@@ -4,7 +4,7 @@ import sys
 from lib2to3 import pygram, pytree
 from lib2to3.pgen2 import driver
 
-ROOTDIR = os.path.dirname(__file__)
+BIN_DIR = os.path.dirname(__file__)
 
 def find(node, leaf):
     if node == leaf:
@@ -14,19 +14,19 @@ def find(node, leaf):
             return find(c, leaf)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print "Usage: inject_dbs.py FILENAME"
+    if len(sys.argv) != 3:
+        print "usage: %s settings_file target_file" % sys.argv[0]
         sys.exit(1)
 
     src     = sys.argv[1]
-    patch   = os.path.join(ROOTDIR, "dbs.py")
-    dest    = "_settings.py"
+    dest    = sys.argv[2]
+    patch   = os.path.join(BIN_DIR, "dbs.py.src")
 
     drv = driver.Driver(pygram.python_grammar, pytree.convert)
     root = drv.parse_file(src)
 
-    node = find(root, pytree.Leaf(1, "DATABASES")) # Find first DATABASES
-    end  = node.parent.next_sibling
+    node = find(root, pytree.Leaf(1, "DATABASES")) # Find node for DATABASES = { ... }
+    end  = node.parent.next_sibling # calculate adjacent sibling
 
     with open(src) as _src:
         head = [_src.next() for x in xrange(end.lineno)]
