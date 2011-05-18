@@ -28,11 +28,11 @@ Django settings.py
 ------------------
 The PLP injects code into `settings.py` to alias every Heroku database URL
 config var. Every variable of the format `${NAME}_URL => postgres://` will be
-added to the settings.DATABASES hash.
+added to the `settings.DATABASES` hash.
 
 On an app with both a shared SHARED_DATABASE_URL and a dedicated
-HEROKU_POSTGRESQL_RED_URL that is promoted to DATABASE_URL, settings will look
-like:
+HEROKU_POSTGRESQL_RED_URL that is promoted to DATABASE_URL, `settings.DATABASES`
+will be:
 
     {
       'DATABASE':               {'ENGINE': 'psycopg2', 'NAME': 'dedicated', ...},
