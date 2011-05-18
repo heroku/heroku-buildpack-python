@@ -1,5 +1,5 @@
 Python Language Pack
---------------------
+====================
 The Python Language Pack (PLP) is a language pack for running Python and Django
 apps on Heroku.
 
