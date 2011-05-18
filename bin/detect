@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# bin/name <build-dir>
+
+BUILD_DIR=$1
+[ -f $BUILD_DIR/requirements.txt ] || exit 1 # fail fast if no requirements.txt
+
+# 'Django' if there is a [mysite]/settings.py file present; otherwise 'Python'
+ls $BUILD_DIR/**/settings.py &> /dev/null && echo Django || echo Python

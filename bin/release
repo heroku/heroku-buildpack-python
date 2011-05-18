@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# bin/release <build-dir>
+
+BIN_DIR=$(dirname $0)
+BUILD_DIR=$1
+NAME=$($BIN_DIR/detect $BUILD_DIR) || exit 1
+
+cd $BUILD_DIR
+
+cat <<EOF
+---
+config_vars:
+  PYTHONUNBUFFERED: true
+EOF
+
+[ "$NAME" = "Django" ] || exit 0
+
+SETTINGS_FILE=$(ls **/settings.py | head -1)
+PROJECT=$(dirname $SETTINGS_FILE)
+
+cat <<EOF
+
+addons:
+  shared-database:5mb
+
+default_process_types:
+  web:      bin/python $PROJECT/manage.py runserver 0.0.0.0:\$PORT --noreload
+  console:  bin/python $PROJECT/manage.py shell
+EOF

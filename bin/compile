@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+set -e
+
+BIN_DIR=$(dirname $0)
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+NAME=$($BIN_DIR/detect $BUILD_DIR)
+PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
+VIRTUALENV_DIRS="bin include lib"
+
+function sed() {
+  # prefer GNU sed over BSD sed on OS X
+  $(which gsed || which sed) "$@"
+}
+
+cd $BUILD_DIR
+
+# copy artifacts out of cache if exists
+mkdir -p $CACHE_DIR
+for dir in $VIRTUALENV_DIRS; do
+  cp -R $CACHE_DIR/$dir . &> /dev/null || true
+done
+
+echo "-----> Preparing virtualenv"
+virtualenv --no-site-packages . | sed -u 's/^/       /'
+[ "${PIPESTATUS[*]}" == "0 0" ]
+
+echo "-----> Byte-compiling code"
+find . -name "*.py" | xargs bin/python -m py_compile
+[ "${PIPESTATUS[*]}" == "0 0" ]
+
+# if Django, inject psycopg and append settings
+if [ "$NAME" = "Django" ]; then
+  grep -q ^psycopg2 requirements.txt || (
+    echo "-----> Injecting psycopg2 into requirements for PostgreSQL support"
+    echo "psycopg2==2.3.1" >> requirements.txt
+  )
+
+  SETTINGS_FILE=$(ls **/settings.py | head -1)
+  echo "-----> Appending code to $SETTINGS_FILE to read from DATABASE_URL"
+  
+  cat >>$SETTINGS_FILE <<EOF
+
+import os, urlparse
+if os.environ.has_key('DATABASE_URL'):
+    urlparse.uses_netloc.append('postgres')
+    url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    DATABASES['default'] = {
+        'ENGINE':   'django.db.backends.postgresql_psycopg2',
+        'NAME':     url.path[1:],
+        'USER':     url.username,
+        'PASSWORD': url.password,
+        'HOST':     url.hostname,
+        'PORT':     url.port,
+    }
+EOF
+fi
+
+echo "-----> Installing dependencies with pip"
+PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt | sed -u 's/^/       /'
+[ "${PIPESTATUS[*]}" == "0 0" ]
+
+# store new artifacts in cache
+for dir in $VIRTUALENV_DIRS; do
+  rm -rf $CACHE_DIR/$dir
+  cp -R $dir $CACHE_DIR/
+done
