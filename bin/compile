@@ -2,8 +2,9 @@
 # bin/compile <build-dir> <cache-dir>
 
 set -e
+set -o pipefail
 
-BIN_DIR=$(dirname $0)
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 CACHE_DIR=$2
 
@@ -24,44 +25,27 @@ for dir in $VIRTUALENV_DIRS; do
   cp -R $CACHE_DIR/$dir . &> /dev/null || true
 done
 
-echo "-----> Preparing virtualenv"
+echo "-----> $NAME app detected"
+
+echo "-----> Preparing virtualenv version $(virtualenv --version)"
 virtualenv --no-site-packages . | sed -u 's/^/       /'
-[ "${PIPESTATUS[*]}" == "0 0" ]
 
 echo "-----> Byte-compiling code"
 find . -name "*.py" | xargs bin/python -m py_compile
-[ "${PIPESTATUS[*]}" == "0 0" ]
 
 # if Django, inject psycopg and append settings
-if [ "$NAME" = "Django" ]; then
-  grep -q ^psycopg2 requirements.txt || (
-    echo "-----> Injecting psycopg2 into requirements for PostgreSQL support"
-    echo "psycopg2==2.3.1" >> requirements.txt
-  )
+if [ "$NAME" = "Python/Django" ]; then
+  echo "-----> Django settings injection"
 
   SETTINGS_FILE=$(ls **/settings.py | head -1)
-  echo "-----> Appending code to $SETTINGS_FILE to read from DATABASE_URL"
-  
-  cat >>$SETTINGS_FILE <<EOF
+  echo "       Injecting code into $SETTINGS_FILE to read from DATABASE_URL"
 
-import os, urlparse
-if os.environ.has_key('DATABASE_URL'):
-    urlparse.uses_netloc.append('postgres')
-    url = urlparse.urlparse(os.environ['DATABASE_URL'])
-    DATABASES['default'] = {
-        'ENGINE':   'django.db.backends.postgresql_psycopg2',
-        'NAME':     url.path[1:],
-        'USER':     url.username,
-        'PASSWORD': url.password,
-        'HOST':     url.hostname,
-        'PORT':     url.port,
-    }
-EOF
+  $BIN_DIR/../opt/inject_dbs $SETTINGS_FILE _settings.py
+  mv _settings.py $SETTINGS_FILE
 fi
 
-echo "-----> Installing dependencies with pip"
+echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
 PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt | sed -u 's/^/       /'
-[ "${PIPESTATUS[*]}" == "0 0" ]
 
 # store new artifacts in cache
 for dir in $VIRTUALENV_DIRS; do
