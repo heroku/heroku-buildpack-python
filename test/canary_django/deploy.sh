@@ -1,5 +1,5 @@
 #!/bin/bash
-[[ $GITHUB_AUTH = "" ]] && { echo "usage: GITHUB_AUTH=user:pass ./push.sh"; exit 1; }
+[[ $GITHUB_AUTH = "" ]] && { echo "usage: GITHUB_AUTH=user:pass ./deploy.sh"; exit 1; }
 heroku destroy --app canary-django --confirm canary-django
 
 rm -rf .git
