@@ -2,8 +2,8 @@ import os
 import re
 import unittest
 
+BIN_DIR = os.path.dirname(__file__)
 DATABASES = {}
-ROOTDIR = os.path.dirname(__file__)
 
 class TestInjectDBs(unittest.TestCase):
     def setUp(self):
@@ -22,7 +22,7 @@ class TestInjectDBs(unittest.TestCase):
         Test the code injected into settings.py to map ENV to settings.DATABASES hash
         """
         # read and exec code in this context
-        with open(os.path.join(ROOTDIR, "..", "opt/dbs.py")) as _src:
+        with open(os.path.join(BIN_DIR, "..", "opt/dbs.py.src")) as _src:
             exec compile(_src.read(), "dbs.py", "exec")
 
         self.assertEqual(5, len(DATABASES)) # default, DATABASE, ONYX, RED, SHARED_DATABASE
