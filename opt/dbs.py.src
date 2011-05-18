@@ -3,7 +3,7 @@
 # BEGIN HEROKU PYTHON/DJANGO LANGUAGE PACK
 # Dynamically set DATABASES from ENV vars
 
-import os, urlparse
+import os, re, urlparse
 urlparse.uses_netloc.append("postgres")
 key_re = re.compile(r"^(?P<name>[A-Z_]+)_URL$")
 

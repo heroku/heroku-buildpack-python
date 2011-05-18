@@ -1,5 +1,4 @@
 import os
-import re
 import unittest
 
 BIN_DIR = os.path.dirname(__file__)
