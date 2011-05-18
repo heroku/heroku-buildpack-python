@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # bin/compile <build-dir> <cache-dir>
 
-set -x
 set -e
 set -o pipefail
 
