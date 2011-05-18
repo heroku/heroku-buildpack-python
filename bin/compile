@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # bin/compile <build-dir> <cache-dir>
 
+set -x
 set -e
 set -o pipefail
 
@@ -18,6 +19,9 @@ function sed() {
 }
 
 cd $BUILD_DIR
+
+# COMPILE HOOK: export build environment if specified
+(make environment 2> /dev/null) && eval $(make environment)
 
 # copy artifacts out of cache if exists
 mkdir -p $CACHE_DIR
@@ -45,7 +49,7 @@ if [ "$NAME" = "Python/Django" ]; then
 fi
 
 echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
-PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt | sed -u 's/^/       /'
+PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt ${PIP_OPTS} | sed -u 's/^/       /'
 
 # store new artifacts in cache
 for dir in $VIRTUALENV_DIRS; do
