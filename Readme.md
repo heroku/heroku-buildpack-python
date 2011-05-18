@@ -14,17 +14,15 @@ web server and console.
 Compile Hooks
 -------------
 The PLP uses a Makefile for user-controlled hooks into slug compilation. If
-present, the `environment` rule will be eval'd in the compile script, allowing
+present, the `make environment` rule will be eval'd in the compile script, allowing
 user-defined exports.
-
-The environment variables referenced in the compile script are:
-
-    PIP_OPTS
 
 A sample Makefile to force a re-build of every pip package is:
 
     environment:
     	export PIP_OPTS=--upgrade
+
+(<a href="https://github.com/heroku/language-pack-python/raw/master/test/canary_django/Makefile">raw file</a>)
 
 Django settings.py
 ------------------
