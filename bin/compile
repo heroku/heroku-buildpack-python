@@ -47,6 +47,7 @@ fi
 
 echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
 PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt ${PIP_OPTS} | sed -u 's/^/       /'
+virtualenv --relocatable .
 
 # store new artifacts in cache
 for dir in $VIRTUALENV_DIRS; do
