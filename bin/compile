@@ -59,6 +59,10 @@ echo "-----> Installing dependencies using pip version $(bin/pip --version | awk
 
 PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt | sed -u 's/^/       /'
 
+if [ "$NAME" = "Python/Django" ]; then
+  bin/pip freeze | grep psycopg2 > /dev/null || { echo " !     Missing psycopg2 dependency in requirements.txt"; exit 1; }
+fi
+
 # store new artifacts in cache
 for dir in $VIRTUALENV_DIRS; do
   rm -rf $CACHE_DIR/$dir
