@@ -10,6 +10,7 @@ cd $BUILD_DIR
 cat <<EOF
 ---
 config_vars:
+  PATH: bin:/usr/local/bin:/usr/bin:/bin
   PYTHONUNBUFFERED: true
 EOF
 
