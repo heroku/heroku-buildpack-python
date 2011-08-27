@@ -61,8 +61,10 @@ EOF
 fi
 
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
-
 PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt | sed -u 's/^/       /'
+
+echo "-----> Making virtualenv relocatable"
+virtualenv --relocatable . | sed -u 's/^/       /'
 
 if [ "$NAME" = "Python/Django" ]; then
   bin/pip freeze | grep psycopg2 > /dev/null || { echo " !     Missing psycopg2 dependency in requirements.txt"; exit 1; }
