@@ -55,7 +55,8 @@ if os.environ.has_key('DATABASE_URL'):
 EOF
 fi
 
-echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
+echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
+
 PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt | sed -u 's/^/       /'
 
 # store new artifacts in cache
