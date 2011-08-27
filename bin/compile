@@ -19,9 +19,6 @@ function sed() {
 
 cd $BUILD_DIR
 
-# COMPILE HOOK: export build environment if specified
-(make environment 2> /dev/null) && eval $(make environment)
-
 # copy artifacts out of cache if exists
 mkdir -p $CACHE_DIR
 for dir in $VIRTUALENV_DIRS; do
@@ -40,14 +37,26 @@ if [ "$NAME" = "Python/Django" ]; then
 
   SETTINGS_FILE=$(ls **/settings.py | head -1)
   echo "       Injecting code into $SETTINGS_FILE to read from DATABASE_URL"
+  
+  cat >>$SETTINGS_FILE <<EOF
 
-  $BIN_DIR/../opt/inject_dbs $SETTINGS_FILE _settings.py
-  mv _settings.py $SETTINGS_FILE
+import os, urlparse
+if os.environ.has_key('DATABASE_URL'):
+    urlparse.uses_netloc.append('postgres')
+    url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    DATABASES['default'] = {
+        'ENGINE':   'django.db.backends.postgresql_psycopg2',
+        'NAME':     url.path[1:],
+        'USER':     url.username,
+        'PASSWORD': url.password,
+        'HOST':     url.hostname,
+        'PORT':     url.port,
+    }
+EOF
 fi
 
 echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
-PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt ${PIP_OPTS} | sed -u 's/^/       /'
-virtualenv --relocatable .
+PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt | sed -u 's/^/       /'
 
 # store new artifacts in cache
 for dir in $VIRTUALENV_DIRS; do

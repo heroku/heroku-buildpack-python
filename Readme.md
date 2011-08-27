@@ -19,35 +19,3 @@ set a `LANGUAGE_PACK_URL` config var with a fully authenticated URL to this repo
     $ heroku config:add LANGUAGE_PACK_URL=https://nzoschke:XXXXXXX@github.com/heroku/language-pack-python.git
 
 On next push, slug-compiler will use this LP instead of the built-in one.
-
-Compile Hooks
--------------
-The PLP uses a Makefile for user-controlled hooks into slug compilation. If
-present, the `make environment` rule will be eval'd in the compile script, allowing
-user-defined exports.
-
-A sample Makefile
-(<a href="https://github.com/heroku/language-pack-python/raw/master/test/canary_django/Makefile">raw</a>)
-to force a re-build of every pip package is:
-
-    environment:
-    	export PIP_OPTS=--upgrade
-
-Django settings.py
-------------------
-The PLP injects code into `settings.py` to alias every Heroku database URL
-config var. Every variable of the format `${NAME}_URL => postgres://` will be
-added to the `settings.DATABASES` hash.
-
-On an app with both a shared SHARED_DATABASE_URL and a dedicated
-HEROKU_POSTGRESQL_RED_URL that is promoted to DATABASE_URL, `settings.DATABASES`
-will be:
-
-    {
-      'DATABASE':               {'ENGINE': 'psycopg2', 'NAME': 'dedicated', ...},
-      'HEROKU_POSTGRESQL_RED':  {'ENGINE': 'psycopg2', 'NAME': 'dedicated', ...},
-      'SHARED':                 {'ENGINE': 'psycopg2', 'NAME': 'shared', ...},
-      'default':                {'ENGINE': 'psycopg2', 'NAME': 'dedicated', ...},
-    }
-
-These aliases can be referenced and further modified at the bottom of `settings.py`.

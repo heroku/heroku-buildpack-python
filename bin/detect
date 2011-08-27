@@ -1,14 +1,8 @@
 #!/usr/bin/env bash
-# bin/detect <build-dir>
+# bin/name <build-dir>
 
 BUILD_DIR=$1
-
-function abort() {
-  echo $1 1>&2
-  exit 1
-}
-
-[ -f $BUILD_DIR/requirements.txt ] || abort "fatal: Not a Python app (no requirements.txt)"
+[ -f $BUILD_DIR/requirements.txt ] || exit 1 # fail fast if no requirements.txt
 
 # 'Python/Django' if there is a [mysite]/settings.py file present; otherwise 'Python'
 ls $BUILD_DIR/**/settings.py &> /dev/null && echo Python/Django || echo Python
