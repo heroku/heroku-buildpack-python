@@ -33,14 +33,15 @@ done
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 virtualenv --no-site-packages . | sed -u 's/^/       /'
 
-echo "-----> Byte-compiling code"
-find . -name "*.py" | xargs bin/python -m py_compile
+#echo "-----> Byte-compiling code"
+find . -name "*.py" | grep -v bin/manage.py | xargs bin/python -m py_compile
 
 # if Django, inject psycopg and append settings
 if [ "$NAME" = "Python/Django" ]; then
   echo "-----> Django settings injection"
 
   SETTINGS_FILE=$(ls **/settings.py | head -1)
+  PROJECT=$(dirname $SETTINGS_FILE)
   echo "       Injecting code into $SETTINGS_FILE to read from DATABASE_URL"
   
   cat >>$SETTINGS_FILE <<EOF
@@ -58,6 +59,14 @@ if os.environ.has_key('DATABASE_URL'):
         'PORT':     url.port,
     }
 EOF
+
+  echo "-----> Django script installation"
+  cat >bin/manage.py <<EOF
+#!/bin/bash
+BIN_DIR=\$(cd \$(dirname \$0); pwd)
+python \$BIN_DIR/../$PROJECT/manage.py \$*
+EOF
+  chmod +x bin/manage.py
 fi
 
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
