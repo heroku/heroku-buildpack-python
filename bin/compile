@@ -66,16 +66,11 @@ try:
             'HOST':     url.hostname,
             'PORT':     url.port,
         }
-        print 1
         if url.scheme == 'postgres':
             DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
-            print 2
-            print DATABASES
         if url.scheme == 'mysql':
             DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
-            print 3
 except:
-    print 4
     print "Unexpected error:", sys.exc_info()
 
 EOF
