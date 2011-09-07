@@ -33,6 +33,13 @@ done
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 virtualenv --no-site-packages . | sed -u 's/^/       /'
 
+mkdir .pip
+cat >>.pip/pip.conf <<EOF
+[install]
+use-mirrors = true
+
+EOF
+
 #echo "-----> Byte-compiling code"
 find . -name "*.py" | grep -v bin/manage.py | xargs bin/python -m py_compile
 
@@ -59,13 +66,12 @@ try:
             'HOST':     url.hostname,
             'PORT':     url.port,
         }
-        if 'postgres' in os.environ['DATABASE_URL']:
+        if url.scheme == 'postgres':
             DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2',
-        if 'mysql' in os.environ['DATABASE_URL']:
+        if url.scheme == 'mysql':
             DATABASES['default']['ENGINE'] = 'django.db.backends.mysql',
 except:
     print "Unexpected error:", sys.exc_info()
-    raise
 
 EOF
 
