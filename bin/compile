@@ -45,19 +45,28 @@ if [ "$NAME" = "Python/Django" ]; then
   echo "       Injecting code into $SETTINGS_FILE to read from DATABASE_URL"
   
   cat >>$SETTINGS_FILE <<EOF
-
 import os, urlparse
-if os.environ.has_key('DATABASE_URL'):
-    urlparse.uses_netloc.append('postgres')
-    url = urlparse.urlparse(os.environ['DATABASE_URL'])
-    DATABASES['default'] = {
-        'ENGINE':   'django.db.backends.postgresql_psycopg2',
-        'NAME':     url.path[1:],
-        'USER':     url.username,
-        'PASSWORD': url.password,
-        'HOST':     url.hostname,
-        'PORT':     url.port,
-    }
+try:
+    if os.environ.has_key('DATABASE_URL'):
+        urlparse.uses_netloc.append('postgres')
+        urlparse.uses_netloc.append('mysql')
+        url = urlparse.urlparse(os.environ['DATABASE_URL'])
+        DATABASES['default'] = {
+            'ENGINE':   'django.db.backends.postgresql_psycopg2',
+            'NAME':     url.path[1:],
+            'USER':     url.username,
+            'PASSWORD': url.password,
+            'HOST':     url.hostname,
+            'PORT':     url.port,
+        }
+        if 'postgres' in os.environ['DATABASE_URL']:
+            DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2',
+        if 'mysql' in os.environ['DATABASE_URL']:
+            DATABASES['default']['ENGINE'] = 'django.db.backends.mysql',
+except:
+    print "Unexpected error:", sys.exc_info()
+    raise
+
 EOF
 
   echo "-----> Django script installation"
@@ -74,10 +83,6 @@ PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt | sed
 
 echo "-----> Making virtualenv relocatable"
 virtualenv --relocatable . | sed -u 's/^/       /'
-
-if [ "$NAME" = "Python/Django" ]; then
-  bin/pip freeze | grep psycopg2 > /dev/null || { echo " !     Missing psycopg2 dependency in requirements.txt"; exit 1; }
-fi
 
 # store new artifacts in cache
 for dir in $VIRTUALENV_DIRS; do
