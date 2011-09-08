@@ -31,14 +31,7 @@ for dir in $VIRTUALENV_DIRS; do
 done
 
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
-virtualenv --no-site-packages . | sed -u 's/^/       /'
-
-mkdir .pip
-cat >>.pip/pip.conf <<EOF
-[install]
-use-mirrors = true
-
-EOF
+virtualenv --no-site-packages PIP_USE_MIRRORS=true . | sed -u 's/^/       /'
 
 #echo "-----> Byte-compiling code"
 find . -name "*.py" | grep -v bin/manage.py | xargs bin/python -m py_compile
