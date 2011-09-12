@@ -46,10 +46,10 @@ if [ "$NAME" = "Python/Django" ]; then
   
   cat >>$SETTINGS_FILE <<EOF
 import os, urlparse
+urlparse.uses_netloc.append('postgres')
+urlparse.uses_netloc.append('mysql')
 try:
     if os.environ.has_key('DATABASE_URL'):
-        urlparse.uses_netloc.append('postgres')
-        urlparse.uses_netloc.append('mysql')
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
         DATABASES['default'] = {
             'NAME':     url.path[1:],
