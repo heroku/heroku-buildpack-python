@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # bin/compile <build-dir> <cache-dir>
 
-set -e
-set -o pipefail
+set -eo pipefail
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
