@@ -71,12 +71,14 @@ fi
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
 PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install --use-mirrors -r requirements.txt | sed -u 's/^/       /'
 
+set +e
 OUT=$(virtualenv --relocatable .)
 [ $? -ne 0 ] && {
   echo " !     Error making virtualenv relocatable"
   echo "$OUT" | sed -u 's/^/       /'
   exit 1
 }
+set -e
 
 # store new artifacts in cache
 for dir in $VIRTUALENV_DIRS; do
