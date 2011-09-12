@@ -11,10 +11,11 @@ NAME=$($BIN_DIR/detect $BUILD_DIR)
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
 
-function sed() {
+sed() {
   # prefer GNU sed over BSD sed on OS X
   $(which gsed || which sed) "$@"
 }
+indent() { sed -u "s/^/       /"; }
 
 cd $BUILD_DIR
 
@@ -30,7 +31,7 @@ for dir in $VIRTUALENV_DIRS; do
 done
 
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
-virtualenv --no-site-packages . | sed -u 's/^/       /'
+virtualenv --no-site-packages . | indent
 
 #echo "-----> Byte-compiling code"
 find . -name "*.py" | grep -v bin/manage.py | xargs bin/python -m py_compile
@@ -69,13 +70,13 @@ EOF
 fi
 
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
-PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install --use-mirrors -r requirements.txt | sed -u 's/^/       /'
+PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install --use-mirrors -r requirements.txt | indent
 
 set +e
 OUT=$(virtualenv --relocatable .)
 [ $? -ne 0 ] && {
   echo " !     Error making virtualenv relocatable"
-  echo "$OUT" | sed -u 's/^/       /'
+  echo "$OUT" | indent
   exit 1
 }
 set -e
