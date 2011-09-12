@@ -67,14 +67,6 @@ except:
     print "Unexpected error:", sys.exc_info()
 
 EOF
-
-  echo "-----> Django script installation"
-  cat >bin/manage.py <<EOF
-#!/bin/bash
-BIN_DIR=\$(cd \$(dirname \$0); pwd)
-python \$BIN_DIR/../$PROJECT/manage.py \$*
-EOF
-  chmod +x bin/manage.py
 fi
 
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
