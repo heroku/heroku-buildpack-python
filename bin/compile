@@ -21,7 +21,7 @@ cd $BUILD_DIR
 
 # reject a non-packaged Django app
 if [ "$NAME" = "Python" ]; then
-  [ -f manage.py ] && [ -f settings.py ] && { echo " !     Django app be in a package subdirectory"; exit 1; }
+  [ -f manage.py ] && [ -f settings.py ] && { echo " !     Django app must be in a package subdirectory"; exit 1; }
 fi
 
 # copy artifacts out of cache if exists
