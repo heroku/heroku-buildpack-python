@@ -31,7 +31,7 @@ for dir in $VIRTUALENV_DIRS; do
 done
 
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
-virtualenv --no-site-packages PIP_USE_MIRRORS=true . | sed -u 's/^/       /'
+virtualenv --no-site-packages . | sed -u 's/^/       /'
 
 #echo "-----> Byte-compiling code"
 find . -name "*.py" | grep -v bin/manage.py | xargs bin/python -m py_compile
@@ -70,7 +70,7 @@ EOF
 fi
 
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
-PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install -r requirements.txt | sed -u 's/^/       /'
+PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install --use-mirrors -r requirements.txt | sed -u 's/^/       /'
 
 echo "-----> Making virtualenv relocatable"
 virtualenv --relocatable . | sed -u 's/^/       /'
