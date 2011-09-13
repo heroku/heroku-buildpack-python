@@ -9,7 +9,7 @@ with packages to install via pip.
 Furthermore, if `${PROJECT}/settings.py` is present, the PLP considers the
 directory a Python/Django app, and patches `settings.py` to parse the Heroku
 DATABASE_URL config vars. It then sets default process types to use the Django
-web server and console.
+web server.
 
 External Language Pack
 ----------------------
