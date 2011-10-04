@@ -42,6 +42,7 @@ if [ "$NAME" = "Python/Django" ]; then
   echo "       Injecting code into $SETTINGS_FILE to read from DATABASE_URL"
   
   cat >>$SETTINGS_FILE <<EOF
+
 import os, sys, urlparse
 urlparse.uses_netloc.append('postgres')
 urlparse.uses_netloc.append('mysql')
