@@ -33,9 +33,6 @@ done
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 virtualenv --no-site-packages . | indent
 
-#echo "-----> Byte-compiling code"
-find . -name "*.py" | xargs bin/python -m py_compile
-
 # if Django, append settings
 if [ "$NAME" = "Python/Django" ]; then
   echo "-----> Django settings injection"
