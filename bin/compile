@@ -11,11 +11,10 @@ NAME=$($BIN_DIR/detect $BUILD_DIR)
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
 
-sed() {
-  # prefer GNU sed over BSD sed on OS X
-  $(which gsed || which sed) "$@"
+indent() {
+  RE="s/^/       /"
+  [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
 }
-indent() { sed -u "s/^/       /"; }
 
 cd $BUILD_DIR
 
