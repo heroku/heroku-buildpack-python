@@ -4,12 +4,18 @@
 set -eo pipefail
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
+ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
 
 NAME=$($BIN_DIR/detect $BUILD_DIR)
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
+
+virtualenv() {
+  VENV_PATH=$ROOT_DIR/src/virtualenv-1.6.4
+  PYTHONPATH=$VENV_PATH python $VENV_PATH/scripts/virtualenv "$@"
+}
 
 indent() {
   RE="s/^/       /"
