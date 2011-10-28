@@ -1,0 +1,29 @@
+Author
+------
+
+Ian Bicking
+
+Maintainers
+-----------
+
+Brian Rosner
+Carl Meyer
+Jannis Leidel
+
+Contributors
+------------
+
+Antonio Cuni
+Armin Ronacher
+Christopher Nilsson
+Curt Micol
+Douglas Creager
+Jeff Hammel
+Jorge Vargas
+Josh Bronson
+Kumar McMillan
+Lars Francke
+Philip Jenvey
+Ronny Pfannschmidt
+Tarek Ziadé
+Vinay Sajip
