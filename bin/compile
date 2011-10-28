@@ -12,14 +12,18 @@ NAME=$($BIN_DIR/detect $BUILD_DIR)
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
 
-virtualenv() {
-  VENV_PATH=$ROOT_DIR/src/virtualenv-1.6.4
-  PYTHONPATH=$VENV_PATH python $VENV_PATH/scripts/virtualenv "$@"
-}
-
 indent() {
   RE="s/^/       /"
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
+}
+
+virtualenv() {
+  python - "$@" <<EOF
+import sys
+sys.path.insert(0, "$ROOT_DIR/src/virtualenv-1.6.4")
+import virtualenv
+virtualenv.main()
+EOF
 }
 
 cd $BUILD_DIR
