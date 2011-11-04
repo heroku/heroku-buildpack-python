@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 # bin/release <build-dir>
 
-BIN_DIR=$(dirname $0)
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 BUILD_DIR=$1
 NAME=$($BIN_DIR/detect $BUILD_DIR) || exit 1
-
-cd $BUILD_DIR
 
 cat <<EOF
 ---
@@ -16,7 +14,7 @@ EOF
 
 [ "$NAME" = "Python/Django" ] || exit 0
 
-SETTINGS_FILE=$(ls **/settings.py | head -1)
+SETTINGS_FILE=$(ls $BUILD_DIR/**/settings.py | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
 
 cat <<EOF
