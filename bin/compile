@@ -33,6 +33,18 @@ if [ "$NAME" = "Python" ]; then
   [ -f manage.py ] && [ -f settings.py ] && { echo " !     Django app must be in a package subdirectory"; exit 1; }
 fi
 
+# warn a checked-in virtualenv
+if [ -d "lib" ] || [ -d "bin" ]; then
+  echo " !     You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
+fi
+
+# reject a conflicting checked-in virtualenv
+if [ -f "lib/python2.7" ]; then
+  echo " !     Checked-in virtualenv conflict."
+  exit 1;
+fi
+
+
 # copy artifacts out of cache if exists
 mkdir -p $CACHE_DIR
 for dir in $VIRTUALENV_DIRS; do
@@ -49,7 +61,7 @@ if [ "$NAME" = "Python/Django" ]; then
   SETTINGS_FILE=$(ls **/settings.py | head -1)
   PROJECT=$(dirname $SETTINGS_FILE)
   echo "Injecting code into $SETTINGS_FILE to read from DATABASE_URL" | indent
-  
+
   cat >>$SETTINGS_FILE <<EOF
 
 import os, sys, urlparse
