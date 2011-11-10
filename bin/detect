@@ -5,4 +5,4 @@ BUILD_DIR=$1
 [ -f $BUILD_DIR/requirements.txt ] || exit 1 # fail fast if no requirements.txt
 
 # 'Python/Django' if there is a [mysite]/settings.py file present; otherwise 'Python'
-ls $BUILD_DIR/**/settings.py &> /dev/null && echo Python/Django || echo 'Python2.7'
+ls $BUILD_DIR/**/settings.py &> /dev/null && echo Python/Django || echo Python
