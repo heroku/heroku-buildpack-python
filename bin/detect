@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/name <build-dir>
+# bin/detect <build-dir>
 
 BUILD_DIR=$1
 [ -f $BUILD_DIR/requirements.txt ] || exit 1 # fail fast if no requirements.txt

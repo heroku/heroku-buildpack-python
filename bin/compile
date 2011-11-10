@@ -48,7 +48,7 @@ if [ "$NAME" = "Python/Django" ]; then
 
   SETTINGS_FILE=$(ls **/settings.py | head -1)
   PROJECT=$(dirname $SETTINGS_FILE)
-  echo "       Injecting code into $SETTINGS_FILE to read from DATABASE_URL"
+  echo "Injecting code into $SETTINGS_FILE to read from DATABASE_URL" | indent
   
   cat >>$SETTINGS_FILE <<EOF
 
