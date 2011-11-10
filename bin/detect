@@ -6,3 +6,5 @@ BUILD_DIR=$1
 
 # 'Python/Django' if there is a [mysite]/settings.py file present; otherwise 'Python'
 ls $BUILD_DIR/**/settings.py &> /dev/null && echo Python/Django || echo Python
+
+echo kennethreitz
