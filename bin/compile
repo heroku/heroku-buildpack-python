@@ -53,7 +53,7 @@ for dir in $VIRTUALENV_DIRS; do
 done
 
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
-virtualenv --no-site-packages --distribute . | indent
+virtualenv --no-site-packages . | indent
 
 
 # if pylibmc within requirements, use vendored libmemcached
@@ -63,6 +63,7 @@ then
     pwd
     curl -L -O http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz
     tar -zxvf vendor-libmemcached.tar.gz
+    rm vendor-libmemcached.tar.gz
 
     export LIBMEMCACHED=$(pwd)/vendor
     ls
