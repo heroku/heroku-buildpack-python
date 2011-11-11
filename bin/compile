@@ -11,6 +11,7 @@ CACHE_DIR=$2
 NAME=$($BIN_DIR/detect $BUILD_DIR)
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
+VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
 
 indent() {
   RE="s/^/       /"
@@ -53,6 +54,19 @@ done
 
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 virtualenv --no-site-packages . | indent
+
+
+# if pylibmc within requirements, use vendored libmemcached
+if grep -Fxq "pylibmc" requirements.txt
+then
+    echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
+    curl -O $VENDORED_MEMCACHED
+    tar -zxvf vendor-libmemcached.tar.gz
+    ls
+fi
+
+
+
 
 # if Django, append settings
 if [ "$NAME" = "Python/Django" ]; then
