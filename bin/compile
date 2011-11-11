@@ -60,9 +60,11 @@ virtualenv --no-site-packages --distribute . | indent
 if grep -Fxq "pylibmc" requirements.txt
 then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
-    curl -s -O $VENDORED_MEMCACHED
-    ls
+    pwd
+    curl -s -O http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz
     tar -zxvf vendor-libmemcached.tar.gz
+
+    export LIBMEMCACHED=/app/vendor
     ls
 fi
 
