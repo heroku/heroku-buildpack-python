@@ -16,8 +16,8 @@ EOF
 if grep -Fxq "pylibmc" $BUILD_DIR/requirements.txt
 then
 cat <<EOF
-  LIBRARY_PATH: ./vendor/lib
-  LD_LIBRARY_PATH: ./vendor/lib
+  LIBRARY_PATH: .heroku/vendor/lib
+  LD_LIBRARY_PATH: .heroku/vendor/lib
 EOF
 fi
 

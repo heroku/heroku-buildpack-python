@@ -55,18 +55,25 @@ done
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 virtualenv --no-site-packages . | indent
 
+# create set-aside .heroku folder.
+mkdir .heroku
+
 
 # if pylibmc within requirements, use vendored libmemcached
 if grep -Fxq "pylibmc" requirements.txt
 then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
-    curl -s -L -O http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz
-    tar -zxvf vendor-libmemcached.tar.gz > /dev/null
-    rm vendor-libmemcached.tar.gz
+    cd .heroku
+
+    if ![ -d "vendor" ]; then
+      curl -s -L -O http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz
+      tar -zxvf vendor-libmemcached.tar.gz > /dev/null
+      rm vendor-libmemcached.tar.gz
+    fi
 
     export LIBMEMCACHED=$(pwd)/vendor
+    cd ..
 fi
-
 
 
 
