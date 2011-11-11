@@ -65,7 +65,7 @@ then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
     cd .heroku
 
-    if ![ -d "vendor" ]; then
+    if [! -d "vendor" ]; then
       curl -s -L -O http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz
       tar -zxvf vendor-libmemcached.tar.gz > /dev/null
       rm vendor-libmemcached.tar.gz
