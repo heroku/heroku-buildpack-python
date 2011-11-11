@@ -13,7 +13,7 @@ config_vars:
 EOF
 
 
-if grep -Fxq "pylibmc" $BIN_DIR/requirements.txt
+if grep -Fxq "pylibmc" $BUILD_DIR/requirements.txt
 then
 cat <<EOF
   LIBRARY_PATH: ./vendor/lib
