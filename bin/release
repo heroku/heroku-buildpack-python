@@ -12,6 +12,16 @@ config_vars:
   PYTHONUNBUFFERED: true
 EOF
 
+
+if grep -Fxq "pylibmc" $BIN_DIR/requirements.txt
+then
+cat <<EOF
+  LIBRARY_PATH: ./vendor/lib
+  LD_LIBRARY_PATH: ./vendor/lib
+EOF
+fi
+
+
 [ "$NAME" = "Python/Django" ] || exit 0
 
 SETTINGS_FILE=$(ls $BUILD_DIR/**/settings.py | head -1)
