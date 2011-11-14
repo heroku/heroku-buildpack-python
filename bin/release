@@ -13,7 +13,7 @@ config_vars:
 EOF
 
 
-if grep -Fxq "pylibmc" $BUILD_DIR/requirements.txt
+if (grep -Fxiq "pylibmc" requirements.txt) || (grep -Fiq "pylibmc=" requirements.txt)
 then
 cat <<EOF
   LIBRARY_PATH: .heroku/vendor/lib
