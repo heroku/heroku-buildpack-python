@@ -60,7 +60,7 @@ mkdir .heroku
 
 
 # if pylibmc within requirements, use vendored libmemcached
-if grep -Fxq "pylibmc" requirements.txt
+if (grep -Fxiq "pylibmc" requirements.txt) || (grep -Fiq "pylibmc=" requirements.txt)
 then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
     cd .heroku
@@ -94,7 +94,7 @@ import os, sys, urlparse
 urlparse.uses_netloc.append('postgres')
 urlparse.uses_netloc.append('mysql')
 try:
-    if os.environ.has_key('DATABASE_URL'):
+    if os.environ.has_key('DATABASE_URL') and DATABASE != None:
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
         DATABASES['default'] = {
             'NAME':     url.path[1:],
