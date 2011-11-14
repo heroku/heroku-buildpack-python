@@ -10,12 +10,6 @@ cat <<EOF
 config_vars:
   PATH: bin:/usr/local/bin:/usr/bin:/bin
   PYTHONUNBUFFERED: true
-EOF
-
-
-if (grep -Fxiq "pylibmc" requirements.txt) || (grep -Fiq "pylibmc=" requirements.txt)
-then
-cat <<EOF
   LIBRARY_PATH: .heroku/vendor/lib
   LD_LIBRARY_PATH: .heroku/vendor/lib
 EOF
