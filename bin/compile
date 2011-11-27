@@ -94,8 +94,16 @@ import os, sys, urlparse
 urlparse.uses_netloc.append('postgres')
 urlparse.uses_netloc.append('mysql')
 try:
-    if os.environ.has_key('DATABASE_URL') and DATABASES != None:
+
+    #check to make sure DATABASES is set in settings.py file.If not default to {}
+    try:
+        DATABASES
+    except NameError:
+        DATABASES = {}
+
+    if os.environ.has_key('DATABASE_URL'):
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
+
         DATABASES['default'] = {
             'NAME':     url.path[1:],
             'USER':     url.username,
