@@ -104,13 +104,15 @@ try:
     if os.environ.has_key('DATABASE_URL'):
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
 
-        DATABASES['default'] = {
+        # We use update here to preserve other keys we
+        # don't care about (like OPTIONS)
+        DATABASES['default'].update({
             'NAME':     url.path[1:],
             'USER':     url.username,
             'PASSWORD': url.password,
             'HOST':     url.hostname,
             'PORT':     url.port,
-        }
+        })
         if url.scheme == 'postgres':
             DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
         if url.scheme == 'mysql':
