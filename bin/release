@@ -17,7 +17,7 @@ EOF
 
 [ "$NAME" = "Python/Django" ] || exit 0
 
-SETTINGS_FILE=$(ls $BUILD_DIR/**/settings.py | head -1)
+SETTINGS_FILE=$(cd $BUILD_DIR && ls **/settings.py | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
 
 cat <<EOF
