@@ -90,18 +90,20 @@ if [ "$NAME" = "Python/Django" ]; then
 
   cat >>$SETTINGS_FILE <<EOF
 
-import os, sys, urlparse
+import os
+import sys
+import urlparse
 urlparse.uses_netloc.append('postgres')
 urlparse.uses_netloc.append('mysql')
 try:
 
-    #check to make sure DATABASES is set in settings.py file.If not default to {}
-    try:
-        DATABASES
-    except NameError:
+    # Check to make sure DATABASES is set in settings.py file.
+    # If not default to {}
+
+    if 'DATABASES' not in locals():
         DATABASES = {}
 
-    if os.environ.has_key('DATABASE_URL'):
+    if 'DATABASE_URL' os.environ:
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
 
         # We use update here to preserve other keys we
@@ -115,6 +117,7 @@ try:
         })
         if url.scheme == 'postgres':
             DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+
         if url.scheme == 'mysql':
             DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
 except:
