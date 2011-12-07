@@ -108,10 +108,9 @@ try:
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
 
         # Ensure default database exists.
-        DATABASES['default'] =  DATABASES.get('default', {})
+        DATABASES['default'] = DATABASES.get('default', {})
 
-        # We use update here to preserve other keys we
-        # don't care about (like OPTIONS)
+        # Update with environment configuration.
         DATABASES['default'].update({
             'NAME': url.path[1:],
             'USER': url.username,
