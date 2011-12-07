@@ -95,6 +95,7 @@ import sys
 import urlparse
 urlparse.uses_netloc.append('postgres')
 urlparse.uses_netloc.append('mysql')
+
 try:
 
     # Check to make sure DATABASES is set in settings.py file.
@@ -103,17 +104,20 @@ try:
     if 'DATABASES' not in locals():
         DATABASES = {}
 
-    if 'DATABASE_URL' os.environ:
+    if 'DATABASE_URL' in os.environ:
         url = urlparse.urlparse(os.environ['DATABASE_URL'])
+
+        # Ensure default database exists.
+        DATABASES['default'] =  DATABASES.get('default', {})
 
         # We use update here to preserve other keys we
         # don't care about (like OPTIONS)
         DATABASES['default'].update({
-            'NAME':     url.path[1:],
-            'USER':     url.username,
+            'NAME': url.path[1:],
+            'USER': url.username,
             'PASSWORD': url.password,
-            'HOST':     url.hostname,
-            'PORT':     url.port,
+            'HOST': url.hostname,
+            'PORT': url.port,
         })
         if url.scheme == 'postgres':
             DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
@@ -121,7 +125,7 @@ try:
         if url.scheme == 'mysql':
             DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
 except:
-    print "Unexpected error:", sys.exc_info()
+    print 'Unexpected error:', sys.exc_info()
 
 EOF
 fi
