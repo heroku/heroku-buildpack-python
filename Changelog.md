@@ -1,13 +1,19 @@
+## v3 (12/07/2011)
+
+Bugfixes:
+
+* Better django setup.py injection.
+
 ## v2 (11/15/2011)
 
 Features:
 
-* support for pylibmc
+* Support for pylibmc and libmemcached +sasl.
 
 Bugfixes:
 
-* detect when virtualenv is checked in and alert user
+* Detect when virtualenv is checked in and alert user.
 
-## v1 (10/1/2011)
+## v1 (10/01/2011)
 
-* Conception
+* Conception.
