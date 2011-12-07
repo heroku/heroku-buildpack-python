@@ -1,4 +1,4 @@
-## v2 (11/15/2011)
+## v0.1.1 (11/15/2011)
 
 Features:
 
@@ -8,6 +8,6 @@ Bugfixes:
 
 * detect when virtualenv is checked in and alert user
 
-## v1 (10/1/2011)
+## v0.1.0 (10/1/2011)
 
 * Conception
