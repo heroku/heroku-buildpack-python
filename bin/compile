@@ -56,7 +56,7 @@ echo "-----> Preparing virtualenv version $(virtualenv --version)"
 virtualenv --no-site-packages . | indent
 
 # create set-aside .heroku folder.
-mkdir .heroku
+mkdir -p .heroku
 
 
 # if pylibmc within requirements, use vendored libmemcached
