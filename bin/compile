@@ -35,7 +35,7 @@ if [ "$NAME" = "Python" ]; then
 fi
 
 # warn a checked-in virtualenv
-if [ -d "lib" ] || [ -d "bin" ]; then
+if [ -e "bin/activate" ] || [ -d "lib/python2.?" ]; then
   echo " !     You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
 fi
 
