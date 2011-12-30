@@ -68,9 +68,9 @@ then
     if [ -d "vendor/lib/sasl2" ]; then
       export LIBMEMCACHED=$(pwd)/vendor
     else
-      curl -s -L -O $VENDORED_MEMCACHED
-      tar -zxvf vendor-libmemcached.tar.gz > /dev/null
-      rm vendor-libmemcached.tar.gz
+      curl -s -L -o tmp-libmemcached.tar.gz $VENDORED_MEMCACHED
+      tar -zxvf tmp-libmemcached.tar.gz > /dev/null
+      rm tmp-libmemcached.tar.gz
       export LIBMEMCACHED=$(pwd)/vendor
     fi
 
