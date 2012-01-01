@@ -45,6 +45,8 @@ if [ -f "lib/python2.7" ]; then
   exit 1;
 fi
 
+# generate a new RELEASE_ID
+python -c 'import uuid ; print uuid.uuid4().hex' > HEROKU_RELEASE_ID
 
 # copy artifacts out of cache if exists
 mkdir -p $CACHE_DIR
