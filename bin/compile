@@ -81,7 +81,7 @@ fi
 
 
 # if Django, append settings
-if [ "$NAME" = "Python/Django" ]; then
+if [ "$NAME" = "Python/Django" ] && ! grep HEROKU_NO_DJANGO_SETTINGS **/settings.py > /dev/null; then
   echo "-----> Django settings injection"
 
   SETTINGS_FILE=$(ls **/settings.py | head -1)
