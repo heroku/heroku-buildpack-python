@@ -12,6 +12,7 @@ NAME=$($BIN_DIR/detect $BUILD_DIR)
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
 VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
+VENDORED_NODE="https://s3.amazonaws.com/audish-binaries/node-0.4.7.tgz"
 
 indent() {
   RE="s/^/       /"
@@ -78,7 +79,22 @@ then
     cd ..
 fi
 
+# if pyexecjs within requirements, use vendored node
+if (grep -v ^# requirements.txt | grep -Fiq "pyexecjs=" requirements.txt)
+then
+    echo "-----> Noticed pyexecjs. Bootstrapping node."
 
+    curl -L -s $VENDORED_NODE | tar -zx -C bin
+    # pyexecjs 1.0 has a bug where it expects an external binary called 'command'; we'll create this binary for it
+    #  and activate the venv so 'command' will be in the path (https://github.com/doloopwhile/PyExecJS/pull/1)
+    cat << EOF > bin/command
+#!/usr/bin/env bash
+
+command "\$@"
+EOF
+    chmod 700 bin/command
+    source bin/activate
+fi
 
 # if Django, append settings
 if [ "$NAME" = "Python/Django" ]; then
