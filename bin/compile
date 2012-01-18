@@ -23,13 +23,8 @@ indent() {
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
 }
 
-virtualenv() {
-  python - "$@" <<EOF
-import sys
-sys.path.insert(0, "$ROOT_DIR/src/virtualenv-1.7")
-import virtualenv
-virtualenv.main()
-EOF
+function virtualenv (){
+  python "$ROOT_DIR/src/virtualenv-1.7/virtualenv.py" "$@"
 }
 
 cd $BUILD_DIR
