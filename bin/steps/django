@@ -56,6 +56,6 @@ OUT=$(python $PROJECT/manage.py collectstatic --noinput )
 
 [ $? -ne 0 ] && {
   echo " !     Error running manage.py collectstatic. See http://devcenter.heroku.com/articles/django-assets for more info."
-  echo "$OUT" | indent
+  echo "$OUT" | indent >&2
 }
 set -e
