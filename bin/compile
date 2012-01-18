@@ -133,17 +133,22 @@ except Exception:
 EOF
 fi
 
+
 echo "-----> Activating virtualenv"
 source bin/activate
 
 
+# Install mercurial, if needed.
 if (grep -Fiq "hg+" requirements.txt) then
   pip install --use-mirrors mercurial | indent
 fi
 
+# Install dependencies.
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
 pip install --use-mirrors -r requirements.txt | indent
 
+
+# Make virtualenv relocatable.
 set +e
 OUT=$(virtualenv --relocatable .)
 [ $? -ne 0 ] && {
@@ -153,7 +158,7 @@ OUT=$(virtualenv --relocatable .)
 }
 set -e
 
-# store new artifacts in cache
+# Store new artifacts in cache.
 for dir in $VIRTUALENV_DIRS; do
   rm -rf $CACHE_DIR/$dir
   cp -R $dir $CACHE_DIR/
