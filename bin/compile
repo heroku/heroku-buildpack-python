@@ -47,7 +47,7 @@ if [ -f "lib/python2.7" ]; then
   exit 1;
 fi
 
-# copy artifacts out of cache if exists
+# Copy artifacts out of cache if exists.
 mkdir -p $CACHE_DIR
 for dir in $VIRTUALENV_DIRS; do
   cp -R $CACHE_DIR/$dir . &> /dev/null || true
