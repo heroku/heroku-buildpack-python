@@ -53,8 +53,11 @@ for dir in $VIRTUALENV_DIRS; do
   cp -R $CACHE_DIR/$dir . &> /dev/null || true
 done
 
-echo "-----> Preparing virtualenv version $(virtualenv --version)"
-virtualenv --distribute --never-download  --prompt=venv . | indent
+# Don't rebuild existing virtualenv.
+if ! [ -f "lib/python2.7" ]; then
+  echo "-----> Preparing virtualenv version $(virtualenv --version)"
+  virtualenv --distribute --never-download  --prompt=venv . | indent
+fi
 
 # Create set-aside .heroku folder.
 mkdir -p .heroku
