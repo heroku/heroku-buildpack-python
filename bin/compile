@@ -56,7 +56,7 @@ done
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 virtualenv --no-site-packages . | indent
 
-# create set-aside .heroku folder.
+# Create set-aside .heroku folder.
 mkdir -p .heroku
 
 # Pylibmc support.
