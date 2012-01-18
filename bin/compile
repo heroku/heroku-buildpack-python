@@ -58,7 +58,7 @@ done
 set +e
 
 # Try to create the virtualenv.
-OUT=$(virtualenv --distribute --never-download  --prompt=venv . )
+OUT=$(virtualenv --distribute --never-download  --prompt=venv . 2>&1)
 
 # If there's an error, purge and recreate.
 [ $? -ne 0 ] && {
