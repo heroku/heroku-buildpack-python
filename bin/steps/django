@@ -49,11 +49,13 @@ EOF
 
 
 # Compile assets.
+set +e
 echo "-----> Collecting static files"
-python $PROJECT/manage.py collectstatic --noinput  | indent
+OUT=$(python $PROJECT/manage.py collectstatic --noinput )
+
 
 [ $? -ne 0 ] && {
   echo " !     Error running manage.py collectstatic. See http://devcenter.heroku.com/articles/django-assets for more info."
+  echo "$OUT" | indent
 }
-
 set -e
