@@ -3,6 +3,8 @@
 
 set -eo pipefail
 
+env
+
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
