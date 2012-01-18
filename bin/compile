@@ -54,7 +54,7 @@ for dir in $VIRTUALENV_DIRS; do
 done
 
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
-virtualenv . | indent
+virtualenv --distribute . | indent
 
 # Create set-aside .heroku folder.
 mkdir -p .heroku
