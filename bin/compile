@@ -31,22 +31,21 @@ EOF
 
 cd $BUILD_DIR
 
-# reject a non-packaged Django app
+# Reject a non-packaged Django app.
 if [ "$NAME" = "Python" ]; then
   [ -f manage.py ] && [ -f settings.py ] && { echo " !     Django app must be in a package subdirectory"; exit 1; }
 fi
 
-# warn a checked-in virtualenv
+# Warn a checked-in virtualenv.
 if [ -d "lib" ] || [ -d "bin" ]; then
   echo " !     You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
 fi
 
-# reject a conflicting checked-in virtualenv
+# Reject a conflicting checked-in virtualenv.
 if [ -f "lib/python2.7" ]; then
   echo " !     Checked-in virtualenv conflict."
   exit 1;
 fi
-
 
 # copy artifacts out of cache if exists
 mkdir -p $CACHE_DIR
@@ -60,30 +59,12 @@ virtualenv --no-site-packages . | indent
 # create set-aside .heroku folder.
 mkdir -p .heroku
 
+# Pylibmc support.
+source $BIN_DIR/steps/pylibmc
 
-# if pylibmc within requirements, use vendored libmemcached
-if (grep -Fxiq "pylibmc" requirements.txt) || (grep -Fiq "pylibmc=" requirements.txt)
-then
-    echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
-    cd .heroku
-
-    if [ -d "vendor/lib/sasl2" ]; then
-      export LIBMEMCACHED=$(pwd)/vendor
-    else
-      curl -s -L -o tmp-libmemcached.tar.gz $VENDORED_MEMCACHED
-      tar -zxvf tmp-libmemcached.tar.gz > /dev/null
-      rm tmp-libmemcached.tar.gz
-      export LIBMEMCACHED=$(pwd)/vendor
-    fi
-
-    export LIBMEMCACHED=$(pwd)/vendor
-    cd ..
-fi
-
-
+# Activate the virtualenv.
 echo "-----> Activating virtualenv"
 source bin/activate
-
 
 # Install mercurial, if needed.
 if (grep -Fiq "hg+" requirements.txt) then
@@ -94,12 +75,10 @@ fi
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
 pip install --use-mirrors -r requirements.txt | indent
 
-
-# if Django, append settings
+# Django support.
 if [ "$NAME" = "Python/Django" ]; then
   source $BIN_DIR/steps/django
 fi
-
 
 # Make virtualenv relocatable.
 set +e
