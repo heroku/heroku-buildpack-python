@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# if pylibmc within requirements, use vendored libmemcached
+if (grep -Fxiq "pylibmc" requirements.txt) || (grep -Fiq "pylibmc=" requirements.txt)
+then
+    echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
+    cd .heroku
+
+    if [ -d "vendor/lib/sasl2" ]; then
+      export LIBMEMCACHED=$(pwd)/vendor
+    else
+      curl -s -L -o tmp-libmemcached.tar.gz $VENDORED_MEMCACHED
+      tar -zxvf tmp-libmemcached.tar.gz > /dev/null
+      rm tmp-libmemcached.tar.gz
+      export LIBMEMCACHED=$(pwd)/vendor
+    fi
+
+    export LIBMEMCACHED=$(pwd)/vendor
+    cd ..
+fi

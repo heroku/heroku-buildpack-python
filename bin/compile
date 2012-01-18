@@ -13,6 +13,8 @@ PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
 VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
 
+export PIP_DOWNLOAD_CACHE
+
 indent() {
   RE="s/^/       /"
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
@@ -21,7 +23,7 @@ indent() {
 virtualenv() {
   python - "$@" <<EOF
 import sys
-sys.path.insert(0, "$ROOT_DIR/src/virtualenv-1.6.4")
+sys.path.insert(0, "$ROOT_DIR/src/virtualenv-1.7")
 import virtualenv
 virtualenv.main()
 EOF
@@ -29,114 +31,72 @@ EOF
 
 cd $BUILD_DIR
 
-# reject a non-packaged Django app
+# Reject a non-packaged Django app.
 if [ "$NAME" = "Python" ]; then
   [ -f manage.py ] && [ -f settings.py ] && { echo " !     Django app must be in a package subdirectory"; exit 1; }
 fi
 
-# warn a checked-in virtualenv
+# Warn a checked-in virtualenv.
 if [ -d "lib" ] || [ -d "bin" ]; then
   echo " !     You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
 fi
 
-# reject a conflicting checked-in virtualenv
+# Reject a conflicting checked-in virtualenv.
 if [ -f "lib/python2.7" ]; then
   echo " !     Checked-in virtualenv conflict."
   exit 1;
 fi
 
-
-# copy artifacts out of cache if exists
+# Copy artifacts out of cache if exists.
 mkdir -p $CACHE_DIR
 for dir in $VIRTUALENV_DIRS; do
   cp -R $CACHE_DIR/$dir . &> /dev/null || true
 done
 
-echo "-----> Preparing virtualenv version $(virtualenv --version)"
-virtualenv --no-site-packages . | indent
 
-# create set-aside .heroku folder.
+# Create virtualenv. Rebuild if corrupt.
+set +e
+
+# Try to create the virtualenv.
+OUT=$(virtualenv --distribute --never-download  --prompt=venv . 2>&1)
+
+# If there's an error, purge and recreate.
+[ $? -ne 0 ] && {
+  echo " !     Virtualenv corrupt, rebuilding."
+  for dir in $VIRTUALENV_DIRS; do
+    rm -fr $dir &> /dev/null || true
+  done
+  OUT=$(virtualenv --distribute --never-download  --prompt=venv . )
+}
+echo "$OUT" | indent
+
+set -e
+
+# Create set-aside .heroku folder.
 mkdir -p .heroku
 
+# Pylibmc support.
+source $BIN_DIR/steps/pylibmc
 
-# if pylibmc within requirements, use vendored libmemcached
-if (grep -Fxiq "pylibmc" requirements.txt) || (grep -Fiq "pylibmc=" requirements.txt)
-then
-    echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
-    cd .heroku
+# Activate the virtualenv.
+echo "-----> Activating virtualenv"
+source bin/activate
 
-    if [ -d "vendor/lib/sasl2" ]; then
-      export LIBMEMCACHED=$(pwd)/vendor
-    else
-      curl -s -L -o tmp-libmemcached.tar.gz $VENDORED_MEMCACHED
-      tar -zxvf tmp-libmemcached.tar.gz > /dev/null
-      rm tmp-libmemcached.tar.gz
-      export LIBMEMCACHED=$(pwd)/vendor
-    fi
-
-    export LIBMEMCACHED=$(pwd)/vendor
-    cd ..
-fi
-
-
-
-# if Django, append settings
-if [ "$NAME" = "Python/Django" ]; then
-  echo "-----> Django settings injection"
-
-  SETTINGS_FILE=$(ls **/settings.py | head -1)
-  PROJECT=$(dirname $SETTINGS_FILE)
-  echo "Injecting code into $SETTINGS_FILE to read from DATABASE_URL" | indent
-
-  cat >>$SETTINGS_FILE <<EOF
-
-import os
-import sys
-import urlparse
-urlparse.uses_netloc.append('postgres')
-urlparse.uses_netloc.append('mysql')
-
-try:
-
-    # Check to make sure DATABASES is set in settings.py file.
-    # If not default to {}
-
-    if 'DATABASES' not in locals():
-        DATABASES = {}
-
-    if 'DATABASE_URL' in os.environ:
-        url = urlparse.urlparse(os.environ['DATABASE_URL'])
-
-        # Ensure default database exists.
-        DATABASES['default'] = DATABASES.get('default', {})
-
-        # Update with environment configuration.
-        DATABASES['default'].update({
-            'NAME': url.path[1:],
-            'USER': url.username,
-            'PASSWORD': url.password,
-            'HOST': url.hostname,
-            'PORT': url.port,
-        })
-        if url.scheme == 'postgres':
-            DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
-
-        if url.scheme == 'mysql':
-            DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
-except:
-    print 'Unexpected error:', sys.exc_info()
-
-EOF
-fi
-
+# Install mercurial, if needed.
 if (grep -Fiq "hg+" requirements.txt) then
-  PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install --use-mirrors mercurial | indent
-  source bin/activate
+  pip install --use-mirrors mercurial | indent
 fi
 
+# Install dependencies.
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
-PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install --use-mirrors -r requirements.txt | indent
+pip install --use-mirrors -r requirements.txt | indent
 
+# Django support.
+if [ "$NAME" = "Python/Django" ] && ! [ "$DISABLE_INJECTION" ]; then
+  source $BIN_DIR/steps/django
+fi
+
+# Make virtualenv relocatable.
 set +e
 OUT=$(virtualenv --relocatable .)
 [ $? -ne 0 ] && {
@@ -146,7 +106,7 @@ OUT=$(virtualenv --relocatable .)
 }
 set -e
 
-# store new artifacts in cache
+# Store new artifacts in cache.
 for dir in $VIRTUALENV_DIRS; do
   rm -rf $CACHE_DIR/$dir
   cp -R $dir $CACHE_DIR/
