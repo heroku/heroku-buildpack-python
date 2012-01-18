@@ -13,6 +13,8 @@ PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
 VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
 
+export PIP_DOWNLOAD_CACHE
+
 indent() {
   RE="s/^/       /"
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
@@ -93,6 +95,8 @@ if [ "$NAME" = "Python/Django" ]; then
 import os
 import sys
 import urlparse
+
+# Register database schemes in URLs.
 urlparse.uses_netloc.append('postgres')
 urlparse.uses_netloc.append('mysql')
 
@@ -129,13 +133,16 @@ except Exception:
 EOF
 fi
 
+echo "-----> Activating virtualenv"
+source bin/activate
+
+
 if (grep -Fiq "hg+" requirements.txt) then
-  PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install --use-mirrors mercurial | indent
-  source bin/activate
+  pip install --use-mirrors mercurial | indent
 fi
 
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
-PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE bin/pip install --use-mirrors -r requirements.txt | indent
+pip install --use-mirrors -r requirements.txt | indent
 
 set +e
 OUT=$(virtualenv --relocatable .)
