@@ -23,7 +23,7 @@ indent() {
 virtualenv() {
   python - "$@" <<EOF
 import sys
-sys.path.insert(0, "$ROOT_DIR/src/virtualenv-1.6.4")
+sys.path.insert(0, "$ROOT_DIR/src/virtualenv-1.7")
 import virtualenv
 virtualenv.main()
 EOF
