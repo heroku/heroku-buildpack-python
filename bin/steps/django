@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "-----> Django settings injection"
+echo "-----> Injecting Django settings..."
 
 SETTINGS_FILE=$(ls **/settings.py | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
@@ -46,3 +46,14 @@ except Exception:
     print 'Unexpected error:', sys.exc_info()
 
 EOF
+
+
+# Compile assets.
+echo "-----> Collecting static files"
+python $PROJECT/manage.py collectstatic --noinput  | indent
+
+[ $? -ne 0 ] && {
+  echo " !     Error running manage.py collectstatic. See http://devcenter.heroku.com/articles/django-assets for more info."
+}
+
+set -e
