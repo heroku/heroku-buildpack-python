@@ -29,6 +29,8 @@ function virtualenv (){
 
 cd $BUILD_DIR
 
+ls
+
 # Reject a non-packaged Django app.
 if [ "$NAME" = "Python" ]; then
   [ -f manage.py ] && [ -f settings.py ] && { echo " !     Django app must be in a package subdirectory"; exit 1; }
@@ -51,6 +53,7 @@ for dir in $VIRTUALENV_DIRS; do
   cp -R $CACHE_DIR/$dir . &> /dev/null || true
 done
 
+ls
 
 # Create virtualenv. Rebuild if corrupt.
 set +e
