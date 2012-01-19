@@ -56,6 +56,8 @@ ls
 
 echo '-------------'
 ls /app/tmp/repo.git/.cache/
+ls /app/tmp/repo.git/
+ls /app/.pip/
 
 # Create virtualenv. Rebuild if corrupt.
 set +e
@@ -94,6 +96,8 @@ fi
 # Install dependencies.
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
 pip install --use-mirrors -r requirements.txt | indent
+
+pip install django-staticfiles==dev
 
 # Django support.
 if [ "$NAME" = "Python/Django" ] && ! [ "$DISABLE_INJECTION" ]; then
