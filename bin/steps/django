@@ -47,19 +47,3 @@ except Exception:
 
 EOF
 
-
-
-# Collect static files.
-set +e
-echo "-----> Collecting static files"
-
-OUT=$(python $PROJECT/manage.py collectstatic --noinput 2>&1)
-[ $? -ne 0 ] && STATIC_FAILED=1
-
-if [ "$STATIC_FAILED" ]; then
-    echo " !     Error running manage.py collectstatic. See http://devcenter.heroku.com/articles/django-assets for more info."
-else
-    echo "$OUT" | indent
-fi
-
-set -e
