@@ -57,7 +57,7 @@ ls
 echo '-------------'
 ls /app/tmp/repo.git/.cache/
 ls /app/tmp/repo.git/
-ls /app/.pip/
+ls -a /app/
 
 # Create virtualenv. Rebuild if corrupt.
 set +e
