@@ -7,7 +7,7 @@ set -eo pipefail
 # which python
 
 # Testing.
-export PATH=:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
+export PATH=:/usr/local/bin:$PATH
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ROOT_DIR=$(dirname $BIN_DIR)
