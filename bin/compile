@@ -89,8 +89,6 @@ fi
 echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
 pip install --use-mirrors -r requirements.txt | indent
 
-pip install django-staticfiles==dev
-
 # Django support.
 if [ "$NAME" = "Python/Django" ] && ! [ "$DISABLE_INJECTION" ]; then
   source $BIN_DIR/steps/django
