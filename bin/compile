@@ -54,6 +54,9 @@ done
 pwd
 ls
 
+echo '-------------'
+ls /app/tmp/repo.git/.cache/
+
 # Create virtualenv. Rebuild if corrupt.
 set +e
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
