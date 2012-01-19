@@ -49,8 +49,6 @@ EOF
 
 
 
-
-
 # Collect static files.
 set +e
 echo "-----> Collecting static files"
