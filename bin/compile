@@ -3,10 +3,7 @@
 
 set -eo pipefail
 
-# env
-# which python
-
-# Testing.
+# Prepend proper path for virtualenv hackery. Will be deprecated soon.
 export PATH=:/usr/local/bin:$PATH
 
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
