@@ -30,7 +30,8 @@ function virtualenv (){
 cd $BUILD_DIR
 curl -s -L -o git.tar.gz http://git-core.googlecode.com/files/git-1.7.9.tar.gz
 tar -zxvf git.tar.gz
-cd git-1.7.9; ./configure  --without-tcltk ; NO_MSGFMT=yes make
+export NO_MSGFMT=yes
+cd git-1.7.9; ./configure  --without-tcltk ;  make
 export PATH=:$BUILD_DIR/git-1.7.9/:$PATH
 
 # Reject a non-packaged Django app.
