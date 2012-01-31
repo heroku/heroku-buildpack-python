@@ -86,12 +86,18 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies.
+set +e
 echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
 
-env
-
-
 pip install --use-mirrors -r requirements.txt -v | indent
+
+# If there's an error, purge and recreate.
+[ $? -ne 0 ] && {
+  ls -a $BUILD_DIR/src/requests/
+  exit 1
+}
+
+set -e
 
 # Django support.
 if [ "$NAME" = "Python/Django" ]; then
