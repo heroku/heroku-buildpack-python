@@ -91,7 +91,7 @@ echo "-----> Installing dependencies using pip version $(pip --version | awk '{p
 env
 
 
-pip install --use-mirrors -r requirements.txt | indent
+pip install --use-mirrors -r requirements.txt -v | indent
 
 # Django support.
 if [ "$NAME" = "Python/Django" ]; then
