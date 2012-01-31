@@ -28,11 +28,6 @@ function virtualenv (){
 }
 
 cd $BUILD_DIR
-curl -s -L -o git.tar.gz http://git-core.googlecode.com/files/git-1.7.9.tar.gz
-tar -zxvf git.tar.gz
-export NO_MSGFMT=yes
-cd git-1.7.9; ./configure  --without-tcltk ;  make
-export PATH=:$BUILD_DIR/git-1.7.9/:$PATH
 
 # Reject a non-packaged Django app.
 if [ "$NAME" = "Python" ]; then
@@ -93,6 +88,8 @@ fi
 # Install dependencies.
 set +e
 echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
+export GIT_TRACE=1
+
 
 pip install --use-mirrors -r requirements.txt -v | indent
 
