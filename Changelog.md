@@ -1,8 +1,15 @@
+## v5 (02/01/2012)
+
+Bugfixes:
+
+* Git requirements 100% work.
+
+
 ## v4 (01/20/2012)
 
 Features:
 
-* Updated to virtualenv v1.7 and patched pip v1.2.
+* Updated to virtualenv v1.7 with patched pip v1.2.
 * Actually activate created virtualenv within compile process.
 * Use distribute instead of deprecated setuptools.
 * Automatically destroy and rebuild corrupt virtualenvs.
