@@ -16,6 +16,7 @@ PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
 VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
 
+unset GIT_DIR
 export PIP_DOWNLOAD_CACHE
 
 indent() {
@@ -86,8 +87,8 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies.
-echo "-----> Installing dependencies using pip version $(bin/pip --version | awk '{print $2}')"
-pip install --use-mirrors -r requirements.txt | indent
+echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
+pip install --use-mirrors -r requirements.txt --src ./.heroku/src | indent
 
 # Django support.
 if [ "$NAME" = "Python/Django" ]; then
