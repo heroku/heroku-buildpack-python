@@ -88,8 +88,6 @@ fi
 
 # Install dependencies.
 echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
-export GIT_TRACE=1
-
 pip install --use-mirrors -r requirements.txt -v | indent
 
 # Django support.
