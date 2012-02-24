@@ -12,6 +12,7 @@ config_vars:
   PYTHONUNBUFFERED: true
   LIBRARY_PATH: .heroku/vendor/lib
   LD_LIBRARY_PATH: .heroku/vendor/lib
+  LANG: en_US.UTF-8
 EOF
 
 
