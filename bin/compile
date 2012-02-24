@@ -91,7 +91,7 @@ echo "-----> Installing dependencies using pip version $(pip --version | awk '{p
 pip install --use-mirrors -r requirements.txt --src ./.heroku/src | indent
 
 # Django support.
-if [ "$NAME" = "Python/Django" ]; then
+if [ "$NAME" = "Python/Django" ] && ! [ "$DISABLE_INJECTION" ]; then
   source $BIN_DIR/steps/django
 fi
 
