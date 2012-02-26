@@ -57,7 +57,9 @@ done
 set +e
 
 echo "-----> Preparing Python ($PYTHON_VERSION)"
-PYTHON_EXE=$(python-build install $PYTHON_VERSION --quiet)
+PYTHON_EXE=$(./python-build install $PYTHON_VERSION --quiet)
+
+PYTHON_EXE=./python/vendor/python/bin/python
 
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 

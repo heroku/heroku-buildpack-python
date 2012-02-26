@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# python-build <version> [--quiet]
+
+curl -o python.tar.bz2 http://python.org/ftp/python/2.7.3/Python-2.7.3rc1.tar.bz2
+mkdir python
+tar -xjf python.tar.bz2 -C python
+
+cd python
+mv */* .
+
+mkdir -p vendor/python
+OLD_OATH=$PWD
+cd vendor/python
+PY_PATH=$PWD
+cd $OLD_OATH
+
+./configure --prefix $PY_PATH
+make
+make install
