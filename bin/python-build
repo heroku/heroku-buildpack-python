@@ -8,12 +8,7 @@ tar -xjf python.tar.bz2 -C python
 cd python
 mv */* .
 
-mkdir -p vendor/python
-OLD_OATH=$PWD
-cd vendor/python
-PY_PATH=$PWD
-cd $OLD_OATH
-
-./configure --prefix $PY_PATH
+mkdir -p $BUILD_DIR/.vendor/python
+./configure --prefix $BUILD_DIR/.vendor/python
 make
 make install
