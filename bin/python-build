@@ -12,3 +12,5 @@ mkdir -p $BUILD_DIR/.vendor/python
 ./configure --prefix $BUILD_DIR/.vendor/python
 make
 make install
+
+rm -fr python python.tar.gz2
