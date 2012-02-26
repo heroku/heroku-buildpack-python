@@ -15,6 +15,7 @@ NAME=$($BIN_DIR/detect $BUILD_DIR)
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
 VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
+PYTHON_VERSION="2.7"
 
 unset GIT_DIR
 export PIP_DOWNLOAD_CACHE
@@ -54,10 +55,14 @@ done
 
 # Create virtualenv. Rebuild if corrupt.
 set +e
+
+echo "-----> Preparing Python ($PYTHON_VERSION)"
+PYTHON_EXE=$(python-build install $PYTHON_VERSION --quiet)
+
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 
 # Try to create the virtualenv.
-OUT=$(virtualenv --distribute --never-download  --prompt=venv . 2>&1)
+OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt=venv . 2>&1)
 
 # If there's an error, purge and recreate.
 [ $? -ne 0 ] && {
@@ -65,7 +70,7 @@ OUT=$(virtualenv --distribute --never-download  --prompt=venv . 2>&1)
   for dir in $VIRTUALENV_DIRS; do
     rm -fr $dir &> /dev/null || true
   done
-  OUT=$(virtualenv --distribute --never-download  --prompt=venv . )
+  OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt=venv . )
 }
 echo "$OUT" | indent
 
