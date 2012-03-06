@@ -9,7 +9,7 @@ cd python
 mv */* .
 
 mkdir -p /app/.vendor/python
-./configure --prefix=/app/.vendor/python
+./configure --prefix=./.vendor/python
 make
 make install
 
