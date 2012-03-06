@@ -8,12 +8,10 @@ tar -xjf python.tar.bz2 -C python
 cd python
 mv */* .
 
-env
-echo '!!!!!!!!!!!!!!!!'
-
 ./configure --prefix=$BUILD_DIR/.heroku/python
 make
 make install
 
-rm -fr python python.tar.gz2
 cd ..
+rm -fr python python.tar.gz2
+
