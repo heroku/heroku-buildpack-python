@@ -16,3 +16,4 @@ make
 make install
 
 rm -fr python python.tar.gz2
+cd ..
