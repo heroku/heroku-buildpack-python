@@ -34,7 +34,9 @@ cd $BUILD_DIR
 
 # Reject a non-packaged Django app.
 if [ "$NAME" = "Python" ]; then
-  [ -f manage.py ] && [ -f settings.py ] && { echo " !     Django app must be in a package subdirectory"; exit 1; }
+  [ -f settings.py ] && { echo " !     Django settings must be in a package subdirectory"; exit 1; }
+
+  (grep -Fiq "django" requirements.txt) && [ -f settings.py ] && { echo " !     Django app must be in a package subdirectory"; exit 1; }
 fi
 
 # Warn a checked-in virtualenv.

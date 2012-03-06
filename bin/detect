@@ -3,9 +3,9 @@
 
 BUILD_DIR=$1
 
-if [ -f $BUILD_DIR/requirements.txt ] || [ -f $BUILD_DIR/setup.py ]; then
+if [ ! -f $BUILD_DIR/requirements.txt ] || [ ! -f $BUILD_DIR/setup.py ]; then
   exit 1
 fi
 
 # 'Python/Django' if there is a [mysite]/settings.py file present; otherwise 'Python'
-ls $BUILD_DIR/**/settings.py &> /dev/null && echo Python/Django || echo Python
+ls $BUILD_DIR/**/settings.py &> /dev/null && (grep -Fiq "django" requirements.txt) && echo Python/Django || echo Python
