@@ -8,8 +8,11 @@ tar -xjf python.tar.bz2 -C python
 cd python
 mv */* .
 
+env
+echo '!!!!!!!!!!!!!!!!'
+
 mkdir -p /app/.vendor/python
-./configure --prefix=$PWD/.vendor/python
+./configure --prefix=$BUILD_DIR/.vendor/python
 make
 make install
 
