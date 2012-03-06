@@ -75,6 +75,7 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt=ven
 # If there's an error, purge and recreate.
 [ $? -ne 0 ] && {
   echo " !     Virtualenv corrupt, rebuilding."
+  echo OUT
   for dir in $VIRTUALENV_DIRS; do
     rm -fr $dir &> /dev/null || true
   done
