@@ -63,7 +63,7 @@ echo "-----> Preparing Python interpreter ($PYTHON_VERSION)"
 # PYTHON_EXE=$($BIN_DIR/python-build install $PYTHON_VERSION --quiet)
 
 export BUILD_DIR
-./python-build
+source $BIN_DIR/python-build
 
 PYTHON_EXE=$BUILD_DIR/.vendor/python/bin/python
 
