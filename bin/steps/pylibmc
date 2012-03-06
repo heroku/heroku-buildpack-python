@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # if pylibmc within requirements, use vendored libmemcached
-if (grep -Fxiq "pylibmc" requirements.txt) || (grep -Fiq "pylibmc=" requirements.txt)
+if (grep -Fiq "pylibmc" requirements.txt)
 then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
     cd .heroku
