@@ -2,7 +2,10 @@
 # bin/detect <build-dir>
 
 BUILD_DIR=$1
-[ -f $BUILD_DIR/requirements.txt ] || exit 1 # fail fast if no requirements.txt
+
+if [ -f $BUILD_DIR/requirements.txt ] || [ -f $BUILD_DIR/setup.py ]; then
+  exit 1
+fi
 
 # 'Python/Django' if there is a [mysite]/settings.py file present; otherwise 'Python'
 ls $BUILD_DIR/**/settings.py &> /dev/null && echo Python/Django || echo Python
