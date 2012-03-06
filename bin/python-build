@@ -11,7 +11,6 @@ mv */* .
 env
 echo '!!!!!!!!!!!!!!!!'
 
-mkdir -p /app/.vendor/python
 ./configure --prefix=$BUILD_DIR/.vendor/python
 make
 make install
