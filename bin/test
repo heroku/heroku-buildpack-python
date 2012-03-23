@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+#
+# Create a Heroku app with the following buildpack:
+# https://github.com/ddollar/buildpack-tet
+#
+# Push this Python buildpack to that Heroku app to
+# run the tests.
+#
+
+
+## utils ########################################
+
+pushd $(dirname 0) >/dev/null
+BASE=$(pwd)
+popd >/dev/null
+
+source ${BASE}/vendor/test-utils
+
+detect() {
+  capture ${BASE}/bin/detect ${BASE}/test/$1
+}
+
+compile() {
+  capture ${BASE}/bin/compile ${BASE}/test/$1
+}
+
+source ${BASE}/vendor/shunit2
+ 

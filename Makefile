@@ -1,3 +1,6 @@
+tests:
+	./bin/test
+	
 docs:
 	mkdir -p site
 	shocco -t 'Python Buildpack Compiler' ./bin/compile > site/index.html
