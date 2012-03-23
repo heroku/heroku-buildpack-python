@@ -167,7 +167,7 @@ OUT=$(virtualenv --python $PYTHON_EXE  --relocatable .)
 }
 set -e
 
-# ### Cache the Artifacts
+# ### Finalize
 #
 
 # Store new artifacts in cache.
