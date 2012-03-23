@@ -19,7 +19,7 @@
 # 
 # - The desired Python VM is available on the base system.
 # - Library dependencies are available on the base system.
-# - Django applications should not require additional configuration.
+# - Django applications should not require any platform-specific configuration.
 
 # <hr />
 
