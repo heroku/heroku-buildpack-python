@@ -1,46 +1,84 @@
 #!/usr/bin/env bash
-# bin/compile <build-dir> <cache-dir>
 
+# This script serves as the **Python Buildpack** compiler. 
+# 
+# A [buildpack](http://devcenter.heroku.m/articles/buildpacks) is an 
+# adapter between a Python application and Heroku's runtime.
+
+# ## Usage
+# Compiling an app into a slug is simple:
+# 
+#     $ bin/compile <build-dir> <cache-dir>
+
+
+# ## Assumptions
+# 
+# This buildpack makes the following assumptions:
+# 
+# - The desired Python VM is available on the base system.
+# - Library dependencies are available on the base system.
+# - Django applications 
+
+# Fail fast and fail hard.
 set -eo pipefail
 
-# Prepend proper path for virtualenv hackery. Will be deprecated soon.
+# Prepend proper path for virtualenv hackery. This will be deprecated soon.
 export PATH=:/usr/local/bin:$PATH
 
+# Paths.
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
 
+# The detected application type (Python|Python/Django).
 NAME=$($BIN_DIR/detect $BUILD_DIR)
+
+# Where to store the Pip download cache.
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
+
+# The directories to include in the cache.
 VIRTUALENV_DIRS="bin include lib"
-VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
+
+# Python versions. This will be used in the future to specify custom Pythons.
 PYTHON_VERSION="2.7.2"
 PYTHON_EXE="python2.7"
 
+# The slug compiler doesn't do a very good job of sanitizing environment variables.
 unset GIT_DIR
+
+# We'll need to send these statics to other scripts we `source`.
 export PIP_DOWNLOAD_CACHE
 export BUILD_DIR
 
+# Syntax sugar.
 indent() {
   RE="s/^/       /"
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
 }
 
 function virtualenv (){
-  python "$ROOT_DIR/src/virtualenv-1.7/virtualenv.py" "$@"
+  python "$ROOT_DIR/vendor/virtualenv-1.7/virtualenv.py" "$@"
 }
 
+# ## Build Time
+# 
+
+# Switch to the repo's context.
 cd $BUILD_DIR
 
-# Reject a non-packaged Django app.
+# ### Sanity Checks
+# 
+# Just a little peace of mind.
+
+# Reject a Django app that appears to be packaged incorrectly.
 if [ "$NAME" = "Python" ]; then
   [ -f settings.py ] && { echo " !     Django settings must be in a package subdirectory"; exit 1; }
 
   (grep -Fiq "django" requirements.txt) && [ -f settings.py ] && { echo " !     Django app must be in a package subdirectory"; exit 1; }
 fi
 
-# Warn a checked-in virtualenv.
+# Warn for a checked-in virtualenv.
 if [ -d "lib" ] || [ -d "bin" ]; then
   echo " !     You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
 fi
@@ -51,18 +89,20 @@ if [ -f "lib/python2.7" ]; then
   exit 1;
 fi
 
-# Copy artifacts out of cache if exists.
+# Copy old artifacts out of the cache.
 mkdir -p $CACHE_DIR
 for dir in $VIRTUALENV_DIRS; do
   cp -R $CACHE_DIR/$dir . &> /dev/null || true
 done
 
-# Create virtualenv. Rebuild if corrupt.
+# ### Virtualenv Setup
+#
+
+# Create the virtualenv. Rebuild if corrupt.
+# TODO: Bootstrap a bottled Python VM... 
+
 set +e
-
 echo "-----> Preparing Python interpreter ($PYTHON_VERSION)"
-# TODO: Bootstrap a Python...
-
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 
 # Try to create the virtualenv.
@@ -92,26 +132,27 @@ echo "-----> Activating virtualenv"
 source bin/activate
 
 
-# If no requirements, assume 'setup.py install'
+# If no requirements given, assume `setup.py develop`
 if [ ! -f requirements.txt ]; then
-  echo "." > requirements.txt
+  echo "-e ." > requirements.txt
 fi
 
-# Install mercurial, if needed.
+# Install Mercurial, if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
   pip install --use-mirrors mercurial | indent
 fi
 
-# Install dependencies.
+# Install dependencies with Pip.
 echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
 pip install --use-mirrors -r requirements.txt --src ./.heroku/src | indent
 
-# Django support.
+# Do additional application hackery if applications appears to be a Django app.
+# Optionally, disable all Django-specific changes with `DISABLE_INJECTION` env.
 if [ "$NAME" = "Python/Django" ] && ! [ "$DISABLE_INJECTION" ]; then
   source $BIN_DIR/steps/django
 fi
 
-# Make virtualenv relocatable.
+# Make Virtualenv's paths relative for portability.
 set +e
 OUT=$(virtualenv --python $PYTHON_EXE  --relocatable .)
 [ $? -ne 0 ] && {
@@ -126,3 +167,5 @@ for dir in $VIRTUALENV_DIRS; do
   rm -rf $CACHE_DIR/$dir
   cp -R $dir $CACHE_DIR/
 done
+
+# fin.
