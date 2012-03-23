@@ -129,7 +129,8 @@ set -e
 # Create set-aside `.heroku` folder.
 mkdir -p .heroku
 
-# Pylibmc support.
+# Pylibmc support.  
+# See [`bin/steps/pylibmc`](pylibmc.html).
 source $BIN_DIR/steps/pylibmc
 
 # Activate the Virtualenv.
