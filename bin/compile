@@ -167,10 +167,13 @@ OUT=$(virtualenv --python $PYTHON_EXE  --relocatable .)
 }
 set -e
 
+# ### Cache the Artifacts
+#
+
 # Store new artifacts in cache.
 for dir in $VIRTUALENV_DIRS; do
   rm -rf $CACHE_DIR/$dir
   cp -R $dir $CACHE_DIR/
 done
 
-# fin.
+# ### Fin.
