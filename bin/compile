@@ -109,7 +109,7 @@ done
 
 set +e
 echo "-----> Preparing Python interpreter ($PYTHON_VERSION)"
-echo "-----> Preparing virtualenv version $(virtualenv --version)"
+echo "-----> Creating Virtualenv version $(virtualenv --version)"
 
 # Try to create the virtualenv.
 OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt=venv . 2>&1)
@@ -117,7 +117,6 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt=ven
 # If there's an error, purge and recreate.
 [ $? -ne 0 ] && {
   echo " !     Virtualenv corrupt, rebuilding."
-  echo $OUT
   for dir in $VIRTUALENV_DIRS; do
     rm -fr $dir &> /dev/null || true
   done
@@ -149,7 +148,7 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies with Pip.
-echo "-----> Installing dependencies using pip version $(pip --version | awk '{print $2}')"
+echo "-----> Installing dependencies using Pip version $(pip --version | awk '{print $2}')"
 pip install --use-mirrors -r requirements.txt --src ./.heroku/src | indent
 
 # Do additional application hackery if applications appears to be a Django app.
