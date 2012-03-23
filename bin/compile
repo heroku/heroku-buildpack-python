@@ -67,6 +67,14 @@ function virtualenv (){
   python "$ROOT_DIR/vendor/virtualenv-1.7/virtualenv.py" "$@"
 }
 
+function puts-step (){
+  echo "-----> $@"
+}
+
+function puts-warn (){
+  echo " !     $@"
+}
+
 # ## Build Time
 # 
 
@@ -79,19 +87,19 @@ cd $BUILD_DIR
 
 # Reject a Django app that appears to be packaged incorrectly.
 if [ "$NAME" = "Python" ]; then
-  [ -f settings.py ] && { echo " !     Django settings must be in a package subdirectory"; exit 1; }
+  [ -f settings.py ] && { puts-warn "Django settings must be in a package subdirectory"; exit 1; }
 
-  (grep -Fiq "django" requirements.txt) && [ -f settings.py ] && { echo " !     Django app must be in a package subdirectory"; exit 1; }
+  (grep -Fiq "django" requirements.txt) && [ -f settings.py ] && { puts-warn "Django app must be in a package subdirectory"; exit 1; }
 fi
 
 # Warn for a checked-in virtualenv.
 if [ -d "lib" ] || [ -d "bin" ]; then
-  echo " !     You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
+  puts-warn "You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
 fi
 
 # Reject a conflicting checked-in virtualenv.
 if [ -f "lib/python2.7" ]; then
-  echo " !     Checked-in virtualenv conflict."
+  puts-warn "Checked-in virtualenv conflict."
   exit 1;
 fi
 
@@ -108,15 +116,15 @@ done
 # TODO: Bootstrap a bottled Python VM... 
 
 set +e
-echo "-----> Preparing Python interpreter ($PYTHON_VERSION)"
-echo "-----> Creating Virtualenv version $(virtualenv --version)"
+puts-step "Preparing Python interpreter ($PYTHON_VERSION)"
+puts-step "Creating Virtualenv version $(virtualenv --version)"
 
 # Try to create the virtualenv.
 OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt=venv . 2>&1)
 
 # If there's an error, purge and recreate.
 [ $? -ne 0 ] && {
-  echo " !     Virtualenv corrupt, rebuilding."
+  puts-warn "Virtualenv corrupt, rebuilding."
   for dir in $VIRTUALENV_DIRS; do
     rm -fr $dir &> /dev/null || true
   done
@@ -134,7 +142,7 @@ mkdir -p .heroku
 source $BIN_DIR/steps/pylibmc
 
 # Activate the Virtualenv.
-echo "-----> Activating virtualenv"
+puts-step "Activating virtualenv"
 source bin/activate
 
 
@@ -149,7 +157,7 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies with Pip.
-echo "-----> Installing dependencies using Pip version $(pip --version | awk '{print $2}')"
+puts-step "Installing dependencies using Pip version $(pip --version | awk '{print $2}')"
 pip install --use-mirrors -r requirements.txt --src ./.heroku/src | indent
 
 # Do additional application hackery if applications appears to be a Django app.
@@ -165,7 +173,7 @@ fi
 set +e
 OUT=$(virtualenv --python $PYTHON_EXE  --relocatable .)
 [ $? -ne 0 ] && {
-  echo " !     Error making virtualenv relocatable"
+  puts-warn "Error making virtualenv relocatable"
   echo "$OUT" | indent
   exit 1
 }
