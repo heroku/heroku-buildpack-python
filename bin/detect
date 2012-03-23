@@ -3,9 +3,20 @@
 
 BUILD_DIR=$1
 
+# Exit early if app is clearly not Python.
 if [ ! -f $BUILD_DIR/requirements.txt ] && [ ! -f $BUILD_DIR/setup.py ]; then
   exit 1
 fi
 
-# 'Python/Django' if there is a [mysite]/settings.py file present; otherwise 'Python'
-ls $BUILD_DIR/**/settings.py &> /dev/null && (grep -Fiq "django" requirements.txt) && echo Python/Django || echo Python
+# If only `setup.py`, assume that the app is not Django.
+if [ ! -f $BUILD_DIR/requirements.txt ]; then
+  echo Python
+  exit 0
+fi
+
+# `Python/Django` if `**/settings.py` is present and `django` exists in 
+# `requirements.txt`.
+#
+# Otherwise, `Python`.
+
+ls $BUILD_DIR/**/settings.py &> /dev/null && (grep -Fiq "django" $BUILD_DIR/requirements.txt) && echo Python/Django || echo Python
