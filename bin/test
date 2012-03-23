@@ -53,22 +53,9 @@ testDetectWithSetupRequires() {
 testDetectNotPython() {
   detect "not-python"
   assertNotCaptured "Python"
-  assertNoAppDetected
+  assertEquals "1" "${RETURN}"
 }
 
-# testPackageJsonWithVersion() {
-#   compile "package-json-version"
-#   assertCaptured "Using Node.js version: 0.6.11"
-#   assertCaptured "Using npm version: 1.1.9"
-#   assertCapturedSuccess
-# }
-
-# testPackageJsonWithoutVersion() {
-#   compile "package-json-noversion"
-#   assertCaptured "Using Node.js version: 0.4.7"
-#   assertCaptured "Using npm version: 1.0.106"
-#   assertCapturedSuccess
-# }
 
 ## utils ########################################
 
