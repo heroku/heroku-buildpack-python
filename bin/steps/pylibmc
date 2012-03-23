@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
+
 # if pylibmc within requirements, use vendored libmemcached
 if (grep -Fiq "pylibmc" requirements.txt)
 then
