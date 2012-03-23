@@ -15,7 +15,8 @@ NAME=$($BIN_DIR/detect $BUILD_DIR)
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 VIRTUALENV_DIRS="bin include lib"
 VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
-PYTHON_VERSION="2.7"
+PYTHON_VERSION="2.7.2"
+PYTHON_EXE="python2.7"
 
 unset GIT_DIR
 export PIP_DOWNLOAD_CACHE
@@ -60,9 +61,7 @@ done
 set +e
 
 echo "-----> Preparing Python interpreter ($PYTHON_VERSION)"
-# PYTHON_EXE=$($BIN_DIR/python-build install $PYTHON_VERSION --quiet)
-
-PYTHON_EXE=$BUILD_DIR/.vendor/python/bin/python
+# TODO: Bootstrap a Python...
 
 echo "-----> Preparing virtualenv version $(virtualenv --version)"
 
