@@ -148,7 +148,7 @@ source bin/activate
 
 # If no requirements given, assume `setup.py develop`.
 if [ ! -f requirements.txt ]; then
-  puts-step "No requirements.txt supplied, assuming distribution package."
+  puts-step "No requirements.txt provided; assuming dist package."
   echo "-e ." > requirements.txt
 fi
 
