@@ -153,6 +153,9 @@ pip install --use-mirrors -r requirements.txt --src ./.heroku/src | indent
 
 # Do additional application hackery if applications appears to be a Django app.
 # Optionally, disable all Django-specific changes with `DISABLE_INJECTION` env.
+# 
+# See [`bin/steps/django`](django.html).
+
 if [ "$NAME" = "Python/Django" ] && ! [ "$DISABLE_INJECTION" ]; then
   source $BIN_DIR/steps/django
 fi
