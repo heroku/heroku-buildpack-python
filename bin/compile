@@ -41,7 +41,7 @@ CACHE_DIR=$2
 NAME=$($BIN_DIR/detect $BUILD_DIR)
 
 # Where to store the Pip download cache.
-CACHED_DIRS = '.heroku'
+CACHED_DIRS='.heroku'
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 
 # Static configurations for virtualenv caches.
@@ -110,7 +110,7 @@ VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
 if [-f $CACHE_DIR/$LEGACY_VIRTUALENV_TRIGGER]; do
   LEGACY_VIRTUALENV=true
   VIRTUALENV_LOC=$LEGACY_VIRTUALENV_LOC
-  CACHED_DIRS = $LEGACY_VIRTUALENV_DIRS
+  CACHED_DIRS=$LEGACY_VIRTUALENV_DIRS
 
   # Warn for a checked-in virtualenv.
   if [ -d "lib" ] || [ -d "bin" ]; then
