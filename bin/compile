@@ -161,7 +161,7 @@ source $BIN_DIR/steps/pylibmc
 
 # Activate the Virtualenv.
 puts-step "Activating virtualenv"
-source bin/activate
+source $VIRTUALENV_LOC/bin/activate
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
