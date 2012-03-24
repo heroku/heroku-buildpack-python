@@ -12,9 +12,8 @@
 echo "-----> Injecting Django settings..."
 
 SETTINGS_FILE=$(ls **/settings.py | head -1)
-MANAGE_FILE=$(ls **/manage.py | head -1)
-
 PROJECT=$(dirname $SETTINGS_FILE)
+
 echo "Injecting code into $SETTINGS_FILE to read from DATABASE_URL" | indent
 
 cat >>$SETTINGS_FILE <<EOF
