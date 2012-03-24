@@ -99,6 +99,9 @@ fi
 # ### The Cache
 mkdir -p $CACHE_DIR
 
+# Create set-aside `.heroku` folder.
+mkdir -p .heroku
+
 # Nice defaults.
 LEGACY_VIRTUALENV=false
 VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
@@ -124,7 +127,10 @@ fi
 # Restore old artifacts from the cache.
 for dir in $CACHED_DIRS; do
   echo "copying $dir..."
+  echo "$ ls $CACHED_DIR/$dir"
+  ls $CACHED_DIR/$dir
   cp -R $CACHED_DIR/$dir . &> /dev/null || true
+  ls $dir
 done
 
 
@@ -152,9 +158,6 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(v
 echo "$OUT" | indent
 
 set -e
-
-# Create set-aside `.heroku` folder.
-mkdir -p .heroku
 
 # Pylibmc support.  
 # See [`bin/steps/pylibmc`](pylibmc.html).
@@ -198,8 +201,13 @@ set -e
 # Store new artifacts in cache.
 for dir in $CACHED_DIRS; do
   echo "copying $dir..."
+  echo "$ ls $CACHED_DIR/$dir"
+  ls $CACHED_DIR/$dir
+
   rm -rf $CACHE_DIR/$dir
+  ls $dir
   cp -R $dir $CACHE_DIR/
+  ls $CACHE_DIR/
 done
 
 # ### Fin.
