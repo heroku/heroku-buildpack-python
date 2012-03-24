@@ -104,7 +104,7 @@ LEGACY_VIRTUALENV=false
 VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
 
 # Support "old-style" virtualenvs.
-if [-f $CACHE_DIR/$LEGACY_VIRTUALENV_TRIGGER]; then
+if [ -f $CACHE_DIR/$LEGACY_VIRTUALENV_TRIGGER ]; then
   LEGACY_VIRTUALENV=true
   VIRTUALENV_LOC=$LEGACY_VIRTUALENV_LOC
   CACHED_DIRS=$LEGACY_VIRTUALENV_DIRS
@@ -161,6 +161,7 @@ source $BIN_DIR/steps/pylibmc
 
 # Activate the Virtualenv.
 puts-step "Activating virtualenv"
+echo '$VIRTUALENV_LOC/bin/activate'
 source $VIRTUALENV_LOC/bin/activate
 
 # Install Mercurial if it appears to be required.
