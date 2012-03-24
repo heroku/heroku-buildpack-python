@@ -43,8 +43,12 @@ NAME=$($BIN_DIR/detect $BUILD_DIR)
 # Where to store the Pip download cache.
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 
-# The directories to include in the cache.
-VIRTUALENV_DIRS="bin include lib"
+# Static configurations for virtualenv caches.
+LEGACY_VIRTUALENV_LOC='.'
+MODERN_VIRTUALENV_LOC='.heroku/venv'
+LEGACY_VIRTUALENV_DIRS="bin include lib"
+LEGACY_VIRTUALENV_TRIGGER='lib/python2.7'
+
 
 # Python version. This will be used in the future to specify custom Pythons.
 PYTHON_VERSION="2.7.2"
@@ -94,22 +98,38 @@ fi
 # Reject a Django app that appears to be packaged incorrectly.
 grep -Fiq "django" requirements.txt) && [ -f settings.py ] && { puts-warn "Django app must be in a package subdirectory"; exit 1; }
 
-# Warn for a checked-in virtualenv.
-if [ -d "lib" ] || [ -d "bin" ]; then
-  puts-warn "You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
-fi
-
-# Reject a conflicting checked-in virtualenv.
-if [ -f "lib/python2.7" ]; then
-  puts-warn "Checked-in virtualenv conflict."
-  exit 1;
-fi
-
-# Copy old artifacts out of the cache.
+# ### The Cache
 mkdir -p $CACHE_DIR
-for dir in $VIRTUALENV_DIRS; do
+
+# Nice defaults.
+LEGACY_VIRTUALENV=false
+VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
+CACHE_DIRS = '.heroku'
+
+# Support "old-style" virtualenvs.
+if [-f $CACHE_DIR/$LEGACY_VIRTUALENV_TRIGGER]; do
+  LEGACY_VIRTUALENV=true
+  VIRTUALENV_LOC=$LEGACY_VIRTUALENV_LOC
+  CACHE_DIRS = $LEGACY_VIRTUALENV_DIRS
+
+  # Warn for a checked-in virtualenv.
+  if [ -d "lib" ] || [ -d "bin" ]; then
+    puts-warn "You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
+  fi
+
+  # Reject a conflicting checked-in virtualenv.
+  if [ -f "lib/python2.7" ]; then
+    puts-warn "Checked-in virtualenv conflict."
+    exit 1;
+  fi
+
+done
+
+# Restore old artifacts from the cache.
+for dir in $CACHE_DIRS; do
   cp -R $CACHE_DIR/$dir . &> /dev/null || true
 done
+
 
 # ### Virtualenv Setup
 #
@@ -122,7 +142,7 @@ puts-step "Preparing Python interpreter ($PYTHON_VERSION)"
 puts-step "Creating Virtualenv version $(virtualenv --version)"
 
 # Try to create the virtualenv.
-OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt=venv . 2>&1)
+OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt=venv $VIRTUALENV_LOC 2>&1)
 
 # If there's an error, purge and recreate.
 [ $? -ne 0 ] && {
@@ -130,7 +150,7 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt=ven
   for dir in $VIRTUALENV_DIRS; do
     rm -fr $dir &> /dev/null || true
   done
-  OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt=venv . )
+  OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt=venv $VIRTUALENV_LOC )
 }
 echo "$OUT" | indent
 
@@ -167,7 +187,7 @@ fi
 
 # Make Virtualenv's paths relative for portability.
 set +e
-OUT=$(virtualenv --python $PYTHON_EXE  --relocatable .)
+OUT=$(virtualenv --python $PYTHON_EXE  --relocatable $VIRTUALENV_LOC)
 [ $? -ne 0 ] && {
   puts-warn "Error making virtualenv relocatable"
   echo "$OUT" | indent
