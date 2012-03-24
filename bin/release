@@ -8,10 +8,10 @@ NAME=$($BIN_DIR/detect $BUILD_DIR) || exit 1
 cat <<EOF
 ---
 config_vars:
-  PATH: bin:/usr/local/bin:/usr/bin:/bin
+  PATH: /bin:/usr/local/bin:/usr/bin
   PYTHONUNBUFFERED: true
-  LIBRARY_PATH: .heroku/vendor/lib
-  LD_LIBRARY_PATH: .heroku/vendor/lib
+  LIBRARY_PATH: /app/.heroku/vendor/lib
+  LD_LIBRARY_PATH: /app/.heroku/vendor/lib
   LANG: en_US.UTF-8
   PYTHONHASHSEED: random
   PYTHONHOME: /app/
