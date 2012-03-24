@@ -21,7 +21,8 @@ EOF
 [ "$NAME" = "Python/Django" ] || exit 0
 
 SETTINGS_FILE=$(cd $BUILD_DIR && ls **/settings.py | head -1)
-PROJECT=$(dirname $SETTINGS_FILE)
+MANAGE_FILE=$(cd $BUILD_DIR && ls **/manage.py | head -1)
+PROJECT=$(dirname $MANAGE_FILE)
 
 cat <<EOF
 
@@ -29,5 +30,5 @@ addons:
   shared-database:5mb
 
 default_process_types:
-  web:      python $PROJECT/manage.py runserver 0.0.0.0:\$PORT --noreload
+  web:      python $MANAGE_FILE runserver 0.0.0.0:\$PORT --noreload
 EOF

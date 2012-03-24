@@ -57,6 +57,11 @@ testDetectNotPython() {
 }
 
 
+testCompileWithReqs() {
+  compile "simple-requirements"
+  assertCapturedSuccess
+}
+
 ## utils ########################################
 
 pushd $(dirname 0) >/dev/null
