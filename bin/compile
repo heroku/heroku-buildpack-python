@@ -195,7 +195,7 @@ set -e
 #
 
 # Store new artifacts in cache.
-for dir in $VIRTUALENV_DIRS; do
+for dir in $CACHED_DIRS; do
   rm -rf $CACHE_DIR/$dir
   cp -R $dir $CACHE_DIR/
 done
