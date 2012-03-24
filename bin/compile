@@ -96,9 +96,6 @@ if [ ! -f requirements.txt ]; then
   echo "-e ." > requirements.txt
 fi
 
-# Reject a Django app that appears to be packaged incorrectly.
-grep -Fiq "django" requirements.txt) && [ -f settings.py ] && { puts-warn "Django app must be in a package subdirectory"; exit 1; }
-
 # ### The Cache
 mkdir -p $CACHE_DIR
 
