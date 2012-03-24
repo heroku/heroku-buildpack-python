@@ -41,6 +41,7 @@ CACHE_DIR=$2
 NAME=$($BIN_DIR/detect $BUILD_DIR)
 
 # Where to store the Pip download cache.
+CACHED_DIRS = '.heroku'
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 
 # Static configurations for virtualenv caches.
@@ -104,13 +105,12 @@ mkdir -p $CACHE_DIR
 # Nice defaults.
 LEGACY_VIRTUALENV=false
 VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
-CACHE_DIRS = '.heroku'
 
 # Support "old-style" virtualenvs.
 if [-f $CACHE_DIR/$LEGACY_VIRTUALENV_TRIGGER]; do
   LEGACY_VIRTUALENV=true
   VIRTUALENV_LOC=$LEGACY_VIRTUALENV_LOC
-  CACHE_DIRS = $LEGACY_VIRTUALENV_DIRS
+  CACHED_DIRS = $LEGACY_VIRTUALENV_DIRS
 
   # Warn for a checked-in virtualenv.
   if [ -d "lib" ] || [ -d "bin" ]; then
@@ -126,8 +126,8 @@ if [-f $CACHE_DIR/$LEGACY_VIRTUALENV_TRIGGER]; do
 done
 
 # Restore old artifacts from the cache.
-for dir in $CACHE_DIRS; do
-  cp -R $CACHE_DIR/$dir . &> /dev/null || true
+for dir in $CACHED_DIRS; do
+  cp -R $CACHED_DIR/$dir . &> /dev/null || true
 done
 
 
