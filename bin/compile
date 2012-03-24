@@ -85,6 +85,12 @@ cd $BUILD_DIR
 # 
 # Just a little peace of mind.
 
+# If no requirements given, assume `setup.py develop`.
+if [ ! -f requirements.txt ]; then
+  puts-step "No requirements.txt provided; assuming dist package."
+  echo "-e ." > requirements.txt
+fi
+
 # Reject a Django app that appears to be packaged incorrectly.
 if [ "$NAME" = "Python" ]; then
   [ -f settings.py ] && { puts-warn "Django settings must be in a package subdirectory"; exit 1; }
@@ -144,13 +150,6 @@ source $BIN_DIR/steps/pylibmc
 # Activate the Virtualenv.
 puts-step "Activating virtualenv"
 source bin/activate
-
-
-# If no requirements given, assume `setup.py develop`.
-if [ ! -f requirements.txt ]; then
-  puts-step "No requirements.txt provided; assuming dist package."
-  echo "-e ." > requirements.txt
-fi
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
