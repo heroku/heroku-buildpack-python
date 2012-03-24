@@ -92,11 +92,7 @@ if [ ! -f requirements.txt ]; then
 fi
 
 # Reject a Django app that appears to be packaged incorrectly.
-if [ "$NAME" = "Python" ]; then
-  [ -f settings.py ] && { puts-warn "Django settings must be in a package subdirectory"; exit 1; }
-
-  (grep -Fiq "django" requirements.txt) && [ -f settings.py ] && { puts-warn "Django app must be in a package subdirectory"; exit 1; }
-fi
+grep -Fiq "django" requirements.txt) && [ -f settings.py ] && { puts-warn "Django app must be in a package subdirectory"; exit 1; }
 
 # Warn for a checked-in virtualenv.
 if [ -d "lib" ] || [ -d "bin" ]; then
