@@ -4,9 +4,10 @@ Features:
 
 * Dist packages (setup.py) support.
 * Disable Django setting injection with `$DISABLE_INJECTION` + [user_env_compile](http://devcenter.heroku.com/articles/labs-user-env-compile).
+* Move new virtualenvs to `/app/.heroku/venv`.
 * Heavily improved Django app detection, accounting for `Django` in `requirements.txt`.
 * Literate [documentation](http://python-buildpack.herokuapp.com).
-* Default `$PYTHONHOME` and `$LANG` configurations.
+* Default `$PYTHONHOME`, `$PYTHONPATH`, and `$LANG` configurations.
 * General code refactor and improved messaging.
 * Unit tests.
 
