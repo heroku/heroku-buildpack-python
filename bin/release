@@ -20,8 +20,8 @@ EOF
 
 [ "$NAME" = "Python/Django" ] || exit 0
 
-SETTINGS_FILE=$(find $BUILD_DIR -type f -name 'settings.py' | head -1)
-MANAGE_FILE=$(find $BUILD_DIR -type f -name 'manage.py' | head -1)
+SETTINGS_FILE=$(cd $BUILD_DIR && find . -type f -name 'settings.py' | head -1)
+MANAGE_FILE=$(cd $BUILD_DIR && find . -type f -name 'manage.py' | head -1)
 PROJECT=$(dirname $MANAGE_FILE)
 
 cat <<EOF
