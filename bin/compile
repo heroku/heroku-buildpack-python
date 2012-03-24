@@ -127,9 +127,9 @@ fi
 # Restore old artifacts from the cache.
 for dir in $CACHED_DIRS; do
   echo "copying $dir..."
-  echo "$ ls $CACHED_DIR/$dir"
-  ls $CACHED_DIR/$dir
-  cp -R $CACHED_DIR/$dir . &> /dev/null || true
+  echo "$ ls $CACHE_DIR/$dir"
+  ls $CACHE_DIR/$dir
+  cp -R $CACHE_DIR/$dir . &> /dev/null || true
   ls $dir
 done
 
@@ -201,8 +201,8 @@ set -e
 # Store new artifacts in cache.
 for dir in $CACHED_DIRS; do
   echo "copying $dir..."
-  echo "$ ls $CACHED_DIR/$dir"
-  ls $CACHED_DIR/$dir
+  echo "$ ls $CACHE_DIR/$dir"
+  ls $CACHE_DIR/$dir
 
   rm -rf $CACHE_DIR/$dir
   ls $dir
