@@ -11,7 +11,7 @@
 
 echo "-----> Injecting Django settings..."
 
-SETTINGS_FILE=$(ls **/settings.py | head -1)
+SETTINGS_FILE=$(find settings.py | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
 
 echo "Injecting code into $SETTINGS_FILE to read from DATABASE_URL" | indent
