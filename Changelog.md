@@ -1,3 +1,20 @@
+## v6 (03/23/2012)
+
+Features:
+
+* Dist packages (setup.py) support.
+* Disable Django setting injection with `$DISABLE_INJECTION` + [user_env_compile](http://devcenter.heroku.com/articles/labs-user-env-compile).
+* Heavily improved Django app detection, accounting for `Django` in `requirements.txt`.
+* Literate [documentation](http://python-buildpack.herokuapp.com).
+* Default `$PYTHONHOME` and `$LANG` configurations.
+* General code refactor and improved messaging.
+* Unit tests.
+
+Bugfixes:
+
+* Django 1.4 startproject template layout support.
+* Django `manage.py` location can now be independent from `settings.py`.
+
 ## v5 (02/01/2012)
 
 Bugfixes:
