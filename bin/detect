@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-# This script serves as the 
-# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python) 
-# detector. 
-# 
-# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an 
+# This script serves as the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# detector.
+#
+# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
 # adapter between a Python application and Heroku's runtime.
 
 # ## Usage
 # Compiling an app into a slug is simple:
-# 
+#
 #     $ bin/detect <build-dir> <cache-dir>
 
 BUILD_DIR=$1
@@ -25,9 +25,41 @@ if [ ! -f $BUILD_DIR/requirements.txt ]; then
   exit 0
 fi
 
-# `Python/Django` if `**/settings.py` is present and `django` exists in 
+# `Python/Django` if `**/settings.py` is present and `django` exists in
 # `requirements.txt`.
 #
 # Otherwise, `Python`.
 
-ls $BUILD_DIR/**/settings.py &> /dev/null && (grep -Fiq "django" $BUILD_DIR/requirements.txt) && echo Python/Django || echo Python
+array=""
+list_requirements() {
+IFS_BAK=$IFS
+IFS="
+"
+    requirement_file=$1
+    reqs=$(cat $requirement_file)
+    for req in $reqs; do
+        if [[ $req == -r* ]]; then
+            new_req=$(echo $req | cut -d" " -f2)
+            if [[ $new_req == $1 ]]; then
+                continue
+            fi
+            directory=$(dirname $requirement_file)
+            if [[ ! $array == *$directory/$new_req* ]]; then
+                list_requirements "$directory/$new_req"
+            fi
+            array="$array $directory/$new_req"
+        else
+            echo $req;
+        fi
+
+    done
+IFS=$IFS_BAK
+IFS_BAK=
+}
+
+
+
+SETTINGS_FILE=$(find $BUILD_DIR/. -maxdepth 3 -type f -name 'settings.py' | head -1)
+
+
+[ -n "$SETTINGS_FILE" ] && ( list_requirements $BUILD_DIR/requirements.txt | grep -Fiq "django" ) && echo Python/Django || echo Python
