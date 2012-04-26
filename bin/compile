@@ -1,22 +1,26 @@
 #!/usr/bin/env bash
 
-# This script serves as the 
-# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python) 
-# compiler. 
-# 
-# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an 
+# This script serves as the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# compiler.
+#
+# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
 # adapter between a Python application and Heroku's runtime.
-
+#
+# You can intreract with the Heroku API directly with [heroku.py](https://github.com/heroku/heroku.py/).
+#
+# See also: [Release history](/changelog.html), [Detection](/detect.html).
+#
 # ## Usage
 # Compiling an app into a slug is simple:
-# 
+#
 #     $ bin/compile <build-dir> <cache-dir>
 
 
 # ## Assumptions
-# 
+#
 # This buildpack makes the following assumptions:
-# 
+#
 # - The desired Python VM is available on the base system.
 # - Library dependencies are available on the base system.
 # - Django applications should not require any platform-specific configuration.
@@ -81,13 +85,13 @@ function puts-warn (){
 }
 
 # ## Build Time
-# 
+#
 
 # Switch to the repo's context.
 cd $BUILD_DIR
 
 # ### Sanity Checks
-# 
+#
 # Just a little peace of mind.
 
 # If no requirements given, assume `setup.py develop`.
@@ -134,7 +138,7 @@ done
 #
 
 # Create the virtualenv. Rebuild if corrupt.
-# TODO: Bootstrap a bottled Python VM... 
+# TODO: Bootstrap a bottled Python VM...
 
 set +e
 puts-step "Preparing Python interpreter ($PYTHON_VERSION)"
@@ -155,7 +159,7 @@ echo "$OUT" | indent
 
 set -e
 
-# Pylibmc support.  
+# Pylibmc support.
 # See [`bin/steps/pylibmc`](pylibmc.html).
 source $BIN_DIR/steps/pylibmc
 
@@ -174,7 +178,7 @@ pip install --use-mirrors -r requirements.txt --src ./.heroku/src | indent
 
 # Do additional application hackery if applications appears to be a Django app.
 # Optionally, disable all Django-specific changes with `DISABLE_INJECTION` env.
-# 
+#
 # See [`bin/steps/django`](django.html).
 
 if [ "$NAME" = "Python/Django" ] && ! [ "$DISABLE_INJECTION" ]; then
@@ -202,3 +206,5 @@ for dir in $CACHED_DIRS; do
 done
 
 # ### Fin.
+
+# <a href="http://github.com/heroku/heroku-buildpack-python"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://d3nwyuy0nl342s.cloudfront.net/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub"></a>
