@@ -19,7 +19,7 @@ if [ -f settings.py ]; then
 fi
 
 echo "-----> Installing dj-database-url..."
-pip install --use-mirrors dj-database-url | indent
+pip install --use-mirrors dj-database-url==0.1.1 | indent
 
 echo "-----> Injecting Django settings..."
 
