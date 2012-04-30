@@ -58,8 +58,7 @@ IFS_BAK=
 }
 
 
-
-SETTINGS_FILE=$(find $BUILD_DIR/. -maxdepth 3 -type f -name 'settings.py' | head -1)
+SETTINGS_FILE=$(find $BUILD_DIR/. -maxdepth 2 -type f -name 'settings.py' | head -1)
 
 
 [ -n "$SETTINGS_FILE" ] && ( list_requirements $BUILD_DIR/requirements.txt | grep -Fiq "django" ) && echo Python/Django || echo Python
