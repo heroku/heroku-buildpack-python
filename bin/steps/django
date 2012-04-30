@@ -32,9 +32,6 @@ cat >>$SETTINGS_FILE <<EOF
 
 import dj_database_url
 
-if 'DATABASES' not in locals():
-    DATABASES = {}
-
-DATABASES = dj_database_url.config(DATABASES)
+DATABASES['default'] = dj_database_url.config()
 EOF
 
