@@ -56,12 +56,6 @@ testDetectNotPython() {
   assertEquals "1" "${RETURN}"
 }
 
-testDetectDjangoWithMultipleRequirements() {
-  detect "multiple-requirements"
-  assertCapturedEquals "Python/Django"
-  assertCapturedSuccess
-}
-
 
 ## utils ########################################
 
