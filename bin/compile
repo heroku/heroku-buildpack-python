@@ -59,8 +59,10 @@ LEGACY_VIRTUALENV_TRIGGER="lib/python2.7"
 PYTHON_VERSION="2.7.2"
 PYTHON_EXE="python2.7"
 
-# The slug compiler doesn't do a very good job of sanitizing environment variables.
+# Sanitizing environment variables.
 unset GIT_DIR
+unset PYTHON_HOME
+unset PYTHONPATH
 
 # We'll need to send these statics to other scripts we `source`.
 export PIP_DOWNLOAD_CACHE
