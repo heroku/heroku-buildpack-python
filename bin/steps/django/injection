@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This script serves as the Django build step of the
+# This script serves as the Django injection build step of the
 # [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
 # compiler.
 #
