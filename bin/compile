@@ -92,6 +92,9 @@ function puts-warn (){
 # Switch to the repo's context.
 cd $BUILD_DIR
 
+# Pre compile hook.
+source $BIN_DIR/steps/pre_compile
+
 # ### Sanity Checks
 #
 # Just a little peace of mind.
@@ -206,6 +209,9 @@ for dir in $CACHED_DIRS; do
   rm -rf $CACHE_DIR/$dir
   cp -R $dir $CACHE_DIR/
 done
+
+# Post compile hook.
+source $BIN_DIR/steps/post_compile
 
 # ### Fin.
 

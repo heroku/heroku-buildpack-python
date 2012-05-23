@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Fail fast and fail hard.
+set -eo pipefail
+
+cd $BUILD_DIR
+
+if [ ! -f scripts/pre_compile ]; then
+  puts-step "Running pre_compile hook."
+  source scripts/pre_compile
+fi
