@@ -18,8 +18,10 @@ if [ -f settings.py ]; then
   exit 1
 fi
 
-echo "-----> Injecting Django settings..."
+echo "-----> Installing dj-database-url..."
+pip install --use-mirrors dj-database-url | indent
 
+echo "-----> Injecting Django settings..."
 
 SETTINGS_FILE=$(find . -maxdepth 2 -type f -name 'settings.py' | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
@@ -30,5 +32,6 @@ cat >>$SETTINGS_FILE <<EOF
 
 import dj_database_url
 
+DATABASES['default'] = dj_database_url.config()
 EOF
 

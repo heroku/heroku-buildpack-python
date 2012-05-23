@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Fail fast and fail hard.
+set -eo pipefail
+
+cd $BUILD_DIR
+
+if [ ! -f scripts/post_compile ]; then
+  puts-step "Running post_compile hook."
+  source scripts/post_compile
+fi
