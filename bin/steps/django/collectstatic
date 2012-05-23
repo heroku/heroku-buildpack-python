@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set +e
+
 # Compile assets.
 echo "-----> Collecting static files"
 python $PROJECT/manage.py collectstatic --noinput  | indent
