@@ -183,7 +183,7 @@ pip install --use-mirrors -r requirements.txt --src ./.heroku/src | indent
 #
 # See [`bin/steps/django`](django.html).
 
-if [ "$NAME" = "Python/Django" ] && ! [ "$DISABLE_INJECTION" ]; then
+if [ "$NAME" = "Python/Django" ]; then
   source $BIN_DIR/steps/django/init
 fi
 

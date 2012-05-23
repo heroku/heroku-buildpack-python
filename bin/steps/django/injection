@@ -12,12 +12,6 @@
 # ## Sanity Checks
 #
 
-# Reject a Django app that appears to be packaged incorrectly.
-if [ -f settings.py ]; then
-  echo " !     Django app must be in a package subdirectory"
-  exit 1
-fi
-
 echo "-----> Installing dj-database-url..."
 pip install --use-mirrors dj-database-url | indent
 

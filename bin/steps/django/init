@@ -11,5 +11,8 @@ PROJECT=$(dirname $SETTINGS_FILE)
 
 export SETTINGS_FILE PROJECT
 
-source injection
+if [ "$DISABLE_INJECTION" ]; then
+    source injection
+fi
+
 source collectstatic
