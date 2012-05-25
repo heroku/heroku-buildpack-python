@@ -1,18 +1,13 @@
 #!/usr/bin/env bash
 
-# Reject a Django app that appears to be packaged incorrectly.
-if [ -f settings.py ]; then
-  echo " !     Django app must be in a package subdirectory"
-  exit 1
-fi
-
 SETTINGS_FILE=$(find . -maxdepth 2 -type f -name 'settings.py' | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
 
 export SETTINGS_FILE PROJECT
 
-if [ "$DISABLE_INJECTION" ]; then
+if [ ! "$DISABLE_INJECTION" ]; then
     source injection
 fi
+
 
 source collectstatic
