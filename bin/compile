@@ -65,8 +65,7 @@ unset PYTHON_HOME
 unset PYTHONPATH
 
 # We'll need to send these statics to other scripts we `source`.
-export PIP_DOWNLOAD_CACHE
-export BUILD_DIR
+export PIP_DOWNLOAD_CACHE BUILD_DIR CACHE_DIR
 
 # Syntax sugar.
 indent() {
