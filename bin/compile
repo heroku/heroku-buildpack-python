@@ -61,7 +61,7 @@ PYTHON_EXE="python2.7"
 
 # Sanitizing environment variables.
 unset GIT_DIR
-unset PYTHON_HOME
+unset PYTHONHOME
 unset PYTHONPATH
 
 # We'll need to send these statics to other scripts we `source`.
