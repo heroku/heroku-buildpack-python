@@ -1,3 +1,12 @@
+## v7
+
+Features:
+
+* Full removal of Django setting injection for new apps.
+* Automatic execution of collectstatic.
+* Search recursively from included requirements.txt files.
+
+
 ## v6 (03/23/2012)
 
 Features:
