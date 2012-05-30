@@ -24,7 +24,7 @@ if [ "$RUN_COLLECTSTATIC" ]; then
     [ $? -ne 0 ] && {
         echo " !     Error running manage.py collectstatic. More info:"
         echo "       http://devcenter.heroku.com/articles/django-assets"
-        exit 1
+        # exit 1
     }
 
 else
