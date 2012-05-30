@@ -19,7 +19,7 @@ indent() {
 }
 
 echo "-----> Installing dj-database-url..."
-pip install --use-mirrors dj-database-url | indent
+pip install --use-mirrors dj-database-url>=0.2.0 | indent
 
 echo "-----> Injecting Django settings..."
 
@@ -32,6 +32,6 @@ cat >>$SETTINGS_FILE <<EOF
 
 import dj_database_url
 
-DATABASES['default'] = dj_database_url.config()
+DATABASES = {'default': dj_database_url.config(default='postgres://')}
 EOF
 
