@@ -4,6 +4,8 @@ Features:
 
 * Full removal of Django setting injection for new apps.
 * Automatic execution of collectstatic.
+* Suppress collectstatic errors via env SILENCE_COLLECTSTATIC.
+* Increase settings.py search depth to 3.
 * Search recursively from included requirements.txt files.
 
 
