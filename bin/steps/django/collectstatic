@@ -13,6 +13,7 @@ fi
 # Compile assets if collectstatic appears to be kosher.
 if [ "$RUN_COLLECTSTATIC" ]; then
     echo "-----> Collecting static files"
+    echo "python $MANAGE_FILE collectstatic --noinput --verbosity=0"
     python $MANAGE_FILE collectstatic --noinput --verbosity=0 | indent
 
     [ $? -ne 0 ] && {
