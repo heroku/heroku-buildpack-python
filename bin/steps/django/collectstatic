@@ -21,9 +21,7 @@ set -e
 if [ "$RUN_COLLECTSTATIC" ]; then
     python $MANAGE_FILE collectstatic --noinput | indent
 
-    COLLECTSTATIC=$?
-
-    [ $COLLECTSTATIC -ne 0 ] && [ ! "$SILENCE_COLLECTSTATIC" ] && {
+    [ $? -ne 0 ] && {
         echo " !     Error running manage.py collectstatic. More info:"
         echo "       http://devcenter.heroku.com/articles/django-assets"
         exit 1
