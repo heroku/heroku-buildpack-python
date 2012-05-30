@@ -17,9 +17,10 @@ if [ ! "$SILENCE_COLLECTSTATIC" ]; then
     set -e
 fi
 
+echo "-----> Collecting static files"
+
 # Compile assets if collectstatic appears to be kosher.
 if [ "$RUN_COLLECTSTATIC" ]; then
-    echo "-----> Collecting static files"
     python $MANAGE_FILE collectstatic --noinput | indent
 
     [ $? -ne 0 ] && {
