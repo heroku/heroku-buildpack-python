@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This script serves as the Django build step of the
+# This script serves as the Django injection build step of the
 # [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
 # compiler.
 #
@@ -12,14 +12,16 @@
 # ## Sanity Checks
 #
 
-# Reject a Django app that appears to be packaged incorrectly.
-if [ -f settings.py ]; then
-  echo " !     Django app must be in a package subdirectory"
-  exit 1
-fi
+# Syntax sugar.
+indent() {
+  RE="s/^/       /"
+  [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
+}
+
+echo "-----> Installing dj-database-url..."
+pip install --use-mirrors dj-database-url | indent
 
 echo "-----> Injecting Django settings..."
-
 
 SETTINGS_FILE=$(find . -maxdepth 2 -type f -name 'settings.py' | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
@@ -30,5 +32,6 @@ cat >>$SETTINGS_FILE <<EOF
 
 import dj_database_url
 
+DATABASES['default'] = dj_database_url.config()
 EOF
 
