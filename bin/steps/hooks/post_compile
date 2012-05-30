@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-if [ -f bin/post_compile]; then
+if [ -f bin/post_compile ]; then
     source bin/post_compile
 fi
