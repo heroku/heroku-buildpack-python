@@ -134,7 +134,7 @@ done
 
 set +e
 # Create set-aside `.heroku` folder.
-mkdir .heroku
+mkdir .heroku &> /dev/null
 HEROKU_DIR_STATUS=$?
 
 # This is a new app, disable injection.
