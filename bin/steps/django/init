@@ -10,6 +10,10 @@ if [ -f .heroku/injection_disabled ]; then
   DISABLE_INJECTION=1
 fi
 
+if [ -f .heroku/collectstatic_disabled ]; then
+  DISABLE_COLLECTSTATIC=1
+fi
+
 export SETTINGS_FILE MANAGE_FILE PROJECT DISABLE_INJECTION
 
 if [ ! "$DISABLE_INJECTION" ]; then
