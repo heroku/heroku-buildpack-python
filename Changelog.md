@@ -1,3 +1,9 @@
+## v9
+
+Bugfixes:
+
+* Unset PYTHONHOME in buildpack for [user_env_compile](http://devcenter.heroku.com/articles/labs-user-env-compile).
+
 ## v8
 
 Features:
