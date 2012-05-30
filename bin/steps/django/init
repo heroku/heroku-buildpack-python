@@ -11,7 +11,7 @@ fi
 export SETTINGS_FILE PROJECT DISABLE_INJECTION
 
 if [ ! "$DISABLE_INJECTION" ]; then
-    source injection
+    source $BIN_DIR/steps/django/injection
 fi
 
-source collectstatic
+source ./collectstatic
