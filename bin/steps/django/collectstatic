@@ -24,3 +24,4 @@ else
     echo "       http://devcenter.heroku.com/articles/django-assets"
 fi
 
+env
