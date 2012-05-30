@@ -13,8 +13,8 @@ fi
 # Compile assets if collectstatic appears to be kosher.
 if [ "$RUN_COLLECTSTATIC" ]; then
     echo "-----> Collecting static files"
-    echo "python $MANAGE_FILE collectstatic --noinput --verbosity=0"
-    python $MANAGE_FILE collectstatic --noinput --verbosity=0 | indent
+    echo "python $MANAGE_FILE collectstatic --noinput"
+    python $MANAGE_FILE collectstatic --noinput | indent
 
     [ $? -ne 0 ] && {
         echo " !     Error running manage.py collectstatic. More info:"
@@ -24,3 +24,5 @@ else
     echo " !     Django collecstatic is not configured. Learn more:"
     echo "       http://devcenter.heroku.com/articles/django-assets"
 fi
+
+echo '\n'
