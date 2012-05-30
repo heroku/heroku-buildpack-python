@@ -13,7 +13,7 @@ fi
 # Compile assets if collectstatic appears to be .
 if [ "$RUN_COLLECTSTATIC" ]; then
     echo "-----> Collecting static files"
-    python $PROJECT/manage.py collectstatic --noinput  | indent
+    python $PROJECT/manage.py collectstatic --noinput --verbosity=0 | indent
 
     [ $? -ne 0 ] && {
         echo " !     Error running manage.py collectstatic. More info:"
