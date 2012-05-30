@@ -3,17 +3,17 @@
 set +e
 
 # Check if collectstatic is configured.
-python $PROJECT/manage.py collectstatic --help &> /dev/null && RUN_COLLECTSTATIC=true
+python $MANAGE_FILE collectstatic --help &> /dev/null && RUN_COLLECTSTATIC=true
 
 # Don't raise errors if SILENCE_COLLECTSTATIC is set.
 if [ ! "$SILENCE_COLLECTSTATIC" ]; then
     set -e
 fi
 
-# Compile assets if collectstatic appears to be .
+# Compile assets if collectstatic appears to be kosher.
 if [ "$RUN_COLLECTSTATIC" ]; then
     echo "-----> Collecting static files"
-    python $PROJECT/manage.py collectstatic --noinput --verbosity=0 | indent
+    python $MANAGE_FILE collectstatic --noinput --verbosity=0 | indent
 
     [ $? -ne 0 ] && {
         echo " !     Error running manage.py collectstatic. More info:"
@@ -23,5 +23,3 @@ else
     echo " !     Django collecstatic is not configured. Learn more:"
     echo "       http://devcenter.heroku.com/articles/django-assets"
 fi
-
-env

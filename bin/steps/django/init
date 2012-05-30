@@ -2,13 +2,15 @@
 
 SETTINGS_FILE=$(find . -maxdepth 3 -type f -name 'settings.py' | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
+MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' | head -1)
+MANAGE_FILE=${MANAGE_FILE:2}
 
 # Disable injection for new applications.
 if [ -f .heroku/injection_disabled ]; then
   DISABLE_INJECTION=1
 fi
 
-export SETTINGS_FILE PROJECT DISABLE_INJECTION
+export SETTINGS_FILE MANAGE_FILE PROJECT DISABLE_INJECTION
 
 if [ ! "$DISABLE_INJECTION" ]; then
     source $BIN_DIR/steps/django/injection
