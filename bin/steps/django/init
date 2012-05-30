@@ -4,7 +4,7 @@ SETTINGS_FILE=$(find . -maxdepth 3 -type f -name 'settings.py' | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
 
 # Disable injection for new applications.
-if [ ! -f .heroku/injection_disabled ]; then
+if [ -f .heroku/injection_disabled ]; then
   DISABLE_INJECTION=1
 fi
 
