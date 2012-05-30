@@ -140,9 +140,9 @@ set +e
 mkdir .heroku &> /dev/null
 HEROKU_DIR_STATUS=$?
 
-# This is a new app, disable injection.
+# TODO: This is a new app, disable injection.
 [ $HEROKU_DIR_STATUS -eq 0 ] && {
-  touch .heroku/injection_disabled
+  #TODO: touch .heroku/injection_disabled
 }
 set -e
 
