@@ -2,6 +2,13 @@
 
 set +e
 
+# Syntax sugar.
+indent() {
+  RE="s/^/       /"
+  [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
+}
+
+
 # Check if collectstatic is configured.
 python $MANAGE_FILE collectstatic --help &> /dev/null && RUN_COLLECTSTATIC=true
 

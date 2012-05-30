@@ -12,6 +12,12 @@
 # ## Sanity Checks
 #
 
+# Syntax sugar.
+indent() {
+  RE="s/^/       /"
+  [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
+}
+
 echo "-----> Installing dj-database-url..."
 pip install --use-mirrors dj-database-url | indent
 
