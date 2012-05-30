@@ -1,3 +1,14 @@
+## v8
+
+Features:
+
+* Disable Django collectstatic with `$DISABLE_COLLECTSTATIC` + [user_env_compile](http://devcenter.heroku.com/articles/labs-user-env-compile).
+
+Bugfixes:
+
+* Don't disbable injection for new Django apps.
+* Inform user of July 1, 2012 deprecation of Django injection.
+
 ## v7
 
 Features:
