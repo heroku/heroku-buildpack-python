@@ -6,7 +6,7 @@ set +e
 python $PROJECT/manage.py collectstatic --help &> /dev/null && RUN_COLLECTSTATIC=true
 
 # Don't raise errors if SILENCE_COLLECTSTATIC is set.
-if [ ! "$SILENCE_COLLECTSTATIC" ]]; then
+if [ ! "$SILENCE_COLLECTSTATIC" ]; then
     set -e
 fi
 
