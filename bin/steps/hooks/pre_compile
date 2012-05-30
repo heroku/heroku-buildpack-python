@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 if [ -f bin/pre_compile ]; then
-    source bin/pre_compile
+    chmod +x bin/pre_compile
+    bin/pre_compile
 fi

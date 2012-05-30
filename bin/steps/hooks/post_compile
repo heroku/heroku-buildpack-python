@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 if [ -f bin/post_compile ]; then
-    source bin/post_compile
+    chmod +x bin/post_compile
+    bin/post_compile
 fi
