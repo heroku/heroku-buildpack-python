@@ -12,6 +12,10 @@ fi
 
 export SETTINGS_FILE MANAGE_FILE PROJECT DISABLE_INJECTION
 
+echo " !     Notice: settings injection is deprecated for all new Django apps."
+echo " !     Please see the following URL for information on the new usage:"
+echo " !     https://devcenter.heroku.com/articles/django#database_settings"
+
 if [ ! "$DISABLE_INJECTION" ]; then
     source $BIN_DIR/steps/django/injection
 fi
