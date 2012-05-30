@@ -105,19 +105,6 @@ fi
 mkdir -p $CACHE_DIR
 
 
-set +e
-
-# Create set-aside `.heroku` folder.
-mkdir .heroku
-HEROKU_DIR_STATUS=$?
-
-# This is a new app, disable injection.
-[ $HEROKU_DIR_STATUS -nq 0 ] && {
-  touch .heroku/injection_disabled
-}
-set -e
-
-
 # Nice defaults.
 LEGACY_VIRTUALENV=false
 VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
@@ -144,6 +131,17 @@ fi
 for dir in $CACHED_DIRS; do
   cp -R $CACHE_DIR/$dir . &> /dev/null || true
 done
+
+set +e
+# Create set-aside `.heroku` folder.
+mkdir .heroku
+HEROKU_DIR_STATUS=$?
+
+# This is a new app, disable injection.
+[ $HEROKU_DIR_STATUS -eq 0 ] && {
+  touch .heroku/injection_disabled
+}
+set -e
 
 
 # ### Virtualenv Setup
