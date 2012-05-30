@@ -65,7 +65,7 @@ unset PYTHON_HOME
 unset PYTHONPATH
 
 # We'll need to send these statics to other scripts we `source`.
-export PIP_DOWNLOAD_CACHE BUILD_DIR CACHE_DIR
+export PIP_DOWNLOAD_CACHE BUILD_DIR CACHE_DIR BIN_DIR
 
 # Syntax sugar.
 indent() {
@@ -183,7 +183,7 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies with Pip.
-puts-step "Installing dependencies using Pip version $(pip --version | awk '{print $2}')"
+puts-step "Installing dependencies using pip version $(pip --version | awk '{print $2}')"
 pip install --use-mirrors -r requirements.txt --src ./.heroku/src | indent
 
 # Do additional application hackery if applications appears to be a Django app.
