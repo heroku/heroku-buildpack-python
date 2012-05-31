@@ -13,7 +13,6 @@ python $MANAGE_FILE collectstatic --dry-run --noinput &> /dev/null && RUN_COLLEC
 
 echo "-----> Collecting static files"
 
-
 # Compile assets if collectstatic appears to be kosher.
 if [ "$RUN_COLLECTSTATIC" ]; then
     python $MANAGE_FILE collectstatic --noinput | indent
