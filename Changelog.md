@@ -1,3 +1,10 @@
+## v11
+
+Bugfixes:
+
+* Cleanup collectstatic output.
+
+
 ## v10
 
 Bugfixes:
