@@ -8,7 +8,7 @@ indent() {
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
 }
 
-# Check if collectstatic is configured.
+# Check if collectstatic is configured properly.
 python $MANAGE_FILE collectstatic --dry-run &> /dev/null && RUN_COLLECTSTATIC=true
 
 echo "-----> Collecting static files"
