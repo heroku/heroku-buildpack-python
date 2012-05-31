@@ -18,12 +18,11 @@ export SETTINGS_FILE MANAGE_FILE PROJECT DISABLE_INJECTION
 
 if [ ! "$DISABLE_INJECTION" ]; then
     source $BIN_DIR/steps/django/injection
-    echo " !     Notice: settings injection will be deprecated for all new Django "
-    echo " !     apps starting on July 1, 2012. Learn more:"
-    echo " !     https://devcenter.heroku.com/articles/django-injection"
 fi
 
-
+echo " !     Notice: settings injection will be deprecated for all new Django "
+echo " !     apps on July 1, 2012. Learn more:"
+echo " !     https://devcenter.heroku.com/articles/django-injection"
 
 if [ ! "$DISABLE_COLLECTSTATIC" ]; then
     source $BIN_DIR/steps/django/collectstatic
