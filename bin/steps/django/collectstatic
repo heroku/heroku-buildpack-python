@@ -15,12 +15,11 @@ echo "-----> Collecting static files"
 
 # Compile assets if collectstatic appears to be kosher.
 if [ "$RUN_COLLECTSTATIC" ]; then
-    python $MANAGE_FILE collectstatic --noinput | sed '/^Copying/d;/^$/d'  | indent
+    python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
 
     [ $? -ne 0 ] && {
         echo " !     Error running manage.py collectstatic. More info:"
         echo "       http://devcenter.heroku.com/articles/django-assets"
-        exit 1
     }
 
 else
@@ -29,3 +28,4 @@ else
 fi
 
 echo
+
