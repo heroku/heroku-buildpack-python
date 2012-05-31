@@ -1,3 +1,9 @@
+## v12
+
+Bugfixes:
+
+* Catch database setting corner case.
+
 ## v11
 
 Bugfixes:
