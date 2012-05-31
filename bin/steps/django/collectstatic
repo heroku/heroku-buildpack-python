@@ -8,14 +8,11 @@ indent() {
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
 }
 
-
 # Check if collectstatic is configured.
-python $MANAGE_FILE collectstatic --help &> /dev/null && RUN_COLLECTSTATIC=true
-
-# Don't raise errors if SILENCE_COLLECTSTATIC is set.
+python $MANAGE_FILE collectstatic --dry-run &> /dev/null && RUN_COLLECTSTATIC=true
 
 echo "-----> Collecting static files"
-set -e
+
 
 # Compile assets if collectstatic appears to be kosher.
 if [ "$RUN_COLLECTSTATIC" ]; then
@@ -24,7 +21,7 @@ if [ "$RUN_COLLECTSTATIC" ]; then
     [ $? -ne 0 ] && {
         echo " !     Error running manage.py collectstatic. More info:"
         echo "       http://devcenter.heroku.com/articles/django-assets"
-        # exit 1
+        exit 1
     }
 
 else
