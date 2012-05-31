@@ -32,6 +32,13 @@ cat >>$SETTINGS_FILE <<EOF
 
 import dj_database_url
 
-DATABASES = {'default': dj_database_url.config(default='postgres://')}
+if 'DATABASES' not in locals():
+    DATABASES = {}
+
+if not 'default' in DATABASES:
+    DATABASES['default'] = {}
+
+DATABASES['default'].update(dj_database_url.config(default='postgres://'))
+
 EOF
 
