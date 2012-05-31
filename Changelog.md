@@ -1,3 +1,9 @@
+## v10
+
+Bugfixes:
+
+* Check for collectstatic validity with --dry-run instead of --help for Django 1.4.
+
 ## v9
 
 Bugfixes:
