@@ -160,12 +160,14 @@ puts-step "Creating Virtualenv version $(virtualenv --version)"
 # Try to create the virtualenv.
 OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(venv) ' $VIRTUALENV_LOC 2>&1)
 
-# If there's an error, purge and recreate.
-[ $? -ne 0 ] && {
-  puts-warn "Virtualenv corrupt, rebuilding."
+[ $? -ne 0 -o -n "$CLEAN_VIRTUALENV" ] && {
+  if [ -n "$CLEAN_VIRTUALENV" ]
+    then echo " !     CLEAN_VIRTUALENV set, rebuilding virtualenv."
+    else echo " !     Virtualenv corrupt, rebuilding."
+  fi
   for dir in $VIRTUALENV_DIRS; do
     rm -fr $dir &> /dev/null || true
-  done
+  done  
   OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
 }
 echo "$OUT" | indent
