@@ -1,3 +1,10 @@
+## v13
+
+Bugfixes:
+
+* Fix pip quoting error.
+* Only talk about collectstatic in buildpack output when it's configured.
+
 ## v12
 
 Bugfixes:
