@@ -19,7 +19,7 @@ indent() {
 }
 
 echo "-----> Installing dj-database-url..."
-pip install --use-mirrors dj-database-url>=0.2.0 | indent
+pip install --use-mirrors 'dj-database-url>=0.2.0' | indent
 
 echo "-----> Injecting Django settings..."
 
