@@ -146,6 +146,7 @@ HEROKU_DIR_STATUS=$?
 # }
 set -e
 
+mkdir -p .profile.d
 
 # ### Virtualenv Setup
 #
@@ -167,7 +168,7 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(v
   fi
   for dir in $VIRTUALENV_DIRS; do
     rm -fr $dir &> /dev/null || true
-  done  
+  done
   OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
 }
 echo "$OUT" | indent
