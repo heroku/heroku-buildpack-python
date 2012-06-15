@@ -165,6 +165,15 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(v
     then echo " !     CLEAN_VIRTUALENV set, rebuilding virtualenv."
     else echo " !     Virtualenv corrupt, rebuilding."
   fi
+  # If the virtualenv is old-style, the new one won't be
+  if $LEGACY_VIRTUALENV; then
+    VIRTUALENV_DIRS=$LEGACY_VIRTUALENV_DIRS
+    VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
+    CACHED_DIRS=".heroku"
+    LEGACY_VIRTUALENV=false
+  else
+    VIRTUALENV_DIRS=$MODERN_VIRTUALENV_LOC
+  fi
   for dir in $VIRTUALENV_DIRS; do
     rm -fr $dir &> /dev/null || true
   done  
