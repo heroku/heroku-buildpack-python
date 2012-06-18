@@ -167,6 +167,10 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(v
   fi
   # If the virtualenv is old-style, the new one won't be
   if $LEGACY_VIRTUALENV; then
+    # Remove old artifacts in cache.
+    for dir in $CACHED_DIRS; do
+      rm -rf $CACHE_DIR/$dir
+    done
     VIRTUALENV_DIRS=$LEGACY_VIRTUALENV_DIRS
     VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
     CACHED_DIRS=".heroku"
