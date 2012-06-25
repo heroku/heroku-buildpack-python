@@ -53,7 +53,7 @@ LEGACY_VIRTUALENV_LOC="."
 MODERN_VIRTUALENV_LOC=".heroku/venv"
 LEGACY_VIRTUALENV_DIRS="bin include lib"
 LEGACY_VIRTUALENV_TRIGGER="lib/python2.7"
-PROFILE_PATH=".profile.d/python"
+PROFILE_PATH="$1/.profile.d/python"
 
 
 # Python version. This will be used in the future to specify custom Pythons.
