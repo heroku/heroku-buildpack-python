@@ -156,7 +156,6 @@ set -e
 # Buildpack profile init script
 mkdir -p .profile.d
 
-# echo "export $2=$3" >> $PROFILE_PATH
 # ### Virtualenv Setup
 #
 
