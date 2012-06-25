@@ -154,7 +154,7 @@ HEROKU_DIR_STATUS=$?
 set -e
 
 # Buildpack profile init script
-mkdir -p .profile.d
+mkdir -p $(dirname $PROFILE_PATH)
 
 # ### Virtualenv Setup
 #
@@ -230,7 +230,7 @@ done
 
 # Set context environment variables.
 
-set-env PATH /app/.heroku/venv/bin:/bin:/usr/local/bin:/usr/bin
+set-env PATH '$HOME/.heroku/venv/bin:/bin:$PATH'
 set-env PYTHONUNBUFFERED true
 set-env LIBRARY_PATH /app/.heroku/vendor/lib
 set-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
