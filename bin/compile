@@ -53,6 +53,7 @@ LEGACY_VIRTUALENV_LOC="."
 MODERN_VIRTUALENV_LOC=".heroku/venv"
 LEGACY_VIRTUALENV_DIRS="bin include lib"
 LEGACY_VIRTUALENV_TRIGGER="lib/python2.7"
+PROFILE_PATH=".profile.d/python"
 
 
 # Python version. This will be used in the future to specify custom Pythons.
@@ -60,12 +61,10 @@ PYTHON_VERSION="2.7.2"
 PYTHON_EXE="python2.7"
 
 # Sanitizing environment variables.
-unset GIT_DIR
-unset PYTHONHOME
-unset PYTHONPATH
+unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
 
 # We'll need to send these statics to other scripts we `source`.
-export PIP_DOWNLOAD_CACHE BUILD_DIR CACHE_DIR BIN_DIR
+export PIP_DOWNLOAD_CACHE BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 
 # Syntax sugar.
 indent() {
@@ -73,16 +72,24 @@ indent() {
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
 }
 
+# Virtualenv wrapper.
 function virtualenv (){
   python "$ROOT_DIR/vendor/virtualenv-1.7/virtualenv.py" "$@"
 }
 
+# Buildpack Steps.
 function puts-step (){
   echo "-----> $@"
 }
 
+# Buildpack Warnings.
 function puts-warn (){
   echo " !     $@"
+}
+
+# Usage: $ set-env key value
+function set-env (){
+  echo "export $1=$2" >> $PROFILE_PATH
 }
 
 # ## Build Time
@@ -146,8 +153,10 @@ HEROKU_DIR_STATUS=$?
 # }
 set -e
 
+# Buildpack profile init script
 mkdir -p .profile.d
 
+# echo "export $2=$3" >> $PROFILE_PATH
 # ### Virtualenv Setup
 #
 
