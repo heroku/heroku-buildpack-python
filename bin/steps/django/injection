@@ -18,16 +18,15 @@ indent() {
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
 }
 
+echo "-----> Injecting legacy Django settings..."
+
 echo "-----> Installing dj-database-url..."
 pip install --use-mirrors 'dj-database-url>=0.2.0' | indent
-
-echo "-----> Injecting Django settings..."
 
 SETTINGS_FILE=$(find . -maxdepth 2 -type f -name 'settings.py' | head -1)
 PROJECT=$(dirname $SETTINGS_FILE)
 
-echo "Injecting code into $SETTINGS_FILE to read from DATABASE_URL" | indent
-
+echo "Injecting code into $SETTINGS_FILE to read from DATABASE_URL" | indent"
 cat >>$SETTINGS_FILE <<EOF
 
 import dj_database_url
