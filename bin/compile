@@ -113,6 +113,7 @@ fi
 
 # ### The Cache
 mkdir -p $CACHE_DIR
+[ ! "$(ls -A $CACHE_DIR)" ] && export FRESH_APP=1
 
 
 # Nice defaults.
