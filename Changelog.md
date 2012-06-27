@@ -1,3 +1,11 @@
+## v14
+
+Features:
+
+* Full removal of Django settings injection for new apps.
+* Support for profile.d
+* Fresh app detection.
+
 ## v13
 
 Bugfixes:
