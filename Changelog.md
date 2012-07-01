@@ -6,6 +6,10 @@ Features:
 * Support for profile.d
 * Fresh app detection.
 
+Bugfixes:
+
+* Default pip path exists action.
+
 ## v13
 
 Bugfixes:
