@@ -5,6 +5,8 @@ Features:
 * Full removal of Django settings injection for new apps.
 * Support for profile.d
 * Fresh app detection.
+* Update to Virtualenv v1.7.2
+* Updated to Pip v1.1 (patched)
 
 Bugfixes:
 
