@@ -94,9 +94,8 @@ function set-env (){
 
 # Usage: $ set-default-env key value
 function set-default-env (){
-  echo "export $1=${$1:$2}" >> $PROFILE_PATH
+  echo "export $1=\${\$$1:-$2}" >> $PROFILE_PATH
 }
-
 
 # ## Build Time
 #
