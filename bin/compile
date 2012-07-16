@@ -92,6 +92,12 @@ function set-env (){
   echo "export $1=$2" >> $PROFILE_PATH
 }
 
+# Usage: $ set-default-env key value
+function set-default-env (){
+  echo "export $1=${$1:$2}" >> $PROFILE_PATH
+}
+
+
 # ## Build Time
 #
 
@@ -231,14 +237,14 @@ done
 
 # Set context environment variables.
 
-set-env PATH '$HOME/.heroku/venv/bin:/bin:$PATH'
-set-env PYTHONUNBUFFERED true
-set-env LIBRARY_PATH /app/.heroku/vendor/lib
-set-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
-set-env LANG en_US.UTF-8
-set-env PYTHONHASHSEED random
-set-env PYTHONHOME /app/.heroku/venv/
-set-env PYTHONPATH /app/
+set-env PATH '$HOME/.heroku/venv/bin:$PATH'
+set-default-env PYTHONUNBUFFERED true
+set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
+set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
+set-default-env LANG en_US.UTF-8
+set-default-env PYTHONHASHSEED random
+set-default-env PYTHONHOME /app/.heroku/venv/
+set-default-env PYTHONPATH /app/
 
 # ### Fin.
 
