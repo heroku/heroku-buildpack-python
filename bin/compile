@@ -207,7 +207,7 @@ fi
 if (grep -Fiq "\${" requirements.txt) then
   echo "Substituting environment variables within requirements.txt" | indent
   env | sed 's/[\%]/\\&/g;s/\([^=]*\)=\(.*\)/s%${\1}%\2%/' > /tmp/env.sed && {
-     sed -f /tmp/env.sed -i '.orig' requirements.txt && rm /tmp/env.sed
+     sed -f /tmp/env.sed -i.orig requirements.txt && rm /tmp/env.sed
   }
 fi
 
