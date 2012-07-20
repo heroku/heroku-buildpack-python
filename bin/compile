@@ -202,6 +202,15 @@ if (grep -Fiq "hg+" requirements.txt) then
   pip install --use-mirrors mercurial | indent
 fi
 
+# Substitute environment variables in requirements.txt
+# TODO: allow cascading in included requirements files?
+if (grep -Fiq "\${" requirements.txt) then
+  echo "Substituting environment variables within requirements.txt" | indent
+  env | sed 's/[\%]/\\&/g;s/\([^=]*\)=\(.*\)/s%${\1}%\2%/' > /tmp/env.sed && {
+     sed -f /tmp/env.sed -i '.orig' requirements.txt && rm /tmp/env.sed
+  }
+fi
+
 # Install dependencies with Pip.
 puts-step "Installing dependencies using pip version $(pip --version | awk '{print $2}')"
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | indent
