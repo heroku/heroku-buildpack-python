@@ -275,7 +275,7 @@ opencv_dir="OpenCV-${opencv_version}"
 opencv_file="${opencv_dir}.tar.gz"
 opencv_url="https://s3.amazonaws.com/loku-python/${opencv_dir}.tar.bz2"
 
-cache_target=${cache}/${opencv_file}
+cache_target=${cache}/${cmake_file}
 build_target=${build}/.heroku
 target=/app/.heroku
 
@@ -293,6 +293,21 @@ if [ ! -f ${cache_target} ]; then
   make install | indent
   PATH=${target}/bin:$PATH
   cd ..
+
+  #Create cache slug
+  tar czf ${cache_target} -C ${target} .
+fi
+
+mkdir -p ${build_target}
+tar xzf ${cache_target} -C ${build_target}
+
+cache_target=${cache}/${opencv_file}
+build_target=${build}/.heroku
+target=/app/.heroku
+
+if [ ! -f ${cache_target} ]; then
+  echo "No cached compile detected. Bulding..." | indent
+  cd $build
 
   echo "Compiling OpenCV v${opencv_version}..." | indent
   #Compile OpenCV
