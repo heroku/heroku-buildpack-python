@@ -272,8 +272,8 @@ cmake_tar_dir="cmake-${cmake_version}"
 
 opencv_version="2.4.2"
 opencv_dir="OpenCV-${opencv_version}"
-opencv_file="${opencv_dir}.tar.bz2"
-opencv_url="https://s3.amazonaws.com/loku-python/${opencv_file}"
+opencv_file="${opencv_dir}.tar.gz"
+opencv_url="https://s3.amazonaws.com/loku-python/${opencv_dir}.tar.bz2"
 
 cache_target=${cache}/${opencv_file}
 build_target=${build}/.local
@@ -282,7 +282,7 @@ target=/app/.local
 if [ ! -f ${cache_target} ]; then
   echo "No cached compile detected. Bulding..." | indent
   cd $build
-
+  
   echo "Compiling cmake v${cmake_version}..." | indent
   #Compile cmake
   curl -s ${cmake_url} > ${cmake_file}
