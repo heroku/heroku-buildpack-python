@@ -291,7 +291,6 @@ if [ ! -f ${cache_target} ]; then
   ./bootstrap --prefix=${target} | indent
   make | indent
   make install | indent
-  PATH=${target}/bin:$PATH
   cd ..
 
   #Create cache slug
@@ -300,6 +299,7 @@ fi
 
 mkdir -p ${build_target}
 tar xzf ${cache_target} -C ${build_target}
+PATH=${build_target}/bin:$PATH
 
 cache_target=${cache}/${opencv_file}
 build_target=${build}/.heroku
