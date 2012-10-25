@@ -276,8 +276,8 @@ opencv_file="${opencv_dir}.tar.gz"
 opencv_url="https://s3.amazonaws.com/loku-python/${opencv_dir}.tar.bz2"
 
 cache_target=${cache}/${opencv_file}
-build_target=${build}/.local
-target=/app/.local
+build_target=${build}/.heroku
+target=/app/.heroku
 
 if [ ! -f ${cache_target} ]; then
   echo "No cached compile detected. Bulding..." | indent
@@ -301,7 +301,7 @@ if [ ! -f ${cache_target} ]; then
   cd ${opencv_dir}
   mkdir build
   cd build
-  cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} -DCMAKE_BUILD_TYPE=release .. | indent
+  cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} .. | indent
   make install | indent
   cd ..
 
