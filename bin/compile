@@ -249,6 +249,70 @@ set-default-env PYTHONHASHSEED random
 set-default-env PYTHONHOME /app/.heroku/venv/
 set-default-env PYTHONPATH /app/
 
+#install OpenCV
+
+# from https://github.com/freeformz/heroku-buildpack-io/blob/master/bin/compile
+
+set -e
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+build=$BUILD_DIR
+cache=$CACHE_DIR
+
+#ensure it exists
+mkdir -p ${cache}
+
+cmake_version="2.8.6"
+cmake_url="http://www.cmake.org/files/v2.8/cmake-2.8.6.tar.gz"
+cmake_file="cmake-${cmake_version}.tar.gz"
+cmake_tar_dir="cmake-${cmake_version}"
+
+opencv_version="2.4.2"
+opencv_dir="OpenCV-${opencv_version}"
+opencv_file="${opencv_dir}.tar.bz2"
+opencv_url="https://s3.amazonaws.com/loku-python/${opencv_file}"
+
+cache_target=${cache}/${opencv_file}
+build_target=${build}/.local
+target=/app/.local
+
+if [ ! -f ${cache_target} ]; then
+  echo "No cached compile detected. Bulding..." | indent
+  cd $build
+
+  echo "Compiling cmake v${cmake_version}..." | indent
+  #Compile cmake
+  curl -s ${cmake_url} > ${cmake_file}
+  tar zxf ${cmake_file}
+  cd ${cmake_tar_dir}
+  ./bootstrap --prefix=${target} | indent
+  make | indent
+  make install | indent
+  PATH=${target}/bin:$PATH
+  cd ..
+
+  echo "Compiling OpenCV v${opencv_version}..." | indent
+  #Compile OpenCV
+  curl -s ${opencv_url} > ${opencv_file}
+  tar zxf ${opencv_file}
+  cd ${opencv_dir}
+  sed -i s/add_subdirectory\(Python\)/#add_subdirectory\(Python\)/ addons/CMakeLists.txt
+  mkdir build
+  cd build
+  cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} -DCMAKE_BUILD_TYPE=release .. | indent
+  make install | indent
+  cd ..
+
+  #Create cache slug
+  tar czf ${cache_target} -C ${target} .
+fi
+
+mkdir -p ${build_target}
+tar xzf ${cache_target} -C ${build_target}
+
 # ### Fin.
 
 # Experimental post_compile hook.
