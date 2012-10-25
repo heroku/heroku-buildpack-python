@@ -301,31 +301,31 @@ fi
 mkdir -p ${build_target}
 tar xzf ${cache_target} -C ${build_target}
 
-cache_target=${cache}/${opencv_file}
-build_target=${build}/.heroku
-target=/app/.heroku
+#cache_target=${cache}/${opencv_file}
+#build_target=${build}/.heroku
+#target=/app/.heroku
 
-if [ ! -f ${cache_target} ]; then
-  echo "No cached compile detected. Bulding..." | indent
-  cd $build
+#if [ ! -f ${cache_target} ]; then
+#  echo "No cached compile detected. Bulding..." | indent
+#  cd $build
 
-  echo "Compiling OpenCV v${opencv_version}..." | indent
-  #Compile OpenCV
-  curl -s ${opencv_url} > ${opencv_file}
-  tar xf ${opencv_file}
-  cd ${opencv_dir}
-  mkdir build
-  cd build
-  cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} .. | indent
-  make install | indent
-  cd ..
+#  echo "Compiling OpenCV v${opencv_version}..." | indent
+#  #Compile OpenCV
+#  curl -s ${opencv_url} > ${opencv_file}
+#  tar xf ${opencv_file}
+#  cd ${opencv_dir}
+#  mkdir build
+#  cd build
+#  cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} .. | indent
+#  make install | indent
+#  cd ..
 
-  #Create cache slug
-  tar czf ${cache_target} -C ${target} .
-fi
+#  #Create cache slug
+#  tar czf ${cache_target} -C ${target} .
+#fi
 
-mkdir -p ${build_target}
-tar xzf ${cache_target} -C ${build_target}
+#mkdir -p ${build_target}
+#tar xzf ${cache_target} -C ${build_target}
 
 # ### Fin.
 
