@@ -299,7 +299,6 @@ if [ ! -f ${cache_target} ]; then
   curl -s ${opencv_url} > ${opencv_file}
   tar xf ${opencv_file}
   cd ${opencv_dir}
-  sed -i s/add_subdirectory\(Python\)/#add_subdirectory\(Python\)/ addons/CMakeLists.txt
   mkdir build
   cd build
   cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} -DCMAKE_BUILD_TYPE=release .. | indent
