@@ -316,7 +316,7 @@ if [ ! -f ${cache_target} ]; then
   cd ${opencv_dir}
   mkdir build
   cd build
-  cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} .. | indent
+  cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} -DCMAKE_BUILD_TYPE=RELEASE .. | indent
   make install | indent
   cd ..
 
