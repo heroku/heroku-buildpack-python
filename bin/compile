@@ -297,7 +297,7 @@ if [ ! -f ${cache_target} ]; then
   echo "Compiling OpenCV v${opencv_version}..." | indent
   #Compile OpenCV
   curl -s ${opencv_url} > ${opencv_file}
-  tar zxf ${opencv_file}
+  tar xf ${opencv_file}
   cd ${opencv_dir}
   sed -i s/add_subdirectory\(Python\)/#add_subdirectory\(Python\)/ addons/CMakeLists.txt
   mkdir build
