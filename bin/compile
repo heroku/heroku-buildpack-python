@@ -187,7 +187,7 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(v
   done
   OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
 }
-echo "$OUT" | indent
+echo "$OUT" | sed -e 's/\.\.\.\+/.../g' | indent
 
 set -e
 
