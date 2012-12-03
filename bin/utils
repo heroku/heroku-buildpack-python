@@ -1,0 +1,35 @@
+# Syntax sugar.
+indent() {
+  RE="s/^/       /"
+  [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
+}
+
+# Clean up pip output
+cleanup() {
+  sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/Overwriting/Id' |  sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
+}
+
+# Virtualenv wrapper.
+function virtualenv (){
+  python "$ROOT_DIR/vendor/virtualenv-1.8.4/virtualenv.py" "$@"
+}
+
+# Buildpack Steps.
+function puts-step (){
+  echo "-----> $@"
+}
+
+# Buildpack Warnings.
+function puts-warn (){
+  echo " !     $@"
+}
+
+# Usage: $ set-env key value
+function set-env (){
+  echo "export $1=$2" >> $PROFILE_PATH
+}
+
+# Usage: $ set-default-env key value
+function set-default-env (){
+  echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
+}
