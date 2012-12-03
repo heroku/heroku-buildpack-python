@@ -74,7 +74,7 @@ indent() {
 
 # Clean up pip output
 cleanup() {
-  sed -e '/already satisfied/Id'
+  sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/Overwriting/Id' |  sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
 }
 
 # Virtualenv wrapper.
@@ -177,7 +177,7 @@ mkdir -p $(dirname $PROFILE_PATH)
 
 set +e
 puts-step "Preparing Python interpreter ($PYTHON_VERSION)"
-puts-step "Creating Virtualenv version $(virtualenv --version)"
+puts-step "Creating Virtualenv ($(virtualenv --version))"
 
 # Try to create the virtualenv.
 OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(venv) ' $VIRTUALENV_LOC 2>&1)
@@ -192,7 +192,7 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(v
   done
   OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
 }
-echo "$OUT" | sed -e 's/\.\.\.\+/.../g' | indent
+echo "$OUT"  | cleanup | indent
 
 set -e
 
@@ -201,7 +201,6 @@ set -e
 source $BIN_DIR/steps/pylibmc
 
 # Activate the Virtualenv.
-puts-step "Activating virtualenv"
 source $VIRTUALENV_LOC/bin/activate
 
 # Install Mercurial if it appears to be required.
@@ -210,7 +209,7 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies with Pip.
-puts-step "Installing dependencies using pip version $(pip --version | awk '{print $2}')"
+puts-step "Installing dependencies using pip ($(pip --version | awk '{print $2}'))"
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
 # Do additional application hackery if applications appears to be a Django app.
