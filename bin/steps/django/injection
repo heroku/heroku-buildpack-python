@@ -19,6 +19,9 @@ indent() {
 }
 
 echo "-----> Injecting legacy Django settings..."
+echo " !     WARNING: Settings injection will be fully deprecated on January 1, 2013. More info:"
+echo " !     https://devcenter.heroku.com/articles/django-injection "
+
 
 echo "-----> Installing dj-database-url..."
 pip install --use-mirrors 'dj-database-url>=0.2.0' | indent
