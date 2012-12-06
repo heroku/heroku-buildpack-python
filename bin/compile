@@ -106,12 +106,6 @@ done
 set +e
 # Create set-aside `.heroku` folder.
 mkdir .heroku &> /dev/null
-HEROKU_DIR_STATUS=$?
-
-# TODO: This is a new app, disable injection.
-# [ $HEROKU_DIR_STATUS -eq 0 ] && {
-  # TODO: touch .heroku/injection_disabled
-# }
 set -e
 
 # Buildpack profile init script
@@ -141,7 +135,6 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(v
   OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
 }
 echo "$OUT"  | cleanup | indent
-
 set -e
 
 # Pylibmc support.
