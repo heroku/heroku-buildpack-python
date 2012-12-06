@@ -75,10 +75,6 @@ cd $BUILD_DIR
 # Experimental pre_compile hook.
 source $BIN_DIR/steps/hooks/pre_compile
 
-# ### Sanity Checks
-#
-# Just a little peace of mind.
-
 # If no requirements given, assume `setup.py develop`.
 if [ ! -f requirements.txt ]; then
   puts-step "No requirements.txt provided; assuming dist package."
@@ -88,11 +84,6 @@ fi
 # ### The Cache
 mkdir -p $CACHE_DIR
 [ ! "$(ls -A $CACHE_DIR)" ] && export FRESH_APP=1
-
-
-# Nice defaults.
-VIRTUALENV_LOC=$VIRTUALENV_LOC
-VIRTUALENV_DIRS=$VIRTUALENV_LOC
 
 # Purge "old-style" virtualenvs.
 [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/*
@@ -128,9 +119,9 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(v
     then echo " !     CLEAN_VIRTUALENV set, rebuilding virtualenv."
     else echo " !     Virtualenv corrupt, rebuilding."
   fi
-  for dir in $VIRTUALENV_DIRS; do
-    rm -fr $dir &> /dev/null || true
-  done
+
+  rm -fr $VIRTUALENV_LOC &> /dev/null || true
+
   OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
 }
 echo "$OUT"  | cleanup | indent
