@@ -159,7 +159,7 @@ pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/
 # See [`bin/steps/django`](django.html).
 
 if [ "$NAME" = "Python/Django" ]; then
-  source $BIN_DIR/steps/django/init
+  source $BIN_DIR/steps/django
 fi
 
 # Make Virtualenv's paths relative for portability.
