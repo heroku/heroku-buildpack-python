@@ -153,11 +153,7 @@ fi
 puts-step "Installing dependencies using pip ($(pip --version | awk '{print $2}'))"
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
-# Do additional application hackery if applications appears to be a Django app.
-# Optionally, disable all Django-specific changes with `DISABLE_INJECTION` env.
-#
-# See [`bin/steps/django`](django.html).
-
+# Django collectstatic support.
 if [ "$NAME" = "Python/Django" ]; then
   source $BIN_DIR/steps/django
 fi
