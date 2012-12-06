@@ -44,17 +44,14 @@ CACHE_DIR=$2
 # The detected application type (`Python`|`Python/Django`).
 NAME=$($BIN_DIR/detect $BUILD_DIR)
 
-# Where to store the Pip download cache.
+# Where to store the pip download cache.
 CACHED_DIRS=".heroku"
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 
 # Static configurations for virtualenv caches.
-LEGACY_VIRTUALENV_LOC="."
-MODERN_VIRTUALENV_LOC=".heroku/venv"
-LEGACY_VIRTUALENV_DIRS="bin include lib"
-LEGACY_VIRTUALENV_TRIGGER="lib/python2.7"
-PROFILE_PATH="$1/.profile.d/python.sh"
-
+VIRTUALENV_LOC=".heroku/venv"
+LEGACY_TRIGGER="lib/python2.7"
+PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 
 # Python version. This will be used in the future to specify custom Pythons.
 PYTHON_VERSION="2.7.2"
@@ -66,6 +63,7 @@ unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
 # We'll need to send these statics to other scripts we `source`.
 export PIP_DOWNLOAD_CACHE BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 
+# Syntax sugar.
 source $BIN_DIR/utils
 
 # ## Build Time
@@ -77,10 +75,6 @@ cd $BUILD_DIR
 # Experimental pre_compile hook.
 source $BIN_DIR/steps/hooks/pre_compile
 
-# ### Sanity Checks
-#
-# Just a little peace of mind.
-
 # If no requirements given, assume `setup.py develop`.
 if [ ! -f requirements.txt ]; then
   puts-step "No requirements.txt provided; assuming dist package."
@@ -91,29 +85,8 @@ fi
 mkdir -p $CACHE_DIR
 [ ! "$(ls -A $CACHE_DIR)" ] && export FRESH_APP=1
 
-
-# Nice defaults.
-VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
-VIRTUALENV_DIRS=$MODERN_VIRTUALENV_LOC
-
-# Support "old-style" virtualenvs.
-if [ -d $CACHE_DIR/$LEGACY_VIRTUALENV_TRIGGER ]; then
-  LEGACY_VIRTUALENV=true
-  VIRTUALENV_LOC=$LEGACY_VIRTUALENV_LOC
-  VIRTUALENV_DIRS=$LEGACY_VIRTUALENV_DIRS
-  CACHED_DIRS=$LEGACY_VIRTUALENV_DIRS
-
-  # Warn for a checked-in virtualenv.
-  if [ -d "lib" ] || [ -d "bin" ]; then
-    puts-warn "You have a virtualenv checked in. You should ignore the appropriate paths in your repo. See http://devcenter.heroku.com/articles/gitignore for more info.";
-  fi
-
-  # Reject a conflicting checked-in virtualenv.
-  if [ -f "lib/python2.7" ]; then
-    puts-warn "Checked-in virtualenv conflict."
-    exit 1;
-  fi
-fi
+# Purge "old-style" virtualenvs.
+[ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/*
 
 # Restore old artifacts from the cache.
 for dir in $CACHED_DIRS; do
@@ -123,12 +96,6 @@ done
 set +e
 # Create set-aside `.heroku` folder.
 mkdir .heroku &> /dev/null
-HEROKU_DIR_STATUS=$?
-
-# TODO: This is a new app, disable injection.
-# [ $HEROKU_DIR_STATUS -eq 0 ] && {
-  # TODO: touch .heroku/injection_disabled
-# }
 set -e
 
 # Buildpack profile init script
@@ -152,13 +119,12 @@ OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(v
     then echo " !     CLEAN_VIRTUALENV set, rebuilding virtualenv."
     else echo " !     Virtualenv corrupt, rebuilding."
   fi
-  for dir in $VIRTUALENV_DIRS; do
-    rm -fr $dir &> /dev/null || true
-  done
+
+  rm -fr $VIRTUALENV_LOC &> /dev/null || true
+
   OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
 }
 echo "$OUT"  | cleanup | indent
-
 set -e
 
 # Pylibmc support.
@@ -177,13 +143,9 @@ fi
 puts-step "Installing dependencies using pip ($(pip --version | awk '{print $2}'))"
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
-# Do additional application hackery if applications appears to be a Django app.
-# Optionally, disable all Django-specific changes with `DISABLE_INJECTION` env.
-#
-# See [`bin/steps/django`](django.html).
-
+# Django collectstatic support.
 if [ "$NAME" = "Python/Django" ]; then
-  source $BIN_DIR/steps/django/init
+  source $BIN_DIR/steps/django
 fi
 
 # Make Virtualenv's paths relative for portability.
@@ -206,16 +168,15 @@ for dir in $CACHED_DIRS; do
 done
 
 # Set context environment variables.
-if [ ! -n "$LEGACY_VIRTUALENV" ]; then
-  set-env PATH '$HOME/.heroku/venv/bin:$PATH'
-  set-default-env PYTHONUNBUFFERED true
-  set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
-  set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
-  set-default-env LANG en_US.UTF-8
-  set-default-env PYTHONHASHSEED random
-  set-default-env PYTHONHOME /app/.heroku/venv/
-  set-default-env PYTHONPATH /app/
-fi
+set-env PATH '$HOME/.heroku/venv/bin:$PATH'
+set-default-env PYTHONUNBUFFERED true
+set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
+set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
+set-default-env LANG en_US.UTF-8
+set-default-env PYTHONHASHSEED random
+set-default-env PYTHONHOME /app/.heroku/venv/
+set-default-env PYTHONPATH /app/
+
 
 # ### Fin.
 
