@@ -49,8 +49,8 @@ CACHED_DIRS=".heroku"
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
 
 # Static configurations for virtualenv caches.
-MODERN_VIRTUALENV_LOC=".heroku/venv"
-LEGACY_VIRTUALENV_TRIGGER="lib/python2.7"
+VIRTUALENV_LOC=".heroku/venv"
+LEGACY_TRIGGER="lib/python2.7"
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 
 
@@ -92,11 +92,11 @@ mkdir -p $CACHE_DIR
 
 
 # Nice defaults.
-VIRTUALENV_LOC=$MODERN_VIRTUALENV_LOC
-VIRTUALENV_DIRS=$MODERN_VIRTUALENV_LOC
+VIRTUALENV_LOC=$VIRTUALENV_LOC
+VIRTUALENV_DIRS=$VIRTUALENV_LOC
 
 # Purge "old-style" virtualenvs.
-[ -d $CACHE_DIR/$LEGACY_VIRTUALENV_TRIGGER ] && rm -fr $CACHE_DIR/*
+[ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/*
 
 # Restore old artifacts from the cache.
 for dir in $CACHED_DIRS; do
