@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Syntax sugar.
+indent() {
+  RE="s/^/       /"
+  [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
+}
+
+SETTINGS_FILE=$(find . -maxdepth 3 -type f -name 'settings.py' | head -1)
+PROJECT=$(dirname $SETTINGS_FILE)
+MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' | head -1)
+MANAGE_FILE=${MANAGE_FILE:2}
+
+
+if [ ! "$DISABLE_COLLECTSTATIC" ]; then
+    set +e
+
+    # Check if collectstatic is configured properly.
+    python $MANAGE_FILE collectstatic --dry-run --noinput &> /dev/null && RUN_COLLECTSTATIC=true
+
+    # Compile assets if collectstatic appears to be kosher.
+    if [ "$RUN_COLLECTSTATIC" ]; then
+
+        echo "-----> Collecting static files"
+        python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
+
+        [ $? -ne 0 ] && {
+            echo " !     Error running manage.py collectstatic. More info:"
+            echo "       http://devcenter.heroku.com/articles/django-assets"
+        }
+    fi
+
+    echo
+
+
+fi
+

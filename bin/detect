@@ -19,46 +19,11 @@ if [ ! -f $BUILD_DIR/requirements.txt ] && [ ! -f $BUILD_DIR/setup.py ]; then
   exit 1
 fi
 
-# If only `setup.py`, assume that the app is not Django.
-if [ ! -f $BUILD_DIR/requirements.txt ]; then
-  echo Python
-  exit 0
-fi
-
-# `Python/Django` if `**/settings.py` is present and `django` exists in
-# `requirements.txt`.
+# `Python/Django` if `**/settings.py` is present.
 #
 # Otherwise, `Python`.
 
-array=""
-list_requirements() {
-IFS_BAK=$IFS
-IFS="
-"
-    requirement_file=$1
-    reqs=$(cat $requirement_file)
-    for req in $reqs; do
-        if [[ $req == -r* ]]; then
-            new_req=$(echo $req | cut -d" " -f2)
-            if [[ $new_req == $1 ]]; then
-                continue
-            fi
-            directory=$(dirname $requirement_file)
-            if [[ ! $array == *$directory/$new_req* ]]; then
-                list_requirements "$directory/$new_req"
-            fi
-            array="$array $directory/$new_req"
-        else
-            echo $req;
-        fi
 
-    done
-IFS=$IFS_BAK
-IFS_BAK=
-}
+SETTINGS_FILE=$(find $BUILD_DIR/. -maxdepth 3 -type f -name 'settings.py' | head -1)
 
-
-SETTINGS_FILE=$(find $BUILD_DIR/. -maxdepth 2 -type f -name 'settings.py' | head -1)
-
-
-[ -n "$SETTINGS_FILE" ] && ( list_requirements $BUILD_DIR/requirements.txt | grep -Fiq "django" ) && echo Python/Django || echo Python
+[ -n "$SETTINGS_FILE" ] && echo Python/Django || echo Python
