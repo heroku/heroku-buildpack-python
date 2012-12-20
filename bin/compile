@@ -66,7 +66,6 @@ source $BIN_DIR/utils
 # Directory Hacks for path consistiency.
 APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
-ls -a $APP_DIR
 
 # Copy Anvil app dir to temporary storage...
 mkdir -p $TMP_APP_DIR
@@ -192,7 +191,7 @@ fi
 
 # Install dependencies with Pip.
 puts-step "Installing dependencies using pip ($(pip --version | awk '{print $2}'))"
-# pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
+pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
 # Django collectstatic support.
 source $BIN_DIR/steps/collectstatic
