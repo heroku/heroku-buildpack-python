@@ -67,13 +67,6 @@ source $BIN_DIR/utils
 APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
-ls -a $APP_DIR
-ls -a $APP_DIR/tmp
-
-echo 'touching things...'
-touch $app_dir/tmp/newfile
-mkdir -p $app_dir/tmp/newdir
-
 # Copy Anvil app dir to temporary storage...
 mkdir -p $TMP_APP_DIR
 deep-mv $APP_DIR $TMP_APP_DIR
@@ -165,9 +158,9 @@ if [ ! "$SKIP_INSTALL" ]; then
   # echo $PATH
   # ls /app/.heroku/python/bin
   hash -r
-  python $ROOT_DIR/vendor/distribute-0.6.32/distribute_setup.py > /dev/null
+  python $ROOT_DIR/vendor/distribute-0.6.32/distribute_setup.py &> /dev/null
   hash -r
-  easy_install $ROOT_DIR/vendor/pip-1.2.1.tar.gz > /dev/null
+  easy_install $ROOT_DIR/vendor/pip-1.2.1.tar.gz &> /dev/null
 fi
 
 
@@ -207,7 +200,6 @@ source $BIN_DIR/steps/collectstatic
 
 # ### Finalize
 #
-python --version
 
 # Store new artifacts in cache.
 for dir in $CACHED_DIRS; do

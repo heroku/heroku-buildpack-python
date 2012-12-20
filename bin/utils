@@ -40,7 +40,7 @@ function set-default-env (){
 function deep-cp (){
   find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec cp -a '{}' $2 \;
   cp -r $1/!(tmp) $2
-  echo copying $1 to $2
+  # echo copying $1 to $2
 }
 
 # Does some serious moving.
