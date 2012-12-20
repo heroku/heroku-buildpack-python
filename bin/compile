@@ -109,6 +109,7 @@ mkdir -p $CACHE_DIR
 
 # Purge "old-style" virtualenvs.
 [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/*
+[ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/*
 
 # Restore old artifacts from the cache.
 for dir in $CACHED_DIRS; do
