@@ -69,7 +69,10 @@ TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 ls -a $APP_DIR
 ls -a $APP_DIR/tmp
-mv $APP_DIR/tmp /tmp/apptmp
+
+echo 'touching things...'
+touch $app_dir/tmp/newfile
+mkdir -p $app_dir/tmp/newdir
 
 # Copy Anvil app dir to temporary storage...
 mkdir -p $TMP_APP_DIR
