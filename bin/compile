@@ -224,13 +224,13 @@ for dir in $CACHED_DIRS; do
 done
 
 # Set context environment variables.
-set-env PATH '$HOME/.heroku/venv/bin:$PATH'
+set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-default-env PYTHONUNBUFFERED true
 set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
 set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
-set-default-env PYTHONHOME /app/.heroku/venv/
+set-default-env PYTHONHOME /app/.heroku/python/
 set-default-env PYTHONPATH /app/
 
 
