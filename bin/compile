@@ -166,7 +166,7 @@ if [ ! "$SKIP_INSTALL" ]; then
   ls /app/.heroku/python/bin
   hash -r
   which python
-  python $ROOT_DIR/vendor/distribute-0.6.31/setup.py install
+  python $ROOT_DIR/vendor/distribute-0.6.32/distribute_setup.py
   echo
   echo
   echo
