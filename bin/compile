@@ -161,6 +161,8 @@ if [ ! "$SKIP_INSTALL" ]; then
 
   # Prepare it for the real world
   # curl -O http://python-distribute.org/distribute_setup.py
+  echo path
+  echo $PATH
   python $ROOT_DIR/vendor/distribute-0.6.31/setup.py install
   easy_install $ROOT_DIR/vendor/pip-1.2.1.tar.gz
 fi
@@ -187,9 +189,6 @@ set -e
 # Pylibmc support.
 # See [`bin/steps/pylibmc`](pylibmc.html).
 source $BIN_DIR/steps/pylibmc
-
-# Activate the Virtualenv.
-source $VIRTUALENV_LOC/bin/activate
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
