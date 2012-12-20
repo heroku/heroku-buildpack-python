@@ -125,7 +125,6 @@ mkdir -p $(dirname $PROFILE_PATH)
 
 set +e
 PYTHON_VERSION=$(cat runtime.txt)
-puts-step "Preparing Python runtime ($PYTHON_VERSION)"
 
 # Install Python.
 if [ -f .heroku/python-version ]; then
@@ -139,6 +138,7 @@ fi
 
 
 if [ ! "$SKIP_INSTALL" ]; then
+  puts-step "Preparing Python runtime ($PYTHON_VERSION)"
   curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx > /dev/null
   mv python .heroku/python
 
