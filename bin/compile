@@ -80,7 +80,7 @@ BUILD_DIR=$APP_DIR
 
 # Prepend proper path buildpack use.
 export PATH=$BUILD_DIR/.heroku/python/bin:$PATH
-# ls $BUILD_DIR
+export PYTHONUNBUFFERED=1
 
 # ## Build Time
 #
@@ -120,14 +120,7 @@ set +e
 mkdir .heroku &> /dev/null
 set -e
 
-# Buildpack profile init script
 mkdir -p $(dirname $PROFILE_PATH)
-
-# ### Virtualenv Setup
-#
-
-# Create the virtualenv. Rebuild if corrupt.
-# TODO: Bootstrap a bottled Python VM...
 
 set +e
 PYTHON_VERSION=$(cat runtime.txt)
@@ -145,7 +138,6 @@ fi
 
 
 if [ ! "$SKIP_INSTALL" ]; then
-  puts-step "Installing runtime $PYTHON_VERSION"
   curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx > /dev/null
   mv python .heroku/python
 
@@ -153,33 +145,12 @@ if [ ! "$SKIP_INSTALL" ]; then
   echo $PYTHON_VERSION > .heroku/python-version
 
   # Prepare it for the real world
-  # curl -O http://python-distribute.org/distribute_setup.py
-  # echo path
-  # echo $PATH
-  # ls /app/.heroku/python/bin
   hash -r
   python $ROOT_DIR/vendor/distribute-0.6.32/distribute_setup.py &> /dev/null
   hash -r
   easy_install $ROOT_DIR/vendor/pip-1.2.1.tar.gz &> /dev/null
 fi
 
-
-# puts-step "Creating Virtualenv ($(virtualenv --version))"
-
-# # Try to create the virtualenv.
-# OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(venv) ' $VIRTUALENV_LOC 2>&1)
-
-# [ $? -ne 0 -o -n "$CLEAN_VIRTUALENV" ] && {
-#   if [ -n "$CLEAN_VIRTUALENV" ]
-#     then echo " !     CLEAN_VIRTUALENV set, rebuilding virtualenv."
-#     else echo " !     Virtualenv corrupt, rebuilding."
-#   fi
-
-#   rm -fr $VIRTUALENV_LOC &> /dev/null || true
-
-#   OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
-# }
-# echo "$OUT"  | cleanup | indent
 set -e
 
 # Pylibmc support.
