@@ -41,9 +41,6 @@ ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-# The detected application type (`Python`|`Python/Django`).
-NAME=$($BIN_DIR/detect $BUILD_DIR)
-
 # Where to store the pip download cache.
 CACHED_DIRS=".heroku"
 PIP_DOWNLOAD_CACHE=${PIP_DOWNLOAD_CACHE:-$CACHE_DIR/pip_downloads}
@@ -144,9 +141,7 @@ puts-step "Installing dependencies using pip ($(pip --version | awk '{print $2}'
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
 # Django collectstatic support.
-if [ "$NAME" = "Python/Django" ]; then
-  source $BIN_DIR/steps/django
-fi
+source $BIN_DIR/steps/collectstatic
 
 # Make Virtualenv's paths relative for portability.
 set +e
