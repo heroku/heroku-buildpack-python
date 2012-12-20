@@ -167,6 +167,13 @@ if [ ! "$SKIP_INSTALL" ]; then
   hash -r
   which python
   python $ROOT_DIR/vendor/distribute-0.6.31/setup.py install
+  echo
+  echo
+  echo
+  ls /app/.heroku/python/bin
+  echo
+  echo
+
   hash -r
   easy_install $ROOT_DIR/vendor/pip-1.2.1.tar.gz
 fi
