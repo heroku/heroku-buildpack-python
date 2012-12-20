@@ -51,8 +51,8 @@ LEGACY_TRIGGER="lib/python2.7"
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 
 # Python version. This will be used in the future to specify custom Pythons.
-PYTHON_VERSION="2.7.2"
-PYTHON_EXE="python2.7"
+DEFAULT_PYTHON_VERSION="python-2.6.3"
+PYTHON_EXE="/app/.heroku/python/bin/python"
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
@@ -62,6 +62,26 @@ export PIP_DOWNLOAD_CACHE BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 
 # Syntax sugar.
 source $BIN_DIR/utils
+
+# Directory Hacks for path consistiency.
+APP_DIR='/app'
+TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
+ls -a $APP_DIR
+
+# Copy Anvil app dir to temporary storage...
+mkdir -p $TMP_APP_DIR
+deep-mv $APP_DIR $TMP_APP_DIR
+
+# Copy Application code in.
+deep-mv $BUILD_DIR $APP_DIR
+
+# Set new context.
+ORIG_BUILD_DIR=$BUILD_DIR
+BUILD_DIR=$APP_DIR
+
+# Prepend proper path buildpack use.
+export PATH=$BUILD_DIR/.heroku/python/bin:$PATH
+# ls $BUILD_DIR
 
 # ## Build Time
 #
@@ -76,6 +96,12 @@ source $BIN_DIR/steps/hooks/pre_compile
 if [ ! -f requirements.txt ]; then
   puts-step "No requirements.txt provided; assuming dist package."
   echo "-e ." > requirements.txt
+fi
+
+# If no runtime given, assume default version.
+if [ ! -f runtime.txt ]; then
+  puts-step "No runtime.txt provided; assuming $DEFAULT_PYTHON_VERSION."
+  echo $DEFAULT_PYTHON_VERSION > runtime.txt
 fi
 
 # ### The Cache
@@ -105,13 +131,51 @@ mkdir -p $(dirname $PROFILE_PATH)
 # TODO: Bootstrap a bottled Python VM...
 
 set +e
-puts-step "Preparing Python interpreter ($PYTHON_VERSION)"
-puts-step "Creating Virtualenv ($(virtualenv --version))"
+PYTHON_VERSION=$(cat runtime.txt)
+puts-step "Preparing Python runtime ($PYTHON_VERSION)"
 
-# Try to create the virtualenv.
-OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(venv) ' $VIRTUALENV_LOC 2>&1)
+# Install Python.
+if [ -f .heroku/python-version ]; then
+  if [ ! $(cat .heroku/python-version) = $PYTHON_VERSION ]; then
+    puts-step "Found $(cat .heroku/python-version), removing."
+    rm -fr .heroku/python
+  else
+    SKIP_INSTALL=1
+  fi
+fi
 
-echo "$OUT"  | cleanup | indent
+
+if [ ! "$SKIP_INSTALL" ]; then
+  puts-step "Installing runtime $PYTHON_VERSION"
+  curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 | tar jx
+  mv python .heroku/python
+
+  # Record for future reference.
+  echo $PYTHON_VERSION > .heroku/python-version
+
+  # Prepare it for the real world
+  # curl -O http://python-distribute.org/distribute_setup.py
+  python $ROOT_DIR/vendor/distribute-0.6.31/setup.py install
+  easy_install $ROOT_DIR/vendor/pip-1.2.1.tar.gz
+fi
+
+
+# puts-step "Creating Virtualenv ($(virtualenv --version))"
+
+# # Try to create the virtualenv.
+# OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download --prompt='(venv) ' $VIRTUALENV_LOC 2>&1)
+
+# [ $? -ne 0 -o -n "$CLEAN_VIRTUALENV" ] && {
+#   if [ -n "$CLEAN_VIRTUALENV" ]
+#     then echo " !     CLEAN_VIRTUALENV set, rebuilding virtualenv."
+#     else echo " !     Virtualenv corrupt, rebuilding."
+#   fi
+
+#   rm -fr $VIRTUALENV_LOC &> /dev/null || true
+
+#   OUT=$(virtualenv --python $PYTHON_EXE --distribute --never-download  --prompt='(venv) ' $VIRTUALENV_LOC )
+# }
+# echo "$OUT"  | cleanup | indent
 set -e
 
 # Pylibmc support.
@@ -128,23 +192,14 @@ fi
 
 # Install dependencies with Pip.
 puts-step "Installing dependencies using pip ($(pip --version | awk '{print $2}'))"
-pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
+# pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
 # Django collectstatic support.
 source $BIN_DIR/steps/collectstatic
 
-# Make Virtualenv's paths relative for portability.
-set +e
-OUT=$(virtualenv --python $PYTHON_EXE  --relocatable $VIRTUALENV_LOC)
-[ $? -ne 0 ] && {
-  puts-warn "Error making virtualenv relocatable"
-  echo "$OUT" | indent
-  exit 1
-}
-set -e
-
 # ### Finalize
 #
+python --version
 
 # Store new artifacts in cache.
 for dir in $CACHED_DIRS; do
@@ -165,8 +220,9 @@ set-default-env PYTHONPATH /app/
 
 # ### Fin.
 
+deep-mv $BUILD_DIR $ORIG_BUILD_DIR
+deep-mv $TMP_APP_DIR $APP_DIR
+
+
 # Experimental post_compile hook.
 source $BIN_DIR/steps/hooks/post_compile
-
-python --version
-# <a href="http://github.com/heroku/heroku-buildpack-python"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://d3nwyuy0nl342s.cloudfront.net/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub"></a>
