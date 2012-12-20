@@ -175,7 +175,7 @@ if [ ! "$SKIP_INSTALL" ]; then
   echo
 
   hash -r
-  easy_install $ROOT_DIR/vendor/pip-1.2.1.tar.gz
+  python $ROOT_DIR/vendor/pip-1.2.1/setup.py install
 fi
 
 
