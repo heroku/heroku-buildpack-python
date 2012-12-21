@@ -1,13 +1,15 @@
-Heroku buildpack: Python
-========================
+This [custom buildpack](https://github.com/JasonSanford/heroku-buildpack-python-geos) is used to include the GEOS binaries necessary for Shapely. To force deployment to use a custom buildpack, add the following heroku config.
 
-This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](http://www.pip-installer.org/).
+    heroku config:set
+BUILDPACK_URL=git://github.com/JasonSanford/heroku-buildpack-python-geos.git
+
+I *think* this buildpack will download/unpack the GEOS binaries each time you deploy which is not ideal. We should probably conditionally download these in the future.
 
 
-Usage
------
+Additionally, the `LIBRARY_PATH` must be updated so that Shapely can locate the necessary binaries.
 
-Example usage:
+    heroku config:set LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib
+    heroku config:set LD_LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib
 
     $ ls
     Procfile  requirements.txt  web.py
