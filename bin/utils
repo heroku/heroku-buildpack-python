@@ -1,3 +1,5 @@
+shopt -s extglob
+
 # Syntax sugar.
 indent() {
   RE="s/^/       /"
@@ -32,4 +34,19 @@ function set-env (){
 # Usage: $ set-default-env key value
 function set-default-env (){
   echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
+}
+
+# Does some serious copying.
+function deep-cp (){
+  find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec cp -a '{}' $2 \;
+  cp -r $1/!(tmp) $2
+  # echo copying $1 to $2
+}
+
+# Does some serious moving.
+function deep-mv (){
+  deep-cp $1 $2
+
+  rm -fr $1/!(tmp)
+  find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec rm -fr '{}' \;
 }
