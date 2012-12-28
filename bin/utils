@@ -50,3 +50,25 @@ function deep-mv (){
   rm -fr $1/!(tmp)
   find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec rm -fr '{}' \;
 }
+
+# Recursively finds requirements.txt files
+function list-req (){
+  echo $@
+  for req in $(grep -Fie "-r " $@ | sed 's/-r //g')
+    do
+      path="$(dirname $@)/$req"
+      list-req $path
+    done
+}
+
+# Find pattern in requirements files recursively
+# Usage: $ in-req pattern file
+function in-req (){
+  for file in $(list-req $2)
+    do
+      if (grep -Fiqe "$1" "$file") then
+        return 0
+      fi
+    done
+  return 1
+}

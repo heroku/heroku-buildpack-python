@@ -173,7 +173,7 @@ set -e
 source $BIN_DIR/steps/pylibmc
 
 # Install Mercurial if it appears to be required.
-if (grep -Fiq "hg+" requirements.txt) then
+if (in-req "hg+" requirements.txt) then
   pip install --use-mirrors mercurial | cleanup | indent
 fi
 
