@@ -103,7 +103,6 @@ fi
 
 # ### The Cache
 mkdir -p $CACHE_DIR
-[ ! "$(ls -A $CACHE_DIR)" ]
 
 # Purge "old-style" virtualenvs.
 [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.heroku/bin $CACHE_DIR/.heroku/lib $CACHE_DIR/.heroku/include
