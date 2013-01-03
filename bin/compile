@@ -193,7 +193,6 @@ done
 
 # Set context environment variables.
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
-# set-env PYTHONHOME /app/.heroku/python/
 set-env PYTHONUNBUFFERED true
 set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
 set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
