@@ -159,6 +159,7 @@ if [ ! "$SKIP_INSTALL" ]; then
   cd $WORKING_DIR
 
   hash -r
+  ls /app/.heroku/python/bin/
   # python $ROOT_DIR/vendor/distribute-0.6.32/distribute_setup.py &> /dev/null
   # hash -r
   # easy_install $ROOT_DIR/vendor/pip-1.2.1.tar.gz &> /dev/null
