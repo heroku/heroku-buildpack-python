@@ -18,14 +18,13 @@ Example usage:
 
     $ git push heroku master
     ...
-    -----> Heroku receiving push
-    -----> Fetching custom build pack... done
+    -----> Fetching custom git buildpack... done
     -----> Python app detected
-    -----> Preparing virtualenv version 1.6.4
-           New python executable in ./bin/python
-           Installing setuptools............done.
-           Installing pip...............done.
-    -----> Installing dependencies using pip version 1.0.2
+    -----> No runtime.txt provided; assuming python-2.7.3;
+    -----> Preparing Python runtime (pyython-2.7.3)
+    -----> Installing Distribute (0.6.34)
+    -----> Installing Pip (1.2.1)
+    -----> Installing dependencies using Pip (1.2.1)
            Downloading/unpacking Flask==0.7.2 (from -r requirements.txt (line 1))
            Downloading/unpacking Werkzeug>=0.6.1 (from Flask==0.7.2->-r requirements.txt (line 1))
            Downloading/unpacking Jinja2>=2.4 (from Flask==0.7.2->-r requirements.txt (line 1))
