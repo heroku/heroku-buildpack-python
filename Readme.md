@@ -38,3 +38,17 @@ You can also add it to upcoming builds of an existing application:
 The buildpack will detect your app as Python if it has the file `requirements.txt` in the root. 
 
 It will use Pip to install your dependencies, vendoring a copy of the Python runtime into your slug. 
+
+Specify a Runtime
+-----------------
+
+You can also provide arbitrary releases Python with a `runtime.txt` file.
+
+    $ cat runtime.txt
+    python-3.3.0
+    
+Runtime options include:
+
+- python-2.7.3
+- python-3.3.0
+- pypy-1.9 (experimental)
