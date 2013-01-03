@@ -150,12 +150,12 @@ if [ ! "$SKIP_INSTALL" ]; then
 
   puts-step "Installing Distribute (0.6.32)"
   cd $ROOT_DIR/vendor/distribute-0.6.32/
-  python setup.py install &> /dev/null
+  python setup.py install # &> /dev/null
   cd $WORKING_DIR
 
   puts-step "Installing pip (1.2.1)"
   cd $ROOT_DIR/vendor/pip-1.2.1/
-  python setup.py install &> /dev/null
+  python setup.py install  # &> /dev/null
   cd $WORKING_DIR
 
   hash -r
