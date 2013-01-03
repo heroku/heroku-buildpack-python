@@ -144,26 +144,20 @@ if [ ! "$SKIP_INSTALL" ]; then
 
   # Record for future reference.
   echo $PYTHON_VERSION > .heroku/python-version
-
   WORKING_DIR=$(pwd)
-  # Prepare it for the real world
 
-  which python
+  # Prepare it for the real world
   puts-step "Installing Distribute (0.6.34)"
   cd $ROOT_DIR/vendor/distribute-0.6.34/
-  python setup.py install # &> /dev/null
+  python setup.py install  &> /dev/null
   cd $WORKING_DIR
 
   puts-step "Installing pip (1.2.1)"
   cd $ROOT_DIR/vendor/pip-1.2.1/
-  python setup.py install  # &> /dev/null
+  python setup.py install  &> /dev/null
   cd $WORKING_DIR
 
   hash -r
-  ls /app/.heroku/python/bin/
-  # python $ROOT_DIR/vendor/distribute-0.6.32/distribute_setup.py &> /dev/null
-  # hash -r
-  # easy_install $ROOT_DIR/vendor/pip-1.2.1.tar.gz &> /dev/null
 else
   puts-step "Using Python runtime ($PYTHON_VERSION)"
 fi
@@ -181,7 +175,7 @@ fi
 
 # Install dependencies with Pip.
 puts-step "Installing dependencies using pip (1.2.1)"
-pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
+pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src # | cleanup | indent
 
 # Django collectstatic support.
 source $BIN_DIR/steps/collectstatic
