@@ -1,14 +1,16 @@
 shopt -s extglob
 
+[ $(uname) == "Darwin" ] && SED_FLAG='-l' || SED_FLAG='-u'
+
 # Syntax sugar.
 indent() {
   RE="s/^/       /"
-  [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
+  sed $SED_FLAG "$RE"
 }
 
 # Clean up pip output
 cleanup() {
-  sed -l -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -l -e '/Overwriting/Id' |  sed -l -e '/python executable/Id' | sed -l -e '/no previously-included files/Id'
+  sed $SED_FLAG -e 's/\.\.\.\+/.../g' | sed $SED_FLAG '/already satisfied/Id' | sed $SED_FLAG -e '/Overwriting/Id' |  sed $SED_FLAG -e '/python executable/Id' | sed $SED_FLAG -e '/no previously-included files/Id'
 }
 
 # Virtualenv wrapper.
