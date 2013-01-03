@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+fp#!/usr/bin/env bash
 
 # This script serves as the
 # [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
@@ -203,11 +203,12 @@ set-default-env PYTHONPATH /app/
 un-set-env PYTHONHOME
 
 
+# Experimental post_compile hook.
+source $BIN_DIR/steps/hooks/post_compile
+
 # ### Fin.
 
 deep-mv $BUILD_DIR $ORIG_BUILD_DIR
 deep-mv $TMP_APP_DIR $APP_DIR
 
-
-# Experimental post_compile hook.
-source $BIN_DIR/steps/hooks/post_compile
+cd $BUILD_DIR
