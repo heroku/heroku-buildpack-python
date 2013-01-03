@@ -20,8 +20,8 @@ Example usage:
     ...
     -----> Fetching custom git buildpack... done
     -----> Python app detected
-    -----> No runtime.txt provided; assuming python-2.7.3;
-    -----> Preparing Python runtime (pyython-2.7.3)
+    -----> No runtime.txt provided; assuming python-2.7.3.
+    -----> Preparing Python runtime (python-2.7.3)
     -----> Installing Distribute (0.6.34)
     -----> Installing Pip (1.2.1)
     -----> Installing dependencies using Pip (1.2.1)
