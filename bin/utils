@@ -8,7 +8,7 @@ indent() {
 
 # Clean up pip output
 cleanup() {
-  sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/Overwriting/Id' |  sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
+  sed -l -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -l -e '/Overwriting/Id' |  sed -l -e '/python executable/Id' | sed -l -e '/no previously-included files/Id'
 }
 
 # Virtualenv wrapper.
