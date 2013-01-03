@@ -210,5 +210,3 @@ source $BIN_DIR/steps/hooks/post_compile
 
 deep-mv $BUILD_DIR $ORIG_BUILD_DIR
 deep-mv $TMP_APP_DIR $APP_DIR
-
-cd $BUILD_DIR
