@@ -149,8 +149,8 @@ if [ ! "$SKIP_INSTALL" ]; then
   # Prepare it for the real world
 
   which python
-  puts-step "Installing Distribute (0.6.32)"
-  cd $ROOT_DIR/vendor/distribute-0.6.32/
+  puts-step "Installing Distribute (0.6.34)"
+  cd $ROOT_DIR/vendor/distribute-0.6.34/
   python setup.py install # &> /dev/null
   cd $WORKING_DIR
 
@@ -197,13 +197,14 @@ done
 
 # Set context environment variables.
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
-set-env PYTHONHOME /app/.heroku/python/
+# set-env PYTHONHOME /app/.heroku/python/
 set-env PYTHONUNBUFFERED true
 set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
 set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
+un-set-env PYTHONHOME
 
 
 # ### Fin.
