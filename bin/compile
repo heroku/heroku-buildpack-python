@@ -148,6 +148,7 @@ if [ ! "$SKIP_INSTALL" ]; then
   WORKING_DIR=$(pwd)
   # Prepare it for the real world
 
+  which python
   puts-step "Installing Distribute (0.6.32)"
   cd $ROOT_DIR/vendor/distribute-0.6.32/
   python setup.py install # &> /dev/null
