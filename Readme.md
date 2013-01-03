@@ -36,9 +36,9 @@ You can also add it to upcoming builds of an existing application:
 
     $ heroku config:add BUILDPACK_URL=git://github.com/heroku/heroku-buildpack-python.git
 
-The buildpack will detect your app as Python if it has the file `requirements.txt` in the root. It will detect your app as Python/Django if there is an additional `settings.py` in a project subdirectory.
+The buildpack will detect your app as Python if it has the file `requirements.txt` in the root. 
 
-It will use virtualenv and pip to install your dependencies, vendoring a copy of the Python runtime into your slug.  The `bin/`, `include/` and `lib/` directories will be cached between builds to allow for faster pip install time.
+It will use Pip to install your dependencies, vendoring a copy of the Python runtime into your slug. 
 
 Hacking
 -------
