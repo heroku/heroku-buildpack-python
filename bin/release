@@ -11,18 +11,13 @@ config_vars:
 
 EOF
 
+MANAGE_FILE=$(cd $BUILD_DIR && find . -maxdepth 3 -type f -name 'manage.py' | head -1)
+MANAGE_FILE=${MANAGE_FILE:2}
 
-# [ "$NAME" = "Python/Django" ] || exit 0
+if [[ $MANAGE_FILE ]]; then
+cat <<EOF
 
-# MANAGE_FILE=$(cd $BUILD_DIR && find . -maxdepth 3 -type f -name 'manage.py' | head -1)
-# MANAGE_FILE=${MANAGE_FILE:2}
-# PROJECT=$(dirname $MANAGE_FILE)
-
-# cat <<EOF
-
-# addons:
-#   shared-database:5mb
-
-# default_process_types:
-#   web:      python $PROJECT/manage.py runserver 0.0.0.0:\$PORT --noreload
-# EOF
+addons:
+  shared-database:5mb
+EOF
+fi
