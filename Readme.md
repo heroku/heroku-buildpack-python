@@ -39,10 +39,3 @@ You can also add it to upcoming builds of an existing application:
 The buildpack will detect your app as Python if it has the file `requirements.txt` in the root. 
 
 It will use Pip to install your dependencies, vendoring a copy of the Python runtime into your slug. 
-
-Hacking
--------
-
-To use this buildpack, fork it on Github.  Push up changes to your fork, then create a test app with `--buildpack <your-github-url>` and push to it.
-
-To change the vendored virtualenv, unpack the desired version to the `src/` folder, and update the virtualenv() function in `bin/compile` to prepend the virtualenv module directory to the path. The virtualenv release vendors its own versions of pip and setuptools.
