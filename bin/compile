@@ -106,7 +106,7 @@ mkdir -p $CACHE_DIR
 
 # Purge "old-style" virtualenvs.
 [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.heroku/bin $CACHE_DIR/.heroku/lib $CACHE_DIR/.heroku/include
-[ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv
+[ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
 
 # Restore old artifacts from the cache.
 for dir in $CACHED_DIRS; do
