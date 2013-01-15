@@ -155,6 +155,9 @@ fi
 puts-step "Installing dependencies using Pip (1.2.1)"
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
+# Install Gemfile packages
+bundle install
+
 # Django collectstatic support.
 source $BIN_DIR/steps/collectstatic
 
