@@ -156,6 +156,7 @@ puts-step "Installing dependencies using Pip (1.2.1)"
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
 # Install Gemfile packages
+command -v bundle >/dev/null 2>&1 || { sudo gem install bundler }
 bundle install
 
 # Django collectstatic support.
