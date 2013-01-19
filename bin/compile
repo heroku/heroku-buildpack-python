@@ -68,13 +68,13 @@ source $BIN_DIR/steps/hooks/pre_compile
 # If no requirements given, assume `setup.py develop`.
 if [ ! -f requirements.txt ]; then
   puts-step "No requirements.txt provided; assuming dist package."
-  echo "-e ." > requirements.txt
+  echo "-e ." >> requirements.txt
 fi
 
 # If no runtime given, assume default version.
 if [ ! -f runtime.txt ]; then
   puts-step "No runtime.txt provided; assuming $DEFAULT_PYTHON_VERSION."
-  echo $DEFAULT_PYTHON_VERSION > runtime.txt
+  echo $DEFAULT_PYTHON_VERSION >> runtime.txt
 fi
 
 # ### The Cache
