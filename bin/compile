@@ -144,6 +144,8 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   cd $ROOT_DIR/vendor/pip-$PIP_VERSION/
   python setup.py install  &> /dev/null
   cd $WORKING_DIR
+
+  hash -r
 fi
 
 set -e
