@@ -157,7 +157,7 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies with Pip.
-puts-step "Installing dependencies using Pip (1.2.1)"
+puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
 # Django collectstatic support.
