@@ -137,12 +137,12 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   # Prepare it for the real world
   puts-step "Installing Distribute ($DISTRIBUTE_VERSION)"
   cd $ROOT_DIR/vendor/distribute-$DISTRIBUTE_VERSION/
-  python setup.py install  &> /dev/null
+  python setup.py install # &> /dev/null
   cd $WORKING_DIR
 
   puts-step "Installing Pip ($PIP_VERSION)"
   cd $ROOT_DIR/vendor/pip-$PIP_VERSION/
-  python setup.py install  &> /dev/null
+  python setup.py install # &> /dev/null
   cd $WORKING_DIR
 
   hash -r
