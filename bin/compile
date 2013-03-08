@@ -125,6 +125,7 @@ if [ ! "$SKIP_INSTALL" ]; then
   # Record for future reference.
   echo $PYTHON_VERSION > .heroku/python-version
   WORKING_DIR=$(pwd)
+  FRESH_PYTHON=true
 
   hash -r
 else
@@ -132,7 +133,7 @@ else
 fi
 
 # If Pip isn't up to date:
-if [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
+if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   # Prepare it for the real world
   puts-step "Installing Distribute ($DISTRIBUTE_VERSION)"
   cd $ROOT_DIR/vendor/distribute-$DISTRIBUTE_VERSION/
