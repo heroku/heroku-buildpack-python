@@ -16,7 +16,7 @@ VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz
 source $BIN_DIR/utils
 
 # If pylibmc exists within requirements, use vendored libmemcached.
-if (grep -Fiq "pylibmc" requirements.txt) then
+if (grep -Eiq "^\s*pylibmc" requirements.txt) then
   echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
   cd .heroku
 
