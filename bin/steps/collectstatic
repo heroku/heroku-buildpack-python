@@ -6,24 +6,34 @@ indent() {
   [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
 }
 
-MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' | head -1)
-MANAGE_FILE=${MANAGE_FILE:2}
+if [ "$DJANGO_SETTINGS_MODULE" ]; then
+    COLLECTSTATIC_CMD="django-admin.py collectstatic"
+fi
+
+if [ ! "$COLLECTSTATIC_CMD" ]; then
+    MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' | head -1)
+    MANAGE_FILE=${MANAGE_FILE:2}
+    COLLECTSTATIC_CMD="python $MANAGE_FILE collectstatic"
+fi
 
 if [ -f .heroku/collectstatic_disabled ]; then
   DISABLE_COLLECTSTATIC=1
 fi
 
+TMP_PP=$PYTHONPATH
+export PYTHONPATH=$APP_PYTHONPATH:$PYTHONPATH
+
 if [ ! "$DISABLE_COLLECTSTATIC" ]; then
     set +e
 
     # Check if collectstatic is configured properly.
-    python $MANAGE_FILE collectstatic --dry-run --noinput &> /dev/null && RUN_COLLECTSTATIC=true
+    $COLLECTSTATIC_CMD --dry-run --noinput &> /dev/null && RUN_COLLECTSTATIC=true
 
     # Compile assets if collectstatic appears to be kosher.
     if [ "$RUN_COLLECTSTATIC" ]; then
 
         echo "-----> Collecting static files"
-        python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
+        $COLLECTSTATIC_CMD --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
 
         [ $? -ne 0 ] && {
             echo " !     Error running manage.py collectstatic. More info:"
@@ -32,7 +42,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ]; then
     fi
 
     echo
-
-
 fi
 
+export PYTHONPATH=$TMP_PP
+unset TMP_PP APP_PYTHONPATH
