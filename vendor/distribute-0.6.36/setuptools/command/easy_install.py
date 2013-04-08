@@ -522,6 +522,10 @@ Please make the appropriate changes for your system and try again.
         """Write all the scripts for `dist`, unless scripts are excluded"""
         if not self.exclude_scripts and dist.metadata_isdir('scripts'):
             for script_name in dist.metadata_listdir('scripts'):
+                if dist.metadata_isdir('scripts/' + script_name):
+                    # The "script" is a directory, likely a Python 3
+                    # __pycache__ directory, so skip it.
+                    continue
                 self.install_script(
                     dist, script_name,
                     dist.get_metadata('scripts/'+script_name)
