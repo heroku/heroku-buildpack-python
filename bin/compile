@@ -28,7 +28,7 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 DEFAULT_PYTHON_VERSION="python-2.7.3"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="1.3.1"
-DISTRIBUTE_VERSION="0.6.35"
+DISTRIBUTE_VERSION="0.6.36"
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
