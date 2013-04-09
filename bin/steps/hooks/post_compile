@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [ -f bin/post_compile ]; then
+if [ -f $BIN_DIR/post_compile ]; then
     echo "-----> Running post-compile hook"
-    chmod +x bin/post_compile
-    bin/post_compile
+    chmod +x $BIN_DIR/post_compile
+    $BIN_DIR/post_compile
 fi
