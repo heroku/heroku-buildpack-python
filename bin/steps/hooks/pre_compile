@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [ -f bin/pre_compile ]; then
+if [ -f $BIN_DIR/pre_compile ]; then
     echo "-----> Running pre-compile hook"
-    chmod +x bin/pre_compile
-    bin/pre_compile
+    chmod +x $BIN_DIR/pre_compile
+    $BIN_DIR/pre_compile
 fi
