@@ -25,7 +25,7 @@ LEGACY_TRIGGER="lib/python2.7"
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 
 # Python version. This will be used in the future to specify custom Pythons.
-DEFAULT_PYTHON_VERSION="python-2.7.3"
+DEFAULT_PYTHON_VERSION="python-2.7.4"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="1.3.1"
 DISTRIBUTE_VERSION="0.6.36"
