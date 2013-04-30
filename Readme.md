@@ -49,6 +49,6 @@ You can also provide arbitrary releases Python with a `runtime.txt` file.
     
 Runtime options include:
 
-- python-2.7.3
-- python-3.3.0
+- python-2.7.4
+- python-3.3.1
 - pypy-1.9 (experimental)
