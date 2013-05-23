@@ -20,6 +20,12 @@ testDetectWithEmptyReqs() {
   assertCapturedSuccess
 }
 
+testDetectDjango15() {
+  detect "django-1.5-skeleton"
+  assertCapturedEquals "Python"
+  assertCapturedSuccess
+}
+
 testDetectDjango14() {
   detect "django-1.4-skeleton"
   assertCapturedEquals "Python"
