@@ -4,6 +4,7 @@
 
 # The location of the pre-compiled libffi binary.
 VENDORED_LIBFFI="https://s3-us-west-2.amazonaws.com/mfenniak-graphviz/libffi-3.0.tgz"
+VENDORED_PATH=/app/vendor/libffi-3.0
 
 # Syntax sugar.
 source $BIN_DIR/utils
@@ -11,7 +12,9 @@ source $BIN_DIR/utils
 # If cffi exists within requirements, use vendored libffi.
 if (grep -Eiq "^\s*cffi" requirements.txt) then
   echo "-----> Noticed cffi. Bootstrapping libffi."
-  cd .heroku
+  PREV_DIR=$(pwd)
+  mkdir -p "$VENDORED_PATH"
+  cd "$VENDORED_PATH"
 
   # Download and extract libffi into target vendor directory.
   curl -s -L -o tmp-libffi.tar.gz $VENDORED_LIBFFI
@@ -26,7 +29,7 @@ if (grep -Eiq "^\s*cffi" requirements.txt) then
     echo "libffi.pc is in-place at $(pwd)/vendor/lib/pkgconfig/libffi.pc, libffi-based builds should work!"
   fi
 
-  cd ..
+  cd "$PREV_DIR"
 fi
 
 
