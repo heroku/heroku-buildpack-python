@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+# This script is invoked by [`bin/compile`](/).
+
+# The location of the pre-compiled libffi binary.
+VENDORED_LIBFFI="https://s3-us-west-2.amazonaws.com/mfenniak-graphviz/libffi-3.0.tgz"
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+# If cffi exists within requirements, use vendored libffi.
+if (grep -Eiq "^\s*cffi" requirements.txt) then
+  echo "-----> Noticed cffi. Bootstrapping libffi."
+  cd .heroku
+
+  # Download and extract libffi into target vendor directory.
+  curl -s -L -o tmp-libffi.tar.gz $VENDORED_MEMCACHED
+  tar -zxvf tmp-libffi.tar.gz > /dev/null
+  rm tmp-libffi.tar.gz
+  export LIBFFI=$(pwd)/vendor
+
+  cd ..
+fi
+
+
+
