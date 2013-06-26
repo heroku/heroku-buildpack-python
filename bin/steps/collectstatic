@@ -7,13 +7,11 @@ indent() {
 }
 
 MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' | head -1)
-MANAGE_FILE=${MANAGE_FILE:2}
+MANAGE_FILE=${MANAGE_FILE:-fakepath}
 
-if [ -f .heroku/collectstatic_disabled ]; then
-  DISABLE_COLLECTSTATIC=1
-fi
+[ -f .heroku/collectstatic_disabled ] && DISABLE_COLLECTSTATIC=1
 
-if [ ! "$DISABLE_COLLECTSTATIC" ]; then
+if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
     set +e
 
     # Check if collectstatic is configured properly.
