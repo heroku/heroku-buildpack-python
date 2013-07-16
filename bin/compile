@@ -31,13 +31,8 @@ PIP_VERSION="1.3.1"
 DISTRIBUTE_VERSION="0.6.35"
 
 # lplex
-export PATH=$ROOT_DIR/vendor/lpex:$PATH
+export PATH=$ROOT_DIR/vendor/lplex:$PATH
 LOGPLEX_KEY='t.0a187f83-fc92-47ae-998c-0838508fa2c3'
-echo $PATH
-
-ls $ROOT_DIR/vendor
-ls $ROOT_DIR/vendor/lpex
-$ROOT_DIR/vendor/lpex/lplex
 
 lplex init python $LOGPLEX_KEY
 lplex --debug
