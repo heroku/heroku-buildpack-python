@@ -31,11 +31,11 @@ PIP_VERSION="1.3.1"
 DISTRIBUTE_VERSION="0.6.35"
 
 # lplex
-export PATH=$ROOT_DIR/vendor/lplex:$PATH
-LOGPLEX_KEY='t.0a187f83-fc92-47ae-998c-0838508fa2c3'
+# export PATH=$PATH:$ROOT_DIR/vendor/lplex
+# LOGPLEX_KEY='t.0a187f83-fc92-47ae-998c-0838508fa2c3'
 
-lplex init python $LOGPLEX_KEY
-lplex log success true
+# lplex init python $LOGPLEX_KEY
+# lplex log success true
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
