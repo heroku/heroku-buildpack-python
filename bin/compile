@@ -169,7 +169,6 @@ source $BIN_DIR/steps/collectstatic
 # ### Finalize
 #
 
-
 # Set context environment variables.
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
@@ -179,6 +178,7 @@ set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
+
 
 # Experimental post_compile hook.
 source $BIN_DIR/steps/hooks/post_compile
@@ -192,4 +192,4 @@ done
 # ### Fin.
 
 deep-mv $BUILD_DIR $ORIG_BUILD_DIR
-# deep-mv $TMP_APP_DIR $APP_DIR
+deep-mv $TMP_APP_DIR $APP_DIR
