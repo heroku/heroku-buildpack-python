@@ -19,3 +19,10 @@ pip:
 	tar -pczf vendor/virtualenv-1.8.4/virtualenv_support/pip-1.2.1.tar.gz pip
 	rm -fr pip
 
+logplex:
+	git clone git@github.com:kennethreitz/python-logplex.git --depth 1
+	rm -fr vendor/logplex/
+	rm -fr python-logplex/.git
+	mv python-logplex/logplex vendor
+	rm -fr python-logplex
+
