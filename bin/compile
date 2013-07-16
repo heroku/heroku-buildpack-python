@@ -33,6 +33,7 @@ DISTRIBUTE_VERSION="0.6.35"
 # lplex
 export PATH=$ROOT_DIR/vendor/lpex:$PATH
 LOGPLEX_KEY='t.0a187f83-fc92-47ae-998c-0838508fa2c3'
+echo $PATH
 
 lplex init python $LOGPLEX_KEY
 lplex --debug
