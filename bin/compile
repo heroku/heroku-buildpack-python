@@ -35,7 +35,7 @@ export PATH=$ROOT_DIR/vendor/lplex:$PATH
 LOGPLEX_KEY='t.0a187f83-fc92-47ae-998c-0838508fa2c3'
 
 lplex init python $LOGPLEX_KEY
-lplex --debug
+lplex log success true
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
