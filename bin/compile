@@ -30,6 +30,24 @@ PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="1.3.1"
 DISTRIBUTE_VERSION="0.6.36"
 
+export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
+
+LOGPLEX_KEY="t.b396af7f-ad75-4643-8b9e-ebb288acc624"
+BUILDPACK_VERSION=HEAD
+
+export BPWATCH_STORE_PATH=$CACHE_DIR/bpwatch.json
+
+[ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
+
+
+
+bpwatch init $LOGPLEX_KEY
+bpwatch build python $BUILDPACK_VERSION $REQUEST_ID
+TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
+
+bpwatch start compile
+
+
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
 
@@ -44,11 +62,15 @@ APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 # Copy Anvil app dir to temporary storage...
+bpwatch start anvil_appdir_stage
 mkdir -p $TMP_APP_DIR
 deep-mv $APP_DIR $TMP_APP_DIR
+bpwatch stop anvil_appdir_stage
 
 # Copy Application code in.
+bpwatch start appdir_stage
 deep-mv $BUILD_DIR $APP_DIR
+bpwatch stop appdir_stage
 
 # Set new context.
 ORIG_BUILD_DIR=$BUILD_DIR
@@ -65,7 +87,9 @@ export LD_LIBRARY_PATH=/app/.heroku/vendor/lib
 cd $BUILD_DIR
 
 # Experimental pre_compile hook.
+bpwatch start pre_compile
 source $BIN_DIR/steps/hooks/pre_compile
+bpwatch stop pre_compile
 
 # If no requirements given, assume `setup.py develop`.
 if [ ! -f requirements.txt ]; then
@@ -83,13 +107,17 @@ fi
 mkdir -p $CACHE_DIR
 
 # Purge "old-style" virtualenvs.
+bpwatch start clear_old_venvs
 [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.heroku/bin $CACHE_DIR/.heroku/lib $CACHE_DIR/.heroku/include
 [ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
+bpwatch stop clear_old_venvs
 
 # Restore old artifacts from the cache.
+bpwatch start restore_cache
 for dir in $CACHED_DIRS; do
   cp -R $CACHE_DIR/$dir . &> /dev/null || true
 done
+bpwatch stop restore_cache
 
 set +e
 # Create set-aside `.heroku` folder.
@@ -104,8 +132,10 @@ PYTHON_VERSION=$(cat runtime.txt)
 # Install Python.
 if [ -f .heroku/python-version ]; then
   if [ ! $(cat .heroku/python-version) = $PYTHON_VERSION ]; then
+    bpwatch start uninstall_python
     puts-step "Found $(cat .heroku/python-version), removing."
     rm -fr .heroku/python
+    bpwatch stop uninstall_python
   else
     SKIP_INSTALL=1
   fi
@@ -113,6 +143,7 @@ fi
 
 
 if [ ! "$SKIP_INSTALL" ]; then
+  bpwatch start install_python
   puts-step "Preparing Python runtime ($PYTHON_VERSION)"
   curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
   if [[ $? != 0 ]] ; then
@@ -121,6 +152,7 @@ if [ ! "$SKIP_INSTALL" ]; then
     exit 1
   fi
   mv python .heroku/python
+  bpwatch stop install_python
 
   # Record for future reference.
   echo $PYTHON_VERSION > .heroku/python-version
@@ -135,16 +167,24 @@ fi
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   WORKING_DIR=$(pwd)
 
+  bpwatch start prepare_environment
+
+  bpwatch start install_distribute
   # Prepare it for the real world
   puts-step "Installing Distribute ($DISTRIBUTE_VERSION)"
   cd $ROOT_DIR/vendor/distribute-$DISTRIBUTE_VERSION/
   python setup.py install &> /dev/null
   cd $WORKING_DIR
+  bpwatch stop install_distribute
 
+  bpwatch start install_pip
   puts-step "Installing Pip ($PIP_VERSION)"
   cd $ROOT_DIR/vendor/pip-$PIP_VERSION/
   python setup.py install &> /dev/null
   cd $WORKING_DIR
+
+  bpwatch stop install_pip
+  bpwatch stop prepare_environment
 fi
 
 set -e
@@ -152,19 +192,33 @@ hash -r
 
 # Pylibmc support.
 # See [`bin/steps/pylibmc`](pylibmc.html).
+bpwatch start pylibmc_install
 source $BIN_DIR/steps/pylibmc
+bpwatch stop pylibmc_install
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
+  bpwatch start mercurial_install
   /app/.heroku/python/bin/pip install --use-mirrors mercurial | cleanup | indent
+  bpwatch stop mercurial_install
 fi
 
 # Install dependencies with Pip.
 puts-step "Installing dependencies using Pip ($PIP_VERSION)"
+
+
+[ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
+[ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
+
 /app/.heroku/python/bin/pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
 
+[ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
+[ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
+
 # Django collectstatic support.
+bpwatch start collectstatic
 source $BIN_DIR/steps/collectstatic
+bpwatch stop collectstatic
 
 # ### Finalize
 #
@@ -181,15 +235,25 @@ set-default-env PYTHONPATH /app/
 
 
 # Experimental post_compile hook.
+bpwatch start post_compile
 source $BIN_DIR/steps/hooks/post_compile
+bpwatch stop post_compile
 
 # Store new artifacts in cache.
+bpwatch start dump_cache
 for dir in $CACHED_DIRS; do
   rm -rf $CACHE_DIR/$dir
   cp -R $dir $CACHE_DIR/
 done
+bpwatch stop dump_cache
 
 # ### Fin.
-
+bpwatch start appdir_commit
 deep-mv $BUILD_DIR $ORIG_BUILD_DIR
+bpwatch stop appdir_commit
+
+bpwatch start anvil_appdir_commit
 deep-mv $TMP_APP_DIR $APP_DIR
+bpwatch stop anvil_appdir_commit
+
+bpwatch stop compile
