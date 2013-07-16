@@ -35,6 +35,7 @@ export PATH=$ROOT_DIR/vendor/lpex:$PATH
 LOGPLEX_KEY='t.0a187f83-fc92-47ae-998c-0838508fa2c3'
 echo $PATH
 ls $ROOT_DIR/vendor/lpex
+ls $ROOT_DIR/vendor
 $ROOT_DIR/vendor/lpex/lplex
 
 lplex init python $LOGPLEX_KEY
