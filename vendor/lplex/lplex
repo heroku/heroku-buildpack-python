@@ -1,19 +1,13 @@
 #!/usr/bin/env python
 
 import os
-from zipimport import zipimporter, ZipImportError
+import sys
 
 
 DEFUALT_PATH = '{}.zip'.format(os.path.abspath(__file__))
 LP_DISTRO_PATH = os.environ.get('LPLEX_DISTRO_PATH', DEFUALT_PATH)
 
-try:
-    distro = zipimporter(LP_DISTRO_PATH)
-except ZipImportError:
-    print "The 'lplex.zip' distribution wasn't found. Try this:"
-    print " $ make"
-    exit()
+sys.path.insert(0, LP_DISTRO_PATH)
 
-
-lp = distro.load_module('lp_cli')
-lp.main()
+import lp_cli
+lp_cli.main()
