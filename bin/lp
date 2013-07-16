@@ -19,7 +19,7 @@ Options:
 import json
 import sys
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Path hack
 sys.path.insert(0, os.path.abspath('../vendor'))
@@ -38,6 +38,12 @@ def dispatch_cli(args):
 
     if args.get('log'):
         log(args.get('<event>'), args.get('<value>'))
+
+    if args.get('start'):
+        start(args.get('<event>'))
+
+    if args.get('stop'):
+        stop(args.get('<event>'))
 
 
 def get_state():
@@ -62,7 +68,21 @@ def format_entry(state, event, value=None):
     return 'measure.{lang}.{event}={value}'.format(lang=lang, event=event, value=value)
 
 
-def timestamp():
+def to_timestamp(dt=None):
+    if dt is None:
+        dt = datetime.utcnow()
+    return '{}+00:00'.format(dt.isoformat())
+
+def from_timestamp(ts):
+
+    ts = ts.split('+', 1)[0]
+    dt_s, _, us= ts.partition(".")
+    dt= datetime.strptime(dt_s, "%Y-%m-%dT%H:%M:%S")
+    us= int(us.rstrip("Z"), 10)
+    return dt + timedelta(microseconds=us)
+
+
+    # datetime.strptime(, "%Y-%m-%dT%H:%M:%S.Z")
     # pkt += datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00 ")
     pass
 
@@ -70,11 +90,32 @@ def init(language, token=None):
     state = get_state()
     state['language'] = language
     state['token'] = token
-    # state['testdate'] =
+
     set_state(state)
 
 def start(event):
-    pass
+    state = get_state()
+    now = to_timestamp()
+
+    if 'starts' not in state:
+        state['starts'] = {}
+
+    state['starts'][event] = now
+
+    set_state(state)
+
+    log('{}.start'.format(event), now)
+
+def stop(event):
+    state = get_state()
+
+    now = datetime.utcnow()
+    then = from_timestamp(state['starts'][event])
+    delta = (now - then).total_seconds()
+
+    log('{}.end'.format(event), now)
+    log('{}.duration'.format(event), delta)
+
 
 def log(event, value):
     state = get_state()
