@@ -29,6 +29,9 @@ DEFAULT_PYTHON_VERSION="python-2.7.3"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="1.3.1"
 DISTRIBUTE_VERSION="0.6.35"
+
+# lplex
+export PATH=$ROOT_DIR/vendor/lpex:$PATH
 LOGPLEX_KEY='t.0a187f83-fc92-47ae-998c-0838508fa2c3'
 
 lplex init python $LOGPLEX_KEY
