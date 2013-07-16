@@ -54,7 +54,7 @@ def set_state(state):
         f.write(json.dumps(state))
 
 def get_logplex(state):
-
+    return Logplex(token=state.get('token'))
 
 def format_entry(state, event, value=None):
 
@@ -77,7 +77,10 @@ def start(event):
     pass
 
 def log(event, value):
-    pass
+    state = get_state()
+    logplex = get_logplex(state)
+    entry = format_entry(state, event, value)
+    logplex.puts(entry)
 
 
 if __name__ == '__main__':
