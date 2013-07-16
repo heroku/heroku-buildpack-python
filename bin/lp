@@ -1,0 +1,85 @@
+#!/usr/bin/env python
+
+"""
+Logplex instrumentation.
+
+Usage:
+  lp init <language> [<token>]
+  lp start <event>
+  lp stop <event>
+  lp log <event> <value>
+  lp -h | --help
+  lp --debug
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+"""
+
+import json
+import sys
+import os
+from datetime import datetime
+
+# Path hack
+sys.path.insert(0, os.path.abspath('../vendor'))
+
+from logplex import Logplex
+from docopt import docopt
+
+def dispatch_cli(args):
+
+    if args.get('init'):
+        init(args.get('<language>'), args.get('<token>'))
+
+    if args.get('--debug'):
+        print get_state()
+
+
+    if args.get('log'):
+        log(args.get('<event>'), args.get('<value>'))
+
+
+def get_state():
+    try:
+        with open('lp.json', 'r') as f:
+            return json.loads(f.read())
+    except IOError:
+      with open('lp.json', 'w') as f:
+        f.write(json.dumps(dict()))
+        return get_state()
+
+def set_state(state):
+    with open('lp.json', 'w') as f:
+        f.write(json.dumps(state))
+
+def get_logplex(state):
+
+
+def format_entry(state, event, value=None):
+
+    lang = state.get('language')
+    return 'measure.{lang}.{event}={value}'.format(lang=lang, event=event, value=value)
+
+
+def timestamp():
+    # pkt += datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00 ")
+    pass
+
+def init(language, token=None):
+    state = get_state()
+    state['language'] = language
+    state['token'] = token
+    # state['testdate'] =
+    set_state(state)
+
+def start(event):
+    pass
+
+def log(event, value):
+    pass
+
+
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='Logplex')
+    dispatch_cli(arguments)
