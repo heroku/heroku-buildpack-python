@@ -82,10 +82,6 @@ def from_timestamp(ts):
     return dt + timedelta(microseconds=us)
 
 
-    # datetime.strptime(, "%Y-%m-%dT%H:%M:%S.Z")
-    # pkt += datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00 ")
-    pass
-
 def init(language, token=None):
     state = get_state()
     state['language'] = language
@@ -110,11 +106,16 @@ def stop(event):
     state = get_state()
 
     now = datetime.utcnow()
-    then = from_timestamp(state['starts'][event])
-    delta = (now - then).total_seconds()
+    try:
+        then = from_timestamp(state['starts'][event])
+        delta = (now - then).total_seconds()
+    except KeyError:
+        # Stopping an event that never started.
+        delta = None
 
     log('{}.end'.format(event), now)
-    log('{}.duration'.format(event), delta)
+    if delta:
+        log('{}.duration'.format(event), delta)
 
 
 def log(event, value):
