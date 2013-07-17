@@ -65,6 +65,8 @@ bpwatch start anvil_appdir_stage
   if [ "$SLUG_ID" ]; then
     mkdir -p $TMP_APP_DIR
     deep-mv $APP_DIR $TMP_APP_DIR
+  else
+    deep-rm $APP_DIR
   fi
 bpwatch stop anvil_appdir_stage
 
