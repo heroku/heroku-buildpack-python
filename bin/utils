@@ -52,3 +52,11 @@ function deep-mv (){
   rm -fr $1/!(tmp)
   find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec rm -fr '{}' \;
 }
+
+# Does some serious deleting.
+function deep-rm (){
+  rm -fr $1/!(tmp)
+  find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec rm -fr '{}' \;
+}
+
+
