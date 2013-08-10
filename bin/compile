@@ -226,3 +226,9 @@ PROJ_VENDOR="vendor/proj"
 
 mkdir -p $1/$PROJ_VENDOR
 curl $PROJ_BINARY -o - | tar -xz -C $1/$PROJ_VENDOR -f -
+
+GDAL_BINARY="https://s3.amazonaws.com/jcsanford-binaries/heroku/gdal-1.8.1-heroku.tar.gz"
+GDAL_VENDOR="vendor/gdal"
+
+mkdir -p $1/$GDAL_VENDOR
+curl $GDAL_BINARY -o - | tar -xz -C $1/$GDAL_VENDOR -f -
