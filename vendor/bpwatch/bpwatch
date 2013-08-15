@@ -4,11 +4,12 @@
 import os
 import sys
 
+# __file__ doesn't exist reliably when this isn't within a module, commenting all this out
 
-DEFUALT_PATH = '{}.zip'.format(os.path.abspath(__file__))
-BPWATCH_DISTRO_PATH = os.environ.get('BPWATCH_DISTRO_PATH', DEFUALT_PATH)
+# DEFUALT_PATH = '{}.zip'.format(os.path.abspath(__file__))
+# BPWATCH_DISTRO_PATH = os.environ.get('BPWATCH_DISTRO_PATH', DEFUALT_PATH)
 
-sys.path.insert(0, BPWATCH_DISTRO_PATH)
+# sys.path.insert(0, BPWATCH_DISTRO_PATH)
 
-import bp_cli
-bp_cli.main()
+# import bp_cli
+# bp_cli.main()
