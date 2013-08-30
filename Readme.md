@@ -8,8 +8,8 @@ I *think* this buildpack will download/unpack the GEOS binaries each time you de
 
 Additionally, the `LIBRARY_PATH` must be updated so that Shapely can locate the necessary binaries.
 
-    heroku config:set LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib
-    heroku config:set LD_LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib
+    heroku config:set LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib
+    heroku config:set LD_LIBRARY_PATH=/app/.heroku/vendor/lib:vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib
 
     $ ls
     Procfile  requirements.txt  web.py
