@@ -201,7 +201,7 @@ bpwatch stop pylibmc_install
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
   bpwatch start mercurial_install
-    /app/.heroku/python/bin/pip install --use-mirrors mercurial | cleanup | indent
+    /app/.heroku/python/bin/pip install  mercurial | cleanup | indent
   bpwatch stop mercurial_install
 fi
 
@@ -212,7 +212,7 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
-/app/.heroku/python/bin/pip install --use-mirrors -r requirements.txt --exists-action=w --src=./.heroku/src | cleanup | indent
+/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src  | cleanup | indent
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
