@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# This script serves as the xmlsec build step of the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# compiler.
+#
+# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# The location of the pre-compiled libmemcached binary.
+VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+# If xmlsec exists within requirements, use vendored libmemcached.
+if (grep -Eiq "^\s*xmlsec" requirements.txt) then
+  echo "-----> Noticed xmlsec. Bootstrapping libmemcached."
+  # cd .heroku
+
+  # if [ -d "vendor/lib/sasl2" ]; then
+  #   export LIBMEMCACHED=$(pwd)/vendor
+  # else
+  #   # Download and extract libmemcached into target vendor directory.
+  #   curl -s -L -o tmp-libmemcached.tar.gz $VENDORED_MEMCACHED
+  #   tar -zxvf tmp-libmemcached.tar.gz > /dev/null
+  #   rm tmp-libmemcached.tar.gz
+  #   export LIBMEMCACHED=$(pwd)/vendor
+  # fi
+
+  # export LIBMEMCACHED=$(pwd)/vendor
+  # cd ..
+fi
+
+
+
