@@ -9,29 +9,35 @@
 #
 # This script is invoked by [`bin/compile`](/).
 
-# The location of the pre-compiled libmemcached binary.
-VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
-
+# The location of the pre-compiled xmlsec1 binary.
+VENDORED_XMLSEC1="https://s3.amazonaws.com/mmvendored/xmlsec1-1.2.tgz"
 # Syntax sugar.
 source $BIN_DIR/utils
 
 # If xmlsec exists within requirements, use vendored libmemcached.
-if (grep -Eiq "^\s*xmlsec" requirements.txt) then
-  echo "-----> Noticed xmlsec. Bootstrapping libmemcached."
-  # cd .heroku
+echo "-----> Checking for xmlsec1"
+if (grep -Ei "^.*xmlsec.*$" requirements.txt) then
+  echo "-----> Noticed xmlsec in requirements. Bootstrapping xmlsec1."
+  cd .heroku
+  if [ ! -d 'vendor' ]; then
+    mkdir vendor
+  fi
+  cd vendor
+  if [ -d 'include/xmlsec1' ]; then
+    echo "-----> Found xmlsec1"
+  else
+    echo "-----> Did not find xmlsec1"
+    # Download and extract xmlsec1 into target vendor directory.
+    curl -s -L -o tmp-libxmlsec1.tar.gz $VENDORED_XMLSEC1
+    tar -zxvf tmp-libxmlsec1.tar.gz # > /dev/null #TODO Hide this output
+    rm tmp-libxmlsec1.tar.gz
+  fi
 
-  # if [ -d "vendor/lib/sasl2" ]; then
-  #   export LIBMEMCACHED=$(pwd)/vendor
-  # else
-  #   # Download and extract libmemcached into target vendor directory.
-  #   curl -s -L -o tmp-libmemcached.tar.gz $VENDORED_MEMCACHED
-  #   tar -zxvf tmp-libmemcached.tar.gz > /dev/null
-  #   rm tmp-libmemcached.tar.gz
-  #   export LIBMEMCACHED=$(pwd)/vendor
-  # fi
-
-  # export LIBMEMCACHED=$(pwd)/vendor
-  # cd ..
+  export LIBXMLSEC1=$(pwd)
+  export CFLAGS="-I$(pwd)/include/xmlsec1"
+  echo "-----> CFLAGS = $CFLAGS"
+  cd ..
+  cd ..
 fi
 
 
