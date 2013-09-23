@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# This script serves as the xmlsec build step of the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# compiler.
+#
+# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# The location of the pre-compiled xmlsec1 binary.
+VENDORED_XMLSEC1="https://s3.amazonaws.com/mmvendored/xmlsec1-1.2.tgz"
+# Syntax sugar.
+source $BIN_DIR/utils
+
+# If xmlsec exists within requirements, use vendored libmemcached.
+echo "-----> Checking for xmlsec1"
+if (grep -Ei "^.*xmlsec.*$" requirements.txt) then
+  echo "-----> Noticed xmlsec in requirements. Bootstrapping xmlsec1."
+  cd .heroku
+  if [ ! -d 'vendor' ]; then
+    mkdir vendor
+  fi
+  cd vendor
+  if [ -d 'include/xmlsec1' ]; then
+    echo "-----> Found xmlsec1"
+  else
+    echo "-----> Did not find xmlsec1"
+    # Download and extract xmlsec1 into target vendor directory.
+    curl -s -L -o tmp-libxmlsec1.tar.gz $VENDORED_XMLSEC1
+    tar -zxvf tmp-libxmlsec1.tar.gz # > /dev/null #TODO Hide this output
+    rm tmp-libxmlsec1.tar.gz
+  fi
+
+  export LIBXMLSEC1=$(pwd)
+  export CFLAGS="-I$(pwd)/include/xmlsec1"
+  echo "-----> CFLAGS = $CFLAGS"
+  cd ..
+  cd ..
+fi
+
+
+
