@@ -45,10 +45,10 @@ Specify a Runtime
 You can also provide arbitrary releases Python with a `runtime.txt` file.
 
     $ cat runtime.txt
-    python-3.3.0
+    python-3.3.2
     
 Runtime options include:
 
 - python-2.7.4
-- python-3.3.1
+- python-3.3.2
 - pypy-1.9 (experimental)
