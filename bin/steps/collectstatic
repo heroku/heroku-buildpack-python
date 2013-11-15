@@ -14,8 +14,12 @@ MANAGE_FILE=${MANAGE_FILE:-fakepath}
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
     set +e
 
-    # Check if collectstatic is configured properly.
-    python $MANAGE_FILE collectstatic --dry-run --noinput &> /dev/null && RUN_COLLECTSTATIC=true
+    if [ ! "$COLLECTSTATIC_FAIL_LOUD" ]; then
+        # Check if collectstatic is configured properly.
+        python $MANAGE_FILE collectstatic --dry-run --noinput &> /dev/null && RUN_COLLECTSTATIC=true
+    else
+        RUN_COLLECTSTATIC=true
+    fi
 
     # Compile assets if collectstatic appears to be kosher.
     if [ "$RUN_COLLECTSTATIC" ]; then
@@ -23,14 +27,16 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
         echo "-----> Collecting static files"
         python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
 
-        [ $? -ne 0 ] && {
+        if [ $? -ne 0 ]; then
             echo " !     Error running manage.py collectstatic. More info:"
             echo "       http://devcenter.heroku.com/articles/django-assets"
-        }
+
+            if [ "$COLLECTSTATIC_FAIL_LOUD" ]; then
+                exit 1
+            fi
+        fi
     fi
 
     echo
-
-
 fi
 
