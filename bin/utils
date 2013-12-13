@@ -59,4 +59,6 @@ function deep-rm (){
   find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec rm -fr '{}' \;
 }
 
-
+function sub-env (){
+   (export $(egrep -v '^(GIT_DIR|PYTHONHOME|PYTHONPATH|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)' $ENV_FILE); $1)
+}

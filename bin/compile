@@ -2,8 +2,7 @@
 
 # Usage:
 #
-#     $ bin/compile <build-dir> <cache-dir>
-
+#     $ bin/compile <build-dir> <cache-dir> <env-path>
 
 # Fail fast and fail hard.
 set -eo pipefail
@@ -16,6 +15,8 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
+ENV_FILE=$3
+
 
 CACHED_DIRS=".heroku"
 
@@ -222,7 +223,7 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 
 # Django collectstatic support.
 bpwatch start collectstatic
-  source $BIN_DIR/steps/collectstatic
+  sub-env $BIN_DIR/steps/collectstatic
 bpwatch stop collectstatic
 
 # ### Finalize
@@ -261,6 +262,6 @@ bpwatch start anvil_appdir_commit
   if [ "$SLUG_ID" ]; then
     deep-mv $TMP_APP_DIR $APP_DIR
   fi
-bpwatch stop anvil_appdir_commit
 
+bpwatch stop anvil_appdir_commit
 bpwatch stop compile
