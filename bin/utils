@@ -60,5 +60,9 @@ function deep-rm (){
 }
 
 function sub-env (){
-   (export $(egrep -v '^(GIT_DIR|PYTHONHOME|PYTHONPATH|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)' $ENV_FILE); $1)
+  if [[ -f $ENV_FILE ]]; then
+    (export $(egrep -v '^(GIT_DIR|PYTHONHOME|PYTHONPATH|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)' -f $ENV_FILE); $1)
+  else
+    $1
+  fi
 }
