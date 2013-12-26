@@ -313,12 +313,12 @@ if [ ! -f ${cache_target} ]; then
   #Compile OpenCV
   curl -L ${opencv_url} > ${opencv_file}
   tar xf ${opencv_file}
-  cd ${opencv_dir}
+  cd opencv-2.4.7
   mkdir build
   cd build
   cmake -DCMAKE_INSTALL_PREFIX=${target} -DCMAKE_FIND_ROOT_PATH=${target} -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_SHARED_LIBS=OFF -DCMAKE_SHARED_LINKER_FLAGS="-fPIC" .. | indent
   make install | indent
-  cd ..
+  cd ../../
 
   #Create cache slug
   tar czf ${cache_target} -C ${target} .
