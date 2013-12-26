@@ -270,10 +270,10 @@ cmake_url="http://www.cmake.org/files/v2.8/cmake-2.8.6.tar.gz"
 cmake_file="cmake-${cmake_version}.tar.gz"
 cmake_tar_dir="cmake-${cmake_version}"
 
-opencv_version="2.4.2"
+opencv_version="2.4.7"
 opencv_dir="OpenCV-${opencv_version}"
 opencv_file="${opencv_dir}.tar.gz"
-opencv_url="https://s3.amazonaws.com/loku-python/${opencv_dir}.tar.bz2"
+opencv_url="https://github.com/Itseez/opencv/archive/2.4.7.tar.gz"
 
 cache_target=${cache}/${cmake_file}
 build_target=${build}/.heroku
@@ -311,7 +311,7 @@ if [ ! -f ${cache_target} ]; then
 
   echo "Compiling OpenCV v${opencv_version}..." | indent
   #Compile OpenCV
-  curl -s ${opencv_url} > ${opencv_file}
+  curl -L ${opencv_url} > ${opencv_file}
   tar xf ${opencv_file}
   cd ${opencv_dir}
   mkdir build
