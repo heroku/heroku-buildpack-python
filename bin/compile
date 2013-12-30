@@ -160,7 +160,9 @@ source $BIN_DIR/steps/pip-uninstall
 source $BIN_DIR/steps/mercurial
 
 # Pylibmc support.
+bpwatch start pylibmc_install
 source $BIN_DIR/steps/pylibmc
+bpwatch stop pylibmc_install
 
 # Libffi support.
 source $BIN_DIR/steps/cryptography
@@ -170,27 +172,37 @@ puts-step "Installing Geos Libraries..."
 GEOS_BINARY="https://s3.amazonaws.com/jcsanford-binaries/heroku/geos-3.3.2-heroku.tar.gz"
 GEOS_VENDOR="vendor/geos"
 
-mkdir -p $1/$GEOS_VENDOR
-curl $GEOS_BINARY -o - | tar -xz -C $1/$GEOS_VENDOR -f -
+mkdir -p $BUILD_DIR/$GEOS_VENDOR
+curl $GEOS_BINARY -o - | tar -xz -C $BUILD_DIR/$GEOS_VENDOR -f -
+PATH=/data/myscripts:$PATH
 
-puts-step "===> Installed GEOS in $1/$GEOS_VENDOR"
+puts-step "===> Installed GEOS in $BUILD_DIR/$GEOS_VENDOR"
 
 PROJ_BINARY="https://s3.amazonaws.com/jcsanford-binaries/heroku/proj-4.8.0-heroku.tar.gz"
 PROJ_VENDOR="vendor/proj"
 
-mkdir -p $1/$PROJ_VENDOR
-curl $PROJ_BINARY -o - | tar -xz -C $1/$PROJ_VENDOR -f -
+mkdir -p $BUILD_DIR/$PROJ_VENDOR
+curl $PROJ_BINARY -o - | tar -xz -C $BUILD_DIR/$PROJ_VENDOR -f -
 
-puts-step "===> Installed Proj in $1/$PROJ_VENDOR"
+puts-step "===> Installed Proj in $BUILD_DIR/$PROJ_VENDOR"
 
 GDAL_BINARY="https://s3.amazonaws.com/jcsanford-binaries/heroku/gdal-1.8.1-heroku.tar.gz"
 GDAL_VENDOR="vendor/gdal"
 
-mkdir -p $1/$GDAL_VENDOR
-curl $GDAL_BINARY -o - | tar -xz -C $1/$GDAL_VENDOR -f -
+mkdir -p $BUILD_DIR/$GDAL_VENDOR
+curl $GDAL_BINARY -o - | tar -xz -C $BUILD_DIR/$GDAL_VENDOR -f -
 
-puts-step "===> Installed GDAL in $1/$GDAL_VENDOR"
+puts-step "===> Installed GDAL in $BUILD_DIR/$GDAL_VENDOR"
 
+export LIBRARY_PATH=$BUILD_DIR/vendor/geos/geos/lib:$BUILD_DIR/vendor/proj/proj/lib:$BUILD_DIR/vendor/gdal/gdal/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=$BUILD_DIR/vendor/geos/geos/lib:$BUILD_DIR/vendor/proj/proj/lib:$BUILD_DIR/vendor/gdal/gdal/lib:$LD_LIBRARY_PATH
+
+# Install Mercurial if it appears to be required.
+if (grep -Fiq "hg+" requirements.txt) then
+  bpwatch start mercurial_install
+    /app/.heroku/python/bin/pip install  mercurial | cleanup | indent
+  bpwatch stop mercurial_install
+fi
 
 # Install dependencies with Pip.
 puts-step "Installing dependencies using Pip ($PIP_VERSION)"
