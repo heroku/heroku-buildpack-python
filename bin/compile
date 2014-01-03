@@ -194,8 +194,8 @@ curl $GDAL_BINARY -o - | tar -xz -C $BUILD_DIR/$GDAL_VENDOR -f -
 
 puts-step "===> Installed GDAL in $BUILD_DIR/$GDAL_VENDOR"
 
-export LIBRARY_PATH=vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib:$LIBRARY_PATH
-export LD_LIBRARY_PATH=vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib:$LD_LIBRARY_PATH
+# export LIBRARY_PATH=vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib:$LIBRARY_PATH
+# export LD_LIBRARY_PATH=vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib:$LD_LIBRARY_PATH
 
 
 # Install Mercurial if it appears to be required.
