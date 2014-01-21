@@ -59,10 +59,22 @@ function deep-rm (){
   find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec rm -fr '{}' \;
 }
 
-function sub-env (){
-  if [[ -f $ENV_FILE ]]; then
-    (export $(egrep -v '^(GIT_DIR|PYTHONHOME|PYTHONPATH|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)' -f $ENV_FILE); $1)
-  else
+
+sub-env() {
+
+  WHITELIST=${2:-''}
+  BLACKLIST=${3:-'^(GIT_DIR|PYTHONHOME|PYTHONPATH|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
+
+  (
+    if [ -d "$ENV_DIR" ]; then
+      for e in $(ls $ENV_DIR); do
+        echo "$e" | grep -E "$WHITELIST" | grep -qvE "$BLACKLIST" &&
+        export "$e=$(cat $ENV_DIR/$e)"
+        :
+      done
+    fi
+
     $1
-  fi
+
+  )
 }

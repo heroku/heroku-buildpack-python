@@ -15,7 +15,7 @@ BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
-ENV_FILE=$3
+ENV_DIR=$3
 
 
 CACHED_DIRS=".heroku"
