@@ -221,6 +221,7 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
 /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src  | cleanup | indent
+[-c "requirements-$PYTHON_VERSION.txt" ] /app/.heroku/python/bin/pip install -r requirements-$PYTHON_VERSION.txt --exists-action=w --src=./.heroku/src  | cleanup | indent
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
