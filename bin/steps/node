@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# Almost copied from heroku-buildpack-nodejs
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+if [ ! -f .heroku/node-version ]; then
+  # Resolve node version using semver.io
+  NODE_VERSION=$(curl --silent --get https://semver.io/node/stable)
+  puts-step "Resolved node version: $NODE_VERSION"
+
+  # Download node from Heroku's S3 mirror of nodejs.org/dist
+  puts-step "Downloading and installing node"
+  NODE_URL="http://s3pository.heroku.com/node/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz"
+  curl $NODE_URL -s -o - | tar xzf - -C $BUILD_DIR
+
+  # Move node (and npm) into .heroku/vendor and make them executable
+  mkdir -p .heroku/vendor
+  mv $BUILD_DIR/node-v$NODE_VERSION-linux-x64 .heroku/vendor/node
+  chmod +x .heroku/vendor/node/bin/*
+
+  # Save resolved node version in the slug for later reference
+  echo $NODE_VERSION > .heroku/node-version
+fi
+
+if [ ! -f .heroku/bower-version ]; then
+  # Install bower
+  puts-step "Downloading and installing bower"
+  .heroku/vendor/node/bin/npm install -g bower 2>&1 | indent
+
+  # Save installed bower version in the slug for later reference
+  .heroku/vendor/node/bin/npm list -g --depth=0 | grep bower | cut -d @ -f 2 > .heroku/bower-version
+fi
+
+PATH=$PATH:.heroku/vendor/node/bin
+
+# Install bower packages
+puts-step "Running bower install"
+bower install 2>&1 | indent

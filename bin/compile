@@ -162,6 +162,11 @@ bundle install
 # Django collectstatic support.
 source $BIN_DIR/steps/collectstatic
 
+# Node and bower support.
+bpwatch start node_bower
+  sub-env $BIN_DIR/steps/node
+bpwatch stop node_bower
+
 # ### Finalize
 #
 
