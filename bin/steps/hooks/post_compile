@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-if [ -f bin/post_compile ]; then
+: ${POST_COMPILE_HOOK:=bin/post_compile}
+
+if [ -f $POST_COMPILE_HOOK ]; then
     echo "-----> Running post-compile hook"
-    chmod +x bin/post_compile
-    sub-env bin/post_compile
+    chmod +x $POST_COMPILE_HOOK
+    sub-env $POST_COMPILE_HOOK
 fi
