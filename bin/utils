@@ -14,39 +14,39 @@ cleanup() {
 }
 
 # Buildpack Steps.
-function puts-step (){
+puts-step() {
   echo "-----> $@"
 }
 
 # Buildpack Warnings.
-function puts-warn (){
+puts-warn() {
   echo " !     $@"
 }
 
 # Usage: $ set-env key value
-function set-env (){
+set-env() {
   echo "export $1=$2" >> $PROFILE_PATH
 }
 
 # Usage: $ set-default-env key value
-function set-default-env (){
+set-default-env() {
   echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
 }
 
 # Usage: $ set-default-env key value
-function un-set-env (){
+un-set-env() {
   echo "unset $1" >> $PROFILE_PATH
 }
 
 # Does some serious copying.
-function deep-cp (){
+deep-cp() {
   find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec cp -a '{}' $2 \;
   cp -r $1/!(tmp) $2
   # echo copying $1 to $2
 }
 
 # Does some serious moving.
-function deep-mv (){
+deep-mv() {
   deep-cp $1 $2
 
   rm -fr $1/!(tmp)
@@ -54,7 +54,7 @@ function deep-mv (){
 }
 
 # Does some serious deleting.
-function deep-rm (){
+deep-rm() {
   rm -fr $1/!(tmp)
   find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec rm -fr '{}' \;
 }
