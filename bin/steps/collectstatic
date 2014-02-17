@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-# Syntax sugar.
-indent() {
-  RE="s/^/       /"
-  [ $(uname) == "Darwin" ] && sed -l "$RE" || sed -u "$RE"
-}
+source $BIN_DIR/utils
 
 MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' | head -1)
 MANAGE_FILE=${MANAGE_FILE:-fakepath}
