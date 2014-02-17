@@ -40,23 +40,29 @@ un-set-env() {
 
 # Does some serious copying.
 deep-cp() {
-  find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec cp -a '{}' $2 \;
-  cp -r $1/!(tmp) $2
-  # echo copying $1 to $2
+  declare source="$1" target="$2"
+
+  mkdir -p "$target"
+
+  # cp doesn't like being called without source params,
+  # so make sure they expand to something first.
+  # subshell to avoid surprising caller with nullglob.
+  (
+    shopt -s nullglob
+    set -- "$source"/!(tmp) "$source"/.{[!.],.?}*
+    [[ $# == 0 ]] || cp -a "$@" "$target"
+  )
 }
 
 # Does some serious moving.
 deep-mv() {
-  deep-cp $1 $2
-
-  rm -fr $1/!(tmp)
-  find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec rm -fr '{}' \;
+  deep-cp "$1" "$2"
+  deep-rm "$1"
 }
 
 # Does some serious deleting.
 deep-rm() {
-  rm -fr $1/!(tmp)
-  find -H $1 -maxdepth 1 -name '.*' -a \( -type d -o -type f -o -type l \) -exec rm -fr '{}' \;
+  rm -rf "$1"/!(tmp) "$1"/.{[!.],.?}*
 }
 
 
