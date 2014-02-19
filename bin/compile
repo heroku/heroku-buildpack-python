@@ -27,8 +27,8 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 
 DEFAULT_PYTHON_VERSION="python-2.7.6"
 PYTHON_EXE="/app/.heroku/python/bin/python"
-PIP_VERSION="1.3.1"
-DISTRIBUTE_VERSION="0.6.36"
+PIP_VERSION="1.5.2"
+SETUPTOOLS_VERSION="2.1"
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
@@ -179,13 +179,13 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
 
   bpwatch start prepare_environment
 
-  bpwatch start install_distribute
+  bpwatch start install_setuptools
     # Prepare it for the real world
-    puts-step "Installing Distribute ($DISTRIBUTE_VERSION)"
-    cd $ROOT_DIR/vendor/distribute-$DISTRIBUTE_VERSION/
+    puts-step "Installing Setuptools ($SETUPTOOLS_VERSION)"
+    cd $ROOT_DIR/vendor/setuptools-$SETUPTOOLS_VERSION/
     python setup.py install &> /dev/null
     cd $WORKING_DIR
-  bpwatch stop install_distribute
+  bpwatch stop install_setuptoools
 
   bpwatch start install_pip
     puts-step "Installing Pip ($PIP_VERSION)"
