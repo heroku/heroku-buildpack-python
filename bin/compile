@@ -27,7 +27,7 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 
 DEFAULT_PYTHON_VERSION="python-2.7.6"
 PYTHON_EXE="/app/.heroku/python/bin/python"
-PIP_VERSION="1.5.2"
+PIP_VERSION="1.5.4"
 SETUPTOOLS_VERSION="2.1"
 
 # Setup bpwatch
@@ -220,7 +220,6 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
-/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src  | cleanup | indent
 /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external  | cleanup | indent
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
