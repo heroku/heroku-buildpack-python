@@ -30,6 +30,12 @@ PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="1.5.4"
 SETUPTOOLS_VERSION="2.1"
 
+# Syntax sugar.
+source $BIN_DIR/utils
+
+# Make the environment available.
+export_env_dir $ENV_DIR
+
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
 LOGPLEX_KEY="t.b396af7f-ad75-4643-8b9e-ebb288acc624"
@@ -51,9 +57,6 @@ bpwatch start compile
 
 # We'll need to send these statics to other scripts we `source`.
 export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
-
-# Syntax sugar.
-source $BIN_DIR/utils
 
 # Directory Hacks for path consistiency.
 APP_DIR='/app'
