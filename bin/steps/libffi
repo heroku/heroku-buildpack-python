@@ -10,7 +10,7 @@ VENDORED_PATH=/app/vendor/libffi-3.0
 source $BIN_DIR/utils
 
 # If cffi exists within requirements, use vendored libffi.
-if (grep -Eiq "^\s*cffi" requirements.txt) then
+if (grep -Eiq "^\s*cffi" requirements.txt || grep -Eiq "^\s*cryptography" requirements.txt) then
   echo "-----> Noticed cffi. Bootstrapping libffi."
   PREV_DIR=$(pwd)
   mkdir -p "$VENDORED_PATH"
