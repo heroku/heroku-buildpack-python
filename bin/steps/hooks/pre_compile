@@ -5,5 +5,5 @@
 if [ -f $PRE_COMPILE_HOOK ]; then
     echo "-----> Running pre-compile hook"
     chmod +x $PRE_COMPILE_HOOK
-    sub-env $PRE_COMPILE_HOOK
+    $PRE_COMPILE_HOOK
 fi

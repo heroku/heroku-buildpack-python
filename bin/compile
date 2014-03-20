@@ -93,7 +93,7 @@ cd $BUILD_DIR
 
 # Experimental pre_compile hook.
 bpwatch start pre_compile
-  source $BIN_DIR/steps/hooks/pre_compile
+  sub-env $BIN_DIR/steps/hooks/pre_compile
 bpwatch stop pre_compile
 
 # If no requirements given, assume `setup.py develop`.
@@ -246,7 +246,7 @@ set-default-env PYTHONPATH /app/
 
 # Experimental post_compile hook.
 bpwatch start post_compile
-  source $BIN_DIR/steps/hooks/post_compile
+  sub-env $BIN_DIR/steps/hooks/post_compile
 bpwatch stop post_compile
 
 # Store new artifacts in cache.
