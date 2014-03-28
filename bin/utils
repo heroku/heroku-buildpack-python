@@ -70,6 +70,7 @@ sub-env() {
 
   (
     if [ -d "$ENV_DIR" ]; then
+      export ENV_DIR
       for e in $(ls $ENV_DIR); do
         echo "$e" | grep -E "$WHITELIST" | grep -qvE "$BLACKLIST" &&
         export "$e=$(cat $ENV_DIR/$e)"
