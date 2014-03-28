@@ -70,6 +70,7 @@ sub-env() {
 
   (
     if [ -d "$ENV_DIR" ]; then
+      export ENV_DIR
       for e in $(ls $ENV_DIR); do
         echo "$e" | grep -E "$WHITELIST" | grep -qvE "$BLACKLIST" &&
         export "$e=$(cat $ENV_DIR/$e)"
@@ -80,4 +81,14 @@ sub-env() {
     $1
 
   )
+}
+
+# https://devcenter.heroku.com/articles/buildpack-api
+export_env_dir() {
+  env_dir=$1
+  if [ -d "$env_dir" ]; then
+    for e in $(ls $env_dir); do
+      export "$e=$(cat $env_dir/$e)"
+    done
+  fi
 }
