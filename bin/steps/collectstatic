@@ -25,8 +25,8 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
             echo "       http://devcenter.heroku.com/articles/django-assets"
         }
     else
-        echo " !     Error running 'manage.py collectstatic --dry-run'. More info:"
-        echo "       http://devcenter.heroku.com/articles/django-assets"
+        echo " !     Collectstatic configuration error. To debug, run:"
+        echo "       $ heroku run python $MANAGE_FILE collectstatic --noinput"
     fi
 
     echo
