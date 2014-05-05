@@ -17,6 +17,13 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+cp -r $ROOT_DIR /tmp/buildpack
+ROOT_DIR=/tmp/buildpack
+cd $ROOT_DIR
+
+function bpwatch() {
+  :
+}
 
 CACHED_DIRS=".heroku"
 
