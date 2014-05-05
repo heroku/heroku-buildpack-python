@@ -67,8 +67,7 @@ deep-mv() {
 deep-rm() {
   # subshell to avoid surprising caller with shopts.
   (
-    shopt -s dotglob
-    rm -rf "$1"/!(tmp|.|..)
+    ls "$1" | grep -v "tmp" | xargs rm -rf
   )
 }
 
