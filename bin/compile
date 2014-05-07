@@ -17,6 +17,7 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+buildpack_absolute="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 cp -r $ROOT_DIR /tmp/buildpack
 ROOT_DIR=/tmp/buildpack
 cd $ROOT_DIR
@@ -162,11 +163,16 @@ fi
 if [ ! "$SKIP_INSTALL" ]; then
   bpwatch start install_python
     puts-step "Preparing Python runtime ($PYTHON_VERSION)"
-    curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
-    if [[ $? != 0 ]] ; then
-      puts-warn "Requested runtime ($PYTHON_VERSION) was not found."
-      puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
-      exit 1
+    if test -d $buildpack_absolute/dependencies
+    then
+      tar -xf $buildpack_absolute/dependencies/$PYTHON_VERSION.tar.bz2
+    else
+      curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
+      if [[ $? != 0 ]] ; then
+        puts-warn "Requested runtime ($PYTHON_VERSION) was not found."
+        puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+        exit 1
+      fi
     fi
     mv python .heroku/python
   bpwatch stop install_python
@@ -227,7 +233,7 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
-/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external  | cleanup | indent
+/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external --find-links=file://$TMP_APP_DIR/vendor | cleanup | indent
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first

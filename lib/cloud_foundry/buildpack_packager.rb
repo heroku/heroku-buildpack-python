@@ -10,6 +10,20 @@ module CloudFoundry
         /\.{1,2}$/
     ]
 
+    DEPENDENCIES = [
+      "http://envy-versions.s3.amazonaws.com/python-2.7.0.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/python-2.7.1.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/python-2.7.2.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/python-2.7.3.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/python-2.7.6.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/python-3.2.0.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/python-3.2.1.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/python-3.2.2.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/python-3.2.3.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/python-3.4.0.tar.bz2",
+      "http://envy-versions.s3.amazonaws.com/pypy-1.9.tar.bz2"
+    ]
+
     class << self
       def package
         Dir.mktmpdir do |temp_dir|
@@ -28,13 +42,11 @@ module CloudFoundry
       def download_dependencies(target_path)
         dependency_path = File.join(target_path, 'dependencies')
 
-        dependencies.each do |version|
-          run_cmd "echo 0"
-        end
-      end
+        run_cmd "mkdir -p #{dependency_path}"
 
-      def dependencies
-        []
+        DEPENDENCIES.each do |uri|
+          run_cmd "cd #{dependency_path}; curl #{uri} -O"
+        end
       end
 
       def in_pack?(file)
@@ -51,7 +63,7 @@ module CloudFoundry
 
       def run_cmd(cmd)
         puts "$ #{cmd}"
-        `#{cmd}`
+        system "#{cmd}"
       end
     end
   end
