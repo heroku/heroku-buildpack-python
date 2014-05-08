@@ -17,9 +17,13 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+# The ROOT_DIR is read only so we can't install dependencies in it
+# Move the ROOT_DIR contents to tmp and point ROOT_DIR to the new root
 buildpack_absolute="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
-cp -r $ROOT_DIR /tmp/buildpack
-ROOT_DIR=/tmp/buildpack
+TMP_ROOT=/tmp/buildpack
+rm -rf $TMP_ROOT
+cp -r $ROOT_DIR $TMP_ROOT
+ROOT_DIR=$TMP_ROOT
 cd $ROOT_DIR
 
 function bpwatch() {
@@ -282,3 +286,5 @@ bpwatch start anvil_appdir_commit
 
 bpwatch stop anvil_appdir_commit
 bpwatch stop compile
+
+rm -rf $TMP_ROOT
