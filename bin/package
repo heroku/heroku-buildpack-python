@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [ $# -eq 0 ] || ([ "$1" != "online" ] && [ "$1" != "offline" ]); then
+  echo "Usage:"
+  echo "  ./package [online|offline]"
+  exit 1
+fi
+
+bundle
+bundle exec ruby lib/buildpack_packager.rb "$1"
