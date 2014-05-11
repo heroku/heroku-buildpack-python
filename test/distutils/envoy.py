@@ -168,7 +168,7 @@ def run(command, data=None, timeout=None, env=None):
     history = []
     for c in command:
 
-        if len(history):
+        if history:
             # due to broken pipe problems pass only first 10MB
             data = history[-1].std_out[0:10*1024]
 
