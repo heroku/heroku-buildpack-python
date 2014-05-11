@@ -20,6 +20,12 @@ testDetectWithEmptyReqs() {
   assertCapturedSuccess
 }
 
+testDetectDjango16() {
+  detect "django-1.6-skeleton"
+  assertCapturedEquals "Python"
+  assertCapturedSuccess
+}
+
 testDetectDjango15() {
   detect "django-1.5-skeleton"
   assertCapturedEquals "Python"
@@ -62,6 +68,23 @@ testDetectNotPython() {
   assertEquals "1" "${RETURN}"
 }
 
+testDetectSimpleRuntimePypy2() {
+  detect "simple-runtime-pypy2"
+  assertCapturedEquals "Python"
+  assertCapturedSuccess
+}
+
+testDetectSimpleRuntimePython2() {
+  detect "simple-runtime-python2"
+  assertCapturedEquals "Python"
+  assertCapturedSuccess
+}
+
+testDetectSimpleRuntimePython3() {
+  detect "simple-runtime"  # should probably be renamed simple-runtime-python3
+  assertCapturedEquals "Python"
+  assertCapturedSuccess
+}
 
 ## utils ########################################
 
