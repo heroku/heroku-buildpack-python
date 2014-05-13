@@ -20,7 +20,8 @@ module BuildpackPackager
     "http://envy-versions.s3.amazonaws.com/python-3.2.2.tar.bz2",
     "http://envy-versions.s3.amazonaws.com/python-3.2.3.tar.bz2",
     "http://envy-versions.s3.amazonaws.com/python-3.4.0.tar.bz2",
-    "http://envy-versions.s3.amazonaws.com/pypy-1.9.tar.bz2"
+    "http://envy-versions.s3.amazonaws.com/pypy-1.9.tar.bz2",
+    "http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
   ]
 
   class << self
@@ -44,7 +45,7 @@ module BuildpackPackager
       run_cmd "mkdir -p #{dependency_path}"
 
       DEPENDENCIES.each do |uri|
-        run_cmd "cd #{dependency_path}; curl #{uri} -O"
+        run_cmd "cd #{dependency_path}; curl #{uri} -O -L"
       end
     end
 
