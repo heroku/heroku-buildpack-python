@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/pivotal-cf-experimental/cf-buildpack-integration-tests.git
-  revision: 99e1c20e9be31604e372a126fb06dd72e2f10fa1
-  ref: 99e1c20
+  revision: 21e332fa4570428623d59cc70439b96b27b1a6ce
+  ref: 21e332fa4570428623d59cc70439b96b27b1a6ce
   specs:
     machete (0.0.1)
       httparty
@@ -24,7 +24,7 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
-    rake (10.3.1)
+    rake (10.3.2)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
