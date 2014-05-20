@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/cf-buildpacks/base_packager.git
+  revision: 317df6498ca202cea1ad4c00d114f99228675275
+  ref: 317df64
+  specs:
+    base_packager (0.0.1)
+      rubyzip
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -7,4 +15,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rubyzip
+  base_packager!
