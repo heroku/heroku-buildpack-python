@@ -249,6 +249,7 @@ pip install sphinx
 cd $BUILD_DIR/ddp
 make html
 
+
 puts-step "copying html in to static_html/books/django-design-patterns/"
 mv build/html/* ../static_html/books/django-design-patterns/
 # Custom code for sphinx
