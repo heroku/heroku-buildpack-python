@@ -91,8 +91,6 @@ export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/ven
 # Switch to the repo's context.
 cd $BUILD_DIR
 
-make html
-
 # Experimental pre_compile hook.
 bpwatch start pre_compile
   source $BIN_DIR/steps/hooks/pre_compile
@@ -245,6 +243,10 @@ set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
 
+
+cd $BUILD_DIR/ddp
+
+make html
 
 # Experimental post_compile hook.
 bpwatch start post_compile
