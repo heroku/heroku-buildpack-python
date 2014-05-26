@@ -244,7 +244,7 @@ set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
 
 puts-step "Installing Python-Sphinx"
-sudo apt-get install python-sphinx
+pip install sphinx
 cd $BUILD_DIR/ddp
 
 make html
