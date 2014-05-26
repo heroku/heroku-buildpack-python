@@ -249,6 +249,8 @@ cd $BUILD_DIR/ddp
 
 make html
 
+cd -
+
 # Experimental post_compile hook.
 bpwatch start post_compile
   source $BIN_DIR/steps/hooks/post_compile
