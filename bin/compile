@@ -243,13 +243,19 @@ set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
 
+# Custom code for sphinx
 puts-step "Installing Python-Sphinx"
 pip install sphinx
 cd $BUILD_DIR/ddp
-
 make html
 
+puts-step "copying html in to static_html/books/django-design-patterns/"
+mv build/html/* ../static_html/books/django-design-patterns/
+# Custom code for sphinx
+
 cd -
+
+puts-step "Done continuing execution"
 
 # Experimental post_compile hook.
 bpwatch start post_compile
