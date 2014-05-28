@@ -265,7 +265,7 @@ puts-step "copying html in to static_html/books/djenofdjango/"
 mv build/html/* ../static_html/books/djenofdjango/
 # Custom code for sphinx
 
-cd -
+cd $BUILD_DIR
 
 puts-step "Done continuing execution"
 
