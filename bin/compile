@@ -268,7 +268,7 @@ cd $BUILD_DIR/merchant/docs
 make html
 
 puts-step "copying html in to static_html/docs/merchant/"
-mv _build/html/* ../static_html/docs/merchant/
+mv _build/html/* ../../static_html/docs/merchant/
 # Custom code for sphinx
 
 cd $BUILD_DIR
