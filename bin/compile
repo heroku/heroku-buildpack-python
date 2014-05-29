@@ -27,8 +27,8 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 
 DEFAULT_PYTHON_VERSION="python-2.7.6"
 PYTHON_EXE="/app/.heroku/python/bin/python"
-PIP_VERSION="1.5.5"
-SETUPTOOLS_VERSION="3.6"
+PIP_VERSION="1.5.4"
+SETUPTOOLS_VERSION="2.1"
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
