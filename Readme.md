@@ -12,23 +12,22 @@ Example usage:
     $ ls
     Procfile  requirements.txt  web.py
 
-    $ heroku create --stack cedar --buildpack git://github.com/heroku/heroku-buildpack-python.git
+    $ heroku create --buildpack git://github.com/heroku/heroku-buildpack-python.git
 
     $ git push heroku master
     ...
-    -----> Fetching custom git buildpack... done
     -----> Python app detected
     -----> No runtime.txt provided; assuming python-2.7.6.
     -----> Preparing Python runtime (python-2.7.6)
-    -----> Installing Setuptools (2.1)
-    -----> Installing Pip (1.5.2)
-    -----> Installing dependencies using Pip (1.5.2)
-           Downloading/unpacking Flask==0.7.2 (from -r requirements.txt (line 1))
-           Downloading/unpacking Werkzeug>=0.6.1 (from Flask==0.7.2->-r requirements.txt (line 1))
-           Downloading/unpacking Jinja2>=2.4 (from Flask==0.7.2->-r requirements.txt (line 1))
-           Installing collected packages: Flask, Werkzeug, Jinja2
-           Successfully installed Flask Werkzeug Jinja2
+    -----> Installing Setuptools (3.6)
+    -----> Installing Pip (1.5.6)
+    -----> Installing dependencies using Pip (1.5.6)
+           Downloading/unpacking requests (from -r requirements.txt (line 1))
+           Installing collected packages: requests
+           Successfully installed requests
            Cleaning up...
+    -----> Discovering process types
+           Procfile declares types -> (none)
 
 You can also add it to upcoming builds of an existing application:
 
