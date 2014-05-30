@@ -1,9 +1,0 @@
-include AUTHORS.txt
-include LICENSE.txt
-include CHANGES.txt
-include PROJECT.txt
-include pip/cacert.pem
-recursive-include docs *.rst
-recursive-include docs *.html
-recursive-exclude docs/_build *.rst
-prune docs/_build/_sources
