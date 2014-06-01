@@ -4,6 +4,21 @@
 #
 #     $ bin/compile <build-dir> <cache-dir> <env-path>
 
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
+# If Python 2.6 of better exists then run compile.py instead of this script
+COMPILE_PY="$BIN_DIR/compile.py"
+if [ -f $COMPILE_PY ]; then  # if compile.py exists
+PYTHON_VERSION=$(python -c "import sys; print(sys.version[:5].replace('.',''))")
+    echo 'PYTHON_VERSION:' $PYTHON_VERSION
+    if [ $PYTHON_VERSION -ge 260 ] ; then # Compile.py tested with Python 2.6 or better
+        echo "Python $COMPILE_PY $1 $2 $3"
+        python $COMPILE_PY $1 $2 $3
+        RETURN_CODE=$?
+        echo "Python $COMPILE_PY $1 $2 $3 return code:" $RETURN_CODE
+        exit $RETURN_CODE # Done.
+    fi
+fi
+
 # Fail fast and fail hard.
 set -eo pipefail
 
