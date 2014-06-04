@@ -249,8 +249,8 @@ pip install sphinx
 cd $BUILD_DIR/ddp
 make html
 
-puts-step "copying html in to static_html/books/django-design-patterns/"
-mv build/html/* ../static_html/books/django-design-patterns/
+puts-step "copying html in to static_html/books/djangodesignpatterns/"
+mv build/html/* ../static_html/books/djangodesignpatterns/
 
 cd $BUILD_DIR/django-gotchas
 make html
