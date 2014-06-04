@@ -246,7 +246,7 @@ set-default-env PYTHONPATH /app/
 # Custom code for sphinx
 puts-step "Installing Python-Sphinx"
 pip install sphinx
-pip uninstall dinette
+/usr/bin/yes | pip uninstall dinette
 pip install git+https://github.com/agiliq/Dinette.git
 cd $BUILD_DIR/ddp
 make html
