@@ -32,7 +32,7 @@ SETUPTOOLS_VERSION="3.6"
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
-LOGPLEX_KEY="t.b396af7f-ad75-4643-8b9e-ebb288acc624"
+LOGPLEX_KEY="t.b90d9d29-5388-4908-9737-b4576af1d4ce"
 export BPWATCH_STORE_PATH=$CACHE_DIR/bpwatch.json
 BUILDPACK_VERSION=v28
 
@@ -247,7 +247,7 @@ set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME /app/.heroku/python
 set-default-env LIBRARY_PATH /app/.heroku/vendor/lib:/app/.heroku/python/lib
-set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib:/app/.heroku/python/lib
+set-env LD_LIBRARY_PATH /app/.heroku/vendor/lib:/app/.heroku/python/lib
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
