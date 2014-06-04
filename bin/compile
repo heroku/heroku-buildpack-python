@@ -246,7 +246,7 @@ bpwatch stop collectstatic
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME /app/.heroku/python
-set-default-env LIBRARY_PATH /app/.heroku/vendor/lib:/app/.heroku/python/lib
+set-env LIBRARY_PATH /app/.heroku/vendor/lib:/app/.heroku/python/lib
 set-env LD_LIBRARY_PATH /app/.heroku/vendor/lib:/app/.heroku/python/lib
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
