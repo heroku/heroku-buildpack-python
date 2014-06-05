@@ -300,3 +300,5 @@ bpwatch start anvil_appdir_commit
 
 bpwatch stop anvil_appdir_commit
 bpwatch stop compile
+
+python /app/agiliqcom/manage.py collectstatic --noinput
