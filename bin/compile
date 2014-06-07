@@ -28,7 +28,7 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 DEFAULT_PYTHON_VERSION="python-2.7.7"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="1.5.6"
-SETUPTOOLS_VERSION="3.6"
+SETUPTOOLS_VERSION="4.0.1"
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
@@ -188,6 +188,8 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
     puts-step "Installing Setuptools ($SETUPTOOLS_VERSION)"
     cd $ROOT_DIR/vendor/
     tar zxf setuptools-$SETUPTOOLS_VERSION.tar.gz
+    # The next line is hard coded :-( -- Could not find one named setuptools-$SETUPTOOLS_VERSION
+    mv pypa-setuptools-d5b699a1068f setuptools-$SETUPTOOLS_VERSION  # Hard coded!
     cd $ROOT_DIR/vendor/setuptools-$SETUPTOOLS_VERSION/
     python setup.py install &> /dev/null
     cd $WORKING_DIR
