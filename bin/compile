@@ -269,6 +269,13 @@ make html
 
 puts-step "copying html in to static_html/docs/merchant/"
 mv _build/html/* ../../static_html/docs/merchant/
+
+
+cd $BUILD_DIR/graphos/docs
+make html
+
+puts-step "copying html in to static_html/docs/graphos/"
+mv _build/html/* ../../static_html/docs/django-graphos/
 # Custom code for sphinx
 
 cd $BUILD_DIR
