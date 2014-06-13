@@ -6,5 +6,5 @@ if [ $# -eq 0 ] || ([ "$1" != "online" ] && [ "$1" != "offline" ]); then
   exit 1
 fi
 
-bundle
-bundle exec ruby lib/buildpack_packager.rb "$1"
+BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $BASE/create_python_buildpack.sh $1
