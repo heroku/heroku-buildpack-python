@@ -24,17 +24,9 @@ if (grep -Eiq "^\s*pylibmc" requirements.txt) then
     export LIBMEMCACHED=$(pwd)/vendor
   else
     # Download and extract libmemcached into target vendor directory.
-    if test -d $buildpack_absolute/dependencies
-    then
-      echo "-----> Extracting vendored memcached"
-      tar -zxvf $buildpack_absolute/dependencies/vendor-libmemcached.tar.gz > /dev/null
-    else
-      echo "-----> Downloading memcached"
-      curl -s -L -o tmp-libmemcached.tar.gz $VENDORED_MEMCACHED
-      echo $?
-      tar -zxvf tmp-libmemcached.tar.gz > /dev/null
-      rm tmp-libmemcached.tar.gz
-    fi
+    curl -s -L -o tmp-libmemcached.tar.gz $VENDORED_MEMCACHED
+    tar -zxvf tmp-libmemcached.tar.gz > /dev/null
+    rm tmp-libmemcached.tar.gz
     export LIBMEMCACHED=$(pwd)/vendor
   fi
 

@@ -2,7 +2,7 @@
 
 # To run, from ~/workspace/buildpacks/cf-buildpack-python
 #
-#   bin/test_create_python_buildpack.sh
+#   bin/test_package
 
 # ==================================== Mocks ====================================
 # The mocks are not subshell safe.  They work by defining a global bash function that takes precedence over the UNIX
@@ -27,29 +27,29 @@ setUp() {
 
 # ==================================== Tests ====================================
 testDependenciesAreDownloadedInOfflineMode() {
-    source $BASE/create_python_buildpack.sh offline
+    source $BASE/package offline
 
     assertEquals 'curl should download files with the url in the saved filename'     \
-                   'http://envy-versions.s3.amazonaws.com/python-2.7.0.tar.bz2 -O -L' \
+                   '-o ./dependencies/http___envy-versions.s3.amazonaws.com_python-2.7.0.tar.bz2 http://envy-versions.s3.amazonaws.com/python-2.7.0.tar.bz2 -L' \
                    "${ARGUMENTS_CALLED_WITH_FOR_CURL[0]}"
 
     assertEquals 'curl downloads 12 dependencies' "12" "${#ARGUMENTS_CALLED_WITH_FOR_CURL[@]}"
 }
 
 testDependenciesAreNotDownloadedInOnlineMode() {
-    source $BASE/create_python_buildpack.sh online
+    source $BASE/package online
 
     assertEquals 'curl downloads 0 dependencies' "0" "${#ARGUMENTS_CALLED_WITH_FOR_CURL[@]}"
 }
 
 testZipForBuildpackIsCreated() {
-    source $BASE/create_python_buildpack.sh
+    source $BASE/package online
 
     assertEquals 'Buildpack is zipped' "1" "${#ARGUMENTS_CALLED_WITH_FOR_ZIP[@]}"
 }
 
 testExcludeFilesFromTheBuildpack() {
-    source $BASE/create_python_buildpack.sh
+    source $BASE/package online
 
     arguments=$ARGUMENTS_CALLED_WITH_FOR_ZIP[@]
 

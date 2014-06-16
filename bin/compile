@@ -19,7 +19,6 @@ ENV_DIR=$3
 
 # The ROOT_DIR is read only so we can't install dependencies in it
 # Move the ROOT_DIR contents to tmp and point ROOT_DIR to the new root
-buildpack_absolute="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 TMP_ROOT=/tmp/buildpack
 rm -rf $TMP_ROOT
 cp -r $ROOT_DIR $TMP_ROOT
@@ -68,6 +67,12 @@ export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 
 # Syntax sugar.
 source $BIN_DIR/utils
+
+# CF Common
+BUILDPACK_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
+export BUILDPACK_PATH
+source $BIN_DIR/cf_common
+# END CF Common
 
 # Directory Hacks for path consistiency.
 APP_DIR='/app'
@@ -169,16 +174,11 @@ fi
 if [ ! "$SKIP_INSTALL" ]; then
   bpwatch start install_python
     puts-step "Preparing Python runtime ($PYTHON_VERSION)"
-    if test -d $buildpack_absolute/dependencies
-    then
-      tar -xf $buildpack_absolute/dependencies/$PYTHON_VERSION.tar.bz2
-    else
-      curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
-      if [[ $? != 0 ]] ; then
-        puts-warn "Requested runtime ($PYTHON_VERSION) was not found."
-        puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
-        exit 1
-      fi
+    curl http://envy-versions.s3.amazonaws.com/$PYTHON_VERSION.tar.bz2 -s | tar jx &> /dev/null
+    if [[ $? != 0 ]] ; then
+    puts-warn "Requested runtime ($PYTHON_VERSION) was not found."
+    puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+    exit 1
     fi
     mv python .heroku/python
   bpwatch stop install_python
@@ -233,7 +233,7 @@ bpwatch stop pylibmc_install
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
   bpwatch start mercurial_install
-    if test -d $buildpack_absolute/dependencies
+    if test -d $BUILDPACK_PATH/dependencies
     then
       puts-warn "Cloud Foundry does not support Pip Mercurial dependencies while in offline-mode. Vendor your dependencies if they do not work."
     fi
