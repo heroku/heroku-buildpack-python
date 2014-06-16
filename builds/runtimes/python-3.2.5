@@ -5,11 +5,13 @@
 OUT_PREFIX=$1
 
 echo "Building Python..."
-SOURCE_TARBALL='http://python.org/ftp/python/2.7.6/Python-2.7.6.tgz'
+SOURCE_TARBALL='http://python.org/ftp/python/3.2.5/Python-3.2.5.tgz'
 curl -L $SOURCE_TARBALL | tar xz
-mv Python-2.7.6 src
+mv Python-3.2.5 src
 cd src
 
 ./configure --prefix=$OUT_PREFIX --enable-shared
 make
 make install
+
+ln $OUT_PREFIX/bin/python3 $OUT_PREFIX/bin/python
