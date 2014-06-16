@@ -40,9 +40,7 @@ then
                 cat $BUILDPACK_PATH/dependencies/$filename
             fi
         else
-            ## Dependency does not exist
-            echo "Expected dependency to exist but could not find it: ${1}"
-            exit 1;
+            echo "Expected dependency to exist but could not find it: ${1}" 1>&2
         fi
     }
 fi

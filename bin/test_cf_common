@@ -29,7 +29,7 @@ testCurlWhenTheFileDoesNotExistAsADependency() {
 
     expected_output="Expected dependency to exist but could not find it: http://files.com/file.txt"
 
-    assertEquals "$expected_output" "$(curl http://files.com/file.txt -s)"
+    assertEquals "$expected_output" "$(curl http://files.com/file.txt -s 2>&1)"
 }
 
 testCurlWhenTheFileFromTheUrlIsStreamed() {
