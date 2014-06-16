@@ -30,10 +30,10 @@ testDependenciesAreDownloadedInOfflineMode() {
     source $BASE/package offline
 
     assertEquals 'curl should download files with the url in the saved filename'     \
-                   '-o ./dependencies/http___envy-versions.s3.amazonaws.com_python-2.7.0.tar.bz2 http://envy-versions.s3.amazonaws.com/python-2.7.0.tar.bz2 -L' \
+                   '-o ./dependencies/http___lang-python.s3.amazonaws.com_runtimes_python-2.7.0.tar.gz http://lang-python.s3.amazonaws.com/runtimes/python-2.7.0.tar.gz -L' \
                    "${ARGUMENTS_CALLED_WITH_FOR_CURL[0]}"
 
-    assertEquals 'curl downloads 12 dependencies' "12" "${#ARGUMENTS_CALLED_WITH_FOR_CURL[@]}"
+    assertEquals 'curl downloads 13 dependencies' "13" "${#ARGUMENTS_CALLED_WITH_FOR_CURL[@]}"
 }
 
 testDependenciesAreNotDownloadedInOnlineMode() {
