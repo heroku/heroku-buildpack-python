@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+# Build Deps: libraries/sqlite
+
+# build_python(PYTHON_VERSION, OUT_PREFIX)
+# build_python "2.7.7" "outPrefix"
+build_python()
+{
+    PYTHON_VERSION=$1
+    OUT_PREFIX=$2
+
+    if [ -z $PYTHON_VERSION ]
+    then
+        $PYTHON_VERSION="2.7.7"
+    fi
+
+    echo "Building Python $PYTHON_VERSION..."
+    SOURCE_TARBALL="http://python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz"
+    curl -L $SOURCE_TARBALL | tar xz
+    mv Python-$PYTHON_VERSION src
+    cd src
+
+    ./configure --prefix=$OUT_PREFIX
+    make
+    make install
+}
