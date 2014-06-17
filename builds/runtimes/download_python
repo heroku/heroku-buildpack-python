@@ -3,7 +3,7 @@
 # Build Deps: libraries/sqlite
 
 # download_python(PYTHON_VERSION)
-# Examle usage: download_python "2.7.7"
+# Example usage: download_python "2.7.7"
 download_python()
 {
     PYTHON_VERSION=$1
