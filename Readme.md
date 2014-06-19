@@ -17,8 +17,8 @@ Example usage:
     $ git push heroku master
     ...
     -----> Python app detected
-    -----> No runtime.txt provided; assuming python-2.7.6.
-    -----> Preparing Python runtime (python-2.7.6)
+    -----> No runtime.txt provided; assuming python-2.7.7.
+    -----> Preparing Python runtime (python-2.7.7)
     -----> Installing Setuptools (3.6)
     -----> Installing Pip (1.5.6)
     -----> Installing dependencies using Pip (1.5.6)
@@ -43,12 +43,12 @@ Specify a Runtime
 You can also provide arbitrary releases Python with a `runtime.txt` file.
 
     $ cat runtime.txt
-    python-3.4.0
+    python-3.4.1
 
 Runtime options include:
 
-- python-2.7.6
-- python-3.4.0
+- python-2.7.7
+- python-3.4.1
 - pypy-1.9 (experimental)
 
-Other [unsupported runtimes](https://github.com/kennethreitz/python-versions/tree/master/formula) are available as well.
+Other [unsupported runtimes](https://github.com/heroku/heroku-buildpack-python/tree/master/builds/runtimes) are available as well.
