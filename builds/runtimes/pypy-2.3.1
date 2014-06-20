@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+# Build Deps: libraries/sqlite
+
+OUT_PREFIX=$1
+PYPY_VERSION="2.3.1"
+SOURCE_TARBALL="https://bitbucket.org/pypy/pypy/downloads/pypy-$PYPY_VERSION-linux64.tar.bz2"
+
+echo "Building PyPy-$PYPY_VERSION from source code downloaded from $SOURCE_TARBALL"
+curl -L $SOURCE_TARBALL | tar jx
+cp -R pypy-$PYPY_VERSION-linux64/* $OUT_PREFIX
+
+ln $OUT_PREFIX/bin/pypy $OUT_PREFIX/bin/python
