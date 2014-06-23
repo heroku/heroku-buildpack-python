@@ -1,12 +1,13 @@
 GIT
   remote: git://github.com/cf-buildpacks/machete.git
-  revision: 3a2d634368ad6212fae78764b0ee97faaaf89e52
+  revision: 09c5de0e198114092477ef3b56b50eaef7e510db
   branch: master
   specs:
     machete (0.0.1)
       httparty
       rake
       rspec
+      wait_until
 
 GEM
   remote: https://rubygems.org/
@@ -22,14 +23,15 @@ GEM
       rspec-core (~> 3.0.0)
       rspec-expectations (~> 3.0.0)
       rspec-mocks (~> 3.0.0)
-    rspec-core (3.0.1)
+    rspec-core (3.0.2)
       rspec-support (~> 3.0.0)
-    rspec-expectations (3.0.1)
+    rspec-expectations (3.0.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.0.0)
-    rspec-mocks (3.0.1)
+    rspec-mocks (3.0.2)
       rspec-support (~> 3.0.0)
-    rspec-support (3.0.0)
+    rspec-support (3.0.2)
+    wait_until (0.1.1)
 
 PLATFORMS
   ruby
