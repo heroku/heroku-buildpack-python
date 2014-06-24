@@ -12,7 +12,7 @@ describe 'CF Python Buildpack' do
         specify do
           expect(app).to be_running
           expect(app.homepage_html).to include 'Hello, World!'
-          expect(app).to have_no_internet_traffic
+          expect(app).not_to have_internet_traffic
         end
       end
 
@@ -20,9 +20,9 @@ describe 'CF Python Buildpack' do
         let(:app_name) { 'mercurial_requirements' }
 
         specify do
-          expect(app).to be_running
+          expect(app).not_to be_running(0)
           expect(app.logs).to include 'Cloud Foundry does not support Pip Mercurial dependencies while in offline-mode. Vendor your dependencies if they do not work.'
-          expect(app).to have_no_internet_traffic
+          expect(app).to have_internet_traffic
         end
       end
     end
