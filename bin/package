@@ -26,5 +26,7 @@ excluded_files=(
   'test/'
 )
 
-source $BIN/cf_packager
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $BIN/../buildpack-packager/lib/packager
+
 package_buildpack $@

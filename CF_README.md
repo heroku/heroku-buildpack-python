@@ -13,3 +13,5 @@ Notes to developers
 * In offline mode, this buildpack will fail with non-Git vcs dependencies in requirements.txt
 * When deploying an app with vendor dependencies, the buildpack does not attempt to download dependencies. Vendor all
 your dependencies in /vendor. See [The PIP documentation for fast local installs.](http://pip.readthedocs.org/en/latest/user_guide.html#fast-local-installs)
+
+* Run `git submodule init` to fetch the buildpack-packager dependency

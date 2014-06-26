@@ -1,0 +1,3 @@
+[submodule "buildpack-packager"]
+	path = buildpack-packager
+	url = https://github.com/cf-buildpacks/buildpack-packager.git
