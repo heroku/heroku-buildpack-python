@@ -6,6 +6,13 @@ if [ $# -eq 0 ] || ([ "$1" != "online" ] && [ "$1" != "offline" ]); then
   exit 1
 fi
 
+mode=$1
+old_dir=`pwd`
+
+BIN_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+source $BIN_PATH/version
+
 dependencies=(
   'http://lang-python.s3.amazonaws.com/runtimes/python-2.7.0.tar.gz'
   'http://lang-python.s3.amazonaws.com/runtimes/python-2.7.1.tar.gz'
@@ -30,10 +37,19 @@ excluded_files=(
   'test/'
 )
 
-mode=$1
-old_dir=`pwd`
+generate_filename () {
+    zip_filename='python_buildpack'
+    if [[ $mode == 'offline' ]]
+    then
+        zip_filename=$zip_filename'-offline'
+    fi
 
-SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    zip_filename=$zip_filename'-v'$VERSION
+    zip_filename=$zip_filename'.zip'
+    echo $zip_filename;
+}
+
+
 
 temp_dir=/tmp/_make_buildpack
 mkdir $temp_dir
@@ -41,7 +57,7 @@ mkdir $temp_dir
 cd $temp_dir
 
 # copy buildpack contents into temp dir
-cp -r $SCRIPT_PATH/../* .
+cp -r $BIN_PATH/../* .
 
 if [[ $mode == 'offline' ]]
 then
@@ -63,7 +79,7 @@ do
 done
 
 # Zip contents of temp dir, excluding certain files
-zip -r $SCRIPT_PATH/../python_buildpack.zip ./ $zip_exclude_string
+zip -r $BIN_PATH/../$(generate_filename) ./ $zip_exclude_string
 
 # Cleaup
 cd $old_dir
