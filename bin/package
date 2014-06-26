@@ -21,9 +21,12 @@ dependencies=(
 excluded_files=(
   '.git/'
   '.gitignore'
+  '.gitmodules'
   'cf_spec/'
   'log/'
   'test/'
+  'bin/package'
+  'buildpack-packager/'
 )
 
 BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
