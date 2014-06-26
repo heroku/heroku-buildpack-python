@@ -1,0 +1,98 @@
+BIN_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BASE_PATH=${BIN_PATH}/..
+WORK_DIRECTORY=/tmp/_make_buildpack
+
+function __check_usage {
+    if [ ${number_of_arguments} -ne 1 ] || ([ ${mode} != "online" ] && [ ${mode} != "offline" ]); then
+      echo "Usage:"
+      echo "  ./package [online|offline]"
+      exit 1
+    fi
+}
+
+function __parse_arguments {
+    number_of_arguments=$#
+    mode=$1
+}
+
+function __create_work_directory {
+    old_dir=$(pwd)
+    mkdir ${WORK_DIRECTORY}
+}
+
+function __setup {
+    __parse_arguments $@
+    __check_usage
+    __create_work_directory
+}
+
+function __copy_buildpack_to_work_directory {
+    cp -r ${BASE_PATH}/* ${WORK_DIRECTORY}
+}
+
+function __translate_url_to_filename {
+    dependency_url=$1
+    sed 's/[:\/]/_/g' <<< ${dependency_url}
+}
+
+function __package_dependencies {
+    mkdir dependencies
+
+    for dependency in ${dependencies[@]}
+    do
+       filename=$(__translate_url_to_filename ${dependency})
+       curl ${dependency} -o ./dependencies/${filename} -L
+    done
+}
+
+function __build_zip_exclusion_string {
+    zip_exclude_string=''
+    for excluded_file in ${excluded_files[@]}
+    do
+       zip_exclude_string="$zip_exclude_string --exclude=*${excluded_file}*"
+    done
+
+    echo ${zip_exclude_string}
+}
+
+function __generate_filename {
+    source ${BIN_PATH}/version
+
+    filename=${language}'_buildpack'
+
+    if [[ ${mode} == 'offline' ]]; then
+        filename=${filename}'-offline'
+    fi
+
+    filename=${filename}'-v'${VERSION}
+    filename=${filename}'.zip'
+
+    echo ${filename}
+}
+
+function __zip_buildpack {
+    zip -r ${BIN_PATH}/../$(__generate_filename) ./ $(__build_zip_exclusion_string)
+}
+
+
+function __cleanup {
+    cd ${old_dir}
+    rm -rf ${WORK_DIRECTORY}
+}
+
+function package_buildpack {
+    __setup $@
+
+    __copy_buildpack_to_work_directory
+
+    cd ${WORK_DIRECTORY}
+
+    if [[ ${mode} == 'offline' ]]; then
+        __package_dependencies
+    fi
+
+    __zip_buildpack
+
+    __cleanup
+}
+

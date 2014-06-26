@@ -1,17 +1,6 @@
 #!/usr/bin/env bash
 
-if [ $# -eq 0 ] || ([ "$1" != "online" ] && [ "$1" != "offline" ]); then
-  echo "Usage:"
-  echo "  ./package [online|offline]"
-  exit 1
-fi
-
-mode=$1
-old_dir=`pwd`
-
-BIN_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-source $BIN_PATH/version
+language='python'
 
 dependencies=(
   'http://lang-python.s3.amazonaws.com/runtimes/python-2.7.0.tar.gz'
@@ -37,50 +26,5 @@ excluded_files=(
   'test/'
 )
 
-generate_filename () {
-    zip_filename='python_buildpack'
-    if [[ $mode == 'offline' ]]
-    then
-        zip_filename=$zip_filename'-offline'
-    fi
-
-    zip_filename=$zip_filename'-v'$VERSION
-    zip_filename=$zip_filename'.zip'
-    echo $zip_filename;
-}
-
-
-
-temp_dir=/tmp/_make_buildpack
-mkdir $temp_dir
-
-cd $temp_dir
-
-# copy buildpack contents into temp dir
-cp -r $BIN_PATH/../* .
-
-if [[ $mode == 'offline' ]]
-then
-    # create deps directory in temp dir
-    mkdir dependencies
-
-    # download each dependency into deps dir
-    for dependency in "${dependencies[@]}"
-    do
-       filename=$(sed 's/[:\/]/_/g' <<< ${dependency})
-       curl -o ./dependencies/${filename} ${dependency} -L
-    done
-fi
-
-zip_exclude_string=''
-for excluded_file in "${excluded_files[@]}"
-do
-   zip_exclude_string="$zip_exclude_string --exclude=*${excluded_file}*"
-done
-
-# Zip contents of temp dir, excluding certain files
-zip -r $BIN_PATH/../$(generate_filename) ./ $zip_exclude_string
-
-# Cleaup
-cd $old_dir
-rm -rf $temp_dir
+source $BIN/cf_packager
+package_buildpack $@
