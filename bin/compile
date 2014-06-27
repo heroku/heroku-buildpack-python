@@ -282,6 +282,11 @@ cd $BUILD_DIR
 
 puts-step "Done continuing execution"
 
+puts-step "Clearing cache"
+
+# Clear catch after each deploy
+python /app/agiliqcom/manage.py clear_cache
+
 # Experimental post_compile hook.
 bpwatch start post_compile
   source $BIN_DIR/steps/hooks/post_compile
@@ -307,7 +312,4 @@ bpwatch start anvil_appdir_commit
 
 bpwatch stop anvil_appdir_commit
 bpwatch stop compile
-
-# Clear catch after each deploy
-python /app/agiliqcom/manage.py clear_cache
 
