@@ -284,8 +284,6 @@ puts-step "Done continuing execution"
 
 puts-step "Clearing cache"
 
-# Clear catch after each deploy
-python /app/agiliqcom/manage.py clear_cache
 
 # Experimental post_compile hook.
 bpwatch start post_compile
@@ -294,6 +292,8 @@ bpwatch stop post_compile
 
 # Store new artifacts in cache.
 bpwatch start dump_cache
+  # Clear catch after each deploy
+  python /app/agiliqcom/manage.py clear_cache
   for dir in $CACHED_DIRS; do
     rm -rf $CACHE_DIR/$dir
     cp -R $dir $CACHE_DIR/
