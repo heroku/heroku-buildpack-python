@@ -71,7 +71,7 @@ source $BIN_DIR/utils
 # CF Common
 BUILDPACK_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 export BUILDPACK_PATH
-source $BIN_DIR/cf_common
+source $BUILDPACK_PATH/compile-extensions/lib/common
 # END CF Common
 
 # Directory Hacks for path consistiency.

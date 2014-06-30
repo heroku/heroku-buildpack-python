@@ -1,3 +1,6 @@
 [submodule "buildpack-packager"]
 	path = buildpack-packager
 	url = https://github.com/cf-buildpacks/buildpack-packager.git
+[submodule "compile-extensions"]
+	path = compile-extensions
+	url = https://github.com/cf-buildpacks/compile-extensions.git
