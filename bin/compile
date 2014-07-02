@@ -229,7 +229,7 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
-/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external  | cleanup | indent
+/app/.heroku/python/bin/pip install -r requirements.txt --upgrade --exists-action=w --src=./.heroku/src --allow-all-external  | cleanup | indent
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
@@ -252,6 +252,44 @@ set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
 
+# Custom code for sphinx
+puts-step "Installing Python-Sphinx"
+pip install sphinx
+cd $BUILD_DIR/ddp
+make html
+
+puts-step "copying html in to static_html/books/djangodesignpatterns/"
+mv build/html/* ../static_html/books/djangodesignpatterns/
+
+cd $BUILD_DIR/django-gotchas
+make html
+
+puts-step "copying html in to static_html/books/django-gotchas/"
+mv build/html/* ../static_html/books/django-gotchas/
+
+cd $BUILD_DIR/djenofdjango
+make html
+
+puts-step "copying html in to static_html/books/djenofdjango/"
+mv build/html/* ../static_html/books/djenofdjango/
+
+cd $BUILD_DIR/merchant/docs
+make html
+
+puts-step "copying html in to static_html/docs/merchant/"
+mv _build/html/* ../../static_html/docs/merchant/
+
+
+cd $BUILD_DIR/graphos/docs
+make html
+
+puts-step "copying html in to static_html/docs/graphos/"
+mv build/html/* ../../static_html/docs/django-graphos/
+# Custom code for sphinx
+
+cd $BUILD_DIR
+
+puts-step "Done continuing execution"
 
 # Experimental post_compile hook.
 bpwatch start post_compile
@@ -278,3 +316,28 @@ bpwatch start anvil_appdir_commit
 
 bpwatch stop anvil_appdir_commit
 bpwatch stop compile
+
+# Nginx Builpack
+
+set -e
+
+mkdir -p "$1/bin/"
+cp bin/nginx "$1/bin/"
+nginx_version=$(./bin/nginx -V 2>&1 | head -1 | awk '{ print $NF }')
+echo "-----> nginx-buildpack: Installed ${nginx_version} to app/bin"
+cp bin/start-nginx "$1/bin/"
+echo '-----> nginx-buildpack: Added start-nginx to app/bin'
+
+mkdir -p "$1/config"
+
+cp config/mime.types "$1/config/"
+echo '-----> nginx-buildpack: Default mime.types copied to app/config/'
+
+if [[ ! -f $1/config/nginx.conf.erb ]]; then
+  cp config/nginx.conf.erb "$1/config/"
+  echo '-----> nginx-buildpack: Default config copied to app/config.'
+else
+  echo '-----> nginx-buildpack: Custom config found in app/config.'
+fi
+exit 0
+
