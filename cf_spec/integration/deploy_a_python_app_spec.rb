@@ -11,7 +11,7 @@ describe 'CF Python Buildpack' do
 
         specify do
           expect(app).to be_running
-          expect(app.homepage_body).to include 'Hello, World!'
+          expect(app).to have_page_body('Hello, World!')
           expect(app.host).not_to have_internet_traffic
         end
       end
@@ -36,7 +36,7 @@ describe 'CF Python Buildpack' do
 
         specify do
           expect(app).to be_running
-          expect(app.homepage_body).to include 'Hello, World!'
+          expect(app).to have_page_body('Hello, World!')
         end
       end
 
@@ -45,10 +45,9 @@ describe 'CF Python Buildpack' do
 
         specify do
           expect(app).to be_running
-          expect(app.homepage_body).to include 'Hello, World!'
+          expect(app).to have_page_body('Hello, World!')
         end
       end
     end
   end
-
 end

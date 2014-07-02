@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/cf-buildpacks/machete.git
-  revision: c27640fdfe641e2ec0de0c0d96d51cc11f43fdae
+  revision: dc7b343820e1ec6acd3a813bad683de56546f022
   branch: master
   specs:
     machete (0.0.1)
