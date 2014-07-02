@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# This script is invoked by [`bin/compile`](/).
+
+# The location of the pre-compiled libffi binary.
+VENDORED_LIBFFI="https://s3.amazonaws.com/rt-uploads/libffi-3.0.tgz"
+VENDORED_PATH=/app/vendor/libffi-3.0
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+# If cffi exists within requirements, use vendored libffi.
+if (grep -Eiq "^\s*cffi" requirements.txt || grep -Eiq "^\s*cryptography" requirements.txt) then
+  echo "-----> Noticed cffi. Bootstrapping libffi."
+  PREV_DIR=$(pwd)
+  mkdir -p "$VENDORED_PATH"
+  cd "$VENDORED_PATH"
+
+  # Download and extract libffi into target vendor directory.
+  curl -s -L -o tmp-libffi.tar.gz $VENDORED_LIBFFI
+  tar -zxvf tmp-libffi.tar.gz > /dev/null
+  rm tmp-libffi.tar.gz
+
+  # Add libffi's to PKG_CONFIG_PATH
+  export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$(pwd)/lib/pkgconfig/
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/lib/
+  #export LIBRARY_PATH=$LIBRARY_PATH:$(pwd)/lib/
+  echo "PKG_CONFIG_PATH=${PKG_CONFIG_PATH}"
+  if [ -e $(pwd)/lib/pkgconfig/libffi.pc ]
+  then
+    echo "libffi.pc is in-place at $(pwd)/vendor/lib/pkgconfig/libffi.pc, libffi-based builds should work!"
+  fi
+
+  cd "$PREV_DIR"
+fi
+
+
+
