@@ -6,11 +6,16 @@ OUT_PREFIX=$1
 echo "Building autoconf..."
 
 
-curl http://files.directadmin.com/services/custombuild/autoconf-2.61.tar.gz | tar xz
-cd autoconf-2.61
+git clone git://git.sv.gnu.org/autoconf
+cd autoconf
 ./configure --prefix=$OUT_PREFIX
 make
 make install
+cd ..
+rm -fr autoconf
+
+# Use new Python path, containing autoconf.
+export PATH="/app/.heroku/python/bin/:$PATH"
 
 echo "Building libffi..."
 
