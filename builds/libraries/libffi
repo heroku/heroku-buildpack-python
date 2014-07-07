@@ -1,23 +1,13 @@
 #!/usr/bin/env bash
 # Build Path: /app/.heroku/python/
+# Build Deps: libraries/autoconf
 
 OUT_PREFIX=$1
 
-echo "Building autoconf..."
-
-
-SOURCE_TARBALL='http://ftp.gnu.org/gnu/autoconf/autoconf-2.68.tar.gz'
-curl -L $SOURCE_TARBALL | tar xz
-
-cd autoconf-2.68
-./configure --prefix=$OUT_PREFIX
-make
-make install
-cd ..
-
-# Use new Python path, containing autoconf.
+# Use new path, containing autoconf.
 export PATH="/app/.heroku/python/bin/:$PATH"
 hash -r
+
 
 echo "Building libffi..."
 
