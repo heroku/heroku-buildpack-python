@@ -3,8 +3,16 @@
 
 OUT_PREFIX=$1
 
-echo "Building libffi..."
+echo "Building autoconf..."
 
+
+curl http://files.directadmin.com/services/custombuild/autoconf-2.61.tar.gz | tar xz
+cd autoconf-2.61
+./configure --prefix=$OUT_PREFIX
+make
+make install
+
+echo "Building libffi..."
 
 SOURCE_TARBALL='https://github.com/atgreen/libffi/archive/master.tar.gz'
 
@@ -12,6 +20,7 @@ curl -L $SOURCE_TARBALL | tar xz
 mv libffi-master libffi
 
 cd libffi
+./autogen.sh
 ./configure --prefix=$OUT_PREFIX
 make
 make install
