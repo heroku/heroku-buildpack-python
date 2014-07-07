@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+
+OUT_PREFIX=$1
+
+echo "Building libffi..."
+
+
+SOURCE_TARBALL='https://github.com/atgreen/libffi/archive/master.tar.gz'
+
+curl $SOURCE_TARBALL | tar xz
+# jx
+mv libffi-master libffi
+
+cd libffi
+./configure --prefix=$OUT_PREFIX
+make
+make install
+
+# Cleanup
+cd ..
+rm -fr libffi
