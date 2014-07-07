@@ -8,8 +8,7 @@ echo "Building libffi..."
 
 SOURCE_TARBALL='https://github.com/atgreen/libffi/archive/master.tar.gz'
 
-curl $SOURCE_TARBALL | tar xz
-# jx
+curl -L $SOURCE_TARBALL | tar xz
 mv libffi-master libffi
 
 cd libffi
