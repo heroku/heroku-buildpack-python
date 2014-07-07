@@ -3,10 +3,21 @@
 # Build Deps: libraries/sqlite, libraries/libffi
 
 OUT_PREFIX=$1
+export PATH="/app/.heroku/python/bin/:$PATH"
+export LD_LIBRARY_PATH="/app/.heroku/vendor/lib:$LD_LIBRARY_PATH"
+export LIBRARY_PATH="/app/.heroku/vendor/lib:$LIBRARY_PATH"
+
+
+hash -r
 
 echo "Building PyPy..."
-SOURCE_TARBALL='https://bitbucket.org/pypy/pypy/downloads/pypy-2.3.1-linux64.tar.bz2'
+SOURCE_TARBALL='https://bitbucket.org/pypy/pypy/downloads/pypy-2.3.1-src.tar.bz2'
 curl -L $SOURCE_TARBALL | tar jx
-cp -R pypy-2.0/* $OUT_PREFIX
+cd pypy-2.3.1-src
+
+cd pypy/goal
+python ../../rpython/bin/rpython -Ojit targetpypystandalone
+
+
 
 ln $OUT_PREFIX/bin/pypy $OUT_PREFIX/bin/python
