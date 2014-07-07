@@ -14,10 +14,10 @@ cd autoconf-2.68
 make
 make install
 cd ..
-rm -fr autoconf-2.68
 
 # Use new Python path, containing autoconf.
 export PATH="/app/.heroku/python/bin/:$PATH"
+hash -r
 
 echo "Building libffi..."
 
@@ -34,4 +34,3 @@ make install
 
 # Cleanup
 cd ..
-rm -fr libffi
