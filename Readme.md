@@ -4,6 +4,8 @@ A Cloud Foundry [buildpack](http://docs.cloudfoundry.org/buildpacks/) for Python
 
 This is based on the [Heroku buildpack] (https://github.com/heroku/heroku-buildpack-python).
 
+Additional inofrmation can be found at [CloudFoundry.org](http://docs.cloudfoundry.org/buildpacks/).
+
 ## Usage
 
 This buildpack will be used if there is a `requirements.txt` or `setup.py` file in the root directory of your project.
