@@ -43,8 +43,8 @@ BUILDPACK_VERSION=v28
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
 
-bpwatch init $LOGPLEX_KEY
-bpwatch build python $BUILDPACK_VERSION $REQUEST_ID
+# bpwatch init $LOGPLEX_KEY
+# bpwatch build python $BUILDPACK_VERSION $REQUEST_ID
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 bpwatch start compile
@@ -61,19 +61,19 @@ APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 # Copy Anvil app dir to temporary storage...
-bpwatch start anvil_appdir_stage
+# bpwatch start anvil_appdir_stage
   if [ "$SLUG_ID" ]; then
     mkdir -p $TMP_APP_DIR
     deep-mv $APP_DIR $TMP_APP_DIR
   else
     deep-rm $APP_DIR
   fi
-bpwatch stop anvil_appdir_stage
+# bpwatch stop anvil_appdir_stage
 
 # Copy Application code in.
-bpwatch start appdir_stage
+# bpwatch start appdir_stage
   deep-mv $BUILD_DIR $APP_DIR
-bpwatch stop appdir_stage
+# bpwatch stop appdir_stage
 
 # Set new context.
 ORIG_BUILD_DIR=$BUILD_DIR
@@ -93,9 +93,9 @@ export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/ven
 cd $BUILD_DIR
 
 # Experimental pre_compile hook.
-bpwatch start pre_compile
+# bpwatch start pre_compile
   source $BIN_DIR/steps/hooks/pre_compile
-bpwatch stop pre_compile
+# bpwatch stop pre_compile
 
 # If no requirements given, assume `setup.py develop`.
 if [ ! -f requirements.txt ]; then
@@ -117,17 +117,17 @@ fi
 mkdir -p $CACHE_DIR
 
 # Purge "old-style" virtualenvs.
-bpwatch start clear_old_venvs
+# bpwatch start clear_old_venvs
   [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.heroku/bin $CACHE_DIR/.heroku/lib $CACHE_DIR/.heroku/include
   [ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
-bpwatch stop clear_old_venvs
+# bpwatch stop clear_old_venvs
 
 # Restore old artifacts from the cache.
-bpwatch start restore_cache
+# bpwatch start restore_cache
   for dir in $CACHED_DIRS; do
     cp -R $CACHE_DIR/$dir . &> /dev/null || true
   done
-bpwatch stop restore_cache
+# bpwatch stop restore_cache
 
 set +e
 # Create set-aside `.heroku` folder.
@@ -142,10 +142,10 @@ PYTHON_VERSION=$(cat runtime.txt)
 # Install Python.
 if [ -f .heroku/python-version ]; then
   if [ ! $(cat .heroku/python-version) = $PYTHON_VERSION ]; then
-    bpwatch start uninstall_python
+    # bpwatch start uninstall_python
       puts-step "Found $(cat .heroku/python-version), removing."
       rm -fr .heroku/python
-    bpwatch stop uninstall_python
+    # bpwatch stop uninstall_python
   else
     SKIP_INSTALL=1
   fi
@@ -153,7 +153,7 @@ fi
 
 
 if [ ! "$SKIP_INSTALL" ]; then
-  bpwatch start install_python
+  # bpwatch start install_python
     puts-step "Preparing Python runtime ($PYTHON_VERSION)"
 
     # Prepare destination directory.
@@ -166,7 +166,7 @@ if [ ! "$SKIP_INSTALL" ]; then
       exit 1
     fi
 
-  bpwatch stop install_python
+  # bpwatch stop install_python
 
   # Record for future reference.
   echo $PYTHON_VERSION > .heroku/python-version
@@ -181,9 +181,9 @@ fi
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   WORKING_DIR=$(pwd)
 
-  bpwatch start prepare_environment
+  # bpwatch start prepare_environment
 
-  bpwatch start install_setuptools
+  # bpwatch start install_setuptools
     # Prepare it for the real world
     puts-step "Installing Setuptools ($SETUPTOOLS_VERSION)"
     cd $ROOT_DIR/vendor/
@@ -191,9 +191,9 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
     cd $ROOT_DIR/vendor/setuptools-$SETUPTOOLS_VERSION/
     python setup.py install &> /dev/null
     cd $WORKING_DIR
-  bpwatch stop install_setuptoools
+  # bpwatch stop install_setuptoools
 
-  bpwatch start install_pip
+  # bpwatch start install_pip
     puts-step "Installing Pip ($PIP_VERSION)"
 
     cd $ROOT_DIR/vendor/
@@ -202,8 +202,8 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
     python setup.py install &> /dev/null
     cd $WORKING_DIR
 
-  bpwatch stop install_pip
-  bpwatch stop prepare_environment
+  # bpwatch stop install_pip
+  # bpwatch stop prepare_environment
 fi
 
 set -e
@@ -211,15 +211,15 @@ hash -r
 
 # Pylibmc support.
 # See [`bin/steps/pylibmc`](pylibmc.html).
-bpwatch start pylibmc_install
+# bpwatch start pylibmc_install
   source $BIN_DIR/steps/pylibmc
-bpwatch stop pylibmc_install
+# bpwatch stop pylibmc_install
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
-  bpwatch start mercurial_install
+  # bpwatch start mercurial_install
     /app/.heroku/python/bin/pip install  mercurial | cleanup | indent
-  bpwatch stop mercurial_install
+  # bpwatch stop mercurial_install
 fi
 
 # Install dependencies with Pip.
@@ -231,13 +231,13 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 
 /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external  | cleanup | indent
 
-[ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
-[ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
+# [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
+# [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
 
 # Django collectstatic support.
-bpwatch start collectstatic
+# bpwatch start collectstatic
   sub-env $BIN_DIR/steps/collectstatic
-bpwatch stop collectstatic
+# bpwatch stop collectstatic
 
 # ### Finalize
 #
@@ -254,27 +254,27 @@ set-default-env PYTHONPATH /app/
 
 
 # Experimental post_compile hook.
-bpwatch start post_compile
+# bpwatch start post_compile
   source $BIN_DIR/steps/hooks/post_compile
-bpwatch stop post_compile
+# bpwatch stop post_compile
 
 # Store new artifacts in cache.
-bpwatch start dump_cache
+# bpwatch start dump_cache
   for dir in $CACHED_DIRS; do
     rm -rf $CACHE_DIR/$dir
     cp -R $dir $CACHE_DIR/
   done
-bpwatch stop dump_cache
+# bpwatch stop dump_cache
 
 # ### Fin.
-bpwatch start appdir_commit
+# bpwatch start appdir_commit
   deep-mv $BUILD_DIR $ORIG_BUILD_DIR
-bpwatch stop appdir_commit
+# bpwatch stop appdir_commit
 
-bpwatch start anvil_appdir_commit
+# bpwatch start anvil_appdir_commit
   if [ "$SLUG_ID" ]; then
     deep-mv $TMP_APP_DIR $APP_DIR
   fi
 
-bpwatch stop anvil_appdir_commit
-bpwatch stop compile
+# bpwatch stop anvil_appdir_commit
+# bpwatch stop compile
