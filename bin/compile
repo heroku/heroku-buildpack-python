@@ -104,9 +104,9 @@ if [ ! -f requirements.txt ]; then
 fi
 
 # Sticky runtimes.
-if [ -f $CACHE_DIR/.heroku/python-version ]; then
-  DEFAULT_PYTHON_VERSION=$(cat $CACHE_DIR/.heroku/python-version)
-fi
+# if [ -f $CACHE_DIR/.heroku/python-version ]; then
+#   DEFAULT_PYTHON_VERSION=$(cat $CACHE_DIR/.heroku/python-version)
+# fi
 
 # If no runtime given, assume default version.
 if [ ! -f runtime.txt ]; then
