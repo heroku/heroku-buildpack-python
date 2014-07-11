@@ -47,7 +47,7 @@ unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
 # bpwatch build python $BUILDPACK_VERSION $REQUEST_ID
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
-bpwatch start compile
+# bpwatch start compile
 
 
 # We'll need to send these statics to other scripts we `source`.
