@@ -148,16 +148,6 @@ mkdir -p $(dirname $PROFILE_PATH)
 set +e
 PYTHON_VERSION=$(cat runtime.txt)
 
-rm -fr .heroku/python
-if [ ! $STACK = $CACHED_PYTHON_STACK ]; then
-  bpwatch start uninstall_python
-    puts-step "Stack changed, re-installing $PYTHON_VERSION."
-    rm -fr .heroku/python
-  bpwatch stop uninstall_python
-else
-  SKIP_INSTALL=1
-fi
-
 # Install Python.
 if [ -f .heroku/python-version ]; then
   if [ ! $(cat .heroku/python-version) = $PYTHON_VERSION ]; then
@@ -168,6 +158,13 @@ if [ -f .heroku/python-version ]; then
   else
     SKIP_INSTALL=1
   fi
+fi
+
+if [ ! $STACK = $CACHED_PYTHON_STACK ]; then
+  bpwatch start uninstall_python
+    puts-step "Stack changed, re-installing $PYTHON_VERSION."
+    rm -fr .heroku/python
+  bpwatch stop uninstall_python
 fi
 
 
