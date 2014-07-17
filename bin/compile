@@ -40,6 +40,7 @@ BUILDPACK_VERSION=v28
 # Support Anvil Build_IDs
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
+[ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
@@ -107,6 +108,13 @@ fi
 # Sticky runtimes.
 if [ -f $CACHE_DIR/.heroku/python-version ]; then
   DEFAULT_PYTHON_VERSION=$(cat $CACHE_DIR/.heroku/python-version)
+fi
+
+# Stack fallback for non-declared caches.
+if [ -f $CACHE_DIR/.heroku/python-stack ]; then
+  CACHED_PYTHON_STACK=$(cat $CACHE_DIR/.heroku/python-stack)
+else
+  CACHED_PYTHON_STACK=$DEFAULT_PYTHON_STACK
 fi
 
 # If no runtime given, assume default version.
