@@ -17,8 +17,8 @@ Example usage:
     $ git push heroku master
     ...
     -----> Python app detected
-    -----> Preparing runtime (python-2.7.8)
-    -----> Installing dependencies using Pip (1.5.6)
+    -----> Installing runtime (python-2.7.8)
+    -----> Installing dependencies using pip
            Downloading/unpacking requests (from -r requirements.txt (line 1))
            Installing collected packages: requests
            Successfully installed requests
