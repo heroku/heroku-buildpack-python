@@ -161,7 +161,7 @@ fi
 
 if [ ! $STACK = $CACHED_PYTHON_STACK ]; then
   bpwatch start uninstall_python
-    puts-step "Stack changed, re-installing runtime ($PYTHON_VERSION)"
+    puts-step "Stack changed, re-installing runtime"
     rm -fr .heroku/python
     unset SKIP_INSTALL
   bpwatch stop uninstall_python
@@ -238,7 +238,7 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies with Pip.
-puts-step "Installing dependencies with Pip ($PIP_VERSION)"
+puts-step "Installing dependencies with pip"
 
 
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
