@@ -101,7 +101,6 @@ bpwatch stop pre_compile
 
 # If no requirements given, assume `setup.py develop`.
 if [ ! -f requirements.txt ]; then
-  puts-step "No requirements.txt provided; assuming dist package."
   echo "-e ." > requirements.txt
 fi
 
@@ -152,7 +151,7 @@ PYTHON_VERSION=$(cat runtime.txt)
 if [ -f .heroku/python-version ]; then
   if [ ! $(cat .heroku/python-version) = $PYTHON_VERSION ]; then
     bpwatch start uninstall_python
-      puts-step "Found $(cat .heroku/python-version), removing."
+      puts-step "Found runtime $(cat .heroku/python-version), removing"
       rm -fr .heroku/python
     bpwatch stop uninstall_python
   else
@@ -162,7 +161,7 @@ fi
 
 if [ ! $STACK = $CACHED_PYTHON_STACK ]; then
   bpwatch start uninstall_python
-    puts-step "Stack changed, re-installing $PYTHON_VERSION."
+    puts-step "Stack changed, re-installing runtime ($PYTHON_VERSION)"
     rm -fr .heroku/python
     unset SKIP_INSTALL
   bpwatch stop uninstall_python
@@ -171,14 +170,14 @@ fi
 
 if [ ! "$SKIP_INSTALL" ]; then
   bpwatch start install_python
-    puts-step "Preparing Python runtime ($PYTHON_VERSION)"
+    puts-step "Installing runtime ($PYTHON_VERSION)"
 
     # Prepare destination directory.
     mkdir -p .heroku/python
 
     curl http://lang-python.s3.amazonaws.com/$STACK/runtimes/$PYTHON_VERSION.tar.gz -s | tar zxv -C .heroku/python &> /dev/null
     if [[ $? != 0 ]] ; then
-      puts-warn "Requested runtime ($PYTHON_VERSION) is not available on the $STACK stack."
+      puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
       puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
       exit 1
     fi
@@ -191,8 +190,6 @@ if [ ! "$SKIP_INSTALL" ]; then
   FRESH_PYTHON=true
 
   hash -r
-else
-  puts-step "Using Python runtime ($PYTHON_VERSION)"
 fi
 
 # If Pip isn't up to date:
@@ -203,7 +200,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
 
   bpwatch start install_setuptools
     # Prepare it for the real world
-    puts-step "Installing Setuptools ($SETUPTOOLS_VERSION)"
+    # puts-step "Installing Setuptools ($SETUPTOOLS_VERSION)"
     cd $ROOT_DIR/vendor/
     tar zxf setuptools-$SETUPTOOLS_VERSION.tar.gz
     cd $ROOT_DIR/vendor/setuptools-$SETUPTOOLS_VERSION/
@@ -212,7 +209,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   bpwatch stop install_setuptoools
 
   bpwatch start install_pip
-    puts-step "Installing Pip ($PIP_VERSION)"
+    # puts-step "Installing Pip ($PIP_VERSION)"
 
     cd $ROOT_DIR/vendor/
     tar zxf pip-$PIP_VERSION.tar.gz
@@ -241,7 +238,7 @@ if (grep -Fiq "hg+" requirements.txt) then
 fi
 
 # Install dependencies with Pip.
-puts-step "Installing dependencies using Pip ($PIP_VERSION)"
+puts-step "Installing dependencies with Pip ($PIP_VERSION)"
 
 
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
