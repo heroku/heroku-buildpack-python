@@ -1,0 +1,5 @@
+v1.0.0 Jun 17, 2014
+===================
+
+* Modify [the Heroku Python buildpack](https://github.com/heroku/heroku-buildpack-python) to
+  support offline mode.
