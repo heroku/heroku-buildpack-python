@@ -1,3 +1,27 @@
+v1.0.1 Jul 22, 2014
+====================
+
+* Improve documentation and made the README CF specific.
+    [#69192654]
+    [#73157760]
+
+* Switch to new Cloud Foundry offline dependency framework
+  (https://www.pivotaltracker.com/story/show/74053110)
+  (https://www.pivotaltracker.com/story/show/73384384)
+  (https://www.pivotaltracker.com/story/show/73723814)
+  (https://www.pivotaltracker.com/story/show/73544396)
+
+* Improve version imprinting
+  (https://www.pivotaltracker.com/story/show/73158908)
+
+* Use Ruby 2.1.1 for packaging
+
+* Fix: Bug in mercurial spec
+    [#73544396]
+
+* Fix: Offline mode should not attempt to use public networks
+  (https://www.pivotaltracker.com/story/show/73420832)
+
 v1.0.0 Jun 17, 2014
 ===================
 
