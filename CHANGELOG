@@ -17,7 +17,7 @@ v1.0.1 Jul 22, 2014
 * Use Ruby 2.1.1 for packaging
 
 * Fix: Bug in mercurial spec
-    [#73544396]
+  (https://www.pivotaltracker.com/story/show/73544396)
 
 * Fix: Offline mode should not attempt to use public networks
   (https://www.pivotaltracker.com/story/show/73420832)
