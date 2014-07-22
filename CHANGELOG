@@ -1,9 +1,9 @@
 v1.0.1 Jul 22, 2014
 ====================
 
-* Improve documentation and made the README CF specific.
-    [#69192654]
-    [#73157760]
+* Improve documentation and make the README CF specific.
+  (https://www.pivotaltracker.com/story/show/69192654)
+  (https://www.pivotaltracker.com/story/show/73157760)
 
 * Switch to new Cloud Foundry offline dependency framework
   (https://www.pivotaltracker.com/story/show/74053110)
