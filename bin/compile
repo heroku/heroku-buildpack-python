@@ -227,6 +227,8 @@ fi
 set -e
 hash -r
 
+
+set +e
 # Install dependencies with Pip.
 bpwatch start pip_uninstall
 if [[ -f .heroku/python/requirements-declared.txt ]]; then
@@ -239,6 +241,7 @@ if [[ -f .heroku/python/requirements-declared.txt ]]; then
   fi
 fi
 bpwatch stop pip_uninstall
+set -e
 
 # Install dependencies with Pip.
 puts-step "Installing dependencies with pip"
