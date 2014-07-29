@@ -32,7 +32,7 @@ class Requirements(object):
             raise ValueError('The given requirements file does not exist.')
 
         for requirement in parse_requirements(reqfile):
-            if requirement:
+            if requirement.req:
                 self.requirements.append(requirement.req)
 
 
