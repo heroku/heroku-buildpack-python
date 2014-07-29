@@ -230,6 +230,9 @@ bpwatch start pylibmc_install
   source $BIN_DIR/steps/pylibmc
 bpwatch stop pylibmc_install
 
+# libffi support.
+source $BIN_DIR/steps/libffi
+
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
   bpwatch start mercurial_install
@@ -266,6 +269,8 @@ set-env LD_LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIB
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
+set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib:/app/vendor/libffi-3.0/lib
+
 
 
 # Experimental post_compile hook.
