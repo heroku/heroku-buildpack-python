@@ -228,10 +228,18 @@ set -e
 hash -r
 
 # Install dependencies with Pip.
-puts-step "Checking for stale dependencies"
+bpwatch start pip_uninstall
 if [[ -f .heroku/python/requirements-declared.txt ]]; then
-  pip-diff --stale .heroku/python/requirements-declared.txt requirements.txt
+
+  pip-diff --stale .heroku/python/requirements-declared.txt requirements.txt > .heroku/python/requirements-stale.txt
+
+  if [[ -s .heroku/python/requirements-stale.txt ]]; then
+    puts-step "Uninstalling stale dependencies"
+    /app/.heroku/python/bin/pip uninstall -r .heroku/python/requirements-stale.txt -y --exists-action=w | cleanup | indent
+  fi
 fi
+bpwatch stop pip_uninstall
+
 # Install dependencies with Pip.
 puts-step "Installing dependencies with pip"
 
