@@ -37,6 +37,9 @@ LOGPLEX_KEY="t.b90d9d29-5388-4908-9737-b4576af1d4ce"
 export BPWATCH_STORE_PATH=$CACHE_DIR/bpwatch.json
 BUILDPACK_VERSION=v28
 
+# Setup pip-pop (pip-diff)
+export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
+
 # Support Anvil Build_IDs
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
@@ -224,11 +227,21 @@ fi
 set -e
 hash -r
 
+# Install dependencies with Pip.
+puts-step "Checking for stale dependencies"
+if [[ -f .heroku/python/requirements-declared.txt ]]; then
+  pip-diff --stale .heroku/python/requirements-declared.txt requirements.txt
+fi
+# Install dependencies with Pip.
+puts-step "Installing dependencies with pip"
+
 # Pylibmc support.
 # See [`bin/steps/pylibmc`](pylibmc.html).
 bpwatch start pylibmc_install
   source $BIN_DIR/steps/pylibmc
 bpwatch stop pylibmc_install
+
+
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
@@ -236,10 +249,6 @@ if (grep -Fiq "hg+" requirements.txt) then
     /app/.heroku/python/bin/pip install  mercurial | cleanup | indent
   bpwatch stop mercurial_install
 fi
-
-# Install dependencies with Pip.
-puts-step "Installing dependencies with pip"
-
 
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
