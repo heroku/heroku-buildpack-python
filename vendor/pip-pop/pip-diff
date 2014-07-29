@@ -12,18 +12,7 @@ Options:
 """
 import os
 from docopt import docopt
-from pkg_resources import parse_requirements
-
-
-# TODO: ignore lines
-IGNORABLE_LINES = ('#', '-r')
-VERSION_OPERATORS = ('==', '>=', '<=', '>', '<', ',')
-
-def split(s):
-    for operator in VERSION_OPERATORS:
-        s = s.replace(operator, '!')
-
-    return s.split('!')
+from pip.req import parse_requirements
 
 class Requirements(object):
     def __init__(self, reqfile=None):
@@ -42,18 +31,8 @@ class Requirements(object):
         if not os.path.exists(reqfile):
             raise ValueError('The given requirements file does not exist.')
 
-        with open(reqfile) as f:
-            data = []
-
-            for line in f:
-                line = line.strip()
-
-                # Skip lines that start with any comment/control charecters.
-                if not any([line.startswith(p) for p in IGNORABLE_LINES]):
-                    data.append(line)
-
-            for requirement in parse_requirements(data):
-                self.requirements.append(requirement)
+        for requirement in parse_requirements(reqfile):
+            self.requirements.append(requirement.req)
 
 
     def diff(self, requirements, ignore_versions=False):
