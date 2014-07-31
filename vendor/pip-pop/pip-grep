@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """Usage:
-  pip-grep <reqfile> <package>...
+  pip-grep [-s] <reqfile> <package>...
 
 Options:
   -h --help     Show this screen.
@@ -34,7 +34,7 @@ class Requirements(object):
 
 
 
-def grep(reqfile, packages):
+def grep(reqfile, packages, silent=False):
 
     try:
         r = Requirements(reqfile)
@@ -44,17 +44,22 @@ def grep(reqfile, packages):
 
     for requirement in r.requirements:
         if requirement.req.project_name in packages:
-            print 'Package {} found!'.format(requirement.req.project_name)
+
+            if not silent:
+                print 'Package {} found!'.format(requirement.req.project_name)
+
             exit(0)
 
-        print 'Not found.'.format(requirement.req.project_name)
+        if not silent:
+            print 'Not found.'.format(requirement.req.project_name)
+
         exit(1)
 
 
 def main():
     args = docopt(__doc__, version='pip-grep')
 
-    kwargs = {'reqfile': args['<reqfile>'], 'packages': args['<package>']}
+    kwargs = {'reqfile': args['<reqfile>'], 'packages': args['<package>'], 'silent': args['-s']}
 
     grep(**kwargs)
 
