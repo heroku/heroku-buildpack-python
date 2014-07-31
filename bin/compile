@@ -162,6 +162,8 @@ source $BIN_DIR/steps/pylibmc
 # Install dependencies with Pip.
 source $BIN_DIR/steps/pip-install
 
+echo 'install finished'
+
 # Django collectstatic support.
 source $BIN_DIR/steps/collectstatic
 
