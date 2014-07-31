@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo 'test0'
+
 source $BIN_DIR/utils
 
 MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' | head -1)
