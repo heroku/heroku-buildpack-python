@@ -17,6 +17,8 @@ source $BIN_DIR/utils
 
 bpwatch start pylibmc_install
 
+cat requirements.txt
+
 pip-grep requirements.txt pylibmc
 
 # If pylibmc exists within requirements, use vendored libmemcached.
