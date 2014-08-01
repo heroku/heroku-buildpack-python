@@ -15,3 +15,5 @@ echo 'copies finished'
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
+
+echo 'bp watch finished'
