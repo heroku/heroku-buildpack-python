@@ -6,12 +6,9 @@ puts-step "Installing dependencies with pip"
 
 /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external  | cleanup | indent
 
-echo 'install finished'
 # Smart Requirements handling
 cp requirements.txt .heroku/python/requirements-declared.txt
 /app/.heroku/python/bin/pip freeze > .heroku/python/requirements-installed.txt
-
-echo 'copies finished'
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first

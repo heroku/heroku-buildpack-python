@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo 'test0'
-
 source $BIN_DIR/utils
 
 MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' | head -1)
@@ -9,11 +7,7 @@ MANAGE_FILE=${MANAGE_FILE:-fakepath}
 
 [ -f .heroku/collectstatic_disabled ] && DISABLE_COLLECTSTATIC=1
 
-echo 'test1'
-
 bpwatch start collectstatic
-
-echo 'test2'
 
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
     set +e

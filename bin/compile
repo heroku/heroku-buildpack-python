@@ -159,12 +159,8 @@ source $BIN_DIR/steps/mercurial
 # Pylibmc support.
 source $BIN_DIR/steps/pylibmc
 
-echo 'install started'
-
 # Install dependencies with Pip.
 source $BIN_DIR/steps/pip-install
-
-echo 'install finished'
 
 # Django collectstatic support.
 source $BIN_DIR/steps/collectstatic
