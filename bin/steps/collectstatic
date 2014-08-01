@@ -30,11 +30,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
         echo "       Collectstatic configuration error. To debug, run:"
         echo "       $ heroku run python $MANAGE_FILE collectstatic --noinput"
     fi
-
     echo
-
-
 fi
-
 
 bpwatch stop collectstatic
