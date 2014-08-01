@@ -17,10 +17,6 @@ source $BIN_DIR/utils
 
 bpwatch start pylibmc_install
 
-cat requirements.txt
-
-pip-grep requirements.txt pylibmc
-
 # If pylibmc exists within requirements, use vendored libmemcached.
 if (pip-grep -s requirements.txt pylibmc) then
   echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
