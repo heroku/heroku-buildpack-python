@@ -13,4 +13,4 @@ cp requirements.txt .heroku/python/requirements-declared.txt
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
 
-echo 'bp watch finished'
+echo
