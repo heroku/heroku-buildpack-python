@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # Build Path: /app/.heroku/vendor/
-# Build Deps: libraries/autoconf
 
 OUT_PREFIX=$1
 
@@ -11,14 +10,19 @@ hash -r
 
 echo "Building libffi..."
 
-SOURCE_TARBALL='https://github.com/atgreen/libffi/archive/master.tar.gz'
+SOURCE_TARBALL='http://cl.ly/2s1t1u3v0N0I/download/libffi-3.1.tar'
 
 curl -L $SOURCE_TARBALL | tar xz
-mv libffi-master libffi
 
-cd libffi
-./autogen.sh
-./configure --prefix=$OUT_PREFIX --enable-shared
+cd libffi-3.1
+
+
+sed -e '/^includesdir/ s:$(libdir)/@PACKAGE_NAME@-@PACKAGE_VERSION@/include:$(includedir):' \
+    -i include/Makefile.in &&
+sed -e '/^includedir/ s:${libdir}/@PACKAGE_NAME@-@PACKAGE_VERSION@/include:@includedir@:' \
+    -e 's/^Cflags: -I${includedir}/Cflags:/' \
+    -i libffi.pc.in        &&
+./configure --prefix=/usr --disable-static &&
 make
 make install
 
