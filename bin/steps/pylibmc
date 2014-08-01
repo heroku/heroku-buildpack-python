@@ -28,6 +28,7 @@ if (pip-grep -s requirements.txt pylibmc) then
     mkdir -p .heroku/vendor
     # Download and extract libmemcached into target vendor directory.
     curl $VENDORED_MEMCACHED -s | tar zxv -C .heroku/vendor &> /dev/null
+    ls -l .heroku/vendor
     export LIBMEMCACHED=$(pwd)/vendor
   fi
 
