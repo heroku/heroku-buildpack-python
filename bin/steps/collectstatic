@@ -7,6 +7,8 @@ MANAGE_FILE=${MANAGE_FILE:-fakepath}
 
 [ -f .heroku/collectstatic_disabled ] && DISABLE_COLLECTSTATIC=1
 
+bpwatch start collectstatic
+
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
     set +e
 
@@ -28,9 +30,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
         echo "       Collectstatic configuration error. To debug, run:"
         echo "       $ heroku run python $MANAGE_FILE collectstatic --noinput"
     fi
-
     echo
-
-
 fi
 
+bpwatch stop collectstatic
