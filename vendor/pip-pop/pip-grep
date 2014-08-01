@@ -39,8 +39,10 @@ def grep(reqfile, packages, silent=False):
     try:
         r = Requirements(reqfile)
     except ValueError:
+
         if not silent:
             print 'There was a problem loading the given requirement file.'
+
         exit(os.EX_NOINPUT)
 
     for requirement in r.requirements:
@@ -48,11 +50,15 @@ def grep(reqfile, packages, silent=False):
         if requirement.req:
 
             if requirement.req.project_name in packages:
+
                 if not silent:
                     print 'Package {} found!'.format(requirement.req.project_name)
+
                 exit(0)
 
-    print 'Not found.'.format(requirement.req.project_name)
+    if not silent:
+        print 'Not found.'.format(requirement.req.project_name)
+
     exit(1)
 
 
