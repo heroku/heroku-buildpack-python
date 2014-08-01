@@ -19,8 +19,6 @@ source $BIN_DIR/utils
 
 bpwatch start libffi_install
 
-whereis pkg-config
-
 # If pylibmc exists within requirements, use vendored cryptography.
 if (pip-grep -s requirements.txt cffi pylibmc) then
 
