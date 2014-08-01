@@ -150,6 +150,9 @@ mkdir -p $(dirname $PROFILE_PATH)
 # Install Python.
 source $BIN_DIR/steps/python
 
+# Sanity check for setuptools/distribute.
+source $BIN_DIR/steps/setuptools
+
 # Uninstall removed dependencies with Pip.
 source $BIN_DIR/steps/pip-uninstall
 

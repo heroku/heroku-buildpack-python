@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+if (pip-grep -s requirements.txt setuptools distribute &> /dev/null) then
+
+  puts-warn 'The package setuptools/distribute is listed in requirements.txt.'
+  puts-warn 'Please remove to ensure expected behavior. '
+
+fi
