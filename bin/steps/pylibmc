@@ -19,7 +19,6 @@ bpwatch start pylibmc_install
 
 # If pylibmc exists within requirements, use vendored libmemcached.
 if (pip-grep -s requirements.txt pylibmc) then
-  cd .heroku
 
   if [ -d "vendor/lib/sasl2" ]; then
     export LIBMEMCACHED=$(pwd)/vendor
@@ -28,11 +27,9 @@ if (pip-grep -s requirements.txt pylibmc) then
     mkdir -p .heroku/vendor
     # Download and extract libmemcached into target vendor directory.
     curl $VENDORED_MEMCACHED -s | tar zxv -C .heroku/vendor &> /dev/null
-    ls -l .heroku/vendor
+
     export LIBMEMCACHED=$(pwd)/vendor
   fi
-
-  cd ..
 fi
 
 bpwatch stop pylibmc_install
