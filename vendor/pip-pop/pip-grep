@@ -41,7 +41,7 @@ def grep(reqfile, packages, silent=False):
     except ValueError:
 
         if not silent:
-            print 'There was a problem loading the given requirement file.'
+            print('There was a problem loading the given requirement file.')
 
         exit(os.EX_NOINPUT)
 
@@ -52,12 +52,12 @@ def grep(reqfile, packages, silent=False):
             if requirement.req.project_name in packages:
 
                 if not silent:
-                    print 'Package {} found!'.format(requirement.req.project_name)
+                    print('Package {} found!'.format(requirement.req.project_name))
 
                 exit(0)
 
     if not silent:
-        print 'Not found.'.format(requirement.req.project_name)
+        print('Not found.'.format(requirement.req.project_name))
 
     exit(1)
 

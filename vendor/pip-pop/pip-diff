@@ -79,18 +79,18 @@ def diff(r1, r2, include_fresh=False, include_stale=False):
         r1 = Requirements(r1)
         r2 = Requirements(r2)
     except ValueError:
-        print 'There was a problem loading the given requirements files.'
+        print('There was a problem loading the given requirements files.')
         exit(os.EX_NOINPUT)
 
     results = r1.diff(r2, ignore_versions=True)
 
     if include_fresh:
         for line in results['fresh']:
-            print line.project_name if include_versions else line
+            print(line.project_name if include_versions else line)
 
     if include_stale:
         for line in results['stale']:
-            print line.project_name if include_versions else line
+            print(line.project_name if include_versions else line)
 
 
 
