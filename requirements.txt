@@ -1,1 +1,1 @@
-requests
+bob-builder==0.0.5

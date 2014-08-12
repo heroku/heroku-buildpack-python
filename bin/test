@@ -2,7 +2,7 @@
 
 #
 # Create a Heroku app with the following buildpack:
-# https://github.com/ddollar/buildpack-tet
+# https://github.com/ddollar/buildpack-test
 #
 # Push this Python buildpack to that Heroku app to
 # run the tests.
@@ -16,6 +16,12 @@ testDetectWithReqs() {
 
 testDetectWithEmptyReqs() {
   detect "empty-requirements"
+  assertCapturedEquals "Python"
+  assertCapturedSuccess
+}
+
+testDetectDjango16() {
+  detect "django-1.6-skeleton"
   assertCapturedEquals "Python"
   assertCapturedSuccess
 }
@@ -62,6 +68,23 @@ testDetectNotPython() {
   assertEquals "1" "${RETURN}"
 }
 
+testDetectSimpleRuntimePypy2() {
+  detect "simple-runtime-pypy2"
+  assertCapturedEquals "Python"
+  assertCapturedSuccess
+}
+
+testDetectSimpleRuntimePython2() {
+  detect "simple-runtime-python2"
+  assertCapturedEquals "Python"
+  assertCapturedSuccess
+}
+
+testDetectSimpleRuntimePython3() {
+  detect "simple-runtime"  # should probably be renamed simple-runtime-python3
+  assertCapturedEquals "Python"
+  assertCapturedSuccess
+}
 
 ## utils ########################################
 

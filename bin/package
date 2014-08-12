@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+language='python'
+
+dependencies=(
+  'http://lang-python.s3.amazonaws.com/runtimes/python-2.7.0.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-2.7.1.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-2.7.2.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-2.7.3.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-2.7.6.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-2.7.7.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-3.2.0.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-3.2.1.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-3.2.2.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-3.2.3.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-3.4.0.tar.gz'
+  'http://lang-python.s3.amazonaws.com/runtimes/python-3.4.1.tar.gz'
+  'http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz'
+)
+
+excluded_files=(
+  '.git/'
+  '.gitignore'
+  '.gitmodules'
+  'cf_spec/'
+  'log/'
+  'test/'
+  'bin/package'
+  'buildpack-packager/'
+)
+
+BIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $BIN/../buildpack-packager/lib/packager
+
+package_buildpack $@
