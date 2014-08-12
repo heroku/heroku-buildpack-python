@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# This script serves as the Numpy build step of the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# compiler.
+#
+# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# The location of the pre-compiled numpy binary.
+VENDORED_NUMPY="https://s3.amazonaws.com/cfResources/vendor-numpy.tar.gz"
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+# If numpy exists within requirements, use vendored numpy.
+if (grep -Eiq "^\s*numpy" requirements.txt) then
+  echo "-----> Noticed numpy. Bootstrapping it."
+  cd .heroku
+
+  if [ -d "lib/python2.7/site-packages/numpy" ]; then
+    echo "Found some numpy already."
+    # export LIBMEMCACHED=$(pwd)/vendor
+  else
+    # Download and extract libmemcached into target vendor directory.
+    curl -s -L -o vendor-numpy.tar.gz $VENDORED_MEMCACHED
+    tar -zxvf vendor-numpy.tar.gz > /dev/null
+    rm vendor-numpy.tar.gz
+    #export LIBMEMCACHED=$(pwd)/vendor
+  fi
+
+  cd ..
+fi
