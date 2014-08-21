@@ -13,6 +13,7 @@ Options:
 import os
 from docopt import docopt
 from pip.req import parse_requirements
+from pip.index import PackageFinder
 
 class Requirements(object):
     def __init__(self, reqfile=None):
@@ -31,7 +32,8 @@ class Requirements(object):
         if not os.path.exists(reqfile):
             raise ValueError('The given requirements file does not exist.')
 
-        for requirement in parse_requirements(reqfile):
+        finder = PackageFinder([], [])
+        for requirement in parse_requirements(reqfile, finder=finder):
             if requirement.req:
                 self.requirements.append(requirement.req)
 
