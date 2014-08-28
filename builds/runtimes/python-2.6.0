@@ -6,15 +6,13 @@
 
 OUT_PREFIX=$1
 
+source ./download_python
+download_python "2.6"
+
 # Protect 2.6 builds from parent Python (causes segfault during build).
 unset LANG PYTHONHOME PYTHONPATH
 
-echo "Building Python..."
-SOURCE_TARBALL='http://www.python.org/ftp/python/2.6/Python-2.6.tar.bz2'
-curl -L $SOURCE_TARBALL | tar jx
-mv Python-2.6 src
 cd src
-
 ./configure --prefix=$OUT_PREFIX --enable-shared
 make
 make install
