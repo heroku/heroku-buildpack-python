@@ -1,0 +1,79 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""Usage:
+  pip-grep [-s] <reqfile> <package>...
+
+Options:
+  -h --help     Show this screen.
+"""
+import os
+from docopt import docopt
+from pip.req import parse_requirements
+from pip.index import PackageFinder
+
+
+class Requirements(object):
+    def __init__(self, reqfile=None):
+        super(Requirements, self).__init__()
+        self.path = reqfile
+        self.requirements = []
+
+        if reqfile:
+            self.load(reqfile)
+
+    def __repr__(self):
+        return '<Requirements \'{}\'>'.format(self.path)
+
+    def load(self, reqfile):
+
+        if not os.path.exists(reqfile):
+            raise ValueError('The given requirements file does not exist.')
+
+        finder = PackageFinder([], [])
+        for requirement in parse_requirements(reqfile, finder=finder):
+            self.requirements.append(requirement)
+
+
+
+
+def grep(reqfile, packages, silent=False):
+
+    try:
+        r = Requirements(reqfile)
+    except ValueError:
+
+        if not silent:
+            print('There was a problem loading the given requirement file.')
+
+        exit(os.EX_NOINPUT)
+
+    for requirement in r.requirements:
+
+        if requirement.req:
+
+            if requirement.req.project_name in packages:
+
+                if not silent:
+                    print('Package {} found!'.format(requirement.req.project_name))
+
+                exit(0)
+
+    if not silent:
+        print('Not found.'.format(requirement.req.project_name))
+
+    exit(1)
+
+
+def main():
+    args = docopt(__doc__, version='pip-grep')
+
+    kwargs = {'reqfile': args['<reqfile>'], 'packages': args['<package>'], 'silent': args['-s']}
+
+
+    grep(**kwargs)
+
+
+
+if __name__ == '__main__':
+    main()

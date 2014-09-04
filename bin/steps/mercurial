@@ -1,0 +1,10 @@
+# Install Mercurial if it appears to be required.
+if (grep -Fiq "hg+" requirements.txt) then
+  bpwatch start mercurial_install
+    if test -d $BUILDPACK_PATH/dependencies
+    then
+      puts-warn "Cloud Foundry does not support Pip Mercurial dependencies while in offline-mode. Vendor your dependencies if they do not work."
+    fi
+    /app/.heroku/python/bin/pip install  mercurial | cleanup | indent
+  bpwatch stop mercurial_install
+fi

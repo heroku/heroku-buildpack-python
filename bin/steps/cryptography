@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# This script serves as the Pylibmc build step of the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# compiler.
+#
+# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# The location of the pre-compiled cryptography binary.
+VENDORED_LIBFFI="http://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libffi.tar.gz"
+
+PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+bpwatch start libffi_install
+
+# If pylibmc exists within requirements, use vendored cryptography.
+if (pip-grep -s requirements.txt cffi crytography &> /dev/null) then
+
+  if [ -d ".heroku/vendor/lib/libffi-3.1.1" ]; then
+    export LIBFFI=$(pwd)/vendor
+  else
+    echo "-----> Noticed cffi. Bootstrapping libffi."
+    mkdir -p .heroku/vendor
+    # Download and extract cryptography into target vendor directory.
+    curl $VENDORED_LIBFFI -s | tar zxv -C .heroku/vendor &> /dev/null
+
+    export LIBFFI=$(pwd)/vendor
+  fi
+fi
+
+bpwatch stop libffi_install

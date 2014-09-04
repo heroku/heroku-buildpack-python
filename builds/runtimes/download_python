@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+# Build Deps: libraries/sqlite
+
+# download_python(PYTHON_VERSION)
+# Example usage: download_python "2.7.8"
+download_python()
+{
+    local PYTHON_VERSION=${1:-2.7.8}
+    echo "Building Python $PYTHON_VERSION..."
+    SOURCE_TARBALL="http://python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz"
+    curl -L $SOURCE_TARBALL | tar xz
+    mv Python-$PYTHON_VERSION src
+}

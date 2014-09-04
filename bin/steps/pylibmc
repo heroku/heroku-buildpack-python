@@ -10,29 +10,27 @@
 # This script is invoked by [`bin/compile`](/).
 
 # The location of the pre-compiled libmemcached binary.
-VENDORED_MEMCACHED="http://cl.ly/0a191R3K160t1w1P0N25/vendor-libmemcached.tar.gz"
+VENDORED_MEMCACHED="http://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libmemcache.tar.gz"
 
 # Syntax sugar.
 source $BIN_DIR/utils
 
-# If pylibmc exists within requirements, use vendored libmemcached.
-if (grep -Eiq "^\s*pylibmc" requirements.txt) then
-  echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
-  cd .heroku
 
-  if [ -d "vendor/lib/sasl2" ]; then
+bpwatch start pylibmc_install
+
+# If pylibmc exists within requirements, use vendored libmemcached.
+if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
+
+  if [ -d ".heroku/vendor/lib/sasl2" ]; then
     export LIBMEMCACHED=$(pwd)/vendor
   else
+    echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
+    mkdir -p .heroku/vendor
     # Download and extract libmemcached into target vendor directory.
-    curl -s -L -o tmp-libmemcached.tar.gz $VENDORED_MEMCACHED
-    tar -zxvf tmp-libmemcached.tar.gz > /dev/null
-    rm tmp-libmemcached.tar.gz
+    curl $VENDORED_MEMCACHED -s | tar zxv -C .heroku/vendor &> /dev/null
+
     export LIBMEMCACHED=$(pwd)/vendor
   fi
-
-  export LIBMEMCACHED=$(pwd)/vendor
-  cd ..
 fi
 
-
-
+bpwatch stop pylibmc_install

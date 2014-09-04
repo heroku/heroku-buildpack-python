@@ -1,0 +1,114 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""Usage:
+  pip-diff (--fresh | --stale) <reqfile1> <reqfile2>
+  pip-diff (-h | --help)
+
+Options:
+  -h --help     Show this screen.
+  --fresh       List newly added packages.
+  --stale       List removed packages.
+"""
+import os
+from docopt import docopt
+from pip.req import parse_requirements
+from pip.index import PackageFinder
+
+class Requirements(object):
+    def __init__(self, reqfile=None):
+        super(Requirements, self).__init__()
+        self.path = reqfile
+        self.requirements = []
+
+        if reqfile:
+            self.load(reqfile)
+
+    def __repr__(self):
+        return '<Requirements \'{}\'>'.format(self.path)
+
+    def load(self, reqfile):
+
+        if not os.path.exists(reqfile):
+            raise ValueError('The given requirements file does not exist.')
+
+        finder = PackageFinder([], [])
+        for requirement in parse_requirements(reqfile, finder=finder):
+            if requirement.req:
+                self.requirements.append(requirement.req)
+
+
+    def diff(self, requirements, ignore_versions=False):
+        r1 = self
+        r2 = requirements
+        results = {'fresh': [], 'stale': []}
+
+        # Generate fresh packages.
+        other_reqs = (
+            [r.project_name for r in r1.requirements]
+            if ignore_versions else r1.requirements
+        )
+
+        for req in r2.requirements:
+            r = req.project_name if ignore_versions else req
+
+            if r not in other_reqs:
+                results['fresh'].append(req)
+
+        # Generate stale packages.
+        other_reqs = (
+            [r.project_name for r in r2.requirements]
+            if ignore_versions else r2.requirements
+        )
+
+        for req in r1.requirements:
+            r = req.project_name if ignore_versions else req
+
+            if r not in other_reqs:
+                results['stale'].append(req)
+
+        return results
+
+
+
+
+
+def diff(r1, r2, include_fresh=False, include_stale=False):
+
+    include_versions = True if include_stale else False
+
+    try:
+        r1 = Requirements(r1)
+        r2 = Requirements(r2)
+    except ValueError:
+        print('There was a problem loading the given requirements files.')
+        exit(os.EX_NOINPUT)
+
+    results = r1.diff(r2, ignore_versions=True)
+
+    if include_fresh:
+        for line in results['fresh']:
+            print(line.project_name if include_versions else line)
+
+    if include_stale:
+        for line in results['stale']:
+            print(line.project_name if include_versions else line)
+
+
+
+def main():
+    args = docopt(__doc__, version='pip-diff')
+
+    kwargs = {
+        'r1': args['<reqfile1>'],
+        'r2': args['<reqfile2>'],
+        'include_fresh': args['--fresh'],
+        'include_stale': args['--stale']
+    }
+
+    diff(**kwargs)
+
+
+
+if __name__ == '__main__':
+    main()
