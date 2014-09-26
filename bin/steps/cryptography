@@ -20,7 +20,7 @@ source $BIN_DIR/utils
 bpwatch start libffi_install
 
 # If pylibmc exists within requirements, use vendored cryptography.
-if (pip-grep -s requirements.txt cffi crytography &> /dev/null) then
+if (pip-grep -s requirements.txt bcrypt cffi crytography &> /dev/null) then
 
   if [ -d ".heroku/vendor/lib/libffi-3.1.1" ]; then
     export LIBFFI=$(pwd)/vendor
