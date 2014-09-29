@@ -1,3 +1,10 @@
+v1.0.3 Sep 29, 2014
+====================
+
+* Merges Heroku upstream change:
+  * Add bcrypt to the list of dependencies triggering libffi installation
+
+
 v1.0.2 Sep 05, 2014
 ====================
 
