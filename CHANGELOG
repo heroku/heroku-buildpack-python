@@ -1,3 +1,10 @@
+v1.0.4 Sep 30, 2014
+====================
+
+Resolve broken buildpack version output.
+  (https://www.pivotaltracker.com/story/show/79781536)
+  (https://www.pivotaltracker.com/n/projects/966314/stories/79702506)
+
 v1.0.3 Sep 29, 2014
 ====================
 
