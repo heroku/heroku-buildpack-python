@@ -19,6 +19,10 @@ dependencies=(
   'http://lang-python.s3.amazonaws.com/cedar/libraries/vendor/libmemcache.tar.gz'
 )
 
+symlinks=(
+
+)
+
 excluded_files=(
   '.git/'
   '.gitignore'
