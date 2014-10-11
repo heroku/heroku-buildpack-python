@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+# Build Deps: libraries/sqlite
+
+OUT_PREFIX=$1
+
+source ./download_python
+download_python "3.4.1"
+
+cd src
+./configure --prefix=$OUT_PREFIX --with-ensurepip=no --enable-shared
+make
+make install
+
+ln $OUT_PREFIX/bin/python3 $OUT_PREFIX/bin/python
