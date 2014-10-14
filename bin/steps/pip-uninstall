@@ -1,4 +1,4 @@
-set +e
+set +eu
 # Install dependencies with Pip.
 bpwatch start pip_uninstall
 if [[ -f .heroku/python/requirements-declared.txt ]]; then
@@ -15,4 +15,4 @@ if [[ -f .heroku/python/requirements-declared.txt ]]; then
   fi
 fi
 bpwatch stop pip_uninstall
-set -e
+set -eu

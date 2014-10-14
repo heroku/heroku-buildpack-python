@@ -1,4 +1,4 @@
-set +e
+set +eu
 PYTHON_VERSION=$(cat runtime.txt)
 
 # Install Python.
@@ -75,5 +75,5 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   bpwatch stop prepare_environment
 fi
 
-set -e
+set -eu
 hash -r
