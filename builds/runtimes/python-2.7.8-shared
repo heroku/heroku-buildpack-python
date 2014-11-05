@@ -10,6 +10,6 @@ curl -L $SOURCE_TARBALL | tar xz
 mv Python-2.7.8 src
 cd src
 
-./configure --prefix=$OUT_PREFIX
+./configure --prefix=$OUT_PREFIX --enable-shared
 make
 make install
