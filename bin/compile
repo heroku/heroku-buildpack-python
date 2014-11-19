@@ -46,7 +46,7 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitizing environment variables.
-unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
+unset GIT_DIR PYTHONHOME PYTHONPATH
 
 bpwatch init $LOGPLEX_KEY
 bpwatch build python $BUILDPACK_VERSION $REQUEST_ID
@@ -88,11 +88,14 @@ BUILD_DIR=$APP_DIR
 export PATH=$BUILD_DIR/.heroku/python/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH
 export PYTHONUNBUFFERED=1
 export LANG=en_US.UTF-8
-export C_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include
-export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include
-export LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib
-export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib
-export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config
+export C_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}
+export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}
+export LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib${LIBRARY_PATH:+:$LIBRARY_PATH}
+export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
+
+# we dont touch cpath ourself, but if it comes in, lets make sure we export it.
+export CPATH
 
 # Switch to the repo's context.
 cd $BUILD_DIR
