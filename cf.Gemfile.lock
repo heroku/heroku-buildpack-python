@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/cf-buildpacks/buildpack-packager.git
+  revision: 1bcd751aa4a13bc0ca684e32584ae32c81c3798b
+  ref: 1bcd751
+  specs:
+    buildpack-packager (0.0.1)
+      activesupport (~> 4.1.8)
+
+GIT
   remote: git://github.com/cf-buildpacks/machete.git
   revision: 4f2ac6817b928a85fb4126263124a0f1a4aa06d2
   branch: master
@@ -10,11 +18,19 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (4.1.8)
+      i18n (~> 0.6, >= 0.6.9)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.1)
+      tzinfo (~> 1.1)
     diff-lcs (1.2.5)
     httparty (0.13.1)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
+    i18n (0.6.11)
     json (1.8.1)
+    minitest (5.4.3)
     multi_xml (0.5.5)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
@@ -28,9 +44,13 @@ GEM
     rspec-mocks (3.0.4)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.4)
+    thread_safe (0.3.4)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  buildpack-packager!
   machete!
