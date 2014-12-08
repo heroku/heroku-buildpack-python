@@ -1,3 +1,30 @@
+v1.1.0 Dec 08, 2014
+====================
+
+* Merge upstream changes
+  (https://www.pivotaltracker.com/story/show/83960192)
+  * Add Python 3.3.6, 3.4.2
+  * Add PyPy 2.4.0
+  * Upgrade setuptools to version 7.0
+  * Add --enable-shared to Python runtime options
+    (https://github.com/cloudfoundry/python-buildpack/issues/7)
+    (https://github.com/heroku/heroku-buildpack-python/issues/181)
+  * Fix typo in libffi check
+    (https://github.com/cloudfoundry/python-buildpack/pull/5)
+    (https://github.com/heroku/heroku-buildpack-python/pull/176)
+
+* Introduce new offline dependency packaging system
+  (https://www.pivotaltracker.com/story/show/82513994)
+  (https://www.pivotaltracker.com/story/show/83886038)
+
+* Introduce new runtime dependency translation system
+  (https://www.pivotaltracker.com/story/show/82513994)
+  (https://www.pivotaltracker.com/story/show/83483872)
+  (https://www.pivotaltracker.com/story/show/83504664)
+
+* Update the README with Machete instructions
+  (https://www.pivotaltracker.com/story/show/82692644)
+
 v1.0.5 Oct 06, 2014
 ====================
 
