@@ -4,7 +4,7 @@ A Cloud Foundry [buildpack](http://docs.cloudfoundry.org/buildpacks/) for Python
 
 This is based on the [Heroku buildpack] (https://github.com/heroku/heroku-buildpack-python).
 
-Additional inofrmation can be found at [CloudFoundry.org](http://docs.cloudfoundry.org/buildpacks/).
+Additional information can be found at [CloudFoundry.org](http://docs.cloudfoundry.org/buildpacks/).
 
 ## Usage
 
