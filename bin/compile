@@ -166,7 +166,7 @@ source $BIN_DIR/steps/pylibmc
 source $BIN_DIR/steps/cryptography
 
 # Install dependencies with Pip.
-source $BIN_DIR/steps/pip-install
+sub-env $BIN_DIR/steps/pip-install
 
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
