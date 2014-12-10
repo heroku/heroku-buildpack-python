@@ -27,3 +27,4 @@ exclude_files:
   - test/
   - bin/package
   - buildpack-packager/
+  - python_buildpack-*v*.zip
