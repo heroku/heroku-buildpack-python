@@ -1,3 +1,13 @@
+v1.1.1 Dec 15, 2014
+====================
+
+* Merge upstream changes
+  * Add Python 2.7.9
+  * Change default to Python 2.7.9
+
+* Complete introduction of new runtime dependency translation system
+  (https://www.pivotaltracker.com/story/show/84330782)
+
 v1.1.0 Dec 08, 2014
 ====================
 
