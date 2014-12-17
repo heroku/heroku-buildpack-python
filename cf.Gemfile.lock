@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/cf-buildpacks/buildpack-packager.git
-  revision: 1b99559d5b745fa8c6228ee405ea8babcf778005
-  ref: 1b99559
+  revision: a1a37890d65752f075c7acdc33e140b7d369ca78
+  tag: v2.0.0
   specs:
     buildpack-packager (0.0.1)
       activesupport (~> 4.1.8)
@@ -30,7 +30,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (0.6.11)
     json (1.8.1)
-    minitest (5.4.3)
+    minitest (5.5.0)
     multi_xml (0.5.5)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
