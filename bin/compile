@@ -160,10 +160,59 @@ source $BIN_DIR/steps/pip-uninstall
 source $BIN_DIR/steps/mercurial
 
 # Pylibmc support.
+bpwatch start pylibmc_install
 source $BIN_DIR/steps/pylibmc
+bpwatch stop pylibmc_install
 
 # Libffi support.
 source $BIN_DIR/steps/cryptography
+
+puts-step "Installing Geos Libraries..."
+
+GEOS_BINARY="https://s3.amazonaws.com/jcsanford-binaries/heroku/geos-3.3.2-heroku.tar.gz"
+GEOS_VENDOR="vendor/geos"
+
+mkdir -p $BUILD_DIR/$GEOS_VENDOR
+curl $GEOS_BINARY -o - | tar -xz -C $BUILD_DIR/$GEOS_VENDOR -f -
+PATH=/data/myscripts:$PATH
+
+puts-step "===> Installed GEOS in $BUILD_DIR/$GEOS_VENDOR"
+
+PROJ_BINARY="https://s3.amazonaws.com/jcsanford-binaries/heroku/proj-4.8.0-heroku.tar.gz"
+PROJ_VENDOR="vendor/proj"
+
+mkdir -p $BUILD_DIR/$PROJ_VENDOR
+curl $PROJ_BINARY -o - | tar -xz -C $BUILD_DIR/$PROJ_VENDOR -f -
+
+puts-step "===> Installed Proj in $BUILD_DIR/$PROJ_VENDOR"
+
+GDAL_BINARY="https://s3.amazonaws.com/jcsanford-binaries/heroku/gdal-1.8.1-heroku.tar.gz"
+GDAL_VENDOR="vendor/gdal"
+
+mkdir -p $BUILD_DIR/$GDAL_VENDOR
+curl $GDAL_BINARY -o - | tar -xz -C $BUILD_DIR/$GDAL_VENDOR -f -
+
+puts-step "===> Installed GDAL in $BUILD_DIR/$GDAL_VENDOR"
+
+# export LIBRARY_PATH=vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib:$LIBRARY_PATH
+# export LD_LIBRARY_PATH=vendor/geos/geos/lib:vendor/proj/proj/lib:vendor/gdal/gdal/lib:$LD_LIBRARY_PATH
+
+
+# Install Mercurial if it appears to be required.
+if (grep -Fiq "hg+" requirements.txt) then
+  bpwatch start mercurial_install
+    /app/.heroku/python/bin/pip install  mercurial | cleanup | indent
+  bpwatch stop mercurial_install
+fi
+
+# Install dependencies with Pip.
+puts-step "Installing dependencies using Pip ($PIP_VERSION)"
+
+
+[ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
+[ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
+
+/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src  | cleanup | indent
 
 # Install dependencies with Pip.
 sub-env $BIN_DIR/steps/pip-install
@@ -211,3 +260,5 @@ bpwatch start anvil_appdir_commit
 
 bpwatch stop anvil_appdir_commit
 bpwatch stop compile
+
+# <a href="http://github.com/heroku/heroku-buildpack-python"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://d3nwyuy0nl342s.cloudfront.net/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub"></a>
