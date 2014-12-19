@@ -1,9 +1,8 @@
-
 #!/usr/bin/env bash
 # Build Path: /app/.heroku/python/
 # Build Deps: libraries/sqlite
 
-# NOTICE: This formula only works for the cedar-14 stack, not cedar. 
+# NOTICE: This formula only works for the cedar-14 stack, not cedar.
 
 OUT_PREFIX=$1
 
