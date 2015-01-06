@@ -36,7 +36,7 @@ class Requirements(object):
             raise ValueError('The given requirements file does not exist.')
 
         finder = PackageFinder([], [], session=requests)
-        for requirement in parse_requirements(reqfile, finder=finder):
+        for requirement in parse_requirements(reqfile, finder=finder, session=requests):
             if requirement.req:
                 self.requirements.append(requirement.req)
 
