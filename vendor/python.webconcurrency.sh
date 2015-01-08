@@ -14,7 +14,7 @@ case $(ulimit -u) in
 
 # PX DYNO
 32768)
-  export DYNO_RAM=8192
+  export DYNO_RAM=6144
   export WEB_CONCURRENCY=${WEB_CONCURRENCY:-9}
   ;;
 
