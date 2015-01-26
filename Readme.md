@@ -14,15 +14,17 @@ This buildpack will be used if there is a `requirements.txt` or `setup.py` file 
 cf push my_app -b https://github.com/cloudfoundry/buildpack-python.git
 ```
 
-## Cloud Foundry Extensions - Offline Mode
+## Cloud Foundry Extensions - Cached Dependencies
 
-The primary purpose of extending the heroku buildpack is to cache system dependencies for firewalled or other non-internet accessible environments. This is called 'offline' mode.
+The primary purpose of extending the heroku buildpack is to cache system dependencies for partially or fully disconnected environments.
+Historically, this was called 'offline' mode.
+It is now called 'Cached dependencies'.
 
-'offline' buildpacks can be used in any environment where you would prefer the dependencies to be cached instead of fetched from the internet.
+'Cached' buildpacks can be used in any environment where you would prefer the dependencies to be cached instead of fetched from the internet.
 
-The list of what is cached is maintained in [bin/package](bin/package).
+The list of what is cached is maintained in [the manifest](manifest.yml). For a description of the manifest file, see the [buildpack packager documentation](https://github.com/cf-buildpacks/buildpack-packager/blob/master/README.md#manifest)
 
-Using cached system dependencies is accomplished by overriding curl during staging. See [bin/compile](bin/compile#L71-75)
+The buildpack consumes cached system dependencies during staging by translating remote urls. Search for 'translate_dependency_url' in this repo to see examples.
 
 ### App Dependencies in Offline Mode
 Offline mode expects each app to use pip to manage dependencies. Use `pip install` to vendor your dependencies into `/vendor`.
@@ -31,14 +33,19 @@ Offline mode expects each app to use pip to manage dependencies. Use `pip instal
 
 1. Make sure you have fetched submodules
 
-  ```bash
+  ```shell
   git submodule update --init
+  ```
+
+1. Get latest buildpack dependencies
+  ```shell
+  BUNDLE_GEMFILE=cf.Gemfile bundle
   ```
 
 1. Build the buildpack
 
-  ```bash
-  bin/package [ online | offline ]
+  ```shell
+  BUNDLE_GEMFILE=cf.Gemfile bundle exec buildpack-packager [ online | offline ]
   ```
 
 1. Use in Cloud Foundry
