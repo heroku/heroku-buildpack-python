@@ -26,8 +26,8 @@ The list of what is cached is maintained in [the manifest](manifest.yml). For a 
 
 The buildpack consumes cached system dependencies during staging by translating remote urls. Search for 'translate_dependency_url' in this repo to see examples.
 
-### App Dependencies in Offline Mode
-Offline mode expects each app to use pip to manage dependencies. Use `pip install` to vendor your dependencies into `/vendor`.
+### App Dependencies in Cached Mode
+Cached (offline) mode expects each app to use pip to manage dependencies. Use `pip install` to vendor your dependencies into `/vendor`.
 
 ## Building
 
