@@ -1,4 +1,4 @@
-# Heroku buildpack: Python
+# Cloud Foundry buildpack: Python
 
 A Cloud Foundry [buildpack](http://docs.cloudfoundry.org/buildpacks/) for Python based apps.
 
