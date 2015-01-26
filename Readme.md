@@ -20,7 +20,7 @@ The primary purpose of extending the heroku buildpack is to cache system depende
 Historically, this was called 'offline' mode.
 It is now called 'Cached dependencies'.
 
-'Cached' buildpacks can be used in any environment where you would prefer the dependencies to be cached instead of fetched from the internet.
+Cached buildpacks can be used in any environment where you would prefer the dependencies to be cached instead of fetched from the internet.
 
 The list of what is cached is maintained in [the manifest](manifest.yml). For a description of the manifest file, see the [buildpack packager documentation](https://github.com/cf-buildpacks/buildpack-packager/blob/master/README.md#manifest)
 
