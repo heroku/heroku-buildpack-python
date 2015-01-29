@@ -20,7 +20,7 @@ To use this buildpack on Cloud Foundry, where the Cloud Foundry instance limits 
 ### Vendoring app dependencies
 As stated in the [Disconnected Environments documentation](https://github.com/cf-buildpacks/buildpack-packager/blob/master/doc/disconnected_environments.md), your application must 'vendor' it's dependencies.
 
-For the Ruby buildpack, use ```pip```:
+For the Python buildpack, use ```pip```:
 
 ```shell 
 cd <your app dir>
