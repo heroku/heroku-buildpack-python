@@ -14,48 +14,20 @@ This buildpack will be used if there is a `requirements.txt` or `setup.py` file 
 cf push my_app -b https://github.com/cloudfoundry/buildpack-python.git
 ```
 
-## Cloud Foundry Extensions - Cached Dependencies
+## Disconnected environments
+To use this buildpack on Cloud Foundry, where the Cloud Foundry instance limits some or all internet activity, please read the [Disconnected Environments documentation](https://github.com/cf-buildpacks/buildpack-packager/blob/master/doc/disconnected_environments.md).
 
-The primary purpose of extending the heroku buildpack is to cache system dependencies for partially or fully disconnected environments.
-Historically, this was called 'offline' mode.
-It is now called 'Cached dependencies'.
+### Vendoring app dependencies
+As stated in the [Disconnected Environments documentation](https://github.com/cf-buildpacks/buildpack-packager/blob/master/doc/disconnected_environments.md), your application must 'vendor' it's dependencies.
 
-Cached buildpacks can be used in any environment where you would prefer the dependencies to be cached instead of fetched from the internet.
+For the Ruby buildpack, use ```pip```:
 
-The list of what is cached is maintained in [the manifest](manifest.yml). For a description of the manifest file, see the [buildpack packager documentation](https://github.com/cf-buildpacks/buildpack-packager/blob/master/README.md#manifest)
+```shell 
+cd <your app dir>
+pip install # vendors into /vendor
+```
 
-The buildpack consumes cached system dependencies during staging by translating remote urls. Search for 'translate_dependency_url' in this repo to see examples.
-
-### App Dependencies in Cached Mode
-Cached (offline) mode expects each app to use pip to manage dependencies. Use `pip install` to vendor your dependencies into `/vendor`.
-
-## Building
-
-1. Make sure you have fetched submodules
-
-  ```shell
-  git submodule update --init
-  ```
-
-1. Get latest buildpack dependencies
-  ```shell
-  BUNDLE_GEMFILE=cf.Gemfile bundle
-  ```
-
-1. Build the buildpack
-
-  ```shell
-  BUNDLE_GEMFILE=cf.Gemfile bundle exec buildpack-packager [ online | offline ]
-  ```
-
-1. Use in Cloud Foundry
-
-    Upload the buildpack to your Cloud Foundry and optionally specify it by name
-
-    ```bash
-    cf create-buildpack custom_python_buildpack python_buildpack-offline-custom.zip 1
-    cf push my_app -b custom_python_buildpack
-    ```
+```cf push``` uploads your vendored dependencies.
 
 ## Contributing
 
