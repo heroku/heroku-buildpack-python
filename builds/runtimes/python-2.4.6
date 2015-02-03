@@ -8,7 +8,7 @@ OUT_PREFIX=$1
 unset LANG PYTHONHOME PYTHONPATH
 
 echo "Building Python..."
-SOURCE_TARBALL='http://python.org/ftp/python/2.4.6/Python-2.4.6.tgz'
+SOURCE_TARBALL='https://python.org/ftp/python/2.4.6/Python-2.4.6.tgz'
 curl -L $SOURCE_TARBALL | tar xz
 mv Python-2.4.6 src
 cd src

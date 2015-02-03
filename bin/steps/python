@@ -16,7 +16,7 @@ fi
 if [ ! $STACK = $CACHED_PYTHON_STACK ]; then
   bpwatch start uninstall_python
     puts-step "Stack changed, re-installing runtime"
-    rm -fr .heroku/python
+    rm -fr .heroku/python .heroku/python-stack .heroku/vendor
     unset SKIP_INSTALL
   bpwatch stop uninstall_python
 fi
@@ -29,9 +29,9 @@ if [ ! "$SKIP_INSTALL" ]; then
     # Prepare destination directory.
     mkdir -p .heroku/python
 
-    curl `translate_dependency_url http://lang-python.s3.amazonaws.com/$STACK/runtimes/$PYTHON_VERSION.tar.gz` -s | tar zxv -C .heroku/python &> /dev/null
+    curl `translate_dependency_url https://lang-python.s3.amazonaws.com/$STACK/runtimes/$PYTHON_VERSION.tar.gz` -s | tar zxv -C .heroku/python &> /dev/null
     if [[ $? != 0 ]] ; then
-      puts-warn "Resource http://lang-python.s3.amazonaws.com/$STACK/runtimes/$PYTHON_VERSION.tar.gz is not provided by this buildpack. Please upgrade your buildpack to receive the latest resources."
+      puts-warn "Resource https://lang-python.s3.amazonaws.com/$STACK/runtimes/$PYTHON_VERSION.tar.gz is not provided by this buildpack. Please upgrade your buildpack to receive the latest resources."
       exit 1
     fi
 

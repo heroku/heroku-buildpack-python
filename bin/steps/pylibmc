@@ -10,7 +10,7 @@
 # This script is invoked by [`bin/compile`](/).
 
 # The location of the pre-compiled libmemcached binary.
-VENDORED_MEMCACHED="http://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libmemcache.tar.gz"
+VENDORED_MEMCACHED="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libmemcache.tar.gz"
 
 # Syntax sugar.
 source $BIN_DIR/utils
