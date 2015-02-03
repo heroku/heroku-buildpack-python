@@ -16,7 +16,7 @@ fi
 
 # Smart Requirements handling
 cp requirements.txt .heroku/python/requirements-declared.txt
-/app/.heroku/python/bin/pip freeze > .heroku/python/requirements-installed.txt
+/app/.heroku/python/bin/pip freeze --find-links=file://$BUILD_DIR/vendor --disable-pip-version-check > .heroku/python/requirements-installed.txt
 
 [ ! ${FRESH_PYTHON:-} ] && bpwatch stop pip_install
 [ ${FRESH_PYTHON:-} ] && bpwatch stop pip_install_first
