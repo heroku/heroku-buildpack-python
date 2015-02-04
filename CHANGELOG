@@ -1,3 +1,21 @@
+v1.1.2 Feb 04, 2015
+====================
+
+* Merge upstream changes
+  * Upgrade pip version to 6.0.6 and setuptools version to 11.1
+    (https://github.com/heroku/heroku-buildpack-python/commit/26b54b690c3796198ed911f451a4b70c65d9b5f7)
+  * Add support for PyPy 3
+    (https://github.com/heroku/heroku-buildpack-python/pull/180)
+  * Change URLs to HTTPS
+    (https://github.com/heroku/heroku-buildpack-python/pull/194)
+
+* Update documentation for use in offline environments
+  (https://www.pivotaltracker.com/story/show/86952360)
+  (https://www.pivotaltracker.com/story/show/86853880)
+
+* Update buildpack-packager to v.2.0.0
+  (https://www.pivotaltracker.com/story/show/84805200)
+
 v1.1.1 Dec 15, 2014
 ====================
 
