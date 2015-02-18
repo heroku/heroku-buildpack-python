@@ -21,11 +21,17 @@ describe 'CF Python Buildpack' do
       end
 
       context 'Warning when pip has mercurial dependencies' do
+        let(:log_file) { File.open('log/integration.log', 'r') }
         let(:app_name) { 'mercurial_requirements' }
+
+        before do
+          log_file.readlines
+        end
 
         specify do
           expect(app).not_to be_running(0)
-          expect(app).to have_logged 'Cloud Foundry does not support Pip Mercurial dependencies while in offline-mode. Vendor your dependencies if they do not work.'
+          statement_appearances = log_file.readlines.join.scan 'Cloud Foundry does not support Pip Mercurial dependencies while in offline-mode. Vendor your dependencies if they do not work.'
+          expect(statement_appearances.count).to be 1
           expect(app.host).to have_internet_traffic
         end
       end
