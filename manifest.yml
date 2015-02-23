@@ -13,70 +13,166 @@ url_to_dependency_map:
   version: 0
 
 dependencies:
-  -
-    name: libmemcache
+  - name: libmemcache
     version: 0
-    uri: https://lang-python.s3.amazonaws.com/cedar/libraries/vendor/libmemcache.tar.gz
-  -
-    name: libffi
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/libmemcache.tar.gz
+  - name: libffi
     version: 0
-    uri: https://lang-python.s3.amazonaws.com/cedar/libraries/vendor/libffi.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/libffi.tar.gz
+  - name: python
     version: 2.7.0
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-2.7.0.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.0.tar.gz
+  - name: python
     version: 2.7.1
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-2.7.1.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.1.tar.gz
+  - name: python
     version: 2.7.2
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-2.7.2.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.2.tar.gz
+  - name: python
     version: 2.7.3
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-2.7.3.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.3.tar.gz
+  - name: python
     version: 2.7.6
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-2.7.6.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.6.tar.gz
+  - name: python
     version: 2.7.7
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-2.7.7.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.7.tar.gz
+  - name: python
     version: 2.7.8
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-2.7.8.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.8.tar.gz
+  - name: python
     version: 2.7.9
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-2.7.9.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.9.tar.gz
+  - name: python
     version: 3.2.0
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-3.2.0.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.2.0.tar.gz
+  - name: python
     version: 3.2.1
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-3.2.1.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.2.1.tar.gz
+  - name: python
     version: 3.2.2
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-3.2.2.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.2.2.tar.gz
+  - name: python
     version: 3.2.3
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-3.2.3.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.2.3.tar.gz
+  - name: python
     version: 3.4.0
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-3.4.0.tar.gz
-  -
-    name: python
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.4.0.tar.gz
+  - name: python
     version: 3.4.1
-    uri: https://lang-python.s3.amazonaws.com/cedar/runtimes/python-3.4.1.tar.gz
+    cf-stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.4.1.tar.gz
+  - name: libmemcache
+    version: 0
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/libmemcache.tar.gz
+  - name: libffi
+    version: 0
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/libffi.tar.gz
+  - name: python
+    version: 2.7.0
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.0.tar.gz
+  - name: python
+    version: 2.7.1
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.1.tar.gz
+  - name: python
+    version: 2.7.2
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.2.tar.gz
+  - name: python
+    version: 2.7.3
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.3.tar.gz
+  - name: python
+    version: 2.7.6
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.6.tar.gz
+  - name: python
+    version: 2.7.7
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.7.tar.gz
+  - name: python
+    version: 2.7.8
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.8.tar.gz
+  - name: python
+    version: 2.7.9
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.9.tar.gz
+  - name: python
+    version: 3.2.0
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.2.0.tar.gz
+  - name: python
+    version: 3.2.1
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.2.1.tar.gz
+  - name: python
+    version: 3.2.2
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.2.2.tar.gz
+  - name: python
+    version: 3.2.3
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.2.3.tar.gz
+  - name: python
+    version: 3.4.0
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.4.0.tar.gz
+  - name: python
+    version: 3.4.1
+    cf-stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.4.1.tar.gz
 
 exclude_files:
   - .git/
