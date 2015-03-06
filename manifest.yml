@@ -18,161 +18,193 @@ dependencies:
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/libmemcache.tar.gz
+    md5: 098b3654742f70300969d96a180ebd8c
   - name: libffi
     version: 0
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/libffi.tar.gz
+    md5: ccb22c212e473275dc3806f1ea765204
   - name: python
     version: 2.7.0
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.0.tar.gz
+    md5: 7ac6bcae3e024de411cb028e2cf5f72c
   - name: python
     version: 2.7.1
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.1.tar.gz
+    md5: 3484db19309d3dc49cbc7eb46950ffb8
   - name: python
     version: 2.7.2
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.2.tar.gz
+    md5: 79756877ae18493354c1bfcdfcb3c1d4
   - name: python
     version: 2.7.3
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.3.tar.gz
+    md5: 65569679a58471dff5fae13a8554665f
   - name: python
     version: 2.7.6
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.6.tar.gz
+    md5: c8741bcb74855b5e25b4b4af8bf5175a
   - name: python
     version: 2.7.7
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.7.tar.gz
+    md5: 8c58000bc7029642862cf68bd1ed815d
   - name: python
     version: 2.7.8
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.8.tar.gz
+    md5: 251295b186790a985cd3098d5f6bef00
   - name: python
     version: 2.7.9
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.9.tar.gz
+    md5: f6f6cdfb39a881ebdec9396ecfb413c6
   - name: python
     version: 3.2.0
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.2.0.tar.gz
+    md5: 7ffe7b4ac68e6240054da19237e51754
   - name: python
     version: 3.2.1
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.2.1.tar.gz
+    md5: 43b500e9f1709bae72fedf761dc05234
   - name: python
     version: 3.2.2
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.2.2.tar.gz
+    md5: 5b2f3b7a772e4ed1d2ec67b4047ddc2f
   - name: python
     version: 3.2.3
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.2.3.tar.gz
+    md5: 89f1f1376bc5fe432e00c53b29f378e3
   - name: python
     version: 3.4.0
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.4.0.tar.gz
+    md5: 23fa5e41ac7db42b0b23018fddb79dd4
   - name: python
     version: 3.4.1
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.4.1.tar.gz
+    md5: c9a2d780b16c419d9b4835f92063307b
   - name: libmemcache
     version: 0
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/libmemcache.tar.gz
+    md5: 6b40600ab7c5bd52b5c6eedd18efb651
   - name: libffi
     version: 0
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/libffi.tar.gz
+    md5: 83028a299b8ac323bda8a56c5c70d4cd
   - name: python
     version: 2.7.0
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.0.tar.gz
+    md5: 87bc3e4e13acc42044c79c3c75fed167
   - name: python
     version: 2.7.1
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.1.tar.gz
+    md5: f5434bca6454dc3bbd0c1564514520f8
   - name: python
     version: 2.7.2
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.2.tar.gz
+    md5: c35f7082c869e95f8ad0fb63c89789e2
   - name: python
     version: 2.7.3
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.3.tar.gz
+    md5: 0dc75faaad2f078ede48aa0d4f6096b2
   - name: python
     version: 2.7.6
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.6.tar.gz
+    md5: 2d07e269280df0a6d27af9f13782c856
   - name: python
     version: 2.7.7
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.7.tar.gz
+    md5: 2ff2a189d0f8d73fbd0c529dc1c4b240
   - name: python
     version: 2.7.8
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.8.tar.gz
+    md5: 78ac2a030dfa010bfed09a37a4218100
   - name: python
     version: 2.7.9
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.9.tar.gz
+    md5: 554d0e369fdcc4aa9234315830d096b3
   - name: python
     version: 3.2.0
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.2.0.tar.gz
+    md5: 3db051aae2a597fac36a8e18f9fb09fd
   - name: python
     version: 3.2.1
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.2.1.tar.gz
+    md5: 73fec7d848acaea84f94e5df7c715d2c
   - name: python
     version: 3.2.2
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.2.2.tar.gz
+    md5: da6f3d4c0a7fa672dd01c9bf439b75b3
   - name: python
     version: 3.2.3
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.2.3.tar.gz
+    md5: 16fa07b01fe3f354c412cbabeb14f1d9
   - name: python
     version: 3.4.0
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.4.0.tar.gz
+    md5: 1a06f72daf4f50c5b0a818fc09cd9a39
   - name: python
     version: 3.4.1
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.4.1.tar.gz
+    md5: f14320582d2058241bfc5f326ae65416
 
 exclude_files:
   - .git/
