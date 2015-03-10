@@ -32,7 +32,6 @@ describe 'CF Python Buildpack' do
           expect(app).not_to be_running(0)
           statement_appearances = log_file.readlines.join.scan 'Cloud Foundry does not support Pip Mercurial dependencies while in offline-mode. Vendor your dependencies if they do not work.'
           expect(statement_appearances.count).to be 1
-          expect(app.host).to have_internet_traffic
         end
       end
     end
