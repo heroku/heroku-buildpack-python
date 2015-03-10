@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/cf-buildpacks/buildpack-packager.git
-  revision: a1a37890d65752f075c7acdc33e140b7d369ca78
-  tag: v2.0.0
-  specs:
-    buildpack-packager (0.0.1)
-      activesupport (~> 4.1.8)
-
-GIT
   remote: git://github.com/cf-buildpacks/machete.git
   revision: 4f2ac6817b928a85fb4126263124a0f1a4aa06d2
   branch: master
@@ -15,10 +7,18 @@ GIT
       httparty
       rspec
 
+GIT
+  remote: git://github.com/cloudfoundry-incubator/buildpack-packager.git
+  revision: a1a37890d65752f075c7acdc33e140b7d369ca78
+  tag: v2.0.0
+  specs:
+    buildpack-packager (0.0.1)
+      activesupport (~> 4.1.8)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.1.8)
+    activesupport (4.1.9)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
@@ -28,9 +28,9 @@ GEM
     httparty (0.13.1)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
-    i18n (0.6.11)
+    i18n (0.7.0)
     json (1.8.1)
-    minitest (5.5.0)
+    minitest (5.5.1)
     multi_xml (0.5.5)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
