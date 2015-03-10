@@ -2,15 +2,15 @@
 language: python
 
 url_to_dependency_map:
-- match: python-(\d+\.\d+\.\d+)
-  name: python
-  version: $1
-- match: libmemcache
-  name: libmemcache
-  version: 0
-- match: libffi
-  name: libffi
-  version: 0
+  - match: python-(\d+\.\d+\.\d+)
+    name: python
+    version: $1
+  - match: libmemcache
+    name: libmemcache
+    version: 0
+  - match: libffi
+    name: libffi
+    version: 0
 
 dependencies:
   - name: libmemcache
