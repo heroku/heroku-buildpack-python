@@ -128,12 +128,6 @@ dependencies:
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.0.tar.gz
     md5: 87bc3e4e13acc42044c79c3c75fed167
   - name: python
-    version: 2.7.1
-    cf_stacks:
-      - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.1.tar.gz
-    md5: f5434bca6454dc3bbd0c1564514520f8
-  - name: python
     version: 2.7.2
     cf_stacks:
       - cflinuxfs2
@@ -169,12 +163,6 @@ dependencies:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.9.tar.gz
     md5: 554d0e369fdcc4aa9234315830d096b3
-  - name: python
-    version: 3.2.0
-    cf_stacks:
-      - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.2.0.tar.gz
-    md5: 3db051aae2a597fac36a8e18f9fb09fd
   - name: python
     version: 3.2.1
     cf_stacks:
