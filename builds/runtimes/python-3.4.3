@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+# Build Deps: libraries/sqlite
+
+OUT_PREFIX=$1
+
+echo "Building Python..."
+SOURCE_TARBALL='https://python.org/ftp/python/3.4.3/Python-3.4.3.tgz'
+curl -L $SOURCE_TARBALL | tar xz
+mv Python-3.4.3 src
+cd src
+
+./configure --prefix=$OUT_PREFIX --with-ensurepip=no --enable-shared
+make
+make install
+
+ln $OUT_PREFIX/bin/python3 $OUT_PREFIX/bin/python
+
