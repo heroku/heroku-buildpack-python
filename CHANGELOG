@@ -1,3 +1,19 @@
+v1.2.0 Mar 17, 2015
+====================
+
+* Support cflinuxfs2 stack. Does not support 2.7.1 and 3.2.0
+  (https://www.pivotaltracker.com/story/show/88174352)
+  (https://www.pivotaltracker.com/story/show/90308418)
+
+* Reference git repos by https in cf.Gemfile
+  (https://www.pivotaltracker.com/story/show/90365848)
+
+* Add checksum to `manifest.yml` for all binaries.
+  (https://www.pivotaltracker.com/story/show/89503126)
+
+* Prevent use of app cached dependencies when stack is switched.
+  (https://www.pivotaltracker.com/story/show/89958540)
+
 v1.1.2 Feb 04, 2015
 ====================
 
