@@ -1,7 +1,3 @@
-#!/usr/bin/env bash
-
-source $BIN_DIR/utils
-
 # Install dependencies with Pip.
 puts-step "Installing dependencies with pip"
 
