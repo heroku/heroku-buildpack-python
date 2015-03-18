@@ -15,7 +15,6 @@ fi
 
 if [ ! $STACK = $CACHED_PYTHON_STACK ]; then
   bpwatch start uninstall_python
-    puts-step "Stack changed, re-installing runtime"
     rm -fr .heroku/python .heroku/python-stack .heroku/vendor
     unset SKIP_INSTALL
   bpwatch stop uninstall_python
