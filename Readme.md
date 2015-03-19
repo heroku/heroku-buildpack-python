@@ -38,7 +38,6 @@ pip install --download vendor -r requirements.txt
 
 See the [Machete](https://github.com/cf-buildpacks/machete) CF buildpack test framework for more information.
 
-
 ### Pull Requests
 
 1. Fork the project
