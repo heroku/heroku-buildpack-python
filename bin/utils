@@ -68,7 +68,7 @@ deep-rm() {
   # subshell to avoid surprising caller with shopts.
   (
     shopt -s dotglob
-    rm -rf "$1"/!(tmp|.|..)
+    rm -rf "$1"/!(.curlrc|.netrc|tmp|.|..)
   )
 }
 
