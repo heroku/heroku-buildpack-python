@@ -30,7 +30,7 @@ DEFAULT_PYTHON_VERSION="python-2.7.7"
 DEFAULT_PYTHON_STACK="cedar"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="6.0.8"
-SETUPTOOLS_VERSION="14.3.1"
+SETUPTOOLS_VERSION="11.3.1"
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
