@@ -109,6 +109,18 @@ dependencies:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.4.1.tar.gz
     md5: c9a2d780b16c419d9b4835f92063307b
+  - name: python
+    version: 3.4.2
+    cf_stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.4.2.tar.gz
+    md5: 16a67cf2e03c1add1fc1121de927019e
+  - name: python
+    version: 3.4.3
+    cf_stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.4.3.tar.gz
+    md5: a19f67c4ae55e821cb70013097fbfc2a
   - name: libmemcache
     version: 0
     cf_stacks:
@@ -193,6 +205,18 @@ dependencies:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.4.1.tar.gz
     md5: f14320582d2058241bfc5f326ae65416
+  - name: python
+    version: 3.4.2
+    cf_stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.4.2.tar.gz
+    md5: c8ea4fae5f23db599d2dcfda0cd578df
+  - name: python
+    version: 3.4.3
+    cf_stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.4.3.tar.gz
+    md5: 00cfe29eeea98638e60f24f3a91e6627
 
 exclude_files:
   - .git/
