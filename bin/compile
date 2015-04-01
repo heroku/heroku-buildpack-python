@@ -157,6 +157,7 @@ bpwatch stop clear_old_venvs
 # Restore old artifacts from the cache.
 
 bpwatch start restore_cache
+CF_STACK=${CF_STACK:-lucid64}
 if [ -f $CACHE_DIR/.cf_stack ]; then
   CACHED_CF_STACK=`cat $CACHE_DIR/.cf_stack`
 
