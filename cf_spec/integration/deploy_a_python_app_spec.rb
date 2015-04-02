@@ -10,7 +10,7 @@ describe 'CF Python Buildpack' do
     let(:app_name) { 'flask_web_app_not_vendored' }
 
     specify do
-      expect(app).to be_running
+      expect(app).to be_running(60)
 
       browser.visit_path('/')
       expect(browser).to have_body('Hello, World!')
@@ -20,7 +20,7 @@ describe 'CF Python Buildpack' do
       app_push_command = Machete::CF::PushApp.new
       app_push_command.execute(replacement_app)
 
-      expect(replacement_app).to be_running
+      expect(replacement_app).to be_running(60)
 
       browser.visit_path('/')
       expect(browser).to have_body('Hello, World!')
@@ -34,7 +34,7 @@ describe 'CF Python Buildpack' do
         let(:app_name) { 'flask_web_app' }
 
         specify do
-          expect(app).to be_running
+          expect(app).to be_running(60)
 
           browser.visit_path('/')
           expect(browser).to have_body('Hello, World!')
@@ -67,7 +67,7 @@ describe 'CF Python Buildpack' do
         let(:app_name) { 'flask_web_app' }
 
         specify do
-          expect(app).to be_running
+          expect(app).to be_running(60)
 
           browser.visit_path('/')
           expect(browser).to have_body('Hello, World!')
@@ -78,7 +78,7 @@ describe 'CF Python Buildpack' do
         let(:app_name) { 'flask_web_app_not_vendored' }
 
         specify do
-          expect(app).to be_running
+          expect(app).to be_running(60)
 
           browser.visit_path('/')
           expect(browser).to have_body('Hello, World!')
