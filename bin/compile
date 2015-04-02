@@ -169,9 +169,18 @@ source $BIN_DIR/steps/cryptography
 # Install dependencies with Pip.
 source $BIN_DIR/steps/pip-install
 
+# Install Gemfile packages
+command -v bundle >/dev/null 2>&1 || { gem install bundler; }
+bundle install
+
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
 
+
+# Node and bower support.
+bpwatch start node_bower
+  sub-env $BIN_DIR/steps/node
+bpwatch stop node_bower
 
 # ### Finalize
 #
