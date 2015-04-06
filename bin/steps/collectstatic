@@ -28,7 +28,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
         }
     else
         echo "       Collectstatic configuration error. To debug, run:"
-        echo "       $ heroku run python $MANAGE_FILE collectstatic --noinput"
+        echo "       $ scalingo run python $MANAGE_FILE collectstatic --noinput"
     fi
     echo
 fi

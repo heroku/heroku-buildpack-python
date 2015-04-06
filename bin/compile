@@ -30,10 +30,10 @@ function bpwatch() {
   :
 }
 
-CACHED_DIRS=".heroku"
+CACHED_DIRS=".scalingo"
 
 # Static configurations for virtualenv caches.
-VIRTUALENV_LOC=".heroku/venv"
+VIRTUALENV_LOC=".scalingo/venv"
 LEGACY_TRIGGER="lib/python2.7"
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
@@ -160,7 +160,7 @@ bpwatch start restore_cache
 bpwatch stop restore_cache
 
 set +e
-# Create set-aside `.heroku` folder.
+# Create set-aside `.scalingo` folder.
 mkdir .scalingo &> /dev/null
 set -e
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # This script serves as the Pylibmc build step of the
-# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# [**Python Buildpack**](https://github.com/Scalingo/python-buildpack)
 # compiler.
 #
-# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
-# adapter between a Python application and Heroku's runtime.
+# A [buildpack](http://doc.scalingo.com/buildpacks) is an adapter between a
+# Python application and Scalingo's runtime.
 #
 # This script is invoked by [`bin/compile`](/).
 
@@ -21,16 +21,12 @@ bpwatch start pylibmc_install
 # If pylibmc exists within requirements, use vendored libmemcached.
 if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
 
-  if [ -d ".heroku/vendor/lib/sasl2" ]; then
-    export LIBMEMCACHED=$(pwd)/vendor
-  else
-    echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
-    mkdir -p .scalingo/vendor
+  if [ -d ".scalingo/vendor/lib/sasl2" ]; then export LIBMEMCACHED=$(pwd)/vendor
+  else echo "-----> Noticed pylibmc. Bootstrapping libmemcached." mkdir -p
+    .scalingo/vendor
     # Download and extract libmemcached into target vendor directory.
     curl $VENDORED_MEMCACHED -s | tar zxv -C .scalingo/vendor &> /dev/null
 
-    export LIBMEMCACHED=$(pwd)/vendor
-  fi
-fi
+    export LIBMEMCACHED=$(pwd)/vendor fi fi
 
 bpwatch stop pylibmc_install

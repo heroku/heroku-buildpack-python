@@ -1,3 +1,10 @@
+v1.2.0 Apr 6, 2015
+==================
+
+* Merge upstream
+* Handle 3.4.2 and 3.4.3 Python runtimes
+* .heroku -> .scalingo
+
 v1.1.0 Mar 15, 2015
 ====================
 
