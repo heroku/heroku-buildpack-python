@@ -40,7 +40,7 @@ WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
 
 DEFAULT_PYTHON_VERSION="python-2.7.9"
 DEFAULT_PYTHON_STACK="cedar"
-PYTHON_EXE="/app/.heroku/python/bin/python"
+PYTHON_EXE="/app/.scalingo/python/bin/python"
 PIP_VERSION="6.0.8"
 SETUPTOOLS_VERSION="11.3.1"
 
@@ -104,14 +104,14 @@ ORIG_BUILD_DIR=$BUILD_DIR
 BUILD_DIR=$APP_DIR
 
 # Prepend proper path buildpack use.
-export PATH=$BUILD_DIR/.heroku/python/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH
+export PATH=$BUILD_DIR/.scalingo/python/bin:$BUILD_DIR/.scalingo/vendor/bin:$PATH
 export PYTHONUNBUFFERED=1
 export LANG=en_US.UTF-8
-export C_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include
-export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include
-export LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib
-export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib
-export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config
+export C_INCLUDE_PATH=/app/.scalingo/vendor/include:$BUILD_DIR/.scalingo/vendor/include:/app/.scalingo/python/include
+export CPLUS_INCLUDE_PATH=/app/.scalingo/vendor/include:$BUILD_DIR/.scalingo/vendor/include:/app/.scalingo/python/include
+export LIBRARY_PATH=/app/.scalingo/vendor/lib:$BUILD_DIR/.scalingo/vendor/lib:/app/.scalingo/python/lib
+export LD_LIBRARY_PATH=/app/.scalingo/vendor/lib:$BUILD_DIR/.scalingo/vendor/lib:/app/.scalingo/python/lib
+export PKG_CONFIG_PATH=/app/.scalingo/vendor/lib/pkg-config:$BUILD_DIR/.scalingo/vendor/lib/pkg-config:/app/.scalingo/python/lib/pkg-config
 
 # Switch to the repo's context.
 cd $BUILD_DIR
@@ -127,13 +127,13 @@ if [ ! -f requirements.txt ]; then
 fi
 
 # Sticky runtimes.
-if [ -f $CACHE_DIR/.heroku/python-version ]; then
-  DEFAULT_PYTHON_VERSION=$(cat $CACHE_DIR/.heroku/python-version)
+if [ -f $CACHE_DIR/.scalingo/python-version ]; then
+  DEFAULT_PYTHON_VERSION=$(cat $CACHE_DIR/.scalingo/python-version)
 fi
 
 # Stack fallback for non-declared caches.
-if [ -f $CACHE_DIR/.heroku/python-stack ]; then
-  CACHED_PYTHON_STACK=$(cat $CACHE_DIR/.heroku/python-stack)
+if [ -f $CACHE_DIR/.scalingo/python-stack ]; then
+  CACHED_PYTHON_STACK=$(cat $CACHE_DIR/.scalingo/python-stack)
 else
   CACHED_PYTHON_STACK=$DEFAULT_PYTHON_STACK
 fi
@@ -148,8 +148,8 @@ mkdir -p $CACHE_DIR
 
 # Purge "old-style" virtualenvs.
 bpwatch start clear_old_venvs
-  [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.heroku/bin $CACHE_DIR/.heroku/lib $CACHE_DIR/.heroku/include
-  [ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
+  [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.scalingo/bin $CACHE_DIR/.scalingo/lib $CACHE_DIR/.scalingo/include
+  [ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.scalingo/venv $CACHE_DIR/.scalingo/src
 bpwatch stop clear_old_venvs
 
 # Restore old artifacts from the cache.
@@ -161,7 +161,7 @@ bpwatch stop restore_cache
 
 set +e
 # Create set-aside `.heroku` folder.
-mkdir .heroku &> /dev/null
+mkdir .scalingo &> /dev/null
 set -e
 
 mkdir -p $(dirname $PROFILE_PATH)
@@ -195,11 +195,11 @@ sub-env $BIN_DIR/steps/collectstatic
 #
 
 # Set context environment variables.
-set-env PATH '$HOME/.heroku/python/bin:$PATH'
+set-env PATH '$HOME/.scalingo/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
-set-env PYTHONHOME /app/.heroku/python
-set-env LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH'
-set-env LD_LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH'
+set-env PYTHONHOME /app/.scalingo/python
+set-env LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LIBRARY_PATH'
+set-env LD_LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LD_LIBRARY_PATH'
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/

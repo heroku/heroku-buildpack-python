@@ -25,9 +25,9 @@ if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
     export LIBMEMCACHED=$(pwd)/vendor
   else
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
-    mkdir -p .heroku/vendor
+    mkdir -p .scalingo/vendor
     # Download and extract libmemcached into target vendor directory.
-    curl $VENDORED_MEMCACHED -s | tar zxv -C .heroku/vendor &> /dev/null
+    curl $VENDORED_MEMCACHED -s | tar zxv -C .scalingo/vendor &> /dev/null
 
     export LIBMEMCACHED=$(pwd)/vendor
   fi

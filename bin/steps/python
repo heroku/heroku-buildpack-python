@@ -2,11 +2,11 @@ set +e
 PYTHON_VERSION=$(cat runtime.txt)
 
 # Install Python.
-if [ -f .heroku/python-version ]; then
-  if [ ! $(cat .heroku/python-version) = $PYTHON_VERSION ]; then
+if [ -f .scalingo/python-version ]; then
+  if [ ! $(cat .scalingo/python-version) = $PYTHON_VERSION ]; then
     bpwatch start uninstall_python
-      puts-step "Found runtime $(cat .heroku/python-version), removing"
-      rm -fr .heroku/python
+      puts-step "Found runtime $(cat .scalingo/python-version), removing"
+      rm -fr .scalingo/python
     bpwatch stop uninstall_python
   else
     SKIP_INSTALL=1
@@ -15,7 +15,7 @@ fi
 
 if [ ! $STACK = $CACHED_PYTHON_STACK ]; then
   bpwatch start uninstall_python
-    rm -fr .heroku/python .heroku/python-stack .heroku/vendor
+    rm -fr .scalingo/python .scalingo/python-stack .scalingo/vendor
     unset SKIP_INSTALL
   bpwatch stop uninstall_python
 fi
@@ -26,9 +26,9 @@ if [ ! "$SKIP_INSTALL" ]; then
     puts-step "Installing runtime ($PYTHON_VERSION)"
 
     # Prepare destination directory.
-    mkdir -p .heroku/python
+    mkdir -p .scalingo/python
 
-    curl https://lang-python.s3.amazonaws.com/$STACK/runtimes/$PYTHON_VERSION.tar.gz -s | tar zxv -C .heroku/python &> /dev/null
+    curl https://lang-python.s3.amazonaws.com/$STACK/runtimes/$PYTHON_VERSION.tar.gz -s | tar zxv -C .scalingo/python &> /dev/null
     if [[ $? != 0 ]] ; then
       puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
       puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
@@ -38,8 +38,8 @@ if [ ! "$SKIP_INSTALL" ]; then
   bpwatch stop install_python
 
   # Record for future reference.
-  echo $PYTHON_VERSION > .heroku/python-version
-  echo $STACK > .heroku/python-stack
+  echo $PYTHON_VERSION > .scalingo/python-version
+  echo $STACK > .scalingo/python-stack
   FRESH_PYTHON=true
 
   hash -r
