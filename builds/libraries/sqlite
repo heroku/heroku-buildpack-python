@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build Path: /app/.heroku/python/
+# Build Path: /app/.scalingo/python/
 
 OUT_PREFIX=$1
 

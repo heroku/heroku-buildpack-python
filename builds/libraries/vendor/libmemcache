@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build Path: /app/.heroku/vendor/
+# Build Path: /app/.scalingo/vendor/
 
 OUT_PREFIX=$1
 
