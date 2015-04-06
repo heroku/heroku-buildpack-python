@@ -10,7 +10,7 @@ hash -r
 
 echo "Building libffi..."
 
-SOURCE_TARBALL='http://cl.ly/2s1t1u3v0N0I/download/libffi-3.1.tar'
+SOURCE_TARBALL='https://cl.ly/2s1t1u3v0N0I/download/libffi-3.1.tar'
 
 curl -L $SOURCE_TARBALL | tar x
 

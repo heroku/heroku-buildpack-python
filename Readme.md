@@ -1,54 +1,37 @@
-# Heroku buildpack: Python
+# Scalingo python buildpack
 
-A Cloud Foundry [buildpack](http://docs.cloudfoundry.org/buildpacks/) for Python based apps.
+A [buildpack](http://docs.cloudfoundry.org/buildpacks/) for Python based apps.
+
+It handles Python 2.x apps as well as Python 3.x apps.
 
 This is based on the [Heroku buildpack] (https://github.com/heroku/heroku-buildpack-python).
-
-Additional inofrmation can be found at [CloudFoundry.org](http://docs.cloudfoundry.org/buildpacks/).
 
 ## Usage
 
 This buildpack will be used if there is a `requirements.txt` or `setup.py` file in the root directory of your project.
 
-```bash
-cf push my_app -b https://github.com/cloudfoundry/buildpack-python.git
+```
+    $ git push scalingo master
+    ...
+    -----> Python app detected
+    -----> Installing runtime (python-2.7.9)
+    -----> Installing dependencies using pip
+           Downloading/unpacking requests (from -r requirements.txt (line 1))
+           Installing collected packages: requests
+           Successfully installed requests
+           Cleaning up...
+    -----> Discovering process types
+           Procfile declares types -> (none)
 ```
 
-## Cloud Foundry Extensions - Offline Mode
+## Cached dependencies
 
-The primary purpose of extending the heroku buildpack is to cache system dependencies for firewalled or other non-internet accessible environments. This is called 'offline' mode.
+The buildpack has a script `bin/deploy` which uses the `buildpack-deployer`
+project to cache system dependencies instead of downloading them all from the
+Internet at each deployment.
 
-'offline' buildpacks can be used in any environment where you would prefer the dependencies to be cached instead of fetched from the internet.
-
-The list of what is cached is maintained in [bin/package](bin/package).
-
-Using cached system dependencies is accomplished by overriding curl during staging. See [bin/compile](bin/compile#L71-75)
-
-### App Dependencies in Offline Mode
-Offline mode expects each app to use pip to manage dependencies. Use `pip install` to vendor your dependencies into `/vendor`.
-
-## Building
-
-1. Make sure you have fetched submodules
-
-  ```bash
-  git submodule update --init
-  ```
-
-1. Build the buildpack
-
-  ```bash
-  bin/package [ online | offline ]
-  ```
-
-1. Use in Cloud Foundry
-
-    Upload the buildpack to your Cloud Foundry and optionally specify it by name
-
-    ```bash
-    cf create-buildpack custom_python_buildpack python_buildpack-offline-custom.zip 1
-    cf push my_app -b custom_python_buildpack
-    ```
+Using cached system dependencies is accomplished by overriding curl during
+staging. See [bin/compile](bin/compile#L71-75)
 
 ## Contributing
 
@@ -63,18 +46,6 @@ BUNDLE_GEMFILE=cf.Gemfile bundle install
 git submodule update --init
 `BUNDLE_GEMFILE=cf.Gemfile bundle show machete`/scripts/buildpack-build [mode]
 ```
-
-`buildpack-build` will create a buildpack in one of two modes and upload it to your local bosh-lite based Cloud Foundry installations.
-
-Valid modes:
-
-online : Dependencies can be fetched from the internet.
-
-offline : System dependencies, such as python, are installed from a cache included in the buildpack.
-
-The tests expect two Cloud Foundry installations to be present, an online one at 10.244.0.34 and an offline one at 10.245.0.34.
-
-We use [bosh-lite](https://github.com/cloudfoundry/bosh-lite) for the online instance and [bosh-lite-2nd-instance](https://github.com/cf-buildpacks/bosh-lite-2nd-instance) for the offline instance.
 
 ### Pull Requests
 

@@ -10,7 +10,7 @@
 # This script is invoked by [`bin/compile`](/).
 
 # The location of the pre-compiled cryptography binary.
-VENDORED_LIBFFI="http://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libffi.tar.gz"
+VENDORED_LIBFFI="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libffi.tar.gz"
 
 PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 
@@ -20,7 +20,7 @@ source $BIN_DIR/utils
 bpwatch start libffi_install
 
 # If pylibmc exists within requirements, use vendored cryptography.
-if (pip-grep -s requirements.txt bcrypt cffi crytography &> /dev/null) then
+if (pip-grep -s requirements.txt bcrypt cffi cryptography PyOpenSSL &> /dev/null) then
 
   if [ -d ".heroku/vendor/lib/libffi-3.1.1" ]; then
     export LIBFFI=$(pwd)/vendor
