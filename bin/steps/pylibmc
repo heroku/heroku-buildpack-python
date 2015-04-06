@@ -15,18 +15,21 @@ VENDORED_MEMCACHED="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor
 # Syntax sugar.
 source $BIN_DIR/utils
 
-
 bpwatch start pylibmc_install
 
 # If pylibmc exists within requirements, use vendored libmemcached.
 if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
 
-  if [ -d ".scalingo/vendor/lib/sasl2" ]; then export LIBMEMCACHED=$(pwd)/vendor
-  else echo "-----> Noticed pylibmc. Bootstrapping libmemcached." mkdir -p
-    .scalingo/vendor
+  if [ -d ".scalingo/vendor/lib/sasl2" ] ; then
+    export LIBMEMCACHED=$(pwd)/vendor
+  else
+    echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
+    mkdir -p .scalingo/vendor
     # Download and extract libmemcached into target vendor directory.
     curl $VENDORED_MEMCACHED -s | tar zxv -C .scalingo/vendor &> /dev/null
 
-    export LIBMEMCACHED=$(pwd)/vendor fi fi
+    export LIBMEMCACHED=$(pwd)/vendor
+  fi
+fi
 
 bpwatch stop pylibmc_install
