@@ -7,14 +7,14 @@ url_to_dependency_map:
     version: $1
   - match: libmemcache
     name: libmemcache
-    version: 0
+    version: 1.0.18
   - match: libffi
     name: libffi
     version: 0
 
 dependencies:
   - name: libmemcache
-    version: 0
+    version: 1.0.18
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/libmemcache.tar.gz
@@ -122,7 +122,7 @@ dependencies:
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-3.4.3.tar.gz
     md5: a19f67c4ae55e821cb70013097fbfc2a
   - name: libmemcache
-    version: 0
+    version: 1.0.18
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/libmemcache.tar.gz
