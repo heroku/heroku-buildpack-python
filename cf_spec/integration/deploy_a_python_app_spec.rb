@@ -1,4 +1,3 @@
-$: << 'cf_spec'
 require 'spec_helper'
 
 describe 'CF Python Buildpack' do
