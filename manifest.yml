@@ -10,7 +10,7 @@ url_to_dependency_map:
     version: 1.0.18
   - match: libffi
     name: libffi
-    version: 0
+    version: "3.1"
 
 dependencies:
   - name: libmemcache
@@ -26,13 +26,13 @@ dependencies:
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/libmemcache.tar.gz
     md5: 6b40600ab7c5bd52b5c6eedd18efb651
   - name: libffi
-    version: 0
+    version: "3.1"
     cf_stacks:
       - lucid64
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/libffi.tar.gz
     md5: ccb22c212e473275dc3806f1ea765204
   - name: libffi
-    version: 0
+    version: "3.1"
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/libffi.tar.gz
