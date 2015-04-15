@@ -28,7 +28,7 @@ Example usage:
 
 You can also add it to upcoming builds of an existing application:
 
-    $ heroku config:add BUILDPACK_URL=git://github.com/heroku/heroku-buildpack-python.git
+    $ heroku buildpack:set git://github.com/heroku/heroku-buildpack-python.git
 
 The buildpack will detect your app as Python if it has the file `requirements.txt` in the root.
 
