@@ -34,15 +34,7 @@ pip install --download vendor -r requirements.txt
 
 ## Contributing
 
-### Run the tests
-
-See the [Machete](https://github.com/cf-buildpacks/machete) CF buildpack test framework for more information.
-
-
-### Pull Requests
-
-1. Fork the project
-1. Submit a pull request
+Find our guidelines [here](./CONTRIBUTING.md).
 
 ## Reporting Issues
 
