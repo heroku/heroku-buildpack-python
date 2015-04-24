@@ -41,7 +41,7 @@ WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
 DEFAULT_PYTHON_VERSION="python-2.7.9"
 DEFAULT_PYTHON_STACK="cedar"
 PYTHON_EXE="/app/.heroku/python/bin/python"
-PIP_VERSION="6.0.6"
+PIP_VERSION="6.0.8"
 SETUPTOOLS_VERSION="11.3.1"
 
 # Setup bpwatch
@@ -195,7 +195,7 @@ source $BIN_DIR/steps/pylibmc
 source $BIN_DIR/steps/cryptography
 
 # Install dependencies with Pip.
-sub-env $BIN_DIR/steps/pip-install
+source $BIN_DIR/steps/pip-install
 
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
@@ -208,7 +208,7 @@ sub-env $BIN_DIR/steps/collectstatic
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME /app/.heroku/python
-set-env LIBRARY_PATH /app/.heroku/vendor/lib:/app/.heroku/python/lib
+set-env LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH'
 set-env LD_LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH'
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random

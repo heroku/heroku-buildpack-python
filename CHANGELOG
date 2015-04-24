@@ -1,3 +1,20 @@
+v1.3.0 Apr 24, 2015
+====================
+
+* Deprecated many Python versions. Currently supported versions:
+	(https://www.pivotaltracker.com/story/show/90697224)
+	* 2.7.8
+	* 2.7.9
+	* 3.2.4
+	* 3.2.5
+	* 3.3.5
+	* 3.3.6
+	* 3.4.2
+	* 3.4.3
+
+* Merge upstream changes from Heroku up to SHA 5abe0d24fd24ad797c20c8b43d4cbf1bd2720186
+	(https://www.pivotaltracker.com/story/show/90537742)
+
 v1.2.0 Mar 17, 2015
 ====================
 
