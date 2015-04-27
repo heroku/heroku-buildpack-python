@@ -8,9 +8,8 @@
 # adapter between a Python application and Heroku's runtime.
 
 # ## Usage
-# Compiling an app into a slug is simple:
 #
-#     $ bin/detect <build-dir> <cache-dir>
+#     $ bin/detect <build-dir>
 
 BUILD_DIR=$1
 
