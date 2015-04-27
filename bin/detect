@@ -13,12 +13,11 @@
 
 BUILD_DIR=$1
 
-# Exit early if the app is not Python.
-if [ -f "$BUILD_DIR/manage.py" ]; then
-  echo "Python (Django)"
-
-elif [ -f "$BUILD_DIR/requirements.txt" ] || [ -f "$BUILD_DIR/setup.py" ]; then
+if [ -f "$BUILD_DIR/requirements.txt" ] || [ -f "$BUILD_DIR/setup.py" ]; then
   echo "Python"
+
+elif ! find "$BUILD_DIR" -maxdepth 2 -name manage.py -print -quit | grep -q .; then
+  echo "Python/Django"
 
 else
   exit 1
