@@ -16,6 +16,11 @@ ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
+if [[ ! -z $4 ]]; then
+    SRC_DIR=$4
+else
+    SRC_DIR=$BUILD_DIR
+fi
 
 
 CACHED_DIRS=".heroku"
@@ -96,7 +101,7 @@ export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/ap
 export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config
 
 # Switch to the repo's context.
-cd $BUILD_DIR
+cd $SRC_DIR
 
 # Experimental pre_compile hook.
 bpwatch start pre_compile
