@@ -24,6 +24,8 @@ fi
 if [ ! "$SKIP_INSTALL" ]; then
   bpwatch start install_python
     puts-step "Installing runtime ($PYTHON_VERSION)"
+    OLD_PWD=$PWD
+    cd $BUILD_DIR
 
     # Prepare destination directory.
     mkdir -p .heroku/python
@@ -34,6 +36,8 @@ if [ ! "$SKIP_INSTALL" ]; then
       puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
       exit 1
     fi
+
+    cd $OLD_PWD
 
   bpwatch stop install_python
 

@@ -161,6 +161,9 @@ set -e
 
 mkdir -p $(dirname $PROFILE_PATH)
 
+# Switch to the repo's context.
+cd $APP_DIR/$SUB_DIR
+
 # Install Python.
 source $BIN_DIR/steps/python
 
