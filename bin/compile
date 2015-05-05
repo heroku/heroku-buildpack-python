@@ -17,9 +17,9 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 if [[ ! -z $4 ]]; then
-    SRC_DIR=$4
+    SUB_DIR=""
 else
-    SRC_DIR=$BUILD_DIR
+    SUB_DIR=$BUILD_DIR
 fi
 
 
@@ -101,7 +101,7 @@ export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/ap
 export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config
 
 # Switch to the repo's context.
-cd $SRC_DIR
+cd $APP_DIR$SUB_DIR
 
 # Experimental pre_compile hook.
 bpwatch start pre_compile
