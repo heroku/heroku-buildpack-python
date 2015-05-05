@@ -9,7 +9,7 @@ set -eo pipefail
 set -x
 
 # Prepend proper path for virtualenv hackery. This will be deprecated soon.
-export PATH=:/usr/local/bin:$PATH
+export PATH=/usr/local/bin:$PATH
 
 # Paths.
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
@@ -18,10 +18,15 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 if [[ ! -z $4 ]]; then
-    SUB_DIR=""
-else
     SUB_DIR=$4
+else
+    SUB_DIR=""
 fi
+echo "-----> ROOT_DIR=$ROOT_DIR"
+echo "-----> BUILD_DIR=$BUILD_DIR"
+echo "-----> CACHE_DIR=$CACHE_DIR"
+echo "-----> ENV_DIR=$ENV_DIR"
+echo "-----> SUB_DIR=$SUB_DIR"
 
 
 CACHED_DIRS=".heroku"
