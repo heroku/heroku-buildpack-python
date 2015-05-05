@@ -5,12 +5,14 @@ puts-step "Installing dependencies with pip"
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
 echo "-----> pwd: $PWD"
-echo "-----> ls /app/
-ls /app/
-echo "-----> ls /app/.heroku
-ls /app/.heroku
-echo "-----> ls /app/.heroku/python
-ls /app/.heroku/python
+echo "-----> ls /app/"
+ls -la /app/
+echo "-----> ls /app/.heroku"
+ls -la /app/.heroku
+echo "-----> ls /app/backend"
+ls -la /app/backend
+echo "-----> ls /app/frontend"
+ls -la /app/frontend
 /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external  | cleanup | indent
 
 # Smart Requirements handling
