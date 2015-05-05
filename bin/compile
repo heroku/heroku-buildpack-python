@@ -161,13 +161,13 @@ set -e
 
 mkdir -p $(dirname $PROFILE_PATH)
 
-# Switch to the repo's context.
-cd $APP_DIR/$SUB_DIR
 
 # Install Python.
+cd $APP_DIR
 source $BIN_DIR/steps/python
 
 # Sanity check for setuptools/distribute.
+cd $APP_DIR/$SUB_DIR
 source $BIN_DIR/steps/setuptools
 
 # Uninstall removed dependencies with Pip.
