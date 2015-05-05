@@ -20,7 +20,7 @@ ENV_DIR=$3
 if [[ ! -z $4 ]]; then
     SUB_DIR=""
 else
-    SUB_DIR=$BUILD_DIR
+    SUB_DIR=$4
 fi
 
 
@@ -44,8 +44,10 @@ LOGPLEX_KEY="t.b90d9d29-5388-4908-9737-b4576af1d4ce"
 export BPWATCH_STORE_PATH=$CACHE_DIR/bpwatch.json
 BUILDPACK_VERSION=v28
 
+cd $BUILD_DIR/$SUB_DIR
 # Setup pip-pop (pip-diff)
 export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
+cd $BUILD_DIR
 
 # Support Anvil Build_IDs
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
@@ -102,7 +104,7 @@ export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/ap
 export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config
 
 # Switch to the repo's context.
-cd $APP_DIR$SUB_DIR
+cd $APP_DIR/$SUB_DIR
 
 # Experimental pre_compile hook.
 bpwatch start pre_compile
