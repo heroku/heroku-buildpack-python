@@ -133,10 +133,12 @@ else
   CACHED_PYTHON_STACK=$DEFAULT_PYTHON_STACK
 fi
 
+cd $APP_DIR
 # If no runtime given, assume default version.
 if [ ! -f runtime.txt ]; then
   echo $DEFAULT_PYTHON_VERSION > runtime.txt
 fi
+cd $APP_DIR/$SUB_DIR
 
 # ### The Cache
 mkdir -p $CACHE_DIR
