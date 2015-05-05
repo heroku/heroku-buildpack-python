@@ -184,8 +184,11 @@ source $BIN_DIR/steps/mercurial
 # Pylibmc support.
 source $BIN_DIR/steps/pylibmc
 
-# Libffi support.
+# Cryptography support.
 source $BIN_DIR/steps/cryptography
+
+# libffi support.
+source $BIN_DIR/steps/libffi
 
 cd $APP_DIR$SUB_DIR
 echo "-----> Executing pip-install in dir $APP_DIR$SUB_DIR"
