@@ -198,6 +198,20 @@ source $BIN_DIR/steps/pip-install
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
 
+cd $APP_DIR
+if [ -f .Buildfile ]; then
+  echo "-----> Found .Buildfile in root ($APP_DIR), executing custom installation procedure"
+
+  echo "-----> Buildfile content:"
+  cat .Buildfile
+  echo "-----> PATH=$PATH"
+  echo "-----> PYTHONPATH=$PYTHONPATH"
+  echo "-----> PYTHONHOME=$PYTHONHOME"
+
+  echo "-----> Executing installation defined in .Buildfile"
+  source .Buildfile
+fi
+
 
 # ### Finalize
 #
