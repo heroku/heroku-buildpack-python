@@ -67,7 +67,6 @@ APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 # Set new context.
-ORIG_BUILD_DIR=$BUILD_DIR
 BUILD_DIR=$APP_DIR
 
 # Prepend proper path buildpack use.
@@ -92,6 +91,8 @@ bpwatch stop pre_compile
 if [ ! -f requirements.txt ]; then
   echo "-e ." > requirements.txt
 fi
+
+ls
 
 # Sticky runtimes.
 if [ -f $CACHE_DIR/.heroku/python-version ]; then
