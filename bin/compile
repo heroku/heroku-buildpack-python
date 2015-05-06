@@ -87,6 +87,7 @@ fi
 
 
 # Set new context.
+ORIG_BUILD_DIR=$BUILD_DIR
 BUILD_DIR=$APP_DIR
 
 # Prepend proper path buildpack use.
@@ -210,6 +211,10 @@ bpwatch stop dump_cache
 
 # ### Fin.
 if [[ ! "$DOCKER_BUILD" ]]; then
+
+  bpwatch start appdir_commit
+    deep-mv $BUILD_DIR $ORIG_BUILD_DIR
+  bpwatch stop appdir_commit
 
   bpwatch start anvil_appdir_commit
   if [ "$SLUG_ID" ]; then
