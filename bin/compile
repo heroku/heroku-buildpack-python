@@ -92,7 +92,7 @@ if [ ! -f requirements.txt ]; then
   echo "-e ." > requirements.txt
 fi
 
-ls
+env
 
 # Sticky runtimes.
 if [ -f $CACHE_DIR/.heroku/python-version ]; then
