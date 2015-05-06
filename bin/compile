@@ -66,20 +66,25 @@ source $BIN_DIR/utils
 APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
-# Copy Anvil app dir to temporary storage...
-bpwatch start anvil_appdir_stage
+# Skip these steps for Docker.
+if [[ ! "$DOCKER_BUILD" ]]; then
+
+  # Copy Anvil app dir to temporary storage...
+  bpwatch start anvil_appdir_stage
   if [ "$SLUG_ID" ]; then
     mkdir -p $TMP_APP_DIR
     deep-mv $APP_DIR $TMP_APP_DIR
   else
     deep-rm $APP_DIR
   fi
-bpwatch stop anvil_appdir_stage
+  bpwatch stop anvil_appdir_stage
 
-# Copy Application code in.
-bpwatch start appdir_stage
-  deep-mv $BUILD_DIR $APP_DIR
-bpwatch stop appdir_stage
+  # Copy Application code in.
+  bpwatch start appdir_stage
+    deep-mv $BUILD_DIR $APP_DIR
+  bpwatch stop appdir_stage
+fi
+
 
 # Set new context.
 BUILD_DIR=$APP_DIR
@@ -205,14 +210,17 @@ bpwatch start dump_cache
 bpwatch stop dump_cache
 
 # ### Fin.
-bpwatch start appdir_commit
-  deep-mv $BUILD_DIR $ORIG_BUILD_DIR
-bpwatch stop appdir_commit
+if [[ ! "$DOCKER_BUILD" ]]; then
+  bpwatch start appdir_commit
+    deep-mv $BUILD_DIR $ORIG_BUILD_DIR
+  bpwatch stop appdir_commit
 
-bpwatch start anvil_appdir_commit
+  bpwatch start anvil_appdir_commit
   if [ "$SLUG_ID" ]; then
     deep-mv $TMP_APP_DIR $APP_DIR
   fi
 
-bpwatch stop anvil_appdir_commit
-bpwatch stop compile
+  bpwatch stop anvil_appdir_commit
+  bpwatch stop compile
+fi
+
