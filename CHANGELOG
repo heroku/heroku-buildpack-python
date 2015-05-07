@@ -1,3 +1,9 @@
+v1.3.1 May 07, 2015
+====================
+
+* Bump buildpack-packager to support custom buildpack manifests.
+  (https://www.pivotaltracker.com/story/show/93717296)
+
 v1.3.0 Apr 24, 2015
 ====================
 

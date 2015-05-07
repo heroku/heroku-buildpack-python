@@ -65,7 +65,7 @@ The buildpack only supports the two most stable patches for each dependency in t
 
 ### Deprecated Versions
 
-If you would like to build the buildpack with previously supported dependency versions, you can update `manifest.yml` with entries from `.deprecated.manifest.yml`, and re-build.
+If you would like to build the buildpack with previously supported dependency versions, provide the `--use-custom-manifest=manifest-including-unsupported.yml` option to `buildpack-packager`.
 
 ## Contributing
 
