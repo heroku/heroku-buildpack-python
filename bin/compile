@@ -6,9 +6,10 @@
 
 # Fail fast and fail hard.
 set -eo pipefail
+set -x
 
 # Prepend proper path for virtualenv hackery. This will be deprecated soon.
-export PATH=:/usr/local/bin:$PATH
+export PATH=/usr/local/bin:$PATH
 
 # Paths.
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
@@ -16,6 +17,16 @@ ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
+if [[ ! -z $4 ]]; then
+    SUB_DIR=/$4
+else
+    SUB_DIR=""
+fi
+echo "-----> ROOT_DIR=$ROOT_DIR"
+echo "-----> BUILD_DIR=$BUILD_DIR"
+echo "-----> CACHE_DIR=$CACHE_DIR"
+echo "-----> ENV_DIR=$ENV_DIR"
+echo "-----> SUB_DIR=$SUB_DIR"
 
 
 CACHED_DIRS=".heroku"
@@ -38,8 +49,10 @@ LOGPLEX_KEY="t.b90d9d29-5388-4908-9737-b4576af1d4ce"
 export BPWATCH_STORE_PATH=$CACHE_DIR/bpwatch.json
 BUILDPACK_VERSION=v28
 
+cd $BUILD_DIR$SUB_DIR
 # Setup pip-pop (pip-diff)
 export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
+cd $BUILD_DIR
 
 # Support Anvil Build_IDs
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
@@ -101,7 +114,7 @@ export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/ap
 export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config
 
 # Switch to the repo's context.
-cd $BUILD_DIR
+cd $APP_DIR$SUB_DIR
 
 # Experimental pre_compile hook.
 bpwatch start pre_compile
@@ -126,10 +139,15 @@ else
   CACHED_PYTHON_STACK=$DEFAULT_PYTHON_STACK
 fi
 
+if [ -f $APP_DIR$SUB_DIR/runtime.txt ]; then
+    cp -v $APP_DIR$SUB_DIR/runtime.txt $APP_DIR/runtime.txt
+fi
+cd $APP_DIR
 # If no runtime given, assume default version.
 if [ ! -f runtime.txt ]; then
   echo $DEFAULT_PYTHON_VERSION > runtime.txt
 fi
+cd $APP_DIR$SUB_DIR
 
 # ### The Cache
 mkdir -p $CACHE_DIR
@@ -154,10 +172,13 @@ set -e
 
 mkdir -p $(dirname $PROFILE_PATH)
 
+
 # Install Python.
+cd $APP_DIR
 source $BIN_DIR/steps/python
 
 # Sanity check for setuptools/distribute.
+cd $APP_DIR$SUB_DIR
 source $BIN_DIR/steps/setuptools
 
 # Uninstall removed dependencies with Pip.
@@ -169,14 +190,33 @@ source $BIN_DIR/steps/mercurial
 # Pylibmc support.
 source $BIN_DIR/steps/pylibmc
 
-# Libffi support.
+# Cryptography support.
 source $BIN_DIR/steps/cryptography
 
+# libffi support.
+source $BIN_DIR/steps/libffi
+
+cd $APP_DIR$SUB_DIR
+echo "-----> Executing pip-install in dir $APP_DIR$SUB_DIR"
 # Install dependencies with Pip.
 source $BIN_DIR/steps/pip-install
 
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
+
+cd $APP_DIR
+if [ -f .Buildfile ]; then
+  echo "-----> Found .Buildfile in root ($APP_DIR), executing custom installation procedure"
+
+  echo "-----> Buildfile content:"
+  cat .Buildfile
+  echo "-----> PATH=$PATH"
+  echo "-----> PYTHONPATH=$PYTHONPATH"
+  echo "-----> PYTHONHOME=$PYTHONHOME"
+
+  echo "-----> Executing installation defined in .Buildfile"
+  source .Buildfile
+fi
 
 
 # ### Finalize

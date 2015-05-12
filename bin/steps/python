@@ -24,7 +24,6 @@ fi
 if [ ! "$SKIP_INSTALL" ]; then
   bpwatch start install_python
     puts-step "Installing runtime ($PYTHON_VERSION)"
-
     # Prepare destination directory.
     mkdir -p .heroku/python
 
