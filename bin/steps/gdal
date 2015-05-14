@@ -22,7 +22,7 @@ bpwatch start gdal_install
 # If GDAL exists within requirements, use vendored gdal.
 if (pip-grep -s requirements.txt GDAL &> /dev/null) then
 
-  if [ -d ".heroku/vendor/lib/gdal-1.11.0" ]; then
+  if [ -f ".heroku/vendor/bin/gdalserver" ]; then
     export GDAL=$(pwd)/vendor
   else
     echo "-----> Noticed GDAL. Bootstrapping gdal."
