@@ -172,6 +172,9 @@ source $BIN_DIR/steps/pylibmc
 # Libffi support.
 source $BIN_DIR/steps/cryptography
 
+# GDAL support.
+source $BIN_DIR/steps/gdal
+
 # Install dependencies with Pip.
 source $BIN_DIR/steps/pip-install
 
