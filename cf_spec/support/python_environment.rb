@@ -1,6 +1,8 @@
 class PythonEnvironment
-  def app
-    @app ||= Machete.deploy_app('flask_web_app')
+  attr_reader :app
+
+  def initialize(app_name)
+    @app = Machete.deploy_app(app_name)
   end
 
   def execute(file: nil, code: nil, &block)

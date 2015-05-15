@@ -5,5 +5,5 @@ try:
     mc["some_key"] = "Some value"
 
 except pylibmc.ConnectionError:
-    print "Could not connect"
+    print("Could not connect")
 

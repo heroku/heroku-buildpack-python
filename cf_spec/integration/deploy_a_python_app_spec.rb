@@ -30,15 +30,30 @@ describe 'CF Python Buildpack' do
   context 'with cached buildpack dependencies' do
     context 'in an offline environment', if: Machete::BuildpackMode.offline? do
       context 'app has dependencies' do
-        let(:app_name) { 'flask_web_app' }
+        context 'with Python 2' do
+          let(:app_name) { 'flask_web_app' }
 
-        specify do
-          expect(app).to be_running(60)
+          specify do
+            expect(app).to be_running(60)
 
-          browser.visit_path('/')
-          expect(browser).to have_body('Hello, World!')
+            browser.visit_path('/')
+            expect(browser).to have_body('Hello, World!')
 
-          expect(app.host).not_to have_internet_traffic
+            expect(app.host).not_to have_internet_traffic
+          end
+        end
+
+        context 'with Python 3' do
+          let(:app_name) { 'flask_web_app_python_3' }
+
+          specify do
+            expect(app).to be_running(60)
+
+            browser.visit_path('/')
+            expect(browser).to have_body('Hello, World!')
+
+            expect(app.host).not_to have_internet_traffic
+          end
         end
       end
 
@@ -63,13 +78,26 @@ describe 'CF Python Buildpack' do
     context 'in an online environment', if: Machete::BuildpackMode.online? do
 
       context 'app has dependencies' do
-        let(:app_name) { 'flask_web_app' }
+        context 'with Python 2' do
+          let(:app_name) { 'flask_web_app' }
 
-        specify do
-          expect(app).to be_running(60)
+          specify do
+            expect(app).to be_running(60)
 
-          browser.visit_path('/')
-          expect(browser).to have_body('Hello, World!')
+            browser.visit_path('/')
+            expect(browser).to have_body('Hello, World!')
+          end
+        end
+
+        context 'with Python 3' do
+          let(:app_name) { 'flask_web_app_python_3' }
+
+          specify do
+            expect(app).to be_running(60)
+
+            browser.visit_path('/')
+            expect(browser).to have_body('Hello, World!')
+          end
         end
       end
 
