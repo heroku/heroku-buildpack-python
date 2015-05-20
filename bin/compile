@@ -41,8 +41,8 @@ WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
 DEFAULT_PYTHON_VERSION="python-2.7.9"
 DEFAULT_PYTHON_STACK="cedar"
 PYTHON_EXE="/app/.heroku/python/bin/python"
-PIP_VERSION="6.0.8"
-SETUPTOOLS_VERSION="11.3.1"
+PIP_VERSION="6.1.1"
+SETUPTOOLS_VERSION="15.2"
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
@@ -86,12 +86,12 @@ TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 # Copy Anvil app dir to temporary storage...
 bpwatch start anvil_appdir_stage
-  if [ "$SLUG_ID" ]; then
-    mkdir -p $TMP_APP_DIR
-    deep-mv $APP_DIR $TMP_APP_DIR
-  else
-    deep-rm $APP_DIR
-  fi
+if [ "$SLUG_ID" ]; then
+  mkdir -p $TMP_APP_DIR
+  deep-mv $APP_DIR $TMP_APP_DIR
+else
+  deep-rm $APP_DIR
+fi
 bpwatch stop anvil_appdir_stage
 
 # Copy Application code in.
@@ -125,6 +125,7 @@ bpwatch stop pre_compile
 if [ ! -f requirements.txt ]; then
   echo "-e ." > requirements.txt
 fi
+
 
 # Sticky runtimes.
 if [ -f $CACHE_DIR/.heroku/python-version ]; then
@@ -194,6 +195,9 @@ source $BIN_DIR/steps/pylibmc
 # Libffi support.
 source $BIN_DIR/steps/cryptography
 
+# GDAL support.
+source $BIN_DIR/steps/gdal
+
 # Install dependencies with Pip.
 source $BIN_DIR/steps/pip-install
 
@@ -238,9 +242,9 @@ bpwatch start appdir_commit
 bpwatch stop appdir_commit
 
 bpwatch start anvil_appdir_commit
-  if [ "$SLUG_ID" ]; then
-    deep-mv $TMP_APP_DIR $APP_DIR
-  fi
+if [ "$SLUG_ID" ]; then
+  deep-mv $TMP_APP_DIR $APP_DIR
+fi
 
 bpwatch stop anvil_appdir_commit
 bpwatch stop compile
