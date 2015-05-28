@@ -1,3 +1,9 @@
+v1.3.3 May 28, 2015
+====================
+
+* remove Python versions 3.2.x
+  (https://www.pivotaltracker.com/story/show/94530056)
+
 v1.3.2 May 21, 2015
 ====================
 
