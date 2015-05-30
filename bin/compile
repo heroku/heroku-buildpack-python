@@ -7,6 +7,8 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
+[ "$BUILDPACK_XTRACE" ] && set -o xtrace
+
 # Prepend proper path for virtualenv hackery. This will be deprecated soon.
 export PATH=:/usr/local/bin:$PATH
 
