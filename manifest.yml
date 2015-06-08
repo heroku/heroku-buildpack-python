@@ -50,6 +50,12 @@ dependencies:
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.9.tar.gz
     md5: f6f6cdfb39a881ebdec9396ecfb413c6
   - name: python
+    version: 2.7.10
+    cf_stacks:
+      - lucid64
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/lucid64/python-2.7.10.tar.gz
+    md5: bdc7481bc702c7837e24163584ec87d2
+  - name: python
     version: 2.7.8
     cf_stacks:
       - cflinuxfs2
@@ -61,6 +67,12 @@ dependencies:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.9.tar.gz
     md5: 554d0e369fdcc4aa9234315830d096b3
+  - name: python
+    version: 2.7.10
+    cf_stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.10.tar.gz
+    md5: e061640801de23f55a925c598912dd5a
   - name: python
     version: 3.3.5
     cf_stacks:
