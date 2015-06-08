@@ -1,3 +1,10 @@
+v1.3.4 Jun 08, 2015
+====================
+
+* Add support for python 2.7.10
+
+* Merge upstream changes up to SHA 7d4093795bbd2028e34adcac2c6055e0195dff63
+
 v1.3.3 May 28, 2015
 ====================
 
