@@ -4,3 +4,4 @@ site
 log/
 **/.DS_Store
 /python_buildpack-*.zip
+.bundle/
