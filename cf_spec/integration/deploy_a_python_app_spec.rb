@@ -4,29 +4,6 @@ describe 'CF Python Buildpack' do
   subject(:app) { Machete.deploy_app(app_name) }
   let(:browser) { Machete::Browser.new(app) }
 
-  describe 'switching stacks' do
-    subject(:app) { Machete.deploy_app(app_name, stack: 'lucid64') }
-    let(:app_name) { 'flask_web_app_not_vendored' }
-
-    specify do
-      expect(app).to be_running(60)
-
-      browser.visit_path('/')
-      expect(browser).to have_body('Hello, World!')
-
-      replacement_app = Machete::App.new(app_name, Machete::Host.create, stack: 'cflinuxfs2')
-
-      app_push_command = Machete::CF::PushApp.new
-      app_push_command.execute(replacement_app)
-
-      expect(replacement_app).to be_running(60)
-
-      browser.visit_path('/')
-      expect(browser).to have_body('Hello, World!')
-
-    end
-  end
-
   context 'with cached buildpack dependencies' do
     context 'in an offline environment', if: Machete::BuildpackMode.offline? do
       context 'app has dependencies' do
