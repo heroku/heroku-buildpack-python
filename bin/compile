@@ -17,6 +17,8 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+$ROOT_DIR/compile-extensions/bin/check_stack_support
+
 # The ROOT_DIR is read only so we can't install dependencies in it
 # Move the ROOT_DIR contents to tmp and point ROOT_DIR to the new root
 TMP_ROOT=/tmp/buildpack
