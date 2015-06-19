@@ -26,12 +26,6 @@ dependencies:
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/libffi.tar.gz
     md5: 83028a299b8ac323bda8a56c5c70d4cd
   - name: python
-    version: 2.7.8
-    cf_stacks:
-      - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.8.tar.gz
-    md5: 78ac2a030dfa010bfed09a37a4218100
-  - name: python
     version: 2.7.9
     cf_stacks:
       - cflinuxfs2
