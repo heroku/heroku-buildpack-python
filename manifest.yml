@@ -29,38 +29,38 @@ dependencies:
     version: 2.7.9
     cf_stacks:
       - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.9.tar.gz
-    md5: 554d0e369fdcc4aa9234315830d096b3
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-2.7.9-linux-x64.tgz
+    md5: 609c6aafd77020bd47c66db9ea844818
   - name: python
     version: 2.7.10
     cf_stacks:
       - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-2.7.10.tar.gz
-    md5: e061640801de23f55a925c598912dd5a
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-2.7.10-linux-x64.tgz
+    md5: b01359af0173f432fe42fe6d5042d493
   - name: python
     version: 3.3.5
     cf_stacks:
       - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.3.5.tar.gz
-    md5: 61fcd9b643bbd4580b0f81ecc4958340
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.3.5-linux-x64.tgz
+    md5: f32e11f2d039dae0d6574403a80b485d
   - name: python
     version: 3.3.6
     cf_stacks:
       - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.3.6.tar.gz
-    md5: abe5203007e0fc81529b4a1e9d11fa94
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.3.6-linux-x64.tgz
+    md5: 08dee09d32477c7f0497e736c0c7967b
   - name: python
     version: 3.4.2
     cf_stacks:
       - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.4.2.tar.gz
-    md5: c8ea4fae5f23db599d2dcfda0cd578df
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.4.2-linux-x64.tgz
+    md5: fcc48e0dffd84b3e7a7a95e17a35809f
   - name: python
     version: 3.4.3
     cf_stacks:
       - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/python-3.4.3.tar.gz
-    md5: 00cfe29eeea98638e60f24f3a91e6627
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.4.3-linux-x64.tgz
+    md5: a5cc3dbdb736e5f6fb93942981e5dbaf
 
 exclude_files:
   - .git/
