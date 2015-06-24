@@ -1,3 +1,14 @@
+v1.4.0 Jun 24, 2015
+====================
+
+* Remove 2.7.8 from skinny manifest
+
+* Remove lucid-specific binaries from manifest.yml
+  (https://www.pivotaltracker.com/story/show/96135874)
+
+* alert user about incompatible stack usage
+  (https://www.pivotaltracker.com/story/show/96137338)
+
 v1.3.5 Jun 08, 2015
 ====================
 
