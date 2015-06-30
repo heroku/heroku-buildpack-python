@@ -13,7 +13,7 @@ case $(ulimit -u) in
   ;;
 
 # IX DYNO
-32767)
+16384)
   export DYNO_RAM=2560
   export WEB_CONCURRENCY=${WEB_CONCURRENCY:-8}
   ;;
