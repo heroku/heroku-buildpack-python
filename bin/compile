@@ -7,6 +7,8 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
+[ "$BUILDPACK_XTRACE" ] && set -o xtrace
+
 # Prepend proper path for virtualenv hackery. This will be deprecated soon.
 export PATH=:/usr/local/bin:$PATH
 
@@ -43,8 +45,8 @@ WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
 DEFAULT_PYTHON_VERSION="python-2.7.10"
 DEFAULT_PYTHON_STACK="cedar"
 PYTHON_EXE="/app/.heroku/python/bin/python"
-PIP_VERSION="7.0.1"
-SETUPTOOLS_VERSION="16.0"
+PIP_VERSION="7.1.0"
+SETUPTOOLS_VERSION="18.0.1"
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
