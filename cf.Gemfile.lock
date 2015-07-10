@@ -8,10 +8,10 @@ GIT
 
 GIT
   remote: https://github.com/cloudfoundry-incubator/buildpack-packager
-  revision: 7c8947128c944a032f14d3bd518db4355bde99ec
-  tag: v2.2.2
+  revision: 58ccd566aee3e1dbfd1810256e3e41eb39d14d54
+  tag: v2.2.3
   specs:
-    buildpack-packager (2.2.2)
+    buildpack-packager (2.2.3)
       activesupport (~> 4.1.8)
       kwalify
       terminal-table (~> 1.4.5)
