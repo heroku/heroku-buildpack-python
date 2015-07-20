@@ -1,3 +1,18 @@
+v1.5.0 Jul 20, 2015
+====================
+
+* Include CF built binaries
+  (https://www.pivotaltracker.com/story/show/97136960)
+
+* Include current stack in unsupported stack message
+  (https://www.pivotaltracker.com/story/show/98579464)
+
+* Update pip to 7.1.0
+
+* Update setuptools to 18.0.1
+
+* Set xtrace if $BUILDPACK_XTRACE set
+
 v1.4.0 Jun 24, 2015
 ====================
 
