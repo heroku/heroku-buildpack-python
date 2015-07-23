@@ -7,7 +7,7 @@ GIT
       httparty
 
 GIT
-  remote: https://github.com/cloudfoundry-incubator/buildpack-packager
+  remote: https://github.com/cloudfoundry/buildpack-packager
   revision: 58ccd566aee3e1dbfd1810256e3e41eb39d14d54
   tag: v2.2.3
   specs:
