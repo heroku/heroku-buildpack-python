@@ -4,7 +4,7 @@ describe 'CF Python Buildpack' do
   subject(:app) { Machete.deploy_app(app_name) }
   let(:browser) { Machete::Browser.new(app) }
 
-  context 'with cached buildpack dependencies', if: Machete::BuildpackMode.cached? do
+  context 'with cached buildpack dependencies', :cached do
     context 'app has dependencies' do
       context 'with Python 2' do
         let(:app_name) { 'flask_web_app' }
@@ -49,7 +49,7 @@ describe 'CF Python Buildpack' do
     end
   end
 
-  context 'without cached buildpack dependencies', if: Machete::BuildpackMode.uncached? do
+  context 'without cached buildpack dependencies', :uncached do
     context 'app has dependencies' do
       context 'with Python 2' do
         let(:app_name) { 'flask_web_app' }
