@@ -5,7 +5,7 @@ if [[ -f .heroku/python/requirements-declared.txt ]]; then
 
   cp .heroku/python/requirements-declared.txt requirements-declared.txt
 
-  pip-diff --stale requirements-declared.txt requirements.txt > .heroku/python/requirements-stale.txt
+  pip-diff --stale requirements-declared.txt requirements.txt --exclude setuptools pip > .heroku/python/requirements-stale.txt
 
   rm -fr requirements-declared.txt
 

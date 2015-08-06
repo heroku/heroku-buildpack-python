@@ -12,10 +12,16 @@ case $(ulimit -u) in
   export WEB_CONCURRENCY=${WEB_CONCURRENCY:-4}
   ;;
 
+# IX DYNO
+16384)
+  export DYNO_RAM=2560
+  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-8}
+  ;;
+
 # PX DYNO
 32768)
-  export DYNO_RAM=6144
-  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-9}
+  export DYNO_RAM=6656
+  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-11}
   ;;
 
 esac
