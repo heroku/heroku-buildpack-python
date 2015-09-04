@@ -51,7 +51,7 @@ The buildpack only supports the two most stable patches for each dependency in t
 1. Build the buildpack
 
   ```shell
-  BUNDLE_GEMFILE=cf.Gemfile bundle exec buildpack-packager [ uncached | cached ]
+  BUNDLE_GEMFILE=cf.Gemfile bundle exec buildpack-packager [ --uncached | --cached ]
   ```
 
 1. Use in Cloud Foundry
