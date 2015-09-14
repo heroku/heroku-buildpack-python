@@ -61,7 +61,12 @@ dependencies:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.4.3-linux-x64.tgz
     md5: a5cc3dbdb736e5f6fb93942981e5dbaf
-
+  - name: python
+    version: 3.5.0
+    cf_stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.5.0-linux-x64.tgz
+    md5: 147e08c5c5ed5bbcaabb6ba0e8625fcc
 exclude_files:
   - .git/
   - .gitignore
