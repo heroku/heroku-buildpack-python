@@ -1,3 +1,12 @@
+v1.5.1 Sep 15, 2015
+====================
+
+* Adding support for Python 3.5.0
+  (https://www.pivotaltracker.com/story/show/103268420)
+
+* Output buildpack information in detect script
+  (https://www.pivotaltracker.com/story/show/100757820)
+
 v1.5.0 Jul 20, 2015
 ====================
 
