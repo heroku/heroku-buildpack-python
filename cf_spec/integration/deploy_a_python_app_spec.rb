@@ -14,6 +14,7 @@ describe 'CF Python Buildpack' do
 
           browser.visit_path('/')
           expect(browser).to have_body('Hello, World!')
+          expect(app).to have_logged(/Downloaded \[file:\/\/.*\]/)
 
           expect(app.host).not_to have_internet_traffic
         end
@@ -59,6 +60,7 @@ describe 'CF Python Buildpack' do
 
           browser.visit_path('/')
           expect(browser).to have_body('Hello, World!')
+          expect(app).to have_logged(/Downloaded \[https:\/\/.*\]/)
         end
       end
 

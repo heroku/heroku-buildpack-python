@@ -28,6 +28,7 @@ if (pip-grep -s requirements.txt bcrypt cffi cryptography pyOpenSSL PyOpenSSL re
     echo "-----> Noticed cffi. Bootstrapping libffi."
     mkdir -p .heroku/vendor
     # Download and extract cryptography into target vendor directory.
+    echo "Downloaded [`translate_dependency_url $VENDORED_LIBFFI`]"
     curl `translate_dependency_url $VENDORED_LIBFFI` -s | tar zxv -C .heroku/vendor &> /dev/null
 
     export LIBFFI=$(pwd)/vendor
