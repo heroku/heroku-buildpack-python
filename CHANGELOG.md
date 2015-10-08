@@ -1,5 +1,17 @@
 # Python Buildpack Changelog
 
+## v64 (2015-10-08)
+
+Improved compatibility with multi and node.js buildpacks.
+
+## v63 (2015-10-08)
+
+Updated Pip and Setuptools.
+
+- Setuptools updated to v18.3.2
+- Pip updated to v7.1.2
+
+
 ## v62 (2015-08-07)
 
 Updated Pip and Setuptools.
