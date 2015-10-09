@@ -1,6 +1,10 @@
 # Python Buildpack Changelog
 
 
+## v66 (2015-10-09)
+
+Improved compatibility with multi and node.js buildpacks.
+
 ## v65 (2015-10-08)
 
 Reverted v64.
