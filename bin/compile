@@ -25,8 +25,6 @@ CACHED_DIRS=".heroku"
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".heroku/venv"
 LEGACY_TRIGGER="lib/python2.7"
-PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
-WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
 
 DEFAULT_PYTHON_VERSION="python-2.7.10"
 DEFAULT_PYTHON_STACK="cedar"
@@ -57,10 +55,6 @@ TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 bpwatch start compile
 
-
-# We'll need to send these statics to other scripts we `source`.
-export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
-
 # Syntax sugar.
 source $BIN_DIR/utils
 
@@ -83,7 +77,7 @@ if [[ ! "$DOCKER_BUILD" ]]; then
 
   # Copy Application code in.
   bpwatch start appdir_stage
-    deep-mv $BUILD_DIR $APP_DIR
+    deep-cp $BUILD_DIR $APP_DIR
   bpwatch stop appdir_stage
 fi
 
@@ -91,6 +85,13 @@ fi
 # Set new context.
 ORIG_BUILD_DIR=$BUILD_DIR
 BUILD_DIR=$APP_DIR
+
+# Set up outputs under new context
+PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
+WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
+
+# We'll need to send these statics to other scripts we `source`.
+export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 
 # Prepend proper path buildpack use.
 export PATH=$BUILD_DIR/.heroku/python/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH
@@ -218,6 +219,7 @@ bpwatch stop dump_cache
 if [[ ! "$DOCKER_BUILD" ]]; then
 
   bpwatch start appdir_commit
+    deep-rm $ORIG_BUILD_DIR
     deep-mv $BUILD_DIR $ORIG_BUILD_DIR
   bpwatch stop appdir_commit
 
