@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v68 (2015-10-12)
+
+Fixed .heroku/venv error with modern apps.
+
 ## v67 (2015-10-12)
 
 Further improved cache compatibility with multi and node.js buildpacks.
