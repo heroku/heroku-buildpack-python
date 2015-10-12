@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v67 (2015-10-12)
+
+Further improved cache compatibility with multi and node.js buildpacks.
+
 
 ## v66 (2015-10-09)
 
