@@ -20,7 +20,7 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 
-CACHE_ENTRIES=".heroku/python .heroku/python-stack .heroku/python-version .heroku/venv"
+CACHE_ENTRIES=".heroku/python .heroku/python-stack .heroku/python-version"
 
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".heroku/venv"
