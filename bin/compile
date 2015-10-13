@@ -145,12 +145,17 @@ bpwatch stop clear_old_venvs
 
 # Restore old artifacts from the cache.
 bpwatch start restore_cache
-  mkdir -p $CACHED_DIR
-  cp -R $CACHE_DIR/$CACHED_DIR/python $CACHE_DIR/python  &> /dev/null || true
-  cp -R $CACHE_DIR/$CACHED_DIR/python-stack $CACHE_DIR/python-stack  &> /dev/null || true
-  cp -R $CACHE_DIR/$CACHED_DIR/python-version $CACHE_DIR/python-version   &> /dev/null || true
-  cp -R $CACHE_DIR/$CACHED_DIR/vendor $CACHE_DIR/vendor  &> /dev/null || true
-  cp -R $CACHE_DIR/$CACHED_DIR/venv $CACHE_DIR/venv  &> /dev/null || true
+  # cp -R $CACHE_DIR/$CACHED_DIR . &> /dev/null || true
+
+  # python vendor python-stack python-version venv
+  cp -R $CACHE_DIR/$CACHED_DIR/python $CACHED_DIR/python
+  cp -R $CACHE_DIR/$CACHED_DIR/python-stack $CACHED_DIR/python-stack
+  cp -R $CACHE_DIR/$CACHED_DIR/python-version $CACHED_DIR/python-version
+  cp -R $CACHE_DIR/$CACHED_DIR/vendor $CACHED_DIR/vendor  &> /dev/null || true
+  cp -R $CACHE_DIR/$CACHED_DIR/venv $CACHED_DIR/venv  &> /dev/null || true
+
+
+
 bpwatch stop restore_cache
 
 set +e
