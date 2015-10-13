@@ -145,15 +145,15 @@ bpwatch start clear_old_venvs
   [ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
 bpwatch stop clear_old_venvs
 
-cd $CACHE_DIR
-rm !($WHITELISTED_CACHE_ENTRIES)
-
-cd $BUILD_DIR
-
 # Restore old artifacts from the cache.
 bpwatch start restore_cache
   cp -R $CACHE_DIR/$CACHED_DIR . &> /dev/null || true
 bpwatch stop restore_cache
+
+# Cleanup what's in the cache.
+cd $CACHED_DIR
+rm !($WHITELISTED_CACHE_ENTRIES)
+cd $BUILD_DIR
 
 set +e
 # Create set-aside `.heroku` folder.
