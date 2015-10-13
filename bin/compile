@@ -218,6 +218,8 @@ bpwatch stop post_compile
 
 # Store new artifacts in cache.
 bpwatch start dump_cache
+  mkdir -p $CACHE_DIR/$CACHED_DIR
+
   # python vendor python-stack python-version venv
   rm -rf $CACHE_DIR/$CACHED_DIR/python
   cp -R $CACHED_DIR/python $CACHE_DIR/$CACHED_DIR/python
@@ -233,6 +235,8 @@ bpwatch start dump_cache
 
   rm -rf $CACHE_DIR/$CACHED_DIR/venv
   cp -R $CACHED_DIR/venv $CACHE_DIR/$CACHED_DIR/venv  &> /dev/null || true
+    mkdir -p $CACHE_DIR/$CACHED_DIR
+
 
 bpwatch stop dump_cache
 
