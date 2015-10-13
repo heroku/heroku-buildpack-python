@@ -20,8 +20,8 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 
-CACHED_DIR=".heroku"
-CACHED_DIRS=".heroku/python .heroku/python-stack .heroku/python-version .heroku/vendor .heroku/venv"
+CACHED_DIRS=".heroku"
+WHITELISTED_CACHE_ENTRIES="python|python-stack|python-version|venv|vendor"
 
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".heroku/venv"
@@ -146,14 +146,11 @@ bpwatch stop clear_old_venvs
 
 # Restore old artifacts from the cache.
 bpwatch start restore_cache
-  mkdir -p $CACHE_DIR/$CACHED_DIR
   for dir in $CACHED_DIRS; do
-    echo "cp -R $CACHE_DIR/$dir $CACHED_DIR"
-    cp -R $CACHE_DIR/$dir $CACHED_DIR &> /dev/null || true
+    cp -R $CACHE_DIR/$dir . &> /dev/null || true
   done
+  ls -1 $CACHED_DIRS | grep -E -v $WHITELISTED_CACHE_ENTRIES | xargs rm -f
 bpwatch stop restore_cache
-
-ls /app/.heroku/
 
 set +e
 # Create set-aside `.heroku` folder.
@@ -214,10 +211,9 @@ bpwatch stop post_compile
 
 # Store new artifacts in cache.
 bpwatch start dump_cache
-  mkdir -p $CACHE_DIR/$CACHED_DIR
   for dir in $CACHED_DIRS; do
     rm -rf $CACHE_DIR/$dir
-    cp -R $dir $CACHE_DIR/ 2>/dev/null
+    cp -R $dir $CACHE_DIR/
   done
 bpwatch stop dump_cache
 
