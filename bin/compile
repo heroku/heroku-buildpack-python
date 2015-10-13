@@ -6,6 +6,7 @@
 
 # Fail fast and fail hard.
 set -eo pipefail
+shopt -s extglob
 
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
 
@@ -20,7 +21,7 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 
-CACHED_DIRS=".heroku"
+CACHED_DIR=".heroku"
 WHITELISTED_CACHE_ENTRIES="python|python-stack|python-version|venv|vendor"
 
 # Static configurations for virtualenv caches.
@@ -144,12 +145,14 @@ bpwatch start clear_old_venvs
   [ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
 bpwatch stop clear_old_venvs
 
+cd $CACHE_DIR
+rm !($WHITELISTED_CACHE_ENTRIES)
+
+cd $BUILD_DIR
+
 # Restore old artifacts from the cache.
 bpwatch start restore_cache
-  for dir in $CACHED_DIRS; do
-    cp -R $CACHE_DIR/$dir . &> /dev/null || true
-  done
-  ls -1 | grep -E -v "$WHITELISTED_CACHE_ENTRIES" | xargs rm -f
+  cp -R $CACHE_DIR/$CACHED_DIR . &> /dev/null || true
 bpwatch stop restore_cache
 
 set +e
@@ -211,10 +214,8 @@ bpwatch stop post_compile
 
 # Store new artifacts in cache.
 bpwatch start dump_cache
-  for dir in $CACHED_DIRS; do
     rm -rf $CACHE_DIR/$dir
     cp -R $dir $CACHE_DIR/
-  done
 bpwatch stop dump_cache
 
 # ### Fin.
