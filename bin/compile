@@ -207,8 +207,22 @@ bpwatch stop post_compile
 
 # Store new artifacts in cache.
 bpwatch start dump_cache
-  rm -rf $CACHE_DIR/$CACHED_DIR
-  cp -R $CACHED_DIR $CACHE_DIR/
+  # python vendor python-stack python-version venv
+  rm -rf $CACHE_DIR/$CACHED_DIR/python
+  cp -R $CACHED_DIR/python $CACHE_DIR/python
+
+  rm -rf $CACHE_DIR/$CACHED_DIR/python-stack
+  cp -R $CACHED_DIR/python-stack $CACHE_DIR/python-stack
+
+  rm -rf $CACHE_DIR/$CACHED_DIR/python-version
+  cp -R $CACHED_DIR/python-version $CACHE_DIR/python-version
+
+  rm -rf $CACHE_DIR/$CACHED_DIR/vendor
+  cp -R $CACHED_DIR/vendor $CACHE_DIR/vendor
+
+  rm -rf $CACHE_DIR/$CACHED_DIR/venv
+  cp -R $CACHED_DIR/venv $CACHE_DIR/venv
+
 bpwatch stop dump_cache
 
 # ### Fin.
