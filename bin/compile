@@ -6,7 +6,6 @@
 
 # Fail fast and fail hard.
 set -eo pipefail
-shopt -s extglob
 
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
 
@@ -21,8 +20,7 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 
-CACHED_DIR=".heroku"
-WHITELISTED_CACHE_ENTRIES="python|python-stack|python-version|venv|vendor"
+CACHED_DIRS=".heroku"
 
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".heroku/venv"
@@ -147,7 +145,9 @@ bpwatch stop clear_old_venvs
 
 # Restore old artifacts from the cache.
 bpwatch start restore_cache
-  cp -R $CACHE_DIR/$CACHED_DIR . &> /dev/null || true
+  for dir in $CACHED_DIRS; do
+    cp -R $CACHE_DIR/$dir . &> /dev/null || true
+  done
 bpwatch stop restore_cache
 
 set +e
@@ -207,6 +207,13 @@ bpwatch start post_compile
   source $BIN_DIR/steps/hooks/post_compile
 bpwatch stop post_compile
 
+# Store new artifacts in cache.
+bpwatch start dump_cache
+  for dir in $CACHED_DIRS; do
+    rm -rf $CACHE_DIR/$dir
+    cp -R $dir $CACHE_DIR/
+  done
+bpwatch stop dump_cache
 
 # ### Fin.
 if [[ ! "$DOCKER_BUILD" ]]; then
@@ -224,16 +231,4 @@ if [[ ! "$DOCKER_BUILD" ]]; then
   bpwatch stop anvil_appdir_commit
   bpwatch stop compile
 fi
-
-
-# Remove all non-whitelisted objects from cache.
-cd $CACHED_DIR
-find . -type f -not \( -name 'python' -or -name 'python-version' -or -name 'python-stack' -or -name 'vendor' -or -name 'venv' \) -delete
-cd $BUILD_DIR
-
-# Store new artifacts in cache.
-bpwatch start dump_cache
-    rm -rf $CACHE_DIR/$CACHED_DIR
-    cp -R $CACHED_DIR $CACHE_DIR/
-bpwatch stop dump_cache
 
