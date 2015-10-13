@@ -213,12 +213,12 @@ if [[ ! "$DOCKER_BUILD" ]]; then
 
   bpwatch start appdir_commit
     deep-rm $ORIG_BUILD_DIR
-    deep-cp $BUILD_DIR $ORIG_BUILD_DIR
+    deep-mv $BUILD_DIR $ORIG_BUILD_DIR
   bpwatch stop appdir_commit
 
   bpwatch start anvil_appdir_commit
   if [ "$SLUG_ID" ]; then
-    deep-cp $TMP_APP_DIR $APP_DIR
+    deep-mv $TMP_APP_DIR $APP_DIR
   fi
 
   bpwatch stop anvil_appdir_commit
