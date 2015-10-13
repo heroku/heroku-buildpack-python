@@ -209,8 +209,8 @@ bpwatch stop post_compile
 
 # Store new artifacts in cache.
 bpwatch start dump_cache
-    rm -rf $CACHE_DIR/$dir
-    cp -R $dir $CACHE_DIR/
+    rm -rf $CACHE_DIR/$CACHED_DIR
+    cp -R $CACHED_DIR $CACHE_DIR/
 bpwatch stop dump_cache
 
 # ### Fin.
