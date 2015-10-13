@@ -149,11 +149,11 @@ bpwatch start restore_cache
 
   ls -a $CACHE_DIR
   # python vendor python-stack python-version venv
-  cp -R $CACHE_DIR/python $CACHED_DIR/python  &> /dev/null || true
-  cp -R $CACHE_DIR/python-stack $CACHED_DIR/python-stack  &> /dev/null || true
-  cp -R $CACHE_DIR/python-version $CACHED_DIR/python-version  &> /dev/null || true
-  cp -R $CACHE_DIR/vendor $CACHED_DIR/vendor  &> /dev/null || true
-  cp -R $CACHE_DIR/venv $CACHED_DIR/venv  &> /dev/null || true
+  cp -R $CACHE_DIR/$CACHED_DIR/python $CACHED_DIR/python  &> /dev/null || true
+  cp -R $CACHE_DIR/$CACHED_DIR/python-stack $CACHED_DIR/python-stack  &> /dev/null || true
+  cp -R $CACHE_DIR/$CACHED_DIR/python-version $CACHED_DIR/python-version  &> /dev/null || true
+  cp -R $CACHE_DIR/$CACHED_DIR/vendor $CACHED_DIR/vendor  &> /dev/null || true
+  cp -R $CACHE_DIR/$CACHED_DIR/venv $CACHED_DIR/venv  &> /dev/null || true
 
 
 
@@ -220,19 +220,19 @@ bpwatch stop post_compile
 bpwatch start dump_cache
   # python vendor python-stack python-version venv
   rm -rf $CACHE_DIR/$CACHED_DIR/python
-  cp -R $CACHED_DIR/python $CACHE_DIR/python
+  cp -R $CACHED_DIR/python $CACHE_DIR/$CACHED_DIR/python
 
   rm -rf $CACHE_DIR/$CACHED_DIR/python-stack
-  cp -R $CACHED_DIR/python-stack $CACHE_DIR/python-stack
+  cp -R $CACHED_DIR/python-stack $CACHE_DIR/$CACHED_DIR/python-stack
 
   rm -rf $CACHE_DIR/$CACHED_DIR/python-version
-  cp -R $CACHED_DIR/python-version $CACHE_DIR/python-version
+  cp -R $CACHED_DIR/python-version $CACHE_DIR/$CACHED_DIR/python-version
 
   rm -rf $CACHE_DIR/$CACHED_DIR/vendor
-  cp -R $CACHED_DIR/vendor $CACHE_DIR/vendor  &> /dev/null || true
+  cp -R $CACHED_DIR/vendor $CACHE_DIR/$CACHED_DIR/vendor  &> /dev/null || true
 
   rm -rf $CACHE_DIR/$CACHED_DIR/venv
-  cp -R $CACHED_DIR/venv $CACHE_DIR/venv  &> /dev/null || true
+  cp -R $CACHED_DIR/venv $CACHE_DIR/$CACHED_DIR/venv  &> /dev/null || true
 
 bpwatch stop dump_cache
 
