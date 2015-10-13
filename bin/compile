@@ -148,9 +148,9 @@ bpwatch start restore_cache
   # cp -R $CACHE_DIR/$CACHED_DIR . &> /dev/null || true
 
   # python vendor python-stack python-version venv
-  cp -R $CACHE_DIR/$CACHED_DIR/python $CACHED_DIR/python
-  cp -R $CACHE_DIR/$CACHED_DIR/python-stack $CACHED_DIR/python-stack
-  cp -R $CACHE_DIR/$CACHED_DIR/python-version $CACHED_DIR/python-version
+  cp -R $CACHE_DIR/$CACHED_DIR/python $CACHED_DIR/python  &> /dev/null || true
+  cp -R $CACHE_DIR/$CACHED_DIR/python-stack $CACHED_DIR/python-stack  &> /dev/null || true
+  cp -R $CACHE_DIR/$CACHED_DIR/python-version $CACHED_DIR/python-version  &> /dev/null || true
   cp -R $CACHE_DIR/$CACHED_DIR/vendor $CACHED_DIR/vendor  &> /dev/null || true
   cp -R $CACHE_DIR/$CACHED_DIR/venv $CACHED_DIR/venv  &> /dev/null || true
 
