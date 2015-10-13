@@ -153,6 +153,8 @@ bpwatch start restore_cache
   done
 bpwatch stop restore_cache
 
+ls /app/.heroku/
+
 set +e
 # Create set-aside `.heroku` folder.
 mkdir .heroku &> /dev/null
