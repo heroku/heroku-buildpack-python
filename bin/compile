@@ -218,10 +218,10 @@ bpwatch start dump_cache
   cp -R $CACHED_DIR/python-version $CACHE_DIR/python-version
 
   rm -rf $CACHE_DIR/$CACHED_DIR/vendor
-  cp -R $CACHED_DIR/vendor $CACHE_DIR/vendor
+  cp -R $CACHED_DIR/vendor $CACHE_DIR/vendor 2>/dev/null
 
   rm -rf $CACHE_DIR/$CACHED_DIR/venv
-  cp -R $CACHED_DIR/venv $CACHE_DIR/venv
+  cp -R $CACHED_DIR/venv $CACHE_DIR/venv 2>/dev/null
 
 bpwatch stop dump_cache
 
