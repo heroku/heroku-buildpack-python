@@ -150,11 +150,6 @@ bpwatch start restore_cache
   cp -R $CACHE_DIR/$CACHED_DIR . &> /dev/null || true
 bpwatch stop restore_cache
 
-# Cleanup what's in the cache.
-cd $CACHED_DIR
-rm !(python|python-stack|python-version|venv|vendor)
-cd $BUILD_DIR
-
 set +e
 # Create set-aside `.heroku` folder.
 mkdir .heroku &> /dev/null
