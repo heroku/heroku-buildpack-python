@@ -207,26 +207,33 @@ bpwatch start post_compile
   source $BIN_DIR/steps/hooks/post_compile
 bpwatch stop post_compile
 
-# Store new artifacts in cache.
-bpwatch start dump_cache
-    rm -rf $CACHE_DIR/$CACHED_DIR
-    cp -R $CACHED_DIR $CACHE_DIR/
-bpwatch stop dump_cache
 
 # ### Fin.
 if [[ ! "$DOCKER_BUILD" ]]; then
 
   bpwatch start appdir_commit
     deep-rm $ORIG_BUILD_DIR
-    deep-mv $BUILD_DIR $ORIG_BUILD_DIR
+    deep-cp $BUILD_DIR $ORIG_BUILD_DIR
   bpwatch stop appdir_commit
 
   bpwatch start anvil_appdir_commit
   if [ "$SLUG_ID" ]; then
-    deep-mv $TMP_APP_DIR $APP_DIR
+    deep-cp $TMP_APP_DIR $APP_DIR
   fi
 
   bpwatch stop anvil_appdir_commit
   bpwatch stop compile
 fi
+
+
+# Remove all non-whitelisted objects from cache.
+cd $CACHED_DIR
+find . -type f -not \( -name 'python' -or -name 'python-version' -or -name 'python-stack' -or -name 'vendor' -or -name 'venv'\) -delete
+cd $BUILD_DIR
+
+# Store new artifacts in cache.
+bpwatch start dump_cache
+    rm -rf $CACHE_DIR/$CACHED_DIR
+    cp -R $CACHED_DIR $CACHE_DIR/
+bpwatch stop dump_cache
 
