@@ -148,6 +148,7 @@ bpwatch stop clear_old_venvs
 bpwatch start restore_cache
   mkdir -p $CACHE_DIR/$CACHED_DIR
   for dir in $CACHED_DIRS; do
+    echo "cp -R $CACHE_DIR/$dir ."
     cp -R $CACHE_DIR/$dir . &> /dev/null || true
   done
 bpwatch stop restore_cache
