@@ -152,7 +152,7 @@ bpwatch stop restore_cache
 
 # Cleanup what's in the cache.
 cd $CACHED_DIR
-rm !($WHITELISTED_CACHE_ENTRIES)
+rm !(python|python-stack|python-version|venv|vendor)
 cd $BUILD_DIR
 
 set +e
