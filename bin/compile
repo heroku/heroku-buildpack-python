@@ -149,7 +149,7 @@ bpwatch start restore_cache
   for dir in $CACHED_DIRS; do
     cp -R $CACHE_DIR/$dir . &> /dev/null || true
   done
-  ls -1 $CACHED_DIRS | grep -E -v $WHITELISTED_CACHE_ENTRIES | xargs rm -f
+  ls -1 | grep -E -v "$WHITELISTED_CACHE_ENTRIES" | xargs rm -f
 bpwatch stop restore_cache
 
 set +e
