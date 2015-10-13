@@ -228,7 +228,7 @@ fi
 
 # Remove all non-whitelisted objects from cache.
 cd $CACHED_DIR
-find . -type f -not \( -name 'python' -or -name 'python-version' -or -name 'python-stack' -or -name 'vendor' -or -name 'venv'\) -delete
+find . -type f -not \( -name 'python' -or -name 'python-version' -or -name 'python-stack' -or -name 'vendor' -or -name 'venv' \) -delete
 cd $BUILD_DIR
 
 # Store new artifacts in cache.
