@@ -4,11 +4,7 @@ puts-step "Installing dependencies with pip"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
-if test -d $BUILD_DIR/vendor; then
-  /app/.scalingo/python/bin/pip install -r requirements.txt --exists-action=w --src=./.scalingo/src --allow-all-external --no-index --find-links=file://$BUILD_DIR/vendor | cleanup | indent
-else
-  /app/.scalingo/python/bin/pip install -r requirements.txt --exists-action=w --src=./.scalingo/src --allow-all-external | cleanup | indent
-fi
+/app/.scalingo/python/bin/pip install -r requirements.txt --exists-action=w --src=./.scalingo/src --allow-all-external --disable-pip-version-check --no-cache-dir | cleanup | indent
 
 # Smart Requirements handling
 cp requirements.txt .scalingo/python/requirements-declared.txt
