@@ -30,6 +30,9 @@ if (pip-grep -s requirements.txt bcrypt cffi cryptography pyOpenSSL PyOpenSSL re
     # Download and extract cryptography into target vendor directory.
     curl -L $VENDORED_LIBFFI -s | tar zxv -C .scalingo/vendor &> /dev/null
 
+    sed -i 's/\.heroku/.scalingo/' .scalingo/vendor/lib/pkgconfig/libffi.pc
+    sed -i 's/\.heroku/.scalingo/' .scalingo/vendor/lib/libffi.la
+
     export LIBFFI=$(pwd)/vendor
   fi
 fi
