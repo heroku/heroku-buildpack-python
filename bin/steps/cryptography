@@ -28,7 +28,7 @@ if (pip-grep -s requirements.txt bcrypt cffi cryptography pyOpenSSL PyOpenSSL re
     echo "-----> Noticed cffi. Bootstrapping libffi."
     mkdir -p .scalingo/vendor
     # Download and extract cryptography into target vendor directory.
-    curl $VENDORED_LIBFFI -s | tar zxv -C .scalingo/vendor &> /dev/null
+    curl -L $VENDORED_LIBFFI -s | tar zxv -C .scalingo/vendor &> /dev/null
 
     export LIBFFI=$(pwd)/vendor
   fi
