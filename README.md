@@ -34,8 +34,6 @@ pip install --download vendor -r requirements.txt
 
 ## Building
 
-The buildpack only supports the two most stable patches for each dependency in the [manifest.yml](manifest.yml).
-
 1. Make sure you have fetched submodules
 
   ```bash
@@ -63,9 +61,19 @@ The buildpack only supports the two most stable patches for each dependency in t
     cf push my_app -b custom_python_buildpack
     ```  
 
-### Deprecated Versions
+# Supported binary dependencies
 
-If you would like to build the buildpack with previously supported dependency versions, provide the `--use-custom-manifest=manifest-including-unsupported.yml` option to `buildpack-packager`.
+The buildpack only supports the stable patches for each dependency listed in the [manifest.yml](manifest.yml) and [releases page](https://github.com/cloudfoundry/python-buildpack/releases).
+
+If you try to use a binary that is not currently supported, staging your app will fail and you will see the following error message:
+
+```
+       Could not get translated url, exited with: DEPENDENCY_MISSING_IN_MANIFEST: ...
+ !
+ !     exit
+ !
+Staging failed: Buildpack compilation step failed
+```
 
 ## Contributing
 
@@ -73,7 +81,7 @@ Find our guidelines [here](./CONTRIBUTING.md).
 
 ## Reporting Issues
 
-Open a GitHub issue on this project at https://github.com/cloudfoundry/python-buildpack/issues/new
+Open a GitHub issue on this project [here](https://github.com/cloudfoundry/python-buildpack/issues/new)
 
 ## Active Development
 
