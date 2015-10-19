@@ -10,7 +10,6 @@ MANAGE_FILE=${MANAGE_FILE:-fakepath}
 bpwatch start collectstatic
 
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
-    set +eu
 
     echo "-----> Preparing static assets"
     # Check if collectstatic is configured properly.
@@ -31,8 +30,6 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
         echo "       $ heroku run python $MANAGE_FILE collectstatic --noinput"
     fi
     echo
-
-    set -eu
 fi
 
 bpwatch stop collectstatic
