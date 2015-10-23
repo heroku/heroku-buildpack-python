@@ -52,3 +52,14 @@ Runtime options include:
 - `pypy-5.0.1` (unsupported, experimental)
 
 Other [unsupported runtimes](https://github.com/heroku/heroku-buildpack-python/tree/master/builds/runtimes) are available as well. Use at your own risk. 
+
+
+Add custom environment variables
+--------------------------------
+
+You may need to add custom environment variables during the build. They can be specified with a `.heroku-env` file:
+
+    $ cat .heroku-env
+    PYTHONPATH=/app/.heroku/python/lib/python3.4/site-packages:/app/.heroku/miniconda/envs/condaenv/lib/python3.4/site-packages:$PYTHONPATH
+
+They will be exported before installing packages with pip, and before the Django Collectstatic runner.

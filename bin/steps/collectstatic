@@ -24,6 +24,8 @@ pip-grep -s requirements.txt django Django && DJANGO_INSTALLED=1
 
 bpwatch start collectstatic  # metrics collection
 
+setup-custom-heroku-env
+
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     set +e
 
