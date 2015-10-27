@@ -215,8 +215,18 @@ bpwatch stop post_compile
 # Store new artifacts in cache.
 bpwatch start dump_cache
 
-  rm -rf $CACHE_DIR/$CACHED_DIR
-  cp -R $CACHED_DIR $CACHE_DIR/
+  rm -rf $CACHE_DIR/.heroku/python
+  rm -rf $CACHE_DIR/.heroku/python-version
+  rm -rf $CACHE_DIR/.heroku/python-stack
+  rm -rf $CACHE_DIR/.heroku/vendor
+  rm -rf $CACHE_DIR/.heroku/venv
+
+  mkdir -p $CACHE_DIR/.heroku
+  cp -R .heroku/python $CACHE_DIR/.heroku
+  cp -R .heroku/python-version $CACHE_DIR/.heroku
+  cp -R .heroku/python-stack $CACHE_DIR/.heroku
+  cp -R .heroku/vendor $CACHE_DIR/.heroku &> /dev/null || true
+  cp -R .heroku/venv $CACHE_DIR/.heroku &> /dev/null || true
 
 bpwatch stop dump_cache
 
