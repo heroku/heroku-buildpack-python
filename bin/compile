@@ -19,9 +19,6 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-
-CACHED_DIR=".heroku"
-
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".heroku/venv"
 LEGACY_TRIGGER="lib/python2.7"
@@ -147,11 +144,11 @@ bpwatch stop clear_old_venvs
 bpwatch start restore_cache
     mkdir -p .heroku
 
-    cp -R $CACHE_DIR/$CACHED_DIR/python .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/$CACHED_DIR/python-stack .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/$CACHED_DIR/python-version .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/$CACHED_DIR/vendor .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/$CACHED_DIR/venv .heroku/ &> /dev/null || true
+    cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
+    cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
+    cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
+    cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
+    cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
 
 bpwatch stop restore_cache
 
