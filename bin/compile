@@ -221,7 +221,7 @@ bpwatch start dump_cache
   mkdir -p $CACHE_DIR/.heroku
   cp -R .heroku/python $CACHE_DIR/.heroku/
   cp -R .heroku/python-version $CACHE_DIR/.heroku/
-  cp -R .heroku/python-stack $CACHE_DIR/.heroku/
+  cp -R .heroku/python-stack $CACHE_DIR/.heroku/ &> /dev/null || true
   cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
   cp -R .heroku/venv $CACHE_DIR/.heroku/ &> /dev/null || true
 
