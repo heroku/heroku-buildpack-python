@@ -58,6 +58,9 @@ bpwatch start compile
 # Syntax sugar.
 source $BIN_DIR/utils
 
+# Import collection of warnings.
+source $BIN_DIR/warnings
+
 # Directory Hacks for path consistiency.
 APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
