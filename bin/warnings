@@ -8,7 +8,20 @@ pylibmc-missing() {
   fi
 }
 
+scipy-included() {
+  if grep -qi 'running setup.py install for scipy' "$WARNINGS_LOG"; then
+    puts-warn "Hello! It looks like you're trying to use scipy on Heroku."
+    puts-warn "Unfortunately, at this time, we do not directly support this library."
+    puts-warn "There is, however, a buildpack available that makes it possible to use it on Heroku."
+    puts-warn "You can learn more here:  https://devcenter.heroku.com/articles/python-c-deps"
+    puts-warn "Sorry for the inconvenience.   -- Much Love, Heroku."
+  fi
+}
+
+
+
 show-warnings() {
   pylibmc-missing
+  scipy-included
 }
 
