@@ -75,6 +75,19 @@ If you try to use a binary that is not currently supported, staging your app wil
 Staging failed: Buildpack compilation step failed
 ```
 
+## Testing
+Buildpacks use the [Machete](https://github.com/cloudfoundry/machete) framework for running integration tests.
+
+To test a buildpack, run the following command from the buildpack's directory:
+
+```
+BUNDLE_GEMFILE=cf.Gemfile bundle exec buildpack-build
+```
+
+More options can be found on Machete's [Github page.](https://github.com/cloudfoundry/machete)
+
+
+
 ## Contributing
 
 Find our guidelines [here](./CONTRIBUTING.md).
