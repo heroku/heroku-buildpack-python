@@ -10,6 +10,7 @@ set -e
 
 if [[ "$?" ]]; then
     echo "an error occurred."
+    show-warnings
     exit 1
 fi
 
