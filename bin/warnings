@@ -1,0 +1,10 @@
+shopt -s extglob
+
+pylibmc-missing() {
+  puts-warn "pylibmc is missing."
+}
+
+show-warnings() {
+  pylibmc-missing()
+
+}
