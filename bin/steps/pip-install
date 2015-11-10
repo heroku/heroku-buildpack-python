@@ -4,7 +4,15 @@ puts-step "Installing dependencies with pip"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
+set +e
+
 /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external --disable-pip-version-check --no-cache-dir | cleanup | log-output | indent
+
+if [[ "$?" ]]; then
+    echo "an error occurred."
+    exit
+fi
+set -e
 
 # Smart Requirements handling
 cp requirements.txt .heroku/python/requirements-declared.txt
