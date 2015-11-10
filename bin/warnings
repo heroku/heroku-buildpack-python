@@ -2,11 +2,9 @@ shopt -s extglob
 
 pylibmc-missing() {
   puts-warn "pylibmc is missing."
-  echo 'pylibmc is missing (echo).'
 }
 
 show-warnings() {
-  echo "hey there!"
   pylibmc-missing
 }
 
