@@ -1,7 +1,9 @@
 shopt -s extglob
 
 pylibmc-missing() {
-  puts-warn "pylibmc is missing."
+  if grep -qi 'fatal error: libmemcached/memcached.h: No such file or directory' "$WARNINGS_LOG"; then
+    puts-warn "pylibmc is missing."
+  fi
 }
 
 show-warnings() {
