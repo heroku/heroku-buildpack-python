@@ -102,6 +102,3 @@ sub-env() {
   )
 }
 
-# Import collection of warnings.
-source $BIN_DIR/warnings.
-
