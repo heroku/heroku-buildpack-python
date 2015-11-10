@@ -29,6 +29,9 @@ PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="7.1.2"
 SETUPTOOLS_VERSION="18.3.2"
 
+# Common Problem Warnings
+export WARNINGS_LOG=$(mktemp)
+
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
 LOGPLEX_KEY="t.b90d9d29-5388-4908-9737-b4576af1d4ce"
