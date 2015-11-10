@@ -5,7 +5,6 @@ pylibmc-missing() {
 }
 
 show-warnings() {
-  pylibmc-missing()
-
+  pylibmc-missing
 }
 
