@@ -4,6 +4,16 @@ describe 'CF Python Buildpack' do
   subject(:app) { Machete.deploy_app(app_name) }
   let(:browser) { Machete::Browser.new(app) }
 
+  context 'with an unsupported dependency' do
+    let(:app_name) { 'unsupported_version' }
+
+    it 'displays a nice error messages and gracefully fails' do
+      expect(app).to_not be_running
+      expect(app).to_not have_logged 'Downloaded ['
+      expect(app).to have_logged 'DEPENDENCY MISSING IN MANIFEST: python 99.99.99'
+    end
+  end
+
   context 'with cached buildpack dependencies', :cached do
     context 'app has dependencies' do
       context 'with Python 2' do
