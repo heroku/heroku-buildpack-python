@@ -1,3 +1,10 @@
+v1.5.2 Nov 16, 2015
+====================
+
+* Developers are given detailed, helpful instructions when they attempt
+  to stage an application whose dependency is not found in the manifest.
+  (https://www.pivotaltracker.com/story/show/107939104)
+
 v1.5.1 Sep 15, 2015
 ====================
 
