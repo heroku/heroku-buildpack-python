@@ -3,7 +3,7 @@
 
 This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](http://www.pip-installer.org/).
 
-The buildpack supports running Django and Flask apps.
+This buildpack supports running Django and Flask apps.
 
 
 Usage
