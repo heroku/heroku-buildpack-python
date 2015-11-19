@@ -56,6 +56,10 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 # Support Anvil Build_IDs
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
+
+if [ -e "$BUILD_DIR/.buildpacks" -a "$STACK" = "scalingo" ] ; then
+  STACK="cedar-14"
+fi
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitizing environment variables.
