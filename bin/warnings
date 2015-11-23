@@ -18,10 +18,21 @@ scipy-included() {
   fi
 }
 
+distribute-included() {
+  if grep -qi 'Running setup.py install for distribute' "$WARNINGS_LOG"; then
+    puts-warn "Hello! Your requirements.txt file contains the distribute package."
+    puts-warn "This library is automatically installed by Heroku and shouldn't be in"
+    puts-warn "Your requirements.txt file. This can cause unexpected behavior."
+    puts-warn "-- Much Love, Heroku."
+  fi
 
+
+
+}
 
 show-warnings() {
   pylibmc-missing
   scipy-included
+  distribute-included
 }
 
