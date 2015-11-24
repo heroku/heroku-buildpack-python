@@ -4,6 +4,8 @@ describe 'CF Python Buildpack' do
   subject(:app) { Machete.deploy_app(app_name) }
   let(:browser) { Machete::Browser.new(app) }
 
+  after { Machete::CF::DeleteApp.new.execute(app) }
+
   context 'with an unsupported dependency' do
     let(:app_name) { 'unsupported_version' }
 
