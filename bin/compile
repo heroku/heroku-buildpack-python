@@ -80,6 +80,9 @@ export BUILDPACK_PATH
 source $BUILDPACK_PATH/compile-extensions/lib/common
 # END CF Common
 
+# Multi buildpack compliment
+EXPORT_PATH="$BUILDPACK_PATH/export"
+
 # Directory Hacks for path consistiency.
 APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
@@ -212,14 +215,14 @@ sub-env $BIN_DIR/steps/collectstatic
 #
 
 # Set context environment variables.
-set-env PATH '$HOME/.scalingo/python/bin:$PATH'
-set-env PYTHONUNBUFFERED true
-set-env PYTHONHOME /app/.scalingo/python
-set-env LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LIBRARY_PATH'
-set-env LD_LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LD_LIBRARY_PATH'
-set-default-env LANG en_US.UTF-8
-set-default-env PYTHONHASHSEED random
-set-default-env PYTHONPATH /app/
+set-env PATH '$HOME/.scalingo/python/bin:$PATH' '$BUILD_DIR/.scalingo/python/bin:$PATH'
+set-env PYTHONUNBUFFERED true true
+set-env PYTHONHOME /app/.scalingo/python '$BUILD_DIR/.scalingo/python'
+set-env LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LIBRARY_PATH' '$BUILD_DIR/.scalingo/vendor/lib:$BUILD_DIR/.scalingo/python/lib:$LIBRARY_PATH'
+set-env LD_LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LD_LIBRARY_PATH' '$BUILD_DIR/.scalingo/vendor/lib:$BUILD_DIR/.scalingo/python/lib:$LD_LIBRARY_PATH'
+set-default-env LANG en_US.UTF-8 en_US.UTF-8
+set-default-env PYTHONHASHSEED random random
+set-default-env PYTHONPATH /app/ '$BUILD_DIR/'
 
 # Install sane-default script for WEB_CONCURRENCY environment variable.
 cp $ROOT_DIR/vendor/python.webconcurrency.sh $WEBCONCURRENCY_PROFILE_PATH

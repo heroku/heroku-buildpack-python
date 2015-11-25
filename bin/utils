@@ -26,13 +26,19 @@ puts-warn() {
   echo " !     $@"
 }
 
+set-export() {
+  echo "export $1=$2" >> $EXPORT_PATH
+}
+
 # Usage: $ set-env key value
 set-env() {
+  set-export "$1" "$3"
   echo "export $1=$2" >> $PROFILE_PATH
 }
 
 # Usage: $ set-default-env key value
 set-default-env() {
+  set-export "$1" "$3"
   echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
 }
 
