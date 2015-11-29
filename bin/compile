@@ -19,20 +19,15 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-
-CACHED_DIRS=".heroku"
-
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".heroku/venv"
 LEGACY_TRIGGER="lib/python2.7"
-PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
-WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
 
 DEFAULT_PYTHON_VERSION="python-2.7.10"
 DEFAULT_PYTHON_STACK="cedar"
 PYTHON_EXE="/app/.heroku/python/bin/python"
-PIP_VERSION="7.1.0"
-SETUPTOOLS_VERSION="18.1"
+PIP_VERSION="7.1.2"
+SETUPTOOLS_VERSION="18.3.2"
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
@@ -57,10 +52,6 @@ TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 bpwatch start compile
 
-
-# We'll need to send these statics to other scripts we `source`.
-export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
-
 # Syntax sugar.
 source $BIN_DIR/utils
 
@@ -83,7 +74,7 @@ if [[ ! "$DOCKER_BUILD" ]]; then
 
   # Copy Application code in.
   bpwatch start appdir_stage
-    deep-mv $BUILD_DIR $APP_DIR
+    deep-cp $BUILD_DIR $APP_DIR
   bpwatch stop appdir_stage
 fi
 
@@ -91,6 +82,13 @@ fi
 # Set new context.
 ORIG_BUILD_DIR=$BUILD_DIR
 BUILD_DIR=$APP_DIR
+
+# Set up outputs under new context
+PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
+WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
+
+# We'll need to send these statics to other scripts we `source`.
+export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 
 # Prepend proper path buildpack use.
 export PATH=$BUILD_DIR/.heroku/python/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH
@@ -144,9 +142,14 @@ bpwatch stop clear_old_venvs
 
 # Restore old artifacts from the cache.
 bpwatch start restore_cache
-  for dir in $CACHED_DIRS; do
-    cp -R $CACHE_DIR/$dir . &> /dev/null || true
-  done
+    mkdir -p .heroku
+
+    cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
+    cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
+    cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
+    cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
+    cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
+
 bpwatch stop restore_cache
 
 set +e
@@ -208,16 +211,27 @@ bpwatch stop post_compile
 
 # Store new artifacts in cache.
 bpwatch start dump_cache
-  for dir in $CACHED_DIRS; do
-    rm -rf $CACHE_DIR/$dir
-    cp -R $dir $CACHE_DIR/
-  done
+
+  rm -rf $CACHE_DIR/.heroku/python
+  rm -rf $CACHE_DIR/.heroku/python-version
+  rm -rf $CACHE_DIR/.heroku/python-stack
+  rm -rf $CACHE_DIR/.heroku/vendor
+  rm -rf $CACHE_DIR/.heroku/venv
+
+  mkdir -p $CACHE_DIR/.heroku
+  cp -R .heroku/python $CACHE_DIR/.heroku/
+  cp -R .heroku/python-version $CACHE_DIR/.heroku/
+  cp -R .heroku/python-stack $CACHE_DIR/.heroku/ &> /dev/null || true
+  cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
+  cp -R .heroku/venv $CACHE_DIR/.heroku/ &> /dev/null || true
+
 bpwatch stop dump_cache
 
 # ### Fin.
 if [[ ! "$DOCKER_BUILD" ]]; then
 
   bpwatch start appdir_commit
+    deep-rm $ORIG_BUILD_DIR
     deep-mv $BUILD_DIR $ORIG_BUILD_DIR
   bpwatch stop appdir_commit
 
