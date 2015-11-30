@@ -25,9 +25,6 @@ distribute-included() {
     puts-warn "Your requirements.txt file. This can cause unexpected behavior."
     puts-warn "-- Much Love, Heroku."
   fi
-
-
-
 }
 
 show-warnings() {
