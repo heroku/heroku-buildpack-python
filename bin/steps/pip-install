@@ -11,7 +11,7 @@ PIP_STATUS="$?"
 
 echo "$PIP_STATUS"
 
-if [[ $PIP_STATUS ]]; then
+if [[ ! $PIP_STATUS -eq 0 ]]; then
     echo "an error occurred."
     show-warnings
     exit 1
