@@ -6,8 +6,8 @@ puts-step "Installing dependencies with pip"
 
 set +e
 /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external --disable-pip-version-check --no-cache-dir | cleanup | log-output | indent
-set -e
 PIP_STATUS="$?"
+set -e
 
 echo "$PIP_STATUS"
 
