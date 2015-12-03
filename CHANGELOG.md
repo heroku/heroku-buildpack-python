@@ -1,7 +1,7 @@
 # Python Buildpack Changelog
 
 
-## v71 (2015-12-03)
+## v72 (2015-12-03)
 
 Added friendly warnings for common build failures.
 
