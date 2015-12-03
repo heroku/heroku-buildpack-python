@@ -15,7 +15,6 @@ if [[ ! $PIP_STATUS -eq 0 ]]; then
     exit 1
 fi
 
-exit 1
 
 # Smart Requirements handling
 cp requirements.txt .heroku/python/requirements-declared.txt
