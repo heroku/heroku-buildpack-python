@@ -9,10 +9,7 @@ set +e
 set -e
 PIP_STATUS="$?"
 
-echo "$PIP_STATUS"
-
 if [[ ! $PIP_STATUS -eq 0 ]]; then
-    echo "an error occurred."
     show-warnings
     exit 1
 fi
