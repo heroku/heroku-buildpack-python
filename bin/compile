@@ -42,7 +42,10 @@ DEFAULT_PYTHON_VERSION="python-2.7.10"
 DEFAULT_PYTHON_STACK="cedar"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="7.1.2"
-SETUPTOOLS_VERSION="18.3.2"
+SETUPTOOLS_VERSION="18.7.1"
+
+# Common Problem Warnings
+export WARNINGS_LOG=$(mktemp)
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
@@ -75,6 +78,9 @@ BUILDPACK_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 export BUILDPACK_PATH
 source $BUILDPACK_PATH/compile-extensions/lib/common
 # END CF Common
+#
+# Import collection of warnings.
+source $BIN_DIR/warnings
 
 # Directory Hacks for path consistiency.
 APP_DIR='/app'

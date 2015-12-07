@@ -4,17 +4,21 @@ puts-step "Installing dependencies with pip"
 [ ! ${FRESH_PYTHON:-} ] && bpwatch start pip_install
 [ ${FRESH_PYTHON:-} ] && bpwatch start pip_install_first
 
-if test -d $BUILD_DIR/vendor; then
-  /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external --no-index --find-links=file://$BUILD_DIR/vendor | cleanup | indent
+set +e
+/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external --disable-pip-version-check --no-cache-dir | cleanup | log-output | indent
+PIP_STATUS="${PIPESTATUS[0]}"
+set -e
 
-  cp requirements.txt .heroku/python/requirements-declared.txt
-  /app/.heroku/python/bin/pip freeze --find-links=file://$BUILD_DIR/vendor --disable-pip-version-check > .heroku/python/requirements-installed.txt
-else
-  /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external | cleanup | indent
-
-  cp requirements.txt .heroku/python/requirements-declared.txt
-  /app/.heroku/python/bin/pip freeze > .heroku/python/requirements-installed.txt
+if [[ ! $PIP_STATUS -eq 0 ]]; then
+    echo
+    show-warnings
+    exit 1
 fi
+
+
+# Smart Requirements handling
+cp requirements.txt .heroku/python/requirements-declared.txt
+/app/.heroku/python/bin/pip freeze > .heroku/python/requirements-installed.txt
 
 [ ! ${FRESH_PYTHON:-} ] && bpwatch stop pip_install
 [ ${FRESH_PYTHON:-} ] && bpwatch stop pip_install_first

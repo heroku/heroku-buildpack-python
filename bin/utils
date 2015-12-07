@@ -11,6 +11,16 @@ indent() {
   sed "s/^/       /"
 }
 
+# Log output for warning detection
+log-output() (
+  while read LINE;
+  do
+    echo "$LINE"
+    echo "$LINE" >> "$WARNINGS_LOG"
+  done
+
+)
+
 # Clean up pip output
 cleanup() {
   sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
@@ -91,3 +101,4 @@ sub-env() {
 
   )
 }
+
