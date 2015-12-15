@@ -26,17 +26,17 @@ dependencies:
     uri: https://pivotal-buildpacks.s3.amazonaws.com/python/binaries/cflinuxfs2/libffi.tar.gz
     md5: 83028a299b8ac323bda8a56c5c70d4cd
   - name: python
-    version: 2.7.9
-    cf_stacks:
-      - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-2.7.9-linux-x64.tgz
-    md5: 609c6aafd77020bd47c66db9ea844818
-  - name: python
     version: 2.7.10
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-2.7.10-linux-x64.tgz
     md5: b01359af0173f432fe42fe6d5042d493
+  - name: python
+    version: 2.7.11
+    cf_stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-2.7.11-linux-x64.tgz
+    md5: 6a93c298ce97d4eb6b3ec7039f9ae439
   - name: python
     version: 3.3.5
     cf_stacks:
@@ -67,6 +67,12 @@ dependencies:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.5.0-linux-x64.tgz
     md5: 147e08c5c5ed5bbcaabb6ba0e8625fcc
+  - name: python
+    version: 3.5.1
+    cf_stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.5.1-linux-x64.tgz
+    md5: a292283d7eec49d7ea5c60036f633740
 exclude_files:
   - .git/
   - .gitignore
