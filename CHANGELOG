@@ -1,3 +1,12 @@
+v1.5.3 Dec 17, 2015
+====================
+
+* Added 2.7.11 and 3.5.1, removed 2.7.9
+  (https://www.pivotaltracker.com/story/show/110082530)
+
+* Merged upstream with heroku 2a3962a
+  (https://www.pivotaltracker.com/story/show/109618254)
+
 v1.5.2 Nov 16, 2015
 ====================
 
