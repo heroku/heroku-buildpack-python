@@ -1,6 +1,10 @@
 # Python Buildpack Changelog
 
 
+## v72 (2015-12-07)
+
+Updated default Python to 2.7.11.
+
 ## v72 (2015-12-03)
 
 Added friendly warnings for common build failures.
