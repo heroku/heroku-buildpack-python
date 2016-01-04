@@ -1,5 +1,8 @@
 # Python Buildpack Changelog
 
+## v74 (2015-12-29)
+
+Added warnings for lack of Procfile.
 
 ## v72 (2015-12-07)
 

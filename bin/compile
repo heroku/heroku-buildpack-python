@@ -130,6 +130,12 @@ export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/ven
 # Switch to the repo's context.
 cd $BUILD_DIR
 
+# Warn for lack of Procfile.
+if [[ ! -f Procfile ]]; then
+  puts-warn 'Warning: Your application is missing a Procfile. This file tells Heroku how to run your application.'
+  puts-warn 'Learn more: https://devcenter.heroku.com/articles/procfile'
+fi
+
 # Experimental pre_compile hook.
 bpwatch start pre_compile
   source $BIN_DIR/steps/hooks/pre_compile
