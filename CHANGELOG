@@ -1,3 +1,14 @@
+v1.5.4 Jan 07, 2016
+====================
+
+* Added 3.4.4, removed 3.4.2
+  (https://www.pivotaltracker.com/story/show/111145834)
+
+* Revert to v1.5.2 of pip-install script to prevent issue where
+  pip contacts the internet in the cached buildpack
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/111018262)
+
+
 v1.5.3 Dec 17, 2015
 ====================
 
