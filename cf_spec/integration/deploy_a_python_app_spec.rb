@@ -36,7 +36,7 @@ describe 'CF Python Buildpack' do
         let(:app_name) { 'flask_web_app_python_3' }
 
         specify do
-          expect(app).to be_running(60)
+          expect(app).to be_running(120)
 
           browser.visit_path('/')
           expect(browser).to have_body('Hello, World!')
