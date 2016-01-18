@@ -28,7 +28,7 @@ describe 'CF Python Buildpack' do
           expect(browser).to have_body('Hello, World!')
           expect(app).to have_logged(/Downloaded \[file:\/\/.*\]/)
 
-          expect(app.host).not_to have_internet_traffic
+          expect(app).not_to have_internet_traffic
         end
       end
 
@@ -41,7 +41,7 @@ describe 'CF Python Buildpack' do
           browser.visit_path('/')
           expect(browser).to have_body('Hello, World!')
 
-          expect(app.host).not_to have_internet_traffic
+          expect(app).not_to have_internet_traffic
         end
       end
     end
@@ -56,8 +56,7 @@ describe 'CF Python Buildpack' do
 
       specify do
         expect(app).not_to be_running(0)
-        statement_appearances = log_file.readlines.join.scan 'Cloud Foundry does not support Pip Mercurial dependencies while in offline-mode. Vendor your dependencies if they do not work.'
-        expect(statement_appearances.count).to be 1
+        expect(app).to have_logged 'Cloud Foundry does not support Pip Mercurial dependencies while in offline-mode. Vendor your dependencies if they do not work.'
       end
     end
   end
