@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## master
+
+Updated pip to v8.0.2 (**incompatible with Python 3.2**).
+
 ## v74 (2015-12-29)
 
 Added warnings for lack of Procfile.
