@@ -5,7 +5,7 @@ puts-step "Installing dependencies with pip"
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
 set +e
-/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external --disable-pip-version-check --no-cache-dir | cleanup | log-output | indent
+/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir | cleanup | log-output | indent
 PIP_STATUS="${PIPESTATUS[0]}"
 set -e
 
