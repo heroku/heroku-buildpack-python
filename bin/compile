@@ -183,6 +183,9 @@ source $BIN_DIR/steps/pip-uninstall
 # Mercurial support.
 source $BIN_DIR/steps/mercurial
 
+# Python-ldap support.
+source $BIN_DIR/steps/python-ldap
+
 # Pylibmc support.
 source $BIN_DIR/steps/pylibmc
 
