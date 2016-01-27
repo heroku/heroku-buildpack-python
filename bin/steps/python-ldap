@@ -18,13 +18,13 @@ if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
 
     puts-step "Noticed python-ldap. Bootstrapping ldap."
 
-    GROFF_VERSION=${GROFF_VERSION:-1.21}
+    GROFF_VERSION=${GROFF_VERSION:-1.22.3}
     GROFF_URL=ftp://ftp.gnu.org/gnu/groff/groff-${GROFF_VERSION}.tar.gz
 
-    BERKLEY_DB_VERSION=${BERKLEY_DB_VERSION:-5.3.15}
+    BERKLEY_DB_VERSION=${BERKLEY_DB_VERSION:-5.3.28}
     BERKLEY_DB_URL=http://download.oracle.com/berkeley-db/db-${BERKLEY_DB_VERSION}.NC.tar.gz
 
-    OPENLDAP_VERSION=${OPENLDAP_VERSION:-2.4.40}
+    OPENLDAP_VERSION=${OPENLDAP_VERSION:-2.4.43}
     OPENLDAP_URL=http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-${OPENLDAP_VERSION}.tgz
 
     mkdir -p $CACHE_DIR/.python-ldap
