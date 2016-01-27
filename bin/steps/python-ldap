@@ -34,6 +34,31 @@ python-ldap-version() {
     echo $PYTHON_LDAP_VERSION
 }
 
+install-python-ldap() {
+    local OPENLDAP_BUILD_DIR=$1
+
+    echo "Installing python-ldap ..." | indent
+    local PYTHON_LDAP_VERSION=$(python-ldap-version)
+    tar -zxvf $CACHE_DIR/.python-ldap/python-ldap-${PYTHON_LDAP_VERSION}.tar.gz > /dev/null
+
+    cd python-ldap-${PYTHON_LDAP_VERSION}
+    sed "s,library_dirs = \(.*\),library_dirs = $OPENLDAP_BUILD_DIR/lib \1,g" setup.cfg > setup.cfg
+    sed "s,include_dirs = \(.*\),include_dirs = $OPENLDAP_BUILD_DIR/include \1,g" setup.cfg > setup.cfg
+
+    set +e
+    /app/.heroku/python/bin/pip install . --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir | cleanup | log-output | indent
+    PIP_STATUS="${PIPESTATUS[0]}"
+    set -e
+
+    cd - > /dev/null
+
+    if [[ ! $PIP_STATUS -eq 0 ]]; then
+        echo
+        show-warnings
+        exit 1
+    fi
+}
+
 # If python-ldap exists within requirements, use vendored cryptography.
 if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
 
@@ -120,15 +145,7 @@ if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
     cp -R $OPENLDAP_CACHE_DIR $OPENLDAP_BUILD_DIR
     echo "Open LDAP enabled." | indent
 
-    echo "Installing python-ldap ..." | indent
-    PYTHON_LDAP_VERSION=$(python-ldap-version)
-    tar -zxvf $CACHE_DIR/.python-ldap/python-ldap-${PYTHON_LDAP_VERSION}.tar.gz
-
-    cd python-ldap-${PYTHON_LDAP_VERSION}
-    sed "s,library_dirs = \(.*\),library_dirs = $OPENLDAP_BUILD_DIR/lib \1,g" setup.cfg > setup.cfg
-    sed "s,include_dirs = \(.*\),include_dirs = $OPENLDAP_BUILD_DIR/include \1,g" setup.cfg > setup.cfg
-    pip install .
-    cd -
+    install-python-ldap $OPENLDAP_BUILD_DIR
 fi
 
 bpwatch stop python_ldap
