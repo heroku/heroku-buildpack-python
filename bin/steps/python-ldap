@@ -20,17 +20,23 @@ if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
 
     GROFF_VERSION=${GROFF_VERSION:-1.22.3}
     GROFF_URL=ftp://ftp.gnu.org/gnu/groff/groff-${GROFF_VERSION}.tar.gz
+    GROFF_CACHE_DIR=${CACHE_DIR}/.python-ldap/lib-groff-${GROFF_VERSION}
+    GROFF_BUILD_DIR=${BUILD_DIR}/.python-ldap/lib-groff-${GROFF_VERSION}
 
     BERKLEY_DB_VERSION=${BERKLEY_DB_VERSION:-5.3.28}
     BERKLEY_DB_URL=http://download.oracle.com/berkeley-db/db-${BERKLEY_DB_VERSION}.NC.tar.gz
+    BERKLEY_CACHE_DIR=${CACHE_DIR}/.python-ldap/lib-berkleydb-${BERKLEY_DB_VERSION}
+    BERKLEY_BUILD_DIR=${BUILD_DIR}/.python-ldap/lib-berkleydb-${BERKLEY_DB_VERSION}
 
     OPENLDAP_VERSION=${OPENLDAP_VERSION:-2.4.43}
     OPENLDAP_URL=http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-${OPENLDAP_VERSION}.tgz
+    OPENLDAP_CACHE_DIR=${CACHE_DIR}/.python-ldap/lib-openldap-${OPENLDAP_VERSION}
+    OPENLDAP_BUILD_DIR=${BUILD_DIR}/.python-ldap/lib-openldap-${OPENLDAP_VERSION}
 
     mkdir -p $CACHE_DIR/.python-ldap
     mkdir -p $BUILD_DIR/.python-ldap
 
-    if [ ! -d $CACHE_DIR/.python-ldap/lib-groff ]; then
+    if [ ! -d $GROFF_CACHE_DIR ]; then
         echo "Downloading Groff ${GROFF_VERSION} ..." | indent
         curl -s -L -o groff.tar.gz $GROFF_URL
         echo "Unpacking ..." | indent
@@ -39,7 +45,7 @@ if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
         mv groff-${GROFF_VERSION} $CACHE_DIR/.python-ldap/groff
         echo "Configuring ..." | indent
         cd $CACHE_DIR/.python-ldap/groff
-        ./configure --prefix=$CACHE_DIR/.python-ldap/lib-groff > /dev/null
+        ./configure --prefix=$GROFF_CACHE_DIR > /dev/null
         echo "Compiling ..." | indent
         make PROCESSEDEXAMPLEFILES="" > /dev/null
         echo "Installing ..." | indent
@@ -47,11 +53,11 @@ if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
         cd - > /dev/null
     fi
 
-    cp -R $CACHE_DIR/.python-ldap/lib-groff $BUILD_DIR/.python-ldap/lib-groff
-    export PATH=${BUILD_DIR}/.python-ldap/lib-groff/bin:${PATH}
+    cp -R $GROFF_CACHE_DIR $GROFF_BUILD_DIR
+    export PATH=${GROFF_BUILD_DIR}/bin:${PATH}
     echo "Groff enabled." | indent
 
-    if [ ! -d $CACHE_DIR/.python-ldap/lib-berkleydb ]; then
+    if [ ! -d $BERKLEY_CACHE_DIR ]; then
         echo "Downloading BerkleyDB ${BERKLEY_DB_VERSION} ..." | indent
         curl -s -L -o berkleydb.tar.gz $BERKLEY_DB_URL
         echo "Unpacking ..." | indent
@@ -60,7 +66,7 @@ if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
         mv db-${BERKLEY_DB_VERSION}.NC $CACHE_DIR/.python-ldap/berkleydb
         echo "Configuring ..." | indent
         cd $CACHE_DIR/.python-ldap/berkleydb/build_unix
-        ../dist/configure --prefix=$CACHE_DIR/.python-ldap/lib-berkleydb > /dev/null
+        ../dist/configure --prefix=$BERKLEY_CACHE_DIR > /dev/null
         echo "Compiling ..." | indent
         make > /dev/null
         echo "Installing ..." | indent
@@ -68,11 +74,11 @@ if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
         cd - > /dev/null
     fi
 
-    cp -R $CACHE_DIR/.python-ldap/lib-berkleydb $BUILD_DIR/.python-ldap/lib-berkleydb
-    export LD_LIBRARY_PATH="$BUILD_DIR/.python-ldap/lib-berkleydb/lib:${LD_LIBRARY_PATH}"
+    cp -R $BERKLEY_CACHE_DIR $BERKLEY_BUILD_DIR
+    export LD_LIBRARY_PATH=${BERKLEY_BUILD_DIR}/lib:${LD_LIBRARY_PATH}
     echo "BerkleyDB enabled." | indent
 
-    if [ ! -d $CACHE_DIR/.python-ldap/lib-openldap ]; then
+    if [ ! -d $OPENLDAP_CACHE_DIR ]; then
         echo "Downloading Open LDAP ${OPENLDAP_VERSION} ..." | indent
         curl -s -L -o openldap.tgz $OPENLDAP_URL
         echo "Unpacking ..." | indent
@@ -81,7 +87,7 @@ if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
         mv openldap-${OPENLDAP_VERSION} $CACHE_DIR/.python-ldap/openldap
         echo "Configuring ..." | indent
         cd $CACHE_DIR/.python-ldap/openldap
-        LDFLAGS="-L$BUILD_DIR/.python-ldap/lib-berkleydb/lib ${LDFLAGS}" CPPFLAGS="-I$BUILD_DIR/.python-ldap/lib-berkleydb/include ${CPPFLAGS}" ./configure --enable-bdb --enable-crypt --with-tls=openssl --prefix=$CACHE_DIR/.python-ldap/lib-openldap > /dev/null
+        LDFLAGS="-L$BERKLEY_BUILD_DIR/lib ${LDFLAGS}" CPPFLAGS="-I$BERKLEY_BUILD_DIR/include ${CPPFLAGS}" ./configure --enable-bdb --enable-crypt --with-tls=openssl --prefix=$OPENLDAP_CACHE_DIR > /dev/null
         echo "Compiling ..." | indent
         make depend > /dev/null
         make > /dev/null
@@ -90,28 +96,28 @@ if (pip-grep -s requirements.txt python-ldap django-auth-ldap &> /dev/null) then
         cd - > /dev/null
     fi
 
-    cp -R $CACHE_DIR/.python-ldap/lib-openldap $BUILD_DIR/.python-ldap/lib-openldap
+    cp -R $OPENLDAP_CACHE_DIR $OPENLDAP_BUILD_DIR
     echo "Open LDAP enabled." | indent
 
     echo "Installing python-ldap ..." | indent
-    export PYTHON_LDAP_VERSION=""
+    PYTHON_LDAP_VERSION=""
     if cat requirements.txt | grep python-ldap ; then
-        export PYTHON_LDAP_VERSION=$(cat requirements.txt | grep python-ldap | awk -F '=' '{ print $3 }')
+        PYTHON_LDAP_VERSION=$(cat requirements.txt | grep python-ldap | awk -F '=' '{ print $3 }')
     fi
 
     mkdir tmpdir
     if [ -n "$PYTHON_LDAP_VERSION" ]; then
-        pip install -d tmpdir python-ldap==${PYTHON_LDAP_VERSION}
+        pip install --quiet --download tmpdir python-ldap==${PYTHON_LDAP_VERSION}
     else
-        pip install -d tmpdir python-ldap
+        pip install --quiet --download tmpdir python-ldap
         PYTHON_LDAP_VERSION=$(ls tmpdir | grep python-ldap | sed 's/python-ldap-\(.*\)\.tar\.gz/\1/g')
     fi
 
     cd tmpdir
     tar -zxvf python-ldap-${PYTHON_LDAP_VERSION}.tar.gz > /dev/null
     cd python-ldap-${PYTHON_LDAP_VERSION}
-    sed "s,library_dirs = \(.*\),library_dirs = $BUILD_DIR/.python-ldap/lib-openldap/lib \1,g" setup.cfg > setup.cfg
-    sed "s,include_dirs = \(.*\),include_dirs = $BUILD_DIR/.python-ldap/lib-openldap/include \1,g" setup.cfg > setup.cfg
+    sed "s,library_dirs = \(.*\),library_dirs = $OPENLDAP_BUILD_DIR/lib \1,g" setup.cfg > setup.cfg
+    sed "s,include_dirs = \(.*\),include_dirs = $OPENLDAP_BUILD_DIR/include \1,g" setup.cfg > setup.cfg
     pip install .
     cd ../..
     rm -rf tmpdir
