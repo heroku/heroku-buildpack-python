@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v75 (2016-01-29)
+
+Updated pip and Setuptools.
+
 ## v74 (2015-12-29)
 
 Added warnings for lack of Procfile.
