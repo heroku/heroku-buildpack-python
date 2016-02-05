@@ -88,6 +88,10 @@ sub-env() {
   WHITELIST=${2:-''}
   BLACKLIST=${3:-'^(GIT_DIR|PYTHONHOME|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
 
+  # Python-specific variables.
+  export PYHONHOME=$BUILD_DIR/.heroku/python
+  export PYTHONPATH=$BUILD_DIR/
+
   (
     if [ -d "$ENV_DIR" ]; then
       for e in $(ls $ENV_DIR); do
