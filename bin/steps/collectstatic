@@ -27,7 +27,7 @@ bpwatch start collectstatic  # metrics collection
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     set +e
 
-    echo "-----> Preparing static assets with 'collectstatic'."
+    echo "-----> Preparing static assets with 'collectstatic'"
 
     # Run collectstatic, cleanup some of the noisy output.
     python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
@@ -37,6 +37,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
 
     # Display a warning if collectstatic failed.
     [ $COLLECTSTATIC_STATUS -ne 0 ] && {
+        echo
         echo " !     Error while runnning '$ python $MANAGE_FILE collectstatic --noinput'."
         echo "       See traceback above for more details."
         echo "       More info: http://devcenter.heroku.com/articles/django-assets"
