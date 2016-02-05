@@ -31,9 +31,12 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
 
     # Run collectstatic, cleanup some of the noisy output.
     python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
+    COLLECTSTATIC_STATUS="${PIPESTATUS[0]}"
+
+    set -e
 
     # Display a warning if collectstatic failed.
-    [ $? -ne 0 ] && {
+    [ $COLLECTSTATIC_STATUS -ne 0 ] && {
         echo " !     Error while runnning '$ python $MANAGE_FILE collectstatic --noinput'."
         echo "       See traceback above for more details."
         echo "       More info: http://devcenter.heroku.com/articles/django-assets"
@@ -50,7 +53,6 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
         exit 1
     }
 
-    set -e
     echo
 fi
 
