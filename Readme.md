@@ -1,4 +1,4 @@
-# Heroku buildpack: Python
+# Heroku Buildpack: Python
 ![python-banner](https://cloud.githubusercontent.com/assets/51578/8914205/ecf2047c-346b-11e5-98c5-42547f9f4410.jpg)
 
 This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](http://www.pip-installer.org/).
@@ -42,7 +42,7 @@ Specify a Runtime
 You can also provide arbitrary releases Python with a `runtime.txt` file.
 
     $ cat runtime.txt
-    python-3.5.0
+    python-3.5.1
 
 Runtime options include:
 
