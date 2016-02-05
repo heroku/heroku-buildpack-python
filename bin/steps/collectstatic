@@ -20,7 +20,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
     if [ "$RUN_COLLECTSTATIC" ]; then
 
         echo "       Running collectstatic..."
-        python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
+        python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Post-processed/d;/^Copying/d;/^$/d;/^ /d' | indent
 
         [ $? -ne 0 ] && {
             echo " !     Error running 'manage.py collectstatic'. More info:"
