@@ -49,7 +49,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
             echo
             echo "****** Collectstatic environment variables:"
             echo
-            env
+            env | indent
         fi
 
         # Abort the build.
