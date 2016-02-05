@@ -6,30 +6,27 @@ MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' -printf '%d\t%P\n' | 
 MANAGE_FILE=${MANAGE_FILE:-fakepath}
 
 [ -f .heroku/collectstatic_disabled ] && DISABLE_COLLECTSTATIC=1
+pip-grep -s requirements.txt django Django && DJANGO_INSTALLED=1
 
 bpwatch start collectstatic
 
-if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
+if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     set +e
 
     echo "-----> Preparing static assets"
-    # Check if collectstatic is configured properly.
-    python $MANAGE_FILE collectstatic --dry-run --noinput &> /dev/null && RUN_COLLECTSTATIC=true
 
-    # Compile assets if collectstatic appears to be kosher.
-    if [ "$RUN_COLLECTSTATIC" ]; then
+    echo "       Running collectstatic..."
+    python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
 
-        echo "       Running collectstatic..."
-        python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
+    # Display a warning if collectstatic failed.
+    [ $? -ne 0 ] && {
+        echo " !     Error while runnning '$ python $MANAGE_FILE collectstatic --noinput'."
+        echo "       See traceback above for more details."
+        echo "       More info: http://devcenter.heroku.com/articles/django-assets"
+        exit 1
+    }
 
-        [ $? -ne 0 ] && {
-            echo " !     Error running 'manage.py collectstatic'. More info:"
-            echo "       http://devcenter.heroku.com/articles/django-assets"
-        }
-    else
-        echo "       Collectstatic configuration error. To debug, run:"
-        echo "       $ heroku run python $MANAGE_FILE collectstatic --noinput"
-    fi
+    set -e
     echo
 fi
 
