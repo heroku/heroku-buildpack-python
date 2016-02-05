@@ -13,7 +13,7 @@ bpwatch start collectstatic
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     set +e
 
-    echo "-----> Preparing static assets"
+    echo "-----> Preparing static assets with 'collectstatic'."
 
     echo "       Running collectstatic..."
     python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
