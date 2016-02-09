@@ -10,8 +10,6 @@ PIP_STATUS="${PIPESTATUS[0]}"
 set -e
 
 show-warnings
-echo '*** DEBUG ****'
-cat $WARNINGS_LOG
 
 if [[ ! $PIP_STATUS -eq 0 ]]; then
     exit 1
