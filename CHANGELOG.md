@@ -1,6 +1,6 @@
 # Python Buildpack Changelog
 
-## v76 (2016-01-30)
+## v76 (2016-02-08)
 
 Improved Django collectstatic support.
 
