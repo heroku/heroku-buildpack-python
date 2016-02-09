@@ -1,7 +1,7 @@
 shopt -s extglob
 
 old-platform() {
-  if grep -qi 'SNIMissingWarning' "$WARNINGS_LOG"; then
+  if grep -qi 'InsecurePlatformWarning' "$WARNINGS_LOG"; then
     puts-warn "Hello! It looks like your application is using an outdated version of Python."
     puts-warn "This caused the security warning you saw above during the 'pip install' step."
     puts-warn "We recommend '$DEFAULT_PYTHON_VERSION', which you can specify in a 'runtime.txt' file."
