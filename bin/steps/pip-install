@@ -9,6 +9,7 @@ set +e
 PIP_STATUS="${PIPESTATUS[0]}"
 set -e
 
+cat $WARNINGS_LOG > /dev/null
 show-warnings
 
 if [[ ! $PIP_STATUS -eq 0 ]]; then
