@@ -26,6 +26,11 @@ cleanup() {
   sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
 }
 
+# Buildpack Indented line.
+puts-line() {
+  echo "       $@"
+}
+
 # Buildpack Steps.
 puts-step() {
   echo "-----> $@"
@@ -34,6 +39,11 @@ puts-step() {
 # Buildpack Warnings.
 puts-warn() {
   echo " !     $@"
+}
+
+# Buildpack Commands.
+puts-cmd() {
+  echo "     $ $@"
 }
 
 # Usage: $ set-env key value
