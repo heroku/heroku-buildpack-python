@@ -1,5 +1,14 @@
 # Python Buildpack Changelog
 
+## v76 (2016-01-30)
+
+Improved Django collectstatic support.
+
+- `$ python manage.py collectstatic` will only be run if `Django` is present in `requirements.txt`.
+- If collectstatic fails, the build fails. Full traceback is provided.
+- `$DISABLE_COLLECTSTATIC`: skip collectstatic step completely (not new).
+- `$DEBUG_COLLECTSTATIC`: echo environment variables upon collectstatic failure.
+
 ## v75 (2016-01-29)
 
 Updated pip and Setuptools.
