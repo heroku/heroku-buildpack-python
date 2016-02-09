@@ -10,9 +10,6 @@ PIP_STATUS="${PIPESTATUS[0]}"
 set -e
 
 show-warnings
-echo
-echo
-cat $WARNINGS_LOG | indent
 
 if [[ ! $PIP_STATUS -eq 0 ]]; then
     exit 1
