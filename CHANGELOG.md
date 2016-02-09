@@ -8,6 +8,8 @@ Improved Django collectstatic support.
 - If collectstatic fails, the build fails. Full traceback is provided.
 - `$DISABLE_COLLECTSTATIC`: skip collectstatic step completely (not new).
 - `$DEBUG_COLLECTSTATIC`: echo environment variables upon collectstatic failure.
+- Updated build output style.
+- New warning for outdated Python (via pip `InsecurePlatform` warning).
 
 ## v75 (2016-01-29)
 
