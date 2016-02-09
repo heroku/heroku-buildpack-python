@@ -12,7 +12,14 @@ set -e
 show-warnings
 echo
 echo
+echo
+echo
 cat $WARNINGS_LOG | indent
+echo
+echo
+echo
+echo
+
 
 if [[ ! $PIP_STATUS -eq 0 ]]; then
     exit 1
