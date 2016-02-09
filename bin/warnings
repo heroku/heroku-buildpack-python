@@ -1,5 +1,14 @@
 shopt -s extglob
 
+old-platform() {
+  if grep -qi 'SNIMissingWarning' "$WARNINGS_LOG"; then
+    puts-warn "Hello! It looks like your application is using an outdated version of Python."
+    puts-warn "This caused the security warning you saw above during the 'pip install' step."
+    puts-warn "We recommend '$DEFAULT_PYTHON_VERSION', which you can specify in a 'runtime.txt' file."
+    puts-warn "  -- Much Love, Heroku."
+  fi
+}
+
 pylibmc-missing() {
   if grep -qi 'fatal error: libmemcached/memcached.h: No such file or directory' "$WARNINGS_LOG"; then
     puts-warn "Hello! There was a problem with your build related to libmemcache."
@@ -23,11 +32,12 @@ distribute-included() {
     puts-warn "Hello! Your requirements.txt file contains the distribute package."
     puts-warn "This library is automatically installed by Heroku and shouldn't be in"
     puts-warn "Your requirements.txt file. This can cause unexpected behavior."
-    puts-warn "-- Much Love, Heroku."
+    puts-warn "  -- Much Love, Heroku."
   fi
 }
 
 show-warnings() {
+  old-platform
   pylibmc-missing
   scipy-included
   distribute-included

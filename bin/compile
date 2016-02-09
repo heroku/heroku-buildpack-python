@@ -39,6 +39,7 @@ SETUPTOOLS_VERSION="19.6"
 
 # Common Problem Warnings
 export WARNINGS_LOG=$(mktemp)
+export DEFAULT_PYTHON_VERSION
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
