@@ -1,7 +1,9 @@
 shopt -s extglob
 
 old-platform() {
+  echo 'old platform'
   if grep -qi 'InsecurePlatformWarning' "$WARNINGS_LOG"; then
+    echo 'true'
     puts-warn "Hello! It looks like your application is using an outdated version of Python."
     puts-warn "This caused the security warning you saw above during the 'pip install' step."
     puts-warn "We recommend '$DEFAULT_PYTHON_VERSION', which you can specify in a 'runtime.txt' file."
@@ -37,6 +39,7 @@ distribute-included() {
 }
 
 show-warnings() {
+  echo "show warnings $WARNINGS_LOG"
   old-platform
   pylibmc-missing
   scipy-included
