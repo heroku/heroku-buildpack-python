@@ -46,9 +46,9 @@ You can also provide arbitrary releases Python with a `runtime.txt` file.
 
 Runtime options include:
 
-- python-2.7.11
-- python-3.5.1
-- pypy-4.0.1 (unsupported, experimental)
-- pypy3-2.4.0 (unsupported, experimental)
+- `python-2.7.11`
+- `python-3.5.1`
+- `pypy-4.0.1` (unsupported, experimental)
+- `pypy3-2.4.0` (unsupported, experimental)
 
 Other [unsupported runtimes](https://github.com/heroku/heroku-buildpack-python/tree/master/builds/runtimes) are available as well.
