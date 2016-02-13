@@ -19,8 +19,8 @@ Example usage:
     $ git push heroku master
     ...
     -----> Python app detected
-    -----> Installing runtime (python-2.7.11)
-    -----> Installing dependencies using pip
+    -----> Installing python-2.7.11
+         $ pip install -r requirements.txt
            Downloading/unpacking requests (from -r requirements.txt (line 1))
            Installing collected packages: requests
            Successfully installed requests
@@ -34,7 +34,7 @@ You can also add it to upcoming builds of an existing application:
 
 The buildpack will detect your app as Python if it has the file `requirements.txt` in the root.
 
-It will use Pip to install your dependencies, vendoring a copy of the Python runtime into your slug.
+It will use pip to install your dependencies, vendoring a copy of the Python runtime into your slug.
 
 Specify a Runtime
 -----------------
