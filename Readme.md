@@ -1,5 +1,5 @@
 # Heroku Buildpack: Python
-![python-banner](https://cloud.githubusercontent.com/assets/51578/8914205/ecf2047c-346b-11e5-98c5-42547f9f4410.jpg)
+![buildpack_python](https://cloud.githubusercontent.com/assets/51578/13116296/5f4058f0-d569-11e5-8129-bffd7be091e6.jpg)
 
 This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](http://www.pip-installer.org/).
 
