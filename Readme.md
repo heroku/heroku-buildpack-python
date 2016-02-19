@@ -1,11 +1,11 @@
 # Heroku Buildpack: Python
 ![buildpack_python](https://cloud.githubusercontent.com/assets/51578/13116296/5f4058f0-d569-11e5-8129-bffd7be091e6.jpg)
 
-This is the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python applications, powered by [pip](http://www.pip-installer.org/) and other excellent software.
+This is the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](http://www.pip-installer.org/) and other excellent software.
 
 Recommended web frameworks include **Django** and **Flask**. The recommended webserver is **Gunicorn**. There are no restrictions around what software can be used (as long as it's pip-installable). Web processes must bind to `$PORT`, and only the HTTP protocol is permitted for incoming connections.
 
-Some Python packages with obscure C dependencies (e.g scipy) are not compatible. 
+Some Python packages with obscure C dependencies (e.g. scipy) are not compatible. 
 
 See it in Action
 ----------------
