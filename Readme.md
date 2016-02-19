@@ -28,11 +28,13 @@ Deploying a Python application couldn't be easier:
     -----> Discovering process types
            Procfile declares types -> (none)
 
-You can also add it to upcoming builds of an existing application:
+A `requirements.txt` file must be present at the root of your application's repository.
+
+You can also specify the latest production relase of this buildpack for upcoming builds of an existing application:
 
     $ heroku buildpacks:set heroku/python
 
-A `requirements.txt` file must be found at the root of your application's repository.
+
 
 Specify a Python Runtime
 ------------------------
