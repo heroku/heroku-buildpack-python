@@ -14,7 +14,7 @@ Example usage:
     $ ls
     Procfile  requirements.txt  web.py
 
-    $ heroku create --buildpack heroku/python
+    $ heroku create --buildpack git://github.com/heroku/heroku-buildpack-python.git
 
     $ git push heroku master
     ...
@@ -30,7 +30,7 @@ Example usage:
 
 You can also add it to upcoming builds of an existing application:
 
-    $ heroku buildpacks:set git://github.com/heroku/heroku-buildpack-python.git
+    $ heroku buildpacks:set heroku/python
 
 The buildpack will detect your app as Python if it has the file `requirements.txt` in the root.
 
