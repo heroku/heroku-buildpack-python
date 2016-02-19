@@ -39,7 +39,7 @@ You can also specify the latest production relase of this buildpack for upcoming
 Specify a Python Runtime
 ------------------------
 
-You can also specify specific versions of the Python runtime with a `runtime.txt` file:
+Specific versions of the Python runtime can be specified with a `runtime.txt` file:
 
     $ cat runtime.txt
     python-3.5.1
