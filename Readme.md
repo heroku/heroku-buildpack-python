@@ -21,10 +21,11 @@ Example usage:
     -----> Python app detected
     -----> Installing python-2.7.11
          $ pip install -r requirements.txt
-           Downloading/unpacking requests (from -r requirements.txt (line 1))
+           Collecting requests (from -r requirements.txt (line 1))
+             Downloading requests-2.9.1-py2.py3-none-any.whl (501kB)
            Installing collected packages: requests
-           Successfully installed requests
-           Cleaning up...
+           Successfully installed requests-2.9.1
+           
     -----> Discovering process types
            Procfile declares types -> (none)
 
@@ -32,9 +33,7 @@ You can also add it to upcoming builds of an existing application:
 
     $ heroku buildpacks:set heroku/python
 
-The buildpack will detect your app as Python if it has the file `requirements.txt` in the root.
-
-It will use pip to install your dependencies, vendoring a copy of the Python runtime into your slug.
+A `requirements.txt` file must be found at the root of your application's repository.
 
 Specify a Runtime
 -----------------
