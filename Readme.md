@@ -50,4 +50,4 @@ Runtime options include:
 - `pypy-4.0.1` (unsupported, experimental)
 - `pypy3-2.4.0` (unsupported, experimental)
 
-Other [unsupported runtimes](https://github.com/heroku/heroku-buildpack-python/tree/master/builds/runtimes) are available as well.
+Other [unsupported runtimes](https://github.com/heroku/heroku-buildpack-python/tree/master/builds/runtimes) are available as well. Use at your own risk. 
