@@ -39,7 +39,7 @@ It will use pip to install your dependencies, vendoring a copy of the Python run
 Specify a Runtime
 -----------------
 
-You can also provide arbitrary releases Python with a `runtime.txt` file.
+You can also specify specific versions of the Python runtime with a `runtime.txt` file:
 
     $ cat runtime.txt
     python-3.5.1
