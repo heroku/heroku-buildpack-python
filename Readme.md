@@ -5,10 +5,10 @@ This is the official [Heroku buildpack](http://devcenter.heroku.com/articles/bui
 
 Recommended web frameworks include Django and Flask. Recommended webserver is Gunicorn. There are no restrictions around what software can be used (as long as it's pip-installable). Web processes must bind to `$PORT`, and only the HTTP protocol is permitted for incoming connections.
 
-Usage
------
+See it in Action
+----------------
 
-Example usage:
+Deploying a Python application couldn't be easier:
 
     $ ls
     Procfile  requirements.txt  web.py
@@ -34,8 +34,8 @@ You can also add it to upcoming builds of an existing application:
 
 A `requirements.txt` file must be found at the root of your application's repository.
 
-Specify a Runtime
------------------
+Specify a Python Runtime
+------------------------
 
 You can also specify specific versions of the Python runtime with a `runtime.txt` file:
 
