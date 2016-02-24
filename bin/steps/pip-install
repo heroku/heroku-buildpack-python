@@ -1,12 +1,11 @@
 # Install dependencies with Pip.
-puts-step "Installing dependencies with pip"
+puts-cmd "pip install -r requirements.txt"
 
 [ ! ${FRESH_PYTHON:-} ] && bpwatch start pip_install
 [ ${FRESH_PYTHON:-} ] && bpwatch start pip_install_first
 
 if test -d $BUILD_DIR/vendor; then
   /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --allow-all-external --no-index --find-links=file://$BUILD_DIR/vendor | cleanup | indent
-
   cp requirements.txt .heroku/python/requirements-declared.txt
   /app/.heroku/python/bin/pip freeze --find-links=file://$BUILD_DIR/vendor --disable-pip-version-check > .heroku/python/requirements-installed.txt
 else

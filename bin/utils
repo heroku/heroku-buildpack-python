@@ -11,19 +11,14 @@ indent() {
   sed "s/^/       /"
 }
 
-# Log output for warning detection
-log-output() (
-  while read LINE;
-  do
-    echo "$LINE"
-    echo "$LINE" >> "$WARNINGS_LOG"
-  done
-
-)
-
 # Clean up pip output
 cleanup() {
   sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
+}
+
+# Buildpack Indented line.
+puts-line() {
+  echo "       $@"
 }
 
 # Buildpack Steps.
@@ -34,6 +29,11 @@ puts-step() {
 # Buildpack Warnings.
 puts-warn() {
   echo " !     $@"
+}
+
+# Buildpack Commands.
+puts-cmd() {
+  echo "     $ $@"
 }
 
 # Usage: $ set-env key value
@@ -87,6 +87,10 @@ sub-env() {
 
   WHITELIST=${2:-''}
   BLACKLIST=${3:-'^(GIT_DIR|PYTHONHOME|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
+
+  # Python-specific variables.
+  export PYHONHOME=$BUILD_DIR/.heroku/python
+  export PYTHONPATH=$BUILD_DIR/
 
   (
     if [ -d "$ENV_DIR" ]; then
