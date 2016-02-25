@@ -32,7 +32,7 @@ VIRTUALENV_LOC=".heroku/venv"
 LEGACY_TRIGGER="lib/python2.7"
 
 DEFAULT_PYTHON_VERSION="python-2.7.11"
-DEFAULT_PYTHON_STACK="cedar"
+DEFAULT_PYTHON_STACK="cedar-14"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="8.0.2"
 SETUPTOOLS_VERSION="19.6"
@@ -147,7 +147,7 @@ fi
 if [ -f $CACHE_DIR/.heroku/python-stack ]; then
   CACHED_PYTHON_STACK=$(cat $CACHE_DIR/.heroku/python-stack)
 else
-  CACHED_PYTHON_STACK=$DEFAULT_PYTHON_STACK
+  CACHED_PYTHON_STACK=$STACK
 fi
 
 # If no runtime given, assume default version.
