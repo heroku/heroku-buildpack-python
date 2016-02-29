@@ -47,7 +47,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
         echo
         echo "          $ heroku config:set DISABLE_COLLECTSTATIC=1"
         echo
-        echo "       http://devcenter.heroku.com/articles/django-assets"
+        echo "       https://devcenter.heroku.com/articles/django-assets"
 
         # Additionally, dump out the environment, if debug mode is on.
         if [ "$DEBUG_COLLECTSTATIC" ]; then
