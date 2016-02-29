@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# The Heroku Python Buildpack. This script accepts paramaters for a build
+# The Heroku Python Buildpack. This script accepts parameters for a build
 # directory, a cache directory, and a directory for app environment variables.
 
-# Warning: there are a few hacks in this script to accomidate excellent builds
-# on Heroku. No gaurentee for external compatibility is made. However,
+# Warning: there are a few hacks in this script to accommodate excellent builds
+# on Heroku. No guarantee for external compatibility is made. However,
 # everything should work fine outside of the Heroku environment, if the
 # environment is setup correctly.
 
@@ -73,7 +73,7 @@ source $BIN_DIR/utils
 # Import collection of warnings.
 source $BIN_DIR/warnings
 
-# Directory Hacks for path consistiency.
+# Directory Hacks for path consistency.
 APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 

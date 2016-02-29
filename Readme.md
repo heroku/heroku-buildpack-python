@@ -1,7 +1,7 @@
 # Heroku Buildpack: Python
 ![buildpack_python](https://cloud.githubusercontent.com/assets/51578/13116296/5f4058f0-d569-11e5-8129-bffd7be091e6.jpg)
 
-This is the official [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](http://www.pip-installer.org/) and other excellent software.
+This is the official [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](https://pip.pypa.io/) and other excellent software.
 
 Recommended web frameworks include **Django** and **Flask**. The recommended webserver is **Gunicorn**. There are no restrictions around what software can be used (as long as it's pip-installable). Web processes must bind to `$PORT`, and only the HTTP protocol is permitted for incoming connections.
 
@@ -15,7 +15,7 @@ Deploying a Python application couldn't be easier:
     $ ls
     Procfile  requirements.txt  web.py
 
-    $ heroku create --buildpack git://github.com/heroku/heroku-buildpack-python.git
+    $ heroku create --buildpack heroku/python
 
     $ git push heroku master
     ...
@@ -32,10 +32,9 @@ Deploying a Python application couldn't be easier:
 
 A `requirements.txt` file must be present at the root of your application's repository.
 
-You can also specify the latest production relase of this buildpack for upcoming builds of an existing application:
+You can also specify the latest production release of this buildpack for upcoming builds of an existing application:
 
     $ heroku buildpacks:set heroku/python
-
 
 
 Specify a Python Runtime
