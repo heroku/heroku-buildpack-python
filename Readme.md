@@ -15,7 +15,7 @@ Deploying a Python application couldn't be easier:
     $ ls
     Procfile  requirements.txt  web.py
 
-    $ heroku create --buildpack git://github.com/heroku/heroku-buildpack-python.git
+    $ heroku create --buildpack heroku/python
 
     $ git push heroku master
     ...
