@@ -19,7 +19,7 @@ MANAGE_FILE=${MANAGE_FILE:-fakepath}
 # Legacy file-based support for $DISABLE_COLLECTSTATIC
 [ -f .heroku/collectstatic_disabled ] && DISABLE_COLLECTSTATIC=1
 
-# Ensure that Django is explicitily specified in requirments.txt
+# Ensure that Django is explicitly specified in requirements.txt
 pip-grep -s requirements.txt django Django && DJANGO_INSTALLED=1
 
 bpwatch start collectstatic  # metrics collection

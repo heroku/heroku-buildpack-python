@@ -32,10 +32,9 @@ Deploying a Python application couldn't be easier:
 
 A `requirements.txt` file must be present at the root of your application's repository.
 
-You can also specify the latest production relase of this buildpack for upcoming builds of an existing application:
+You can also specify the latest production release of this buildpack for upcoming builds of an existing application:
 
     $ heroku buildpacks:set heroku/python
-
 
 
 Specify a Python Runtime
