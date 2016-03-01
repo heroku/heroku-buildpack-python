@@ -82,6 +82,22 @@ deep-rm() {
   )
 }
 
+download-unpack() {
+  URL="$1"
+  FILENAME="${URL##*/}"
+  TARGET_DIR="$2"
+
+  TMP_DOWNLOAD_DIR=$(mktemp -d)
+  trap "rm -rf $TMP_DOWNLOAD_DIR" RETURN
+
+  WORKING_DIR="$PWD"
+  cd $TMP_DOWNLOAD_DIR
+
+  curl $URL --silent --fail --retry 5 --retry-max-time 15 -o $FILENAME || return 1
+
+  cd $WORKING_DIR
+  tar xzf $TMP_DOWNLOAD_DIR/$FILENAME -C $TARGET_DIR &> /dev/null
+}
 
 sub-env() {
 

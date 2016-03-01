@@ -29,10 +29,10 @@ if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
   else
     echo "-----> Bootstrapping gdal, geos, proj."
     mkdir -p .heroku/vendor
-    # Download and extract cryptography into target vendor directory.
-    curl $VENDORED_GDAL -s | tar zxv -C .heroku/vendor &> /dev/null
-    curl $VENDORED_GEOS -s | tar zxv -C .heroku/vendor &> /dev/null
-    curl $VENDORED_PROJ -s | tar zxv -C .heroku/vendor &> /dev/null
+    # Download, verify checksum and extract into the vendor directory.
+    download-unpack $VENDORED_GDAL .heroku/vendor
+    download-unpack $VENDORED_GEOS .heroku/vendor
+    download-unpack $VENDORED_PROJ .heroku/vendor
 
     export GDAL=$(pwd)/vendor
   fi
