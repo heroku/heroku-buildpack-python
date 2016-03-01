@@ -4,7 +4,7 @@
 # [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
 # detector.
 #
-# A [buildpack](http://devcenter.heroku.com/articles/buildpacks) is an
+# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
 # adapter between a Python application and Heroku's runtime.
 
 # ## Usage

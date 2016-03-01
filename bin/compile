@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# The Heroku Python Buildpack. This script accepts paramaters for a build
+# The Heroku Python Buildpack. This script accepts parameters for a build
 # directory, a cache directory, and a directory for app environment variables.
 
-# Warning: there are a few hacks in this script to accomidate excellent builds
-# on Heroku. No gaurentee for external compatibility is made. However,
+# Warning: there are a few hacks in this script to accommodate excellent builds
+# on Heroku. No guarantee for external compatibility is made. However,
 # everything should work fine outside of the Heroku environment, if the
 # environment is setup correctly.
 
@@ -47,7 +47,7 @@ VIRTUALENV_LOC=".heroku/venv"
 LEGACY_TRIGGER="lib/python2.7"
 
 DEFAULT_PYTHON_VERSION="python-2.7.11"
-DEFAULT_PYTHON_STACK="cedar"
+DEFAULT_PYTHON_STACK="cedar-14"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="8.0.2"
 SETUPTOOLS_VERSION="19.6"
@@ -94,7 +94,7 @@ source $BUILDPACK_PATH/compile-extensions/lib/common
 # Import collection of warnings.
 source $BIN_DIR/warnings
 
-# Directory Hacks for path consistiency.
+# Directory Hacks for path consistency.
 APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
@@ -168,7 +168,7 @@ fi
 if [ -f $CACHE_DIR/.heroku/python-stack ]; then
   CACHED_PYTHON_STACK=$(cat $CACHE_DIR/.heroku/python-stack)
 else
-  CACHED_PYTHON_STACK=$DEFAULT_PYTHON_STACK
+  CACHED_PYTHON_STACK=$STACK
 fi
 
 # If no runtime given, assume default version.
