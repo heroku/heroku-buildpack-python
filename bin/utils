@@ -95,6 +95,19 @@ download-unpack() {
 
   curl $URL --silent --fail --retry 5 --retry-max-time 15 -o $FILENAME || return 1
 
+  grep -s -e "  $FILENAME\$" $CHECKSUMS_FILE | sha256sum --check --strict > /dev/null 2>&1
+
+  # Both statuses have to be assigned in one command, or PIPESTATUS will be overwritten.
+  GREP_STATUS="${PIPESTATUS[0]}" SHASUM_STATUS="${PIPESTATUS[1]}"
+
+  if [[ $GREP_STATUS != 0 ]] ; then
+    # TODO: Make this fatal in the future, once we're confident no checksums are missing.
+    puts-warn "Skipping verification of $FILENAME - no known checksum found!"
+  elif [[ $SHASUM_STATUS != 0 ]] ; then
+    puts-warn "Downloaded file $FILENAME did not have the expected checksum. Aborting!"
+    exit 1
+  fi
+
   cd $WORKING_DIR
   tar xzf $TMP_DOWNLOAD_DIR/$FILENAME -C $TARGET_DIR &> /dev/null
 }
