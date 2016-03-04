@@ -22,7 +22,7 @@ source $BIN_DIR/utils
 bpwatch start gdal_install
 
 # If GDAL exists within requirements, use vendored gdal.
-if (pip-grep -s requirements.txt GDAL gdal &> /dev/null) then
+if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
 
   if [ -f ".heroku/vendor/bin/gdalserver" ]; then
     export GDAL=$(pwd)/vendor
