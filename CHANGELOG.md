@@ -12,6 +12,8 @@ Improved GDAL support.
 - The vendored GDAL library has been updated to 1.11.1.
 - GDAL bootstrapping now also installs the GEOS and Proj.4 libraries.
 
+Updated pip to 8.1.0.
+
 ## v77 (2016-02-10)
 
 Improvements to warnings and minor bugfix.
