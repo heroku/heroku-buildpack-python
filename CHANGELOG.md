@@ -1,5 +1,19 @@
 # Python Buildpack Changelog
 
+## Unreleased
+
+Added automatic configuration of Gunicorn's `FORWARDED_ALLOW_IPS` setting.
+
+Improved detection of libffi dependency when using bcrypt via `Django[bcrypt]`.
+
+Improved GDAL support.
+
+- GDAL dependency detection now checks for pygdal and is case-insensitive.
+- The vendored GDAL library has been updated to 1.11.1.
+- GDAL bootstrapping now also installs the GEOS and Proj.4 libraries.
+
+Updated pip to 8.1.0 and setuptools to 20.2.2.
+
 ## v77 (2016-02-10)
 
 Improvements to warnings and minor bugfix.
