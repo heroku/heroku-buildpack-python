@@ -1,6 +1,6 @@
 # Python Buildpack Changelog
 
-## Unreleased
+## v78 (2016-03-18)
 
 Added automatic configuration of Gunicorn's `FORWARDED_ALLOW_IPS` setting.
 
@@ -12,7 +12,7 @@ Improved GDAL support.
 - The vendored GDAL library has been updated to 1.11.1.
 - GDAL bootstrapping now also installs the GEOS and Proj.4 libraries.
 
-Updated pip to 8.1.0 and setuptools to 20.2.2.
+Updated pip to 8.1.1 and setuptools to 20.3.
 
 ## v77 (2016-02-10)
 
