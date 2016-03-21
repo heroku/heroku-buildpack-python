@@ -10,7 +10,7 @@ curl -L $SOURCE_TARBALL | tar xz
 mv Python-3.5.1 src
 cd src
 
-./configure --prefix=$OUT_PREFIX --with-ensurepip=no --enable-shared
+./configure --prefix=$OUT_PREFIX --with-ensurepip=no
 make
 make install
 
