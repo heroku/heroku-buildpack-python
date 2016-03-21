@@ -1,3 +1,8 @@
+v1.5.5 Mar 21, 2016
+====================
+
+* Increase the Python 3 timeout to 120 seconds.
+
 v1.5.4 Jan 07, 2016
 ====================
 
