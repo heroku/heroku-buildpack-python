@@ -49,6 +49,6 @@ Runtime options include:
 
 - `python-2.7.11`
 - `python-3.5.1`
-- `pypy-4.0.1` (unsupported, experimental)
+- `pypy-5.0.1` (unsupported, experimental)
 
 Other [unsupported runtimes](https://github.com/heroku/heroku-buildpack-python/tree/master/builds/runtimes) are available as well. Use at your own risk. 
