@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/cf-buildpacks/machete
-  revision: 9c17e9f342569ed50998dec1df7480d0e06ebf5f
-  tag: v0.0.34
-  specs:
-    machete (0.0.34)
-      httparty
-
-GIT
   remote: https://github.com/cloudfoundry/buildpack-packager
   revision: 77ef3ffd08f902c084da4653e5373fc26ee816ea
   tag: v2.2.7
@@ -15,6 +7,14 @@ GIT
       activesupport (~> 4.1.8)
       kwalify
       terminal-table (~> 1.4.5)
+
+GIT
+  remote: https://github.com/cloudfoundry/machete
+  revision: 8a5b6d0c1160f4c7c9e83c552ebb773f074723b9
+  tag: v0.0.37
+  specs:
+    machete (0.0.37)
+      httparty
 
 GEM
   remote: https://rubygems.org/
