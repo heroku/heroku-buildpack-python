@@ -33,7 +33,7 @@ LEGACY_TRIGGER="lib/python2.7"
 
 DEFAULT_PYTHON_VERSION="python-2.7.11"
 DEFAULT_PYTHON_STACK="cedar-14"
-PYTHON_EXE="/app/.heroku/python/bin/python"
+PYTHON_EXE="${APP_DIR:="/app"}/.heroku/python/bin/python"
 PIP_VERSION="8.1.1"
 SETUPTOOLS_VERSION="20.3"
 
@@ -112,11 +112,11 @@ export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 export PATH=$BUILD_DIR/.heroku/python/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH
 export PYTHONUNBUFFERED=1
 export LANG=en_US.UTF-8
-export C_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include:$C_INCLUDE_PATH
-export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include:$CPLUS_INCLUDE_PATH
-export LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH
-export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH
-export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH
+export C_INCLUDE_PATH=$APP_DIR/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:$APP_DIR/.heroku/python/include:$C_INCLUDE_PATH
+export CPLUS_INCLUDE_PATH=$APP_DIR/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:$APP_DIR/.heroku/python/include:$CPLUS_INCLUDE_PATH
+export LIBRARY_PATH=$APP_DIR/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:$APP_DIR/.heroku/python/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=$APP_DIR/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:$APP_DIR/.heroku/python/lib:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=$APP_DIR/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:$APP_DIR/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH
 
 # Switch to the repo's context.
 cd $BUILD_DIR
@@ -217,12 +217,12 @@ sub-env $BIN_DIR/steps/collectstatic
 # Create .profile script for application runtime environment variables.
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
-set-env PYTHONHOME /app/.heroku/python
-set-env LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH'
-set-env LD_LIBRARY_PATH '/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH'
+set-env PYTHONHOME $APP_DIR/.heroku/python
+set-env LIBRARY_PATH '$APP_DIR/.heroku/vendor/lib:$APP_DIR/.heroku/python/lib:$LIBRARY_PATH'
+set-env LD_LIBRARY_PATH '$APP_DIR/.heroku/vendor/lib:$APP_DIR/.heroku/python/lib:$LD_LIBRARY_PATH'
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
-set-default-env PYTHONPATH /app/
+set-default-env PYTHONPATH $APP_DIR/
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
