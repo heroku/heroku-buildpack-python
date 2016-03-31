@@ -1,0 +1,19 @@
+What version of Cloud Foundry are you using?
+
+
+What version of the buildpack you are using?
+
+
+If you were attempting to accomplish a task, what was it you were attempting to do?
+
+
+What did you expect to happen?
+
+
+What was the actual behavior?
+
+
+Please confirm where necessary:
+* [ ] I have included a log output 
+* [ ] My log includes an error message 
+* [ ] I have included steps for reproduction
