@@ -106,3 +106,12 @@ sub-env() {
   )
 }
 
+setup-custom-heroku-env() {
+  if [ -f .heroku-env ]; then
+    puts-step "Applying custom environment variables"
+    set -a
+    source .heroku-env
+    set +a
+  fi
+}
+
