@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe 'CF Python Buildpack' do
-  subject(:app) { Machete.deploy_app(app_name) }
-  let(:browser) { Machete::Browser.new(app) }
+  let(:browser)  { Machete::Browser.new(app) }
+  let(:app_name) { 'flask_web_app' }
+
+  subject(:app)  { Machete.deploy_app(app_name) }
 
   after { Machete::CF::DeleteApp.new.execute(app) }
 
@@ -14,6 +16,11 @@ describe 'CF Python Buildpack' do
       expect(app).to_not have_logged 'Downloaded ['
       expect(app).to have_logged 'DEPENDENCY MISSING IN MANIFEST: python 99.99.99'
     end
+  end
+
+  it "should not display the allow-all-external deprecation message" do
+    expect(app).to be_running
+    expect(app).to_not have_logged 'DEPRECATION: --allow-all-external has been deprecated and will be removed in the future'
   end
 
   context 'with cached buildpack dependencies', :cached do
