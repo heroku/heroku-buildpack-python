@@ -36,6 +36,12 @@ pip install --download vendor -r requirements.txt
 
 ```cf push``` uploads your vendored dependencies. The buildpack will install them directly from the `vendor/`.
 
+## HTTP Proxy Support
+
+If you need to use a proxy to download dependencies during staging, you can set
+the `http_proxy` and/or `https_proxy` environment variables. For more information, see
+the [Proxy Usage Docs](http://docs.cloudfoundry.org/buildpacks/proxy-usage.html).
+
 ## Building
 
 1. Make sure you have fetched submodules
