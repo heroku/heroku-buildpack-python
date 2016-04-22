@@ -207,6 +207,9 @@ sub-env $BIN_DIR/steps/geo-libs
 # GDAL support.
 source $BIN_DIR/steps/gdal
 
+# ortools support.
+source $BIN_DIR/steps/ortools
+
 # Install dependencies with Pip.
 source $BIN_DIR/steps/pip-install
 
@@ -267,4 +270,3 @@ if [[ ! "$DOCKER_BUILD" ]]; then
   bpwatch stop anvil_appdir_commit
   bpwatch stop compile
 fi
-

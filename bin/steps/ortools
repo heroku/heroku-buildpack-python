@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# Install Google's `or-tools` from with vendored setup.
+#
+# This package depends on native code and there are issues with PyPI and
+# `setup_tools` that prevent this package from being installed directly
+# with `pip`.
+#
+# This script is invoked by [`bin/compile`](/).
+
+bpwatch start ortools_install
+
+if (pip-grep -s requirements.txt ortools &> /dev/null) then
+  echo "-----> Installing or-tools"
+  (cd $ROOT_DIR/vendor/ortools ; python2.7 setup.py install --user &> /dev/null)
+fi
+
+bpwatch stop ortools_install
