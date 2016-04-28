@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """Usage:
-  pip-diff (--fresh | --stale) <reqfile1> <reqfile2>
+  pip-diff (--fresh | --stale) <reqfile1> <reqfile2> [--exclude <package>...]
   pip-diff (-h | --help)
 
 Options:
@@ -41,7 +41,7 @@ class Requirements(object):
                 self.requirements.append(requirement.req)
 
 
-    def diff(self, requirements, ignore_versions=False):
+    def diff(self, requirements, ignore_versions=False, excludes=None):
         r1 = self
         r2 = requirements
         results = {'fresh': [], 'stale': []}
@@ -55,7 +55,7 @@ class Requirements(object):
         for req in r2.requirements:
             r = req.project_name if ignore_versions else req
 
-            if r not in other_reqs:
+            if r not in other_reqs and r not in excludes:
                 results['fresh'].append(req)
 
         # Generate stale packages.
@@ -67,7 +67,7 @@ class Requirements(object):
         for req in r1.requirements:
             r = req.project_name if ignore_versions else req
 
-            if r not in other_reqs:
+            if r not in other_reqs and r not in excludes:
                 results['stale'].append(req)
 
         return results
@@ -76,9 +76,10 @@ class Requirements(object):
 
 
 
-def diff(r1, r2, include_fresh=False, include_stale=False):
+def diff(r1, r2, include_fresh=False, include_stale=False, excludes=None):
 
     include_versions = True if include_stale else False
+    excludes = excludes if len(excludes) else []
 
     try:
         r1 = Requirements(r1)
@@ -87,7 +88,7 @@ def diff(r1, r2, include_fresh=False, include_stale=False):
         print('There was a problem loading the given requirements files.')
         exit(os.EX_NOINPUT)
 
-    results = r1.diff(r2, ignore_versions=True)
+    results = r1.diff(r2, ignore_versions=True, excludes=excludes)
 
     if include_fresh:
         for line in results['fresh']:
@@ -106,7 +107,8 @@ def main():
         'r1': args['<reqfile1>'],
         'r2': args['<reqfile2>'],
         'include_fresh': args['--fresh'],
-        'include_stale': args['--stale']
+        'include_stale': args['--stale'],
+        'excludes': args['<package>']
     }
 
     diff(**kwargs)

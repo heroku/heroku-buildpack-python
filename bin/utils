@@ -16,6 +16,11 @@ cleanup() {
   sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
 }
 
+# Buildpack Indented line.
+puts-line() {
+  echo "       $@"
+}
+
 # Buildpack Steps.
 puts-step() {
   echo "-----> $@"
@@ -24,6 +29,11 @@ puts-step() {
 # Buildpack Warnings.
 puts-warn() {
   echo " !     $@"
+}
+
+# Buildpack Commands.
+puts-cmd() {
+  echo "     $ $@"
 }
 
 # Usage: $ set-env key value
@@ -36,7 +46,7 @@ set-default-env() {
   echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
 }
 
-# Usage: $ set-default-env key value
+# Usage: $ un-set-env key
 un-set-env() {
   echo "unset $1" >> $PROFILE_PATH
 }
@@ -78,6 +88,10 @@ sub-env() {
   WHITELIST=${2:-''}
   BLACKLIST=${3:-'^(GIT_DIR|PYTHONHOME|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
 
+  # Python-specific variables.
+  export PYHONHOME=$BUILD_DIR/.heroku/python
+  export PYTHONPATH=$BUILD_DIR/
+
   (
     if [ -d "$ENV_DIR" ]; then
       for e in $(ls $ENV_DIR); do
@@ -91,3 +105,4 @@ sub-env() {
 
   )
 }
+
