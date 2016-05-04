@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# Cloud Foundry Python Conda Buildpack
+# Copyright (c) 2014-2015 the original author or authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+echo "-----> Starting compile step..."
+BUILD_DIR=$1
+CACHE=$2
+
+BASH=$(which bash)
+WGET=$(which wget)
+CONDA_HOME="$1/.conda"
+CONDA_BIN="$CONDA_HOME/bin"
+RUNTIME="$BUILD_DIR/runtime.txt"
+
+# Get the runtime version and download appropriate Miniconda
+if [ -e $RUNTIME ]; then
+    PYTHON_VERSION=$(cut -d- -f2 $RUNTIME)
+    if [ ${PYTHON_VERSION:0:1} -eq 3 ]; then
+        PYTHON_MAJOR_VERSION=3
+    else
+        PYTHON_MAJOR_VERSION=""
+    fi
+    MINICONDA_FILE="Miniconda$PYTHON_MAJOR_VERSION-latest-Linux-x86_64.sh"
+else
+    MINICONDA_FILE="Miniconda-latest-Linux-x86_64.sh"
+fi
+
+MINICONDA_URI="http://repo.continuum.io/miniconda/$MINICONDA_FILE"
+MINICONDA_CACHE="$CACHE/$MINICONDA_FILE"
+
+PROFILE_PATH="$BUILD_DIR/.profile.d/conda.sh"
+
+echo "-----> Preparing Python Environment..."
+if [ ! -e $MINICONDA_CACHE ] ; then
+    echo "-----> Downloading Miniconda..."
+    if [ ! -d $CACHE ]; then mkdir $CACHE; fi
+    $WGET -q -O $MINICONDA_CACHE $MINICONDA_URI
+    chmod +x $MINICONDA_CACHE
+fi
+if [ -e $CONDA_HOME ]; then rm -rf $CONDA_HOME; fi
+# Install miniconda
+$MINICONDA_CACHE -b -p $CONDA_HOME #&> /dev/null
+
+echo "-----> Installing Dependencies..."
+$CONDA_BIN/conda update --yes --quiet conda
+$CONDA_BIN/conda install --yes --quiet pip
+
+# Default Conda env is root
+CONDA_ENV="root"
+
+# Install application dependencies
+echo "-----> Installing conda environment from environment.yml..."
+$CONDA_BIN/conda env update -n root -f "$BUILD_DIR/environment.yml"
+
+$CONDA_BIN/conda clean -pt
+
+#
+echo "-----> Fixing paths..."
+grep -rlI $BUILD_DIR $BUILD_DIR | xargs sed -i.bak "s|$BUILD_DIR|/home/vcap/app|g"
+#
+
+# Add Conda path to profile
+mkdir -p $(dirname $PROFILE_PATH)
+echo "export PATH=$HOME/app/.conda/bin:\$PATH" >> $PROFILE_PATH
+
+if test -f $BUILD_DIR/runtime.txt && grep 'python=' $BUILD_DIR/environment.yml; then
+    echo "WARNING: you have specified the version of Python runtime both in 'runtime.txt and 'environment.yml'. You should remove one of the two versions"
+fi
+
+echo "-----> Finished compile step"

@@ -27,6 +27,13 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+# Use microconda if environment.yml exists and exit
+if [ -f $BUILD_DIR/environment.yml ]; then
+  echo "----------------- USING CONDA BUILDPACK -----------------"
+  $BIN_DIR/steps/conda-install $BUILD_DIR $CACHE_DIR
+  exit 0
+fi
+
 $ROOT_DIR/compile-extensions/bin/check_stack_support
 
 # The ROOT_DIR is read only so we can't install dependencies in it
@@ -97,6 +104,7 @@ source $BIN_DIR/warnings
 # Directory Hacks for path consistency.
 APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
+
 
 # Skip these steps for Docker.
 if [[ ! "$DOCKER_BUILD" ]]; then

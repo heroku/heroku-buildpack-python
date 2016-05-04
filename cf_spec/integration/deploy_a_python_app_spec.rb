@@ -108,5 +108,59 @@ describe 'CF Python Buildpack' do
         expect(app).to use_proxy_during_staging
       end
     end
+
+    context 'an app that uses miniconda and python 2' do
+      let(:app_name) { 'miniconda_simple_app_python_2' }
+
+      specify do
+        expect(app).to be_running(120)
+
+        browser.visit_path('/')
+        expect(browser).to have_body('numpy: 1.10.4')
+        expect(browser).to have_body('scipy: 0.17.0')
+        expect(browser).to have_body('sklearn: 0.17.1')
+        expect(browser).to have_body('pandas: 0.18.0')
+        expect(browser).to have_body('python-version2')
+      end
+
+      it "uses a proxy during staging if present" do
+        expect(app).oto use_proxy_during_staging
+      end
+    end
+
+    context 'an app that uses miniconda and python 3' do
+      let(:app_name) { 'miniconda_simple_app_python_3' }
+
+      specify do
+        expect(app).to be_running(120)
+
+        browser.visit_path('/')
+        expect(browser).to have_body('numpy: 1.10.4')
+        expect(browser).to have_body('scipy: 0.17.0')
+        expect(browser).to have_body('sklearn: 0.17.1')
+        expect(browser).to have_body('pandas: 0.18.0')
+        expect(browser).to have_body('python-version3')
+      end
+
+      it "uses a proxy during staging if present" do
+        expect(app).to use_proxy_during_staging
+      end
+    end
+
+    context 'an app that uses miniconda and specifies python 2 in runtime.txt but python3 in the environment.yml' do
+      let(:app_name) { 'miniconda_simple_app_python_2_3' }
+
+      specify do
+        expect(app).to be_running(120)
+
+        browser.visit_path('/')
+        expect(browser).to have_body('python-version3')
+        expect(app).to have_logged "WARNING: you have specified the version of Python runtime both in 'runtime.txt' and 'environment.yml'. You should remove one of the two versions"
+      end
+
+      it "uses a proxy during staging if present" do
+        expect(app).to use_proxy_during_staging
+      end
+    end
   end
 end

@@ -16,7 +16,7 @@ BUILD_DIR=$1
 BP=$(dirname $(dirname $0))
 
 # Exit early if app is clearly not Python.
-if [ ! -f $BUILD_DIR/requirements.txt ] && [ ! -f $BUILD_DIR/setup.py ]; then
+if [ ! -f $BUILD_DIR/requirements.txt ] && [ ! -f $BUILD_DIR/setup.py ] && [ ! -f $BUILD_DIR/environment.yml ]; then
   exit 1
 fi
 
