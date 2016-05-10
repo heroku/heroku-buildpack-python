@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This script serves as the Pylibmc build step of the
+# This script serves as the Cryptography build step of the
 # [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
 # compiler.
 #
