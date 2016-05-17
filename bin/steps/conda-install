@@ -77,7 +77,7 @@ mkdir -p $(dirname $PROFILE_PATH)
 echo "export PATH=$HOME/app/.conda/bin:\$PATH" >> $PROFILE_PATH
 
 if test -f $BUILD_DIR/runtime.txt && grep 'python=' $BUILD_DIR/environment.yml; then
-    echo "WARNING: you have specified the version of Python runtime both in 'runtime.txt and 'environment.yml'. You should remove one of the two versions"
+    echo "WARNING: you have specified the version of Python runtime both in 'runtime.txt' and 'environment.yml'. You should remove one of the two versions"
 fi
 
 echo "-----> Finished compile step"

@@ -124,7 +124,7 @@ describe 'CF Python Buildpack' do
       end
 
       it "uses a proxy during staging if present" do
-        expect(app).oto use_proxy_during_staging
+        expect(app).to use_proxy_during_staging
       end
     end
 
