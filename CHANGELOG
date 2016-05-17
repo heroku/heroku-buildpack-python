@@ -1,3 +1,10 @@
+v1.5.6 May 17, 2016
+====================
+
+* Allow the buildpack use miniconda when `environment.yml` is present
+  and there is internet connectivity.
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/118752873)
+
 v1.5.5 Mar 21, 2016
 ====================
 
