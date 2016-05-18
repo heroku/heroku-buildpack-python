@@ -1,5 +1,5 @@
 # Install dependencies with Pip.
-puts-cmd "pip install -r requirements.txt"
+puts-cmd "pip install -Ur requirements.txt"
 
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
