@@ -23,6 +23,8 @@ BASH=$(which bash)
 WGET=$(which wget)
 CONDA_HOME="$1/.conda"
 CONDA_BIN="$CONDA_HOME/bin"
+CONDA_ENVS="$CONDA_HOME/envs"
+CONDA_ENVS_CACHE="$CACHE/envs"
 RUNTIME="$BUILD_DIR/runtime.txt"
 
 # Get the runtime version and download appropriate Miniconda
@@ -54,27 +56,34 @@ if [ -e $CONDA_HOME ]; then rm -rf $CONDA_HOME; fi
 # Install miniconda
 $MINICONDA_CACHE -b -p $CONDA_HOME #&> /dev/null
 
+if [ -e $CONDA_ENVS_CACHE ] ; then
+    echo "-----> Using dependency cache at $CONDA_ENVS_CACHE"
+    cp -R $CONDA_ENVS_CACHE/* $CONDA_ENVS
+else
+    mkdir -p $CONDA_ENVS_CACHE
+fi
+
 echo "-----> Installing Dependencies..."
 $CONDA_BIN/conda update --yes --quiet conda
 $CONDA_BIN/conda install --yes --quiet pip
 
-# Default Conda env is root
-CONDA_ENV="root"
+CONDA_ENV="dep_env"
 
 # Install application dependencies
 echo "-----> Installing conda environment from environment.yml..."
-$CONDA_BIN/conda env update -n root -f "$BUILD_DIR/environment.yml"
-
+$CONDA_BIN/conda env update  -n dep_env -f "$BUILD_DIR/environment.yml"
 $CONDA_BIN/conda clean -pt
 
-#
+echo "-----> Caching dependencies to $CONDA_ENVS_CACHE"
+cp -R $CONDA_ENVS/* $CONDA_ENVS_CACHE
+
 echo "-----> Fixing paths..."
 grep -rlI $BUILD_DIR $BUILD_DIR | xargs sed -i.bak "s|$BUILD_DIR|/home/vcap/app|g"
-#
 
 # Add Conda path to profile
 mkdir -p $(dirname $PROFILE_PATH)
 echo "export PATH=$HOME/app/.conda/bin:\$PATH" >> $PROFILE_PATH
+echo "source activate dep_env" >> $PROFILE_PATH
 
 if test -f $BUILD_DIR/runtime.txt && grep 'python=' $BUILD_DIR/environment.yml; then
     echo "WARNING: you have specified the version of Python runtime both in 'runtime.txt' and 'environment.yml'. You should remove one of the two versions"

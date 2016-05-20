@@ -8,6 +8,25 @@ describe 'CF Python Buildpack' do
 
   after { Machete::CF::DeleteApp.new.execute(app) }
 
+  def create_environment_yml(app_name,contents = nil)
+    filename = File.join(File.dirname(__FILE__), '..', 'fixtures', app_name, 'environment.yml')
+    unless contents
+      contents = <<HERE
+name: pydata_test
+dependencies:
+- pip
+- pytest
+- flask
+- nose
+- numpy=1.10.4
+- scipy=0.17.0
+- scikit-learn=0.17.1
+- pandas=0.18.0
+HERE
+    end
+    File.open(filename, 'w') { |file| file.write(contents) }
+  end
+
   context 'with an unsupported dependency' do
     let(:app_name) { 'unsupported_version' }
 
@@ -75,7 +94,6 @@ describe 'CF Python Buildpack' do
 
         specify do
           expect(app).to be_running(60)
-
           browser.visit_path('/')
           expect(browser).to have_body('Hello, World!')
           expect(app).to have_logged(/Downloaded \[https:\/\/.*\]/)
@@ -130,20 +148,51 @@ describe 'CF Python Buildpack' do
 
     context 'an app that uses miniconda and python 3' do
       let(:app_name) { 'miniconda_simple_app_python_3' }
+      before(:each) {create_environment_yml app_name}
+      after(:each) {create_environment_yml app_name}
 
-      specify do
-        expect(app).to be_running(120)
+      describe 'keeping track of environment.yml' do
+        specify do
+          expect(app).to be_running(120)
 
-        browser.visit_path('/')
-        expect(browser).to have_body('numpy: 1.10.4')
-        expect(browser).to have_body('scipy: 0.17.0')
-        expect(browser).to have_body('sklearn: 0.17.1')
-        expect(browser).to have_body('pandas: 0.18.0')
-        expect(browser).to have_body('python-version3')
-      end
+          browser.visit_path('/')
+          expect(browser).to have_body('numpy: 1.10.4')
+          expect(browser).to have_body('scipy: 0.17.0')
+          expect(browser).to have_body('sklearn: 0.17.1')
+          expect(browser).to have_body('pandas: 0.18.0')
+          expect(browser).to have_body('python-version3')
+          expect(app).to have_logged("[      COMPLETE      ]|###################")
+        end
 
-      it "uses a proxy during staging if present" do
-        expect(app).to use_proxy_during_staging
+        it "doesn't re-download unchanged dependencies" do
+          Machete.push(app)
+          expect(app).to be_running(120)
+          expect(app).to have_logged("All requested packages already installed.")
+        end
+
+        it "it updates dependencies if environment.yml changes" do
+          contents = <<HERE
+name: pydata_test
+dependencies:
+- pip
+- pytest
+- flask
+- nose
+- numpy=1.11.0
+- scikit-learn=0.17.1
+- pandas=0.18.0
+HERE
+          create_environment_yml app_name, contents
+          Machete.push(app)
+          expect(app).to be_running(120)
+
+          browser.visit_path('/')
+          expect(browser).to have_body('numpy: 1.11.0')
+        end
+
+        it "uses a proxy during staging if present" do
+          expect(app).to use_proxy_during_staging
+        end
       end
     end
 
