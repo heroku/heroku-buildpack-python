@@ -1,6 +1,7 @@
 # Install dependencies with Pip.
 puts-cmd "pip install --upgrade pip"
 puts-cmd "pip install -r requirements.txt"
+puts-cmd "bower install"
 
 
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
