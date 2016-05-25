@@ -27,7 +27,7 @@ bpwatch start collectstatic  # metrics collection
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     set +e
 
-    puts-cmd "python $MANAGE_FILE collectstatic --noinput"
+    puts-cmd "python $MANAGE_FILE collectstatic --no-input --no-post-process"
 
     # Run collectstatic, cleanup some of the noisy output.
     python $MANAGE_FILE collectstatic --noinput --traceback 2>&1 | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
