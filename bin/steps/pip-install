@@ -4,12 +4,12 @@ puts-cmd "pip install -r requirements.txt"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
-# if we have an SSL client cert passed in the env var $DEVPI_CLIENT_CERT
+# if we have an SSL client cert passed in the env var $CLIENT_CERT
 # then dump to disk so that `pip install` can use it when contacting the devpi
 # server
-if [[ -f "${ENV_DIR}/DEVPI_CLIENT_CERT" ]] ; then
+if [[ -f "${ENV_DIR}/CLIENT_CERT" ]] ; then
     puts-cmd "using DevPI client side SSL cert ..."
-    CLIENT_CERT="--client-cert=${ENV_DIR}/DEVPI_CLIENT_CERT"
+    CLIENT_CERT="--client-cert=${ENV_DIR}/CLIENT_CERT"
 fi
 
 
