@@ -92,17 +92,14 @@ sub-env() {
   export PYHONHOME=$BUILD_DIR/.heroku/python
   export PYTHONPATH=$BUILD_DIR/
 
-  (
-    if [ -d "$ENV_DIR" ]; then
-      for e in $(ls $ENV_DIR); do
-        echo "$e" | grep -E "$WHITELIST" | grep -qvE "$BLACKLIST" &&
-        export "$e=$(cat $ENV_DIR/$e)"
-        :
-      done
-    fi
-
+  if [ -d "$1" ]; then
+    for e in $(ls $1); do
+      echo "$e" | grep -E "$WHITELIST" | grep -qvE "$BLACKLIST" &&
+      export "$e=$(cat $1/$e)"
+      :
+    done
+  else
     $1
-
-  )
+  fi
 }
 
