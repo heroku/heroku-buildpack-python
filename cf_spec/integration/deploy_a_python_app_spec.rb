@@ -148,7 +148,7 @@ HERE
 
     context 'an app that uses miniconda and python 3' do
       let(:app_name) { 'miniconda_simple_app_python_3' }
-      before(:each) {create_environment_yml app_name}
+      before(:each) { create_environment_yml app_name }
       after(:each) {create_environment_yml app_name}
 
       describe 'keeping track of environment.yml' do
@@ -161,13 +161,11 @@ HERE
           expect(browser).to have_body('sklearn: 0.17.1')
           expect(browser).to have_body('pandas: 0.18.0')
           expect(browser).to have_body('python-version3')
-          expect(app).to have_logged("[      COMPLETE      ]|###################")
         end
 
         it "doesn't re-download unchanged dependencies" do
           Machete.push(app)
           expect(app).to be_running(120)
-          expect(app).to have_logged("Cache location: /tmp/app/.conda/pkgs")
           expect(app).to have_logged("Using dependency cache")
         end
 
