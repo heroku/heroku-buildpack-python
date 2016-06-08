@@ -167,7 +167,8 @@ HERE
         it "doesn't re-download unchanged dependencies" do
           Machete.push(app)
           expect(app).to be_running(120)
-          expect(app).to have_logged("All requested packages already installed.")
+          expect(app).to have_logged("Cache location: /tmp/app/.conda/pkgs")
+          expect(app).to have_logged("Using dependency cache")
         end
 
         it "it updates dependencies if environment.yml changes" do
