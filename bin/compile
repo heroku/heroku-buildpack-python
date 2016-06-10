@@ -31,6 +31,7 @@ ENV_DIR=$3
 VIRTUALENV_LOC=".heroku/venv"
 LEGACY_TRIGGER="lib/python2.7"
 
+CHECKSUMS_FILE="$ROOT_DIR/builds/checksums/$STACK.txt"
 DEFAULT_PYTHON_VERSION="python-2.7.11"
 DEFAULT_PYTHON_STACK="cedar-14"
 PYTHON_EXE="/app/.heroku/python/bin/python"

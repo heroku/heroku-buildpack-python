@@ -27,8 +27,8 @@ if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
   else
     echo "-----> Noticed GDAL. Bootstrapping gdal."
     mkdir -p .heroku/vendor
-    # Download and extract cryptography into target vendor directory.
-    curl $VENDORED_GDAL -s | tar zxv -C .heroku/vendor &> /dev/null
+    # Download GDAL, verify checksum and extract into the vendor directory.
+    download-unpack $VENDORED_GDAL .heroku/vendor
 
     export GDAL=$(pwd)/vendor
   fi
