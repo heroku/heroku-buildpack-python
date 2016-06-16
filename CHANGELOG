@@ -1,3 +1,9 @@
+v1.5.7 Jun 16, 2016
+====================
+
+* Cache dependencies when using miniconda and environment.yml doesn't change
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/119822023)
+
 v1.5.6 May 17, 2016
 ====================
 
