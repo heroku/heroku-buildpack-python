@@ -71,7 +71,7 @@ CONDA_ENV="dep_env"
 
 # Install application dependencies
 echo "-----> Installing conda environment from environment.yml..."
-$CONDA_BIN/conda env update  -n dep_env -f "$BUILD_DIR/environment.yml"
+$CONDA_BIN/conda env update --quiet -n dep_env -f "$BUILD_DIR/environment.yml"
 $CONDA_BIN/conda clean -pt
 
 echo "-----> Caching dependencies to $CONDA_ENVS_CACHE"
