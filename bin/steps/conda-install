@@ -32,10 +32,12 @@ if [ -e $RUNTIME ]; then
     PYTHON_VERSION=$(cut -d- -f2 $RUNTIME)
     if [ ${PYTHON_VERSION:0:1} -eq 3 ]; then
         PYTHON_MAJOR_VERSION=3
+    elif [ ${PYTHON_VERSION:0:1} -eq 2 ]; then
+        PYTHON_MAJOR_VERSION=2
     else
         PYTHON_MAJOR_VERSION=""
     fi
-    MINICONDA_FILE="Miniconda$PYTHON_MAJOR_VERSION-latest-Linux-x86_64.sh"
+    MINICONDA_FILE="Miniconda${PYTHON_MAJOR_VERSION}-latest-Linux-x86_64.sh"
 else
     MINICONDA_FILE="Miniconda-latest-Linux-x86_64.sh"
 fi
