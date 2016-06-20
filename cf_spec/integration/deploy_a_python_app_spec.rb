@@ -164,6 +164,7 @@ HERE
         end
 
         it "doesn't re-download unchanged dependencies" do
+          expect(app).to be_running(120)
           Machete.push(app)
           expect(app).to be_running(120)
           expect(app).to have_logged("Using dependency cache")
