@@ -1,0 +1,5 @@
+dj-database-url==0.4.1
+Django==1.9.7
+gunicorn==19.6.0
+waitress==0.9.0
+whitenoise==3.2

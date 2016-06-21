@@ -45,16 +45,19 @@ HERE
   context 'with cached buildpack dependencies', :cached do
     context 'app has dependencies' do
       context 'with Python 2' do
-        let(:app_name) { 'flask_web_app' }
+        context 'deploy a flask web app' do
+          let(:app_name) { 'flask_web_app' }
 
-        specify do
-          expect(app).to be_running(60)
+          specify do
+            expect(app).to be_running(60)
 
-          browser.visit_path('/')
-          expect(browser).to have_body('Hello, World!')
-          expect(app).to have_logged(/Downloaded \[file:\/\/.*\]/)
+            browser.visit_path('/')
+            expect(browser).to have_body('Hello, World!')
+            expect(app).to have_logged(/Downloaded \[file:\/\/.*\]/)
 
-          expect(app).not_to have_internet_traffic
+            expect(app).not_to have_internet_traffic
+
+          end
         end
       end
 
@@ -90,24 +93,58 @@ HERE
   context 'without cached buildpack dependencies', :uncached do
     context 'app has dependencies' do
       context 'with Python 2' do
-        let(:app_name) { 'flask_web_app' }
+        context 'deploy a flask web app' do
+          let(:app_name) { 'flask_web_app' }
 
-        specify do
-          expect(app).to be_running(60)
-          browser.visit_path('/')
-          expect(browser).to have_body('Hello, World!')
-          expect(app).to have_logged(/Downloaded \[https:\/\/.*\]/)
+          specify do
+            expect(app).to be_running(60)
+
+            browser.visit_path('/')
+            expect(browser).to have_body('Hello, World!')
+            expect(app).to have_logged(/Downloaded \[file:\/\/.*\]/)
+          end
+        end
+        context 'deploy a django web app' do
+          let(:app_name) { 'django_web_app' }
+
+          specify do
+            expect(app).to be_running(60)
+
+            browser.visit_path('/')
+            expect(browser).to have_body('It worked!')
+            # Check that collectstatic ran
+            expect(app).to_not have_logged(/Error while running/)
+            expect(app).to have_logged(/collectstatic --noinput/)
+
+          end
         end
       end
 
       context 'with Python 3' do
-        let(:app_name) { 'flask_web_app_python_3' }
+        context 'deploy a flask web app' do
+          let(:app_name) { 'flask_web_app_python_3' }
 
-        specify do
-          expect(app).to be_running(60)
+          specify do
+            expect(app).to be_running(60)
 
-          browser.visit_path('/')
-          expect(browser).to have_body('Hello, World!')
+            browser.visit_path('/')
+            expect(browser).to have_body('Hello, World!')
+          end
+        end
+
+        context 'deploy a django web app' do
+          let(:app_name) { 'django_web_app_python_3' }
+
+          specify do
+            expect(app).to be_running(60)
+
+            browser.visit_path('/')
+            expect(browser).to have_body('It worked!')
+            # Check that collectstatic ran
+            expect(app).to_not have_logged(/Error while running/)
+            expect(app).to have_logged(/collectstatic --noinput/)
+
+          end
         end
       end
     end
