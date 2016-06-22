@@ -8,4 +8,3 @@ dependencies:
 - scipy=0.17.0
 - scikit-learn=0.17.1
 - pandas=0.18.0
-- python=2
