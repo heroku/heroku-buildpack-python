@@ -65,16 +65,11 @@ else
     mkdir -p $CONDA_ENVS_CACHE
 fi
 
-echo "-----> Updating conda, conda-env, and pip..."
-$CONDA_BIN/conda update --yes --quiet conda
-$CONDA_BIN/conda update --yes --quiet conda-env
-$CONDA_BIN/conda install --yes --quiet pip
-
 CONDA_ENV="dep_env"
 
 echo "-----> Installing Dependencies..."
 echo "-----> Installing conda environment from environment.yml..."
-$CONDA_BIN/conda env update --quiet -n dep_env -f "$BUILD_DIR/environment.yml"
+$CONDA_BIN/conda env update --quiet -n $CONDA_ENV -f "$BUILD_DIR/environment.yml"
 $CONDA_BIN/conda clean -pt
 
 echo "-----> Caching dependencies to $CONDA_ENVS_CACHE"
@@ -86,7 +81,7 @@ grep -rlI $BUILD_DIR $BUILD_DIR | xargs sed -i.bak "s|$BUILD_DIR|/home/vcap/app|
 # Add Conda path to profile
 mkdir -p $(dirname $PROFILE_PATH)
 echo "export PATH=$HOME/app/.conda/bin:\$PATH" >> $PROFILE_PATH
-echo "source activate dep_env" >> $PROFILE_PATH
+echo "source activate $CONDA_ENV" >> $PROFILE_PATH
 
 if test -f $BUILD_DIR/runtime.txt && grep 'python=' $BUILD_DIR/environment.yml; then
     echo "WARNING: you have specified the version of Python runtime both in 'runtime.txt' and 'environment.yml'. You should remove one of the two versions"
