@@ -1,7 +1,16 @@
-v1.5.7 Jun 16, 2016
+v1.5.7 Jun 23, 2016
 ====================
 
-* Cache dependencies when using miniconda and environment.yml doesn't change
+* Stop updating the conda version
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/121852995)
+
+* Add Django Integration Test
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/119774643)
+
+* Suppress download progress text
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/121172013)
+
+* Cache dependencies when using miniconda and enivironment.yml doesn't change
   (https://www.pivotaltracker.com/n/projects/1042066/stories/119822023)
 
 v1.5.6 May 17, 2016
