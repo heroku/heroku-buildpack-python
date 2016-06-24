@@ -55,10 +55,14 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
+echo ' ----- before sanitization'
+env
+
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
 unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
 unset CYTOKINE_LOG_FILE GEM_PATH
+
 
 # Setup buildpack instrumentation.
 bpwatch init $LOGPLEX_KEY
