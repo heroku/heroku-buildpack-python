@@ -55,8 +55,6 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
-echo ' ----- before sanitization'
-env
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
@@ -122,6 +120,9 @@ export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/
 export LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH
 export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH
 export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH
+
+echo ' ----- here we go!'
+env
 
 # Switch to the repo's context.
 cd $BUILD_DIR
