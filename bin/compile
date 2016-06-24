@@ -96,7 +96,8 @@ if [[ ! "$DOCKER_BUILD" ]]; then
 
   # Copy Application code in.
   bpwatch start appdir_stage
-    deep-cp $BUILD_DIR $APP_DIR
+    # deep-cp $BUILD_DIR $APP_DIR
+    ln $BUILD_DIR/* $APP_DIR
   bpwatch stop appdir_stage
 fi
 
