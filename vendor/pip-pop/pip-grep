@@ -62,7 +62,7 @@ def grep(reqfile, packages, silent=False):
                 exit(0)
 
     if not silent:
-        print('Not found.'.format(requirement.req.project_name))
+        print('Not found.')
 
     exit(1)
 
