@@ -62,17 +62,17 @@ dependencies:
     uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.4.5-linux-x64.tgz
     md5: 119671dbbb94170e69da5f3247f6ee6e
   - name: python
-    version: 3.5.0
-    cf_stacks:
-      - cflinuxfs2
-    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.5.0-linux-x64.tgz
-    md5: 147e08c5c5ed5bbcaabb6ba0e8625fcc
-  - name: python
     version: 3.5.1
     cf_stacks:
       - cflinuxfs2
     uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.5.1-linux-x64.tgz
     md5: a292283d7eec49d7ea5c60036f633740
+  - name: python
+    version: 3.5.2
+    cf_stacks:
+      - cflinuxfs2
+    uri: https://pivotal-buildpacks.s3.amazonaws.com/concourse-binaries/python/python-3.5.2-linux-x64.tgz
+    md5: 701a135b3228075c2ce59c527bc92e1e
 exclude_files:
   - .git/
   - .gitignore
