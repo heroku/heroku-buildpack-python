@@ -1,3 +1,15 @@
+v1.5.8 Jun 28, 2016
+====================
+
+* Add python 2.7.12, remove python 2.7.10
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/122296441)
+
+* Add python 3.4.5, remove python 3.4.3
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/122378741)
+
+* Add python 3.5.2, remove python 3.5.0
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/122378741)
+
 v1.5.7 Jun 23, 2016
 ====================
 
