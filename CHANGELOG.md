@@ -1,5 +1,12 @@
 # Python Buildpack Changelog
 
+## v81 (2016-06-28)
+
+Updated default Python to 2.7.11.
+
+- Updated setuptools to v8.1.2.
+- Updated pip to v23.1.0.
+
 ## v80 (2016-04-05)
 
 Improved pip-pop compatibility with latest pip releases.
