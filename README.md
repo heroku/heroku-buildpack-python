@@ -1,5 +1,6 @@
+-![python](https://cloud.githubusercontent.com/assets/51578/13712821/b68a42ce-e793-11e5-96b0-d8eb978137ba.png)
+
 # Heroku Buildpack: Python
-![python](https://cloud.githubusercontent.com/assets/51578/13712821/b68a42ce-e793-11e5-96b0-d8eb978137ba.png)
 
 This is the official [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](https://pip.pypa.io/) and other excellent software.
 
@@ -20,12 +21,12 @@ Deploying a Python application couldn't be easier:
     $ git push heroku master
     ...
     -----> Python app detected
-    -----> Installing python-2.7.11
+    -----> Installing python-2.7.12
          $ pip install -r requirements.txt
            Collecting requests (from -r requirements.txt (line 1))
-             Downloading requests-2.9.1-py2.py3-none-any.whl (501kB)
+             Downloading requests-2.10.0-py2.py3-none-any.whl (501kB)
            Installing collected packages: requests
-           Successfully installed requests-2.9.1
+           Successfully installed requests-2.10.0
            
     -----> Discovering process types
            Procfile declares types -> (none)
@@ -43,12 +44,12 @@ Specify a Python Runtime
 Specific versions of the Python runtime can be specified with a `runtime.txt` file:
 
     $ cat runtime.txt
-    python-3.5.1
+    python-3.5.2
 
 Runtime options include:
 
-- `python-2.7.11`
-- `python-3.5.1`
-- `pypy-5.0.1` (unsupported, experimental)
+- `python-2.7.12`
+- `python-3.5.2`
+- `pypy-5.3.1` (unsupported, experimental)
 
 Other [unsupported runtimes](https://github.com/heroku/heroku-buildpack-python/tree/master/builds/runtimes) are available as well. Use at your own risk. 
