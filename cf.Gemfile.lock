@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/cloudfoundry/buildpack-packager
-  revision: 7e6e21368690ddd1fb2af2f72f2c3058ae260c2f
-  tag: v2.2.9
+  revision: 9dbcd132c37ddebc949f330e8163e4606aec81ad
+  tag: v2.3.0
   specs:
     buildpack-packager (2.2.9)
       activesupport (~> 4.1.8)
