@@ -1,0 +1,78 @@
+GIT
+  remote: https://github.com/cloudfoundry/buildpack-packager
+  revision: d32016f56ddf89e433fecfc76e4a664058f52c32
+  tag: v2.3.1
+  specs:
+    buildpack-packager (2.3.1)
+      activesupport (~> 4.1.8)
+      kwalify
+      terminal-table (~> 1.4.5)
+
+GIT
+  remote: https://github.com/cloudfoundry/machete
+  revision: 143a81238819217dd570aa896aa9b3e5d8a259d5
+  tag: v0.0.43
+  specs:
+    machete (0.0.43)
+      httparty
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (4.1.16)
+      i18n (~> 0.6, >= 0.6.9)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.1)
+      tzinfo (~> 1.1)
+    coderay (1.1.1)
+    diff-lcs (1.2.5)
+    httparty (0.13.7)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
+    i18n (0.7.0)
+    json (1.8.3)
+    kwalify (0.7.2)
+    method_source (0.8.2)
+    minitest (5.9.0)
+    multi_xml (0.5.5)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.1)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-instafail (1.0.0)
+      rspec
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+    slop (3.6.0)
+    terminal-table (1.4.5)
+    thread_safe (0.3.5)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  buildpack-packager!
+  machete!
+  pry
+  rspec
+  rspec-instafail
+
+RUBY VERSION
+   ruby 2.3.1p112
+
+BUNDLED WITH
+   1.12.5
