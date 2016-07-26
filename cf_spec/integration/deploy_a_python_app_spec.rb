@@ -96,12 +96,17 @@ HERE
         context 'deploy a flask web app' do
           let(:app_name) { 'flask_web_app' }
 
+          subject(:app) do
+            Machete.deploy_app(app_name, env: {'BP_DEBUG' => '1'})
+          end
+
           specify do
             expect(app).to be_running(60)
 
             browser.visit_path('/')
             expect(browser).to have_body('Hello, World!')
             expect(app).to have_logged(/Downloaded \[https:\/\/.*\]/)
+            expect(app).to have_logged('DEBUG: default_version_for node is')
           end
         end
         context 'deploy a django web app' do

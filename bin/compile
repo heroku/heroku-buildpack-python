@@ -49,11 +49,17 @@ function bpwatch() {
   :
 }
 
+# CF Common
+BUILDPACK_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
+export BUILDPACK_PATH
+source $BUILDPACK_PATH/compile-extensions/lib/common
+# END CF Common
+
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".heroku/venv"
 LEGACY_TRIGGER="lib/python2.7"
 
-DEFAULT_PYTHON_VERSION="python-2.7.12"
+DEFAULT_PYTHON_VERSION="python-$($BUILDPACK_PATH/compile-extensions/bin/default_version_for $BUILDPACK_PATH/manifest.yml python)"
 DEFAULT_PYTHON_STACK="cedar-14"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="8.1.2"
@@ -92,12 +98,6 @@ bpwatch start compile
 # Syntax sugar.
 source $BIN_DIR/utils
 
-# CF Common
-BUILDPACK_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
-export BUILDPACK_PATH
-source $BUILDPACK_PATH/compile-extensions/lib/common
-# END CF Common
-#
 # Import collection of warnings.
 source $BIN_DIR/warnings
 
