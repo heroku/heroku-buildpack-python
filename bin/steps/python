@@ -30,7 +30,7 @@ if [ ! "$SKIP_INSTALL" ]; then
     exit_code=0
     url="https://lang-python.s3.amazonaws.com/$STACK/runtimes/$PYTHON_VERSION.tar.gz"
     translated_url=$(translate_dependency_url $url) || exit_code=$?
-    filtered_url=$(filter_dependency_url $url) || exit_code=$?
+    filtered_url=$(filter_dependency_url $translated_url) || true
     if [[ $exit_code != 0 ]] ; then
       $ROOT_DIR/compile-extensions/bin/recommend_dependency $url
       exit 1

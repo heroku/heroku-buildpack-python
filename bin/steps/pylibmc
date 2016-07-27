@@ -26,9 +26,12 @@ if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
   else
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
     mkdir -p .heroku/vendor
+ 
+    translated_url=`translate_dependency_url $VENDORED_MEMCACHED`
+    filtered_url=`filter_dependency_url $translated_url`
     # Download and extract libmemcached into target vendor directory.
-    echo "Downloaded [`filter_dependency_url $VENDORED_MEMCACHED`]"
-    curl `translate_dependency_url $VENDORED_MEMCACHED` -s | tar zxv -C .heroku/vendor &> /dev/null
+    echo "Downloaded [$filtered_url]"
+    curl $translated_url -s | tar zxv -C .heroku/vendor &> /dev/null
 
     export LIBMEMCACHED=$(pwd)/vendor
   fi
