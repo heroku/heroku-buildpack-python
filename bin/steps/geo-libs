@@ -24,7 +24,7 @@ bpwatch start geo_libs_install
 # If GDAL exists within requirements, use vendored gdal.
 if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
 
-  if [ ! -f ".heroku/vendor/bin/gdalserver" ]; then
+  if [ ! -f ".heroku/vendor/bin/proj" ]; then
     echo "-----> Bootstrapping gdal, geos, proj."
     mkdir -p .heroku/vendor
     # Download and extract cryptography into target vendor directory.
