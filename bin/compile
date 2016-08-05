@@ -102,6 +102,29 @@ if [[ ! -f Procfile ]]; then
   puts-warn 'Learn more: https://devcenter.heroku.com/articles/procfile'
 fi
 
+# Prepare the cache.
+mkdir -p $CACHE_DIR
+
+# Purge "old-style" virtualenvs.
+bpwatch start clear_old_venvs
+  [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.heroku/bin $CACHE_DIR/.heroku/lib $CACHE_DIR/.heroku/include
+  [ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
+bpwatch stop clear_old_venvs
+
+# Restore old artifacts from the cache.
+bpwatch start restore_cache
+  mkdir -p .heroku
+
+  cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
+  cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
+  cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
+  cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
+  cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
+  if [[ -d $CACHE_DIR/.heroku/src ]]; then
+    cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
+  fi
+bpwatch stop restore_cache
+
 # Experimental pre_compile hook.
 bpwatch start pre_compile
   source $BIN_DIR/steps/hooks/pre_compile
@@ -111,7 +134,6 @@ bpwatch stop pre_compile
 if [ ! -f requirements.txt ]; then
   echo "-e ." > requirements.txt
 fi
-
 
 # Sticky runtimes.
 if [ -f $CACHE_DIR/.heroku/python-version ]; then
@@ -129,30 +151,6 @@ fi
 if [ ! -f runtime.txt ]; then
   echo $DEFAULT_PYTHON_VERSION > runtime.txt
 fi
-
-# Prepare the cache.
-mkdir -p $CACHE_DIR
-
-# Purge "old-style" virtualenvs.
-bpwatch start clear_old_venvs
-  [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.heroku/bin $CACHE_DIR/.heroku/lib $CACHE_DIR/.heroku/include
-  [ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
-bpwatch stop clear_old_venvs
-
-# Restore old artifacts from the cache.
-bpwatch start restore_cache
-    mkdir -p .heroku
-
-    cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
-    if [[ -d $CACHE_DIR/.heroku/src ]]; then
-      cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
-    fi
-
-bpwatch stop restore_cache
 
 mkdir -p $(dirname $PROFILE_PATH)
 mkdir -p /app/.heroku/src
