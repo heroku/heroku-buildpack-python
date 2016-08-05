@@ -10,10 +10,11 @@ GIT
 
 GIT
   remote: https://github.com/cloudfoundry/machete
-  revision: 143a81238819217dd570aa896aa9b3e5d8a259d5
-  tag: v0.0.43
+  revision: e541107fbbf16f0790b3f026ce0b041f43e3501e
+  tag: v0.0.44
   specs:
-    machete (0.0.43)
+    machete (0.0.44)
+      childprocess
       httparty
 
 GEM
@@ -25,10 +26,12 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    childprocess (0.5.9)
+      ffi (~> 1.0, >= 1.0.11)
     coderay (1.1.1)
     diff-lcs (1.2.5)
-    httparty (0.13.7)
-      json (~> 1.8)
+    ffi (1.9.14)
+    httparty (0.14.0)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
     json (1.8.3)
