@@ -3,11 +3,12 @@
 # Build Deps: libraries/sqlite
 
 OUT_PREFIX=$1
+VERSION="3.5.2"
 
-echo "Building Python..."
-SOURCE_TARBALL='https://python.org/ftp/python/3.5.2/Python-3.5.2.tgz'
+echo "Building Python ${VERSION}..."
+SOURCE_TARBALL="https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
 curl -L $SOURCE_TARBALL | tar xz
-mv Python-3.5.2 src
+mv "Python-${VERSION}" src
 cd src
 
 ./configure --prefix=$OUT_PREFIX --with-ensurepip=no
@@ -15,4 +16,3 @@ make
 make install
 
 # ln $OUT_PREFIX/bin/python3 $OUT_PREFIX/bin/python
-
