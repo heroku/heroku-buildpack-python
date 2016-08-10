@@ -129,7 +129,7 @@ fi
 
 # Experimental pre_compile hook.
 bpwatch start pre_compile
-  source $BIN_DIR/steps/hooks/pre_compile
+  sub-env $BIN_DIR/steps/hooks/pre_compile
 bpwatch stop pre_compile
 
 # If no requirements.txt file given, assume `setup.py develop` is intended.
@@ -230,7 +230,7 @@ cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
 
 # Experimental post_compile hook.
 bpwatch start post_compile
-  source $BIN_DIR/steps/hooks/post_compile
+  sub-env $BIN_DIR/steps/hooks/post_compile
 bpwatch stop post_compile
 
 # Store new artifacts in cache.

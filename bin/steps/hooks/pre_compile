@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-if [ -f bin/pre_compile ]; then
+: ${PRE_COMPILE_HOOK:=bin/pre_compile}
+
+if [ -f $PRE_COMPILE_HOOK ]; then
     echo "-----> Running pre-compile hook"
-    chmod +x bin/pre_compile
-    sub-env bin/pre_compile
+    chmod +x $PRE_COMPILE_HOOK
+    $PRE_COMPILE_HOOK
 fi
