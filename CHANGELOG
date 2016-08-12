@@ -1,3 +1,15 @@
+v1.5.9 Aug 12, 2016
+====================
+
+* Add credential filtering for printed urls
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/126514693)
+
+* Add default_versions support for specifying python default version
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/126394947)
+
+* Make buildpacks.cloudfoundry.org the default url for buildpack dependencies
+  (https://www.pivotaltracker.com/n/projects/1042066/stories/121757949)
+
 v1.5.8 Jun 28, 2016
 ====================
 
