@@ -11,18 +11,18 @@ describe 'CF Python Buildpack' do
   def create_environment_yml(app_name,contents = nil)
     filename = File.join(File.dirname(__FILE__), '..', 'fixtures', app_name, 'environment.yml')
     unless contents
-      contents = <<HERE
-name: pydata_test
-dependencies:
-- pip
-- pytest
-- flask
-- nose
-- numpy=1.10.4
-- scipy=0.17.0
-- scikit-learn=0.17.1
-- pandas=0.18.0
-HERE
+      contents = <<~HERE
+                    name: pydata_test
+                    dependencies:
+                    - pip
+                    - pytest
+                    - flask
+                    - nose
+                    - numpy=1.10.4
+                    - scipy=0.17.0
+                    - scikit-learn=0.17.1
+                    - pandas=0.18.0
+                    HERE
     end
     File.open(filename, 'w') { |file| file.write(contents) }
   end
@@ -218,17 +218,17 @@ HERE
         end
 
         it "it updates dependencies if environment.yml changes" do
-          contents = <<HERE
-name: pydata_test
-dependencies:
-- pip
-- pytest
-- flask
-- nose
-- numpy=1.11.0
-- scikit-learn=0.17.1
-- pandas=0.18.0
-HERE
+          contents = <<~HERE
+                        name: pydata_test
+                        dependencies:
+                        - pip
+                        - pytest
+                        - flask
+                        - nose
+                        - numpy=1.11.0
+                        - scikit-learn=0.17.1
+                        - pandas=0.18.0
+                        HERE
           create_environment_yml app_name, contents
           Machete.push(app)
           expect(app).to be_running(120)
