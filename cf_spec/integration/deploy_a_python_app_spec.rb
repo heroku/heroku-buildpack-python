@@ -164,7 +164,7 @@ describe 'CF Python Buildpack' do
         expect(browser).to have_body('Hello, World!')
       end
 
-      it "uses a proxy during staging if present" do
+      it "uses a proxy during staging if present", :uncached do
         expect(app).to use_proxy_during_staging
       end
     end
@@ -183,7 +183,7 @@ describe 'CF Python Buildpack' do
         expect(browser).to have_body('python-version2')
       end
 
-      it "uses a proxy during staging if present" do
+      it "uses a proxy during staging if present", :uncached do
         expect(app).to use_proxy_during_staging
       end
     end
@@ -237,7 +237,7 @@ describe 'CF Python Buildpack' do
           expect(browser).to have_body('numpy: 1.11.0')
         end
 
-        it "uses a proxy during staging if present" do
+        it "uses a proxy during staging if present", :uncached do
           expect(app).to use_proxy_during_staging
         end
       end
@@ -254,7 +254,7 @@ describe 'CF Python Buildpack' do
         expect(app).to have_logged "WARNING: you have specified the version of Python runtime both in 'runtime.txt' and 'environment.yml'. You should remove one of the two versions"
       end
 
-      it "uses a proxy during staging if present" do
+      it "uses a proxy during staging if present", :uncached do
         expect(app).to use_proxy_during_staging
       end
     end
