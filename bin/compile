@@ -55,12 +55,10 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
-
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
 unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
 unset CYTOKINE_LOG_FILE GEM_PATH
-
 
 # Setup buildpack instrumentation.
 bpwatch init $LOGPLEX_KEY
@@ -94,8 +92,7 @@ if [[ ! "$DOCKER_BUILD" ]]; then
 
   # Copy Application code in.
   bpwatch start appdir_stage
-    # deep-cp $BUILD_DIR $APP_DIR
-    ln -s $BUILD_DIR/* $APP_DIR
+    deep-cp $BUILD_DIR $APP_DIR
   bpwatch stop appdir_stage
 fi
 
