@@ -1,5 +1,11 @@
 # Python Buildpack Changelog
 
+## v82 (2016-08-22)
+
+Update to library detection mechnisms (pip-pop).
+
+- Updated setuptools to v25.5.0
+
 ## v81 (2016-06-28)
 
 Updated default Python to 2.7.11.
