@@ -8,10 +8,10 @@ Update to library detection mechnisms (pip-pop).
 
 ## v81 (2016-06-28)
 
-Updated default Python to 2.7.11.
+Updated default Python to 2.7.12.
 
-- Updated setuptools to v8.1.2.
-- Updated pip to v23.1.0.
+- Updated setuptools to v23.1.0.
+- Updated pip to v8.1.2.
 
 ## v80 (2016-04-05)
 
