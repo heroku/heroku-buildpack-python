@@ -18,6 +18,7 @@ from pip._vendor.requests import session
 
 requests = session()
 
+
 class Requirements(object):
     def __init__(self, reqfile=None):
         super(Requirements, self).__init__()
@@ -31,13 +32,15 @@ class Requirements(object):
         return '<Requirements \'{}\'>'.format(self.path)
 
     def load(self, reqfile):
-
         if not os.path.exists(reqfile):
             raise ValueError('The given requirements file does not exist.')
 
         finder = PackageFinder([], [], session=requests)
         for requirement in parse_requirements(reqfile, finder=finder, session=requests):
             if requirement.req:
+                if not getattr(requirement.req, 'name', None):
+                    # Prior to pip 8.1.2 the attribute `name` did not exist.
+                    requirement.req.name = requirement.req.project_name
                 self.requirements.append(requirement.req)
 
 
@@ -48,24 +51,24 @@ class Requirements(object):
 
         # Generate fresh packages.
         other_reqs = (
-            [r.project_name for r in r1.requirements]
+            [r.name for r in r1.requirements]
             if ignore_versions else r1.requirements
         )
 
         for req in r2.requirements:
-            r = req.project_name if ignore_versions else req
+            r = req.name if ignore_versions else req
 
             if r not in other_reqs and r not in excludes:
                 results['fresh'].append(req)
 
         # Generate stale packages.
         other_reqs = (
-            [r.project_name for r in r2.requirements]
+            [r.name for r in r2.requirements]
             if ignore_versions else r2.requirements
         )
 
         for req in r1.requirements:
-            r = req.project_name if ignore_versions else req
+            r = req.name if ignore_versions else req
 
             if r not in other_reqs and r not in excludes:
                 results['stale'].append(req)
@@ -73,11 +76,7 @@ class Requirements(object):
         return results
 
 
-
-
-
 def diff(r1, r2, include_fresh=False, include_stale=False, excludes=None):
-
     include_versions = True if include_stale else False
     excludes = excludes if len(excludes) else []
 
@@ -92,12 +91,11 @@ def diff(r1, r2, include_fresh=False, include_stale=False, excludes=None):
 
     if include_fresh:
         for line in results['fresh']:
-            print(line.project_name if include_versions else line)
+            print(line.name if include_versions else line)
 
     if include_stale:
         for line in results['stale']:
-            print(line.project_name if include_versions else line)
-
+            print(line.name if include_versions else line)
 
 
 def main():
@@ -112,7 +110,6 @@ def main():
     }
 
     diff(**kwargs)
-
 
 
 if __name__ == '__main__':
