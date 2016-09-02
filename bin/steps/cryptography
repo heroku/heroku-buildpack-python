@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 
 # This script serves as the Cryptography build step of the
-# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# [**Python Buildpack**](https://github.com/cloudfoundry/python-buildpack)
 # compiler.
-#
-# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
-# adapter between a Python application and Heroku's runtime.
 #
 # This script is invoked by [`bin/compile`](/).
 

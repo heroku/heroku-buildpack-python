@@ -16,8 +16,5 @@ EOF
 
 if [[ $MANAGE_FILE ]]; then
 cat <<EOF
-
-addons:
-  - heroku-postgresql
 EOF
 fi

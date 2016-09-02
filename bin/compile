@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 
-# The Heroku Python Buildpack. This script accepts parameters for a build
+# The Cloud Foundry Python Buildpack. This script accepts parameters for a build
 # directory, a cache directory, and a directory for app environment variables.
-
-# Warning: there are a few hacks in this script to accommodate excellent builds
-# on Heroku. No guarantee for external compatibility is made. However,
-# everything should work fine outside of the Heroku environment, if the
-# environment is setup correctly.
 
 # Usage:
 #
@@ -60,7 +55,6 @@ VIRTUALENV_LOC=".heroku/venv"
 LEGACY_TRIGGER="lib/python2.7"
 
 DEFAULT_PYTHON_VERSION="python-$($BUILDPACK_PATH/compile-extensions/bin/default_version_for $BUILDPACK_PATH/manifest.yml python)"
-DEFAULT_PYTHON_STACK="cedar-14"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="8.1.2"
 SETUPTOOLS_VERSION="25.2.0"
@@ -81,7 +75,6 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 # Support Anvil Build_IDs
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
-[ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
@@ -152,8 +145,8 @@ cd $BUILD_DIR
 
 # Warn for lack of Procfile.
 if [[ ! -f Procfile ]]; then
-  puts-warn 'Warning: Your application is missing a Procfile. This file tells Heroku how to run your application.'
-  puts-warn 'Learn more: https://devcenter.heroku.com/articles/procfile'
+  puts-warn 'Warning: Your application is missing a Procfile. This file tells Cloud Foundry how to run your application.'
+  puts-warn 'Learn more: https://docs.cloudfoundry.org/buildpacks/prod-server.html#procfile'
 fi
 
 # Experimental pre_compile hook.
