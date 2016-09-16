@@ -20,7 +20,7 @@ source $BIN_DIR/utils
 bpwatch start libffi_install
 
 # If a package using cffi exists within requirements, use vendored libffi.
-if (pip-grep -s requirements.txt bcrypt cffi cryptography django[bcrypt] Django[bcrypt] PyNaCl pyOpenSSL PyOpenSSL requests[security] misaka &> /dev/null) then
+if (pip-grep -s requirements.txt argon2-cffi bcrypt cffi cryptography django[argon2] Django[argon2] django[bcrypt] Django[bcrypt] PyNaCl pyOpenSSL PyOpenSSL requests[security] misaka &> /dev/null) then
 
   if [ ! -d ".heroku/vendor/lib/libffi-3.1" ]; then
     echo "-----> Noticed cffi. Bootstrapping libffi."
