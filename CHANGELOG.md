@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v83
+
+- Cffi support for argon2
+
 ## v82 (2016-08-22)
 
 Update to library detection mechnisms (pip-pop).
