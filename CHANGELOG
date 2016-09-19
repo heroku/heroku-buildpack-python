@@ -1,3 +1,12 @@
+v1.5.10 Sep 19, 2016
+=====================
+
+* Remove Heroku references from staging output
+  (https://www.pivotaltracker.com/story/show/127931269)
+
+* Lock version of conda to 4.1.11
+  (https://www.pivotaltracker.com/story/show/119902339)
+
 v1.5.9 Aug 12, 2016
 ====================
 
