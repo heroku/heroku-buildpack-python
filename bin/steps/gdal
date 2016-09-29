@@ -22,16 +22,14 @@ bpwatch start gdal_install
 # If GDAL exists within requirements, use vendored gdal.
 if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
 
-  if [ -f ".heroku/vendor/bin/gdalserver" ]; then
-    export GDAL=$(pwd)/vendor
-  else
+  if [ ! -f ".heroku/vendor/bin/gdalserver" ]; then
     echo "-----> Noticed GDAL. Bootstrapping gdal."
     mkdir -p .heroku/vendor
     # Download and extract cryptography into target vendor directory.
     curl $VENDORED_GDAL -s | tar zxv -C .heroku/vendor &> /dev/null
-
-    export GDAL=$(pwd)/vendor
   fi
+
+  export GDAL=$(pwd)/vendor
 fi
 
 bpwatch stop gdal_install

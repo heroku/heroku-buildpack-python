@@ -1,5 +1,22 @@
 # Python Buildpack Changelog
 
+## v83
+
+- Cffi support for argon2
+
+## v82 (2016-08-22)
+
+Update to library detection mechnisms (pip-pop).
+
+- Updated setuptools to v25.5.0
+
+## v81 (2016-06-28)
+
+Updated default Python to 2.7.11.
+
+- Updated setuptools to v8.1.2.
+- Updated pip to v23.1.0.
+
 ## v80 (2016-04-05)
 
 Improved pip-pop compatibility with latest pip releases.
