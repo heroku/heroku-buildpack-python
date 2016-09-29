@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+# Build Deps: libraries/sqlite
+
+# NOTICE: This formula only works for the cedar-14 stack, not cedar.
+
+OUT_PREFIX=$1
+
+echo "Building PyPy..."
+SOURCE_TARBALL='https://bbuseruploads.s3.amazonaws.com/54220cd1-b139-4188-9455-1e13e663f1ac/downloads/265504fc-8c03-4c1d-935a-2b8fbc6da51a/pypy2-v5.3.1-linux64.tar.bz2?Signature=F%2FnnB39QrCTPldSErIJoqzAt8YA%3D&Expires=1471612628&AWSAccessKeyId=AKIAIWY5XSVPZPDQYRQQ&versionId=kJjoDTh5eNcLrGrt5hYT0_5XGjg3.gl0&response-content-disposition=attachment%3B%20filename%3D%22pypy2-v5.3.1-linux64.tar.bz2%22'
+curl -L $SOURCE_TARBALL | tar jx
+cp -R pypy2-v5.3.1-linux64/* $OUT_PREFIX
+
+ln $OUT_PREFIX/bin/pypy $OUT_PREFIX/bin/python

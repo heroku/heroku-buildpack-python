@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This script serves as the Pylibmc build step of the
+# This script serves as the Cryptography build step of the
 # [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
 # compiler.
 #
@@ -20,18 +20,16 @@ source $BIN_DIR/utils
 bpwatch start libffi_install
 
 # If a package using cffi exists within requirements, use vendored libffi.
-if (pip-grep -s requirements.txt bcrypt cffi cryptography django[bcrypt] Django[bcrypt] PyNaCl pyOpenSSL PyOpenSSL requests[security] &> /dev/null) then
+if (pip-grep -s requirements.txt argon2-cffi bcrypt cffi cryptography django[argon2] Django[argon2] django[bcrypt] Django[bcrypt] PyNaCl pyOpenSSL PyOpenSSL requests[security] misaka &> /dev/null) then
 
-  if [ -d ".heroku/vendor/lib/libffi-3.1.1" ]; then
-    export LIBFFI=$(pwd)/vendor
-  else
+  if [ ! -d ".heroku/vendor/lib/libffi-3.1" ]; then
     echo "-----> Noticed cffi. Bootstrapping libffi."
     mkdir -p .heroku/vendor
     # Download and extract libffi into target vendor directory.
     curl $VENDORED_LIBFFI -s | tar zxv -C .heroku/vendor &> /dev/null
-
-    export LIBFFI=$(pwd)/vendor
   fi
+
+  export LIBFFI=$(pwd)/vendor
 fi
 
 bpwatch stop libffi_install
