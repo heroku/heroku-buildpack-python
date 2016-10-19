@@ -1,3 +1,10 @@
+v1.5.11 Oct 19, 2016
+=====================
+
+* python-buildpack BOSH release now available on bosh.io at
+  http://bosh.io/releases/github.com/cloudfoundry/python-buildpack-release
+  (https://www.pivotaltracker.com/story/show/130040305)
+
 v1.5.10 Sep 19, 2016
 =====================
 
