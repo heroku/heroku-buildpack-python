@@ -1,5 +1,6 @@
 # Python Buildpack Changelog
 
+
 ## v82 (2016-08-22)
 
 Update to library detection mechnisms (pip-pop).
