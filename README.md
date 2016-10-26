@@ -51,3 +51,4 @@ Runtime options include:
 - `python-2.7.12`
 - `python-3.5.2`
 - `pypy-5.3.1` (unsupported, experimental)
+- `pypy3-2.4.0` (unsupported, experimental)
