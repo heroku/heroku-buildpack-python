@@ -1,0 +1,4 @@
+---
+applications:
+  - name: flask_web_app_python_3_no_procfile
+    command: gunicorn server:app
