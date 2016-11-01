@@ -74,5 +74,8 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   bpwatch stop prepare_environment
 fi
 
+puts-step "Installing pgs"
+cp ${BASE}/bin/pgs /app/pgs
+
 set -e
 hash -r
