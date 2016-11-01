@@ -75,7 +75,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
 fi
 
 puts-step "Installing pgs"
-cp ${BASE}/bin/pgs /app/pgs
+cp bin/pgs /app/pgs
 
 set -e
 hash -r
