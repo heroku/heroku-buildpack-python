@@ -39,11 +39,14 @@ puts-cmd() {
 # Usage: $ set-env key value
 set-env() {
   echo "export $1=$2" >> $PROFILE_PATH
+  echo "export $1=$2" >> $EXPORT_PATH
 }
 
 # Usage: $ set-default-env key value
 set-default-env() {
   echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
+  echo "export $1=\${$1:-$2}" >> $EXPORT_PATH
+
 }
 
 # Usage: $ un-set-env key

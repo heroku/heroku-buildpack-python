@@ -106,6 +106,7 @@ BUILD_DIR=$APP_DIR
 
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
+EXPORT_PATH="$BIN_DIR/../export"
 GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 
 # We'll need to send these statics to other scripts we `source`.
