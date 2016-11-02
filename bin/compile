@@ -54,6 +54,7 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
+[[ $BUILD_DIR != "/app" ]] && SKIP_MOVE_BUILD=$1
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
@@ -78,7 +79,7 @@ APP_DIR='/app'
 TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 # Skip these steps for Docker.
-if [[ ! "$DOCKER_BUILD" ]]; then
+if [[ ! "$SKIP_MOVE_BUILD" ]]; then
 
   # Copy Anvil app dir to temporary storage...
   bpwatch start anvil_appdir_stage
@@ -92,10 +93,7 @@ if [[ ! "$DOCKER_BUILD" ]]; then
 
   # Copy Application code in.
   bpwatch start appdir_stage
-    # Skip copying the code if we're already in the right spot.
-    if [[ $BUILD_DIR != "/app" ]]; then
-      deep-cp $BUILD_DIR $APP_DIR
-    fi
+    deep-cp $BUILD_DIR $APP_DIR
   bpwatch stop appdir_stage
 fi
 
@@ -256,7 +254,7 @@ bpwatch start dump_cache
 bpwatch stop dump_cache
 
 # Fin.
-if [[ ! "$DOCKER_BUILD" ]]; then
+if [[ ! "$SKIP_MOVE_BUILD" ]]; then
 
   bpwatch start appdir_commit
     deep-rm $ORIG_BUILD_DIR
