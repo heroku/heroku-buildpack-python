@@ -1,4 +1,4 @@
--![python](https://cloud.githubusercontent.com/assets/51578/13712821/b68a42ce-e793-11e5-96b0-d8eb978137ba.png)
+![python](https://cloud.githubusercontent.com/assets/51578/13712821/b68a42ce-e793-11e5-96b0-d8eb978137ba.png)
 
 # Heroku Buildpack: Python
 
@@ -51,5 +51,4 @@ Runtime options include:
 - `python-2.7.12`
 - `python-3.5.2`
 - `pypy-5.3.1` (unsupported, experimental)
-
-Other [unsupported runtimes](https://github.com/heroku/heroku-buildpack-python/tree/master/builds/runtimes) are available as well. Use at your own risk. 
+- `pypy3-2.4.0` (unsupported, experimental)
