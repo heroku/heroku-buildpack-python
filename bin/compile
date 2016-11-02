@@ -56,10 +56,6 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 [[ $BUILD_DIR == "/app" ]] && SKIP_MOVE_BUILD=$1
 
-echo $SKIP_MOVE_BUILD
-echo $BUILD_DIR
-echo '^^^^'
-
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
 unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
