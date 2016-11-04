@@ -10,10 +10,10 @@ GIT
 
 GIT
   remote: https://github.com/cloudfoundry/machete
-  revision: 8f71e87c6b74648a733584a16221900876119304
-  tag: v0.0.51
+  revision: 660800bd2bd57054acbbf70e59d2a34b11d6d563
+  tag: v0.0.52
   specs:
-    machete (0.0.51)
+    machete (0.0.52)
       childprocess
       httparty
 
