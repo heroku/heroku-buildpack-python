@@ -23,12 +23,14 @@ if (pip-grep -s requirements.txt argon2-cffi bcrypt cffi cryptography django[arg
     echo "-----> Noticed cffi. Bootstrapping libffi."
     mkdir -p .heroku/vendor
 
-    translated_url=`translate_dependency_url $VENDORED_LIBFFI`
-    filtered_url=`filter_dependency_url $translated_url`
-    # Download and extract cryptography into target vendor directory.
-    echo "Downloaded [$filtered_url]"
     # Download and extract libffi into target vendor directory.
-    curl $translated_url -s | tar zxv -C .heroku/vendor &> /dev/null
+    exit_code=0
+    filtered_url=$($ROOT_DIR/compile-extensions/bin/download_dependency $VENDORED_LIBFFI /tmp)
+    echo "Downloaded [$filtered_url]"
+
+    downloaded_file=/tmp/libffi.tar.gz
+    tar zxvf $downloaded_file -C .heroku/vendor &> /dev/null
+    rm $downloaded_file
   fi
 
   export LIBFFI=$(pwd)/vendor
