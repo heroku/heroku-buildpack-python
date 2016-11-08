@@ -54,7 +54,7 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
-[[ $BUILD_DIR == "/app" ]] && SKIP_MOVE_BUILD=$1
+[[ $BUILD_DIR == "/app" ]] && SKIP_MOVE_BUILD=1
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
