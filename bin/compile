@@ -75,6 +75,7 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 # Support Anvil Build_IDs
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
+[[ $BUILD_DIR == "/app" ]] && SKIP_MOVE_BUILD=$1
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
@@ -100,7 +101,7 @@ TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 
 # Skip these steps for Docker.
-if [[ ! "$DOCKER_BUILD" ]]; then
+if [[ ! "$SKIP_MOVE_BUILD" ]]; then
 
   # Copy Anvil app dir to temporary storage...
   bpwatch start anvil_appdir_stage
@@ -125,10 +126,11 @@ BUILD_DIR=$APP_DIR
 
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
+EXPORT_PATH="$BIN_DIR/../export"
 GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 
 # We'll need to send these statics to other scripts we `source`.
-export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
+export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH EXPORT_PATH
 
 # Prepend proper environment variables for Python use.
 export PATH=$BUILD_DIR/.heroku/python/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH
@@ -274,7 +276,7 @@ bpwatch start dump_cache
 bpwatch stop dump_cache
 
 # Fin.
-if [[ ! "$DOCKER_BUILD" ]]; then
+if [[ ! "$SKIP_MOVE_BUILD" ]]; then
 
   bpwatch start appdir_commit
     deep-rm $ORIG_BUILD_DIR
