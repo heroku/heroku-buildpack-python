@@ -17,4 +17,6 @@ See the [Machete](https://github.com/cf-buildpacks/machete) CF buildpack test fr
 1. Fork the project
 1. Submit a pull request
 
+Please include tests with the pull request. Include a fixture app with integration test and/or unit tests based on which best covers the new functionality. Fixtures, integration tests and unit tests can all be found in the `cf-spec/` directory
+
 **NOTE:** When submitting a pull request, *please make sure to target the `develop` branch*, so that your changes are up-to-date and easy to integrate with the most recent work on the buildpack. Thanks!

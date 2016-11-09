@@ -7,3 +7,7 @@ Thanks for contributing to the buildpack. To speed up the process of reviewing y
 * [ ] I have viewed signed and have submitted the Contributor License Agreement
 
 * [ ] I have made this pull request to the `develop` branch
+
+* [ ] I have added an integration test (if applicable)
+
+* [ ] I have added a unit test (if applicable)
