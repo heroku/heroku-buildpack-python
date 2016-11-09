@@ -2,6 +2,8 @@
 
 ## v83
 
+Support for Heroku CI.
+
 - Cffi support for argon2
 
 ## v82 (2016-08-22)
