@@ -75,7 +75,8 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 # Support Anvil Build_IDs
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
-[[ $BUILD_DIR == "/app" ]] && SKIP_MOVE_BUILD=$1
+[ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
+[[ $BUILD_DIR == "/app" ]] && SKIP_MOVE_BUILD=1
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
