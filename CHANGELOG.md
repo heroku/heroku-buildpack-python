@@ -1,5 +1,12 @@
 # Python Buildpack Changelog
 
+## v84
+
+Updated pip and setuptools.
+
+- Updated pip to v9.0.1.
+- Updated setuptools to v28.8.0.
+
 ## v83
 
 Support for Heroku CI.
