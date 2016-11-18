@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+# Build Deps: libraries/sqlite
+
+OUT_PREFIX=$1
+VERSION="2.7.13"
+
+echo "Building Python ${VERSION}..."
+SOURCE_TARBALL="https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
+curl -L $SOURCE_TARBALL | tar xz
+mv "Python-${VERSION}" src
+cd src
+
+# The default Python build's unicode mode (until Python 3.3, when PEP 393 landed)
+# is UCS-2. However Ubuntu's system Python 2.7 is compiled in UCS-4 mode, so we
+# override the default for parity, and to avoid hard to debug unicode bugs. See:
+# https://github.com/heroku/heroku-buildpack-python/issues/305
+./configure --prefix=$OUT_PREFIX --with-ensurepip=no --enable-unicode=ucs4
+make
+make install
