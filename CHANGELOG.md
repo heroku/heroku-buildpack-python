@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v85
+
+Packaging fix. 
+
 ## v84
 
 Updated pip and setuptools.
