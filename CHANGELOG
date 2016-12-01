@@ -1,3 +1,12 @@
+v1.5.13 Dec 01, 2016
+=====================
+
+* Rebuild and change path for python, libffi, and libmemcache binaries
+  - We identified a potential, but unlikely, attack vector in our continuous
+    integration system. Our own auditing strongly suggests that this attack
+    vector was not taken advantage of. However, out of an abundance of caution,
+    we are rebuilding all buildpack dependencies that we maintain.
+
 v1.5.12 Nov 11, 2016
 =====================
 
