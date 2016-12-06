@@ -185,6 +185,9 @@ set -e
 
 mkdir -p $(dirname $PROFILE_PATH)
 
+# Export application's configuration variables
+sub-env $ENV_DIR
+
 # Install Python.
 source $BIN_DIR/steps/python
 
