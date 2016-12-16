@@ -93,7 +93,10 @@ if [[ ! "$SKIP_MOVE_BUILD" ]]; then
 
   # Copy Application code in.
   bpwatch start appdir_stage
-    deep-cp $BUILD_DIR $APP_DIR
+    # deep-cp $BUILD_DIR $APP_DIR
+    mkdir -p /app/.heroku
+    ln -s $BUILD_DIR
+
   bpwatch stop appdir_stage
 fi
 
@@ -177,11 +180,6 @@ bpwatch start restore_cache
     cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
 
 bpwatch stop restore_cache
-
-set +e
-# Create set-aside `.heroku` folder.
-mkdir .heroku &> /dev/null
-set -e
 
 mkdir -p $(dirname $PROFILE_PATH)
 
