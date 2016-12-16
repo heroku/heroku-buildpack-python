@@ -54,7 +54,6 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
-[[ $BUILD_DIR == "/app" ]] && SKIP_MOVE_BUILD=1
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
@@ -64,7 +63,6 @@ unset CYTOKINE_LOG_FILE GEM_PATH
 # Setup buildpack instrumentation.
 bpwatch init $LOGPLEX_KEY
 bpwatch build python $BUILDPACK_VERSION $REQUEST_ID
-TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 bpwatch start compile
 
@@ -74,36 +72,8 @@ source $BIN_DIR/utils
 # Import collection of warnings.
 source $BIN_DIR/warnings
 
-# Directory Hacks for path consistency.
-APP_DIR='/app'
-TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
-
-# Skip these steps for Docker.
-if [[ ! "$SKIP_MOVE_BUILD" ]]; then
-
-  # Copy Anvil app dir to temporary storage...
-  bpwatch start anvil_appdir_stage
-  if [ "$SLUG_ID" ]; then
-    mkdir -p $TMP_APP_DIR
-    deep-mv $APP_DIR $TMP_APP_DIR
-  else
-    deep-rm $APP_DIR
-  fi
-  bpwatch stop anvil_appdir_stage
-
-  # Copy Application code in.
-  bpwatch start appdir_stage
-    # deep-cp $BUILD_DIR $APP_DIR
-    mkdir -p /app/.heroku
-    ln -s $BUILD_DIR
-
-  bpwatch stop appdir_stage
-fi
-
-
-# Set new context.
-ORIG_BUILD_DIR=$BUILD_DIR
-BUILD_DIR=$APP_DIR
+# we need to put a bunch of symlinks in there later
+mkdir -p /app/.heroku
 
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
@@ -114,14 +84,14 @@ GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH EXPORT_PATH
 
 # Prepend proper environment variables for Python use.
-export PATH=$BUILD_DIR/.heroku/python/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH
+export PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin:$PATH
 export PYTHONUNBUFFERED=1
 export LANG=en_US.UTF-8
-export C_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include:$C_INCLUDE_PATH
-export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:$BUILD_DIR/.heroku/vendor/include:/app/.heroku/python/include:$CPLUS_INCLUDE_PATH
-export LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH
-export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:$BUILD_DIR/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH
-export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH
+export C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$C_INCLUDE_PATH
+export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$CPLUS_INCLUDE_PATH
+export LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH
 
 # Switch to the repo's context.
 cd $BUILD_DIR
@@ -185,6 +155,14 @@ mkdir -p $(dirname $PROFILE_PATH)
 
 # Install Python.
 source $BIN_DIR/steps/python
+
+if [[ $BUILD_DIR != '/app' ]]; then
+    # python expects to reside in /app, so set up symlinks
+    # we will not remove these later so subsequent buildpacks can still invoke it
+    ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
+    ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/python
+    ln -s $BUILD_DIR/.heroku/venv /app/.heroku/python
+fi
 
 # Sanity check for setuptools/distribute.
 source $BIN_DIR/steps/setuptools
@@ -252,19 +230,4 @@ bpwatch start dump_cache
 bpwatch stop dump_cache
 
 # Fin.
-if [[ ! "$SKIP_MOVE_BUILD" ]]; then
-
-  bpwatch start appdir_commit
-    deep-rm $ORIG_BUILD_DIR
-    deep-mv $BUILD_DIR $ORIG_BUILD_DIR
-  bpwatch stop appdir_commit
-
-  bpwatch start anvil_appdir_commit
-  if [ "$SLUG_ID" ]; then
-    deep-mv $TMP_APP_DIR $APP_DIR
-  fi
-
-  bpwatch stop anvil_appdir_commit
-  bpwatch stop compile
-fi
-
+bpwatch stop compile
