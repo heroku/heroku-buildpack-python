@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v87
+
+Updated default Python 2.7.13.
+
 ## v86
 
 Refactor and multi-buildpack compatibility.
@@ -31,8 +35,8 @@ Update to library detection mechnisms (pip-pop).
 
 Updated default Python to 2.7.11.
 
-- Updated setuptools to v8.1.2.
-- Updated pip to v23.1.0.
+- Updated pip to v8.1.2.
+- Updated setuptools to v23.1.0.
 
 ## v80 (2016-04-05)
 
