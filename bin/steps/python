@@ -35,12 +35,6 @@ if [ ! "$SKIP_INSTALL" ]; then
       exit 1
     fi
 
-  if [[ $BUILD_DIR != '/app' ]]; then
-    # python expects to reside in /app, so set up symlinks
-    # we will not remove these later so subsequent buildpacks can still invoke it
-    ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
-  fi
-
   bpwatch stop install_python
 
   # Record for future reference.
