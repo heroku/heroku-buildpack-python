@@ -159,8 +159,8 @@ source $BIN_DIR/steps/python
 if [[ $BUILD_DIR != '/app' ]]; then
     # python expects to reside in /app, so set up symlinks
     # we will not remove these later so subsequent buildpacks can still invoke it
-    ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/python
-    ln -s $BUILD_DIR/.heroku/venv /app/.heroku/python
+    ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
+    ln -s $BUILD_DIR/.heroku/venv /app/.heroku/venv
 fi
 
 # Sanity check for setuptools/distribute.
