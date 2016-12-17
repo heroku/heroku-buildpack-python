@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# This script serves as the GDAL build step of the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# compiler.
+#
+# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# The location of the pre-compiled cryptography binary.
+VENDORED_GDAL="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/gdal.tar.gz"
+
+PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+bpwatch start gdal_install
+
+# If GDAL exists within requirements, use vendored gdal.
+if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
+
+  if [ ! -f ".heroku/vendor/bin/gdalserver" ]; then
+    echo "-----> Noticed GDAL. Bootstrapping gdal."
+    mkdir -p .heroku/vendor
+    # Download and extract cryptography into target vendor directory.
+    curl $VENDORED_GDAL -s | tar zxv -C .heroku/vendor &> /dev/null
+  fi
+
+  export GDAL=$(pwd)/vendor
+fi
+
+bpwatch stop gdal_install

@@ -1,36 +1,67 @@
 #!/usr/bin/env bash
 
+# Django Collectstatic runner. If you have Django installed, collectstatic will
+# automatically be executed as part of the build process. If collectstatic
+# fails, your build fails.
+
+# This functionality will only activate if Django is in requirements.txt.
+
+# Runtime arguments:
+#   - $DISABLE_COLLECTSTATIC: disables this functionality.
+#   - $DEBUG_COLLECTSTATIC: upon failure, print out environment variables.
+
 source $BIN_DIR/utils
 
+# Location of 'manage.py', if it exists.
 MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' -printf '%d\t%P\n' | sort -nk1 | cut -f2 | head -1)
 MANAGE_FILE=${MANAGE_FILE:-fakepath}
 
+# Legacy file-based support for $DISABLE_COLLECTSTATIC
 [ -f .heroku/collectstatic_disabled ] && DISABLE_COLLECTSTATIC=1
 
-bpwatch start collectstatic
+# Ensure that Django is explicitly specified in requirements.txt
+pip-grep -s requirements.txt django Django && DJANGO_INSTALLED=1
 
-if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
+bpwatch start collectstatic  # metrics collection
+
+if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     set +e
 
-    echo "-----> Preparing static assets"
-    # Check if collectstatic is configured properly.
-    python $MANAGE_FILE collectstatic --dry-run --noinput &> /dev/null && RUN_COLLECTSTATIC=true
+    puts-cmd "python $MANAGE_FILE collectstatic --noinput"
 
-    # Compile assets if collectstatic appears to be kosher.
-    if [ "$RUN_COLLECTSTATIC" ]; then
+    # Run collectstatic, cleanup some of the noisy output.
+    python $MANAGE_FILE collectstatic --noinput --traceback 2>&1 | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
+    COLLECTSTATIC_STATUS="${PIPESTATUS[0]}"
 
-        echo "       Running collectstatic..."
-        python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
+    set -e
 
-        [ $? -ne 0 ] && {
-            echo " !     Error running 'manage.py collectstatic'. More info:"
-            echo "       http://devcenter.heroku.com/articles/django-assets"
-        }
-    else
-        echo "       Collectstatic configuration error. To debug, run:"
-        echo "       $ heroku run python $MANAGE_FILE collectstatic --noinput"
-    fi
+    # Display a warning if collectstatic failed.
+    [ $COLLECTSTATIC_STATUS -ne 0 ] && {
+
+        echo
+        echo " !     Error while running '$ python $MANAGE_FILE collectstatic --noinput'."
+        echo "       See traceback above for details."
+        echo
+        echo "       You may need to update application code to resolve this error."
+        echo "       Or, you can disable collectstatic for this application:"
+        echo
+        echo "          $ heroku config:set DISABLE_COLLECTSTATIC=1"
+        echo
+        echo "       https://devcenter.heroku.com/articles/django-assets"
+
+        # Additionally, dump out the environment, if debug mode is on.
+        if [ "$DEBUG_COLLECTSTATIC" ]; then
+            echo
+            echo "****** Collectstatic environment variables:"
+            echo
+            env | indent
+        fi
+
+        # Abort the build.
+        exit 1
+    }
+
     echo
 fi
 
-bpwatch stop collectstatic
+bpwatch stop collectstatic  # metrics collection

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Syntax sugar.
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
+source $BIN_DIR/utils
+
+DISABLE_COLLECTSTATIC=1 "$(dirname ${0:-})/compile" "$1" "$2" "$3"
+
+if [[ -f "$1/requirements-test.txt" ]]; then
+    /app/.heroku/python/bin/pip install -r "$1/requirements-test.txt" --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent
+fi
