@@ -35,7 +35,7 @@ DEFAULT_PYTHON_VERSION="python-2.7.12"
 DEFAULT_PYTHON_STACK="cedar-14"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="9.0.1"
-SETUPTOOLS_VERSION="28.8.0"
+SETUPTOOLS_VERSION="32.1.0"
 
 # Common Problem Warnings
 export WARNINGS_LOG=$(mktemp)
