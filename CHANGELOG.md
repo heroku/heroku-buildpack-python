@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v86
+
+Refactor and multi-buildpack compatibility.
+
 ## v85
 
 Packaging fix. 
