@@ -4,6 +4,9 @@
 
 Updated default Python 2.7.13.
 
+- Python 2.7.13 uses UCS-4 build, more compatibile with linux wheels.
+- Updated setuptools to v32.1.0.
+
 ## v86
 
 Refactor and multi-buildpack compatibility.
