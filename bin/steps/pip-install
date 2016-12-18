@@ -4,8 +4,17 @@ puts-cmd "pip install -r requirements.txt"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
+# if we have an SSL client cert passed in the env var $CLIENT_CERT
+# then dump to disk so that `pip install` can use it when contacting the devpi
+# server
+if [[ -f "${ENV_DIR}/CLIENT_CERT" ]] ; then
+    puts-cmd "using DevPI client side SSL cert ..."
+    CLIENT_CERT="--client-cert=${ENV_DIR}/CLIENT_CERT"
+fi
+
+
 set +e
-/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
+/app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir $CLIENT_CERT 2>&1 | tee $WARNINGS_LOG | cleanup | indent
 PIP_STATUS="${PIPESTATUS[0]}"
 set -e
 
