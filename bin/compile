@@ -153,12 +153,16 @@ bpwatch stop restore_cache
 
 mkdir -p $(dirname $PROFILE_PATH)
 
+# Make the directory for -e pip installations.
+mkdir -p /$BUILD_DIR/.heroku/src
+
 if [[ $BUILD_DIR != '/app' ]]; then
     # python expects to reside in /app, so set up symlinks
     # we will not remove these later so subsequent buildpacks can still invoke it
     ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
     ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
     ln -s $BUILD_DIR/.heroku/venv /app/.heroku/venv
+    ln -s $BUILD_DIR/.heroku/src /app/.heroku/src
 fi
 
 # Install Python.
