@@ -152,6 +152,7 @@ if [[ $BUILD_DIR != '/app' ]]; then
   ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
   ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
   ln -s $BUILD_DIR/.heroku/venv /app/.heroku/venv
+  # NOTE: /app/.heroku/src also exists, but is copied manually later.
 fi
 
 # Install Python.
