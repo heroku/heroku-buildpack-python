@@ -154,7 +154,7 @@ bpwatch stop restore_cache
 mkdir -p $(dirname $PROFILE_PATH)
 
 # Make the directory for -e pip installations.
-mkdir -p /$app/.heroku/src
+mkdir -p /app/.heroku/src
 
 if [[ $BUILD_DIR != '/app' ]]; then
     # python expects to reside in /app, so set up symlinks
