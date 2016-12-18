@@ -131,13 +131,13 @@ mkdir -p $CACHE_DIR
 
 # Restore old artifacts from the cache.
 bpwatch start restore_cache
-    mkdir -p .heroku
+  mkdir -p .heroku
 
-    cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
+  cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
+  cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
+  cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
+  cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
+  cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
 
 bpwatch stop restore_cache
 
@@ -147,11 +147,11 @@ mkdir -p $(dirname $PROFILE_PATH)
 mkdir -p /app/.heroku/src
 
 if [[ $BUILD_DIR != '/app' ]]; then
-    # python expects to reside in /app, so set up symlinks
-    # we will not remove these later so subsequent buildpacks can still invoke it
-    ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
-    ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
-    ln -s $BUILD_DIR/.heroku/venv /app/.heroku/venv
+  # python expects to reside in /app, so set up symlinks
+  # we will not remove these later so subsequent buildpacks can still invoke it
+  ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
+  ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
+  ln -s $BUILD_DIR/.heroku/venv /app/.heroku/venv
 fi
 
 # Install Python.
