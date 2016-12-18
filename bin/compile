@@ -162,7 +162,6 @@ if [[ $BUILD_DIR != '/app' ]]; then
     ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
     ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
     ln -s $BUILD_DIR/.heroku/venv /app/.heroku/venv
-    ln -s $BULD_DIR/.heroku/src /app/.heroku/src
 fi
 
 # Install Python.
@@ -208,6 +207,9 @@ set-default-env PYTHONPATH /app/
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
+
+# Deep copy the directory for -e pip installations
+deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
 
 # Experimental post_compile hook.
 bpwatch start post_compile
