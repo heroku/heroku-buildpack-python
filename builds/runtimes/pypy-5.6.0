@@ -11,4 +11,4 @@ SOURCE_TARBALL='https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.6.0-linux64.t
 curl -L $SOURCE_TARBALL | tar jx
 cp -R pypy2-v5.6.0-linux64/* $OUT_PREFIX
 
-ln $OUT_PREFIX/bin/pypy $OUT_PREFIX/bin/python
+ln -s $OUT_PREFIX/bin/pypy $OUT_PREFIX/bin/python
