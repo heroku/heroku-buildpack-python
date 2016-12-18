@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v88
+
+Fixed bug with editable pip installations. 
+
 ## v87
 
 Updated default Python 2.7.13.
