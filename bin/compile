@@ -157,6 +157,7 @@ if [[ $BUILD_DIR != '/app' ]]; then
     # python expects to reside in /app, so set up symlinks
     # we will not remove these later so subsequent buildpacks can still invoke it
     ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
+    ln -s $BUILD_DIR/.heroku/src /app/.heroku/src
     ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
     ln -s $BUILD_DIR/.heroku/venv /app/.heroku/venv
 fi
@@ -185,12 +186,19 @@ sub-env $BIN_DIR/steps/geo-libs
 # GDAL support.
 source $BIN_DIR/steps/gdal
 
+# rewrite any existing egg links to point to the build dir so pip does not fail with a mismatch error
+find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#"
+find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#"
+
 # Install dependencies with Pip.
 source $BIN_DIR/steps/pip-install
 
+# rewrite build dir in egg links to /app so things are found at runtime
+find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
+find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
+
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
-
 
 # Create .profile script for application runtime environment variables.
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
