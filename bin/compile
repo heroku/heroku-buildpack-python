@@ -142,6 +142,11 @@ bpwatch start restore_cache
   cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
   cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
 
+  if [[ -d $CACHE_DIR/.heroku/src ]]; then
+    cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
+  fi
+
+
 bpwatch stop restore_cache
 
 mkdir -p $(dirname $PROFILE_PATH)
@@ -202,8 +207,11 @@ set-default-env PYTHONPATH /app/
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
 
-# Deep copy the directory for -e pip installations
-deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
+# Symlink the directory for -e pip installations
+if [[ $BUILD_DIR != '/app' ]]; then
+  mv /app/.heroku/src $BUILD_DIR/.heroku
+  ln -s /app/.heroku/src $BUILD_DIR/.heroku/src
+fi
 
 # Experimental post_compile hook.
 bpwatch start post_compile
@@ -218,6 +226,7 @@ bpwatch start dump_cache
   rm -rf $CACHE_DIR/.heroku/python-stack
   rm -rf $CACHE_DIR/.heroku/vendor
   rm -rf $CACHE_DIR/.heroku/venv
+  rm -rf $CACHE_DIR/.heroku/src
 
   mkdir -p $CACHE_DIR/.heroku
   cp -R .heroku/python $CACHE_DIR/.heroku/
@@ -225,6 +234,7 @@ bpwatch start dump_cache
   cp -R .heroku/python-stack $CACHE_DIR/.heroku/ &> /dev/null || true
   cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
   cp -R .heroku/venv $CACHE_DIR/.heroku/ &> /dev/null || true
+  cp -R .heroku/src $CACHE_DIR/.heroku/ &> /dev/null || true
 
 bpwatch stop dump_cache
 
