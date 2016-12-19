@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v89
+
+Improved cache functionality and fix egg-links regression. 
+
 ## v88
 
 Fixed bug with editable pip installations. 
