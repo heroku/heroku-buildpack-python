@@ -24,7 +24,7 @@ cp requirements.txt .heroku/python/requirements-declared.txt
 # find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -0 cat
 
 find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#./app/#"
-find .heroku/python/lib/python*/site-packages/ -name "easy-install.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
+find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
