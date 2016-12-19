@@ -146,13 +146,16 @@ bpwatch stop restore_cache
 
 mkdir -p $(dirname $PROFILE_PATH)
 
+# Make the directory for -e pip installations.
+mkdir -p /app/.heroku/src
+
 if [[ $BUILD_DIR != '/app' ]]; then
   # python expects to reside in /app, so set up symlinks
   # we will not remove these later so subsequent buildpacks can still invoke it
   ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
   ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
   ln -s $BUILD_DIR/.heroku/venv /app/.heroku/venv
-  ln -s $BUILD_DIR/.heroku/src /app/.heroku/src
+  # NOTE: /app/.heroku/src also exists, but is copied manually later.
 fi
 
 # Install Python.
@@ -198,6 +201,9 @@ set-default-env PYTHONPATH /app/
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
+
+# Deep copy the directory for -e pip installations
+deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
 
 # Experimental post_compile hook.
 bpwatch start post_compile
