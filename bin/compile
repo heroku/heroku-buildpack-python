@@ -142,6 +142,11 @@ bpwatch start restore_cache
   cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
   cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
 
+  if [[ -d $CACHE_DIR/.heroku/src ]]; then
+    cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
+  fi
+
+
 bpwatch stop restore_cache
 
 mkdir -p $(dirname $PROFILE_PATH)
