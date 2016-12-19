@@ -209,7 +209,7 @@ cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
 
 # Symlink the directory for -e pip installations
 if [[ $BUILD_DIR != '/app' ]]; then
-  mv /app/.heroku/src $BUILD_DIR/.heroku
+  deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
   ln -s /app/.heroku/src $BUILD_DIR/.heroku/src
 fi
 
