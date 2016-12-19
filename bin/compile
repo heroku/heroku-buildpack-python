@@ -202,8 +202,11 @@ set-default-env PYTHONPATH /app/
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
 
-# Deep copy the directory for -e pip installations
-deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
+# Symlink the directory for -e pip installations
+if [[ $BUILD_DIR != '/app' ]]; then
+  mv /app/.heroku/src $BUILD_DIR/.heroku
+  ln -s /app/.heroku/src $BUILD_DIR/.heroku/src
+fi
 
 # Experimental post_compile hook.
 bpwatch start post_compile
