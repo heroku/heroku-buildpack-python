@@ -21,7 +21,7 @@ cp requirements.txt .heroku/python/requirements-declared.txt
 /app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
 
 # Replace egg-links with new paths for /app.
-find .heroku/python/lib/python*/site-packages/-name "*.egg-link" -print0 | xargs -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
+find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
