@@ -4,9 +4,6 @@ puts-cmd "pip install -r requirements.txt"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
-# Change directory to /app for pip.
-cd /app
-
 set +e
 /app/.heroku/python/bin/pip install -r $BUILD_DIR/requirements.txt --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
 PIP_STATUS="${PIPESTATUS[0]}"
@@ -26,5 +23,4 @@ cp requirements.txt .heroku/python/requirements-declared.txt
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
 
-cd $BUILD_DIR
 echo
