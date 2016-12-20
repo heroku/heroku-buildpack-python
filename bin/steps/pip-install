@@ -3,14 +3,14 @@ puts-cmd "pip install -r requirements.txt"
 
 set +e
 # rewrite any existing egg links to point to the build dir so pip does not fail with a mismatch error
-find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#" &> /dev/null
-find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#" &> /dev/null
+find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#" &> /dev/null
+find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#" &> /dev/null
 set -e
 
 set +e
 # Support for PyPy
-find .heroku/python/lib-python/*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#" &> /dev/null
-find .heroku/python/lib-python/*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#" &> /dev/null
+find .heroku/python/lib-python/*/site-packages/ -name "*.egg-link" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#" &> /dev/null
+find .heroku/python/lib-python/*/site-packages/ -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#" &> /dev/null
 set -e
 
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
@@ -37,14 +37,14 @@ cp requirements.txt .heroku/python/requirements-declared.txt
 
 set +e
 # rewrite build dir in egg links to /app so things are found at runtime
-find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
-find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
+find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
+find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
 set -e
 
 set +e
 # Support for PyPy
-find .heroku/python/lib-python/*/site-packages/  -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
-find .heroku/python/lib-python/*/site-packages/  -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
+find .heroku/python/lib-python/*/site-packages/  -name "*.egg-link" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
+find .heroku/python/lib-python/*/site-packages/  -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
 set -e
 
 echo
