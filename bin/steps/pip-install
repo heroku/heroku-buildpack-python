@@ -5,6 +5,10 @@ puts-cmd "pip install -r requirements.txt"
 find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#"
 find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#"
 
+# Support for PyPy
+find .heroku/python/lib-python/*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#"
+find .heroku/python/lib-python/*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#"
+
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
@@ -30,6 +34,10 @@ cp requirements.txt .heroku/python/requirements-declared.txt
 # rewrite build dir in egg links to /app so things are found at runtime
 find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
 find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
+
+# Support for PyPy
+find .heroku/python/lib-python/*/site-packages/  -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
+find .heroku/python/lib-python/*/site-packages/  -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
 
 
 echo
