@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## v93
+
+Improved support for PyPy.
+
 ## v92
 
 Improved cache functionality and fix egg-links regression. 
