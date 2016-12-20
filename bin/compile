@@ -193,6 +193,10 @@ source $BIN_DIR/steps/gdal
 # Install dependencies with Pip (where the magic happens).
 source $BIN_DIR/steps/pip-install
 
+# Support for pip install -e.
+rm -fr $BUILD_DIR/.heroku/src
+deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
+
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
 
@@ -208,10 +212,6 @@ set-default-env PYTHONPATH /app/
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
-
-# Support for pip install -e.
-rm -fr $BUILD_DIR/.heroku/src
-deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
 
 # Experimental post_compile hook.
 bpwatch start post_compile
