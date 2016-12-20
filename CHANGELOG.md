@@ -1,5 +1,13 @@
 # Python Buildpack Changelog
 
+## 95
+
+Improved output support. 
+
+## v94
+
+Improved support for PyPy.
+
 ## v93
 
 Improved support for PyPy.
