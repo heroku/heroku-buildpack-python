@@ -209,6 +209,7 @@ set-default-env PYTHONPATH /app/
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
 
+# Support for pip install -e.
 rm -fr $BUILD_DIR/.heroku/src
 deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
 
