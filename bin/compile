@@ -148,11 +148,14 @@ bpwatch start restore_cache
     cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
     cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
     cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
+    if [[ -d $CACHE_DIR/.heroku/src ]]; then
+      cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
+    fi
 
 bpwatch stop restore_cache
 
 mkdir -p $(dirname $PROFILE_PATH)
-mkdir /app/.heroku/src
+mkdir -p /app/.heroku/src
 
 if [[ $BUILD_DIR != '/app' ]]; then
     # python expects to reside in /app, so set up symlinks
@@ -160,6 +163,7 @@ if [[ $BUILD_DIR != '/app' ]]; then
     ln -s $BUILD_DIR/.heroku/python /app/.heroku/python
     ln -s $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
     ln -s $BUILD_DIR/.heroku/venv /app/.heroku/venv
+    # Note: .heroku/src is copied in later.
 fi
 
 # Install Python.
@@ -228,6 +232,7 @@ bpwatch start dump_cache
   rm -rf $CACHE_DIR/.heroku/python-stack
   rm -rf $CACHE_DIR/.heroku/vendor
   rm -rf $CACHE_DIR/.heroku/venv
+  rm -rf $CACHE_DIR/.heroku/src
 
   mkdir -p $CACHE_DIR/.heroku
   cp -R .heroku/python $CACHE_DIR/.heroku/
@@ -235,6 +240,9 @@ bpwatch start dump_cache
   cp -R .heroku/python-stack $CACHE_DIR/.heroku/ &> /dev/null || true
   cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
   cp -R .heroku/venv $CACHE_DIR/.heroku/ &> /dev/null || true
+  if [[ -d .heroku/src ]]; then
+    cp -R .heroku/src $CACHE_DIR/.heroku/ &> /dev/null || true
+  fi
 
 bpwatch stop dump_cache
 
