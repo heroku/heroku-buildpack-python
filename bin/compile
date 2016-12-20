@@ -190,16 +190,8 @@ sub-env $BIN_DIR/steps/geo-libs
 # GDAL support.
 source $BIN_DIR/steps/gdal
 
-# rewrite any existing egg links to point to the build dir so pip does not fail with a mismatch error
-find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#"
-find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#"
-
-# Install dependencies with Pip.
+# Install dependencies with Pip (where the magic happens).
 source $BIN_DIR/steps/pip-install
-
-# rewrite build dir in egg links to /app so things are found at runtime
-find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
-find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#"
 
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
