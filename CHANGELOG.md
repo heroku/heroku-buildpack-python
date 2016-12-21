@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## 96
+
+Bugfix.
+
 ## 95
 
 Improved output support. 
