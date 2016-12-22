@@ -1,6 +1,18 @@
 # Install dependencies with Pip.
 puts-cmd "pip install -r requirements.txt"
 
+set +e
+# rewrite any existing egg links to point to the build dir so pip does not fail with a mismatch error
+find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#" &> /dev/null
+find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#" &> /dev/null
+set -e
+
+set +e
+# Support for PyPy
+find .heroku/python/lib-python/*/site-packages/ -name "*.egg-link" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#/app/#$(pwd)/#" &> /dev/null
+find .heroku/python/lib-python/*/site-packages/ -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#" &> /dev/null
+set -e
+
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
