@@ -59,7 +59,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
     puts-step "Installing Setuptools ($SETUPTOOLS_VERSION)"
     tar zxf $ROOT_DIR/vendor/setuptools-$SETUPTOOLS_VERSION.tar.gz -C $TMPTARDIR
     cd $TMPTARDIR/setuptools-$SETUPTOOLS_VERSION/
-    python setup.py install &> /dev/null
+    python setup.py install
     cd $WORKING_DIR
   bpwatch stop install_setuptoools
 
