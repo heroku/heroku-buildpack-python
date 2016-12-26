@@ -5,7 +5,7 @@ language='python'
 dependencies=(
   'https://lang-python.s3.amazonaws.com/cedar-14/runtimes/python-2.7.13.tar.gz'
   'https://lang-python.s3.amazonaws.com/cedar-14/runtimes/python-3.3.6.tar.gz'
-  'https://lang-python.s3.amazonaws.com/cedar-14/runtimes/python-3.4.5.tar.gz'
+  'https://lang-python.s3.amazonaws.com/cedar-14/runtimes/python-3.4.3.tar.gz'
   'https://lang-python.s3.amazonaws.com/cedar-14/runtimes/python-3.5.2.tar.gz'
   'https://lang-python.s3.amazonaws.com/cedar-14/runtimes/python-3.6.0.tar.gz'
   'https://lang-python.s3.amazonaws.com/cedar-14/libraries/vendor/libmemcache.tar.gz'
@@ -17,7 +17,7 @@ symlinks=(
   'https___lang-python.s3.amazonaws.com_cedar-14_libraries_vendor_libffi.tar.gz:https___lang-python.s3.amazonaws.com_scalingo_libraries_vendor_libffi.tar.gz'
   'https___lang-python.s3.amazonaws.com_cedar-14_runtimes_python-2.7.13.tar.gz:https___lang-python.s3.amazonaws.com_scalingo_runtimes_python-2.7.13.tar.gz'
   'https___lang-python.s3.amazonaws.com_cedar-14_runtimes_python-3.3.6.tar.gz:https___lang-python.s3.amazonaws.com_scalingo_runtimes_python-3.3.6.tar.gz'
-  'https___lang-python.s3.amazonaws.com_cedar-14_runtimes_python-3.4.5.tar.gz:https___lang-python.s3.amazonaws.com_scalingo_runtimes_python-3.4.5.tar.gz'
+  'https___lang-python.s3.amazonaws.com_cedar-14_runtimes_python-3.4.3.tar.gz:https___lang-python.s3.amazonaws.com_scalingo_runtimes_python-3.4.3.tar.gz'
   'https___lang-python.s3.amazonaws.com_cedar-14_runtimes_python-3.5.2.tar.gz:https___lang-python.s3.amazonaws.com_scalingo_runtimes_python-3.5.2.tar.gz'
   'https___lang-python.s3.amazonaws.com_cedar-14_runtimes_python-3.6.0.tar.gz:https___lang-python.s3.amazonaws.com_scalingo_runtimes_python-3.6.0.tar.gz'
 )
