@@ -38,7 +38,7 @@ CACHE_ENTRIES=".scalingo/python .scalingo/python-stack .scalingo/python-version"
 VIRTUALENV_LOC=".scalingo/venv"
 LEGACY_TRIGGER="lib/python2.7"
 
-DEFAULT_PYTHON_VERSION="python-2.7.10"
+DEFAULT_PYTHON_VERSION="python-2.7.13"
 DEFAULT_PYTHON_STACK="cedar"
 PYTHON_EXE="/app/.scalingo/python/bin/python"
 PIP_VERSION="7.1.2"
