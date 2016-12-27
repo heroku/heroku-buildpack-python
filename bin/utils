@@ -92,7 +92,7 @@ sub-env() {
   BLACKLIST=${3:-'^(GIT_DIR|PYTHONHOME|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
 
   # Python-specific variables.
-  export PYHONHOME=$BUILD_DIR/.heroku/python
+  export PYHONHOME=$BUILD_DIR/.scalingo/python
   export PYTHONPATH=$BUILD_DIR/
 
   (

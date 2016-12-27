@@ -15,6 +15,8 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
+set -x
+
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
 
 # Prepend proper path for virtualenv hackery. This will be deprecated soon.
@@ -77,7 +79,7 @@ source $BIN_DIR/utils
 source $BIN_DIR/warnings
 
 # we need to put a bunch of symlinks in there later
-mkdir -p /app/.heroku
+mkdir -p /app/.scalingo
 
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
@@ -103,7 +105,7 @@ cd $BUILD_DIR
 # Warn for lack of Procfile.
 if [[ ! -f Procfile ]]; then
   puts-warn 'Warning: Your application is missing a Procfile. This file tells Heroku how to run your application.'
-  puts-warn 'Learn more: https://devcenter.heroku.com/articles/procfile'
+  puts-warn 'Learn more: https://devcenter.scalingo.com/articles/procfile'
 fi
 
 # Experimental pre_compile hook.
@@ -197,8 +199,8 @@ source $BIN_DIR/steps/gdal
 source $BIN_DIR/steps/pip-install
 
 # Support for pip install -e.
-rm -fr $BUILD_DIR/.heroku/src
-deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
+rm -fr $BUILD_DIR/.scalingo/src
+deep-cp /app/.scalingo/src $BUILD_DIR/.scalingo/src
 
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
@@ -237,21 +239,21 @@ set -e
 # Store new artifacts in cache.
 bpwatch start dump_cache
 
-  rm -rf $CACHE_DIR/.heroku/python
-  rm -rf $CACHE_DIR/.heroku/python-version
-  rm -rf $CACHE_DIR/.heroku/python-stack
-  rm -rf $CACHE_DIR/.heroku/vendor
-  rm -rf $CACHE_DIR/.heroku/venv
-  rm -rf $CACHE_DIR/.heroku/src
+  rm -rf $CACHE_DIR/.scalingo/python
+  rm -rf $CACHE_DIR/.scalingo/python-version
+  rm -rf $CACHE_DIR/.scalingo/python-stack
+  rm -rf $CACHE_DIR/.scalingo/vendor
+  rm -rf $CACHE_DIR/.scalingo/venv
+  rm -rf $CACHE_DIR/.scalingo/src
 
-  mkdir -p $CACHE_DIR/.heroku
-  cp -R .heroku/python $CACHE_DIR/.heroku/
-  cp -R .heroku/python-version $CACHE_DIR/.heroku/
-  cp -R .heroku/python-stack $CACHE_DIR/.heroku/ &> /dev/null || true
-  cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
-  cp -R .heroku/venv $CACHE_DIR/.heroku/ &> /dev/null || true
-  if [[ -d .heroku/src ]]; then
-    cp -R .heroku/src $CACHE_DIR/.heroku/ &> /dev/null || true
+  mkdir -p $CACHE_DIR/.scalingo
+  cp -R .scalingo/python $CACHE_DIR/.scalingo/
+  cp -R .scalingo/python-version $CACHE_DIR/.scalingo/
+  cp -R .scalingo/python-stack $CACHE_DIR/.scalingo/ &> /dev/null || true
+  cp -R .scalingo/vendor $CACHE_DIR/.scalingo/ &> /dev/null || true
+  cp -R .scalingo/venv $CACHE_DIR/.scalingo/ &> /dev/null || true
+  if [[ -d .scalingo/src ]]; then
+    cp -R .scalingo/src $CACHE_DIR/.scalingo/ &> /dev/null || true
   fi
 
 bpwatch stop dump_cache
