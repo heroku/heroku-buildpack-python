@@ -20,16 +20,14 @@ bpwatch start pylibmc_install
 # If pylibmc exists within requirements, use vendored libmemcached.
 if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
 
-  if [ -d ".scalingo/vendor/lib/sasl2" ] ; then
-    export LIBMEMCACHED=$(pwd)/vendor
-  else
+  if [ ! -d ".scalingo/vendor/lib/sasl2" ] ; then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
     mkdir -p .scalingo/vendor
     # Download and extract libmemcached into target vendor directory.
     curl -L $VENDORED_MEMCACHED -s | tar zxv -C .scalingo/vendor &> /dev/null
-
-    export LIBMEMCACHED=$(pwd)/vendor
   fi
+
+  export LIBMEMCACHED=$(pwd)/vendor
 fi
 
 bpwatch stop pylibmc_install

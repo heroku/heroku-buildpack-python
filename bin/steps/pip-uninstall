@@ -5,7 +5,7 @@ if [[ -f .scalingo/python/requirements-declared.txt ]]; then
 
   cp .scalingo/python/requirements-declared.txt requirements-declared.txt
 
-  pip-diff --stale requirements-declared.txt requirements.txt --exclude setuptools pip > .scalingo/python/requirements-stale.txt
+  pip-diff --stale requirements-declared.txt requirements.txt --exclude setuptools pip wheel > .scalingo/python/requirements-stale.txt
 
   rm -fr requirements-declared.txt
 

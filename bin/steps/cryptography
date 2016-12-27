@@ -9,7 +9,7 @@
 #
 # This script is invoked by [`bin/compile`](/).
 
-# The location of the pre-compiled cryptography binary.
+# The location of the pre-compiled libffi binary.
 VENDORED_LIBFFI="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libffi.tar.gz"
 
 PKG_CONFIG_PATH="/app/.scalingo/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
@@ -20,11 +20,9 @@ source $BIN_DIR/utils
 bpwatch start libffi_install
 
 # If pylibmc exists within requirements, use vendored cryptography.
-if (pip-grep -s requirements.txt bcrypt cffi cryptography pyOpenSSL PyOpenSSL kinto-pusher requests[security] &> /dev/null) then
+if (pip-grep -s requirements.txt argon2-cffi bcrypt cffi cryptography django[argon2] Django[argon2] django[bcrypt] Django[bcrypt] PyNaCl pyOpenSSL PyOpenSSL kinto-pusher requests[security] misaka &> /dev/null) then
 
-  if [ -d ".scalingo/vendor/lib/libffi-3.1.1" ]; then
-    export LIBFFI=$(pwd)/vendor
-  else
+  if [ ! -d ".scalingo/vendor/lib/libffi-3.1" ]; then
     echo "-----> Noticed cffi. Bootstrapping libffi."
     mkdir -p .scalingo/vendor
     # Download and extract cryptography into target vendor directory.
@@ -32,9 +30,9 @@ if (pip-grep -s requirements.txt bcrypt cffi cryptography pyOpenSSL PyOpenSSL ki
 
     sed -i 's/\.heroku/.scalingo/' .scalingo/vendor/lib/pkgconfig/libffi.pc
     sed -i 's/\.heroku/.scalingo/' .scalingo/vendor/lib/libffi.la
-
-    export LIBFFI=$(pwd)/vendor
   fi
+
+  export LIBFFI=$(pwd)/vendor
 fi
 
 bpwatch stop libffi_install

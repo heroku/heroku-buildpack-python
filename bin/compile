@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# The Heroku Python Buildpack. This script accepts parameters for a build
+# directory, a cache directory, and a directory for app environment variables.
+
+# Warning: there are a few hacks in this script to accommodate excellent builds
+# on Heroku. No guarantee for external compatibility is made. However,
+# everything should work fine outside of the Heroku environment, if the
+# environment is setup correctly.
+
 # Usage:
 #
 #     $ bin/compile <build-dir> <cache-dir> <env-path>
@@ -19,30 +27,19 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-# The ROOT_DIR is read only so we can't install dependencies in it
-# Move the ROOT_DIR contents to tmp and point ROOT_DIR to the new root
-TMP_ROOT=/tmp/buildpack
-rm -rf $TMP_ROOT
-cp -r $ROOT_DIR $TMP_ROOT
-ROOT_DIR=$TMP_ROOT
-cd $ROOT_DIR
-
-# Scalingo does not have support for Logplex.
-function bpwatch() {
-  :
-}
-
-CACHE_ENTRIES=".scalingo/python .scalingo/python-stack .scalingo/python-version"
-
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".scalingo/venv"
 LEGACY_TRIGGER="lib/python2.7"
 
 DEFAULT_PYTHON_VERSION="python-2.7.13"
-DEFAULT_PYTHON_STACK="cedar"
+DEFAULT_PYTHON_STACK="cedar-14"
 PYTHON_EXE="/app/.scalingo/python/bin/python"
-PIP_VERSION="7.1.2"
-SETUPTOOLS_VERSION="18.3.2"
+PIP_VERSION="9.0.1"
+SETUPTOOLS_VERSION="32.1.0"
+
+# Common Problem Warnings
+export WARNINGS_LOG=$(mktemp)
+export RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
 
 # Setup bpwatch
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
@@ -63,80 +60,58 @@ fi
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitizing environment variables.
-unset GIT_DIR PYTHONHOME PYTHONPATH LD_LIBRARY_PATH LIBRARY_PATH
+unset GIT_DIR PYTHONHOME PYTHONPATH
+unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
+unset CYTOKINE_LOG_FILE GEM_PATH
 
+# Setup buildpack instrumentation.
 bpwatch init $LOGPLEX_KEY
 bpwatch build python $BUILDPACK_VERSION $REQUEST_ID
-TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 bpwatch start compile
 
 # Syntax sugar.
 source $BIN_DIR/utils
 
-# CF Common
-BUILDPACK_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
-export BUILDPACK_PATH
-source $BUILDPACK_PATH/compile-extensions/lib/common
-# END CF Common
+# Import collection of warnings.
+source $BIN_DIR/warnings
 
-# Multi buildpack compliment
-EXPORT_PATH="$BUILDPACK_PATH/export"
-
-# Directory Hacks for path consistiency.
-APP_DIR='/app'
-TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
-
-# Skip these steps for Docker.
-if [[ ! "$DOCKER_BUILD" ]]; then
-
-  # Copy Anvil app dir to temporary storage...
-  bpwatch start anvil_appdir_stage
-  if [ "$SLUG_ID" ]; then
-    mkdir -p $TMP_APP_DIR
-    deep-mv $APP_DIR $TMP_APP_DIR
-  else
-    deep-rm $APP_DIR
-  fi
-  bpwatch stop anvil_appdir_stage
-
-  # Copy Application code in.
-  bpwatch start appdir_stage
-    deep-cp $BUILD_DIR $APP_DIR
-  bpwatch stop appdir_stage
-fi
-
-
-# Set new context.
-ORIG_BUILD_DIR=$BUILD_DIR
-BUILD_DIR=$APP_DIR
+# we need to put a bunch of symlinks in there later
+mkdir -p /app/.heroku
 
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
-WEBCONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.webconcurrency.sh"
+EXPORT_PATH="$BIN_DIR/../export"
+GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 
 # We'll need to send these statics to other scripts we `source`.
-export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
+export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH EXPORT_PATH
 
-# Prepend proper path buildpack use.
-export PATH=$BUILD_DIR/.scalingo/python/bin:$BUILD_DIR/.scalingo/vendor/bin:$PATH
+# Prepend proper environment variables for Python use.
+export PATH=/app/.scalingo/python/bin:/app/.scalingo/vendor/bin:$PATH
 export PYTHONUNBUFFERED=1
 export LANG=en_US.UTF-8
-export C_INCLUDE_PATH=/app/.scalingo/vendor/include:$BUILD_DIR/.scalingo/vendor/include:/app/.scalingo/python/include
-export CPLUS_INCLUDE_PATH=/app/.scalingo/vendor/include:$BUILD_DIR/.scalingo/vendor/include:/app/.scalingo/python/include
-export LIBRARY_PATH=/app/.scalingo/vendor/lib:$BUILD_DIR/.scalingo/vendor/lib:/app/.scalingo/python/lib
-export LD_LIBRARY_PATH=/app/.scalingo/vendor/lib:$BUILD_DIR/.scalingo/vendor/lib:/app/.scalingo/python/lib
-export PKG_CONFIG_PATH=/app/.scalingo/vendor/lib/pkg-config:$BUILD_DIR/.scalingo/vendor/lib/pkg-config:/app/.scalingo/python/lib/pkg-config
+export C_INCLUDE_PATH=/app/.scalingo/vendor/include:/app/.scalingo/python/include:$C_INCLUDE_PATH
+export CPLUS_INCLUDE_PATH=/app/.scalingo/vendor/include:/app/.scalingo/python/include:$CPLUS_INCLUDE_PATH
+export LIBRARY_PATH=/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=/app/.scalingo/vendor/lib/pkg-config:/app/.scalingo/python/lib/pkg-config:$PKG_CONFIG_PATH
 
 # Switch to the repo's context.
 cd $BUILD_DIR
+
+# Warn for lack of Procfile.
+if [[ ! -f Procfile ]]; then
+  puts-warn 'Warning: Your application is missing a Procfile. This file tells Heroku how to run your application.'
+  puts-warn 'Learn more: https://devcenter.heroku.com/articles/procfile'
+fi
 
 # Experimental pre_compile hook.
 bpwatch start pre_compile
   source $BIN_DIR/steps/hooks/pre_compile
 bpwatch stop pre_compile
 
-# If no requirements given, assume `setup.py develop`.
+# If no requirements.txt file given, assume `setup.py develop` is intended.
 if [ ! -f requirements.txt ]; then
   echo "-e ." > requirements.txt
 fi
@@ -151,7 +126,7 @@ fi
 if [ -f $CACHE_DIR/.scalingo/python-stack ]; then
   CACHED_PYTHON_STACK=$(cat $CACHE_DIR/.scalingo/python-stack)
 else
-  CACHED_PYTHON_STACK=$DEFAULT_PYTHON_STACK
+  CACHED_PYTHON_STACK=$STACK
 fi
 
 # If no runtime given, assume default version.
@@ -159,7 +134,7 @@ if [ ! -f runtime.txt ]; then
   echo $DEFAULT_PYTHON_VERSION > runtime.txt
 fi
 
-# ### The Cache
+# Prepare the cache.
 mkdir -p $CACHE_DIR
 
 # Purge "old-style" virtualenvs.
@@ -170,18 +145,29 @@ bpwatch stop clear_old_venvs
 
 # Restore old artifacts from the cache.
 bpwatch start restore_cache
-  for dir in $CACHE_ENTRIES; do
-    mkdir -p $(basename $dir)
-    cp -R $CACHE_DIR/$dir $dir &> /dev/null || true
-  done
+    mkdir -p .scalingo
+    cp -R $CACHE_DIR/.scalingo/python .scalingo/ &> /dev/null || true
+    cp -R $CACHE_DIR/.scalingo/python-stack .scalingo/ &> /dev/null || true
+    cp -R $CACHE_DIR/.scalingo/python-version .scalingo/ &> /dev/null || true
+    cp -R $CACHE_DIR/.scalingo/vendor .scalingo/ &> /dev/null || true
+    cp -R $CACHE_DIR/.scalingo/venv .scalingo/ &> /dev/null || true
+    if [[ -d $CACHE_DIR/.scalingo/src ]]; then
+      cp -R $CACHE_DIR/.scalingo/src .scalingo/ &> /dev/null || true
+    fi
+
 bpwatch stop restore_cache
 
-set +e
-# Create set-aside `.scalingo` folder.
-mkdir .scalingo &> /dev/null
-set -e
-
 mkdir -p $(dirname $PROFILE_PATH)
+mkdir -p /app/.scalingo/src
+
+if [[ $BUILD_DIR != '/app' ]]; then
+    # python expects to reside in /app, so set up symlinks
+    # we will not remove these later so subsequent buildpacks can still invoke it
+    ln -nsf $BUILD_DIR/.scalingo/python /app/.scalingo/python
+    ln -nsf $BUILD_DIR/.scalingo/vendor /app/.scalingo/vendor
+    ln -nsf $BUILD_DIR/.scalingo/venv /app/.scalingo/venv
+    # Note: .scalingo/src is copied in later.
+fi
 
 # Install Python.
 source $BIN_DIR/steps/python
@@ -201,62 +187,74 @@ source $BIN_DIR/steps/pylibmc
 # Libffi support.
 source $BIN_DIR/steps/cryptography
 
+# Support for Geo libraries.
+sub-env $BIN_DIR/steps/geo-libs
+
 # GDAL support.
 source $BIN_DIR/steps/gdal
 
-# Install dependencies with Pip.
+# Install dependencies with Pip (where the magic happens).
 source $BIN_DIR/steps/pip-install
+
+# Support for pip install -e.
+rm -fr $BUILD_DIR/.heroku/src
+deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
 
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
 
+# Create .profile script for application runtime environment variables.
+set-env PATH '$HOME/.scalingo/python/bin:$PATH'
+set-env PYTHONUNBUFFERED true
+set-env PYTHONHOME /app/.scalingo/python
+set-env LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LIBRARY_PATH'
+set-env LD_LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LD_LIBRARY_PATH'
+set-default-env LANG en_US.UTF-8
+set-default-env PYTHONHASHSEED random
+set-default-env PYTHONPATH /app/
 
-# ### Finalize
-#
-
-# Set context environment variables.
-set-env PATH '$HOME/.scalingo/python/bin:$PATH' '$BUILD_DIR/.scalingo/python/bin:$PATH'
-set-env PYTHONUNBUFFERED true true
-set-env PYTHONHOME /app/.scalingo/python '$BUILD_DIR/.scalingo/python'
-set-env LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LIBRARY_PATH' '$BUILD_DIR/.scalingo/vendor/lib:$BUILD_DIR/.scalingo/python/lib:$LIBRARY_PATH'
-set-env LD_LIBRARY_PATH '/app/.scalingo/vendor/lib:/app/.scalingo/python/lib:$LD_LIBRARY_PATH' '$BUILD_DIR/.scalingo/vendor/lib:$BUILD_DIR/.scalingo/python/lib:$LD_LIBRARY_PATH'
-set-default-env LANG en_US.UTF-8 en_US.UTF-8
-set-default-env PYTHONHASHSEED random random
-set-default-env PYTHONPATH /app/ '$BUILD_DIR/'
-
-# Install sane-default script for WEB_CONCURRENCY environment variable.
-cp $ROOT_DIR/vendor/python.webconcurrency.sh $WEBCONCURRENCY_PROFILE_PATH
-
+# Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
+cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
 
 # Experimental post_compile hook.
 bpwatch start post_compile
   source $BIN_DIR/steps/hooks/post_compile
 bpwatch stop post_compile
 
+
+set +e
+# rewrite build dir in egg links to /app so things are found at runtime
+find .scalingo/python/lib/python*/site-packages/ -name "*.egg-link" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
+find .scalingo/python/lib/python*/site-packages/ -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
+set -e
+
+set +e
+# Support for PyPy
+find .scalingo/python/lib-python/*/site-packages/  -name "*.egg-link" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
+find .scalingo/python/lib-python/*/site-packages/  -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)/#/app/#" &> /dev/null
+set -e
+
 # Store new artifacts in cache.
 bpwatch start dump_cache
-  for dir in $CACHE_ENTRIES; do
-    rm -rf $CACHE_DIR/$dir
-    mkdir -p $(dirname $CACHE_DIR/$dir)
-    cp -R $dir $CACHE_DIR/$dir
-  done
-bpwatch stop dump_cache
 
-# ### Fin.
-if [[ ! "$DOCKER_BUILD" ]]; then
+  rm -rf $CACHE_DIR/.heroku/python
+  rm -rf $CACHE_DIR/.heroku/python-version
+  rm -rf $CACHE_DIR/.heroku/python-stack
+  rm -rf $CACHE_DIR/.heroku/vendor
+  rm -rf $CACHE_DIR/.heroku/venv
+  rm -rf $CACHE_DIR/.heroku/src
 
-  bpwatch start appdir_commit
-    deep-rm $ORIG_BUILD_DIR
-    deep-mv $BUILD_DIR $ORIG_BUILD_DIR
-  bpwatch stop appdir_commit
-
-  bpwatch start anvil_appdir_commit
-  if [ "$SLUG_ID" ]; then
-    deep-mv $TMP_APP_DIR $APP_DIR
+  mkdir -p $CACHE_DIR/.heroku
+  cp -R .heroku/python $CACHE_DIR/.heroku/
+  cp -R .heroku/python-version $CACHE_DIR/.heroku/
+  cp -R .heroku/python-stack $CACHE_DIR/.heroku/ &> /dev/null || true
+  cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
+  cp -R .heroku/venv $CACHE_DIR/.heroku/ &> /dev/null || true
+  if [[ -d .heroku/src ]]; then
+    cp -R .heroku/src $CACHE_DIR/.heroku/ &> /dev/null || true
   fi
 
-  bpwatch stop anvil_appdir_commit
-  bpwatch stop compile
+bpwatch stop dump_cache
 
-  rm -rf $TMP_ROOT
-fi
+# Fin.
+bpwatch stop compile
