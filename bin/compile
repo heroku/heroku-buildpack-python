@@ -15,8 +15,7 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
-set -x
-
+[ "$BUILDPACK_DEBUG" ] && set -x
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
 
 # Prepend proper path for virtualenv hackery. This will be deprecated soon.
