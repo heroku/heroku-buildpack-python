@@ -28,9 +28,9 @@ if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
     echo "-----> Bootstrapping gdal, geos, proj."
     mkdir -p .scalingo/vendor
     # Download and extract cryptography into target vendor directory.
-    curl $VENDORED_GDAL -s | tar zxv -C .scalingo/vendor &> /dev/null
-    curl $VENDORED_GEOS -s | tar zxv -C .scalingo/vendor &> /dev/null
-    curl $VENDORED_PROJ -s | tar zxv -C .scalingo/vendor &> /dev/null
+    curl --location $VENDORED_GDAL -s | tar zxv -C .scalingo/vendor &> /dev/null
+    curl --location $VENDORED_GEOS -s | tar zxv -C .scalingo/vendor &> /dev/null
+    curl --location $VENDORED_PROJ -s | tar zxv -C .scalingo/vendor &> /dev/null
   fi
 
   export GDAL=$(pwd)/vendor

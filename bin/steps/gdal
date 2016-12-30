@@ -26,7 +26,7 @@ if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
     echo "-----> Noticed GDAL. Bootstrapping gdal."
     mkdir -p .scalingo/vendor
     # Download and extract cryptography into target vendor directory.
-    curl $VENDORED_GDAL -s | tar zxv -C .scalingo/vendor &> /dev/null
+    curl --location $VENDORED_GDAL -s | tar zxv -C .scalingo/vendor &> /dev/null
   fi
 
   export GDAL=$(pwd)/vendor
