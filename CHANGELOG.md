@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+## 97
+
+Improved egg-link functionality.
+
 ## 96
 
 Bugfix.
