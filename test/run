@@ -13,6 +13,19 @@ testPsycopg2() {
   assertCapturedSuccess
 }
 
+testPython2() {
+  compile "python2"
+  assertCaptured "python-2.7.13"
+  assertCapturedSuccess
+}
+
+testPython3() {
+  compile "python3"
+  assertCaptured "python-3.6.0"
+  assertCapturedSuccess
+}
+
+
 pushd $(dirname 0) >/dev/null
 popd >/dev/null
 
