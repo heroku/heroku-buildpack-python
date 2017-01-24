@@ -1,2 +1,6 @@
-sudo: false
-script: exit 0
+language: bash
+sudo: required
+services:
+  - docker
+install: docker pull heroku/cedar:14
+script: make test
