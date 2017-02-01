@@ -2,7 +2,7 @@
 
 # Heroku Buildpack: Python
 
-![build](https://travis-ci.org/heroku/heroku-buildpack-python.svg?branch=master)
+[![Build Status](https://travis-ci.org/heroku/heroku-buildpack-python.svg?branch=master)](https://travis-ci.org/heroku/heroku-buildpack-python)
 
 This is the official [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](https://pip.pypa.io/) and other excellent software.
 
