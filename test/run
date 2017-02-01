@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
-# See README.md for info on running these tests.
+
+testNoRequirements() {
+  compile "no-requirements"
+  assertCapturedError
+}
+
+
+testSetupPy() {
+  compile "setup-py"
+  assertCaptured "maya"
+  assertCapturedSuccess
+}
+
 
 testStandardRequirements() {
   compile "requirements-standard"
@@ -24,6 +36,8 @@ testPython3() {
   assertCaptured "python-3.6.0"
   assertCapturedSuccess
 }
+
+
 
 
 pushd $(dirname 0) >/dev/null

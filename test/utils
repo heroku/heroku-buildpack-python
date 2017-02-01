@@ -147,6 +147,11 @@ _assertContains()
   fi
 }
 
+debug()
+{
+  cat $STD_OUT
+}
+
 assertContains()
 {
   _assertContains "$@" 0 "text"
