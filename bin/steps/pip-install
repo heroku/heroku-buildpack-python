@@ -1,5 +1,8 @@
 # Install dependencies with Pip.
+puts-cmd "pip install --upgrade pip"
 puts-cmd "pip install -r requirements.txt"
+puts-cmd "bower install"
+
 
 set +e
 # delete any existing egg links, to uninstall exisisting installations.
