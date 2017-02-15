@@ -193,6 +193,9 @@ source $BIN_DIR/steps/gdal
 # Install dependencies with Pip (where the magic happens).
 source $BIN_DIR/steps/pip-install
 
+# Support for NLTK corpora.
+sub-env $BIN_DIR/steps/nltk
+
 # Support for pip install -e.
 rm -fr $BUILD_DIR/.heroku/src
 deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
