@@ -27,8 +27,6 @@ if [ $? -eq 0 ]; then
     else
         puts-warn "nltk.txt not found, not downloading any corpora"
     fi
-else
-    puts-warn "nltk not apparently installed, not downloading packages"
 fi
 
 
