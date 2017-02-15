@@ -1,5 +1,12 @@
 # Python Buildpack Changelog
 
+## 98
+
+Official NLTK support and other improvements.
+
+- Support for `nltk.txt` file for declaring corpora to be downloaded.
+- Leading zeros for auto-set WEB_CONCURRENCY.
+
 ## 97
 
 Improved egg-link functionality.
@@ -10,7 +17,7 @@ Bugfix.
 
 ## 95
 
-Improved output support. 
+Improved output support.
 
 ## v94
 
@@ -22,7 +29,7 @@ Improved support for PyPy.
 
 ## v92
 
-Improved cache functionality and fix egg-links regression. 
+Improved cache functionality and fix egg-links regression.
 
 ## v91
 
@@ -34,11 +41,11 @@ Bugfix.
 
 ## v89
 
-Improved cache functionality and fix egg-links regression. 
+Improved cache functionality and fix egg-links regression.
 
 ## v88
 
-Fixed bug with editable pip installations. 
+Fixed bug with editable pip installations.
 
 ## v87
 
@@ -53,7 +60,7 @@ Refactor and multi-buildpack compatibility.
 
 ## v85
 
-Packaging fix. 
+Packaging fix.
 
 ## v84
 
