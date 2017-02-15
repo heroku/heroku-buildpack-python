@@ -14,9 +14,6 @@ source $BIN_DIR/utils
 
 bpwatch start nltk_download
 
-export NLTK_DATA_DIR="$BUILD_DIR/nltk_data"
-export NLTK_DATA="$BUILD_DIR/nltk_data"
-
 # Check that nltk was installed by pip, otherwise obviously not needed
 python -m nltk.downloader -h >/dev/null 2>&1
 if [ $? -eq 0 ]; then
