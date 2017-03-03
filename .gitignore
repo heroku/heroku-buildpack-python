@@ -1,2 +1,3 @@
 *.pyc
 site
+.DS_Store
