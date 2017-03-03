@@ -1,3 +1,14 @@
+# Set pip specific environment variables
+env_dir=$1
+whitelist_regex=${2:-'^PIP_.*$'}
+if [ -d "$env_dir" ]; then
+  for e in $(ls $env_dir); do
+    echo "$e" | grep -E "$whitelist_regex" &&
+    export "$e=$(cat $env_dir/$e)"
+    :
+  done
+fi
+
 # Install dependencies with Pip.
 puts-cmd "pip install -r requirements.txt"
 

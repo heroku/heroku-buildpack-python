@@ -196,7 +196,7 @@ sub-env $BIN_DIR/steps/geo-libs
 source $BIN_DIR/steps/gdal
 
 # Install dependencies with Pip (where the magic happens).
-source $BIN_DIR/steps/pip-install
+source $BIN_DIR/steps/pip-install $ENV_DIR
 
 # Support for NLTK corpora.
 sub-env $BIN_DIR/steps/nltk
