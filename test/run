@@ -5,6 +5,18 @@ testNoRequirements() {
   assertCapturedError
 }
 
+testPipenv() {
+  compile "pipenv"
+  assertCaptured "requests"
+  assertCapturedSuccess
+}
+
+testPipenvVersion() {
+  compile "pipenv-version"
+  assertCaptured "3.6"
+  assertCapturedSuccess
+}
+
 
 testSetupPy() {
   compile "setup-py"
