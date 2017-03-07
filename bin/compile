@@ -42,7 +42,7 @@ export WARNINGS_LOG=$(mktemp)
 export RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
 
 # Setup bpwatch
-export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
+export PATH=$PATH:$ROOT_DIR/vendor/:$ROOT_DIR/vendor/bpwatch
 LOGPLEX_KEY="t.b90d9d29-5388-4908-9737-b4576af1d4ce"
 export BPWATCH_STORE_PATH=$CACHE_DIR/bpwatch.json
 BUILDPACK_VERSION=v28
@@ -107,12 +107,6 @@ bpwatch start pre_compile
   source $BIN_DIR/steps/hooks/pre_compile
 bpwatch stop pre_compile
 
-# If no requirements.txt file given, assume `setup.py develop` is intended.
-if [ ! -f requirements.txt ]; then
-  echo "-e ." > requirements.txt
-fi
-
-
 # Sticky runtimes.
 if [ -f $CACHE_DIR/.heroku/python-version ]; then
   DEFAULT_PYTHON_VERSION=$(cat $CACHE_DIR/.heroku/python-version)
@@ -124,6 +118,9 @@ if [ -f $CACHE_DIR/.heroku/python-stack ]; then
 else
   CACHED_PYTHON_STACK=$STACK
 fi
+
+# Pipenv Python version support.
+source $BIN_DIR/steps/pipenv-python-version
 
 # If no runtime given, assume default version.
 if [ ! -f runtime.txt ]; then
@@ -171,6 +168,14 @@ source $BIN_DIR/steps/python
 
 # Sanity check for setuptools/distribute.
 source $BIN_DIR/steps/setuptools
+
+# Pipenv support.
+source $BIN_DIR/steps/pipenv
+
+# If no requirements.txt file given, assume `setup.py develop` is intended.
+if [ ! -f requirements.txt ]; then
+  echo "-e ." > requirements.txt
+fi
 
 # Uninstall removed dependencies with Pip.
 source $BIN_DIR/steps/pip-uninstall

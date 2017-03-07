@@ -1,0 +1,13 @@
+# Generate requriements.txt with pipenv.
+
+if [[ -f Pipfile ]]; then
+    if [[ ! -f requirements.txt ]]; then
+        puts-step "Generating 'requirements.txt' with pipenv"
+
+        pip install pipenv --upgrade &> /dev/null
+        pipenv lock --requirements > requirements.txt 2> /dev/null
+
+        pipstrip requirements.txt
+    fi
+fi
+
