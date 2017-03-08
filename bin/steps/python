@@ -57,7 +57,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   bpwatch start install_setuptools
     # Prepare it for the real world
     puts-step "Installing Setuptools ($SETUPTOOLS_VERSION)"
-    tar zxf $ROOT_DIR/vendor/setuptools-$SETUPTOOLS_VERSION.tar.gz -C $TMPTARDIR
+    unzip $ROOT_DIR/vendor/setuptools-$SETUPTOOLS_VERSION.zip -d $TMPTARDIR
     cd $TMPTARDIR/setuptools-$SETUPTOOLS_VERSION/
     python setup.py install
     cd $WORKING_DIR
@@ -65,7 +65,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
 
   bpwatch start install_pip
     puts-step "Installing Pip ($PIP_VERSION)"
-    unzip $ROOT_DIR/vendor/pip-$PIP_VERSION.zip -d $TMPTARDIR
+    tar zxf $ROOT_DIR/vendor/pip-$PIP_VERSION.tar.gz -C $TMPTARDIR
     cd $TMPTARDIR/pip-$PIP_VERSION/
     python setup.py install
     cd $WORKING_DIR
