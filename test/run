@@ -5,6 +5,14 @@ testNoRequirements() {
   assertCapturedError
 }
 
+
+testPipenv() {
+  compile "pipenv"
+  assertCaptured "maya"
+  assertCapturedSuccess
+}
+
+
 testSetupPy() {
   compile "setup-py"
   assertCaptured "maya"

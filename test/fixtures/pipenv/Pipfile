@@ -1,2 +1,2 @@
 [packages]
-requests = "*"
+maya = "*"
