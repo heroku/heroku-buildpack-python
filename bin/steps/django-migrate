@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Django migrate runner. If you have Django installed, migrate will
+# automatically be executed as part of the build process. If migrate
+# fails, your build fails.
+
+# This functionality will only activate if Django is in requirements.txt.
+
+# Runtime arguments:
+#   - $DISABLE_DJANGOMIGRATE: disables this functionality.
+#   - $DEBUG_DJANGOMIGRATE: upon failure, print out environment variables.
+
+source $BIN_DIR/django-utils
+
+bpwatch start djangomigrate  # metrics collection
+
+if [ ! "$DISABLE_DJANGOMIGRATE" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
+    django-manage-command migrate $DEBUG_DJANGOMIGRATE "DISABLE_DJANGOMIGRATE"
+fi
+
+bpwatch stop djangomigrate  # metrics collection

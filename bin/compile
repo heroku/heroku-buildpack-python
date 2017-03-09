@@ -207,6 +207,9 @@ deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
 # Django collectstatic support.
 sub-env $BIN_DIR/steps/collectstatic
 
+# Django migrate support.
+sub-env $BIN_DIR/steps/django-migrate
+
 # Create .profile script for application runtime environment variables.
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
