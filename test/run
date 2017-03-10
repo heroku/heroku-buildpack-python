@@ -8,7 +8,6 @@ testNoRequirements() {
 
 testPipenv() {
   compile "pipenv"
-  assertCaptured "maya"
   assertCapturedSuccess
 }
 
