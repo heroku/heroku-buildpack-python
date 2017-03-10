@@ -22,8 +22,6 @@ MANAGE_FILE=${MANAGE_FILE:-fakepath}
 # Ensure that Django is explicitly specified in requirements.txt
 pip-grep -s requirements.txt django Django && DJANGO_INSTALLED=1
 
-bpwatch start collectstatic  # metrics collection
-
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     set +e
 
@@ -63,5 +61,3 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
 
     echo
 fi
-
-bpwatch stop collectstatic  # metrics collection

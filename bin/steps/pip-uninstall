@@ -1,6 +1,6 @@
 set +e
 # Install dependencies with Pip.
-bpwatch start pip_uninstall
+
 if [[ -f .heroku/python/requirements-declared.txt ]]; then
 
   cp .heroku/python/requirements-declared.txt requirements-declared.txt
@@ -14,5 +14,4 @@ if [[ -f .heroku/python/requirements-declared.txt ]]; then
     /app/.heroku/python/bin/pip uninstall -r .heroku/python/requirements-stale.txt -y --exists-action=w | cleanup | indent
   fi
 fi
-bpwatch stop pip_uninstall
 set -e

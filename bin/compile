@@ -40,11 +40,8 @@ PIP_VERSION="9.0.1"
 export WARNINGS_LOG=$(mktemp)
 export RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
 
-# Setup bpwatch
-export PATH=$PATH:$ROOT_DIR/vendor/:$ROOT_DIR/vendor/bpwatch
-LOGPLEX_KEY="t.b90d9d29-5388-4908-9737-b4576af1d4ce"
-export BPWATCH_STORE_PATH=$CACHE_DIR/bpwatch.json
-BUILDPACK_VERSION=v28
+# Add vendor to path.
+export PATH=$PATH:$ROOT_DIR/vendor/
 
 # Setup pip-pop (pip-diff)
 export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
@@ -58,12 +55,6 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 unset GIT_DIR PYTHONHOME PYTHONPATH
 unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
 unset CYTOKINE_LOG_FILE GEM_PATH
-
-# Setup buildpack instrumentation.
-bpwatch init $LOGPLEX_KEY
-bpwatch build python $BUILDPACK_VERSION $REQUEST_ID
-
-bpwatch start compile
 
 # Syntax sugar.
 source $BIN_DIR/utils
@@ -102,9 +93,7 @@ if [[ ! -f Procfile ]]; then
 fi
 
 # Experimental pre_compile hook.
-bpwatch start pre_compile
-  source $BIN_DIR/steps/hooks/pre_compile
-bpwatch stop pre_compile
+source $BIN_DIR/steps/hooks/pre_compile
 
 # Sticky runtimes.
 if [ -f $CACHE_DIR/.heroku/python-version ]; then
@@ -130,25 +119,21 @@ fi
 mkdir -p $CACHE_DIR
 
 # Purge "old-style" virtualenvs.
-bpwatch start clear_old_venvs
-  [ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.heroku/bin $CACHE_DIR/.heroku/lib $CACHE_DIR/.heroku/include
-  [ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
-bpwatch stop clear_old_venvs
+[ -d $CACHE_DIR/$LEGACY_TRIGGER ] && rm -fr $CACHE_DIR/.heroku/bin $CACHE_DIR/.heroku/lib $CACHE_DIR/.heroku/include
+[ -d $CACHE_DIR/$VIRTUALENV_LOC ] && rm -fr $CACHE_DIR/.heroku/venv $CACHE_DIR/.heroku/src
 
 # Restore old artifacts from the cache.
-bpwatch start restore_cache
-    mkdir -p .heroku
+mkdir -p .heroku
 
-    cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
-    cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
-    if [[ -d $CACHE_DIR/.heroku/src ]]; then
-      cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
-    fi
+cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
+cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
+cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
+cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
+cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
+if [[ -d $CACHE_DIR/.heroku/src ]]; then
+  cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
+fi
 
-bpwatch stop restore_cache
 
 mkdir -p $(dirname $PROFILE_PATH)
 mkdir -p /app/.heroku/src
@@ -221,9 +206,7 @@ set-default-env PYTHONPATH /app/
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
 
 # Experimental post_compile hook.
-bpwatch start post_compile
-  source $BIN_DIR/steps/hooks/post_compile
-bpwatch stop post_compile
+source $BIN_DIR/steps/hooks/post_compile
 
 set +e
 # rewrite build dir in egg links to /app so things are found at runtime
@@ -236,26 +219,20 @@ find .heroku/python/lib-python/*/site-packages/  -name "*.pth" -print0 2> /dev/n
 set -e
 
 # Store new artifacts in cache.
-bpwatch start dump_cache
 
-  rm -rf $CACHE_DIR/.heroku/python
-  rm -rf $CACHE_DIR/.heroku/python-version
-  rm -rf $CACHE_DIR/.heroku/python-stack
-  rm -rf $CACHE_DIR/.heroku/vendor
-  rm -rf $CACHE_DIR/.heroku/venv
-  rm -rf $CACHE_DIR/.heroku/src
+rm -rf $CACHE_DIR/.heroku/python
+rm -rf $CACHE_DIR/.heroku/python-version
+rm -rf $CACHE_DIR/.heroku/python-stack
+rm -rf $CACHE_DIR/.heroku/vendor
+rm -rf $CACHE_DIR/.heroku/venv
+rm -rf $CACHE_DIR/.heroku/src
 
-  mkdir -p $CACHE_DIR/.heroku
-  cp -R .heroku/python $CACHE_DIR/.heroku/
-  cp -R .heroku/python-version $CACHE_DIR/.heroku/
-  cp -R .heroku/python-stack $CACHE_DIR/.heroku/ &> /dev/null || true
-  cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
-  cp -R .heroku/venv $CACHE_DIR/.heroku/ &> /dev/null || true
-  if [[ -d .heroku/src ]]; then
-    cp -R .heroku/src $CACHE_DIR/.heroku/ &> /dev/null || true
-  fi
-
-bpwatch stop dump_cache
-
-# Fin.
-bpwatch stop compile
+mkdir -p $CACHE_DIR/.heroku
+cp -R .heroku/python $CACHE_DIR/.heroku/
+cp -R .heroku/python-version $CACHE_DIR/.heroku/
+cp -R .heroku/python-stack $CACHE_DIR/.heroku/ &> /dev/null || true
+cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
+cp -R .heroku/venv $CACHE_DIR/.heroku/ &> /dev/null || true
+if [[ -d .heroku/src ]]; then
+  cp -R .heroku/src $CACHE_DIR/.heroku/ &> /dev/null || true
+fi
