@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 if [[ ! "$STACK" ]]; then
     echo '$STACK must be set! (heroku-16 | cedar-14)'
