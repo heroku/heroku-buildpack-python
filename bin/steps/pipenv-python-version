@@ -1,10 +1,11 @@
 # Detect Python-version with Pipenv.
 
-if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
+if [[ -f $BUILD_DIR/Pipfile ]]; then
 
     if [[ ! -f $BUILD_DIR/runtime.txt ]]; then
         if [[ ! -f Pipfile.lock ]]; then
-            pipenv lock 2> /dev/null
+            puts-step "Pipfile.lock not found, creating..."
+            /app/.heroku/python/bin/pipenv lock 2> /dev/null
         fi
 
         set +e

@@ -39,7 +39,9 @@ if [ ! "$SKIP_INSTALL" ]; then
 fi
 
 # If Pip isn't up to date:
-if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
+if [ "$FRESH_PYTHON" ] || pip list -o --format=legacy --disable-pip-version-check | grep '^pip' 2>&1 /dev/null; then
+
+  # TODO: automatically detect pip is out of date with 'pip list -o --format=legacy --disable-pip-version-check | grep '^pip''
   WORKING_DIR=$(pwd)
 
   TMPTARDIR=$(mktemp -d)
