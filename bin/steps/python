@@ -46,7 +46,9 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   trap "rm -rf $TMPTARDIR" RETURN
 
   puts-step "Bootstrapping pip"
-  python $ROOT_DIR/vendor/get-pip.py
+  /app/.heroku/python/bin/python $ROOT_DIR/vendor/get-pip.py | indent
+  /app/.heroku/python/bin/pip install setuptools --upgrade &> /dev/null
+
 
 fi
 
