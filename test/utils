@@ -150,8 +150,6 @@ _assertContains()
 debug()
 {
   cat $STD_OUT
-  echo '^^^^^^'
-  cat $STD_ERR
 }
 
 assertContains()

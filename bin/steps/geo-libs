@@ -19,6 +19,8 @@ PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 # Syntax sugar.
 source $BIN_DIR/utils
 
+bpwatch start geo_libs_install
+
 # If GDAL exists within requirements, use vendored gdal.
 if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
 
@@ -33,3 +35,5 @@ if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
 
   export GDAL=$(pwd)/vendor
 fi
+
+bpwatch stop geo_libs_install

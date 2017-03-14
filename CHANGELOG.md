@@ -1,12 +1,5 @@
 # Python Buildpack Changelog
 
-## 101
-
-Cleanups.
-
- - Remove legacy instrumentation.
- - Remove legacy virtualenv support.
-
 ## 100
 
 Preliminary pipenv support.

@@ -1,38 +1,9 @@
 #!/usr/bin/env bash
 
-testPipenvVersion() {
-  compile "pipenv-version"
-  assertCaptured "3.6.0"
-}
-
-testPipenv() {
-  compile "pipenv"
-  assertCapturedSuccess
-}
-
-
 testNoRequirements() {
   compile "no-requirements"
   assertCapturedError
 }
-
-
-testNLTK() {
-  compile "nltk"
-  assertCaptured "wordnet"
-  assertCapturedSuccess
-
-}
-
-
-
-
-
-testNewlineRuntime() {
-  compile "newline-runtime"
-  assertCaptured "2.7.11"
-}
-
 
 
 testSetupPy() {
