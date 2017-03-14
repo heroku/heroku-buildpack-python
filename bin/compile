@@ -120,7 +120,6 @@ cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
 cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
 cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
 cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
-cp -R $CACHE_DIR/.heroku/venv .heroku/ &> /dev/null || true
 if [[ -d $CACHE_DIR/.heroku/src ]]; then
   cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
 fi
@@ -134,7 +133,6 @@ if [[ $BUILD_DIR != '/app' ]]; then
     # we will not remove these later so subsequent buildpacks can still invoke it
     ln -nsf $BUILD_DIR/.heroku/python /app/.heroku/python
     ln -nsf $BUILD_DIR/.heroku/vendor /app/.heroku/vendor
-    ln -nsf $BUILD_DIR/.heroku/venv /app/.heroku/venv
     # Note: .heroku/src is copied in later.
 fi
 
