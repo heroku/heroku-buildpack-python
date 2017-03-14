@@ -22,6 +22,11 @@ testPipenvVersion() {
   assertCapturedSuccess
 }
 
+testNewlineRuntime() {
+  compile "newline-runtime"
+  assertCaptured "2.7.11"
+  assertCapturedSuccess
+}
 
 testPipenv() {
   compile "pipenv"
