@@ -5,9 +5,12 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
     if [[ ! -f $BUILD_DIR/runtime.txt ]]; then
         if [[ ! -f Pipfile.lock ]]; then
             puts-warn "Pipfile.lock not found!"
-        else
+            echo '{}' > Pipfile.lock
+        fi
+
+        if [[ -f Pipfile.lock ]]; then
             set +e
-            PYTHON=$(cat $BUILD_DIR/Pipfile.lock | jq '._meta.requires.python_version' -r) 2>&1 /dev/null
+            PYTHON=$(cat $BUILD_DIR/Pipfile.lock | jq '._meta.requires.python_version' -r)
             set -e
 
             if [ "$PYTHON" = 2.7 ]; then
@@ -17,6 +20,7 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
                 echo "python-3.6.0" > $BUILD_DIR/runtime.txt
             fi
         fi
+
     fi
 fi
 

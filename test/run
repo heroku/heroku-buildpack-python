@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+testPipenvVersion() {
+  compile "pipenv-version"
+  assertCaptured "3.6.0"
+  assertCapturedSuccess
+}
+
 testPipenv() {
   compile "pipenv"
   assertCapturedSuccess
@@ -21,11 +27,7 @@ testNLTK() {
 
 
 
-testPipenvVersion() {
-  compile "pipenv-version"
-  assertCaptured "3.6.0"
-  assertCapturedSuccess
-}
+
 
 testNewlineRuntime() {
   compile "newline-runtime"
