@@ -1,4 +1,8 @@
 set +e
+
+# Fix any pending whitespace around runtime.txt.
+runtime-fixer runtime.txt
+
 PYTHON_VERSION=$(cat runtime.txt)
 
 # Install Python.
