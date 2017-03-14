@@ -1,8 +1,31 @@
 #!/usr/bin/env bash
 
+
+
 testNoRequirements() {
   compile "no-requirements"
   assertCapturedError
+}
+
+
+testNLTK() {
+  compile "nltk"
+  assertCaptured "wordnet"
+  assertCapturedSuccess
+
+}
+
+
+testPipenvVersion() {
+  compile "pipenv-version"
+  assertCaptured "3.6.0"
+  assertCapturedSuccess
+}
+
+
+testPipenv() {
+  compile "pipenv"
+  assertCapturedSuccess
 }
 
 
