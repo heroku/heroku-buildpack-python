@@ -51,7 +51,7 @@ if [ "$FRESH_PYTHON" ] || pip list -o --format=legacy --disable-pip-version-chec
   TMPTARDIR=$(mktemp -d)
   trap "rm -rf $TMPTARDIR" RETURN
 
-  puts-step "Bootstrapping pip"
+  puts-step "Installing pip"
   /app/.heroku/python/bin/python $ROOT_DIR/vendor/get-pip.py | indent
   /app/.heroku/python/bin/pip install setuptools --upgrade &> /dev/null
 

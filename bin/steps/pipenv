@@ -2,9 +2,11 @@
 
 if [[ -f Pipfile ]]; then
     if [[ ! -f requirements.txt ]]; then
-        puts-step "Generating 'requirements.txt' with pipenv"
 
-        /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
+        puts-step "Installing pipenv"
+        /app/.heroku/python/bin/python $ROOT_DIR/vendor/get-pipenv.py &> /dev/null
+
+        puts-step "Generating 'requirements.txt' with pipenv"
         /app/.heroku/python/bin/pipenv lock --requirements > requirements.txt 2> /dev/null
 
         pipstrip requirements.txt
