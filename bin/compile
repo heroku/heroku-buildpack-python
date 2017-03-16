@@ -158,6 +158,9 @@ source $BIN_DIR/steps/python
 # Sanity check for setuptools/distribute.
 source $BIN_DIR/steps/setuptools
 
+# Mercurial support.
+source $BIN_DIR/steps/pipenv
+
 # If no requirements.txt file given, assume `setup.py develop` is intended.
 if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
   echo "-e ." > requirements.txt

@@ -13,17 +13,6 @@ find .heroku/python/lib-python/*/site-packages/ -name "*.egg-link" -print0 2> /d
 find .heroku/python/lib-python/*/site-packages/ -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#/app/#/$(pwd)/#" &> /dev/null
 set -e
 
-# Pipenv support (Generate requriements.txt with pipenv).
-if [[ -f Pipfile ]]; then
-    if [[ ! -f requirements.txt ]]; then
-        puts-step "Generating 'requirements.txt' with pipenv"
-
-        /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
-        /app/.heroku/python/bin/pipenv lock --requirements --no-hashes > $BUILD_DIR/requirements.txt 2> /dev/null
-        pipstrip requirements.txt
-    fi
-fi
-
 
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
