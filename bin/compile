@@ -163,9 +163,6 @@ if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
   echo "-e ." > requirements.txt
 fi
 
-# Uninstall removed dependencies with Pip.
-source $BIN_DIR/steps/pip-uninstall
-
 # Mercurial support.
 source $BIN_DIR/steps/mercurial
 
@@ -183,6 +180,9 @@ source $BIN_DIR/steps/gdal
 
 # Install dependencies with Pip (where the magic happens).
 source $BIN_DIR/steps/pip-install
+
+# Uninstall removed dependencies with Pip.
+source $BIN_DIR/steps/pip-uninstall
 
 # Support for NLTK corpora.
 sub-env $BIN_DIR/steps/nltk
