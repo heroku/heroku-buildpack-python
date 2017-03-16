@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 
+
+testPipenv() {
+  compile "pipenv"
+  debug
+  assertCapturedSuccess
+}
+
 testPipenvVersion() {
   compile "pipenv-version"
   assertCaptured "3.6.0"
   assertCapturedSuccess
 }
-
-
-testPipenv() {
-  compile "pipenv"
-  assertCapturedSuccess
-}
-
-
 
 testNoRequirements() {
   compile "no-requirements"
