@@ -19,7 +19,7 @@ if [[ -f Pipfile ]]; then
         puts-step "Generating 'requirements.txt' with pipenv"
 
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
-        /app/.heroku/python/bin/pipenv lock --requirements --no-hashes > $BUILD_DIR/requirements.txt #2> /dev/null
+        /app/.heroku/python/bin/pipenv lock --requirements --no-hashes > $BUILD_DIR/requirements.txt 2> /dev/null
         cat requirements.txt
         pipstrip requirements.txt
     fi
