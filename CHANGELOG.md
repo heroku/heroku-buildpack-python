@@ -1,5 +1,11 @@
 # Python Buildpack Changelog
 
+## 101
+
+Updated setuptools installation method.
+
+- Improved pipenv support.
+
 ## 100
 
 Preliminary pipenv support.
