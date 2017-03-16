@@ -159,7 +159,7 @@ source $BIN_DIR/steps/python
 source $BIN_DIR/steps/setuptools
 
 # If no requirements.txt file given, assume `setup.py develop` is intended.
-if [ ! -f requirements.txt ]; then
+if [ ! -f requirements.txt ] && [! -f Pipfile ]; then
   echo "-e ." > requirements.txt
 fi
 
