@@ -158,9 +158,6 @@ source $BIN_DIR/steps/python
 # Sanity check for setuptools/distribute.
 source $BIN_DIR/steps/setuptools
 
-# Pipenv support.
-source $BIN_DIR/steps/pipenv
-
 # If no requirements.txt file given, assume `setup.py develop` is intended.
 if [ ! -f requirements.txt ]; then
   echo "-e ." > requirements.txt

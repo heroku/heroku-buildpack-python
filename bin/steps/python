@@ -55,23 +55,30 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   TMPTARDIR=$(mktemp -d)
   trap "rm -rf $TMPTARDIR" RETURN
 
-  bpwatch start install_setuptools
-    # Prepare it for the real world
-    # puts-step "Installing Setuptools ($SETUPTOOLS_VERSION)"
-    tar zxf $ROOT_DIR/vendor/setuptools-$SETUPTOOLS_VERSION.tar.gz -C $TMPTARDIR
-    cd $TMPTARDIR/setuptools-$SETUPTOOLS_VERSION/
-    python setup.py install &> /dev/null
-    cd $WORKING_DIR
-  bpwatch stop install_setuptoools
+  puts-step "Installing pip"
+  /app/.heroku/python/bin/python $ROOT_DIR/vendor/get-pip.py &> /dev/null
 
-  bpwatch start install_pip
-    # puts-step "Installing Pip ($PIP_VERSION)"
-    tar zxf $ROOT_DIR/vendor/pip-$PIP_VERSION.tar.gz -C $TMPTARDIR
-    cd $TMPTARDIR/pip-$PIP_VERSION/
-    python setup.py install &> /dev/null
-    cd $WORKING_DIR
+  # bpwatch start install_setuptools
+  #   # Prepare it for the real world
+  #   puts-step "Installing Setuptools ($SETUPTOOLS_VERSION)"
+  #   tar zxf $ROOT_DIR/vendor/setuptools-$SETUPTOOLS_VERSION.tar.gz -C $TMPTARDIR
+  #   cd $TMPTARDIR/setuptools-$SETUPTOOLS_VERSION/
+  #   /app/.heroku/python/bin/python setup.py install  &> /dev/null
+  #   cd $WORKING_DIR
+  # bpwatch stop install_setuptoools
 
-  bpwatch stop install_pip
+  # bpwatch start install_pip
+  #   puts-step "Installing Pip ($PIP_VERSION)"
+  #   tar zxf $ROOT_DIR/vendor/pip-$PIP_VERSION.tar.gz -C $TMPTARDIR
+  #   cd $TMPTARDIR/pip-$PIP_VERSION/
+  #   /app/.heroku/python/bin/python setup.py install &> /dev/null
+  #   cd $WORKING_DIR
+
+  # bpwatch stop install_pip
+
+
+
+
   bpwatch stop prepare_environment
 fi
 
