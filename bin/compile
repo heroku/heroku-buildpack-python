@@ -158,9 +158,6 @@ source $BIN_DIR/steps/python
 # Sanity check for setuptools/distribute.
 source $BIN_DIR/steps/setuptools
 
-# Fix egg-links.
-source $BIN_DIR/steps/eggpath-fix
-
 # Pipenv support.
 source $BIN_DIR/steps/pipenv
 
@@ -168,6 +165,9 @@ source $BIN_DIR/steps/pipenv
 if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
   echo "-e ." > requirements.txt
 fi
+
+# Fix egg-links.
+source $BIN_DIR/steps/eggpath-fix
 
 # Mercurial support.
 source $BIN_DIR/steps/mercurial
