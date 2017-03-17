@@ -16,8 +16,6 @@ VENDORED_MEMCACHED="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor
 source $BIN_DIR/utils
 
 
-bpwatch start pylibmc_install
-
 # If pylibmc exists within requirements, use vendored libmemcached.
 if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
 
@@ -30,5 +28,3 @@ if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
 
   export LIBMEMCACHED=$(pwd)/vendor
 fi
-
-bpwatch stop pylibmc_install

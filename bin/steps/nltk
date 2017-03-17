@@ -12,8 +12,6 @@
 # Syntax sugar.
 source $BIN_DIR/utils
 
-bpwatch start nltk_download
-
 # Check that nltk was installed by pip, otherwise obviously not needed
 python -m nltk.downloader -h >/dev/null 2>&1
 if [ $? -eq 0 ]; then
@@ -29,5 +27,3 @@ if [ $? -eq 0 ]; then
     fi
 fi
 
-
-bpwatch stop nltk_download

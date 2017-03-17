@@ -5,25 +5,20 @@ PYTHON_VERSION=$(cat runtime.txt)
 # Install Python.
 if [ -f .heroku/python-version ]; then
   if [ ! $(cat .heroku/python-version) = $PYTHON_VERSION ]; then
-    bpwatch start uninstall_python
       puts-step "Found $(cat .heroku/python-version), removing"
       rm -fr .heroku/python
-    bpwatch stop uninstall_python
   else
     SKIP_INSTALL=1
   fi
 fi
 
 if [ ! $STACK = $CACHED_PYTHON_STACK ]; then
-  bpwatch start uninstall_python
     rm -fr .heroku/python .heroku/python-stack .heroku/vendor
     unset SKIP_INSTALL
-  bpwatch stop uninstall_python
 fi
 
 
 if [ ! "$SKIP_INSTALL" ]; then
-  bpwatch start install_python
     puts-step "Installing $PYTHON_VERSION"
 
     # Prepare destination directory.
@@ -35,8 +30,6 @@ if [ ! "$SKIP_INSTALL" ]; then
       puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
       exit 1
     fi
-
-  bpwatch stop install_python
 
   # Record for future reference.
   echo $PYTHON_VERSION > .heroku/python-version
@@ -50,8 +43,6 @@ fi
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   WORKING_DIR=$(pwd)
 
-  bpwatch start prepare_environment
-
   TMPTARDIR=$(mktemp -d)
   trap "rm -rf $TMPTARDIR" RETURN
 
@@ -63,7 +54,6 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
 
   /app/.heroku/python/bin/python $ROOT_DIR/vendor/get-pip.py &> /dev/null
 
-  bpwatch stop prepare_environment
 fi
 
 set -e

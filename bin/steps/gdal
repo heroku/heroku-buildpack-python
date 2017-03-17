@@ -17,8 +17,6 @@ PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 # Syntax sugar.
 source $BIN_DIR/utils
 
-bpwatch start gdal_install
-
 # If GDAL exists within requirements, use vendored gdal.
 if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
 
@@ -32,4 +30,3 @@ if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
   export GDAL=$(pwd)/vendor
 fi
 
-bpwatch stop gdal_install
