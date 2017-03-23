@@ -46,11 +46,11 @@ Specify a Python Runtime
 Specific versions of the Python runtime can be specified with a `runtime.txt` file:
 
     $ cat runtime.txt
-    python-3.6.0
+    python-3.6.1
 
 Runtime options include:
 
 - `python-2.7.13`
-- `python-3.6.0`
+- `python-3.6.1`
 - `pypy-5.7.0` (unsupported, experimental)
 - `pypy3-5.5.0` (unsupported, experimental)
