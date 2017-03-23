@@ -1,5 +1,11 @@
 # Python Buildpack Changelog
 
+## 102
+
+Buildpack code cleanup.
+
+- Improved messaging around NLTK.
+
 ## 101
 
 Updated setuptools installation method.

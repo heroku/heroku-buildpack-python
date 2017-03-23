@@ -23,7 +23,8 @@ if [ $? -eq 0 ]; then
         python -m nltk.downloader -d $BUILD_DIR/.heroku/python/nltk_data $nltk_packages  | indent
         set-env NLTK_DATA "/app/.heroku/python/nltk_data"
     else
-        puts-warn "nltk.txt not found, not downloading any corpora"
+        puts-warn "'nltk.txt' not found, not downloading any corpora"
+        puts-warn "Learn more: https://devcenter.heroku.com/articles/python-nltk"
     fi
 fi
 
