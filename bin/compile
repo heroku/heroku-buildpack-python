@@ -63,8 +63,8 @@ mkdir -p /app/.heroku
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 EXPORT_PATH="$BIN_DIR/../export"
-GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
-WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
+GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
+WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
 
 # We'll need to send these statics to other scripts we `source`.
 export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH EXPORT_PATH
