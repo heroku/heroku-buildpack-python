@@ -1,8 +1,3 @@
-if [[ "${WEB_CONCURRENCY:-}" == 0* ]]; then
-  # another buildpack set a default value, with leading zero
-  unset WEB_CONCURRENCY
-fi
-
 case $(ulimit -u) in
 
 # Automatic configuration for Gunicorn's Workers setting.
