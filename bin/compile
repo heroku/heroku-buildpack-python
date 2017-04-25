@@ -15,6 +15,10 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
+# Standard Library.
+export BPLOG_PREFIX="buildpack.python"
+export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
+
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
 
 # Prepend proper path for virtualenv hackery. This will be deprecated soon.
