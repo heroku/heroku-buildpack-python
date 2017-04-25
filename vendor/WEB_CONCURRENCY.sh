@@ -1,7 +1,6 @@
 case $(ulimit -u) in
 
 # Automatic configuration for Gunicorn's Workers setting.
-# Leading zero padding so a subsequent buildpack can figure out that we set a value, and not the user
 
 # Standard-1X (+Free, +Hobby) Dyno
 256)
