@@ -48,7 +48,7 @@ export PATH=$PATH:$ROOT_DIR/vendor/:$ROOT_DIR/vendor/pip-pop
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
-unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
+unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN
 unset CYTOKINE_LOG_FILE GEM_PATH
 
 # Syntax sugar.
