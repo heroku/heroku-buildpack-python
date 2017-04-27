@@ -6,7 +6,6 @@ if [[ ! -f  /tmp/stdlib.sh ]]; then
 fi
 source /tmp/stdlib.sh
 
-
 if [ $(uname) == Darwin ]; then
     sed() { command sed -l "$@"; }
 else
@@ -17,6 +16,7 @@ fi
 indent() {
   sed "s/^/       /"
 }
+
 
 # Clean up pip output
 cleanup() {
@@ -63,5 +63,10 @@ sub-env() {
     $1
 
   )
+}
+
+# Measure the size of the Python installation.
+measure-size() {
+  echo "$((du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
 }
 

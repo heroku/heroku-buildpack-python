@@ -223,3 +223,5 @@ cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
 if [[ -d .heroku/src ]]; then
   cp -R .heroku/src $CACHE_DIR/.heroku/ &> /dev/null || true
 fi
+
+mmeasure 'python.size' "$(measure-size)"
