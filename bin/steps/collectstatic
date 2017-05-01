@@ -26,7 +26,7 @@ pip-grep -s requirements.txt django Django && DJANGO_INSTALLED=1
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     set +e
 
-    puts-cmd "python $MANAGE_FILE collectstatic --noinput"
+    puts-step "python $MANAGE_FILE collectstatic --noinput"
 
     # Run collectstatic, cleanup some of the noisy output.
     python $MANAGE_FILE collectstatic --noinput --traceback 2>&1 | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent

@@ -24,7 +24,15 @@ cleanup() {
   sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/No files were found to uninstall/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
 }
 
+# Buildpack Steps.
+puts-step() {
+  echo "-----> $@"
+}
 
+# Buildpack Warnings.
+puts-warn() {
+  echo " !     $@"
+}
 
 # Does some serious copying.
 deep-cp() {
