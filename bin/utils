@@ -1,4 +1,11 @@
+#!/usr/bin/env bash
 shopt -s extglob
+
+# The standard library.
+if [[ ! -f  /tmp/stdlib.sh ]]; then
+  curl --retry 3 -s https://lang-common.s3.amazonaws.com/buildpack-stdlib/v2/stdlib.sh > /tmp/stdlib.sh
+fi
+source /tmp/stdlib.sh
 
 if [ $(uname) == Darwin ]; then
     sed() { command sed -l "$@"; }
@@ -11,14 +18,10 @@ indent() {
   sed "s/^/       /"
 }
 
+
 # Clean up pip output
 cleanup() {
   sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/No files were found to uninstall/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
-}
-
-# Buildpack Indented line.
-puts-line() {
-  echo "       $@"
 }
 
 # Buildpack Steps.
@@ -29,28 +32,6 @@ puts-step() {
 # Buildpack Warnings.
 puts-warn() {
   echo " !     $@"
-}
-
-# Buildpack Commands.
-puts-cmd() {
-  echo "     $ $@"
-}
-
-# Usage: $ set-env key value
-set-env() {
-  echo "export $1=$2" >> $PROFILE_PATH
-  echo "export $1=$2" >> $EXPORT_PATH
-}
-
-# Usage: $ set-default-env key value
-set-default-env() {
-  echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
-  echo "export $1=\${$1:-$2}" >> $EXPORT_PATH
-}
-
-# Usage: $ un-set-env key
-un-set-env() {
-  echo "unset $1" >> $PROFILE_PATH
 }
 
 # Does some serious copying.
@@ -69,26 +50,11 @@ deep-cp() {
   )
 }
 
-# Does some serious moving.
-deep-mv() {
-  deep-cp "$1" "$2"
-  deep-rm "$1"
-}
-
-# Does some serious deleting.
-deep-rm() {
-  # subshell to avoid surprising caller with shopts.
-  (
-    shopt -s dotglob
-    rm -rf "$1"/!(.curlrc|.netrc|tmp|.|..)
-  )
-}
-
 
 sub-env() {
 
   WHITELIST=${2:-''}
-  BLACKLIST=${3:-'^(GIT_DIR|PYTHONHOME|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
+  BLACKLIST=${3:-'^(GIT_DIR|STACK|PYTHONHOME|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
 
   # Python-specific variables.
   export PYHONHOME=$BUILD_DIR/.heroku/python
@@ -106,5 +72,10 @@ sub-env() {
     $1
 
   )
+}
+
+# Measure the size of the Python installation.
+measure-size() {
+  echo "$((du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
 }
 

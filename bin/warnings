@@ -7,6 +7,7 @@ old-platform() {
     puts-warn "This caused the security warning you saw above during the 'pip install' step."
     puts-warn "We recommend '$RECOMMENDED_PYTHON_VERSION', which you can specify in a 'runtime.txt' file."
     puts-warn "  -- Much Love, Heroku."
+    mcount 'warnings.python.old'
   fi
 }
 
@@ -16,6 +17,7 @@ pylibmc-missing() {
     puts-warn "Hello! There was a problem with your build related to libmemcache."
     puts-warn "The Python library 'pylibmc' must be explicitly specified in 'requirements.txt' in order to build correctly."
     puts-warn "Once you do that, everything should work as expected.   -- Much Love, Heroku."
+    mcount 'warnings.libmemcache'
   fi
 }
 
@@ -27,6 +29,7 @@ scipy-included() {
     puts-warn "There is, however, a buildpack available that makes it possible to use it on Heroku."
     puts-warn "You can learn more here:  https://devcenter.heroku.com/articles/python-c-deps"
     puts-warn "Sorry for the inconvenience.   -- Much Love, Heroku."
+    mcount 'warnings.scipy'
   fi
 }
 
@@ -37,6 +40,18 @@ distribute-included() {
     puts-warn "This library is automatically installed by Heroku and shouldn't be in"
     puts-warn "Your requirements.txt file. This can cause unexpected behavior."
     puts-warn "  -- Much Love, Heroku."
+    mcount 'warnings.distribute'
+  fi
+}
+
+six-included() {
+  if grep -qi 'Running setup.py install for six' "$WARNINGS_LOG"; then
+    echo
+    puts-warn "Hello! Your requirements.txt file contains the six package."
+    puts-warn "This library is automatically installed by Heroku and shouldn't be in"
+    puts-warn "Your requirements.txt file. This can cause unexpected behavior."
+    puts-warn "  -- Much Love, Heroku."
+    mcount 'warnings.six'
   fi
 }
 
@@ -45,5 +60,6 @@ show-warnings() {
   pylibmc-missing
   scipy-included
   distribute-included
+  six-included
 }
 
