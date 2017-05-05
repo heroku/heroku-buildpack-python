@@ -15,6 +15,10 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
+# Standard Library.
+export BPLOG_PREFIX="buildpack.python"
+export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
+
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
 
 # Prepend proper path for virtualenv hackery. This will be deprecated soon.
@@ -48,7 +52,7 @@ export PATH=$PATH:$ROOT_DIR/vendor/:$ROOT_DIR/vendor/pip-pop
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
-unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN DYNO
+unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN
 unset CYTOKINE_LOG_FILE GEM_PATH
 
 # Syntax sugar.
@@ -64,6 +68,7 @@ mkdir -p /app/.heroku
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 EXPORT_PATH="$BIN_DIR/../export"
 GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
+WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
 
 # We'll need to send these statics to other scripts we `source`.
 export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH EXPORT_PATH
@@ -136,10 +141,14 @@ if [[ $BUILD_DIR != '/app' ]]; then
 fi
 
 # Install Python.
+let start=$(nowms)
 source $BIN_DIR/steps/python
+mtime "python.install.time" "${start}"
 
 # Sanity check for setuptools/distribute.
+let start=$(nowms)
 source $BIN_DIR/steps/setuptools
+mtime "setuptools.install.time" "${start}"
 
 # Pipenv support.
 source $BIN_DIR/steps/pipenv
@@ -168,20 +177,28 @@ sub-env $BIN_DIR/steps/geo-libs
 source $BIN_DIR/steps/gdal
 
 # Install dependencies with Pip (where the magic happens).
+let start=$(nowms)
 source $BIN_DIR/steps/pip-install
+mtime "pip.install.time" "${start}"
 
 # Uninstall removed dependencies with Pip.
+let start=$(nowms)
 source $BIN_DIR/steps/pip-uninstall
+mtime "pip.uninstall.time" "${start}"
 
 # Support for NLTK corpora.
+let start=$(nowms)
 sub-env $BIN_DIR/steps/nltk
+mtime "nltk.download.time" "${start}"
 
 # Support for pip install -e.
 rm -fr $BUILD_DIR/.heroku/src
 deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
 
 # Django collectstatic support.
+let start=$(nowms)
 sub-env $BIN_DIR/steps/collectstatic
+mtime "collectstatic.time" "${start}"
 
 # Create .profile script for application runtime environment variables.
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
@@ -194,7 +211,9 @@ set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
+cp $ROOT_DIR/vendor/WEB_CONCURRENCY.sh $WEB_CONCURRENCY_PROFILE_PATH
 cp $ROOT_DIR/vendor/python.gunicorn.sh $GUNICORN_PROFILE_PATH
+
 
 # Experimental post_compile hook.
 source $BIN_DIR/steps/hooks/post_compile
@@ -218,3 +237,6 @@ cp -R .heroku/vendor $CACHE_DIR/.heroku/ &> /dev/null || true
 if [[ -d .heroku/src ]]; then
   cp -R .heroku/src $CACHE_DIR/.heroku/ &> /dev/null || true
 fi
+
+# Measure the size of the Python installation.
+mmeasure 'python.size' "$(measure-size)"
