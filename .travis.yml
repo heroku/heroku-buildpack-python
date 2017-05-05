@@ -7,10 +7,12 @@ script:
   - ./tests.sh
   - if [[ ${TRAVIS_BRANCH} == "master" ]] && [[ ${TRAVIS_PULL_REQUEST} == "false" ]]; then mkdir -p $(dirname ${DOCKER_CACHE_FILE}) ; docker save $(docker history -q ${DOCKER_REPOSITORY}:${TRAVIS_COMMIT} | grep -v '<missing>') | gzip > ${DOCKER_CACHE_FILE}; fi
 env:
-  - STACK=heroku-16
-  - STACK=cedar-14
+
   global:
     - DOCKER_CACHE_FILE=/home/travis/docker/cache.tar.gz
+  matrix:
+    - STACK=heroku-16
+    - STACK=cedar-14
 cache:
   directories:
     - /home/travis/docker/
