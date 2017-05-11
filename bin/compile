@@ -91,6 +91,20 @@ if [[ ! -f Procfile ]]; then
   puts-warn 'Learn more: https://devcenter.heroku.com/articles/procfile'
 fi
 
+# Prepare the cache.
+mkdir -p $CACHE_DIR
+
+# Restore old artifacts from the cache.
+mkdir -p .heroku
+
+cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
+cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
+cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
+cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
+if [[ -d $CACHE_DIR/.heroku/src ]]; then
+  cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
+fi
+
 # Experimental pre_compile hook.
 source $BIN_DIR/steps/hooks/pre_compile
 
@@ -113,21 +127,6 @@ source $BIN_DIR/steps/pipenv-python-version
 if [ ! -f runtime.txt ]; then
   echo $DEFAULT_PYTHON_VERSION > runtime.txt
 fi
-
-# Prepare the cache.
-mkdir -p $CACHE_DIR
-
-# Restore old artifacts from the cache.
-mkdir -p .heroku
-
-cp -R $CACHE_DIR/.heroku/python .heroku/ &> /dev/null || true
-cp -R $CACHE_DIR/.heroku/python-stack .heroku/ &> /dev/null || true
-cp -R $CACHE_DIR/.heroku/python-version .heroku/ &> /dev/null || true
-cp -R $CACHE_DIR/.heroku/vendor .heroku/ &> /dev/null || true
-if [[ -d $CACHE_DIR/.heroku/src ]]; then
-  cp -R $CACHE_DIR/.heroku/src .heroku/ &> /dev/null || true
-fi
-
 
 mkdir -p $(dirname $PROFILE_PATH)
 mkdir -p /app/.heroku/src
