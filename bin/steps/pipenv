@@ -1,7 +1,7 @@
 # Pipenv support (Generate requriements.txt with pipenv).
 if [[ -f Pipfile ]]; then
     if [[ ! -f requirements.txt ]]; then
-        puts-step "Generating 'requirements.txt' with pipenv"
+        puts-step "Installing requirements with pipenv..."
 
         /app/.heroku/python/bin/pip install pipenv install --system &> /dev/null
         export SKIP_PIP_INSTALL=1
