@@ -7,5 +7,9 @@ if [[ -f Pipfile ]]; then
 
         /app/.heroku/python/bin/pipenv install --system | indent
         export SKIP_PIP_INSTALL=1
+
+        # Pip freeze, for compatibility.
+        /app/.heroku/python/bin/pip freeze > requirements.txt
+
     fi
 fi
