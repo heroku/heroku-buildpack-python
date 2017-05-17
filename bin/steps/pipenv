@@ -5,6 +5,6 @@ if [[ -f Pipfile ]]; then
 
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
-        /app/.heroku/python/bin/pipenv install --system
+        /app/.heroku/python/bin/pipenv install --system | indent
     fi
 fi
