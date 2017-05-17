@@ -3,9 +3,13 @@ if [[ -f Pipfile ]]; then
     if [[ ! -f requirements.txt ]]; then
         puts-step "Installing requirements with latest pipenv..."
 
+        # Install pipenv.
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
+        # Install the dependencies.
         /app/.heroku/python/bin/pipenv install --system | indent
+
+        # Skip pip install, later.
         export SKIP_PIP_INSTALL=1
 
         # Pip freeze, for compatibility.
