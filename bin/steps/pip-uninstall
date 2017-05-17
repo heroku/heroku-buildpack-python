@@ -1,21 +1,18 @@
-if [ ! "$SKIP_PIP_INSTALL" ]; then
+set +e
+# Install dependencies with Pip.
 
-    set +e
-    # Install dependencies with Pip.
+if [[ -f .heroku/python/requirements-declared.txt ]]; then
 
-    if [[ -f .heroku/python/requirements-declared.txt ]]; then
+  cp .heroku/python/requirements-declared.txt requirements-declared.txt
 
-      cp .heroku/python/requirements-declared.txt requirements-declared.txt
+  pip-diff --stale requirements-declared.txt requirements.txt --exclude setuptools pip wheel > .heroku/python/requirements-stale.txt
 
-      pip-diff --stale requirements-declared.txt requirements.txt --exclude setuptools pip wheel > .heroku/python/requirements-stale.txt
+  rm -fr requirements-declared.txt
 
-      rm -fr requirements-declared.txt
-
-      if [[ -s .heroku/python/requirements-stale.txt ]]; then
-        puts-step "Uninstalling stale dependencies"
-        /app/.heroku/python/bin/pip uninstall -r .heroku/python/requirements-stale.txt -y --exists-action=w | cleanup | indent
-      fi
-    fi
-
-    set -e
+  if [[ -s .heroku/python/requirements-stale.txt ]]; then
+    puts-step "Uninstalling stale dependencies"
+    /app/.heroku/python/bin/pip uninstall -r .heroku/python/requirements-stale.txt -y --exists-action=w | cleanup | indent
+  fi
 fi
+
+set -e
