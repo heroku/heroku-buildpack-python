@@ -5,6 +5,6 @@ if [[ -f Pipfile ]]; then
 
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
-        /app/.heroku/python/bin/pipenv lock --requirements --no-hashes > $BUILD_DIR/requirements.txt 2> /dev/null
+        /app/.heroku/python/bin/pipenv lock --requirements > $BUILD_DIR/requirements.txt 2> /dev/null
     fi
 fi
