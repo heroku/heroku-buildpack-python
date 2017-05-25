@@ -1,5 +1,7 @@
 # Python Buildpack Binaries
 
+For Cedar-14 stack
+------------------
 
 To get started with it, create an app on Heroku inside a clone of this repository, and set your S3 config vars:
 
@@ -27,5 +29,13 @@ Then, shell into an instance and run a build by giving the name of the formula i
 If this works, run `bob deploy` instead of `bob build` to have the result uploaded to S3 for you.
 
 To speed things up drastically, it'll usually be a good idea to `heroku run bash --size PX` instead.
+
+For Heroku-16 stack
+-------------------
+
+1. Ensure GNU Make and Docker are installed.
+2. From the root of the buildpack repository, run: `make buildenv-heroku-16`
+3. Follow the instructions displayed!
+
 
 Enjoy :)
