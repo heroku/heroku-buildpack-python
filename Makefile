@@ -13,6 +13,19 @@ test-heroku-16:
 	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=heroku-16" heroku/heroku:16-build bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run;'
 	@echo ""
 
+buildenv-heroku-16:
+	@echo "Creating build environment (heroku-16)..."
+	@echo
+	@docker build --pull -t python-buildenv-heroku-16 .
+	@echo
+	@echo "Usage..."
+	@echo
+	@echo "  $$ export AWS_ACCESS_KEY_ID=foo AWS_SECRET_ACCESS_KEY=bar  # Optional unless deploying"
+	@echo "  $$ bob build runtimes/python-2.7.13"
+	@echo "  $$ bob deploy runtimes/python-2.7.13"
+	@echo
+	@docker run -it --rm python-buildenv-heroku-16
+
 tools:
 	git clone https://github.com/kennethreitz/pip-pop.git
 	mv pip-pop/bin/* vendor/pip-pop/
