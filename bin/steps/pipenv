@@ -1,10 +1,19 @@
 # Pipenv support (Generate requriements.txt with pipenv).
 if [[ -f Pipfile ]]; then
     if [[ ! -f requirements.txt ]]; then
-        puts-step "Generating 'requirements.txt' with pipenv"
+        puts-step "Installing requirements with latest pipenv..."
 
+        # Install pipenv.
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
-        /app/.heroku/python/bin/pipenv lock --requirements --no-hashes > $BUILD_DIR/requirements.txt 2> /dev/null
+        # Install the dependencies.
+        /app/.heroku/python/bin/pipenv install --system 2>&1 | indent
+
+        # Skip pip install, later.
+        export SKIP_PIP_INSTALL=1
+
+        # Pip freeze, for compatibility.
+        /app/.heroku/python/bin/pip freeze > requirements.txt
+
     fi
 fi
