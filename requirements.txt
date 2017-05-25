@@ -1,1 +1,2 @@
-bob-builder==0.0.5
+# TODO: Replace this once the bob-builder changes on master are released:
+https://github.com/kennethreitz/bob-builder/archive/54211376a8fb49c67ecbd6798bd45b55f4d125f4.zip
