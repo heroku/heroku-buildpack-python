@@ -192,6 +192,7 @@ sub-env $BIN_DIR/steps/nltk
 mtime "nltk.download.time" "${start}"
 
 # Support for pip install -e.
+# In CI, $BUILD_DIR is /app.
 if [[ ! "$BUILD_DIR" == "/app" ]]; then
   rm -fr $BUILD_DIR/.heroku/src
   deep-cp /app/.heroku/src $BUILD_DIR/.heroku/src
