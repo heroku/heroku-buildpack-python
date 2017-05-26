@@ -1,5 +1,12 @@
 # Python Buildpack Changelog
 
+## 103
+
+Bug fixes.
+
+- Fix for Pipenv.
+- Fix for Heroku CI.
+
 ## 102
 
 Buildpack code cleanup.
