@@ -2,10 +2,13 @@
 
 ## 103
 
-Bug fixes.
+Bug fixes and improvements.
 
 - Fix for Pipenv.
 - Fix for Heroku CI.
+- Improve handling of WEB_CONCURRENCY when using multiple buildpacks.
+- Adjust environment variables set during the build to more closely match those in the dyno environment (DYNO is now available, STACK is not).
+- Restore the build cache prior to running bin/pre_compile.
 
 ## 102
 
