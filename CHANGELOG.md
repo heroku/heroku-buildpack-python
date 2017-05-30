@@ -2,8 +2,9 @@
 
 # 104
 
-unreleased
+General improvements.
 
+- Fix for Heroku CI.
 - Use `pkg_resources` to check if a distribution is installed instead of
   parsing `requirements.txt`. ([#395][395])
 
