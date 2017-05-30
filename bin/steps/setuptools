@@ -3,4 +3,9 @@
 # Syntax sugar.
 source $BIN_DIR/utils
 
-pip-clean requirements.txt
+puts-step "Removing packaging utilities from requirements.txt."
+
+if [[ -f requirements.txt ]]; then
+    pip-clean requirements.txt
+fi
+
