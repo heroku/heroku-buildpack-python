@@ -11,25 +11,18 @@ from docopt import docopt
 
 BAD_PACKAGES = ['appdirs', 'packaging', 'pyparsing', 'six', 'setuptools', 'distribute']
 
+
+def good_package(line):
+    package_name = line.split('=')[0].split('<')[0].split('>')[0].split(' ')[0].split('#')[0].split('\n')[0]
+    return package_name not in BAD_PACKAGES
+
 def main():
     args = docopt(__doc__, version='pip-grep')
     req_file = args['<req-file>']
 
-    lines = []
     with open(req_file, 'r') as f:
         # Iterate over every line in the requirements file.
-        for line in f:
-
-            skip_line = False
-
-            # Check for every known bad package.
-            for package in BAD_PACKAGES:
-                if line.startswith(package):
-                    # If bad package detected, remove the line.
-                    skip_line = True
-
-            if not skip_line:
-                lines.append(line)
+        lines = [line for line in f if good_package(line)]
 
     # Write the requirements file to disk.
     with open(req_file, 'w') as f:
