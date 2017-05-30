@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 105
+
+Improvements to output messaging.
+
 # 104
 
 General improvements.
