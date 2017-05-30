@@ -1,5 +1,13 @@
 # Python Buildpack Changelog
 
+# 106
+
+Don't install packages that could mess up packaging.
+
+- The Python buildpack will automatically remove `six`, `pyparsing`, `appdirs`,
+  `setuptools`, and `distribute` from a `requirements.txt` file now, as these
+  packages are provided by the Python buildpack.
+
 # 105
 
 Improvements to output messaging.
