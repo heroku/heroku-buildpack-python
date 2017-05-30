@@ -145,11 +145,6 @@ let start=$(nowms)
 source $BIN_DIR/steps/python
 mtime "python.install.time" "${start}"
 
-# Sanity check for setuptools/distribute.
-let start=$(nowms)
-source $BIN_DIR/steps/setuptools
-mtime "setuptools.install.time" "${start}"
-
 # Pipenv support.
 source $BIN_DIR/steps/pipenv
 
