@@ -17,7 +17,7 @@ source $BIN_DIR/utils
 
 
 # If pylibmc exists within requirements, use vendored libmemcached.
-if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
+if (pip-grep -s pylibmc &> /dev/null) then
 
   if [ ! -d ".heroku/vendor/lib/sasl2" ]; then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
