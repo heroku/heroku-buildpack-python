@@ -17,7 +17,7 @@ def good_package(line):
     return package_name not in BAD_PACKAGES
 
 def main():
-    args = docopt(__doc__, version='pip-grep')
+    args = docopt(__doc__, version='pip-clean')
     req_file = args['<req-file>']
 
     with open(req_file, 'r') as f:
