@@ -153,6 +153,9 @@ if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
   echo "-e ." > requirements.txt
 fi
 
+# Cleanup requirements.txt
+source $BIN_DIR/steps/setuptools
+
 # Fix egg-links.
 source $BIN_DIR/steps/eggpath-fix
 

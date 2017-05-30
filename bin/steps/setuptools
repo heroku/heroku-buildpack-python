@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+pip-clean requirements.txt
