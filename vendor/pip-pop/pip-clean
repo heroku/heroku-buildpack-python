@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""Usage:
+  pip-clean <req-file>
+
+Options:
+  -h --help     Show this screen.
+"""
+from docopt import docopt
+
+BAD_PACKAGES = ['appdirs', 'packaging', 'pyparsing', 'six', 'setuptools', 'distribute']
+
+
+def good_package(line):
+    package_name = line.split('=')[0].split('<')[0].split('>')[0].split(' ')[0].split('#')[0].split('\n')[0]
+    return package_name not in BAD_PACKAGES
+
+def main():
+    args = docopt(__doc__, version='pip-clean')
+    req_file = args['<req-file>']
+
+    with open(req_file, 'r') as f:
+        # Iterate over every line in the requirements file.
+        lines = [line for line in f if good_package(line)]
+
+    # Write the requirements file to disk.
+    with open(req_file, 'w') as f:
+        f.write(''.join(lines))
+
+
+if __name__ == '__main__':
+    main()
