@@ -159,6 +159,9 @@ source $BIN_DIR/steps/eggpath-fix
 # Mercurial support.
 source $BIN_DIR/steps/mercurial
 
+# Python-ldap support.
+source $BIN_DIR/steps/python-ldap
+
 # Pylibmc support.
 source $BIN_DIR/steps/pylibmc
 
