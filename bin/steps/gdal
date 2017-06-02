@@ -18,7 +18,7 @@ PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 source $BIN_DIR/utils
 
 # If GDAL exists within requirements, use vendored gdal.
-if (pip-grep -s GDAL pygdal &> /dev/null) then
+if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
 
   if [ ! -f ".heroku/vendor/bin/gdalserver" ]; then
     echo "-----> Noticed GDAL. Bootstrapping gdal."
