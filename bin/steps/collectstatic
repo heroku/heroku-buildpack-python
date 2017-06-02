@@ -20,7 +20,7 @@ MANAGE_FILE=${MANAGE_FILE:-fakepath}
 [ -f .heroku/collectstatic_disabled ] && DISABLE_COLLECTSTATIC=1
 
 # Ensure that Django is explicitly specified in requirements.txt
-pip-grep -s requirements.txt django Django && DJANGO_INSTALLED=1
+sp-grep django && DJANGO_INSTALLED=1
 
 
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
