@@ -3,6 +3,8 @@
 # Syntax sugar.
 source $BIN_DIR/utils
 
+if (pip-grep -s requirements.txt setuptools distribute &> /dev/null) then
+
 puts-step "Removing packaging utilities from requirements.txt."
 
 if [[ -f requirements.txt ]]; then
