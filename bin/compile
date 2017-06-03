@@ -171,19 +171,15 @@ sub-env $BIN_DIR/steps/geo-libs
 # GDAL support.
 source $BIN_DIR/steps/gdal
 
-# Uninstall removed dependencies with Pip.
-let start=$(nowms)
-source $BIN_DIR/steps/pip-uninstall
-mtime "pip.uninstall.time" "${start}"
-
-# Cleanup requirements.txt
-source $BIN_DIR/steps/setuptools
-
 # Install dependencies with Pip (where the magic happens).
 let start=$(nowms)
 source $BIN_DIR/steps/pip-install
 mtime "pip.install.time" "${start}"
 
+# Uninstall removed dependencies with Pip.
+let start=$(nowms)
+source $BIN_DIR/steps/pip-uninstall
+mtime "pip.uninstall.time" "${start}"
 
 # Support for NLTK corpora.
 let start=$(nowms)
