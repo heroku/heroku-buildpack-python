@@ -44,6 +44,12 @@ testPsycopg2() {
   assertCapturedSuccess
 }
 
+testPylibmc() {
+  compile "pylibmc"
+  assertCaptured "pylibmc"
+  assertCapturedSuccess
+}
+
 testPython2() {
   compile "python2"
   assertCaptured "python-2.7.13"
