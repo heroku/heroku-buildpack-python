@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 109
+
+Fix output for collectstatic step.
+
 # 108
 
 Updated setuptools.
