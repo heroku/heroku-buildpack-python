@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 110
+
+Update Default Python to 3.6.1.
+
 # 109
 
 Fix output for collectstatic step.
