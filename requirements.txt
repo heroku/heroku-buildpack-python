@@ -1,1 +1,11 @@
 bob-builder==0.0.13
+bob-builder==0.0.5
+gunicorn==19.7.1
+Flask==0.12.2
+pip==9.0.1
+numpy==1.12.1
+jsonify==0.5
+pymongo==3.4.0
+opencv-python==3.2.0.7
+colorthief==0.2.1
+html5lib==1.0b10
