@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# Unreleased
+
+Fixed automatic pip uninstall of dependencies removed from requirements.txt.
+
 # 109
 
 Fix output for collectstatic step.
