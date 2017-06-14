@@ -62,6 +62,16 @@ testPython3() {
   assertCapturedSuccess
 }
 
+testSmartRequirements() {
+  local cache_dir="$(mktmpdir)"
+  compile "requirements-standard" "$cache_dir"
+  assertFile "requests" ".heroku/python/requirements-declared.txt"
+  assertCapturedSuccess
+  compile "psycopg2" "$cache_dir"
+  assertCaptured "Uninstalling requests"
+  assertFile "psycopg2" ".heroku/python/requirements-declared.txt"
+  assertCapturedSuccess
+}
 
 
 
