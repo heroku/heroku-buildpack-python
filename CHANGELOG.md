@@ -1,8 +1,10 @@
 # Python Buildpack Changelog
 
-# Unreleased
+# 110
 
-Fixed automatic pip uninstall of dependencies removed from requirements.txt.
+Update Default Python to 3.6.1, bugfixes.
+
+- Fixed automatic pip uninstall of dependencies removed from requirements.txt.
 
 # 109
 
