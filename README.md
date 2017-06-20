@@ -23,7 +23,7 @@ Deploying a Python application couldn't be easier:
     $ git push heroku master
     ...
     -----> Python app detected
-    -----> Installing python-2.7.13
+    -----> Installing python-3.6.1
          $ pip install -r requirements.txt
            Collecting requests (from -r requirements.txt (line 1))
              Downloading requests-2.12.4-py2.py3-none-any.whl (576KB)
@@ -46,11 +46,11 @@ Specify a Python Runtime
 Specific versions of the Python runtime can be specified with a `runtime.txt` file:
 
     $ cat runtime.txt
-    python-3.6.1
+    python-2.7.13
 
 Runtime options include:
 
-- `python-2.7.13`
 - `python-3.6.1`
+- `python-2.7.13`
 - `pypy-5.7.1` (unsupported, experimental)
 - `pypy3-5.5.1` (unsupported, experimental)
