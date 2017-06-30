@@ -1,4 +1,4 @@
-# Pipenv support (Generate requriements.txt with pipenv).
+# Pipenv support (Generate requirements.txt with pipenv).
 if [[ -f Pipfile ]]; then
     if [[ ! -f requirements.txt ]]; then
         puts-step "Installing requirements with latest pipenv..."

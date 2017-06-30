@@ -177,7 +177,7 @@ mtime "pip.uninstall.time" "${start}"
 
 # Install dependencies with Pip (where the magic happens).
 let start=$(nowms)
-sub-env $BIN_DIR/steps/pip-install
+source $BIN_DIR/steps/pip-install
 mtime "pip.install.time" "${start}"
 
 # Support for NLTK corpora.
