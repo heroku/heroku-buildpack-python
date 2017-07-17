@@ -14,5 +14,8 @@ cd src
 make
 make install
 
-ln $OUT_PREFIX/bin/python3 $OUT_PREFIX/bin/python
+# Remove unneeded test directories, similar to the official Docker Python images:
+# https://github.com/docker-library/python
+find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -rf '{}' +
 
+ln $OUT_PREFIX/bin/python3 $OUT_PREFIX/bin/python

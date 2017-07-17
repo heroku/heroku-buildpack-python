@@ -13,3 +13,7 @@ cd src
 ./configure --prefix=$OUT_PREFIX  --enable-unicode=ucs4 --with-ensurepip=no
 make
 make install
+
+# Remove unneeded test directories, similar to the official Docker Python images:
+# https://github.com/docker-library/python
+find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -rf '{}' +
