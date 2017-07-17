@@ -32,7 +32,7 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 # Python defaults
-DEFAULT_PYTHON_VERSION="python-3.6.1"
+DEFAULT_PYTHON_VERSION="python-3.6.2"
 DEFAULT_PYTHON_STACK="cedar-14"
 PYTHON_EXE="/app/.heroku/python/bin/python"
 PIP_VERSION="9.0.1"
