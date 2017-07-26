@@ -8,6 +8,12 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     # Install dependencies with Pip.
     puts-step "Installing requirements with pip"
 
+    # Set PIP_EXTRA_INDEX_URL
+    if [[ -r $ENV_DIR/PIP_EXTRA_INDEX_URL ]]; then
+        PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
+        export PIP_EXTRA_INDEX_URL
+    fi
+
     set +e
     
     # Measure that we're using pip.
