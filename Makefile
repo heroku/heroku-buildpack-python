@@ -1,7 +1,7 @@
 # These targets are not files
 .PHONY: tests
 
-test: test-cedar-14
+test: test-heroku-16
 
 test-cedar-14:
 	@echo "Running tests in docker (cedar-14)..."
@@ -25,8 +25,3 @@ buildenv-heroku-16:
 	@echo "  $$ bob deploy runtimes/python-2.7.13"
 	@echo
 	@docker run -it --rm python-buildenv-heroku-16
-
-tools:
-	git clone https://github.com/kennethreitz/pip-pop.git
-	mv pip-pop/bin/* vendor/pip-pop/
-	rm -fr pip-pop
