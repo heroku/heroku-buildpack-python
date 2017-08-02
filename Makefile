@@ -1,7 +1,7 @@
 # These targets are not files
 .PHONY: tests
 
-test: test-cedar-14
+test: test-heroku-16
 
 test-cedar-14:
 	@echo "Running tests in docker (cedar-14)..."
