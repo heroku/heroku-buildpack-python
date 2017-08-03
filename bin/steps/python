@@ -54,7 +54,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   rm -fr /app/.heroku/python/lib/python2.7/site-packages/pip-*
   rm -fr /app/.heroku/python/lib/python2.7/site-packages/setuptools-*
 
-  /app/.heroku/python/bin/python $ROOT_DIR/vendor/get-pip.py &> /dev/null
+  /app/.heroku/python/bin/python $ROOT_DIR/vendor/get-pip.py #&> /dev/null
 
 fi
 
