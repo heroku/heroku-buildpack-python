@@ -10,6 +10,7 @@
 #   - $DISABLE_COLLECTSTATIC: disables this functionality.
 #   - $DEBUG_COLLECTSTATIC: upon failure, print out environment variables.
 
+# shellcheck source=bin/utils
 source $BIN_DIR/utils
 
 # Location of 'manage.py', if it exists.
@@ -29,13 +30,13 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
     puts-step "$ python $MANAGE_FILE collectstatic --noinput"
 
     # Run collectstatic, cleanup some of the noisy output.
-    python $MANAGE_FILE collectstatic --noinput --traceback 2>&1 | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
+    python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
     COLLECTSTATIC_STATUS="${PIPESTATUS[0]}"
 
     set -e
 
     # Display a warning if collectstatic failed.
-    [ $COLLECTSTATIC_STATUS -ne 0 ] && {
+    [ "$COLLECTSTATIC_STATUS" -ne 0 ] && {
 
         echo
         echo " !     Error while running '$ python $MANAGE_FILE collectstatic --noinput'."
