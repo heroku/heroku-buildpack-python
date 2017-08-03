@@ -9,12 +9,13 @@ addons:
 services:
   - docker
 # install: docker pull heroku/cedar:14
-env:
-  - STACK=heroku-16
-  - STACK=cedar-14
 jobs:
   include:
     - stage: shellcheck
       script: make check
+
     - stage: test
       script: ./tests.sh
+      env:
+        - STACK=heroku-16
+        - STACK=cedar-14
