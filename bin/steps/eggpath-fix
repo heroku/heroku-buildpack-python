@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set +e
 # delete any existing egg links, to uninstall exisisting installations.
 find .heroku/python/lib/python*/site-packages/ -name "*.egg-link" -delete 2> /dev/null
