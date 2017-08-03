@@ -1,5 +1,11 @@
 language: bash
-sudo: required
+# sudo: required
+addons:
+  apt:
+    sources:
+    - debian-sid    # Grab shellcheck from the Debian repo (o_O)
+    packages:
+    - shellcheck
 services:
   - docker
 # install: docker pull heroku/cedar:14
