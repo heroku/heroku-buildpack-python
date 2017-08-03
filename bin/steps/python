@@ -42,7 +42,7 @@ if [ ! "$SKIP_INSTALL" ]; then
 fi
 
 # If Pip isn't up to date:
-if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
+if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
   WORKING_DIR=$(pwd)
 
   TMPTARDIR=$(mktemp -d)
@@ -54,7 +54,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
   rm -fr /app/.heroku/python/lib/python2.7/site-packages/pip-*
   rm -fr /app/.heroku/python/lib/python2.7/site-packages/setuptools-*
 
-  /app/.heroku/python/bin/python $ROOT_DIR/vendor/get-pip.py #&> /dev/null
+  /app/.heroku/python/bin/python $ROOT_DIR/vendor/get-pip.py &> /dev/null
 
 fi
 
