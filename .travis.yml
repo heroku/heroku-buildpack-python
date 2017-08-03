@@ -8,7 +8,7 @@ env:
   - STACK=cedar-14
 jobs:
   include:
-    - stage: test
-      script: ./tests.sh
     - stage: shellcheck
       script: make check
+    - stage: test
+      script: ./tests.sh
