@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 testPipenv() {
   compile "pipenv"
   assertCapturedSuccess
@@ -17,13 +16,17 @@ testNoRequirements() {
   assertCapturedError
 }
 
+testGEOS() {
+  BUILD_WITH_GEO_LIBRARIES=1 compile "geos"
+  assertCaptured "geos"
+  assertCapturedSuccess
+}
 
 testNLTK() {
   compile "nltk"
   assertCaptured "wordnet"
   assertCapturedSuccess
 }
-
 
 testSetupPy() {
   compile "setup-py"
