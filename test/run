@@ -61,7 +61,7 @@ testPython2() {
 
 testPython3() {
   compile "python3"
-  assertCaptured "python-3.6.0"
+  assertCaptured "python-3.6.2"
   assertCapturedSuccess
 }
 
