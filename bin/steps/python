@@ -45,9 +45,6 @@ fi
 # If Pip isn't up to date:
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
 
-  TMPTARDIR=$(mktemp -d)
-  trap 'rm -rf $TMPTARDIR' RETURN
-
   puts-step "Installing pip"
 
   # Remove old installations.
