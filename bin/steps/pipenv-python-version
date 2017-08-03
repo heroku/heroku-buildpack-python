@@ -10,8 +10,7 @@ if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
         fi
         if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
             set +e
-            # shellcheck disable=SC2002
-            PYTHON=$(cat "$BUILD_DIR/Pipfile.lock" | jq '._meta.requires.python_version' -r)
+            PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
             set -e
 
             if [ "$PYTHON" = 2.7 ]; then
