@@ -11,15 +11,15 @@ services:
 # install: docker pull heroku/cedar:14
 jobs:
   include:
-    - stage: shellcheck
+    - stage: "Bash linting (shellcheck)"
       script: make check
 
-    - stage: "Heroku-16 Stack"
+    - stage: "Heroku-16 Stack Tests"
       script: ./tests.sh
       env:
         - STACK=heroku-16
 
-    - stage: "Cedar-14 Stack"
+    - stage: "Cedar-14 Stack Tests"
       script: ./tests.sh
       env:
         - STACK=cedar-14
