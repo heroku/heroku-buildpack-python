@@ -14,8 +14,12 @@ jobs:
     - stage: shellcheck
       script: make check
 
-    - stage: test
+    - stage: Heroku-16 Stack
       script: ./tests.sh
       env:
         - STACK=heroku-16
+
+    - stage: Cedar-14 Stack
+      script: ./tests.sh
+      env:
         - STACK=cedar-14
