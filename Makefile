@@ -4,7 +4,7 @@
 test: test-heroku-16
 
 check:
-	shellcheck bin/compile
+	shellcheck bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings
 
 test-cedar-14:
 	@echo "Running tests in docker (cedar-14)..."
