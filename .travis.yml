@@ -3,7 +3,6 @@ sudo: required
 services:
   - docker
 # install: docker pull heroku/cedar:14
-script: ./tests.sh
 env:
   - STACK=heroku-16
   - STACK=cedar-14
