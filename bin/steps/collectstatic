@@ -10,7 +10,7 @@
 #   - $DISABLE_COLLECTSTATIC: disables this functionality.
 #   - $DEBUG_COLLECTSTATIC: upon failure, print out environment variables.
 
-# shellcheck source=/dev/null
+# shellcheck source=bin/utils
 source $BIN_DIR/utils
 
 # Location of 'manage.py', if it exists.

@@ -15,8 +15,8 @@ VENDORED_GDAL="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/gdal
 PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Syntax sugar.
-# shellcheck source=/dev/null
-source $BIN_DIR/utils
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
 
 # If GDAL exists within requirements, use vendored gdal.
 if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then

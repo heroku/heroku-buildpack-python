@@ -10,8 +10,8 @@
 # This script is invoked by [`bin/compile`](/).
 
 # Syntax sugar.
-# shellcheck source=/dev/null
-source $BIN_DIR/utils
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
 
 # Check that nltk was installed by pip, otherwise obviously not needed
 if ! python -m nltk.downloader -h >/dev/null 2>&1; then

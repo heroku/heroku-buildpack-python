@@ -2,8 +2,9 @@
 
 # Syntax sugar.
 BIN_DIR=$(cd "$(dirname "$0")" || return; pwd) # absolute path
-# shellcheck source=/dev/null
-source $BIN_DIR/utils
+
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
 
 DISABLE_COLLECTSTATIC=1 "$(dirname "${0:-}")/compile" "$1" "$2" "$3"
 
