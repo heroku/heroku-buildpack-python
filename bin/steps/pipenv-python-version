@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Detect Python-version with Pipenv.
 
 if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
@@ -8,14 +10,15 @@ if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
         fi
         if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
             set +e
-            PYTHON=$(cat $BUILD_DIR/Pipfile.lock | jq '._meta.requires.python_version' -r)
+            # shellcheck disable=SC2002
+            PYTHON=$(cat "$BUILD_DIR/Pipfile.lock" | jq '._meta.requires.python_version' -r)
             set -e
 
             if [ "$PYTHON" = 2.7 ]; then
-                echo "python-2.7.13" > $BUILD_DIR/runtime.txt
+                echo "python-2.7.13" > "$BUILD_DIR/runtime.txt"
             fi
             if [ "$PYTHON" = 3.6 ]; then
-                echo "python-3.6.0" > $BUILD_DIR/runtime.txt
+                echo "python-3.6.2" > "$BUILD_DIR/runtime.txt"
             fi
         fi
     fi
