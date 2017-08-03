@@ -7,7 +7,7 @@ testPipenv() {
 
 testPipenvVersion() {
   compile "pipenv-version"
-  assertCaptured "3.6.0"
+  assertCaptured "3.6.2"
   assertCapturedSuccess
 }
 
