@@ -4,7 +4,8 @@
 test: test-heroku-16
 
 check:
-	shellcheck bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings
+	@shellcheck bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings
+	@shellcheck bin/steps/collectstatic bin/steps/cryptography bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/gdal bin/steps/geo-libs bin/steps/mercurial bin/steps/nltk bin/steps/pip-install bin/steps/pip-uninstall bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/pylibmc bin/steps/python
 
 test-cedar-14:
 	@echo "Running tests in docker (cedar-14)..."
