@@ -13,6 +13,7 @@
 VENDORED_MEMCACHED="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libmemcache.tar.gz"
 
 # Syntax sugar.
+# shellcheck source=/dev/null
 source $BIN_DIR/utils
 
 
@@ -23,8 +24,9 @@ if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
     mkdir -p .heroku/vendor
     # Download and extract libmemcached into target vendor directory.
-    curl $VENDORED_MEMCACHED -s | tar zxv -C .heroku/vendor &> /dev/null
+    curl "$VENDORED_MEMCACHED" -s | tar zxv -C .heroku/vendor &> /dev/null
   fi
 
-  export LIBMEMCACHED=$(pwd)/vendor
+  LIBMEMCACHED=$(pwd)/vendor
+  export LIBMEMCACHED
 fi
