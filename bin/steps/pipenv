@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Pipenv support (Generate requriements.txt with pipenv).
 if [[ -f Pipfile ]]; then
     if [[ ! -f requirements.txt ]]; then
