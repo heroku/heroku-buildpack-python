@@ -81,6 +81,7 @@ testStackChange() {
   mkdir -p "${cache_dir}/.heroku"
   echo "different-stack" > "${cache_dir}/.heroku/python-stack"
   compile "requirements-standard" "$cache_dir"
+  assertCaptured "clearing cache"
   assertFile "$STACK" ".heroku/python-stack"
   assertCapturedSuccess
 }
