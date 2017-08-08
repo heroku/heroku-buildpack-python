@@ -76,6 +76,15 @@ testSmartRequirements() {
   assertCapturedSuccess
 }
 
+testStackChange() {
+  local cache_dir="$(mktmpdir)"
+  mkdir -p "${cache_dir}/.heroku"
+  echo "different-stack" > "${cache_dir}/.heroku/python-stack"
+  compile "requirements-standard" "$cache_dir"
+  assertCaptured "clearing cache"
+  assertFile "$STACK" ".heroku/python-stack"
+  assertCapturedSuccess
+}
 
 
 pushd $(dirname 0) >/dev/null
