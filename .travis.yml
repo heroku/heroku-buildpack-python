@@ -1,25 +1,23 @@
 language: bash
-# sudo: required
-addons:
-  apt:
-    sources:
-    - debian-sid    # Grab shellcheck from the Debian repo (o_O)
-    packages:
-    - shellcheck
-services:
-  - docker
-# install: docker pull heroku/cedar:14
+dist: trusty
 jobs:
   include:
     - stage: "Bash linting (shellcheck)"
+      sudo: false
+      addons:
+        apt:
+          sources:
+          - debian-sid    # Grab shellcheck from the Debian repo (o_O)
+          packages:
+          - shellcheck
       script: make check
 
-    - stage: "Heroku-16 Stack Tests"
+    - stage: "Stack Tests"
+      services: docker
+      env: STACK=heroku-16
       script: ./tests.sh
-      env:
-        - STACK=heroku-16
 
-    - stage: "Cedar-14 Stack Tests"
+    - stage: "Stack Tests"
+      services: docker
+      env: STACK=cedar-14
       script: ./tests.sh
-      env:
-        - STACK=cedar-14
