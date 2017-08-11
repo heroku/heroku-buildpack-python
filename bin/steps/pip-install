@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 if [ ! "$SKIP_PIP_INSTALL" ]; then
 
     # Install dependencies with Pip.

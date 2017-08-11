@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 testPipenv() {
   compile "pipenv"
   assertCapturedSuccess
@@ -8,7 +7,7 @@ testPipenv() {
 
 testPipenvVersion() {
   compile "pipenv-version"
-  assertCaptured "3.6.0"
+  assertCaptured "3.6.2"
   assertCapturedSuccess
 }
 
@@ -17,13 +16,17 @@ testNoRequirements() {
   assertCapturedError
 }
 
+testGEOS() {
+  BUILD_WITH_GEO_LIBRARIES=1 compile "geos"
+  assertCaptured "geos"
+  assertCapturedSuccess
+}
 
 testNLTK() {
   compile "nltk"
   assertCaptured "wordnet"
   assertCapturedSuccess
 }
-
 
 testSetupPy() {
   compile "setup-py"
@@ -58,7 +61,7 @@ testPython2() {
 
 testPython3() {
   compile "python3"
-  assertCaptured "python-3.6.0"
+  assertCaptured "python-3.6.2"
   assertCapturedSuccess
 }
 
@@ -73,6 +76,15 @@ testSmartRequirements() {
   assertCapturedSuccess
 }
 
+testStackChange() {
+  local cache_dir="$(mktmpdir)"
+  mkdir -p "${cache_dir}/.heroku"
+  echo "different-stack" > "${cache_dir}/.heroku/python-stack"
+  compile "requirements-standard" "$cache_dir"
+  assertCaptured "clearing cache"
+  assertFile "$STACK" ".heroku/python-stack"
+  assertCapturedSuccess
+}
 
 
 pushd $(dirname 0) >/dev/null

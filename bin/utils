@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 shopt -s extglob
+shopt -s nullglob
 
 # The standard library.
 if [[ ! -f  /tmp/stdlib.sh ]]; then
   curl --retry 3 -s https://lang-common.s3.amazonaws.com/buildpack-stdlib/v2/stdlib.sh > /tmp/stdlib.sh
 fi
+# shellcheck source=/dev/null
 source /tmp/stdlib.sh
 
-if [ $(uname) == Darwin ]; then
+if [ "$(uname)" == Darwin ]; then
     sed() { command sed -l "$@"; }
 else
     sed() { command sed -u "$@"; }
@@ -26,12 +28,12 @@ cleanup() {
 
 # Buildpack Steps.
 puts-step() {
-  echo "-----> $@"
+  echo "-----> $*"
 }
 
 # Buildpack Warnings.
 puts-warn() {
-  echo " !     $@"
+  echo " !     $*"
 }
 
 # Does some serious copying.
@@ -62,20 +64,21 @@ sub-env() {
 
   (
     if [ -d "$ENV_DIR" ]; then
-      for e in $(ls $ENV_DIR); do
+      # shellcheck disable=SC2045
+      for e in $(ls "$ENV_DIR"); do
         echo "$e" | grep -E "$WHITELIST" | grep -qvE "$BLACKLIST" &&
-        export "$e=$(cat $ENV_DIR/$e)"
+        export "$e=$(cat "$ENV_DIR/$e")"
         :
       done
     fi
 
-    $1
+    "$@"
 
   )
 }
 
 # Measure the size of the Python installation.
 measure-size() {
-  echo "$((du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
+  echo "$(du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
 }
 

@@ -10,14 +10,15 @@ hash -r
 
 echo "Building gdal..."
 
-SOURCE_TARBALL='http://download.osgeo.org/gdal/1.11.1/gdal-1.11.1.tar.gz'
+VERSION="1.11.5"
+SOURCE_TARBALL="http://download.osgeo.org/gdal/${VERSION}/gdal-${VERSION}.tar.gz"
 
 curl -L $SOURCE_TARBALL | tar zx
 
-cd gdal-1.11.1
+pushd "gdal-${VERSION}"
 ./configure --prefix=$OUT_PREFIX --enable-static=no  &&
 make
 make install
 
 # Cleanup
-cd ..
+popd

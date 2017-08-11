@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
     /app/.heroku/python/bin/pip install  mercurial | cleanup | indent
