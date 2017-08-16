@@ -5,25 +5,25 @@ case $(ulimit -u) in
 # Standard-1X (+Free, +Hobby) Dyno
 256)
   export DYNO_RAM=512
-  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-02}
+  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-2}
   ;;
 
 # Standard-2X Dyno
 512)
   export DYNO_RAM=1024
-  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-04}
+  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-4}
   ;;
 
 # Performance-M Dyno
 16384)
   export DYNO_RAM=2560
-  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-08}
+  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-8}
   ;;
 
 # Performance-L Dyno
 32768)
-  export DYNO_RAM=6656
-  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-011}
+  export DYNO_RAM=14336
+  export WEB_CONCURRENCY=${WEB_CONCURRENCY:-11}
   ;;
 
 esac
