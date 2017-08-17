@@ -10,7 +10,7 @@ hash -r
 
 echo "Building gdal..."
 
-VERSION="1.11.5"
+VERSION="2.2.1"
 SOURCE_TARBALL="http://download.osgeo.org/gdal/${VERSION}/gdal-${VERSION}.tar.gz"
 
 curl -L $SOURCE_TARBALL | tar zx
