@@ -182,7 +182,7 @@ source "$BIN_DIR/steps/cryptography"
 
 # Support for Geo libraries.
 # shellcheck source=bin/steps/geo-libs
-sub-env "$BIN_DIR/steps/geo-libs"
+sub_env "$BIN_DIR/steps/geo-libs"
 
 # GDAL support.
 # shellcheck source=bin/steps/gdal
@@ -202,7 +202,7 @@ mtime "pip.install.time" "${start}"
 
 # Support for NLTK corpora.
 let start=$(nowms)
-sub-env "$BIN_DIR/steps/nltk"
+sub_env "$BIN_DIR/steps/nltk"
 mtime "nltk.download.time" "${start}"
 
 # Support for pip install -e.
@@ -215,7 +215,7 @@ fi
 
 # Django collectstatic support.
 let start=$(nowms)
-sub-env "$BIN_DIR/steps/collectstatic"
+sub_env "$BIN_DIR/steps/collectstatic"
 mtime "collectstatic.time" "${start}"
 
 # Create .profile script for application runtime environment variables.
