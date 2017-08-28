@@ -4,7 +4,7 @@ shopt -s nullglob
 
 # The standard library.
 if [[ ! -f  /tmp/stdlib.sh ]]; then
-  curl --retry 3 -s https://lang-common.s3.amazonaws.com/buildpack-stdlib/v2/stdlib.sh > /tmp/stdlib.sh
+  curl --retry 3 -s https://lang-common.s3.amazonaws.com/buildpack-stdlib/v8/stdlib.sh > /tmp/stdlib.sh
 fi
 # shellcheck source=/dev/null
 source /tmp/stdlib.sh
@@ -52,30 +52,6 @@ deep-cp() {
   )
 }
 
-
-sub-env() {
-
-  WHITELIST=${2:-''}
-  BLACKLIST=${3:-'^(GIT_DIR|STACK|PYTHONHOME|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
-
-  # Python-specific variables.
-  export PYHONHOME=$BUILD_DIR/.heroku/python
-  export PYTHONPATH=$BUILD_DIR/
-
-  (
-    if [ -d "$ENV_DIR" ]; then
-      # shellcheck disable=SC2045
-      for e in $(ls "$ENV_DIR"); do
-        echo "$e" | grep -E "$WHITELIST" | grep -qvE "$BLACKLIST" &&
-        export "$e=$(cat "$ENV_DIR/$e")"
-        :
-      done
-    fi
-
-    "$@"
-
-  )
-}
 
 # Measure the size of the Python installation.
 measure-size() {
