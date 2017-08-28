@@ -219,12 +219,12 @@ sub_env "$BIN_DIR/steps/collectstatic"
 mtime "collectstatic.time" "${start}"
 
 # Create .profile script for application runtime environment variables.
-set-env PATH "\$HOME/.heroku/python/bin:\$PATH"
-set-env PYTHONUNBUFFERED true
-set-env PYTHONHOME /app/.heroku/python
+set_env PATH "\$HOME/.heroku/python/bin:\$PATH"
+set_env PYTHONUNBUFFERED true
+set_env PYTHONHOME /app/.heroku/python
 
-set-env LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LIBRARY_PATH"
-set-env LD_LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LD_LIBRARY_PATH"
+set_env LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LIBRARY_PATH"
+set_env LD_LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LD_LIBRARY_PATH"
 
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
