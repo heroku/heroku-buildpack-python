@@ -8,7 +8,7 @@ Bugfix.
 
 # 111
 
-Linting ,bugfixes.
+Linting, bugfixes.
 
 # 110
 
