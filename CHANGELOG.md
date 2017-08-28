@@ -1,5 +1,6 @@
 # Python Buildpack Changelog
 
+<<<<<<< HEAD
 # 112
 
 Bugfix.
