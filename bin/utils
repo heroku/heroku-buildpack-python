@@ -4,7 +4,7 @@ shopt -s nullglob
 
 # The standard library.
 if [[ ! -f  /tmp/stdlib.sh ]]; then
-  curl --retry 3 -s https://lang-common.s3.amazonaws.com/buildpack-stdlib/v2/stdlib.sh > /tmp/stdlib.sh
+  curl --retry 3 -s https://lang-common.s3.amazonaws.com/buildpack-stdlib/v7/stdlib.sh > /tmp/stdlib.sh
 fi
 # shellcheck source=/dev/null
 source /tmp/stdlib.sh
