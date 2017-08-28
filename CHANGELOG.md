@@ -1,8 +1,14 @@
 # Python Buildpack Changelog
 
+# 112
+
+Bugfix.
+
+- Fixed grep output bug.
+
 # 111
 
-Linting , bugfixes.
+Linting, bugfixes.
 
 # 110
 
