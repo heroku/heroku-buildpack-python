@@ -9,7 +9,7 @@ if [[ -f Pipfile ]]; then
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
         # Install the dependencies.
-        /app/.heroku/python/bin/pipenv install --system 2>&1 | indent
+        /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
 
         # Skip pip install, later.
         export SKIP_PIP_INSTALL=1
