@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 113
+
+- Updates to Pipenv support.
+
 # 112
 
 Bugfix.
