@@ -1,5 +1,11 @@
 # Python Buildpack Changelog
 
+# 114
+
+- Bugfixes.
+
+Blacklisting `PYTHONHOME` and `PYTHONPATH` for older apps. Upgrades to nltk support.
+
 # 113
 
 - Updates to Pipenv support.
