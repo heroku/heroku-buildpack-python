@@ -47,6 +47,12 @@ testPsycopg2() {
   assertCapturedSuccess
 }
 
+testCffi() {
+  compile "cffi"
+  assertCaptured "cffi"
+  assertCapturedSuccess
+}
+
 testPylibmc() {
   compile "pylibmc"
   assertCaptured "pylibmc"
