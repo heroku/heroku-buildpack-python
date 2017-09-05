@@ -33,7 +33,7 @@ Deploying a Python application couldn't be easier:
     -----> Discovering process types
            Procfile declares types -> (none)
 
-A `requirements.txt` file must be present at the root of your application's repository.
+A `Pipfile` or `requirements.txt` must be present at the root of your application's repository.
 
 You can also specify the latest production release of this buildpack for upcoming builds of an existing application:
 
