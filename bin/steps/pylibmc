@@ -9,13 +9,17 @@
 #
 # This script is invoked by [`bin/compile`](/).
 
+if [[ "$STACK" == "heroku-16" ]]; then
+    # libmemcached is pre-installed in the stack image so there is no need to vendor it.
+    return 0
+fi
+
 # The location of the pre-compiled libmemcached binary.
 VENDORED_MEMCACHED="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libmemcache.tar.gz"
 
 # Syntax sugar.
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
-
 
 # If pylibmc exists within requirements, use vendored libmemcached.
 if (pip-grep -s requirements.txt pylibmc &> /dev/null) then

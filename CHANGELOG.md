@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# Unreleased
+
+The libffi/libmemcached vendoring step is now skipped on Heroku-16 (since they are installed in the base image).
+
 # 115
 
 Revert a pull request.

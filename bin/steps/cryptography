@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This script serves as the Cryptography build step of the
+# This script serves as the cffi build step of the
 # [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
 # compiler.
 #
@@ -8,6 +8,11 @@
 # adapter between a Python application and Heroku's runtime.
 #
 # This script is invoked by [`bin/compile`](/).
+
+if [[ "$STACK" == "heroku-16" ]]; then
+    # libffi is pre-installed in the stack image so there is no need to vendor it.
+    return 0
+fi
 
 # The location of the pre-compiled libffi binary.
 VENDORED_LIBFFI="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libffi.tar.gz"
