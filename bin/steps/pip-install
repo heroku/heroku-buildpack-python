@@ -6,7 +6,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     puts-step "Installing requirements with pip"
 
     set +e
-    BLACKLIST='PYTHONHOME|PYTHONPATH'
+    BLACKLIST='PYTHONHOME|PYTHONPATH|LIBRARY_PATH|LD_LIBRARY_PATH'
     export BLACKLIST
 
     sub_env /app/.heroku/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
