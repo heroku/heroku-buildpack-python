@@ -1,5 +1,11 @@
 # Python Buildpack Changelog
 
+# 115
+
+Revert a pull request.
+
+- No longer using `sub_env` for `pip install` step.
+
 # 114
 
 - Bugfixes.
@@ -8,7 +14,7 @@ Blacklisting `PYTHONHOME` and `PYTHONPATH` for older apps. Upgrades to nltk supp
 
 # 113
 
-- Updates to Pipenv support.
+Updates to Pipenv support.
 
 # 112
 
