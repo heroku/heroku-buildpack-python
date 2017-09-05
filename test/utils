@@ -150,6 +150,11 @@ _assertContains()
     esac
 
     fail "${msg:-${default_msg}}"
+
+    if [ "${haystack_type}" == "file" ]; then
+      echo
+      cat "${haystack}"
+    fi
   fi
 }
 
