@@ -28,17 +28,17 @@ Linting, bugfixes.
 
 # 110
 
+Update default Python to 3.6.2.
+
+# 109
+
 Update Default Python to 3.6.1, bugfixes.
 
 - Fixed automatic pip uninstall of dependencies removed from requirements.txt.
 
-# 109
-
-Fix output for collectstatic step.
-
 # 108
 
-Updated setuptools.
+Fix output for collectstatic step.
 
 # 107
 
