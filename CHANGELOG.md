@@ -1,8 +1,11 @@
 # Python Buildpack Changelog
 
-# Unreleased
+# 116
 
-The libffi/libmemcached vendoring step is now skipped on Heroku-16 (since they are installed in the base image).
+Vendoring improvements.
+
+- Geos libraries should work on Heroku-16 now.
+- The libffi/libmemcached vendoring step is now skipped on Heroku-16 (since they are installed in the base image).
 
 # 115
 
