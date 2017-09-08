@@ -182,7 +182,7 @@ source "$BIN_DIR/steps/cryptography"
 
 # Support for Geo libraries.
 # shellcheck source=bin/steps/geo-libs
-sub-env "$BIN_DIR/steps/geo-libs"
+sub_env "$BIN_DIR/steps/geo-libs"
 
 # GDAL support.
 # shellcheck source=bin/steps/gdal
@@ -202,7 +202,7 @@ mtime "pip.install.time" "${start}"
 
 # Support for NLTK corpora.
 let start=$(nowms)
-sub-env "$BIN_DIR/steps/nltk"
+sub_env "$BIN_DIR/steps/nltk"
 mtime "nltk.download.time" "${start}"
 
 # Support for pip install -e.
@@ -215,20 +215,20 @@ fi
 
 # Django collectstatic support.
 let start=$(nowms)
-sub-env "$BIN_DIR/steps/collectstatic"
+sub_env "$BIN_DIR/steps/collectstatic"
 mtime "collectstatic.time" "${start}"
 
 # Create .profile script for application runtime environment variables.
-set-env PATH "\$HOME/.heroku/python/bin:\$PATH"
-set-env PYTHONUNBUFFERED true
-set-env PYTHONHOME /app/.heroku/python
+set_env PATH "\$HOME/.heroku/python/bin:\$PATH"
+set_env PYTHONUNBUFFERED true
+set_env PYTHONHOME /app/.heroku/python
 
-set-env LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LIBRARY_PATH"
-set-env LD_LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LD_LIBRARY_PATH"
+set_env LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LIBRARY_PATH"
+set_env LD_LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LD_LIBRARY_PATH"
 
-set-default-env LANG en_US.UTF-8
-set-default-env PYTHONHASHSEED random
-set-default-env PYTHONPATH /app/
+set_default_env LANG en_US.UTF-8
+set_default_env PYTHONHASHSEED random
+set_default_env PYTHONPATH /app/
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
 cp "$ROOT_DIR/vendor/WEB_CONCURRENCY.sh" "$WEB_CONCURRENCY_PROFILE_PATH"
