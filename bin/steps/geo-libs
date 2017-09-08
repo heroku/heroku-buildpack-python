@@ -30,7 +30,11 @@ if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
     curl "$VENDORED_GDAL" -s | tar zxv -C .heroku/vendor &> /dev/null
     curl "$VENDORED_GEOS" -s | tar zxv -C .heroku/vendor &> /dev/null
     curl "$VENDORED_PROJ" -s | tar zxv -C .heroku/vendor &> /dev/null
-    cp /usr/lib/x86_64-linux-gnu/libjasper.so* ".heroku/vendor/lib/."
+
+    if [[ "$STACK" == "heroku-16" ]]; then
+      cp /usr/lib/x86_64-linux-gnu/libjasper.so* ".heroku/vendor/lib/."
+    fi
+
   fi
 
   GDAL=$(pwd)/vendor
