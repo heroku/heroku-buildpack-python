@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 117
+
+Bug fix.
+
 # 116
 
 Vendoring improvements.
