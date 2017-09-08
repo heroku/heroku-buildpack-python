@@ -24,7 +24,7 @@ testGEOS() {
 
 testNLTK() {
   compile "nltk"
-  assertCaptured "wordnet"
+  assertCaptured "Downloading NLTK packages: city_database stopwords"
   assertCapturedSuccess
 }
 
@@ -44,6 +44,12 @@ testStandardRequirements() {
 testPsycopg2() {
   compile "psycopg2"
   assertCaptured "psycopg2"
+  assertCapturedSuccess
+}
+
+testCffi() {
+  compile "cffi"
+  assertCaptured "cffi"
   assertCapturedSuccess
 }
 

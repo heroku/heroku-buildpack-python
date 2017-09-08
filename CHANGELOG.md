@@ -1,18 +1,48 @@
 # Python Buildpack Changelog
 
+# Unreleased
+
+The libffi/libmemcached vendoring step is now skipped on Heroku-16 (since they are installed in the base image).
+
+# 115
+
+Revert a pull request.
+
+- No longer using `sub_env` for `pip install` step.
+
+# 114
+
+- Bugfixes.
+
+Blacklisting `PYTHONHOME` and `PYTHONPATH` for older apps. Upgrades to nltk support.
+
+# 113
+
+Updates to Pipenv support.
+
+# 112
+
+Bugfix.
+
+- Fixed grep output bug.
+
+# 111
+
+Linting, bugfixes.
+
 # 110
+
+Update default Python to 3.6.2.
+
+# 109
 
 Update Default Python to 3.6.1, bugfixes.
 
 - Fixed automatic pip uninstall of dependencies removed from requirements.txt.
 
-# 109
-
-Fix output for collectstatic step.
-
 # 108
 
-Updated setuptools.
+Fix output for collectstatic step.
 
 # 107
 

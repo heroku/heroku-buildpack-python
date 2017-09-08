@@ -21,15 +21,14 @@ if sp-grep -s nltk; then
 
     if [ -f "$nltk_packages_definition" ]; then
 
-        nltk_packages=$(tr "\n" " " < "$nltk_packages_definition")
-        puts-step "Downloading NLTK packages: $nltk_packages"
+        readarray -t nltk_packages < "$nltk_packages_definition"
+        puts-step "Downloading NLTK packages: ${nltk_packages[*]}"
 
-        python -m nltk.downloader -d "$BUILD_DIR/.heroku/python/nltk_data" "$nltk_packages"  | indent
-        set-env NLTK_DATA "/app/.heroku/python/nltk_data"
+        python -m nltk.downloader -d "$BUILD_DIR/.heroku/python/nltk_data" "${nltk_packages[@]}" | indent
+        set_env NLTK_DATA "/app/.heroku/python/nltk_data"
 
     else
         puts-warn "'nltk.txt' not found, not downloading any corpora"
         puts-warn "Learn more: https://devcenter.heroku.com/articles/python-nltk"
     fi
 fi
-
