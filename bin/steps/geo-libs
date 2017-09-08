@@ -31,6 +31,7 @@ if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
     curl "$VENDORED_GEOS" -s | tar zxv -C .heroku/vendor &> /dev/null
     curl "$VENDORED_PROJ" -s | tar zxv -C .heroku/vendor &> /dev/null
 
+    # Copy libjasper from build image to slug.
     if [[ "$STACK" == "heroku-16" ]]; then
       cp /usr/lib/x86_64-linux-gnu/libjasper.so* ".heroku/vendor/lib/."
     fi
