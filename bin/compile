@@ -188,6 +188,9 @@ sub_env "$BIN_DIR/steps/geo-libs"
 # shellcheck source=bin/steps/gdal
 source "$BIN_DIR/steps/gdal"
 
+# FreeTDS support.
+source "$BIN_DIR/steps/freetds"
+
 # Uninstall removed dependencies with Pip.
 let start=$(nowms)
 # shellcheck source=bin/steps/pip-uninstall
