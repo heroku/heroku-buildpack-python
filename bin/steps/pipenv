@@ -3,13 +3,18 @@
 # Pipenv support (Generate requriements.txt with pipenv).
 if [[ -f Pipfile ]]; then
     if [[ ! -f requirements.txt ]]; then
-        puts-step "Installing requirements with latest pipenv..."
+        puts-step "Installing requirements with latest Pipenv..."
 
         # Install pipenv.
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
+        if [[ ! -f Pipfile.lock ]]; then
+            /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
+        else
+            /app/.heroku/python/bin/pipenv install --system 2>&1 | indent
+        fi
         # Install the dependencies.
-        /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
+
 
         # Skip pip install, later.
         export SKIP_PIP_INSTALL=1
