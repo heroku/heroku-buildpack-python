@@ -6,7 +6,7 @@
 
 OUT_PREFIX=$1
 
-echo "Building PyPy..."
+echo "Building PyPy…"
 SOURCE_TARBALL='https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.6.0-linux64.tar.bz2'
 curl -L $SOURCE_TARBALL | tar jx
 cp -R pypy2-v5.6.0-linux64/* $OUT_PREFIX
