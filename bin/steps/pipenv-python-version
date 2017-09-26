@@ -16,7 +16,7 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
             fi
             set -e
 
-            if [[ "$PYTHON" != "null" ]]; then
+            if [[ "$PYTHON" == "null" ]]; then
                 PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
                 if [ "$PYTHON" = 2.7 ]; then
                     echo "python-2.7.14" > "$BUILD_DIR/runtime.txt"
