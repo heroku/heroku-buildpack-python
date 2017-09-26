@@ -8,7 +8,7 @@ export PATH="/app/.heroku/python/bin/:$PATH"
 hash -r
 
 
-echo "Building geos..."
+echo "Building geos…"
 
 VERSION=3.6.2
 

@@ -5,8 +5,19 @@ testPipenv() {
   assertCapturedSuccess
 }
 
+testPipenvLock() {
+  compile "pipenv-lock"
+  assertCapturedSuccess
+}
+
 testPipenvVersion() {
   compile "pipenv-version"
+  assertCaptured "3.6.2"
+  assertCapturedSuccess
+}
+
+testPipenvFullVersion() {
+  compile "pipenv-full-version"
   assertCaptured "3.6.2"
   assertCapturedSuccess
 }
@@ -61,7 +72,7 @@ testPylibmc() {
 
 testPython2() {
   compile "python2"
-  assertCaptured "python-2.7.13"
+  assertCaptured "python-2.7.14"
   assertCapturedSuccess
 }
 

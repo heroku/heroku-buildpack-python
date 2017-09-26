@@ -6,19 +6,27 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
 
     if [[ ! -f $BUILD_DIR/runtime.txt ]]; then
         if [[ ! -f $BUILD_DIR/Pipfile.lock ]]; then
-            puts-warn "No 'pipfile.lock' found! We recommend you commit this into your repository."
+            puts-warn "No 'Pipfile.lock' found! We recommend you commit this into your repository."
         fi
         if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
             set +e
-            PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
+            PYTHON=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock")
+            if [[ "$PYTHON" != "null" ]]; then
+                echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
+            fi
             set -e
 
-            if [ "$PYTHON" = 2.7 ]; then
-                echo "python-2.7.13" > "$BUILD_DIR/runtime.txt"
+            if [[ "$PYTHON" == "null" ]]; then
+                PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
+                if [ "$PYTHON" = 2.7 ]; then
+                    echo "python-2.7.14" > "$BUILD_DIR/runtime.txt"
+                fi
+                if [ "$PYTHON" = 3.6 ]; then
+                    echo "python-3.6.2" > "$BUILD_DIR/runtime.txt"
+                fi
             fi
-            if [ "$PYTHON" = 3.6 ]; then
-                echo "python-3.6.2" > "$BUILD_DIR/runtime.txt"
-            fi
+
+
         fi
     fi
 fi
