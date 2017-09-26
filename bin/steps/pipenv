@@ -11,9 +11,9 @@ if [[ -f Pipfile ]]; then
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
         if [[ ! -f Pipfile.lock ]]; then
-            bash -ic "/app/.heroku/python/bin/pipenv install --system --skip-lock" 2>&1 | indent
+            bash -lic "/app/.heroku/python/bin/pipenv install --system --skip-lock" 2>&1 | indent
         else
-            bash -ic "/app/.heroku/python/bin/pipenv install --system" 2>&1 | indent
+            bash -lic "/app/.heroku/python/bin/pipenv install --system" 2>&1 | indent
         fi
         # Install the dependencies.
 
