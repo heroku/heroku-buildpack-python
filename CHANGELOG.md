@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 120
+
+Use Pipenv --deploy.
+
 # 119
 
 Improvements to Pipenv support, warning on unsupported Python versions.
