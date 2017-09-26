@@ -12,7 +12,7 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
             set +e
             PYTHON=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock")
             if [[ "$PYTHON" != "null" ]]; then
-                echo "$PYTHON" > "$BUILD_DIR/runtime.txt"
+                echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
             fi
             set -e
 
