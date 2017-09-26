@@ -46,6 +46,16 @@ Specific versions of the Python runtime can be specified with a `runtime.txt` fi
     $ cat runtime.txt
     python-2.7.14
 
+Or, with a `Pipfile.lock` (generated from the following `Pipfile`):
+
+    [requires]
+    python_version = "2.7"
+
+Or, more specifically:
+
+    [requires]
+    python_full_version = "2.7.14"
+
 Runtime options include:
 
 - `python-3.6.2`
