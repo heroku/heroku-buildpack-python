@@ -10,7 +10,7 @@ if [[ -f Pipfile ]]; then
         puts-step "Installing requirements with latest Pipenv…"
 
         # Install pipenv.
-        /app/.heroku/python/bin/pip pipenv --upgrade &> /dev/null
+        /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
         if [[ ! -f Pipfile.lock ]]; then
             /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
