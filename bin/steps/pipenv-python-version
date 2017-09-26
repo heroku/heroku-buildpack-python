@@ -6,7 +6,7 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
 
     if [[ ! -f $BUILD_DIR/runtime.txt ]]; then
         if [[ ! -f $BUILD_DIR/Pipfile.lock ]]; then
-            puts-warn "No 'pipfile.lock' found! We recommend you commit this into your repository."
+            puts-warn "No 'Pipfile.lock' found! We recommend you commit this into your repository."
         fi
         if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
             set +e
