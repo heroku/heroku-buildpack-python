@@ -1,5 +1,12 @@
 # Python Buildpack Changelog
 
+# 119
+
+Improvements to Pipenv support, warning on unsupported Python versions.
+
+- We now warn when a user is not using latest 2.x or 3.x Python.
+- Heroku now supports `[requires]` `python_full_version` in addition to `python_version`.
+
 # 118
 
 Improvements to Pipenv support.
