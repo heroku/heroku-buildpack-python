@@ -5,6 +5,11 @@ testPipenv() {
   assertCapturedSuccess
 }
 
+testPipenvLock() {
+  compile "pipenv-lock"
+  assertCapturedSuccess
+}
+
 testPipenvVersion() {
   compile "pipenv-version"
   assertCaptured "3.6.2"
