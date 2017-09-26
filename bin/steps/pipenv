@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 export CLINT_FORCE_COLOR=1
+env
 
 # Pipenv support (Generate requriements.txt with pipenv).
 if [[ -f Pipfile ]]; then
