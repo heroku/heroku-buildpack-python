@@ -14,7 +14,7 @@ if [[ -f Pipfile ]]; then
         if [[ ! -f Pipfile.lock ]]; then
             /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
         else
-            /app/.heroku/python/bin/pipenv install --system 2>&1 | indent
+            /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
         fi
         # Install the dependencies.
 
