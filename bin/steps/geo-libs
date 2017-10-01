@@ -40,5 +40,10 @@ if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
 
   GDAL=$(pwd)/vendor
   export GDAL
+  # set path for post_compile hooks
+  export GDAL_LIBRARY_PATH="$BUILD_DIR/.heroku/vendor/lib/libgdal.so"
+  export GEOS_LIBRARY_PATH="$BUILD_DIR/.heroku/vendor/lib/libgeos_c.so"
+  # set path for runtime environmeht
+  set_env GDAL_LIBRARY_PATH "/app/.heroku/vendor/lib/libgdal.so"
+  set_env GEOS_LIBRARY_PATH "/app/.heroku/vendor/lib/libgeos_c.so"
 fi
-
