@@ -25,11 +25,13 @@ if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
 fi
 
 if [ -f .heroku/python-version ]; then
-  if [ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]; then
-      puts-step "Found $(cat .heroku/python-version), removing"
-      rm -fr .heroku/python
+  CACHED_PYTHON_VERSION="$(cat .heroku/python-version)"
+  if [[ "${CACHED_PYTHON_VERSION}" = "${PYTHON_VERSION}" ]]; then
+      puts-step "Using cached ${PYTHON_VERSION}"
+      SKIP_INSTALL=1
   else
-    SKIP_INSTALL=1
+      puts-step "Removing cached ${CACHED_PYTHON_VERSION}"
+      rm -fr .heroku/python
   fi
 fi
 

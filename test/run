@@ -88,8 +88,19 @@ testSmartRequirements() {
   assertFile "requests" ".heroku/python/requirements-declared.txt"
   assertCapturedSuccess
   compile "psycopg2" "$cache_dir"
+  assertCaptured "Using cached python-"
   assertCaptured "Uninstalling requests"
   assertFile "psycopg2" ".heroku/python/requirements-declared.txt"
+  assertCapturedSuccess
+}
+
+testPythonVersionChange() {
+  local cache_dir="$(mktmpdir)"
+  mkdir -p "${cache_dir}/.heroku"
+  echo "python-2.7.9" > "${cache_dir}/.heroku/python-version"
+  compile "python2" "$cache_dir"
+  assertCaptured "Removing cached python-2.7.9"
+  assertCaptured "Installing python-2.7.14"
   assertCapturedSuccess
 }
 
