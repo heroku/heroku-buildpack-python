@@ -94,7 +94,7 @@ General improvements.
 - Use `pkg_resources` to check if a distribution is installed instead of
   parsing `requirements.txt`. ([#395][395])
 
-[395]: https://github.com/heroku/heroku-buildpack-python/pull/395
+[395]: https://github.com/keacloud/heroku-buildpack-python/pull/395
 
 ## 103
 

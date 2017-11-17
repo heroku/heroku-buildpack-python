@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This script serves as the
-# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# [**Python Buildpack**](https://github.com/keacloud/heroku-buildpack-python)
 # detector.
 #
 # A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
@@ -10,7 +10,7 @@
 # ## Usage
 # Compiling an app into a slug is simple:
 #
-#     $ bin/detect <build-dir> <cache-dir>
+#     $ bin/detect BUILD_DIR CACHE_DIR
 
 BUILD_DIR=$1
 
@@ -19,4 +19,10 @@ if [ ! -f "$BUILD_DIR/requirements.txt" ] && [ ! -f "$BUILD_DIR/setup.py" ] && [
   exit 1
 fi
 
-echo Python
+# Check for coconut files
+if compgen -G "$BUILD_DIR/**/*.coco" > /dev/null; then
+    echo Coconut
+
+else
+    echo Python
+fi
