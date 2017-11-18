@@ -26,5 +26,5 @@ if compgen -G "$BUILD_DIR/**/*.coco" > /dev/null; then
      TARGET=$COCONUT_TARGET || "universal"
      ARGS=$COCONUT_ARGS || ""
 
-     coconut . . --package --force --target $TARGET $ARGS 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+     python -m coconut.main $BUILD_DIR $BUILD_DIR --package --force --target $TARGET $ARGS 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
 fi
