@@ -15,17 +15,16 @@
 BIN_DIR=$(cd "$(dirname "$0")"; pwd) # absolute path
 BUILD_DIR=$1
 
+source "$BIN_DIR/utils"
+
 # Check for coconut files
 if compgen -G "$BUILD_DIR/**/*.coco" > /dev/null; then
-    if [ ! "$SKIP_COCONUT_COMPILE" ]; then
-        puts-step "Installing compiler"
-        /app/.heroku/python/bin/pip install --disable-pip-version-check --exists-action=w --src=/app/.heroku/src coconut[all] 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+     puts-step "Installing compiler"
+     /app/.heroku/python/bin/pip install --disable-pip-version-check --exists-action=w --src=/app/.heroku/src coconut[all] 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
 
-        puts-step "Compilng .coco files"
-        TARGET=$COCONUT_TARGET || "universal"
-        ARGS=$COCONUT_ARGS || ""
+     puts-step "Compilng .coco files"
+     TARGET=$COCONUT_TARGET || "universal"
+     ARGS=$COCONUT_ARGS || ""
 
-        coconut . . --package --force --target $TARGET $ARGS 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
-
-    fi
+     coconut . . --package --force --target $TARGET $ARGS 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
 fi
