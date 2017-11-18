@@ -2,7 +2,7 @@
 
 # This script serves as the
 # [**Python Buildpack**](https://github.com/keacloud/heroku-buildpack-python)
-# pre-compiler.
+# post-compiler.
 #
 # A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
 # adapter between a Python application and Heroku's runtime.
@@ -10,7 +10,7 @@
 # ## Usage
 # Compiling an app into a slug is simple:
 #
-#     $ bin/pre_compile BUILD_DIR BIN_DIR
+#     $ bin/post_compile BUILD_DIR
 
 BIN_DIR=$(cd "$(dirname "$0")"; pwd) # absolute path
 BUILD_DIR=$1
