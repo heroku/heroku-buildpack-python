@@ -22,7 +22,7 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
                     echo "python-2.7.14" > "$BUILD_DIR/runtime.txt"
                 fi
                 if [ "$PYTHON" = 3.6 ]; then
-                    echo "python-3.6.2" > "$BUILD_DIR/runtime.txt"
+                    echo "python-3.6.3" > "$BUILD_DIR/runtime.txt"
                 fi
             fi
 
