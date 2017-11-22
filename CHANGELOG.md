@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 121
+
+Update default Python to v3.6.3.
+
 # 120
 
 Use Pipenv --deploy.
