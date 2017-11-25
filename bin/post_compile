@@ -24,7 +24,14 @@ if compgen -G "$BUILD_DIR/**/*.coco" > /dev/null; then
      puts-step "Installing compiler"
      pip install coconut 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
 
+     # Compile .coco files
      puts-step "Compilng .coco files"
 
-     python -m coconut.main $BUILD_DIR $BUILD_DIR --package --force $ARGS 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+     mkdir -p "$CACHE_DIR/.coconut"
+
+     python -m coconut.main $BUILD_DIR "$CACHE_DIR/.coconut" --package $ARGS 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+
+     # Restore cached compiled files
+     puts-step "Restoring cached compiled .coco files"
+     cp -R "$CACHE_DIR/.coconut/*" $BUILD_DIR &> /dev/null || true
 fi
