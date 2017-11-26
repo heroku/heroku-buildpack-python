@@ -5,7 +5,7 @@ For Cedar-14 stack
 
 To get started with it, create an app on Heroku inside a clone of this repository, and set your S3 config vars:
 
-    $ heroku create --buildpack https://github.com/keacloud/heroku-buildpack-python#not-heroku
+    $ heroku create --buildpack https://github.com/heroku/heroku-buildpack-python#not-heroku
     $ heroku config:set WORKSPACE_DIR=builds
     $ heroku config:set AWS_ACCESS_KEY_ID=<your_aws_key>
     $ heroku config:set AWS_SECRET_ACCESS_KEY=<your_aws_secret>
