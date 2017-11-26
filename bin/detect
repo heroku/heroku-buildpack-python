@@ -19,4 +19,10 @@ if [ ! -f "$BUILD_DIR/requirements.txt" ] && [ ! -f "$BUILD_DIR/setup.py" ] && [
   exit 1
 fi
 
-echo Python
+# Check for coconut files
+if compgen -G "$BUILD_DIR/**/*.coco" > /dev/null; then
+    echo Coconut
+
+else
+    echo Python
+fi

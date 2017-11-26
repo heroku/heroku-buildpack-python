@@ -72,6 +72,8 @@ source "$BIN_DIR/warnings"
 # we need to put a bunch of symlinks in there later
 mkdir -p /app/.heroku
 
+export_env_dir "$ENV_DIR"
+
 # Set up outputs under new context
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 EXPORT_PATH="$BIN_DIR/../export"

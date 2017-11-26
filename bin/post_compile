@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# This script serves as the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# post-compiler.
+#
+# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+
+# ## Usage
+# Compiling an app into a slug is simple:
+#
+#     $ bin/post_compile BUILD_DIR
+
+BIN_DIR=$(cd "$(dirname "$0")"; pwd) # absolute path
+BUILD_DIR=$1
+
+source "$BIN_DIR/utils"
+
+ARGS="${COCONUT_ARGS:=}"
+
+# Check for coconut files
+if compgen -G "$BUILD_DIR/**/*.coco" > /dev/null; then
+     puts-step "Installing compiler"
+     pip install coconut 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+
+     # Compile .coco files
+     puts-step "Compilng .coco files"
+
+     mkdir -p "$CACHE_DIR/.coconut"
+
+     python -m coconut.main $BUILD_DIR "$CACHE_DIR/.coconut" --package $ARGS 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+
+     # Restore cached compiled files
+     puts-step "Restoring cached compiled .coco files"
+     cp -R "$CACHE_DIR/.coconut/*" $BUILD_DIR &> /dev/null || true
+fi

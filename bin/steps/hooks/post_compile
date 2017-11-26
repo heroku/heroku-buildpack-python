@@ -4,4 +4,9 @@ if [ -f bin/post_compile ]; then
     echo "-----> Running post-compile hook"
     chmod +x bin/post_compile
     sub_env bin/post_compile
+
+elif [ -f $BIN_DIR/post_compile ]; then
+    echo "-----> Running buildpack post-compile hook"
+    chmod +x $BIN_DIR/post_compile
+    $BIN_DIR/post_compile $BUILD_DIR
 fi
