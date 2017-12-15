@@ -12,9 +12,9 @@ if [[ -f Pipfile ]]; then
 
         # Measure that we're using Pipenv.
         mcount "tool.pipenv"
-        
+
         # Install pipenv.
-        /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/nullsss
+        /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
         if [[ ! -f Pipfile.lock ]]; then
             /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
