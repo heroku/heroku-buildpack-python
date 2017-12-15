@@ -2,12 +2,14 @@
 
 # export CLINT_FORCE_COLOR=1
 # export PIPENV_FORCE_COLOR=1
+source $BIN_DIR/utils
 
 # Pipenv support (Generate requriements.txt with pipenv).
 if [[ -f Pipfile ]]; then
     if [[ ! -f requirements.txt ]]; then
         puts-step "Installing requirements with latest Pipenv…"
 
+        mcount "tool.pipenv"
         # Install pipenv.
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
