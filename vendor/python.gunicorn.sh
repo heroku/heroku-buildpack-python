@@ -2,4 +2,4 @@
 export FORWARDED_ALLOW_IPS='*'
 
 # Automatic configuration for Gunicorn's stdout access log setting.
-export GUNICORN_CMD_ARGS="--access-logfile -"
+export GUNICORN_CMD_ARGS=${GUNICORN_CMD_ARGS:-"--access-logfile -"}
