@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 122
+
+Update gunicorn init.d script to allow overrides.
+
 # 121
 
 Update default Python to v3.6.3.
