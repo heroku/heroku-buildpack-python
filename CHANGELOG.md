@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 124
+
+Update buildpack to automatically install [dev-packages] (Pipenv) during Heroku CI builds.
+
 # 123
 
 Update gunicorn init.d script to allow overrides.
