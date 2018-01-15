@@ -24,8 +24,8 @@ if [[ -f Pipfile ]]; then
         fi
 
         # Install the test dependencies, for CI.
-        if [ "$INSTALL_TEST"" ]]; then
-            puts_step "Installing test dependencies."
+        if [ "$INSTALL_TEST" ]]; then
+            puts-step "Installing test dependencies."
             /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
         fi
 
