@@ -11,3 +11,7 @@ DISABLE_COLLECTSTATIC=1 "$(dirname "${0:-}")/compile" "$1" "$2" "$3"
 if [[ -f "$1/requirements-test.txt" ]]; then
     /app/.heroku/python/bin/pip install -r "$1/requirements-test.txt" --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent
 fi
+
+if [[ -f "$1/Pipfile" ]]; then
+    /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
+fi
