@@ -16,13 +16,18 @@ if [[ -f Pipfile ]]; then
         # Install pipenv.
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
+        # Install the dependencies.
         if [[ ! -f Pipfile.lock ]]; then
             /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
         else
             /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
         fi
-        # Install the dependencies.
 
+        # Install the test dependencies, for CI.
+        if [ "$INSTALL_TEST" ]; then
+            puts-step "Installing test dependencies…"
+            /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
+        fi
 
         # Skip pip install, later.
         export SKIP_PIP_INSTALL=1

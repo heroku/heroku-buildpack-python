@@ -6,8 +6,8 @@ BIN_DIR=$(cd "$(dirname "$0")" || return; pwd) # absolute path
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
 
-DISABLE_COLLECTSTATIC=1 "$(dirname "${0:-}")/compile" "$1" "$2" "$3"
+# Locale support for Pipenv.
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
 
-if [[ -f "$1/requirements-test.txt" ]]; then
-    /app/.heroku/python/bin/pip install -r "$1/requirements-test.txt" --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent
-fi
+DISABLE_COLLECTSTATIC=1 INSTALL_TEST=1 "$(dirname "${0:-}")/compile" "$1" "$2" "$3"
