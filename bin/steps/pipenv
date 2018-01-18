@@ -35,5 +35,10 @@ if [[ -f Pipfile ]]; then
         # Pip freeze, for compatibility.
         /app/.heroku/python/bin/pip freeze > requirements.txt
 
+        # Clean up existing Smart Requirements files if they exist.
+        if [[ -f .heroku/python/requirements-declared.txt ]]; then
+            rm .heroku/python/requirements-declared.txt
+        fi
+
     fi
 fi
