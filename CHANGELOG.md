@@ -2,7 +2,7 @@
 
 # 125
 
-Set `PYTHONHOME` during collectstatic runs.
+Set `PYTHONPATH` during collectstatic runs.
 
 # 124
 
