@@ -13,6 +13,12 @@ if [[ -f Pipfile ]]; then
         # Measure that we're using Pipenv.
         mcount "tool.pipenv"
 
+        # Set PIP_EXTRA_INDEX_URL
+        if [[ -r $ENV_DIR/PIP_EXTRA_INDEX_URL ]]; then
+            PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
+            export PIP_EXTRA_INDEX_URL
+        fi
+
         # Install pipenv.
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
