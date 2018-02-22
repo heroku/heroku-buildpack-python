@@ -224,14 +224,24 @@ mtime "collectstatic.time" "${start}"
 # Create .profile script for application runtime environment variables.
 set_env PATH "\$HOME/.heroku/python/bin:\$PATH"
 set_env PYTHONUNBUFFERED true
-set_env PYTHONHOME /app/.heroku/python
+set_env PYTHONHOME "\$HOME/.heroku/python"
 
-set_env LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LIBRARY_PATH"
-set_env LD_LIBRARY_PATH "/app/.heroku/vendor/lib:/app/.heroku/python/lib:\$LD_LIBRARY_PATH"
+set_env LIBRARY_PATH "\$HOME/.heroku/vendor/lib:\$HOME/.heroku/python/lib:\$LIBRARY_PATH"
+set_env LD_LIBRARY_PATH "\$HOME/.heroku/vendor/lib:\$HOME/.heroku/python/lib:\$LD_LIBRARY_PATH"
 
 set_default_env LANG en_US.UTF-8
 set_default_env PYTHONHASHSEED random
-set_default_env PYTHONPATH /app/
+set_default_env PYTHONPATH "\$HOME"
+
+# python expects to be in /app, if at runtime, it is not, set
+# up symlinks... this can occur when the subdir buildpack is used
+cat <<EOT >> "$PROFILE_PATH"
+if [[ \$HOME != "/app" ]]; then
+    mkdir -p /app/.heroku
+    ln -nsf "\$HOME/.heroku/python" /app/.heroku/python
+    ln -nsf "\$HOME/.heroku/vendor" /app/.heroku/vendor
+fi
+EOT
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
 cp "$ROOT_DIR/vendor/WEB_CONCURRENCY.sh" "$WEB_CONCURRENCY_PROFILE_PATH"
