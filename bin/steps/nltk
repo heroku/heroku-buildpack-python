@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # This script serves as the NLTK build step of the
-# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# [**Python Buildpack**](https://github.com/Scalingo/python-buildpack)
 # compiler.
 #
-# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
-# adapter between a Python application and Heroku's runtime.
+# A [buildpack](https://doc.scalingo.com/buildpacks) is an
+# adapter between a Python application and Scalingo's runtime.
 #
 # This script is invoked by [`bin/compile`](/).
 
@@ -22,8 +22,8 @@ if [ $? -eq 0 ]; then
     if [ -f "$nltk_packages_definition" ]; then
         nltk_packages=$(tr "\n" " " < "$nltk_packages_definition")
         puts-step "Downloading NLTK packages: $nltk_packages"
-        python -m nltk.downloader -d $BUILD_DIR/.heroku/python/nltk_data $nltk_packages  | indent
-        set-env NLTK_DATA "/app/.heroku/python/nltk_data"
+        python -m nltk.downloader -d $BUILD_DIR/.scalingo/python/nltk_data $nltk_packages  | indent
+        set-env NLTK_DATA "/app/.scalingo/python/nltk_data"
     else
         puts-warn "nltk.txt not found, not downloading any corpora"
     fi
