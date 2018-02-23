@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# This script serves as the NLTK build step of the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# compiler.
+#
+# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# Syntax sugar.
+source $BIN_DIR/utils
+
+bpwatch start nltk_download
+
+# Check that nltk was installed by pip, otherwise obviously not needed
+python -m nltk.downloader -h >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+    puts-step "Downloading NLTK corpora..."
+    nltk_packages_definition="$BUILD_DIR/nltk.txt"
+    if [ -f "$nltk_packages_definition" ]; then
+        nltk_packages=$(tr "\n" " " < "$nltk_packages_definition")
+        puts-step "Downloading NLTK packages: $nltk_packages"
+        python -m nltk.downloader -d $BUILD_DIR/.heroku/python/nltk_data $nltk_packages  | indent
+        set-env NLTK_DATA "/app/.heroku/python/nltk_data"
+    else
+        puts-warn "nltk.txt not found, not downloading any corpora"
+    fi
+fi
+
+
+bpwatch stop nltk_download

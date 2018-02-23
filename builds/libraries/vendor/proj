@@ -15,7 +15,7 @@ SOURCE_TARBALL='http://download.osgeo.org/proj/proj-4.8.0.tar.gz'
 curl -L $SOURCE_TARBALL | tar zx
 
 cd proj-4.8.0
-./configure --prefix=$OUT_PREFIX  &&
+./configure --prefix=$OUT_PREFIX --enable-static=no &&
 make
 make install
 

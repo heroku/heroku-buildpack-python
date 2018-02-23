@@ -10,12 +10,12 @@ hash -r
 
 echo "Building geos..."
 
-SOURCE_TARBALL='http://download.osgeo.org/geos/geos-3.4.2.tar.bz2'
+SOURCE_TARBALL='http://download.osgeo.org/geos/geos-3.4.3.tar.bz2'
 
 curl -L $SOURCE_TARBALL | tar xj
 
-cd geos-3.4.2
-./configure --prefix=$OUT_PREFIX  &&
+cd geos-3.4.3
+./configure --prefix=$OUT_PREFIX --enable-static=no &&
 make
 make install
 
