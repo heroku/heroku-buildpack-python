@@ -17,6 +17,7 @@ set -e
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
 set +e
+/app/.heroku/python/bin/pip freeze
 /app/.heroku/python/bin/pip install -r $BUILD_DIR/requirements.txt --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee $WARNINGS_LOG | cleanup | indent
 PIP_STATUS="${PIPESTATUS[0]}"
 set -e
