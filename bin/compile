@@ -33,6 +33,12 @@ ENV_DIR=$3
 
 export BUILD_DIR CACHE_DIR ENV_DIR
 
+VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
+if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
+    VENDOR_URL="$BUILDPACK_VENDOR_URL"
+fi
+export VENDOR_URL
+
 # Python defaults
 DEFAULT_PYTHON_VERSION="python-3.6.4"
 LATEST_3="python-3.6.4"
