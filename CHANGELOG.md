@@ -2,7 +2,10 @@
 
 # 125
 
-Set `PYTHONPATH` during collectstatic runs.
+Set `PYTHONPATH` during collectstatic runs, other updates.
+
+- Update Set `PYTHONPATH` during collectstatic runs.
+- Update Pipenv "3.6" to "3.6.4".
 
 # 124
 
