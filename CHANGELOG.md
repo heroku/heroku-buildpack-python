@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 125
+
+Set `PYTHONPATH` during collectstatic runs.
+
 # 124
 
 Update buildpack to automatically install [dev-packages] (Pipenv) during Heroku CI builds.
