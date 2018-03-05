@@ -58,8 +58,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             export SKIP_PIP_INSTALL=1
 
             # Pip freeze, for compatibility.
-
-            # pip freeze > requirements.txt
+            pip freeze > requirements.txt
         fi
     fi
 else
