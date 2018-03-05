@@ -63,5 +63,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         fi
     fi
 else
+    pipenv-to-pip Pipfile.lock > requirements.txt
     export SKIP_PIP_INSTALL=1
 fi
