@@ -41,6 +41,7 @@ class Requirements(object):
                 if not getattr(requirement.req, 'name', None):
                     # Prior to pip 8.1.2 the attribute `name` did not exist.
                     requirement.req.name = requirement.req.project_name
+                    requirement.req.name = requirement.req.name.lower()
                 self.requirements.append(requirement.req)
 
 
