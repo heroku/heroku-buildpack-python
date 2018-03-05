@@ -19,6 +19,11 @@ if [[ -f Pipfile ]]; then
             export PIP_EXTRA_INDEX_URL
         fi
 
+        if [[ -f .heroku/python/requirements-declared.txt ]]; then
+            cp .heroku/python/requirements-declared.txt requirements.txt
+            "$BIN_DIR/steps/pip-uninstall"
+        fi
+
         # Install pipenv.
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
