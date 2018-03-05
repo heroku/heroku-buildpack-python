@@ -30,8 +30,8 @@ if [[ -f Pipfile ]]; then
         # Install the dependencies.
         if [[ ! -f Pipfile.lock ]]; then
             /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
-
         else
+            pipenv-to-pip Pipfile.lock > .heroku/python/requirements-declared.txt
             /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
         fi
 
@@ -45,7 +45,7 @@ if [[ -f Pipfile ]]; then
         export SKIP_PIP_INSTALL=1
 
         # Pip freeze, for compatibility.
-        /app/.heroku/python/bin/pip freeze > requirements.txt
-        cp requirements.txt .heroku/python/requirements-declared.txt
+
+        pip freeze > requirements.txt
     fi
 fi
