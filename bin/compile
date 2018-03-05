@@ -100,12 +100,6 @@ export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/li
 # Switch to the repo's context.
 cd "$BUILD_DIR"
 
-# Warn for lack of Procfile.
-if [[ ! -f Procfile ]]; then
-  puts-warn 'Warning: Your application is missing a Procfile. This file tells Heroku how to run your application.'
-  puts-warn 'Learn more: https://devcenter.heroku.com/articles/procfile'
-fi
-
 # Prepare the cache.
 mkdir -p "$CACHE_DIR"
 
