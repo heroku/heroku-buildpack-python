@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 126
+
+Skip installs if Pipfile.lock hasn't changed, and uninstall stale dependencies with Pipenv.
+
 # 125
 
 Set `PYTHONPATH` during collectstatic runs, other updates.
