@@ -62,5 +62,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             # pip freeze > requirements.txt
         fi
     fi
-
+else
+    export SKIP_PIP_INSTALL=1
 fi
