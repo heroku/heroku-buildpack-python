@@ -164,6 +164,16 @@ let start=$(nowms)
 source "$BIN_DIR/steps/python"
 mtime "python.install.time" "${start}"
 
+# Uninstall removed dependencies with Pip.
+let start=$(nowms)
+# shellcheck source=bin/steps/pip-uninstall
+source "$BIN_DIR/steps/pip-uninstall"
+mtime "pip.uninstall.time" "${start}"
+
+# Pipenv support.
+# shellcheck source=bin/steps/pipenv
+source "$BIN_DIR/steps/pipenv"
+
 # If no requirements.txt file given, assume `setup.py develop` is intended.
 if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
   echo "-e ." > requirements.txt
@@ -192,16 +202,6 @@ sub_env "$BIN_DIR/steps/geo-libs"
 # GDAL support.
 # shellcheck source=bin/steps/gdal
 source "$BIN_DIR/steps/gdal"
-
-# Uninstall removed dependencies with Pip.
-let start=$(nowms)
-# shellcheck source=bin/steps/pip-uninstall
-source "$BIN_DIR/steps/pip-uninstall"
-mtime "pip.uninstall.time" "${start}"
-
-# Pipenv support.
-# shellcheck source=bin/steps/pipenv
-source "$BIN_DIR/steps/pipenv"
 
 # Install dependencies with Pip (where the magic happens).
 let start=$(nowms)
