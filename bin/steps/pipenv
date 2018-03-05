@@ -7,7 +7,7 @@ source $BIN_DIR/utils
 
 
 if [[ -f Pipfile.lock ]]; then
-    if [ $("shasum -a 256 Pipfile.lock") == $"(cat .heroku/python/Pipfile.lock.sha256)" ]; then
+    if [ $("openssl dgst -sha256 Pipfile.lock") == $"(cat .heroku/python/Pipfile.lock.sha256)" ]; then
         SKIP_PIPENV_INSTALL=1
     fi
 fi
@@ -43,7 +43,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
                 pipenv-to-pip Pipfile.lock > requirements.txt
                 "$BIN_DIR/steps/pip-uninstall"
                 cp requirements.txt .heroku/python/requirements-declared.txt
-                shasum -a 256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
+                openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
 
                 /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
             fi
