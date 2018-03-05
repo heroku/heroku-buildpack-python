@@ -19,10 +19,9 @@ if [[ -f Pipfile ]]; then
             export PIP_EXTRA_INDEX_URL
         fi
 
-        if [[ -f .heroku/python/requirements-declared.txt ]]; then
-            cp .heroku/python/requirements-declared.txt requirements.txt
-            "$BIN_DIR/steps/pip-uninstall"
-        fi
+        # if [[ -f .heroku/python/requirements-declared.txt ]]; then
+        #     cp .heroku/python/requirements-declared.txt requirements.txt
+        # fi
 
         # Install pipenv.
         /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
@@ -31,7 +30,9 @@ if [[ -f Pipfile ]]; then
         if [[ ! -f Pipfile.lock ]]; then
             /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
         else
-            pipenv-to-pip Pipfile.lock > .heroku/python/requirements-declared.txt
+            pipenv-to-pip Pipfile.lock > requirements.txt
+            "$BIN_DIR/steps/pip-uninstall"
+
             /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
         fi
 
