@@ -41,6 +41,6 @@ if [[ -f Pipfile ]]; then
 
         # Pip freeze, for compatibility.
         /app/.heroku/python/bin/pip freeze > requirements.txt
-        cp requirements.txt heroku/python/requirements-declared.txt
+        cp requirements.txt .heroku/python/requirements-declared.txt
     fi
 fi
