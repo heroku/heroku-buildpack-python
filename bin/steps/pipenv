@@ -32,6 +32,7 @@ if [[ -f Pipfile ]]; then
         else
             pipenv-to-pip Pipfile.lock > requirements.txt
             "$BIN_DIR/steps/pip-uninstall"
+            cp requirements.txt .heroku/python/requirements-declared.txt
 
             /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
         fi
