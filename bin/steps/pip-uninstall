@@ -2,6 +2,8 @@
 
 set +e
 # Install dependencies with Pip.
+# shellcheck source=bin/utils
+source $BIN_DIR/utils
 
 if [ ! "$SKIP_PIP_INSTALL" ]; then
 
