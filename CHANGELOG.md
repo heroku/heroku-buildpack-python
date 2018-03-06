@@ -1,21 +1,14 @@
 # Python Buildpack Changelog
 
-# 126
-
-Skip installs if Pipfile.lock hasn't changed, and uninstall stale dependencies with Pipenv.
-
-- No longer warn if there is no `Procfile`.
-
-# 125
-
-Set `PYTHONPATH` during collectstatic runs, other updates.
-
-- Update Set `PYTHONPATH` during collectstatic runs.
-- Update Pipenv "3.6" to "3.6.4".
-
 # 124
 
 Update buildpack to automatically install [dev-packages] (Pipenv) during Heroku CI builds.
+
+- Skip installs if Pipfile.lock hasn't changed, and uninstall stale dependencies with Pipenv.
+- Set `PYTHONPATH` during collectstatic runs, other updates.
+- Update Set `PYTHONPATH` during collectstatic runs.
+- No longer warn if there is no `Procfile`.
+- Update Pipenv "3.6" to "3.6.4".
 
 # 123
 
