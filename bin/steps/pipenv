@@ -9,7 +9,9 @@ source $BIN_DIR/utils
 if [[ -f Pipfile.lock ]]; then
     if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
         if [[ $(openssl dgst -sha256 Pipfile.lock) == $(cat .heroku/python/Pipfile.lock.sha256) ]]; then
-            SKIP_PIPENV_INSTALL=1
+            if [[ ! "$PIPENV_ALWAYS_INSTALL" ]]; then
+                SKIP_PIPENV_INSTALL=1
+            fi
         fi
     fi
 fi
