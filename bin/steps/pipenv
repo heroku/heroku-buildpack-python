@@ -38,10 +38,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
                 export PIP_EXTRA_INDEX_URL
             fi
 
-            # if [[ -f .heroku/python/requirements-declared.txt ]]; then
-            #     cp .heroku/python/requirements-declared.txt requirements.txt
-            # fi
-
             # Install pipenv.
             /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
