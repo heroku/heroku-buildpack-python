@@ -3,16 +3,24 @@
 import json
 import sys
 
-INFILE = sys.argv[1]
 
-with open(INFILE, 'rb') as f:
-    lockfile = json.load(f)
+def main():
+    INFILE = sys.argv[1]
 
-packages = []
-for package in lockfile.get('default', {}):
-    try:
-        packages.append('{0}{1}'.format(package, lockfile['default'][package]['version']))
-    except KeyError:
-        pass
+    with open(INFILE, 'rb') as f:
+        lockfile = json.load(f)
 
-print('\n'.join(packages))
+    packages = []
+    for package in lockfile.get('default', {}):
+        try:
+            packages.append('{0}{1}'.format(package, lockfile['default'][package]['version']))
+        except KeyError:
+            pass
+
+    print('\n'.join(packages))
+
+
+try:
+    main()
+except Exception:
+    pass
