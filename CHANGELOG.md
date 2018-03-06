@@ -11,7 +11,7 @@ Update buildpack to automatically install `[dev-packages]` during Heroku CI Pipe
 
 # 123
 
-Update gunicorn init.d script to allow overrides.
+Update gunicorn `init.d` script to allow overrides.
 
 # 122
 
@@ -23,7 +23,7 @@ Update default Python to v3.6.3.
 
 # 120
 
-Use Pipenv --deploy.
+Use `$ pipenv --deploy`.
 
 # 119
 
