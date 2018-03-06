@@ -7,7 +7,7 @@ Update buildpack to automatically install `[dev-packages]` during Heroku CI Pipe
 - Skip installs if Pipfile.lock hasn't changed, and uninstall stale dependencies with Pipenv.
 - Set `PYTHONPATH` during collectstatic runs.
 - No longer warn if there is no `Procfile`.
-- Update Pipenv "3.6" to "3.6.4".
+- Update Pipenv's "3.6" runtime specifier to point to "3.6.4".
 
 # 123
 
