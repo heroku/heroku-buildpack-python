@@ -186,10 +186,6 @@ source "$BIN_DIR/steps/mercurial"
 # shellcheck source=bin/steps/pylibmc
 source "$BIN_DIR/steps/pylibmc"
 
-# Libffi support.
-# shellcheck source=bin/steps/cryptography
-source "$BIN_DIR/steps/cryptography"
-
 # Support for Geo libraries.
 # shellcheck source=bin/steps/geo-libs
 sub_env "$BIN_DIR/steps/geo-libs"
