@@ -4,6 +4,8 @@
 
 Skip installs if Pipfile.lock hasn't changed, and uninstall stale dependencies with Pipenv.
 
+- No longer warn if there is no `Procfile`.
+
 # 125
 
 Set `PYTHONPATH` during collectstatic runs, other updates.
