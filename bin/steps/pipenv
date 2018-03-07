@@ -14,8 +14,8 @@ if [[ -f Pipfile.lock ]]; then
                 # echo "To disable this functionality, run the following command:"
                 # echo ""
                 # echo "    $ heroku config:set PIPENV_ALWAYS_INSTALL=1" | indent
-
                 export SKIP_PIPENV_INSTALL=1
+                export SKIP_PIP_INSTALL=1
             fi
         fi
     fi
