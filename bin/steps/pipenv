@@ -62,9 +62,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
                 puts-step "Installing test dependencies…"
                 /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
             fi
-
-            # Pip freeze, for compatibility.
-            pip freeze > requirements.txt
         fi
     fi
 else
