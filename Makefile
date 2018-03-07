@@ -5,7 +5,7 @@ test: test-heroku-16
 
 check:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings
-	@shellcheck -x bin/steps/collectstatic bin/steps/cryptography bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/gdal bin/steps/geo-libs bin/steps/mercurial bin/steps/nltk bin/steps/pip-install bin/steps/pip-uninstall bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/pylibmc bin/steps/python
+	@shellcheck -x bin/steps/collectstatic bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/gdal bin/steps/geo-libs bin/steps/mercurial bin/steps/nltk bin/steps/pip-install bin/steps/pip-uninstall bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/pylibmc bin/steps/python
 	@shellcheck -x bin/steps/hooks/*
 
 test-cedar-14:
