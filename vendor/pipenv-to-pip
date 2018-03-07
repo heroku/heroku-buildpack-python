@@ -19,8 +19,5 @@ def main():
 
     print('\n'.join(packages))
 
-
-try:
+if __name__ == '__main__':
     main()
-except Exception:
-    pass
