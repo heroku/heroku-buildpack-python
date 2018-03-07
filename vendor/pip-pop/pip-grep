@@ -8,6 +8,7 @@ Options:
   -h --help     Show this screen.
 """
 import os
+import sys
 from docopt import docopt
 from pip.req import parse_requirements
 from pip.index import PackageFinder
@@ -73,5 +74,5 @@ if __name__ == '__main__':
     try:
         main()
     except Exception:
-        pass
+        sys.exit(1)
 
