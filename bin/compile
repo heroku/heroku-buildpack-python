@@ -160,7 +160,7 @@ mtime "python.install.time" "${start}"
 
 # Pipenv support.
 # shellcheck source=bin/steps/pipenv
-sub_env "$BIN_DIR/steps/pipenv"
+source "$BIN_DIR/steps/pipenv"
 
 # Uninstall removed dependencies with Pip.
 let start=$(nowms)
