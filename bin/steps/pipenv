@@ -26,42 +26,39 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
 
     # Pipenv support (Generate requriements.txt with pipenv).
     if [[ -f Pipfile ]]; then
-        if [[ ! -f requirements.txt ]]; then
+        # Measure that we're using Pipenv.
+        mcount "tool.pipenv"
 
-            # Measure that we're using Pipenv.
-            mcount "tool.pipenv"
+        # Skip pip install, later.
+        export SKIP_PIP_INSTALL=1
 
-            # Skip pip install, later.
-            export SKIP_PIP_INSTALL=1
+        # Set PIP_EXTRA_INDEX_URL
+        if [[ -r $ENV_DIR/PIP_EXTRA_INDEX_URL ]]; then
+            PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
+            export PIP_EXTRA_INDEX_URL
+        fi
 
-            # Set PIP_EXTRA_INDEX_URL
-            if [[ -r $ENV_DIR/PIP_EXTRA_INDEX_URL ]]; then
-                PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
-                export PIP_EXTRA_INDEX_URL
-            fi
+        # Install pipenv.
+        /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
 
-            # Install pipenv.
-            /app/.heroku/python/bin/pip install pipenv --upgrade &> /dev/null
+        # Install the dependencies.
+        if [[ ! -f Pipfile.lock ]]; then
+            puts-step "Installing dependencies with latest Pipenv…"
+            /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
+        else
+            pipenv-to-pip Pipfile.lock > requirements.txt
+            "$BIN_DIR/steps/pip-uninstall"
+            cp requirements.txt .heroku/python/requirements-declared.txt
+            openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
 
-            # Install the dependencies.
-            if [[ ! -f Pipfile.lock ]]; then
-                puts-step "Installing dependencies with latest Pipenv…"
-                /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
-            else
-                pipenv-to-pip Pipfile.lock > requirements.txt
-                "$BIN_DIR/steps/pip-uninstall"
-                cp requirements.txt .heroku/python/requirements-declared.txt
-                openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
+            puts-step "Installing dependencies with latest Pipenv…"
+            /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
+        fi
 
-                puts-step "Installing dependencies with latest Pipenv…"
-                /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
-            fi
-
-            # Install the test dependencies, for CI.
-            if [ "$INSTALL_TEST" ]; then
-                puts-step "Installing test dependencies…"
-                /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
-            fi
+        # Install the test dependencies, for CI.
+        if [ "$INSTALL_TEST" ]; then
+            puts-step "Installing test dependencies…"
+            /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
         fi
     fi
 else
