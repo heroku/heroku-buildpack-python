@@ -4,7 +4,7 @@
 # export PIPENV_FORCE_COLOR=1
 # shellcheck source=bin/utils
 source $BIN_DIR/utils
-
+set -e
 
 if [[ -f Pipfile.lock ]]; then
     if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
@@ -15,7 +15,7 @@ if [[ -f Pipfile.lock ]]; then
                 echo ""
                 echo "    $ heroku config:set PIPENV_ALWAYS_INSTALL=1" | indent
 
-                SKIP_PIPENV_INSTALL=1
+                export SKIP_PIPENV_INSTALL=1
             fi
         fi
     fi
@@ -27,7 +27,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
     # Pipenv support (Generate requriements.txt with pipenv).
     if [[ -f Pipfile ]]; then
         if [[ ! -f requirements.txt ]]; then
-            puts-step "Installing requirements with latest Pipenv…"
 
             # Measure that we're using Pipenv.
             mcount "tool.pipenv"
@@ -43,6 +42,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
 
             # Install the dependencies.
             if [[ ! -f Pipfile.lock ]]; then
+                puts-step "Installing dependencies with latest Pipenv…"
                 /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
             else
                 pipenv-to-pip Pipfile.lock > requirements.txt
@@ -50,6 +50,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
                 cp requirements.txt .heroku/python/requirements-declared.txt
                 openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
 
+                puts-step "Installing dependencies with latest Pipenv…"
                 /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
             fi
 
