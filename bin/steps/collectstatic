@@ -39,6 +39,8 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
     # Display a warning if collectstatic failed.
     [ "$COLLECTSTATIC_STATUS" -ne 0 ] && {
 
+        mcount "failure.collectstatic"
+
         echo
         echo " !     Error while running '$ python $MANAGE_FILE collectstatic --noinput'."
         echo "       See traceback above for details."
