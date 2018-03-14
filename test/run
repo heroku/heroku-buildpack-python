@@ -27,6 +27,11 @@ testNoRequirements() {
   assertCapturedError
 }
 
+testCollectstatic() {
+  compile "collectstatic"
+  assertCaptured "collectstatic"
+}
+
 testGEOS() {
   BUILD_WITH_GEO_LIBRARIES=1 compile "geos"
   assertCaptured "geos"
