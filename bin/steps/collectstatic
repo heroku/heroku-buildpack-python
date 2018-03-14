@@ -32,7 +32,11 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
     # Run collectstatic, cleanup some of the noisy output.
     PYTHONPATH=${PYTHONPATH:-.}
     export PYTHONPATH
-    python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
+
+    # Create a temporary file for collecting the collectstaic logs.
+    COLLECTSTATIC_LOG=$(mktemp)
+
+    python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | tee $COLLECTSTATIC_LOG | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
     COLLECTSTATIC_STATUS="${PIPESTATUS[0]}"
 
     set -e
@@ -41,6 +45,22 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
     [ "$COLLECTSTATIC_STATUS" -ne 0 ] && {
 
         mcount "failure.collectstatic"
+
+        if grep -q 'SyntaxError' "$COLLECTSTATIC_LOG"; then
+            mcount "failure.collectstatic.syntax-error"
+        fi
+
+        if grep -q 'ImproperlyConfigured' "$COLLECTSTATIC_LOG"; then
+            mcount "failure.collectstatic.improper-configuration"
+        fi
+
+        if grep -q 'The CSS file' "$COLLECTSTATIC_LOG"; then
+            mcount "failure.collectstatic.fancy-references"
+        fi
+
+        if grep -q 'OSError' "$COLLECTSTATIC_LOG"; then
+            mcount "failure.collectstatic.missing-file"
+        fi
 
         echo
         echo " !     Error while running '$ python $MANAGE_FILE collectstatic --noinput'."
