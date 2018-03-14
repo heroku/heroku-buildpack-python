@@ -15,6 +15,8 @@ if [[ -f Pipfile.lock ]]; then
             # Don't skip installation of there are git deps.
             if ! grep -q 'git' Pipfile.lock; then
                 echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
+
+                mcount "tool.pipenv"
                 export SKIP_PIPENV_INSTALL=1
                 export SKIP_PIP_INSTALL=1
             fi
