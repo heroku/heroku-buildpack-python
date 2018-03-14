@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 127
+
+Pin to Pipenv v11.7.1.
+
 # 126
 
 Bugfixes.
