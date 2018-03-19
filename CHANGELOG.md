@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 128
+
+Pin to Pipenv v11.8.2.
+
 # 127
 
 Pin to Pipenv v11.7.1.
