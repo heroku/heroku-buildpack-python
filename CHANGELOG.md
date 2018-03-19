@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 130
+
+Better upgrade strategy for pip.
+
 # 129
 
 Don't upgrade pip (from v128).
