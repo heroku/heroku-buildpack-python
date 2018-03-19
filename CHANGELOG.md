@@ -2,7 +2,7 @@
 
 # 129
 
-Don't upgrade pip.
+Don't upgrade pip (from v128).
 
 # 128
 
