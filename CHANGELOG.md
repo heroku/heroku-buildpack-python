@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 129
+
+Don't upgrade pip.
+
 # 128
 
 Upgrade pip, pin to Pipenv v11.8.2.
