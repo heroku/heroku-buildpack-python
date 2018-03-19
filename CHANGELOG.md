@@ -2,7 +2,7 @@
 
 # 128
 
-Pin to Pipenv v11.8.2.
+Upgrade pip, pin to Pipenv v11.8.2.
 
 # 127
 
