@@ -87,6 +87,12 @@ testPython3() {
   assertCapturedSuccess
 }
 
+testGitEgg() {
+  compile "git-egg"
+  assertCaptured "requests"
+  assertCapturedSuccess
+}
+
 testSmartRequirements() {
   local cache_dir="$(mktmpdir)"
   compile "requirements-standard" "$cache_dir"
