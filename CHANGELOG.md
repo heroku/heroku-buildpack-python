@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 131
+
+Fix bug with pip.
+
 # 130
 
 Better upgrade strategy for pip.
