@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 132
+
+Improve pip installation, with the release of v9.0.2.
+
 # 131
 
 Fix bug with pip.
