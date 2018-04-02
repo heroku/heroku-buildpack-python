@@ -7,7 +7,10 @@ BIN_DIR=$(cd "$(dirname "$0")" || return; pwd) # absolute path
 source "$BIN_DIR/utils"
 
 # Locale support for Pipenv.
-export LC_ALL=C.UTF-8
-export LANG=C.UTF-8
+if locale -a | grep -q ^C.UTF-8; then
+    # only change locale if it exists on the system
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+fi
 
 DISABLE_COLLECTSTATIC=1 INSTALL_TEST=1 "$(dirname "${0:-}")/compile" "$1" "$2" "$3"
