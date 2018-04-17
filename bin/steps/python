@@ -67,7 +67,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
   rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
   rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
 
-  /app/.heroku/python/bin/python "$ROOT_DIR/vendor/get-pip.py" &> /dev/null
+  /app/.heroku/python/bin/python "$ROOT_DIR/vendor/get-pip.py" pip==9.0.2 &> /dev/null
   /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
 
 fi
