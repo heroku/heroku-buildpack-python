@@ -2,15 +2,15 @@ language: bash
 dist: trusty
 jobs:
   include:
-    - stage: "Bash linting (shellcheck)"
-      sudo: false
-      addons:
-        apt:
-          sources:
-          - debian-sid    # Grab shellcheck from the Debian repo (o_O)
-          packages:
-          - shellcheck
-      script: make check
+    # - stage: "Bash linting (shellcheck)"
+    #   sudo: false
+    #   addons:
+    #     apt:
+    #       sources:
+    #       - debian-sid    # Grab shellcheck from the Debian repo (o_O)
+    #       packages:
+    #       - shellcheck
+    #   script: make check
 
     - stage: "Stack Tests"
       services: docker
