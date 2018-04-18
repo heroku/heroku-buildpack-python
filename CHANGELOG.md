@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 133
+
+Fixes for Pip 10 release.
+
 # 132
 
 Improve pip installation, with the release of v9.0.2.
