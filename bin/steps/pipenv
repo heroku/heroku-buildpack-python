@@ -32,9 +32,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         # Measure that we're using Pipenv.
         mcount "tool.pipenv"
 
-        # Skip pip install, later.
-        export SKIP_PIP_INSTALL=1
-
         # Set PIP_EXTRA_INDEX_URL
         if [[ -r $ENV_DIR/PIP_EXTRA_INDEX_URL ]]; then
             PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
@@ -65,6 +62,9 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             puts-step "Installing test dependencies…"
             /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
         fi
+
+        # Skip pip install, later.
+        export SKIP_PIP_INSTALL=1
     fi
 else
     export SKIP_PIP_INSTALL=1
