@@ -32,6 +32,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     show-warnings
 
     if [[ ! $PIP_STATUS -eq 0 ]]; then
+        mcount "failure.pip-install"
         exit 1
     fi
 
