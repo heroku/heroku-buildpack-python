@@ -46,19 +46,15 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
 
         if grep -q 'SyntaxError' "$COLLECTSTATIC_LOG"; then
             mcount "failure.collectstatic.syntax-error"
-        fi
 
         elif grep -q 'ImproperlyConfigured' "$COLLECTSTATIC_LOG"; then
             mcount "failure.collectstatic.improper-configuration"
-        fi
 
         elif grep -q 'The CSS file' "$COLLECTSTATIC_LOG"; then
             mcount "failure.collectstatic.fancy-references"
-        fi
 
         elif grep -q 'OSError' "$COLLECTSTATIC_LOG"; then
             mcount "failure.collectstatic.missing-file"
-        fi
 
         else
             mcount "failure.collectstatic.other"
