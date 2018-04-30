@@ -9,7 +9,7 @@
 #
 # This script is invoked by [`bin/compile`](/).
 
-if [[ "$STACK" == "heroku-16" ]]; then
+if [[ "$STACK" != "cedar-14" ]]; then
     # libmemcached is pre-installed in the stack image so there is no need to vendor it.
     return 0
 fi
