@@ -42,7 +42,7 @@ export VENDOR_URL
 # Python defaults
 DEFAULT_PYTHON_VERSION="python-3.6.4"
 LATEST_3="python-3.6.4"
-LATEST_2="python-2.7.14"
+LATEST_2="python-2.7.15"
 
 DEFAULT_PYTHON_STACK="cedar-14"
 PIP_UPDATE="9.0.2"
