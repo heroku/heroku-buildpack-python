@@ -77,7 +77,7 @@ testPylibmc() {
 
 testPython2() {
   compile "python2"
-  assertCaptured "python-2.7.14"
+  assertCaptured "python-2.7.15"
   assertCapturedSuccess
 }
 
