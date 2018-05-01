@@ -3,6 +3,11 @@
 
 OUT_PREFIX=$1
 
+# Skip the build for heroku-16.
+if [[ $S3_PREFIX == "heroku-16" ]]; then
+    exit 0
+fi
+
 # fail hard
 set -o pipefail
 # fail harder
@@ -15,7 +20,7 @@ dep_archive_name=${dep_dirname}.tar.gz
 dep_url=https://launchpad.net/libmemcached/1.0/${dep_version}/+download/${dep_archive_name}
 
 # SASL Support.
-echo "-----> Building cyrus-sasl 2.1.26..."
+echo "-----> Building cyrus-sasl 2.1.26…"
 
 curl -LO ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-2.1.26.tar.gz
 # FTP doesn't play well with piping into tar xz
@@ -28,7 +33,7 @@ make -s -j 9
 make install -s
 popd
 
-echo "-----> Building libmemcached ${dep_version}..."
+echo "-----> Building libmemcached ${dep_version}…"
 
 curl -L ${dep_url} | tar xz
 pushd ${dep_dirname}

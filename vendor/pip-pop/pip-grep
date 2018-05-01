@@ -8,12 +8,14 @@ Options:
   -h --help     Show this screen.
 """
 import os
+import sys
 from docopt import docopt
 from pip.req import parse_requirements
 from pip.index import PackageFinder
 from pip._vendor.requests import session
 
 requests = session()
+
 
 class Requirements(object):
     def __init__(self, reqfile=None):
@@ -28,41 +30,34 @@ class Requirements(object):
         return '<Requirements \'{}\'>'.format(self.path)
 
     def load(self, reqfile):
-
         if not os.path.exists(reqfile):
             raise ValueError('The given requirements file does not exist.')
 
         finder = PackageFinder([], [], session=requests)
         for requirement in parse_requirements(reqfile, finder=finder, session=requests):
-            self.requirements.append(requirement)
-
-
+            if requirement.req:
+                if not getattr(requirement.req, 'name', None):
+                    # Prior to pip 8.1.2 the attribute `name` did not exist.
+                    requirement.req.name = requirement.req.project_name
+                self.requirements.append(requirement.req)
 
 
 def grep(reqfile, packages, silent=False):
-
     try:
         r = Requirements(reqfile)
     except ValueError:
-
         if not silent:
             print('There was a problem loading the given requirement file.')
-
         exit(os.EX_NOINPUT)
 
-    for requirement in r.requirements:
-
-        if requirement.req:
-
-            if requirement.req.project_name in packages:
-
-                if not silent:
-                    print('Package {} found!'.format(requirement.req.project_name))
-
-                exit(0)
+    for req in r.requirements:
+        if req.name in packages:
+            if not silent:
+                print('Package {} found!'.format(req.name))
+            exit(0)
 
     if not silent:
-        print('Not found.'.format(requirement.req.project_name))
+        print('Not found.')
 
     exit(1)
 
@@ -72,10 +67,12 @@ def main():
 
     kwargs = {'reqfile': args['<reqfile>'], 'packages': args['<package>'], 'silent': args['-s']}
 
-
     grep(**kwargs)
 
 
-
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception:
+        sys.exit(1)
+

@@ -1,6 +1,15 @@
+#!/usr/bin/env bash
 shopt -s extglob
+shopt -s nullglob
 
-if [ $(uname) == Darwin ]; then
+# The standard library.
+if [[ ! -f  /tmp/stdlib.sh ]]; then
+  curl --retry 3 -s https://lang-common.s3.amazonaws.com/buildpack-stdlib/v8/stdlib.sh > /tmp/stdlib.sh
+fi
+# shellcheck source=/dev/null
+source /tmp/stdlib.sh
+
+if [ "$(uname)" == Darwin ]; then
     sed() { command sed -l "$@"; }
 else
     sed() { command sed -u "$@"; }
@@ -11,34 +20,20 @@ indent() {
   sed "s/^/       /"
 }
 
+
 # Clean up pip output
 cleanup() {
-  sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
+  sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/No files were found to uninstall/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
 }
 
 # Buildpack Steps.
 puts-step() {
-  echo "-----> $@"
+  echo "-----> $*"
 }
 
 # Buildpack Warnings.
 puts-warn() {
-  echo " !     $@"
-}
-
-# Usage: $ set-env key value
-set-env() {
-  echo "export $1=$2" >> $PROFILE_PATH
-}
-
-# Usage: $ set-default-env key value
-set-default-env() {
-  echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
-}
-
-# Usage: $ un-set-env key
-un-set-env() {
-  echo "unset $1" >> $PROFILE_PATH
+  echo " !     $*"
 }
 
 # Does some serious copying.
@@ -57,37 +52,9 @@ deep-cp() {
   )
 }
 
-# Does some serious moving.
-deep-mv() {
-  deep-cp "$1" "$2"
-  deep-rm "$1"
+
+# Measure the size of the Python installation.
+measure-size() {
+  echo "$(du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
 }
 
-# Does some serious deleting.
-deep-rm() {
-  # subshell to avoid surprising caller with shopts.
-  (
-    shopt -s dotglob
-    rm -rf "$1"/!(.curlrc|.netrc|tmp|.|..)
-  )
-}
-
-
-sub-env() {
-
-  WHITELIST=${2:-''}
-  BLACKLIST=${3:-'^(GIT_DIR|PYTHONHOME|LD_LIBRARY_PATH|LIBRARY_PATH|PATH)$'}
-
-  (
-    if [ -d "$ENV_DIR" ]; then
-      for e in $(ls $ENV_DIR); do
-        echo "$e" | grep -E "$WHITELIST" | grep -qvE "$BLACKLIST" &&
-        export "$e=$(cat $ENV_DIR/$e)"
-        :
-      done
-    fi
-
-    $1
-
-  )
-}

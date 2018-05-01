@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+# Build Deps: libraries/sqlite
+
+OUT_PREFIX=$1
+
+echo "Building Python…"
+SOURCE_TARBALL='https://python.org/ftp/python/3.6.5/Python-3.6.5.tgz'
+curl -L $SOURCE_TARBALL | tar xz
+mv Python-3.6.5 src
+cd src
+
+./configure --prefix=$OUT_PREFIX --with-ensurepip=no
+make
+make install
+
+# Remove unneeded test directories, similar to the official Docker Python images:
+# https://github.com/docker-library/python
+find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -rf '{}' +
+
+ln $OUT_PREFIX/bin/python3 $OUT_PREFIX/bin/python

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/vendor/
+
+OUT_PREFIX=$1
+
+# Use new path, containing autoconf.
+export PATH="/app/.heroku/python/bin/:$PATH"
+hash -r
+
+
+echo "Building gdal…"
+
+VERSION=4.9.3
+SOURCE_TARBALL="http://download.osgeo.org/proj/proj-${VERSION}.tar.gz"
+
+curl -L $SOURCE_TARBALL | tar zx
+
+pushd "proj-${VERSION}"
+./configure --prefix=$OUT_PREFIX --enable-static=no
+make
+make install
+
+# Cleanup
+popd

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set +e
+# rewrite build dir in egg links to /app so things are found at runtime
+find .heroku/python/lib/python*/site-packages/ -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)#/app#" &> /dev/null
+set -e
+
+set +e
+# Support for PyPy
+find .heroku/python/lib-python/*/site-packages/  -name "*.pth" -print0 2> /dev/null | xargs -r -0 -n 1 sed -i -e "s#$(pwd)#/app#" &> /dev/null
+set -e

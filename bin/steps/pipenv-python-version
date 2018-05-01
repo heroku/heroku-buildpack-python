@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Detect Python-version with Pipenv.
+
+if [[ -f $BUILD_DIR/Pipfile ]]; then
+
+    if [[ ! -f $BUILD_DIR/runtime.txt ]]; then
+        if [[ ! -f $BUILD_DIR/Pipfile.lock ]]; then
+            puts-warn "No 'Pipfile.lock' found! We recommend you commit this into your repository."
+        fi
+        if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
+            set +e
+            PYTHON=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock")
+            if [[ "$PYTHON" != "null" ]]; then
+                echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
+            fi
+            set -e
+
+            if [[ "$PYTHON" == "null" ]]; then
+                PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
+                if [ "$PYTHON" = 2.7 ]; then
+                    echo "$LATEST_2" > "$BUILD_DIR/runtime.txt"
+                fi
+                if [ "$PYTHON" = 3.6 ]; then
+                    echo "$LATEST_3" > "$BUILD_DIR/runtime.txt"
+                fi
+            fi
+
+
+        fi
+    fi
+fi
+

@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+# export CLINT_FORCE_COLOR=1
+# export PIPENV_FORCE_COLOR=1
+# shellcheck source=bin/utils
+source $BIN_DIR/utils
+set -e
+
+if [[ -f Pipfile.lock ]]; then
+    if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
+        if [[ $(openssl dgst -sha256 Pipfile.lock) == $(cat .heroku/python/Pipfile.lock.sha256) ]]; then
+            # Measure that we're using Pipenv.
+            mcount "tool.pipenv"
+
+            # Don't skip installation of there are git deps.
+            if ! grep -q 'git' Pipfile.lock; then
+                echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
+
+                mcount "tool.pipenv"
+                export SKIP_PIPENV_INSTALL=1
+                export SKIP_PIP_INSTALL=1
+            fi
+
+        fi
+    fi
+fi
+
+
+if [ ! "$SKIP_PIPENV_INSTALL" ]; then
+    # Pipenv support (Generate requriements.txt with pipenv).
+    if [[ -f Pipfile ]]; then
+        # Measure that we're using Pipenv.
+        mcount "tool.pipenv"
+
+        # Skip pip install, later.
+        export SKIP_PIP_INSTALL=1
+
+        # Set PIP_EXTRA_INDEX_URL
+        if [[ -r $ENV_DIR/PIP_EXTRA_INDEX_URL ]]; then
+            PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
+            export PIP_EXTRA_INDEX_URL
+        fi
+
+        export PIPENV_VERSION="11.8.2"
+
+        # Install pipenv.
+        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade &> /dev/null
+
+        # Install the dependencies.
+        if [[ ! -f Pipfile.lock ]]; then
+            puts-step "Installing dependencies with Pipenv $PIPENV_VERSION…"
+            /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
+        else
+            pipenv-to-pip Pipfile.lock > requirements.txt
+            "$BIN_DIR/steps/pip-uninstall"
+            cp requirements.txt .heroku/python/requirements-declared.txt
+            openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
+
+            puts-step "Installing dependencies with Pipenv $PIPENV_VERSION…"
+            /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
+        fi
+
+        # Install the test dependencies, for CI.
+        if [ "$INSTALL_TEST" ]; then
+            puts-step "Installing test dependencies…"
+            /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
+        fi
+    fi
+else
+    export SKIP_PIP_INSTALL=1
+    pipenv-to-pip Pipfile.lock > requirements.txt
+fi

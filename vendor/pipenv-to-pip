@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+import json
+import sys
+
+
+def main():
+    INFILE = sys.argv[1]
+
+    with open(INFILE, 'rb') as f:
+        lockfile = json.load(f)
+
+    packages = []
+    for package in lockfile.get('default', {}):
+        try:
+            packages.append('{0}{1}'.format(package, lockfile['default'][package]['version']))
+        except KeyError:
+            pass
+
+    print('\n'.join(packages))
+
+if __name__ == '__main__':
+    main()

@@ -3,7 +3,7 @@
 
 OUT_PREFIX=$1
 
-echo "Building SQLite..."
+echo "Building SQLite…"
 
 
 SOURCE_TARBALL='https://www.sqlite.org/sqlite-autoconf-3070900.tar.gz'

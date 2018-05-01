@@ -3,12 +3,17 @@
 
 OUT_PREFIX=$1
 
+# Skip the build for heroku-16.
+if [[ $S3_PREFIX == "heroku-16" ]]; then
+    exit 0
+fi
+
 # Use new path, containing autoconf.
 export PATH="/app/.heroku/python/bin/:$PATH"
 hash -r
 
 
-echo "Building libffi..."
+echo "Building libffi…"
 
 SOURCE_TARBALL='ftp://sourceware.org/pub/libffi/libffi-3.1.tar.gz'
 
