@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 134
+
+Default to 3.6.5, bugfixes.
+
 # 133
 
 Fixes for Pip 10 release.
