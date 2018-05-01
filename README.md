@@ -49,14 +49,14 @@ Specific versions of the Python runtime can be specified in your `Pipfile`:
 Or, more specifically:
 
     [requires]
-    python_full_version = "2.7.14"
+    python_full_version = "2.7.15"
 
 Or, with a `runtime.txt` file:
 
     $ cat runtime.txt
-    python-2.7.14
+    python-2.7.15
 
 Runtime options include:
 
 - `python-3.6.4`
-- `python-2.7.14`
+- `python-2.7.15`
