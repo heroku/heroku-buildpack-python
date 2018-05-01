@@ -40,8 +40,8 @@ fi
 export VENDOR_URL
 
 # Python defaults
-DEFAULT_PYTHON_VERSION="python-3.6.4"
-LATEST_3="python-3.6.4"
+DEFAULT_PYTHON_VERSION="python-3.6.5"
+LATEST_3="python-3.6.5"
 LATEST_2="python-2.7.15"
 
 DEFAULT_PYTHON_STACK="cedar-14"
