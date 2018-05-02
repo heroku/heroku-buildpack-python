@@ -12,7 +12,7 @@ testPipenvLock() {
 
 testPipenvVersion() {
   compile "pipenv-version"
-  assertCaptured "3.6.4"
+  assertCaptured "3.6.5"
   assertCapturedSuccess
 }
 
@@ -83,7 +83,7 @@ testPython2() {
 
 testPython3() {
   compile "python3"
-  assertCaptured "python-3.6.4"
+  assertCaptured "python-3.6.5"
   assertCapturedSuccess
 }
 
