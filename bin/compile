@@ -221,7 +221,7 @@ fi
 
 # Download / Install Python, from pre-build binaries available on Amazon S3.
 # This step also bootstraps pip / setuptools.
-let start=$(nowms)
+(( start=$(nowms) ))
 # shellcheck source=bin/steps/python
 source "$BIN_DIR/steps/python"
 mtime "python.install.time" "${start}"
@@ -233,7 +233,7 @@ source "$BIN_DIR/steps/pipenv"
 # Uninstall removed dependencies with Pip.
 # The buildpack will automatically remove any declared dependencies (in requirements.txt)
 # that were explicitly removed. This machinery is a bit complex, but it is not complicated.
-let start=$(nowms)
+(( start=$(nowms) ))
 # shellcheck source=bin/steps/pip-uninstall
 source "$BIN_DIR/steps/pip-uninstall"
 mtime "pip.uninstall.time" "${start}"
@@ -277,7 +277,7 @@ source "$BIN_DIR/steps/gdal"
 # -----------
 
 # Install dependencies with pip (where the magic happens).
-let start=$(nowms)
+(( start=$(nowms) ))
 # shellcheck source=bin/steps/pip-install
 source "$BIN_DIR/steps/pip-install"
 mtime "pip.install.time" "${start}"
@@ -286,7 +286,7 @@ mtime "pip.install.time" "${start}"
 # Note: this may only work on Python 2.7. I don't think many customers use this functionality,
 # and it should probably be undocumented.
 # (there's an import error on 3.6 that should hopefully be fixed upstream at some point)
-let start=$(nowms)
+(( start=$(nowms) ))
 sub_env "$BIN_DIR/steps/nltk"
 mtime "nltk.download.time" "${start}"
 
@@ -304,7 +304,7 @@ fi
 # This is the cause for the majority of build failures on the Python platform.
 # These failures are intentional — if collectstatic (which can be tricky, at times) fails,
 # your build fails.
-let start=$(nowms)
+(( start=$(nowms) ))
 sub_env "$BIN_DIR/steps/collectstatic"
 mtime "collectstatic.time" "${start}"
 
