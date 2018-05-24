@@ -3,7 +3,7 @@
 # export CLINT_FORCE_COLOR=1
 # export PIPENV_FORCE_COLOR=1
 # shellcheck source=bin/utils
-source $BIN_DIR/utils
+source "$BIN_DIR/utils"
 set -e
 
 if [[ -f Pipfile.lock ]]; then

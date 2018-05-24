@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck source=bin/utils
-source $BIN_DIR/utils
+source "$BIN_DIR/utils"
 
 if [ ! "$SKIP_PIP_INSTALL" ]; then
 
