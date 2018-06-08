@@ -16,7 +16,7 @@ SOURCE_TARBALL="http://download.osgeo.org/gdal/${VERSION}/gdal-${VERSION}.tar.gz
 curl -L $SOURCE_TARBALL | tar zx
 
 pushd "gdal-${VERSION}"
-./configure --prefix=$OUT_PREFIX --enable-static=no  &&
+./configure --prefix=$OUT_PREFIX --enable-static=no --with-python --with-geos=yes &&
 make
 make install
 
