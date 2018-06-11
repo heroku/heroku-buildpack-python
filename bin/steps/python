@@ -61,7 +61,7 @@ fi
 # If Pip isn't up to date:
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
 
-  puts-step "Installing pip"
+  puts-step "Installing pip $PIP_UPDATE"
 
   # Remove old installations.
   rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
