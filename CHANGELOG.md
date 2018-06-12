@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 135
+
+Upgrade Pipenv to v2018.5.18.
+
 # 134
 
 Default to 3.6.5, bugfixes.
