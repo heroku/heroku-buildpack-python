@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 # Build Path: /app/.heroku/python/
-# Build Deps: libraries/sqlite
 
 OUT_PREFIX=$1
+BIN_DIR="$(cd "$(dirname "$0")"/../.. || exit; pwd)/bin"
+export BIN_DIR
+
+# shellcheck source=bin/utils
+source "$BIN_DIR/steps/sqlite3"
+
+sqlite3_version
+echo "Setting up SQLite3 Headers for $SQLITE3_VERSION"
+sqlite3_install "$OUT_PREFIX" "$SQLITE3_VERSION" 1
 
 echo "Building Python…"
 SOURCE_TARBALL='https://python.org/ftp/python/2.7.15/Python-2.7.15.tgz'
