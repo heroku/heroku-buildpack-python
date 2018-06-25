@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# shellcheck source=bin/utils
+source $BIN_DIR/utils
+
+SQLITE3_VERSION="3.22.0-1"
+
+# We didn't always record the sqlite3 version. This code is in place because of that.
+if [ -f "$CACHE_DIR/.heroku/python-sqlite3-version" ]; then
+  CACHED_SQLITE3_VERSION=$(cat "$CACHE_DIR/.heroku/python-sqlite3-version")
+else
+  CACHED_SQLITE3_VERSION=''
+fi
+
+# only install if the sqlite3 version has changed
+if [[ $CACHED_SQLITE3_VERSION != $SQLITE3_VERSION ]]; then
+  
+  APT_CACHE_DIR="$CACHE_DIR/.heroku/vendor/apt/cache"
+  APT_STATE_DIR="$CACHE_DIR/.heroku/vendor/apt/state"
+
+  mkdir -p "$APT_CACHE_DIR/archives/partial"
+  mkdir -p "$APT_STATE_DIR/lists/partial"
+
+  APT_OPTIONS="-o debug::nolocking=true"
+  APT_OPTIONS="$APT_OPTIONS -o dir::cache=$APT_CACHE_DIR"
+  APT_OPTIONS="$APT_OPTIONS -o dir::state=$APT_STATE_DIR"
+  APT_OPTIONS="$APT_OPTIONS -o dir::etc::sourcelist=/etc/apt/sources.list"
+
+  puts-step "Installing SQLite3"
+  apt-get $APT_OPTIONS update >/dev/null 2>&1
+  apt-get $APT_OPTIONS -y -d --reinstall install sqlite3=$SQLITE3_VERSION >/dev/null 2>&1
+
+  # Prepare destination directory.
+  mkdir -p ".heroku/vendor/sqlite3/"
+  for deb in $(find $APT_CACHE_DIR/archives/ -name "*.deb"); do
+    dpkg -x $deb "$BUILD_DIR/.heroku/vendor/sqlite3/"
+  done
+
+  # Copy the sqlite3 binaries from the installed location to the python directory
+  # where it has historicly been
+  cp -r "$BUILD_DIR/.heroku/vendor/sqlite3/usr"/* "$BUILD_DIR/.heroku/python/"
+
+  # Clean up behind us
+  rm -r "$BUILD_DIR/.heroku/vendor/sqlite3"
+  
+  # save version installed
+  echo "$SQLITE3_VERSION" > .heroku/python-sqlite3-version
+fi

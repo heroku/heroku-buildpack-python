@@ -159,6 +159,8 @@ cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
 cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
 # A plain text file which contains the current python version being used (used for cache busting).
 cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
+# A plain text file which contains the current sqlite3 version being used (used for cache busting).
+cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
 # Any pre-compiled binaries, provided by the buildpack.
 cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
 # "editable" installations of code repositories, via pip or pipenv.
@@ -245,6 +247,12 @@ mtime "pip.uninstall.time" "${start}"
 if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
   echo "-e ." > requirements.txt
 fi
+
+# SQLite3 support.
+# This sets up and installs sqlite3 CLI binary, which has historicly been available with
+# this buildpack
+# shellcheck source=bin/steps/sqlite3
+source "$BIN_DIR/steps/sqlite3"
 
 # Fix egg-links.
 # Because we're installing things into a different path than we're running them (temp dir vs app dir),
@@ -353,6 +361,7 @@ source "$BIN_DIR/steps/eggpath-fix2"
 rm -rf "$CACHE_DIR/.heroku/python"
 rm -rf "$CACHE_DIR/.heroku/python-version"
 rm -rf "$CACHE_DIR/.heroku/python-stack"
+rm -rf "$CACHE_DIR/.heroku/python-sqlite3-version"
 rm -rf "$CACHE_DIR/.heroku/vendor"
 rm -rf "$CACHE_DIR/.heroku/src"
 
@@ -360,6 +369,7 @@ mkdir -p "$CACHE_DIR/.heroku"
 cp -R .heroku/python "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-version "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &> /dev/null || true
+cp -R .heroku/python-sqlite3-version "$CACHE_DIR/.heroku/" &> /dev/null || true
 cp -R .heroku/vendor "$CACHE_DIR/.heroku/" &> /dev/null || true
 if [[ -d .heroku/src ]]; then
   cp -R .heroku/src "$CACHE_DIR/.heroku/" &> /dev/null || true
