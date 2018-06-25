@@ -41,8 +41,15 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             export PIP_EXTRA_INDEX_URL
         fi
 
-        PIPENV_INSTALL="${PIPENV_VERSION:-2018.5.18 --upgrade}"
-        PIPENV_VERSION="${PIPENV_VERSION:-2018.5.18}"
+        PIPENV_INSTALL_DEFAULT="2018.5.18 --upgrade"
+        PIPENV_VERSION_DEFAULT="2018.5.18"
+
+        if [ ! "${PIPENV_VERSION}" ]; then
+            PIPENV_INSTALL="${PIPENV_INSTALL_DEFAULT}"
+            PIPENV_VERSION="${PIPENV_VERSION_DEFAULT}"
+        else
+            PIPENV_INSTALL="${PIPENV_VERSION}"
+        fi
 
         # Install pipenv.
         /app/.heroku/python/bin/pip install pipenv=="${PIPENV_INSTALL}" &> /dev/null
