@@ -330,7 +330,7 @@ set_default_env PYTHONPATH "\$HOME"
 # Python expects to be in /app, if at runtime, it is not, set
 # up symlinks… this can occur when the subdir buildpack is used.
 cat <<EOT >> "$PROFILE_PATH"
-if [[ \$HOME != "/app" ]]; then
+if [ \$HOME != "/app" ]; then
     mkdir -p /app/.heroku
     ln -nsf "\$HOME/.heroku/python" /app/.heroku/python
     ln -nsf "\$HOME/.heroku/vendor" /app/.heroku/vendor
