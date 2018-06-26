@@ -2,24 +2,29 @@
 
 set +e
 runtime-fixer runtime.txt
-PYTHON_VERSION=$(cat runtime.txt)
 
+if [[ -r "$BUILD_DIR/test-runtime.txt" ]]; then
+    PYTHON_VERSION=$(cat $BUILD_DIR/test-runtime.txt)
+    echo $PYTHON_VERSION
+else
+    PYTHON_VERSION=$(cat runtime.txt)
+fi
 # The location of the pre-compiled python binary.
-VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
+VENDORED_PYTHON="${VENDOR_URL}runtimes/$PYTHON_VERSION.tar.gz"
+
+if [[ `wget -S --spider 'https://lang-python.s3.amazonaws.com/runtimes/python-3.6.5.tar.gz'  2>&1 | grep 'HTTP/1.1 200 OK'` ]]; then echo "true"; fi
+
 
 if [[ $PYTHON_VERSION =~ ^python-2 ]]; then
-  if [[ "$PYTHON_VERSION" != "$LATEST_2" ]]; then
-    puts-warn "The latest version of Python 2 is $LATEST_2 (you are using $PYTHON_VERSION, which is unsupported)."
-    puts-warn "We recommend upgrading by specifying the latest version ($LATEST_2)."
-    echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-  fi
+    puts-warn "The latest version of Python is $LATEST_3 (you are using $PYTHON_VERSION, which is unsupported)."
+    echo "`cat $BIN_DIR/downgrade-doc.txt`"
+    exit 1
 else
   if [[ "$PYTHON_VERSION" != "$LATEST_3" ]]; then
     puts-warn "The latest version of Python 3 is $LATEST_3 (you are using $PYTHON_VERSION, which is unsupported)."
     puts-warn "We recommend upgrading by specifying the latest version ($LATEST_3)."
     echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
   fi
-
 fi
 
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
@@ -37,16 +42,17 @@ if [ -f .heroku/python-version ]; then
 fi
 
 if [ ! "$SKIP_INSTALL" ]; then
-    puts-step "Installing $PYTHON_VERSION"
+    puts-step "Attempting to install $PYTHON_VERSION..."
 
     # Prepare destination directory.
     mkdir -p .heroku/python
 
     mcount "version.python.$PYTHON_VERSION"
-
+    echo "blah"
+    echo "${VENDORED_PYTHON}"
     if ! curl "${VENDORED_PYTHON}" -s | tar zxv -C .heroku/python &> /dev/null; then
       puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
-      puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+      echo "`cat $BIN_DIR/downgrade-doc.txt`"
       exit 1
     fi
 

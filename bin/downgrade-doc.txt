@@ -1,0 +1,43 @@
+
+        Unfortunately, this version won't work on this stack (Heroku-18) as-is.
+
+        You can downgrade to the heroku-16 stack to continue to deploy Python 2.7,
+        and for older legacy versions, you can downgrade to cedar-14 stack.
+
+        You can downgrade the stack of an existing app with the following command:
+        heroku stack:set heroku-16 --app <myapp>
+        To rebuild without a new code commit, run:
+        git commit --allow-empty -m \"Downgrading to heroku-16\"
+
+        You can also specify the stack explicitly when creating a new app:
+        heroku create --remote <mynewapp> --stack heroku-16
+
+        To use an older tagged version of the python buildpack, run:
+        heroku create --remote <mynewapp> --stack heroku-16 https://github.com/heroku/heroku-buildpack-python#v000
+
+        For more information, check out this article about upgrading and downgrading
+        your Heroku stack:
+        https://devcenter.heroku.com/articles/upgrading-to-the-latest-stack
+
+        -----------------------------------------------------------------------------
+        While it's relatively easy to spin up an app on an older stack, we are 
+        constantly improving our stacks, and release new stacks every two years.
+        Downgrading should ultimately be considered a temporary solution.
+
+        To check the currently supported stacks and their end of life dates, check out
+        https://devcenter.heroku.com/articles/stack#migrating-to-a-new-stack
+
+        Learn more about Heroku supported runtimes:
+        https://devcenter.heroku.com/articles/python-runtimes
+
+        To learn how to start upgrading your app, get the gist of the process here:
+        https://gist.github.com/CaseyFaist/7ecd4fc3ed1dafaef907df8bc2f49ef8
+
+        -----------------------------------------------------------------------------
+
+        To downgrade your stack:
+        heroku stack:set heroku-16 --app <myapp>
+
+        To rebuild without a new code commit:
+        git commit --allow-empty -m \"Upgrading to heroku-16\"
+
