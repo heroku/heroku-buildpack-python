@@ -40,5 +40,5 @@ testSetup()
 testMissingAnyVersionFile()
 { 
     detect
-    assertCapturedError 1 ${rtrn}
+    assertCapturedError
 }
