@@ -23,7 +23,7 @@ Deploying a Python application couldn't be easier:
     $ git push heroku master
     …
     -----> Python app detected
-    -----> Installing python-3.6.5
+    -----> Installing python-3.6.6
     -----> Installing pip
     -----> Installing requirements with Pipenv 2018.5.18…
            ...
@@ -58,5 +58,6 @@ Or, with a `runtime.txt` file:
 
 Runtime options include:
 
-- `python-3.6.5`
+- `python-3.7.0`
+- `python-3.6.6`
 - `python-2.7.15`
