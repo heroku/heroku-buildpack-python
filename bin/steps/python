@@ -2,24 +2,28 @@
 
 set +e
 runtime-fixer runtime.txt
-PYTHON_VERSION=$(cat runtime.txt)
+
+# IF we're running tests, favor the test-runtime for version
+if [[ -r "$BUILD_DIR/test-runtime.txt" ]]; then
+    PYTHON_VERSION=$(cat $BUILD_DIR/test-runtime.txt)
+else
+    PYTHON_VERSION=$(cat runtime.txt)
+fi
 
 # The location of the pre-compiled python binary.
 VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
 
 if [[ $PYTHON_VERSION =~ ^python-2 ]]; then
-  if [[ "$PYTHON_VERSION" != "$LATEST_2" ]]; then
-    puts-warn "The latest version of Python 2 is $LATEST_2 (you are using $PYTHON_VERSION, which is unsupported)."
-    puts-warn "We recommend upgrading by specifying the latest version ($LATEST_2)."
-    echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-  fi
+    puts-warn "The latest version of Python is $LATEST_3 (you are using $PYTHON_VERSION, which is unsupported)."
+    echo "`cat $BIN_DIR/downgrade-doc.txt`"
+    puts-warn "Aborting build."
+    exit 1
 else
   if [[ "$PYTHON_VERSION" != "$LATEST_3" ]]; then
     puts-warn "The latest version of Python 3 is $LATEST_3 (you are using $PYTHON_VERSION, which is unsupported)."
     puts-warn "We recommend upgrading by specifying the latest version ($LATEST_3)."
     echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
   fi
-
 fi
 
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
@@ -37,16 +41,17 @@ if [ -f .heroku/python-version ]; then
 fi
 
 if [ ! "$SKIP_INSTALL" ]; then
-    puts-step "Installing $PYTHON_VERSION"
+    puts-step "Attempting to install $PYTHON_VERSION..."
 
     # Prepare destination directory.
     mkdir -p .heroku/python
 
     mcount "version.python.$PYTHON_VERSION"
 
-    if ! curl "${VENDORED_PYTHON}" -s | tar zxv -C .heroku/python &> /dev/null; then
+    if ! curl "${VENDORED_PYTHON}" -s | tar -xvz -C .heroku/python &> /dev/null; then
       puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
-      puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+      echo "`cat $BIN_DIR/downgrade-doc.txt`"
+      puts-warn "Aborting build."
       exit 1
     fi
 
@@ -58,19 +63,22 @@ if [ ! "$SKIP_INSTALL" ]; then
   hash -r
 fi
 
-# If Pip isn't up to date:
-if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
+# Wrap this call to pip-install in a check to isolate from python_test's effects
+if [[ ! -e "$BUILD_DIR/test-runtime.txt" ]]; then
+    # If Pip isn't up to date:
+    if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
 
-  puts-step "Installing pip"
+      puts-step "Installing pip"
 
-  # Remove old installations.
-  rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
-  rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
+      # Remove old installations.
+      rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
+      rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
 
-  /app/.heroku/python/bin/python "$ROOT_DIR/vendor/get-pip.py" pip=="$PIP_UPDATE" &> /dev/null
-  /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
-
+      /app/.heroku/python/bin/python "$ROOT_DIR/vendor/get-pip.py" pip=="$PIP_UPDATE" &> /dev/null
+      /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
+    fi
+else
+    exit 0
 fi
-
 set -e
 hash -r

@@ -33,17 +33,7 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 # Export Path variables, for use in sub-scripts.
-export BUILD_DIR CACHE_DIR ENV_DIR
-
-# Set the Buildpack's internet target for downloading Python distributions.
-# The user can provide BUILDPACK_VENDOR_URL to specify a custom target.
-# Note: this is designed for non-Heroku use, as it does not use the user-provided
-# environment variable mechanism (the ENV_DIR).
-VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
-if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
-    VENDOR_URL="$BUILDPACK_VENDOR_URL"
-fi
-export VENDOR_URL
+export BUILD_DIR CACHE_DIR ENV_DIR 
 
 # Which versions of Python are we using?
 # These variables are used to specify which versions of Python to install by default,
@@ -54,7 +44,8 @@ LATEST_3="python-3.6.6"
 LATEST_2="python-2.7.15"
 
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
-DEFAULT_PYTHON_STACK="cedar-14"
+DEFAULT_PYTHON_STACK="heroku-18"
+STACK=
 # If pip doesn't match this version (the version we install), run the installer.
 PIP_UPDATE="9.0.2"
 
@@ -79,6 +70,16 @@ export PATH=$PATH:$ROOT_DIR/vendor/:$ROOT_DIR/vendor/pip-pop
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
+# Set the Buildpack's internet target for downloading Python distributions.
+# The user can provide BUILDPACK_VENDOR_URL to specify a custom target.
+# Note: this is designed for non-Heroku use, as it does not use the user-provided
+# environment variable mechanism (the ENV_DIR).
+VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
+if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
+    VENDOR_URL="$BUILDPACK_VENDOR_URL"
+fi
+export VENDOR_URL
+
 # Sanitize externally-provided environment variables:
 # The following environment variables are either problematic or simply unneccessary
 # for the buildpack to have knowledge of, so we unset them, to keep the environment
@@ -100,7 +101,7 @@ source "$BIN_DIR/warnings"
 # to `/app`.
 # Symlinks are required, since Python is not a portable installation.
 # More on this topic later.
-mkdir -p /app/.heroku
+mkdir -p app/.heroku
 
 # This buildpack programatically generates (or simply copies) a number of files for
 # buildpack machinery: an export script, and a number of `.profile.d` scripts. This

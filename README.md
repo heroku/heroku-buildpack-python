@@ -44,17 +44,17 @@ Specify a Python Runtime
 Specific versions of the Python runtime can be specified in your `Pipfile`:
 
     [requires]
-    python_version = "2.7"
+    python_version = "3.6"
 
 Or, more specifically:
 
     [requires]
-    python_full_version = "2.7.15"
+    python_full_version = "3.6.5"
 
 Or, with a `runtime.txt` file:
 
     $ cat runtime.txt
-    python-2.7.15
+    python-3.6.5
 
 Runtime options include:
 
