@@ -39,6 +39,11 @@ testGEOS() {
 }
 
 testNLTK() {
+  # NOTE: This is a RuntimeWarning emitted by Python 3's runpy.py script
+  # which is what is used when you call `python -m <module>`. This is due to
+  # how nltk imports things. It's not actually an error, but it would probably
+  # be bad to silence in Production.
+  export PYTHONWARNINGS="ignore::RuntimeWarning"
   compile "nltk"
   assertCaptured "Downloading NLTK packages: city_database stopwords"
   assertCapturedSuccess
@@ -76,9 +81,18 @@ testPylibmc() {
 }
 
 testPython2() {
-  compile "python2"
-  assertCaptured "python-2.7.15"
-  assertCapturedSuccess
+  if [[ "$STACK" == "heroku-16" ]] || [[ "$STACK" == "cedar-14" ]]; then
+    compile "python2"
+    assertCaptured "python-2.7.15"
+    assertCapturedSuccess
+  fi
+}
+
+testNoPython2() {
+  if [[ "$STACK" == "heroku-18" ]]; then
+    compile "python2"
+    assertCapturedError
+  fi
 }
 
 testPython3() {
