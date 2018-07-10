@@ -11,6 +11,11 @@ jobs:
 
     - stage: "Stack Tests"
       services: docker
+      env: STACK=heroku-18
+      script: ./tests.sh
+
+    - stage: "Stack Tests"
+      services: docker
       env: STACK=heroku-16
       script: ./tests.sh
 

@@ -14,3 +14,8 @@ if [[ "$STACK" == "heroku-16" ]]; then
     make test-heroku-16
     exit $?
 fi
+
+if [[ "$STACK" == "heroku-18" ]]; then
+    make test-heroku-18
+    exit $?
+fi
