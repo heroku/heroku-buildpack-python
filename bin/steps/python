@@ -14,12 +14,17 @@ if [[ $PYTHON_VERSION =~ ^python-2 ]]; then
     echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
   fi
 else
-  if [[ "$PYTHON_VERSION" != "$LATEST_3" ]]; then
-    puts-warn "The latest version of Python 3 is $LATEST_3 (you are using $PYTHON_VERSION, which is unsupported)."
-    puts-warn "We recommend upgrading by specifying the latest version ($LATEST_3)."
+  if [[ $PYTHON_VERSION =~ ^python-3.7 ]] && [[ "$PYTHON_VERSION" != "$LATEST_37" ]]; then
+    puts-warn "The latest version of Python 3.7 is $LATEST_37 (you are using $PYTHON_VERSION, which is unsupported)."
+    puts-warn "We recommend upgrading by specifying the latest version ($LATEST_37)."
     echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+  else
+    if [[ "$PYTHON_VERSION" != "$LATEST_36" ]]; then
+      puts-warn "The latest version of Python 3.6 is $LATEST_36 (you are using $PYTHON_VERSION, which is unsupported)."
+      puts-warn "We recommend upgrading by specifying the latest version ($LATEST_36)."
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+    fi
   fi
-
 fi
 
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then

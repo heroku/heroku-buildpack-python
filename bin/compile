@@ -50,7 +50,8 @@ export VENDOR_URL
 # as well as prompt the user to upgrade if they are using an un–supported version.
 # Note: When 3.7 lands, I recommend switching to LATEST_36 and LATEST_37.
 DEFAULT_PYTHON_VERSION="python-3.6.6"
-LATEST_3="python-3.6.6"
+LATEST_36="python-3.6.6"
+LATEST_37="python-3.7.0"
 LATEST_2="python-2.7.15"
 
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
@@ -58,7 +59,7 @@ DEFAULT_PYTHON_STACK="cedar-14"
 # If pip doesn't match this version (the version we install), run the installer.
 PIP_UPDATE="9.0.2"
 
-export DEFAULT_PYTHON_VERSION DEFAULT_PYTHON_STACK PIP_UPDATE LATEST_2 LATEST_3
+export DEFAULT_PYTHON_VERSION DEFAULT_PYTHON_STACK PIP_UPDATE LATEST_2 LATEST_36 LATEST_37
 
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.

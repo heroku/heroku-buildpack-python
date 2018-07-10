@@ -22,7 +22,10 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
                     echo "$LATEST_2" > "$BUILD_DIR/runtime.txt"
                 fi
                 if [ "$PYTHON" = 3.6 ]; then
-                    echo "$LATEST_3" > "$BUILD_DIR/runtime.txt"
+                    echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
+                fi
+                if [ "$PYTHON" = 3.7 ]; then
+                    echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
                 fi
             fi
 
