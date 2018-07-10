@@ -1,5 +1,12 @@
 # Python Buildpack Changelog
 
+# Unreleased
+
+- Fix bug with the "latest version" message on 3.7.0
+- Add an `OVERRIDDEN_PIPENV_VERSION` option to override the version of Pipenv
+  used in the buildpack
+- Upgrade the `DEFAULT_PIPENV_VERSION` to `2018.7.1`
+
 # 136
 
 Upgrade to 3.6.6 and support 3.7.0 on all runtimes.
