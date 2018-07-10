@@ -6,21 +6,19 @@
 source "$BIN_DIR/utils"
 set -e
 
+export DEFAULT_PIPENV_VERSION="2018.7.1"
+
 if [[ -f Pipfile.lock ]]; then
     if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
         if [[ $(openssl dgst -sha256 Pipfile.lock) == $(cat .heroku/python/Pipfile.lock.sha256) ]]; then
-            # Measure that we're using Pipenv.
-            mcount "tool.pipenv"
-
             # Don't skip installation of there are git deps.
             if ! grep -q 'git' Pipfile.lock; then
                 echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
 
-                mcount "tool.pipenv"
                 export SKIP_PIPENV_INSTALL=1
                 export SKIP_PIP_INSTALL=1
             fi
-
+            mcount "tool.pipenv"
         fi
     fi
 fi
@@ -29,9 +27,6 @@ fi
 if [ ! "$SKIP_PIPENV_INSTALL" ]; then
     # Pipenv support (Generate requriements.txt with pipenv).
     if [[ -f Pipfile ]]; then
-        # Measure that we're using Pipenv.
-        mcount "tool.pipenv"
-
         # Skip pip install, later.
         export SKIP_PIP_INSTALL=1
 
@@ -41,10 +36,12 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             export PIP_EXTRA_INDEX_URL
         fi
 
-        export PIPENV_VERSION="2018.7.1"
+        export PIPENV_VERSION="${OVERRIDDEN_PIPENV_VERSION:-$DEFAULT_PIPENV_VERSION}"
+        mcount "tool.pipenv"
+        mcount "version.pipenv.$PIPENV_VERSION"
 
         # Install pipenv.
-        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade &> /dev/null
+        /app/.heroku/python/bin/pip install "pipenv==$PIPENV_VERSION" --upgrade &> /dev/null
 
         # Install the dependencies.
         if [[ ! -f Pipfile.lock ]]; then
