@@ -56,9 +56,10 @@ LATEST_2="python-2.7.15"
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
 DEFAULT_PYTHON_STACK="cedar-14"
 # If pip doesn't match this version (the version we install), run the installer.
-PIP_UPDATE="9.0.2"
+DEFAULT_PYTHON_PIP_VERSION="9.0.2"
+[ ! "$PYTHON_PIP_VERSION" ] && PYTHON_PIP_VERSION=$DEFAULT_PYTHON_PIP_VERSION
 
-export DEFAULT_PYTHON_VERSION DEFAULT_PYTHON_STACK PIP_UPDATE LATEST_2 LATEST_3
+export DEFAULT_PYTHON_VERSION DEFAULT_PYTHON_STACK PYTHON_PIP_VERSION LATEST_2 LATEST_3
 
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.
