@@ -58,3 +58,30 @@ measure-size() {
   echo "$(du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
 }
 
+# Python version operator >
+version_gt() {
+  test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1";
+}
+
+# Python verison operator >=
+version_gte() {
+  if [ "$1" == "$2" ]; then
+    return 0
+  fi
+
+  version_gt "$1" "$2"
+}
+
+# Check if Python 2
+python2_check() {
+  VERSION="$1"
+
+  version_gte "$VERSION" "python-2.7.0" && version_gt "python-3.0.0" "$VERSION"
+}
+
+# Check if Python 3
+python3_check() {
+  VERSION="$1"
+
+  version_gte "$VERSION" "python-3.0.0" && version_gt "python-4.0.0" "$VERSION"
+}
