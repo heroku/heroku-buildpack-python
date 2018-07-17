@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 137
+
+Prevent 3.7.0 from appearing as unsupported in buildpack messaging.
+
 # 136
 
 Upgrade to 3.6.6 and support 3.7.0 on all runtimes.
