@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Build Path: /app/.heroku/python/
-# Build Deps: libraries/sqlite
 
 OUT_PREFIX=$1
+
+echo "Installing libsqlite3-dev"
+apt-get -qq update && apt-get install libsqlite3-dev
 
 echo "Building Python…"
 SOURCE_TARBALL='https://python.org/ftp/python/3.5.2/Python-3.5.2.tgz'
