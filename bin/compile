@@ -36,7 +36,7 @@ DEFAULT_PYTHON_VERSION="python-2.7.14"
 DEFAULT_PYTHON_STACK="cedar-14"
 PYTHON_EXE="/app/.scalingo/python/bin/python"
 PIP_VERSION="9.0.1"
-SETUPTOOLS_VERSION="32.1.0"
+SETUPTOOLS_VERSION="39.0.1"
 
 # Common Problem Warnings
 export WARNINGS_LOG=$(mktemp)
@@ -55,10 +55,10 @@ export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
 
-if [ -e "$BUILD_DIR/.buildpacks" -a "$STACK" = "scalingo" ] ; then
-  STACK="cedar-14"
+if [ "$STACK" = "scalingo" ] ; then
+  export STACK="cedar-14"
 fi
-[ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
+[ ! "$STACK" ] && export STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitizing environment variables.
 unset GIT_DIR PYTHONHOME PYTHONPATH
