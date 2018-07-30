@@ -1,14 +1,10 @@
-![python](https://cloud.githubusercontent.com/assets/51578/13712821/b68a42ce-e793-11e5-96b0-d8eb978137ba.png)
+# Buildpack: Python
 
-# Heroku Buildpack: Python
-
-[![Build Status](https://travis-ci.org/heroku/heroku-buildpack-python.svg?branch=master)](https://travis-ci.org/heroku/heroku-buildpack-python)
-
-This is the official [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](https://pip.pypa.io/) and other excellent software.
+This is the official [Scalingo buildpack](https://doc.scalingo.com/buildpacks) for Python apps, powered by [Pipenv](http://docs.pipenv.org/), [pip](https://pip.pypa.io/) and other excellent software.
 
 Recommended web frameworks include **Django** and **Flask**. The recommended webserver is **Gunicorn**. There are no restrictions around what software can be used (as long as it's pip-installable). Web processes must bind to `$PORT`, and only the HTTP protocol is permitted for incoming connections.
 
-Some Python packages with obscure C dependencies (e.g. scipy) are [not compatible](https://devcenter.heroku.com/articles/python-c-deps).
+Python packages with C dependencies that are not [available on the base image](https://doc.scalingo.com/platform/internals/base-docker-image#top-of-page) are generally not supported, unless `manylinux` wheels are provided by the package maintainers (common).
 
 See it in Action
 ----------------
@@ -16,41 +12,48 @@ See it in Action
 Deploying a Python application couldn't be easier:
 
     $ ls
-    Procfile  requirements.txt  web.py
+    Pipfile		Pipfile.lock	Procfile	web.py
 
-    $ heroku create --buildpack heroku/python
+    $ scalingo create my-python-app
 
-    $ git push heroku master
-    ...
+    $ git push scalingo master
+    …
     -----> Python app detected
-    -----> Installing python-2.7.14
-         $ pip install -r requirements.txt
-           Collecting requests (from -r requirements.txt (line 1))
-             Downloading requests-2.12.4-py2.py3-none-any.whl (576KB)
-           Installing collected packages: requests
-           Successfully installed requests-2.12.4
-
+    -----> Installing python-3.6.6
+    -----> Installing pip
+    -----> Installing requirements with Pipenv 2018.5.18…
+           ...
+           Installing dependencies from Pipfile…
     -----> Discovering process types
            Procfile declares types -> (none)
 
-A `requirements.txt` file must be present at the root of your application's repository.
+A `Pipfile` or `requirements.txt` must be present at the root of your application's repository.
 
 You can also specify the latest production release of this buildpack for upcoming builds of an existing application:
 
-    $ heroku buildpacks:set heroku/python
+    $ scalingo env-set BUILDPACK_URL=https://github.com/Scalingo/python-buildpack
 
 
 Specify a Python Runtime
 ------------------------
 
-Specific versions of the Python runtime can be specified with a `runtime.txt` file:
+Specific versions of the Python runtime can be specified in your `Pipfile`:
+
+    [requires]
+    python_version = "2.7"
+
+Or, more specifically:
+
+    [requires]
+    python_full_version = "2.7.15"
+
+Or, with a `runtime.txt` file:
 
     $ cat runtime.txt
-    python-3.6.4
+    python-2.7.15
 
 Runtime options include:
 
-- `python-2.7.14`
-- `python-3.6.4`
-- `pypy-5.6.0` (unsupported, experimental)
-- `pypy3-5.5.0` (unsupported, experimental)
+- `python-3.7.0`
+- `python-3.6.6`
+- `python-2.7.15`

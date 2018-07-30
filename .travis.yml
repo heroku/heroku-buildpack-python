@@ -1,9 +1,25 @@
 language: bash
-sudo: required
-services:
-  - docker
-# install: docker pull heroku/cedar:14
-script: ./tests.sh
-env:
-  - STACK=heroku-16
-  - STACK=cedar-14
+dist: trusty
+jobs:
+  include:
+    - stage: "Bash linting (shellcheck)"
+      sudo: false
+      before_install:
+        - wget -c https://goo.gl/ZzKHFv -O - | tar -xvJ -C /tmp/
+        - PATH="/tmp/shellcheck-latest:$PATH"
+      script: make check
+
+    - stage: "Stack Tests"
+      services: docker
+      env: STACK=heroku-18
+      script: ./tests.sh
+
+    - stage: "Stack Tests"
+      services: docker
+      env: STACK=heroku-16
+      script: ./tests.sh
+
+    - stage: "Stack Tests"
+      services: docker
+      env: STACK=cedar-14
+      script: ./tests.sh

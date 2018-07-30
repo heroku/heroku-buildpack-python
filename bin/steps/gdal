@@ -10,14 +10,13 @@
 # This script is invoked by [`bin/compile`](/).
 
 # The location of the pre-compiled cryptography binary.
-VENDORED_GDAL="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/gdal.tar.gz"
+VENDORED_GDAL="${VENDOR_URL}/libraries/vendor/gdal.tar.gz"
 
 PKG_CONFIG_PATH="/app/.scalingo/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Syntax sugar.
-source $BIN_DIR/utils
-
-bpwatch start gdal_install
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
 
 # If GDAL exists within requirements, use vendored gdal.
 if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
@@ -26,10 +25,10 @@ if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
     echo "-----> Noticed GDAL. Bootstrapping gdal."
     mkdir -p .scalingo/vendor
     # Download and extract cryptography into target vendor directory.
-    curl --location $VENDORED_GDAL -s | tar zxv -C .scalingo/vendor &> /dev/null
+    curl --location "$VENDORED_GDAL" -s | tar zxv -C .scalingo/vendor &> /dev/null
   fi
 
-  export GDAL=$(pwd)/vendor
+  GDAL=$(pwd)/vendor
+  export GDAL
 fi
 
-bpwatch stop gdal_install

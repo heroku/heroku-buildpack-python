@@ -36,7 +36,7 @@ capture()
 
   LAST_COMMAND="$@"
 
-  $@ >${STD_OUT} 2>${STD_ERR}
+  "$@" >${STD_OUT} 2>${STD_ERR}
   RETURN=$?
   rtrn=${RETURN} # deprecated
 }
@@ -93,8 +93,14 @@ assertNotCaptured()
 
 assertCapturedSuccess()
 {
-  assertEquals "Expected captured exit code to be 0; was <${RETURN}>" "0" "${RETURN}"
-  assertEquals "Expected STD_ERR to be empty; was <$(cat ${STD_ERR})>" "" "$(cat ${STD_ERR})"
+  assertEquals "Captured exit code -" "0" "${RETURN}"
+  assertEquals "STD_ERR -" "" "$(cat ${STD_ERR})"
+
+  if [ $RETURN -ne 0 -a -z "$(cat ${STD_ERR})" ]; then
+    # Failing exit code but stderr was empty. Display stdout to help debugging.
+    cat $STD_OUT
+    echo
+  fi
 }
 
 # assertCapturedError [[expectedErrorCode] expectedErrorMsg]
@@ -144,12 +150,19 @@ _assertContains()
     esac
 
     fail "${msg:-${default_msg}}"
+
+    if [ "${haystack_type}" == "file" ]; then
+      echo
+      cat "${haystack}"
+    fi
   fi
 }
 
 debug()
 {
   cat $STD_OUT
+  echo '^^^^^^'
+  cat $STD_ERR
 }
 
 assertContains()

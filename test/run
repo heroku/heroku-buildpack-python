@@ -1,10 +1,53 @@
 #!/usr/bin/env bash
 
+testPipenv() {
+  compile "pipenv"
+  assertCapturedSuccess
+}
+
+testPipenvLock() {
+  compile "pipenv-lock"
+  assertCapturedSuccess
+}
+
+testPipenvVersion() {
+  compile "pipenv-version"
+  assertCaptured "3.6.6"
+  assertCapturedSuccess
+}
+
+testPipenvFullVersion() {
+  compile "pipenv-full-version"
+  assertCaptured "3.6.3"
+  assertCapturedSuccess
+}
+
 testNoRequirements() {
   compile "no-requirements"
   assertCapturedError
 }
 
+testCollectstatic() {
+  compile "collectstatic"
+  assertCaptured "collectstatic"
+}
+
+testGEOS() {
+  BUILD_WITH_GEO_LIBRARIES=1 compile "geos"
+  assertCaptured "geos"
+  assertCapturedSuccess
+}
+
+testNLTK() {
+  # NOTE: This is a RuntimeWarning emitted by Python 3's runpy.py script
+  # which is what is used when you call `python -m <module>`. This is due to
+  # how nltk imports things. It's not actually an error, but it would probably
+  # be bad to silence in Production.
+  export PYTHONWARNINGS="ignore::RuntimeWarning"
+  compile "nltk"
+  assertCaptured "Downloading NLTK packages: city_database stopwords"
+  assertCapturedSuccess
+}
 
 testSetupPy() {
   compile "setup-py"
@@ -25,19 +68,65 @@ testPsycopg2() {
   assertCapturedSuccess
 }
 
-testPython2() {
-  compile "python2"
-  assertCaptured "python-2.7.13"
+testCffi() {
+  compile "cffi"
+  assertCaptured "cffi"
   assertCapturedSuccess
+}
+
+testPylibmc() {
+  compile "pylibmc"
+  assertCaptured "pylibmc"
+  assertCapturedSuccess
+}
+
+testPython2() {
+  if [[ "$STACK" == "heroku-16" ]] || [[ "$STACK" == "cedar-14" ]]; then
+    compile "python2"
+    assertCaptured "python-2.7.15"
+    assertCapturedSuccess
+  fi
+}
+
+testNoPython2() {
+  if [[ "$STACK" == "heroku-18" ]]; then
+    compile "python2"
+    assertCapturedError
+  fi
 }
 
 testPython3() {
   compile "python3"
-  assertCaptured "python-3.6.0"
+  assertCaptured "python-3.6.6"
   assertCapturedSuccess
 }
 
+testGitEgg() {
+  compile "git-egg"
+  assertCaptured "requests"
+  assertCapturedSuccess
+}
 
+testSmartRequirements() {
+  local cache_dir="$(mktmpdir)"
+  compile "requirements-standard" "$cache_dir"
+  assertFile "requests" ".heroku/python/requirements-declared.txt"
+  assertCapturedSuccess
+  compile "psycopg2" "$cache_dir"
+  assertCaptured "Uninstalling requests"
+  assertFile "psycopg2" ".heroku/python/requirements-declared.txt"
+  assertCapturedSuccess
+}
+
+testStackChange() {
+  local cache_dir="$(mktmpdir)"
+  mkdir -p "${cache_dir}/.heroku"
+  echo "different-stack" > "${cache_dir}/.heroku/python-stack"
+  compile "requirements-standard" "$cache_dir"
+  assertCaptured "clearing cache"
+  assertFile "$STACK" ".heroku/python-stack"
+  assertCapturedSuccess
+}
 
 
 pushd $(dirname 0) >/dev/null

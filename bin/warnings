@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 shopt -s extglob
 
 old-platform() {
@@ -39,10 +40,21 @@ distribute-included() {
   fi
 }
 
+six-included() {
+  if grep -qi 'Running setup.py install for six' "$WARNINGS_LOG"; then
+    echo
+    puts-warn "Hello! Your requirements.txt file contains the six package."
+    puts-warn "This library is automatically installed by Scalingo and shouldn't be in"
+    puts-warn "Your requirements.txt file. This can cause unexpected behavior."
+    puts-warn "  -- Much Love, Scalingo."
+  fi
+}
+
 show-warnings() {
   old-platform
   pylibmc-missing
   scipy-included
   distribute-included
+  six-included
 }
 

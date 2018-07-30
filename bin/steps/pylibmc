@@ -9,13 +9,16 @@
 #
 # This script is invoked by [`bin/compile`](/).
 
+if [[ "$STACK" != "cedar-14" ]]; then
+    # libmemcached is pre-installed in the stack image so there is no need to vendor it.
+    return 0
+fi
+
 # The location of the pre-compiled libmemcached binary.
-VENDORED_MEMCACHED="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/libmemcache.tar.gz"
+VENDORED_MEMCACHED="${VENDOR_URL}/libraries/vendor/libmemcache.tar.gz"
 
-# Syntax sugar.
-source $BIN_DIR/utils
-
-bpwatch start pylibmc_install
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
 
 # If pylibmc exists within requirements, use vendored libmemcached.
 if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
@@ -24,10 +27,9 @@ if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
     mkdir -p .scalingo/vendor
     # Download and extract libmemcached into target vendor directory.
-    curl -L $VENDORED_MEMCACHED -s | tar zxv -C .scalingo/vendor &> /dev/null
+    curl "$VENDORED_MEMCACHED" -s | tar zxv -L .scalingo/vendor &> /dev/null
   fi
 
-  export LIBMEMCACHED=$(pwd)/vendor
+  LIBMEMCACHED=$(pwd)/vendor
+  export LIBMEMCACHED
 fi
-
-bpwatch stop pylibmc_install

@@ -10,16 +10,15 @@
 # This script is invoked by [`bin/compile`](/).
 
 # The location of the pre-compiled cryptography binary.
-VENDORED_GDAL="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/gdal.tar.gz"
-VENDORED_GEOS="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/geos.tar.gz"
-VENDORED_PROJ="https://lang-python.s3.amazonaws.com/$STACK/libraries/vendor/proj.tar.gz"
+VENDORED_GDAL="${VENDOR_URL}/libraries/vendor/gdal.tar.gz"
+VENDORED_GEOS="${VENDOR_URL}/libraries/vendor/geos.tar.gz"
+VENDORED_PROJ="${VENDOR_URL}/libraries/vendor/proj.tar.gz"
 
 PKG_CONFIG_PATH="/app/.scalingo/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Syntax sugar.
-source $BIN_DIR/utils
-
-bpwatch start geo_libs_install
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
 
 # If GDAL exists within requirements, use vendored gdal.
 if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
@@ -31,9 +30,19 @@ if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
     curl --location $VENDORED_GDAL -s | tar zxv -C .scalingo/vendor &> /dev/null
     curl --location $VENDORED_GEOS -s | tar zxv -C .scalingo/vendor &> /dev/null
     curl --location $VENDORED_PROJ -s | tar zxv -C .scalingo/vendor &> /dev/null
+
+    # Copy libjasper from build image to slug.
+    if [[ "$STACK" == "heroku-16" ]]; then
+      cp /usr/lib/x86_64-linux-gnu/libjasper.so* ".scalingo/vendor/lib/."
+    fi
   fi
 
-  export GDAL=$(pwd)/vendor
+  GDAL=$(pwd)/vendor
+  export GDAL
+  # set path for post_compile hooks
+  export GDAL_LIBRARY_PATH="$BUILD_DIR/.scalingo/vendor/lib/libgdal.so"
+  export GEOS_LIBRARY_PATH="$BUILD_DIR/.scalingo/vendor/lib/libgeos_c.so"
+  # set path for runtime environmeht
+  set_env GDAL_LIBRARY_PATH "/app/.scalingo/vendor/lib/libgdal.so"
+  set_env GEOS_LIBRARY_PATH "/app/.scalingo/vendor/lib/libgeos_c.so"
 fi
-
-bpwatch stop geo_libs_install

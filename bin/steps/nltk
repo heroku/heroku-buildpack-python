@@ -10,24 +10,22 @@
 # This script is invoked by [`bin/compile`](/).
 
 # Syntax sugar.
-source $BIN_DIR/utils
-
-bpwatch start nltk_download
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
 
 # Check that nltk was installed by pip, otherwise obviously not needed
-python -m nltk.downloader -h >/dev/null 2>&1
-if [ $? -eq 0 ]; then
-    puts-step "Downloading NLTK corpora..."
+if sp-grep -s nltk; then
+    puts-step "Downloading NLTK corpora…"
+
     nltk_packages_definition="$BUILD_DIR/nltk.txt"
+
     if [ -f "$nltk_packages_definition" ]; then
-        nltk_packages=$(tr "\n" " " < "$nltk_packages_definition")
-        puts-step "Downloading NLTK packages: $nltk_packages"
-        python -m nltk.downloader -d $BUILD_DIR/.scalingo/python/nltk_data $nltk_packages  | indent
-        set-env NLTK_DATA "/app/.scalingo/python/nltk_data"
+        readarray -t nltk_packages < "$nltk_packages_definition"
+        puts-step "Downloading NLTK packages: ${nltk_packages[*]}"
+
+        python -m nltk.downloader -d "$BUILD_DIR/.scalingo/python/nltk_data" "${nltk_packages[@]}" | indent
+        set_env NLTK_DATA "/app/.scalingo/python/nltk_data"
     else
-        puts-warn "nltk.txt not found, not downloading any corpora"
+        puts-warn "'nltk.txt' not found, not downloading any corpora"
     fi
 fi
-
-
-bpwatch stop nltk_download

@@ -8,16 +8,17 @@ export PATH="/app/.scalingo/python/bin/:$PATH"
 hash -r
 
 
-echo "Building gdal..."
+echo "Building gdal…"
 
-SOURCE_TARBALL='http://download.osgeo.org/proj/proj-4.8.0.tar.gz'
+VERSION=4.9.3
+SOURCE_TARBALL="http://download.osgeo.org/proj/proj-${VERSION}.tar.gz"
 
 curl -L $SOURCE_TARBALL | tar zx
 
-cd proj-4.8.0
-./configure --prefix=$OUT_PREFIX --enable-static=no &&
+pushd "proj-${VERSION}"
+./configure --prefix=$OUT_PREFIX --enable-static=no
 make
 make install
 
 # Cleanup
-cd ..
+popd

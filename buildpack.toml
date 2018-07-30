@@ -1,0 +1,13 @@
+[buildpack]
+name = "Python"
+
+  [publish.Ignore]
+  files = [
+    "test/",
+    ".gitignore",
+    ".dockerignore",
+    ".github/",
+    "Dockerfile",
+    "Pipfile",
+    "Pipfile.lock"
+  ]

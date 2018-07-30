@@ -1,18 +1,20 @@
+#!/usr/bin/env bash
+
 set +e
 # Install dependencies with Pip.
-bpwatch start pip_uninstall
-if [[ -f .scalingo/python/requirements-declared.txt ]]; then
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
 
-  cp .scalingo/python/requirements-declared.txt requirements-declared.txt
+if [ ! "$SKIP_PIP_INSTALL" ]; then
+  if [[ -f .scalingo/python/requirements-declared.txt ]]; then
+    cp .scalingo/python/requirements-declared.txt requirements-declared.txt
 
-  pip-diff --stale requirements-declared.txt requirements.txt --exclude setuptools pip wheel > .scalingo/python/requirements-stale.txt
+    rm -fr requirements-declared.txt
 
-  rm -fr requirements-declared.txt
-
-  if [[ -s .scalingo/python/requirements-stale.txt ]]; then
-    puts-step "Uninstalling stale dependencies"
-    /app/.scalingo/python/bin/pip uninstall -r .scalingo/python/requirements-stale.txt -y --exists-action=w --disable-pip-version-check | cleanup | indent
+    if [[ -s .scalingo/python/requirements-stale.txt ]]; then
+      puts-step "Uninstalling stale dependencies"
+      /app/.scalingo/python/bin/pip uninstall -r .scalingo/python/requirements-stale.txt -y --exists-action=w --disable-pip-version-check | cleanup | indent
+    fi
   fi
 fi
-bpwatch stop pip_uninstall
 set -e
