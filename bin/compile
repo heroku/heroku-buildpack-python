@@ -35,6 +35,11 @@ ENV_DIR=$3
 # Export Path variables, for use in sub-scripts.
 export BUILD_DIR CACHE_DIR ENV_DIR
 
+# Require for multibuildpack as there is no local dependency cache here
+if [ "$STACK" = "scalingo" ] ; then
+  export STACK="cedar-14"
+fi
+
 # Set the Buildpack's internet target for downloading Python distributions.
 # The user can provide BUILDPACK_VENDOR_URL to specify a custom target.
 # Note: this is designed for non-Scalingo use, as it does not use the user-provided
@@ -78,10 +83,6 @@ export PATH=$PATH:$ROOT_DIR/vendor/:$ROOT_DIR/vendor/pip-pop
 # This can likely be removed, with caution.
 [ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
 [ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
-
-if [ "$STACK" = "scalingo" ] ; then
-  export STACK="cedar-14"
-fi
 [ ! "$STACK" ] && export STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitize externally-provided environment variables:
