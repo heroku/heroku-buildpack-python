@@ -4,7 +4,7 @@
 # [**Python Buildpack**](https://github.com/Scalingo/python-buildpack)
 # compiler.
 #
-# A [buildpack](http://doc.scalingo.com/buildpacks) is an adapter between a
+# A [buildpack](https://doc.scalingo.com/buildpacks) is an adapter between a
 # Python application and Scalingo's runtime.
 #
 # This script is invoked by [`bin/compile`](/).

@@ -47,7 +47,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
         echo
         echo "          $ scalingo env-set DISABLE_COLLECTSTATIC=1"
         echo
-        echo "       http://doc.scalingo.com/languages/python/getting-started-with-django/#static-file-serving"
+        echo "       https://doc.scalingo.com/languages/python/django/start#static-file-serving"
 
         # Additionally, dump out the environment, if debug mode is on.
         if [ "$DEBUG_COLLECTSTATIC" ]; then

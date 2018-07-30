@@ -104,7 +104,7 @@ cd $BUILD_DIR
 # Warn for lack of Procfile.
 if [[ ! -f Procfile ]]; then
   puts-warn 'Warning: Your application is missing a Procfile. This file tells Scalingo how to run your application.'
-  puts-warn 'Learn more: http://doc.scalingo.com/internals/procfile.html'
+  puts-warn 'Learn more: https://doc.scalingo.com/internals/procfile'
 fi
 
 # Experimental pre_compile hook.
