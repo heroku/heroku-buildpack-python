@@ -21,9 +21,6 @@ if [[ -f Pipfile.lock ]]; then
 
         fi
     fi
-else
-    export SKIP_PIP_INSTALL=1
-    pipenv-to-pip Pipfile.lock > requirements.txt
 fi
 
 
