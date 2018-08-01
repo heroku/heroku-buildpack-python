@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 138
+
+Use stack image SQLite3 instead of vendoring
+
 # 137
 
 Prevent 3.7.0 from appearing as unsupported in buildpack messaging.
