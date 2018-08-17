@@ -34,6 +34,10 @@ else
         else
           echo "       Using supported version of Python 3.6 ($PYTHON_VERSION)"
         fi
+      else
+        puts-warn "Heroku supports the latest version of Python 2 $LATEST_37, Python 3.6 $LATEST_36 and Python 3.7 $LATEST_2." 
+        puts-warn "You are using $PYTHON_VERSION, which is unsupported."
+        puts-warn "We recommend upgrading by specifying the default supported version ($LATEST_36)."
       fi
     fi
   fi
