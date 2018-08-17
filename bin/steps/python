@@ -12,17 +12,29 @@ if [[ $PYTHON_VERSION =~ ^python-2 ]]; then
     puts-warn "The latest version of Python 2 is $LATEST_2 (you are using $PYTHON_VERSION, which is unsupported)."
     puts-warn "We recommend upgrading by specifying the latest version ($LATEST_2)."
     echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+  else
+    echo "       Using supported version of Python 2 ($PYTHON_VERSION)"
   fi
 else
-  if [[ $PYTHON_VERSION =~ ^python-3.7 ]] && [[ "$PYTHON_VERSION" != "$LATEST_37" ]]; then
-    puts-warn "The latest version of Python 3.7 is $LATEST_37 (you are using $PYTHON_VERSION, which is unsupported)."
-    puts-warn "We recommend upgrading by specifying the latest version ($LATEST_37)."
-    echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-  else
-    if [[ "$PYTHON_VERSION" != "$LATEST_36" ]]; then
-      puts-warn "The latest version of Python 3.6 is $LATEST_36 (you are using $PYTHON_VERSION, which is unsupported)."
-      puts-warn "We recommend upgrading by specifying the latest version ($LATEST_36)."
+  if [[ $PYTHON_VERSION =~ ^python-3 ]]; then
+    if [[ $PYTHON_VERSION =~ ^python-3.7 ]]; then
+      if [[ "$PYTHON_VERSION" != "$LATEST_37" ]]; then
+      puts-warn "The latest version of Python 3.7 is $LATEST_37 (you are using $PYTHON_VERSION, which is unsupported)."
+      puts-warn "We recommend upgrading by specifying the latest version ($LATEST_37)."
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+      else
+        echo "       Using supported version of Python 3.7 ($PYTHON_VERSION)"
+      fi
+    else
+      if [[ $PYTHON_VERSION =~ ^python-3.6 ]]; then
+        if [[ "$PYTHON_VERSION" != "$LATEST_36" ]]; then
+          puts-warn "The latest version of Python 3.6 is $LATEST_36 (you are using $PYTHON_VERSION, which is unsupported)."
+          puts-warn "We recommend upgrading by specifying the latest version ($LATEST_36)."
+          echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+        else
+          echo "       Using supported version of Python 3.6 ($PYTHON_VERSION)"
+        fi
+      fi
     fi
   fi
 fi
@@ -49,6 +61,7 @@ if [ -f .heroku/python-version ]; then
   fi
 fi
 
+
 if [ ! "$SKIP_INSTALL" ]; then
     puts-step "Installing $PYTHON_VERSION"
 
@@ -70,6 +83,7 @@ if [ ! "$SKIP_INSTALL" ]; then
 
   hash -r
 fi
+
 
 # If Pip isn't up to date:
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
