@@ -222,6 +222,9 @@ if [[ $BUILD_DIR != '/app' ]]; then
     # Note: .heroku/src is copied in later.
 fi
 
+# Set Up SSH deploy-key.
+source $BIN_DIR/steps/sshkey
+
 # Download / Install Python, from pre-build binaries available on Amazon S3.
 # This step also bootstraps pip / setuptools.
 (( start=$(nowms) ))
