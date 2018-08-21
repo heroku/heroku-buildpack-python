@@ -19,20 +19,20 @@ jobs:
     - wget -c https://goo.gl/ZzKHFv -O - | tar -xvJ -C /tmp/
     - PATH="/tmp/shellcheck-latest:$PATH"
     script: make check
-  - stage: Stack Tests
+  - stage: Stack Unit Tests
     services: docker
     env: STACK=heroku-18
     script: "./tests.sh"
-  - stage: Stack Tests
+  - stage: Stack Unit Tests
     services: docker
     env: STACK=heroku-16
     script: "./tests.sh"
-  - stage: Stack Tests
+  - stage: Stack Unit Tests
     services: docker
     env: STACK=cedar-14
     script: "./tests.sh"
   - stage: Hatchet Integration
-    script: "rspec"
+    script: "bundle exec rspec"
 env:
   global:
   - HATCHET_RETRIES=3

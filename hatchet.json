@@ -1,6 +1,5 @@
 {
   "python": [
     "heroku/python-getting-started"
-    // "pyhatchery/x" <- namespace of python test org
   ]
 }
