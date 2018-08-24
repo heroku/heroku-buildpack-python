@@ -84,7 +84,6 @@ testPython2() {
     compile "python2"
     assertCaptured "python-2.7.15"
     assertCapturedSuccess
-  fi
 }
 
 testPython3() {
