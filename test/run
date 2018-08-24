@@ -81,17 +81,9 @@ testPylibmc() {
 }
 
 testPython2() {
-  if [[ "$STACK" == "heroku-16" ]] || [[ "$STACK" == "cedar-14" ]]; then
     compile "python2"
     assertCaptured "python-2.7.15"
     assertCapturedSuccess
-  fi
-}
-
-testNoPython2() {
-  if [[ "$STACK" == "heroku-18" ]]; then
-    compile "python2"
-    assertCapturedError
   fi
 }
 
