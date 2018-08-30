@@ -1,22 +1,22 @@
 # Python Buildpack Changelog
 
-# 138
+# 138 (2018-08-01)
 
 Use stack image SQLite3 instead of vendoring
 
-# 137
+# 137 (2018-07-17)
 
 Prevent 3.7.0 from appearing as unsupported in buildpack messaging.
 
-# 136
+# 136 (2018-06-28)
 
 Upgrade to 3.6.6 and support 3.7.0 on all runtimes.
 
-# 135
+# 135 (2018-05-29)
 
 Upgrade Pipenv to v2018.5.18.
 
-# 134
+# 134 (2018-05-02)
 
 Default to 3.6.5, bugfixes.
 
