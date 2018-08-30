@@ -88,13 +88,6 @@ testPython2() {
   fi
 }
 
-testNoPython2() {
-  if [[ "$STACK" == "heroku-18" ]]; then
-    compile "python2"
-    assertCapturedError
-  fi
-}
-
 testPython3() {
   compile "python3"
   assertCaptured "python-3.6.6"
