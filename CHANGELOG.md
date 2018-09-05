@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 139
+
+Improvements to Python install messaging
+
 # 138 (2018-08-01)
 
 Use stack image SQLite3 instead of vendoring
