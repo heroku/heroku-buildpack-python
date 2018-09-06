@@ -1,6 +1,10 @@
 # Python Buildpack Changelog
 
-# 139
+# 139 (2018-09-XX)
+
+Make experience between stacks uniform, make 3.5.6 and 3.4.9 available
+
+# 139 (2018-09-06)
 
 Improvements to Python install messaging
 
