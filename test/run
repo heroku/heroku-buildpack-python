@@ -86,9 +86,27 @@ testPython2() {
     assertCapturedSuccess
 }
 
-testPython3() {
-  compile "python3"
+testPython3_4() {
+  compile "python3_4"
+  assertCaptured "python-3.4.9"
+  assertCapturedSuccess
+}
+
+testPython3_5() {
+  compile "python3_5"
+  assertCaptured "python-3.5.6"
+  assertCapturedSuccess
+}
+
+testPython3_6() {
+  compile "python3_6"
   assertCaptured "python-3.6.6"
+  assertCapturedSuccess
+}
+
+testPython3_7() {
+  compile "python3_7"
+  assertCaptured "python-3.7.0"
   assertCapturedSuccess
 }
 
