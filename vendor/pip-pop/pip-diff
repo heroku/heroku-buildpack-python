@@ -12,9 +12,13 @@ Options:
 """
 import os
 from docopt import docopt
-from pip.req import parse_requirements
-from pip.index import PackageFinder
-from pip._vendor.requests import session
+from requests import session
+try:  # for pip >= 10
+    from pip._internal.index import PackageFinder
+    from pip._internal.req import parse_requirements
+except ImportError:  # for pip <= 9.0.3
+    from pip.index import PackageFinder
+    from pip.req import parse_requirements
 
 requests = session()
 
