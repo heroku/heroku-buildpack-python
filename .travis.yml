@@ -3,6 +3,7 @@ dist: trusty
 rvm:
 - 2.4.4
 before_script:
+  - bash etc/ci-setup.sh
   - gem install bundler -v 1.16.2
   - bundle exec rake hatchet:setup_travis
 addons:
