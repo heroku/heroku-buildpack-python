@@ -6,12 +6,6 @@ before_script:
   - bash etc/ci-setup.sh
   - gem install bundler -v 1.16.2
   - bundle exec rake hatchet:setup_travis
-addons:
-  apt:
-    sources:
-    - heroku
-    packages:
-    - heroku-toolbelt
 jobs:
   include:
   - stage: Bash linting (shellcheck)
