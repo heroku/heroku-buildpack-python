@@ -1,16 +1,18 @@
 language: ruby
 dist: trusty
+sudo: required
 rvm:
 - 2.4.4
 before_script:
   - gem install bundler -v 1.16.2
   - bundle exec rake hatchet:setup_travis
+before_install:
+  - sudo bash etc/ci-setup.sh
 jobs:
   include:
   - stage: Bash linting (shellcheck)
     sudo: false
     before_install:
-    - bash etc/ci-setup.sh
     - wget -c https://goo.gl/ZzKHFv -O - | tar -xvJ -C /tmp/
     - PATH="/tmp/shellcheck-latest:$PATH"
     script: make check
