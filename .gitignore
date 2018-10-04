@@ -4,3 +4,6 @@ site
 
 /.envrc
 repos/*
+
+#Venv
+buildpack/*
