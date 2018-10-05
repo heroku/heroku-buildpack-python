@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 testAirflow() {
+  export SLUGIFY_USES_TEXT_UNIDECODE="yes"
   compile "airflow"
   assertCaptured "apache-airflow==1.10"
   assertCapturedSuccess
