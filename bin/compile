@@ -286,6 +286,11 @@ source "$BIN_DIR/steps/sqlite3"
 buildpack_sqlite3_install
 mtime "sqlite3.install.time" "${start}"
 
+# Source compile variables
+if [ -s .python-compile-env ]; then
+  source .python-compile-env
+fi
+
 # pip install
 # -----------
 
