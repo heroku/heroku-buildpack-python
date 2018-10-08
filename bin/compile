@@ -149,33 +149,7 @@ cd "$BUILD_DIR"
 # - Once the build is complete, `~/.heroku/{known-paths}` is copied back into the cache.
 
 # Create the cache directory, if it doesn't exist.
-mkdir -p "$CACHE_DIR"
-
-# Restore old artifacts from the cache.
-mkdir -p .heroku
-
-# The Python installation.
-cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
-# A plain text file which contains the current stack being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
-# A plain text file which contains the current python version being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
-# A plain text file which contains the current sqlite3 version being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
-# Any pre-compiled binaries, provided by the buildpack.
-cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
-# "editable" installations of code repositories, via pip or pipenv.
-if [[ -d "$CACHE_DIR/.heroku/src" ]]; then
-  cp -R "$CACHE_DIR/.heroku/src" .heroku/ &> /dev/null || true
-fi
-
-# The pre_compile hook. Customers rely on this. Don't remove it.
-# This part of the code is used to allow users to customize their build experience
-# without forking the buildpack by providing a `bin/pre_compile` script, which gets
-# run inline with the buildpack automatically.
-
-# shellcheck source=bin/steps/hooks/pre_compile
-source "$BIN_DIR/steps/hooks/pre_compile"
+mkdir -p .heroku "$CACHE_DIR/.heroku"
 
 # Sticky runtimes. If there was a previous build, and it used a given version of Python,
 # continue to use that version of Python in perpituity (warnings will be raised if
@@ -203,7 +177,55 @@ source "$BIN_DIR/steps/pipenv-python-version"
 # If no runtime was provided by the user, assume the default Python runtime version.
 if [ ! -f runtime.txt ]; then
   echo "$DEFAULT_PYTHON_VERSION" > runtime.txt
+  PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
+else
+  runtime-fixer runtime.txt
+  PYTHON_VERSION=$(cat runtime.txt)
 fi
+
+# Restore old artifacts from the cache.
+if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
+  puts-step "Stack has changed from $CACHED_PYTHON_STACK to $STACK, clearing cache"
+elif [ -d "$CACHE_DIR/.heroku/python" ] && [ ! -f "$CACHE_DIR/.heroku/python-sqlite3-version" ] && python_sqlite3_check "$PYTHON_VERSION"; then
+  # need to clear the cache for first time installing SQLite3,
+  # since the version is changing and could lead to runtime errors
+  # with compiled extensions.
+  puts-step "Need to update SQLite3, clearing cache"
+
+else
+  # A plain text file which contains the current stack being used (used for cache busting).
+  cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
+  # A plain text file which contains the current python version being used (used for cache busting).
+  cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
+  # A plain text file which contains the current sqlite3 version being used (used for cache busting).
+  cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
+  # Any pre-compiled binaries, provided by the buildpack.
+  cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
+
+  # The Python installation.
+  if [ -f .heroku/python-version ]; then
+    if [ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]; then
+      puts-step "Found $(cat .heroku/python-version), removing"
+    else
+      cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
+      SKIP_INSTALL=1
+    fi
+  fi
+fi
+export SKIP_INSTALL PYTHON_VERSION
+
+# "editable" installations of code repositories, via pip or pipenv.
+if [[ -d "$CACHE_DIR/.heroku/src" ]]; then
+  cp -R "$CACHE_DIR/.heroku/src" .heroku/ &> /dev/null || true
+fi
+
+# The pre_compile hook. Customers rely on this. Don't remove it.
+# This part of the code is used to allow users to customize their build experience
+# without forking the buildpack by providing a `bin/pre_compile` script, which gets
+# run inline with the buildpack automatically.
+
+# shellcheck source=bin/steps/hooks/pre_compile
+source "$BIN_DIR/steps/hooks/pre_compile"
 
 # Create the directory for .profile.d, if it doesn't exist.
 mkdir -p "$(dirname "$PROFILE_PATH")"
