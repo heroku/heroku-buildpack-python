@@ -12,7 +12,7 @@
 # The location of the pre-compiled cryptography binary.
 VENDORED_GDAL="${VENDOR_URL}/libraries/vendor/gdal.tar.gz"
 
-PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
+PKG_CONFIG_PATH="$BUILD_DIR/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Syntax sugar.
 # shellcheck source=bin/utils
