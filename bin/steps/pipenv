@@ -41,6 +41,15 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             mcount "buildvar.PIP_EXTRA_INDEX_URL"
         fi
 
+        # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+        if [[ -r $ENV_DIR/DEFAULT_PIPENV_VERSION ]]; then
+            DEFAULT_PIPENV_VERSION="$(cat "$ENV_DIR/DEFAULT_PIPENV_VERSION")"
+            export DEFAULT_PIPENV_VERSION
+            mcount "buildvar.DEFAULT_PIPENV_VERSION"
+        else
+            export DEFAULT_PIPENV_VERSION="2018.7.1"
+        fi
+
         # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
         if [[ -r $ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE ]]; then
             SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
@@ -48,7 +57,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
         fi
 
-        export DEFAULT_PIPENV_VERSION="2018.7.1"
+
 
         # Install pipenv; do not upgrade.
         /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION &> /dev/null
