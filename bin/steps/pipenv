@@ -57,8 +57,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
         fi
 
-
-
         # Install pipenv; do not upgrade.
         /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION &> /dev/null
 
