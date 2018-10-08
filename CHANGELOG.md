@@ -1,6 +1,13 @@
 # Python Buildpack Changelog
 
-# 139
+# 140 (2018-10-X)
+
+Add an `OVERRIDDEN_PIPENV_VERSION` option to override the version of Pipenv
+used in the buildpack
+Upgrade the `DEFAULT_PIPENV_VERSION` to `2018.7.1`
+
+
+# 139 (2018-10-8)
 
 Improvements to Python install messaging
 

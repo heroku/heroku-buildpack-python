@@ -9,14 +9,11 @@ set -e
 if [[ -f Pipfile.lock ]]; then
     if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
         if [[ $(openssl dgst -sha256 Pipfile.lock) == $(cat .heroku/python/Pipfile.lock.sha256) ]]; then
-            # Measure that we're using Pipenv.
-            mcount "tool.pipenv"
 
             # Don't skip installation of there are git deps.
             if ! grep -q 'git' Pipfile.lock; then
                 echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
 
-                mcount "tool.pipenv"
                 export SKIP_PIPENV_INSTALL=1
                 export SKIP_PIP_INSTALL=1
             fi
@@ -29,8 +26,6 @@ fi
 if [ ! "$SKIP_PIPENV_INSTALL" ]; then
     # Pipenv support (Generate requriements.txt with pipenv).
     if [[ -f Pipfile ]]; then
-        # Measure that we're using Pipenv.
-        mcount "tool.pipenv"
 
         # Skip pip install, later.
         export SKIP_PIP_INSTALL=1
@@ -41,10 +36,10 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             export PIP_EXTRA_INDEX_URL
         fi
 
-        export PIPENV_VERSION="2018.5.18"
+        export DEFAULT_PIPENV_VERSION="2018.7.1"
 
-        # Install pipenv.
-        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade &> /dev/null
+        # Install pipenv; do not upgrade.
+        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION &> /dev/null
 
         # Install the dependencies.
         if [[ ! -f Pipfile.lock ]]; then
@@ -59,6 +54,8 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             puts-step "Installing dependencies with Pipenv $PIPENV_VERSION…"
             /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
         fi
+        # Measure that we're using Pipenv.
+        mcount "tool.pipenv"
 
         # Install the test dependencies, for CI.
         if [ "$INSTALL_TEST" ]; then
