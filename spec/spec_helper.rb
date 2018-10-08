@@ -1,4 +1,4 @@
-ENV['HATCHET_BUILDPACK_BASE'] = 'https://github.com/heroku/heroku-buildpack-python.git'
+ENV['HATCHET_BUILDPACK_BASE'] = 'https://github.com/' + ENV['TRAVIS_REPO_SLUG'] + '.git'
 
 require 'rspec/core'
 require 'rspec/retry'
