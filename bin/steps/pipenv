@@ -56,7 +56,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         export PIPENV_VERSION="2018.5.18"
 
         # Install pipenv.
-        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade &> /dev/null
+        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
 
         # Install the dependencies.
         if [[ ! -f Pipfile.lock ]]; then
