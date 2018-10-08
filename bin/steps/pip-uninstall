@@ -20,7 +20,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
 
     if [[ -s .heroku/python/requirements-stale.txt ]]; then
       puts-step "Uninstalling stale dependencies"
-      /app/.heroku/python/bin/pip uninstall -r .heroku/python/requirements-stale.txt -y --exists-action=w --disable-pip-version-check | cleanup | indent
+      "$BUILD_DIR/.heroku/python/bin/pip" uninstall -r .heroku/python/requirements-stale.txt -y --exists-action=w --disable-pip-version-check | cleanup | indent
     fi
   fi
 

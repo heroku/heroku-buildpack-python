@@ -35,7 +35,7 @@ else
           echo "       Using supported version of Python 3.6 ($PYTHON_VERSION)"
         fi
       else
-        puts-warn "Heroku supports runtime versions $LATEST_37, $LATEST_36 and $LATEST_2." 
+        puts-warn "Heroku supports runtime versions $LATEST_37, $LATEST_36 and $LATEST_2."
         puts-warn "You are using $PYTHON_VERSION, which is unsupported."
         puts-warn "We recommend upgrading by specifying the default supported version ($LATEST_36)."
         echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
@@ -96,11 +96,11 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
   puts-step "Installing pip"
 
   # Remove old installations.
-  rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
-  rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
+  rm -fr "$BUILD_DIR/.heroku/python/lib/python*/site-packages/pip-*"
+  rm -fr "$BUILD_DIR/.heroku/python/lib/python*/site-packages/setuptools-*"
 
-  /app/.heroku/python/bin/python "$ROOT_DIR/vendor/get-pip.py" pip=="$PIP_UPDATE" &> /dev/null
-  /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
+  "$BUILD_DIR/.heroku/python/bin/python" "$ROOT_DIR/vendor/get-pip.py" pip=="$PIP_UPDATE" &> /dev/null
+  "$BUILD_DIR/.heroku/python/bin/pip" install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
 
 fi
 

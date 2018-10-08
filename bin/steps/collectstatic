@@ -30,12 +30,11 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
     puts-step "$ python $MANAGE_FILE collectstatic --noinput"
 
     # Run collectstatic, cleanup some of the noisy output.
-    PYTHONPATH=${PYTHONPATH:-.}
+    PYTHONPATH=${PYTHONPATH:-$BUILD_DIR}
     export PYTHONPATH
 
     # Create a temporary file for collecting the collectstaic logs.
     COLLECTSTATIC_LOG=$(mktemp)
-
     python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | tee "$COLLECTSTATIC_LOG" | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
     COLLECTSTATIC_STATUS="${PIPESTATUS[0]}"
 
