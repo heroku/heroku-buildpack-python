@@ -1,13 +1,11 @@
 # Python Buildpack Changelog
 
-# 140 (2018-10-X)
+# 140 (2018-10-09)
 
-Add an `OVERRIDDEN_PIPENV_VERSION` option to override the version of Pipenv
-used in the buildpack
-Upgrade the `DEFAULT_PIPENV_VERSION` to `2018.7.1`
+Add support for detecting SLUGIFY_USES_TEXT_UNIDECODE, which is required to
+install Apache Airflow version 1.10 or higher.
 
-
-# 139 (2018-10-8)
+# 139 (2018-10-08)
 
 Improvements to Python install messaging
 
