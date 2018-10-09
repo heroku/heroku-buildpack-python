@@ -12,24 +12,49 @@ if [[ $PYTHON_VERSION =~ ^python-2 ]]; then
     puts-warn "The latest version of Python 2 is $LATEST_2 (you are using $PYTHON_VERSION, which is unsupported)."
     puts-warn "We recommend upgrading by specifying the latest version ($LATEST_2)."
     echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
+  else
+    echo "       Using supported version of Python 2 ($PYTHON_VERSION)"
   fi
 else
-  if [[ $PYTHON_VERSION =~ ^python-3.7 ]] && [[ "$PYTHON_VERSION" != "$LATEST_37" ]]; then
-    puts-warn "The latest version of Python 3.7 is $LATEST_37 (you are using $PYTHON_VERSION, which is unsupported)."
-    puts-warn "We recommend upgrading by specifying the latest version ($LATEST_37)."
-    echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-  else
-    if [[ "$PYTHON_VERSION" != "$LATEST_36" ]]; then
-      puts-warn "The latest version of Python 3.6 is $LATEST_36 (you are using $PYTHON_VERSION, which is unsupported)."
-      puts-warn "We recommend upgrading by specifying the latest version ($LATEST_36)."
+  if [[ $PYTHON_VERSION =~ ^python-3 ]]; then
+    if [[ $PYTHON_VERSION =~ ^python-3.7 ]]; then
+      if [[ "$PYTHON_VERSION" != "$LATEST_37" ]]; then
+      puts-warn "The latest version of Python 3.7 is $LATEST_37 (you are using $PYTHON_VERSION, which is unsupported)."
+      puts-warn "We recommend upgrading by specifying the latest version ($LATEST_37)."
       echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
+      else
+        echo "       Using supported version of Python 3.7 ($PYTHON_VERSION)"
+      fi
+    else
+      if [[ $PYTHON_VERSION =~ ^python-3.6 ]]; then
+        if [[ "$PYTHON_VERSION" != "$LATEST_36" ]]; then
+          puts-warn "The latest version of Python 3.6 is $LATEST_36 (you are using $PYTHON_VERSION, which is unsupported)."
+          puts-warn "We recommend upgrading by specifying the latest version ($LATEST_36)."
+          echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
+        else
+          echo "       Using supported version of Python 3.6 ($PYTHON_VERSION)"
+        fi
+      else
+        puts-warn "Scalingo supports runtime versions $LATEST_37, $LATEST_36 and $LATEST_2."
+        puts-warn "You are using $PYTHON_VERSION, which is unsupported."
+        puts-warn "We recommend upgrading by specifying the default supported version ($LATEST_36)."
+        echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
+      fi
     fi
   fi
 fi
 
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
     puts-step "Stack has changed from $CACHED_PYTHON_STACK to $STACK, clearing cache"
-    rm -fr .scalingo/python-stack .scalingo/python-version .scalingo/python .scalingo/vendor
+    rm -fr .scalingo/python-stack .scalingo/python-version .scalingo/python .scalingo/vendor .scalingo/python .scalingo/python-sqlite3-version
+fi
+
+# need to clear the cache for first time installing SQLite3,
+# since the version is changing and could lead to runtime errors
+# with compiled extensions.
+if [ -d .scalingo/python ] && [ ! -f .scalingo/python-sqlite3-version ] && python_sqlite3_check "$PYTHON_VERSION"; then
+  puts-step "Need to update SQLite3, clearing cache"
+  rm -fr .scalingo/python-stack .scalingo/python-version .scalingo/python .scalingo/vendor
 fi
 
 if [ -f .scalingo/python-version ]; then
@@ -40,6 +65,7 @@ if [ -f .scalingo/python-version ]; then
     SKIP_INSTALL=1
   fi
 fi
+
 
 if [ ! "$SKIP_INSTALL" ]; then
     puts-step "Installing $PYTHON_VERSION"
@@ -60,6 +86,7 @@ if [ ! "$SKIP_INSTALL" ]; then
 
   hash -r
 fi
+
 
 # If Pip isn't up to date:
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
