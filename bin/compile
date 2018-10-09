@@ -269,7 +269,7 @@ source "$BIN_DIR/steps/pylibmc"
 # Support for Geo libraries. This is deprecated functionality, only functional on cedar-14.
 # It is undocumented.
 # shellcheck source=bin/steps/geo-libs
-sub_env "$BIN_DIR/steps/geo-libs"
+source "$BIN_DIR/steps/geo-libs"
 
 # GDAL support.
 # This is part of the Geo support.

@@ -61,3 +61,20 @@ Runtime options include:
 - `python-3.7.0`
 - `python-3.6.6`
 - `python-2.7.15`
+
+Buildpack specific environment variables
+----------------------------------------
+
+- `DISABLE_COLLECTSTATIC` (default `0`):
+  Should the buildpack detects a Django app, it will automatically collect the static files for your.
+  If set to `1` it will deactivate this behavior.
+  
+  
+- `BUILD_WITH_GEO_LIBRARIES` (default `0`):
+  If set to `1` the buildpack will install GDAL, GEOS and PROJ.
+  
+- `PIP_EXTRA_INDEX_URL` (default ``):
+  Can be used to provide additional pip package repositories.
+  
+- `SLUGIFY_USES_TEXT_UNIDECODE` (default `unset`):
+  Required to install Airflow version 1.10 and later.
