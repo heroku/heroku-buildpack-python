@@ -20,6 +20,8 @@ PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
 
+export_env "$ENV_DIR" "^BUILD_WITH_GEO_LIBRARIES$"
+
 # If GDAL exists within requirements, use vendored gdal.
 if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
 
