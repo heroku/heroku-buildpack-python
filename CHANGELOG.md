@@ -1,5 +1,11 @@
 # Python Buildpack Changelog
 
+#141 (2018-10-10)
+
+Pin pipenv to version 2018.7.1
+Use same pip version is used for pip and pipenv installs
+Allow pipenv version override
+
 # 140 (2018-10-09)
 
 Add support for detecting SLUGIFY_USES_TEXT_UNIDECODE, which is required to
