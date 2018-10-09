@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
+set -e pipefail
+
 # export CLINT_FORCE_COLOR=1
 # export PIPENV_FORCE_COLOR=1
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
-set -e
 
 if [[ -f Pipfile.lock ]]; then
     if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
@@ -35,23 +36,10 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         # Skip pip install, later.
         export SKIP_PIP_INSTALL=1
 
-        # Set Pip env vars
-        # This reads certain environment variables set on the Heroku app config
-        # and makes them accessible to the pip install process.
-        #
-        # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
-        if [[ -r $ENV_DIR/PIP_EXTRA_INDEX_URL ]]; then
-            PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
-            export PIP_EXTRA_INDEX_URL
-            mcount "buildvar.PIP_EXTRA_INDEX_URL"
-        fi
-
-        # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
-        if [[ -r $ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE ]]; then
-            SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
-            export SLUGIFY_USES_TEXT_UNIDECODE
-            mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
-        fi
+        # Expose environment variables to Pipenv:
+        # - PIP_EXTRA_INDEX_URL: allows for an alternate pypi URL to be used.
+        # - SLUGIFY_USES_TEXT_UNIDECODE:  required for Airflow versions >=1.10
+        export_env "$ENV_DIR" "^(PIP_EXTRA_INDEX_URL|SLUGIFY_USES_TEXT_UNIDECODE)$"
 
         export PIPENV_VERSION="2018.5.18"
 
