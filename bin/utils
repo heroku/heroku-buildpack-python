@@ -2,9 +2,19 @@
 shopt -s extglob
 shopt -s nullglob
 
+# Set the Common lib's internet target for downloading common dependencies.
+# The user can provide BUILDPACK_COMMON_URL to specify a custom target.
+# Note: this is designed for non-Heroku use, as it does not use the user-provided
+# environment variable mechanism (the ENV_DIR).
+COMMON_VENDOR_URL="https://lang-common.s3.amazonaws.com"
+if [[ -n ${BUILDPACK_COMMON_URL:-} ]]; then
+    COMMON_VENDOR_URL="$BUILDPACK_COMMON_URL"
+fi
+export COMMON_VENDOR_URL
+
 # The standard library.
 if [[ ! -f  /tmp/stdlib.sh ]]; then
-  curl --retry 3 -s https://lang-common.s3.amazonaws.com/buildpack-stdlib/v8/stdlib.sh > /tmp/stdlib.sh
+  curl --retry 3 -s "${COMMON_VENDOR_URL}/buildpack-stdlib/v8/stdlib.sh" > /tmp/stdlib.sh
 fi
 # shellcheck source=/dev/null
 source /tmp/stdlib.sh
