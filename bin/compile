@@ -183,33 +183,34 @@ else
   PYTHON_VERSION=$(cat runtime.txt)
 fi
 
-# Restore old artifacts from the cache.
+# Validate cached python/stack/sqlite3
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
   puts-step "Stack has changed from $CACHED_PYTHON_STACK to $STACK, clearing cache"
-elif [ -d "$CACHE_DIR/.heroku/python" ] && [ ! -f "$CACHE_DIR/.heroku/python-sqlite3-version" ] && python_sqlite3_check "$PYTHON_VERSION"; then
-  # need to clear the cache for first time installing SQLite3,
-  # since the version is changing and could lead to runtime errors
-  # with compiled extensions.
-  puts-step "Need to update SQLite3, clearing cache"
+elif [ -d "$CACHE_DIR/.heroku/python" ] && [ -f "$CACHE_DIR/.heroku/python-version" ]; then
+  CACHED_PYTHON_VERSION="$(cat "$CACHE_DIR/.heroku/python-version")"
+  if [ ! -f "$CACHE_DIR/.heroku/python-sqlite3-version" ] && python_sqlite3_check "$PYTHON_VERSION"; then
+    # need to clear the cache for first time installing SQLite3,
+    # since the version is changing and could lead to runtime errors
+    # with compiled extensions.
+    puts-step "Need to update SQLite3, clearing cache"
 
-else
-  # A plain text file which contains the current stack being used (used for cache busting).
-  cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
-  # A plain text file which contains the current python version being used (used for cache busting).
-  cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
-  # A plain text file which contains the current sqlite3 version being used (used for cache busting).
-  cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
-  # Any pre-compiled binaries, provided by the buildpack.
-  cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
+  elif [[ "$CACHED_PYTHON_VERSION" == "$PYTHON_VERSION" ]]; then
+    # Restore old artifacts from the cache.
 
-  # The Python installation.
-  if [ -f .heroku/python-version ]; then
-    if [ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]; then
-      puts-step "Found $(cat .heroku/python-version), removing"
-    else
-      cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
-      SKIP_INSTALL=1
-    fi
+    # A plain text file which contains the current stack being used (used for cache busting).
+    cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
+    # A plain text file which contains the current python version being used (used for cache busting).
+    cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
+    # A plain text file which contains the current sqlite3 version being used (used for cache busting).
+    cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
+    # Any pre-compiled binaries, provided by the buildpack.
+    cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
+    # The Python installation.
+    cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
+
+    SKIP_INSTALL=1
+  else
+    puts-step "Found $CACHED_PYTHON_VERSION, removing"
   fi
 fi
 export SKIP_INSTALL PYTHON_VERSION
