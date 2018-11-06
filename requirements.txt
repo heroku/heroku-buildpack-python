@@ -1,3 +1,4 @@
 docopt==0.6.2
-bob-builder==0.0.13
+# bob-builder==0.0.13
+-e git://github.com/heroku-python/bob-builder#egg=bob-builder
 boto==2.48.0
