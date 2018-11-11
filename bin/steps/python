@@ -32,6 +32,13 @@ if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
     fi
   fi
+  if [[ "$PYTHON_VERSION" == $PY34* ]]; then
+    # security update note
+    if [ "$PYTHON_VERSION" != "$LATEST_34" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_34"
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+    fi
+  fi
   if [[ "$PYTHON_VERSION" == $PY27* ]]; then
     # security update note
     if [ "$PYTHON_VERSION" != "$LATEST_27" ]; then
