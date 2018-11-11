@@ -10,32 +10,32 @@ VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
 SECURITY_UPDATE="Python has released a security update! Please consider upgrading to "
 
 # check if runtime exists
-if curl --output /dev/null --silent --head --fail $VENDORED_PYTHON; then
-  if [[ $PYTHON_VERSION == $PY37* ]]; then
+if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
+  if [[ "$PYTHON_VERSION" == $PY37* ]]; then
     # do things to alert the user of security release available
-    if [ $PYTHON_VERSION != $LATEST_37 ]; then
-      puts-warn $SECURITY_UPDATE $LATEST_37
+    if [ "$PYTHON_VERSION" != "$LATEST_37" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_37"
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
     fi
   fi
-  if [[ $PYTHON_VERSION == $PY36* ]]; then
+  if [[ "$PYTHON_VERSION" == $PY36* ]]; then
     # security update note
-    if [ $PYTHON_VERSION != $LATEST_36 ]; then
-      puts-warn $SECURITY_UPDATE $LATEST_36
+    if [ "$PYTHON_VERSION" != "$LATEST_36" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_36"
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
     fi
   fi
-  if [[ $PYTHON_VERSION == $PY35* ]]; then
+  if [[ "$PYTHON_VERSION" == $PY35* ]]; then
     # security update note
-    if [ $PYTHON_VERSION != $LATEST_35 ]; then
-      puts-warn $SECURITY_UPDATE $LATEST_35
+    if [ "$PYTHON_VERSION" != "$LATEST_35" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_35"
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
     fi
   fi
-  if [[ $PYTHON_VERSION == $PY27* ]]; then
+  if [[ "$PYTHON_VERSION" == $PY27* ]]; then
     # security update note
-    if [ $PYTHON_VERSION != $LATEST_27 ]; then
-      puts-warn $SECURITY_UPDATE $LATEST_27
+    if [ "$PYTHON_VERSION" != "$LATEST_27" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_27"
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
     fi
   fi
