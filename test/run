@@ -93,22 +93,44 @@ testPython2() {
     assertCapturedSuccess
 }
 
+# This will succeed on Cedar-14 and fail on 16 and 18
+testPython3_4() {
+  compile "python3_4"
+  assertCaptured "python-3.4.9"
+  assertCapturedError
+}
+
+# This will fail
 testPython3_5() {
   compile "python3_5"
   assertCaptured "python-3.5.6"
-  assertCapturedSuccess
+  assertCapturedError
 }
 
 testPython3_6() {
   compile "python3_6"
-  assertCaptured "python-3.6.7"
+  assertCaptured "python-3.6.6"
   assertCapturedSuccess
+}
+
+# This will fail
+testPython3_6_7() {
+  compile "python3_6_7"
+  assertCaptured "python-3.6.7"
+  assertCapturedError
 }
 
 testPython3_7() {
   compile "python3_7"
-  assertCaptured "python-3.7.1"
+  assertCaptured "python-3.7.0"
   assertCapturedSuccess
+}
+
+# This will fail
+testPython3_7_1() {
+  compile "python3_7_1"
+  assertCaptured "python-3.7.1"
+  assertCapturedError
 }
 
 testGitEgg() {
