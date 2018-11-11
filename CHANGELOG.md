@@ -2,7 +2,7 @@
 
 # 145 (2018-11-08)
 
-Python 3.7.1, 3.6.7 and 3.5.6 now available on all Heroku stacks.
+Python 3.7.1, 3.6.7, 3.5.6 and 3.4.9 now available on all Heroku stacks.
 
 # 144 (2018-10-10)
 
