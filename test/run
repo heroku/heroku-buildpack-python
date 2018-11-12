@@ -89,9 +89,13 @@ testPylibmc() {
 
 testPython2_warn() {
     compile "python2_warn"
-    assertCaptured "python-2.7.14"
-    assertCaptured "security update!"
-    assertCapturedSuccess
+    if [[ $STACK = "heroku-18" ]]; then
+      assertCapturedError
+    else
+      assertCaptured "python-2.7.14"
+      assertCaptured "security update!"
+      assertCapturedSuccess
+    fi
 }
 
 testPython2() {
@@ -123,7 +127,8 @@ testPython3_5_warn() {
   compile "python3_5_warn"
   if [[ $STACK = "cedar-14" ]]; then
     assertCaptured "python-3.5.3"
-    assertCapturedSuccess
+    assertCaptured "security update!"
+    assertCapturedError
   else
     assertCapturedError
   fi
