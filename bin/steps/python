@@ -7,41 +7,49 @@ PYTHON_VERSION=$(cat runtime.txt)
 # The location of the pre-compiled python binary.
 VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
 
-if [[ $PYTHON_VERSION =~ ^python-2 ]]; then
-  if [[ "$PYTHON_VERSION" != "$LATEST_2" ]]; then
-    puts-warn "The latest version of Python 2 is $LATEST_2 (you are using $PYTHON_VERSION, which is unsupported)."
-    puts-warn "We recommend upgrading by specifying the latest version ($LATEST_2)."
-    echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-  else
-    echo "       Using supported version of Python 2 ($PYTHON_VERSION)"
-  fi
-else
-  if [[ $PYTHON_VERSION =~ ^python-3 ]]; then
-    if [[ $PYTHON_VERSION =~ ^python-3.7 ]]; then
-      if [[ "$PYTHON_VERSION" != "$LATEST_37" ]]; then
-      puts-warn "The latest version of Python 3.7 is $LATEST_37 (you are using $PYTHON_VERSION, which is unsupported)."
-      puts-warn "We recommend upgrading by specifying the latest version ($LATEST_37)."
+SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
+
+# check if runtime exists
+if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
+  if [[ "$PYTHON_VERSION" == $PY37* ]]; then
+    # do things to alert the user of security release available
+    if [ "$PYTHON_VERSION" != "$LATEST_37" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_37"
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-      else
-        echo "       Using supported version of Python 3.7 ($PYTHON_VERSION)"
-      fi
-    else
-      if [[ $PYTHON_VERSION =~ ^python-3.6 ]]; then
-        if [[ "$PYTHON_VERSION" != "$LATEST_36" ]]; then
-          puts-warn "The latest version of Python 3.6 is $LATEST_36 (you are using $PYTHON_VERSION, which is unsupported)."
-          puts-warn "We recommend upgrading by specifying the latest version ($LATEST_36)."
-          echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-        else
-          echo "       Using supported version of Python 3.6 ($PYTHON_VERSION)"
-        fi
-      else
-        puts-warn "Heroku supports runtime versions $LATEST_37, $LATEST_36 and $LATEST_2." 
-        puts-warn "You are using $PYTHON_VERSION, which is unsupported."
-        puts-warn "We recommend upgrading by specifying the default supported version ($LATEST_36)."
-        echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-      fi
     fi
   fi
+  if [[ "$PYTHON_VERSION" == $PY36* ]]; then
+    # security update note
+    if [ "$PYTHON_VERSION" != "$LATEST_36" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_36"
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+    fi
+  fi
+  if [[ "$PYTHON_VERSION" == $PY35* ]]; then
+    # security update note
+    if [ "$PYTHON_VERSION" != "$LATEST_35" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_35"
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+    fi
+  fi
+  if [[ "$PYTHON_VERSION" == $PY34* ]]; then
+    # security update note
+    if [ "$PYTHON_VERSION" != "$LATEST_34" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_34"
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+    fi
+  fi
+  if [[ "$PYTHON_VERSION" == $PY27* ]]; then
+    # security update note
+    if [ "$PYTHON_VERSION" != "$LATEST_27" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_27"
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+    fi
+  fi
+else
+  puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
+  puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+  exit 1
 fi
 
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then

@@ -89,10 +89,9 @@ python3_check() {
 # Check if Python version needs to install SQLite3
 python_sqlite3_check() {
   VERSION="$1"
-  MIN_PYTHON_3="python-3.6.6"
+  MIN_PYTHON_3="python-3.5.6"
   MIN_PYTHON_2="python-2.7.15"
 
   ( python2_check "$VERSION" && version_gte "$VERSION" "$MIN_PYTHON_2" ) \
-    || ( python3_check "$VERSION" && version_gte "$VERSION" "$MIN_PYTHON_3" ) \
-    || ( version_gte "$VERSION" "3.7.0" )
+    || ( python3_check "$VERSION" && version_gte "$VERSION" "$MIN_PYTHON_3" )
 }
