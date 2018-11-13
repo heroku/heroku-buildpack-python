@@ -87,6 +87,18 @@ testPylibmc() {
   assertCapturedSuccess
 }
 
+testPythonDefault() {
+  compile "pythonDefault"
+  assertCaptured "python-3.6.6"
+  assertCapturedSuccess
+}
+
+testPython2() {
+    compile "python2"
+    assertCaptured "python-2.7.15"
+    assertCapturedSuccess
+}
+
 testPython2_warn() {
     compile "python2_warn"
     if [[ $STACK = "heroku-18" ]]; then
@@ -98,31 +110,41 @@ testPython2_warn() {
     fi
 }
 
-testPython2() {
-    compile "python2"
-    assertCaptured "python-2.7.15"
-    assertCapturedSuccess
+testPython2_fail() {
+    compile "python2_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
 }
 
-# This fail
+testPython3_4() {
+  compile "python3_4"
+  assertCaptured "python-3.4.9"
+  assertCapturedSuccess
+}
+
 testPython3_4_warn() {
   compile "python3_4_warn"
   if [[ $STACK = "cedar-14" ]]; then
     assertCaptured "python-3.4.0"
+    assertCaptured "security update!"
     assertCapturedSuccess
   else
     assertCapturedError
   fi
 }
 
-# This fail
-testPython3_4() {
-  compile "python3_4"
-  assertCaptured "python-3.4.9"
-  assertCapturedError
+testPython3_4_fail() {
+    compile "python3_4_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
 }
 
-# This fail
+testPython3_5() {
+  compile "python3_5"
+  assertCaptured "python-3.5.6"
+  assertCapturedSuccess
+}
+
 testPython3_5_warn() {
   compile "python3_5_warn"
   if [[ $STACK = "cedar-14" ]]; then
@@ -134,14 +156,18 @@ testPython3_5_warn() {
   fi
 }
 
-# This will fail
-testPython3_5() {
-  compile "python3_5"
-  assertCaptured "python-3.5.6"
-  assertCapturedError
+testPython3_5_fail() {
+    compile "python3_5_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
 }
 
-# This will warn
+testPython3_6() {
+  compile "python3_6"
+  assertCaptured "python-3.6.7"
+  assertCapturedSuccess
+}
+
 testPython3_6_warn() {
   compile "python3_6_warn"
   assertCaptured "python-3.6.5"
@@ -149,17 +175,10 @@ testPython3_6_warn() {
   assertCapturedSuccess
 }
 
-testPython3_6() {
-  compile "python3_6"
-  assertCaptured "python-3.6.6"
-  assertCapturedSuccess
-}
-
-# This will fail
-testPython3_6_7() {
-  compile "python3_6_7"
-  assertCaptured "python-3.6.7"
-  assertCapturedError
+testPython3_6_fail() {
+    compile "python3_6_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
 }
 
 testPython3_7() {
@@ -167,15 +186,25 @@ testPython3_7() {
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
   else
-    assertCaptured "python-3.7.0"
+    assertCaptured "python-3.7.1"
     assertCapturedSuccess
   fi
 }
 
-# This will fail
-testPython3_7_1() {
-  compile "python3_7_1"
-  assertCaptured "python-3.7.1"
+testPython3_7_warn() {
+  compile "python3_7"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCapturedError
+  else
+    assertCaptured "python-3.7.0"
+    assertCaptured "security update!"
+    assertCapturedSuccess
+  fi
+}
+
+testPython3_7_fail() {
+  compile "python3_7_warn"
+  assertCaptured "Aborting"
   assertCapturedError
 }
 
