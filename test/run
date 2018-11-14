@@ -89,7 +89,7 @@ testPylibmc() {
 
 testPythonDefault() {
   compile "pythonDefault"
-  assertCaptured "python-3.6.6"
+  assertCaptured "python-3.6.7"
   assertCapturedSuccess
 }
 
