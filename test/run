@@ -192,7 +192,7 @@ testPython3_7() {
 }
 
 testPython3_7_warn() {
-  compile "python3_7"
+  compile "python3_7_warn"
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
   else
@@ -203,7 +203,7 @@ testPython3_7_warn() {
 }
 
 testPython3_7_fail() {
-  compile "python3_7_warn"
+  compile "python3_7_fail"
   assertCaptured "Aborting"
   assertCapturedError
 }
