@@ -23,6 +23,11 @@ testPipenvVersion() {
   assertCapturedSuccess
 }
 
+testPipenvVersion2() {
+  compile "pipenv-version2"
+  assertCaptured "2.7.15"
+  assertCapturedSuccess
+}
 testPipenvFullVersion() {
   compile "pipenv-full-version"
   assertCaptured "3.6.3"
