@@ -61,3 +61,25 @@ Runtime options include:
 - `python-3.7.0`
 - `python-3.6.6`
 - `python-2.7.15`
+
+## Tests
+
+The buildpack tests use [Docker](https://www.docker.com/) to simulate
+Heroku's [stack images.](https://devcenter.heroku.com/articles/stack)
+
+To run the test suite:
+
+```
+make test
+```
+
+Or to test in a particular stack:
+
+```
+make test-heroku-18
+make test-heroku-16
+```
+
+The tests are run via the vendored
+[shunit2](https://github.com/kward/shunit2)
+test framework.
