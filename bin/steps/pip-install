@@ -9,6 +9,13 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     puts-step "Installing requirements with pip"
 
     # Set Pip env vars
+    # Set git oauth key for private repo access
+    if [[ -r "$ENV_DIR/GIT_OAUTH_KEY" ]]; then
+        GIT_OAUTH_KEY="$(cat "$ENV_DIR/GIT_OAUTH_KEY")"
+        export GIT_OAUTH_KEY
+        mcount "buildvar.GIT_OAUTH_KEY"
+    fi
+
     # This reads certain environment variables set on the Heroku app config
     # and makes them accessible to the pip install process.
     #
