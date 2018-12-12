@@ -10,9 +10,6 @@ jobs:
   include:
   - stage: Bash linting (shellcheck)
     sudo: false
-    before_install:
-    - wget -c https://goo.gl/ZzKHFv -O - | tar -xvJ -C /tmp/
-    - PATH="/tmp/shellcheck-latest:$PATH"
     script: make check
   - stage: Stack Unit Tests
     services: docker
