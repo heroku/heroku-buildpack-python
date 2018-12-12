@@ -20,7 +20,6 @@ if [[ -f Pipfile.lock ]]; then
                 export SKIP_PIPENV_INSTALL=1
                 export SKIP_PIP_INSTALL=1
             fi
-
         fi
     fi
 fi
@@ -35,16 +34,31 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         # Skip pip install, later.
         export SKIP_PIP_INSTALL=1
 
-        # Set PIP_EXTRA_INDEX_URL
-        if [[ -r $ENV_DIR/PIP_EXTRA_INDEX_URL ]]; then
+        # Set Pip env vars
+        # This reads certain environment variables set on the Heroku app config
+        # and makes them accessible to the pip install process.
+        #
+        # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+        if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
             PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
             export PIP_EXTRA_INDEX_URL
+            mcount "buildvar.PIP_EXTRA_INDEX_URL"
+        fi
+
+        # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
+        if [[ -r "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE" ]]; then
+            SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
+            export SLUGIFY_USES_TEXT_UNIDECODE
+            mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
         fi
 
         export PIPENV_VERSION="2018.5.18"
 
         # Install pipenv.
-        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade &> /dev/null
+        # Due to weird old pip behavior and pipenv behavior, pipenv upgrades pip
+        # to latest if only --upgrade is specified. Specify upgrade strategy to
+        # avoid this eager behavior.
+        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
 
         # Install the dependencies.
         if [[ ! -f Pipfile.lock ]]; then

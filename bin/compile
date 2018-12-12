@@ -49,16 +49,28 @@ export VENDOR_URL
 # These variables are used to specify which versions of Python to install by default,
 # as well as prompt the user to upgrade if they are using an un–supported version.
 # Note: When 3.7 lands, I recommend switching to LATEST_36 and LATEST_37.
-DEFAULT_PYTHON_VERSION="python-3.6.5"
-LATEST_3="python-3.6.5"
-LATEST_2="python-2.7.15"
+DEFAULT_PYTHON_VERSION="python-3.6.7"
+LATEST_36="python-3.6.7"
+LATEST_37="python-3.7.1"
+LATEST_35="python-3.5.6"
+LATEST_34="python-3.4.9"
+LATEST_27="python-2.7.15"
+
+# Supported Python Branches
+PY37="python-3.7"
+PY36="python-3.6"
+PY35="python-3.5"
+PY34="python-3.4"
+PY27="python-2.7"
 
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
 DEFAULT_PYTHON_STACK="cedar-14"
 # If pip doesn't match this version (the version we install), run the installer.
 PIP_UPDATE="9.0.2"
 
-export DEFAULT_PYTHON_VERSION DEFAULT_PYTHON_STACK PIP_UPDATE LATEST_2 LATEST_3
+export DEFAULT_PYTHON_VERSION DEFAULT_PYTHON_STACK PIP_UPDATE
+export LATEST_27 LATEST_36 LATEST_37 LATEST_35 LATEST_34
+export PY37 PY36 PY35 PY27 PY34
 
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.
@@ -159,6 +171,8 @@ cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
 cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
 # A plain text file which contains the current python version being used (used for cache busting).
 cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
+# A plain text file which contains the current sqlite3 version being used (used for cache busting).
+cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
 # Any pre-compiled binaries, provided by the buildpack.
 cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
 # "editable" installations of code repositories, via pip or pipenv.
@@ -272,6 +286,16 @@ sub_env "$BIN_DIR/steps/geo-libs"
 # This is part of the Geo support.
 # shellcheck source=bin/steps/gdal
 source "$BIN_DIR/steps/gdal"
+
+# SQLite3 support.
+# This sets up and installs sqlite3 dev headers and the sqlite3 binary but not the
+# libsqlite3-0 library since that exists on the stack image.
+# Note: This only applies to Python 2.7.15+ and Python 3.6.6+
+(( start=$(nowms) ))
+# shellcheck source=bin/steps/sqlite3
+source "$BIN_DIR/steps/sqlite3"
+buildpack_sqlite3_install
+mtime "sqlite3.install.time" "${start}"
 
 # pip install
 # -----------

@@ -1,6 +1,48 @@
 # Python Buildpack Changelog
 
-# 134
+# 146 (2018-15-08)
+
+Python 3.7.1, 3.6.7, 3.5.6 and 3.4.9 now available on all Heroku stacks.
+
+# 145 (2018-11-08)
+
+Testing and tooling expanded to better support new runtimes
+
+# 144 (2018-10-10)
+
+Switch to cautious upgrade for Pipenv install to ensure the pinned pip version
+is used with Pipenv
+
+# 143 (2018-10-09)
+
+Add support for detecting SLUGIFY_USES_TEXT_UNIDECODE, which is required to
+install Apache Airflow version 1.10 or higher.
+
+# 142 (2018-10-08)
+
+Improvements to Python install messaging
+
+# 139, 140, 141
+
+No user-facing changes, documenting for version clarity
+
+# 138 (2018-08-01)
+
+Use stack image SQLite3 instead of vendoring
+
+# 137 (2018-07-17)
+
+Prevent 3.7.0 from appearing as unsupported in buildpack messaging.
+
+# 136 (2018-06-28)
+
+Upgrade to 3.6.6 and support 3.7.0 on all runtimes.
+
+# 135 (2018-05-29)
+
+Upgrade Pipenv to v2018.5.18.
+
+# 134 (2018-05-02)
 
 Default to 3.6.5, bugfixes.
 

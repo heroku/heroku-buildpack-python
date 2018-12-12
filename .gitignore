@@ -3,3 +3,7 @@ site
 .DS_Store
 
 /.envrc
+repos/*
+
+#Venv
+buildpack/*
