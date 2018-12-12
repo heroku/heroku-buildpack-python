@@ -94,7 +94,7 @@ testPylibmc() {
 
 testPythonDefault() {
   compile "pythonDefault"
-  assertCaptured "python-3.6.7"
+  assertCaptured "python-3.6.8"
   assertCapturedSuccess
 }
 
@@ -169,13 +169,13 @@ testPython3_5_fail() {
 
 testPython3_6() {
   compile "python3_6"
-  assertCaptured "python-3.6.7"
+  assertCaptured "python-3.6.8"
   assertCapturedSuccess
 }
 
 testPython3_6_warn() {
   compile "python3_6_warn"
-  assertCaptured "python-3.6.5"
+  assertCaptured "python-3.6.7"
   assertCaptured "security update!"
   assertCapturedSuccess
 }
@@ -191,7 +191,7 @@ testPython3_7() {
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
   else
-    assertCaptured "python-3.7.1"
+    assertCaptured "python-3.7.2"
     assertCapturedSuccess
   fi
 }
@@ -201,7 +201,7 @@ testPython3_7_warn() {
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
   else
-    assertCaptured "python-3.7.0"
+    assertCaptured "python-3.7.1"
     assertCaptured "security update!"
     assertCapturedSuccess
   fi
