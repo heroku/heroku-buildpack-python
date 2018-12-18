@@ -99,9 +99,11 @@ fi
 
 
 # If Pip isn't up to date:
-if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
+CURRENT_PIP_VERSION="$(pip --version)"
 
-  puts-step "Installing pip"
+if [ "$FRESH_PYTHON" ] || [[ ! "$CURRENT_PIP_VERSION" == *$PIP_UPDATE* ]]; then
+
+  puts-step "Installing pip $PIP_UPDATE"
 
   # Remove old installations.
   rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
@@ -110,6 +112,8 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
   /app/.heroku/python/bin/python "$ROOT_DIR/vendor/get-pip.py" pip=="$PIP_UPDATE" &> /dev/null
   /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
 
+else
+  puts-step "pip version $CURRENT_PIP_VERSION is already installed"
 fi
 
 set -e
