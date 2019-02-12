@@ -3,7 +3,7 @@
 testAirflow() {
   export SLUGIFY_USES_TEXT_UNIDECODE="yes"
   compile "airflow"
-  assertCaptured "apache-airflow==1.10"
+  assertCaptured "apache-airflow==1.10.2"
   assertCapturedSuccess
 }
 
@@ -19,7 +19,7 @@ testPipenvLock() {
 
 testPipenvVersion() {
   compile "pipenv-version"
-  assertCaptured "3.6.7"
+  assertCaptured "3.6.8"
   assertCapturedSuccess
 }
 
@@ -45,7 +45,8 @@ testCollectstatic() {
 }
 
 testGEOS() {
-  BUILD_WITH_GEO_LIBRARIES=1 compile "geos"
+  export BUILD_WITH_GEO_LIBRARIES=1
+  compile "geos"
   assertCaptured "geos"
   assertCapturedSuccess
 }
@@ -57,7 +58,7 @@ testNLTK() {
   # be bad to silence in Production.
   export PYTHONWARNINGS="ignore::RuntimeWarning"
   compile "nltk"
-  assertCaptured "Downloading NLTK packages: city_database stopwords"
+  assertCaptured "[nltk_data] Downloading package city_database" "STD_ERR"
   assertCapturedSuccess
 }
 
@@ -94,7 +95,7 @@ testPylibmc() {
 
 testPythonDefault() {
   compile "pythonDefault"
-  assertCaptured "python-3.6.7"
+  assertCaptured "python-3.6.8"
   assertCapturedSuccess
 }
 
@@ -169,13 +170,13 @@ testPython3_5_fail() {
 
 testPython3_6() {
   compile "python3_6"
-  assertCaptured "python-3.6.7"
+  assertCaptured "python-3.6.8"
   assertCapturedSuccess
 }
 
 testPython3_6_warn() {
   compile "python3_6_warn"
-  assertCaptured "python-3.6.5"
+  assertCaptured "python-3.6.7"
   assertCaptured "security update!"
   assertCapturedSuccess
 }
@@ -191,7 +192,7 @@ testPython3_7() {
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
   else
-    assertCaptured "python-3.7.1"
+    assertCaptured "python-3.7.2"
     assertCapturedSuccess
   fi
 }
@@ -201,7 +202,7 @@ testPython3_7_warn() {
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
   else
-    assertCaptured "python-3.7.0"
+    assertCaptured "python-3.7.1"
     assertCaptured "security update!"
     assertCapturedSuccess
   fi
