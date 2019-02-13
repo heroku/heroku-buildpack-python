@@ -32,6 +32,8 @@ Out of the box, each `Dockerfile` has the correct values predefined for `S3_BUCK
 
 If you want to deploy packages and thus need to pass `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, you can either pass them explicitly, through your environment, or through an env file.
 
+If you want to deploy packages and thus need to pass `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, you can either pass them explicitly, through your environment, or through an env file.
+
 #### Passing credentials explicitly
 
     docker run --rm -ti -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... heroku-python-build-heroku-18 bash
