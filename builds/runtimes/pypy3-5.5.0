@@ -2,13 +2,7 @@
 # Build Path: /app/.heroku/python/
 # Build Deps: libraries/sqlite
 
-# NOTICE: This formula only works for the cedar-14 stack, not cedar.
-
-OUT_PREFIX=$1
-
-echo "Building PyPy…"
-SOURCE_TARBALL='https://bitbucket.org/pypy/pypy/downloads/pypy3.3-v5.5.0-alpha-linux64.tar.bz2'
-curl -L $SOURCE_TARBALL | tar jx
-cp -R pypy3-v5.5.0-linux64/* $OUT_PREFIX
-
-ln $OUT_PREFIX/bin/pypy3 $OUT_PREFIX/bin/python
+# version pypy3-5.5.0 is really called pypy3.3-v5.5.0-alpha
+dep_version_prefix=".3"
+dep_version_suffix="-alpha"
+source $(dirname $0)/pypy3
