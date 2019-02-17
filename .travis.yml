@@ -3,7 +3,8 @@ dist: trusty
 sudo: required
 rvm:
 - 2.4.4
-before_script:
+before_script:  
+  sudo: required
   - gem update --system
   - gem install bundler 
   - bundle exec hatchet ci:setup
