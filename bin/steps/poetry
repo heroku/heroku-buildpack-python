@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+source "$BIN_DIR/utils"
+set -e
+
+if [[ -f poetry.lock ]]; then
+    if [[ -f .heroku/python/poetry.lock.sha256 ]]; then
+        if [[ $(openssl dgst -sha256 poetry.lock) == $(cat .heroku/python/poetry.lock.sha256) ]]; then
+            # Measure that we're using poetry.
+            mcount "tool.poetry"
+
+            # Don't skip installation of there are git deps.
+            if ! grep -q 'git' poetry.lock; then
+                echo "Skipping installation, as poetry.lock hasn't changed since last deploy." | indent
+
+                mcount "tool.poetry"
+                export SKIP_POETRY_INSTALL=1
+                export SKIP_PIP_INSTALL=1
+            fi
+        fi
+    fi
+fi
+
+
+if [ ! "$SKIP_POETRY_INSTALL" ]; then
+    # Poetry support (Generate requriements.txt with poetry).
+    if [[ -f pyproject.toml ]]; then
+        # Measure that we're using Poetry.
+        mcount "tool.poetry"
+
+        # Skip pip install, later.
+        export SKIP_PIP_INSTALL=1
+
+        # Set Pip env vars
+        # This reads certain environment variables set on the Heroku app config
+        # and makes them accessible to the pip install process.
+        #
+        # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+        if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
+            PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
+            export PIP_EXTRA_INDEX_URL
+            mcount "buildvar.PIP_EXTRA_INDEX_URL"
+        fi
+
+        # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
+        if [[ -r "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE" ]]; then
+            SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
+            export SLUGIFY_USES_TEXT_UNIDECODE
+            mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
+        fi
+
+        # Install poetry.
+        puts-step "Installing Poetry..."
+        /app/.heroku/python/bin/pip install poetry --user &> /dev/null
+
+        # Install the dependencies.
+        puts-step "Installing dependencies with Poetry..."
+        /app/.heroku/python/bin/poetry install &> /dev/null
+
+        fi
+    fi
+else
+    export SKIP_PIP_INSTALL=1
+fi
