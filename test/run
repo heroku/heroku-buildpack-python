@@ -17,6 +17,18 @@ testPoetryLock(){
   assertCapturedSuccess
 }
 
+testPoetryVersion(){
+  compile "poetry-version"
+  assertCaptured "3.6.8"
+  assertCapturedSuccess
+}
+
+testPoetryLockVersion(){
+  compile "poetry-lock-version"
+  assertCaptured "3.6.8"
+  assertCapturedSuccess
+}
+
 testPipenv() {
   compile "pipenv"
   assertCapturedSuccess

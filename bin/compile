@@ -206,8 +206,7 @@ export CACHED_PYTHON_STACK
 
 # Poetry Python version support.
 # Detect the version of Python requested from a poetry.lock or pyproject.toml file by this order and convert it to a runtime.txt file.
-source "$BIN_DIR/steps/pipenv-python-version"
-
+source "$BIN_DIR/steps/poetry-python-version"
 
 # Pipenv Python version support.
 # Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).

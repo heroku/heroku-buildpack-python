@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "poetry-lock-version"
+version = "0.1.0"
+description = ""
+authors = ["AndreGuerra123 <guerraandre@hotmail.com>"]
+
+[tool.poetry.dependencies]
+python = "3.6.8"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
