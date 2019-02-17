@@ -4,8 +4,6 @@ sudo: required
 rvm:
 - 2.4.4
 before_script:  
-  - gem update --system
-  - gem install bundler 
   - bundle exec hatchet ci:setup
 jobs:
   include:
