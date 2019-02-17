@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 148 (2019-02-18)
+
+Support for Poetry.
+
 # 147 (2019-02-07)
 
 Python 3.7.2 and 3.6.8 now available on all Heroku stacks.

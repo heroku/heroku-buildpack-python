@@ -7,6 +7,16 @@ testAirflow() {
   assertCapturedSuccess
 }
 
+testPoetry(){
+  compile "poetry"
+  assertCapturedSuccess
+}
+
+testPoetryLock(){
+  compile "poetry-lock"
+  assertCapturedSuccess
+}
+
 testPipenv() {
   compile "pipenv"
   assertCapturedSuccess

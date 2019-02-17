@@ -12,7 +12,7 @@ Make sure you have Python [installed properly](http://install.python-guide.org).
 $ git clone git@github.com:heroku/python-getting-started.git
 $ cd python-getting-started
 
-$ pipenv install
+$ pipenv install # or poetry install
 
 $ createdb python_getting_started
 
