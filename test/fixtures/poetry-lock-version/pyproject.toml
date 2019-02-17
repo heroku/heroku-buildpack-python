@@ -2,7 +2,7 @@
 name = "poetry-lock-version"
 version = "0.1.0"
 description = ""
-authors = ["AndreGuerra123 <guerraandre@hotmail.com>"]
+authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = "3.6.8"
