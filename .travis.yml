@@ -3,7 +3,8 @@ dist: trusty
 sudo: required
 rvm:
 - 2.4.4
-before_script:  
+before_script:
+  - gem update bundle
   - bundle exec hatchet ci:setup
 jobs:
   include:
