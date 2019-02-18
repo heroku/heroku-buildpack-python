@@ -4,8 +4,8 @@ sudo: required
 rvm:
 - 2.4.4
 before_script:
-  - gem install bundler -v 1.16.2
-  - bundle exec hatchet ci:setup
+- gem install bundler -v 1.16.2
+- bundle exec hatchet ci:setup
 jobs:
   include:
   - stage: Bash linting (shellcheck)
@@ -24,12 +24,12 @@ jobs:
     env: STACK=cedar-14
     script: "./tests.sh"
   - stage: Hatchet Integration
-    script: "bundle exec rspec"
+    script: bundle exec rspec
 env:
   global:
   - HATCHET_RETRIES=3
   - IS_RUNNING_ON_CI=true
   - HATCHET_APP_LIMIT=5
   - HATCHET_DEPLOY_STRATEGY=git
-  - secure: yjtlPE5FbVxTKnjUy/tZUBgSEf4qADD3QOxtgziuid73S0U/1IEXlMGFULsQzIjtlHKmHeywZqpVVEpthIH4RuT7uoX1Pb7SSM/g0T8fT3VoEFbFK1uYl0oZQbUS4Klxv9tPiumj8if3m6ULEGIz1X0wZcMOC0tMLwVCnwmap0E=
-  - secure: ZeFTHWwnpIKE9nAqs88ocmiQh7bKce84lilGm5J23nf3N6V4wNyLwqlkvsM008WGBCaOg9AUx7ZunasT0ANsR5gLP3eV2UUg7ILdRgV2Gy13eNRFheC4PHdN92RqQ3aKoqlIv2K999xlhVjod0NzhkQQXB6PddfQINbuU7ks6As=
+dd:
+  secure: IdUlymtzPbICj5SpWwhiIO3v950/iNqfjdDE/64AtWm+OdvNGPX3RSLin0KY9RWJXBxbWS6lNw0vLdFZfFe2qTNK2wDWDmoi+Xe98uhoqPOldyl4Q/ju1Um/DKoJWdQD53KqobgStHtM6bxvX6sXuul1ZUQ2dyENRedY+292em/Q7zex+ZwJJbUgHCfWT1WECZKouhLcEzbEU4ZSFv0Y7Uj+pnpDju4XLyVO7gxqJAh7HcnvI1S8X+tIMS0Wm/bh3avXXplPYefk+957Us9Xml9PJjFrEnV3sb6t0UKLXKBj4JxevBLIWtNQh962lHmJyi7MA7DnqC1eLjiSDhaQsaN+8Aw4KFyLIBTztkcPjSCxKCBpEvpN9KxWXv4OIUTmglIQLicSCNrM/cR9I++NRYOgh6Cdl0Ia8yc8O6CNKgV3sLSgbMnQAJhiXavLsg4LrdfIwqsXCU4N2kccGpw+LE94t7tqdjx92lwVB5pelSnlSrVg2VjjCwto0RuMwM4csoGDjabBKn5x8/lTCcD0+IpwgFMFLVDu0Crqcf58mS5JdLoia9znbT2i92VaS7/0uEIkYtDVKXEYCK6RfyS3aOUvHokwoRTz21S+j/E5OlVVflbAPNkuWyySj+Ze1MjGsATlwCuhlpQYea09K6tljJIKfTxjm6sNATb5mmttMrQ=
