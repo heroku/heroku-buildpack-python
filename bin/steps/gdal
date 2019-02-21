@@ -12,6 +12,8 @@
 # The location of the pre-compiled cryptography binary.
 VENDORED_GDAL="${VENDOR_URL}/libraries/vendor/gdal.tar.gz"
 
+
+
 PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Syntax sugar.
@@ -26,9 +28,9 @@ if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
     mkdir -p .heroku/vendor
     # Download and extract cryptography into target vendor directory.
     curl "$VENDORED_GDAL" -s | tar zxv -C .heroku/vendor &> /dev/null
+    mcount "steps.vendor.gdal"
   fi
 
   GDAL=$(pwd)/vendor
   export GDAL
 fi
-
