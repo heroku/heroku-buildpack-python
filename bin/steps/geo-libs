@@ -22,6 +22,7 @@ source "$BIN_DIR/utils"
 
 # If GDAL exists within requirements, use vendored gdal.
 if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
+  mcount "buildvar.BUILD_WITH_GEO_LIBRARIES"
 
   if [ ! -f ".heroku/vendor/bin/proj" ]; then
     echo "-----> Bootstrapping gdal, geos, proj."
@@ -31,9 +32,11 @@ if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
     curl "$VENDORED_GEOS" -s | tar zxv -C .heroku/vendor &> /dev/null
     curl "$VENDORED_PROJ" -s | tar zxv -C .heroku/vendor &> /dev/null
 
+    mcount "steps.vendor.geo_libs"
     # Copy libjasper from build image to slug.
     if [[ "$STACK" == "heroku-16" ]]; then
       cp /usr/lib/x86_64-linux-gnu/libjasper.so* ".heroku/vendor/lib/."
+      mcount "steps.vendor.libjasper"
     fi
 
   fi
