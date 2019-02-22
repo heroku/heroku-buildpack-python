@@ -1,7 +1,7 @@
 # These targets are not files
 .PHONY: tests
 
-test: test-heroku-16
+test: test-heroku-18 test-heroku-16
 
 check:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings

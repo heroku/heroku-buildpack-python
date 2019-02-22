@@ -4,6 +4,6 @@
 if [[ -f "requirements.txt" ]]; then
 	if (grep -Fiq "hg+" requirements.txt) then
 		/app/.heroku/python/bin/pip install  mercurial | cleanup | indent
+		mcount "steps.mercurial"
 	fi
 fi
-

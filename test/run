@@ -3,7 +3,7 @@
 testAirflow() {
   export SLUGIFY_USES_TEXT_UNIDECODE="yes"
   compile "airflow"
-  assertCaptured "apache-airflow==1.10"
+  assertCaptured "apache-airflow==1.10.2"
   assertCapturedSuccess
 }
 
@@ -19,10 +19,15 @@ testPipenvLock() {
 
 testPipenvVersion() {
   compile "pipenv-version"
-  assertCaptured "3.6.6"
+  assertCaptured "3.6.8"
   assertCapturedSuccess
 }
 
+testPipenvVersion2() {
+  compile "pipenv-version2"
+  assertCaptured "2.7.15"
+  assertCapturedSuccess
+}
 testPipenvFullVersion() {
   compile "pipenv-full-version"
   assertCaptured "3.6.3"
@@ -40,7 +45,8 @@ testCollectstatic() {
 }
 
 testGEOS() {
-  BUILD_WITH_GEO_LIBRARIES=1 compile "geos"
+  export BUILD_WITH_GEO_LIBRARIES=1
+  compile "geos"
   assertCaptured "geos"
   assertCapturedSuccess
 }
@@ -52,7 +58,7 @@ testNLTK() {
   # be bad to silence in Production.
   export PYTHONWARNINGS="ignore::RuntimeWarning"
   compile "nltk"
-  assertCaptured "Downloading NLTK packages: city_database stopwords"
+  assertCaptured "[nltk_data] Downloading package city_database" "STD_ERR"
   assertCapturedSuccess
 }
 
@@ -87,16 +93,125 @@ testPylibmc() {
   assertCapturedSuccess
 }
 
+testPythonDefault() {
+  compile "pythonDefault"
+  assertCaptured "python-3.6.8"
+  assertCapturedSuccess
+}
+
 testPython2() {
     compile "python2"
     assertCaptured "python-2.7.15"
     assertCapturedSuccess
 }
 
-testPython3() {
-  compile "python3"
-  assertCaptured "python-3.6.6"
+testPython2_warn() {
+    compile "python2_warn"
+    if [[ $STACK = "heroku-18" ]]; then
+      assertCapturedError
+    else
+      assertCaptured "python-2.7.14"
+      assertCaptured "security update!"
+      assertCapturedSuccess
+    fi
+}
+
+testPython2_fail() {
+    compile "python2_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
+}
+
+testPython3_4() {
+  compile "python3_4"
+  assertCaptured "python-3.4.9"
   assertCapturedSuccess
+}
+
+testPython3_4_warn() {
+  compile "python3_4_warn"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCaptured "python-3.4.0"
+    assertCaptured "security update!"
+    assertCapturedSuccess
+  else
+    assertCapturedError
+  fi
+}
+
+testPython3_4_fail() {
+    compile "python3_4_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
+}
+
+testPython3_5() {
+  compile "python3_5"
+  assertCaptured "python-3.5.6"
+  assertCapturedSuccess
+}
+
+testPython3_5_warn() {
+  compile "python3_5_warn"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCaptured "python-3.5.3"
+    assertCaptured "security update!"
+    assertCapturedError
+  else
+    assertCapturedError
+  fi
+}
+
+testPython3_5_fail() {
+    compile "python3_5_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
+}
+
+testPython3_6() {
+  compile "python3_6"
+  assertCaptured "python-3.6.8"
+  assertCapturedSuccess
+}
+
+testPython3_6_warn() {
+  compile "python3_6_warn"
+  assertCaptured "python-3.6.7"
+  assertCaptured "security update!"
+  assertCapturedSuccess
+}
+
+testPython3_6_fail() {
+    compile "python3_6_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
+}
+
+testPython3_7() {
+  compile "python3_7"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCapturedError
+  else
+    assertCaptured "python-3.7.2"
+    assertCapturedSuccess
+  fi
+}
+
+testPython3_7_warn() {
+  compile "python3_7_warn"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCapturedError
+  else
+    assertCaptured "python-3.7.1"
+    assertCaptured "security update!"
+    assertCapturedSuccess
+  fi
+}
+
+testPython3_7_fail() {
+  compile "python3_7_fail"
+  assertCaptured "Aborting"
+  assertCapturedError
 }
 
 testGitEgg() {
