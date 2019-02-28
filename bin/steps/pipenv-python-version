@@ -5,7 +5,7 @@
 # If has Pipfile.lock file tries to get version from python version from this lock file. Returns default if not found.
 # If does not have Pipfile.lock uses Pipfile to get python version from this config file. Returns default if not found.
 # Note it must have one of the two as defined in detect if is a Pipenv managed project.
-
+if [ -f "$BUILD_DIR/Pipfile" ] || [ -f "$BUILD_DIR/Pipfile.lock"]; then
 if [[! -f $BUILD_DIR/runtime.txt]]; then # Check if managed by Pipenv and runtime.txt file not set by user.
     if [[ -f $BUILD_DIR/Pipfile.lock ]]; then #Priority for Pipenv python verions extraction using Pipfile.lock lock file.
         set +e
@@ -52,7 +52,8 @@ if [[! -f $BUILD_DIR/runtime.txt]]; then # Check if managed by Pipenv and runtim
                 echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
             fi
         fi
+        set -e
     fi
 fi
-
+fi
 
