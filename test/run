@@ -17,7 +17,7 @@ testPipenvLock() {
   assertCapturedSuccess
 }
 
-testPipenvLock() {
+testPipenvLockOnly() {
   compile "pipenv-lock-only"
   assertCapturedSuccess
 }

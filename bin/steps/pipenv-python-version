@@ -5,55 +5,77 @@
 # If has Pipfile.lock file tries to get version from python version from this lock file. Returns default if not found.
 # If does not have Pipfile.lock uses Pipfile to get python version from this config file. Returns default if not found.
 # Note it must have one of the two as defined in detect if is a Pipenv managed project.
-if [ -f "$BUILD_DIR/Pipfile" ] || [ -f "$BUILD_DIR/Pipfile.lock"]; then
-if [[! -f $BUILD_DIR/runtime.txt]]; then # Check if managed by Pipenv and runtime.txt file not set by user.
-    if [[ -f $BUILD_DIR/Pipfile.lock ]]; then #Priority for Pipenv python verions extraction using Pipfile.lock lock file.
-        set +e
-        echo Retrieving Python version from Pipfile.lock
-        PYTHON=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock") #Priority for full python version extraction.
-        if [[ "$PYTHON" != "null" ]]; then
-            echo Found Python full version $PYTHON
-            echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
-        else
-            PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")  #Alternative major python version extraction.
-            echo Found Python version $PYTHON
-            if [ "$PYTHON" = 2.7 ]; then
-                echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
-            elif [ "$PYTHON" = 3.4 ]; then
-                echo "$LATEST_34" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.4
-            elif [ "$PYTHON" = 3.5 ]; then
-                echo "$LATEST_35" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.5
-            elif [ "$PYTHON" = 3.6 ]; then
-                echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
-            elif [ "$PYTHON" = 3.7 ]; then
-                echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+if [ -f "$BUILD_DIR/Pipfile" ] || [ -f "$BUILD_DIR/Pipfile.lock"]; 
+then
+    if [! -f "$BUILD_DIR/runtime.txt"]; # Check if managed by Pipenv and runtime.txt file not set by user.
+    then 
+        if [ -f "$BUILD_DIR/Pipfile.lock" ]; then #Priority for Pipenv python verions extraction using Pipfile.lock lock file.
+            echo Retrieving Python version from Pipfile.lock
+            set +e
+            PYTHON=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock") #Priority for full python version extraction.
+            set -e
+            if [ "$PYTHON" != "null" ];
+            then
+                echo Found Python full version $PYTHON
+                echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
+            else
+                set +e
+                PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")  #Alternative major python version extraction.
+                set -e
+                if [[ "$PYTHON" != "null" ]]; 
+                then
+                    echo Found Python version $PYTHON
+                    if [ "$PYTHON" = 2.7 ]; 
+                    then
+                        echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
+                    elif [ "$PYTHON" = 3.4 ]; 
+                    then
+                        echo "$LATEST_34" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.4
+                    elif [ "$PYTHON" = 3.5 ]; 
+                    then
+                        echo "$LATEST_35" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.5
+                    elif [ "$PYTHON" = 3.6 ]; 
+                    then
+                        echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
+                    elif [ "$PYTHON" = 3.7 ]; 
+                    then
+                        echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                    fi
+                fi
+            fi
+        elif [[ -f $BUILD_DIR/Pipfile ]]; # Alternative Pipenv python version extraction using Pipfile configuration file.
+        then
+            echo Retrieving Python version from Pipfile
+            set +e
+            PYTHON = $(sed -nr "/^\[requires\]/ { :l /^python_full_version[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/Pipfile" | tr -d '"')  #Priority for full python version extraction.
+            set -e
+            if [[ "$PYTHON" != "null" ]]; then
+                echo Found Python full version $PYTHON
+                echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
+            else
+                PYTHON = $(sed -nr "/^\[requires\]/ { :l /^python_version[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/Pipfile" | tr -d '"')  #Alternative major python version extraction.
+                if [[ "$PYTHON" != "null" ]];
+                then
+                    echo Found Python version $PYTHON
+                    if [ "$PYTHON" = 2.7 ]; 
+                    then
+                        echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
+                    elif [ "$PYTHON" = 3.4 ]; 
+                    then
+                        echo "$LATEST_34" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.4
+                    elif [ "$PYTHON" = 3.5 ]; 
+                    then
+                        echo "$LATEST_35" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.5
+                    elif [ "$PYTHON" = 3.6 ];
+                    then
+                        echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
+                    elif [ "$PYTHON" = 3.7 ]; 
+                    then
+                        echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                    fi
+                fi
             fi
         fi
-        set -e
-    elif [[ -f $BUILD_DIR/Pipfile ]]; then # Alternative Pipenv python version extraction using Pipfile configuration file.
-        set +e
-        echo Retrieving Python version from Pipfile
-        PYTHON = $(sed -nr "/^\[requires\]/ { :l /^python_full_version[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/Pipfile" | tr -d '"')  #Priority for full python version extraction.
-        if [[ "$PYTHON" != "null" ]]; then
-            echo Found Python full version $PYTHON
-            echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
-        else
-            PYTHON = $(sed -nr "/^\[requires\]/ { :l /^python_version[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/Pipfile" | tr -d '"')  #Alternative major python version extraction.
-            echo Found Python version $PYTHON
-            if [ "$PYTHON" = 2.7 ]; then
-                echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
-            elif [ "$PYTHON" = 3.4 ]; then
-                echo "$LATEST_34" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.4
-            elif [ "$PYTHON" = 3.5 ]; then
-                echo "$LATEST_35" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.5
-            elif [ "$PYTHON" = 3.6 ]; then
-                echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
-            elif [ "$PYTHON" = 3.7 ]; then
-                echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
-            fi
-        fi
-        set -e
     fi
-fi
 fi
 
