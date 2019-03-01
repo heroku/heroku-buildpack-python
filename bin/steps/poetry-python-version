@@ -6,6 +6,9 @@
 # If does not have poetry.lock uses pyproject.toml to get python version from this config file. Returns default if not found.
 # Note it must have one of the two as defined in detect if is a Poetry managed project.
 
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
+
 if [ -f "$BUILD_DIR/pyproject.toml" ] || [ -f "$BUILD_DIR/poetry.lock"] # Check if Poetry is the package manager
 then
     if [! -f "$BUILD_DIR/runtime.txt"] # Check if managed by Poetry and runtime.txt file not set by user.

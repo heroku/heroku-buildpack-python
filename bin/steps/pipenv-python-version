@@ -6,6 +6,10 @@
 # If does not have Pipfile.lock uses Pipfile to get python version from this config file. Returns default if not found.
 # Note it must have one of the two as defined in detect if is a Pipenv managed project.
 
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
+
+
 if [ -f "$BUILD_DIR/Pipfile" ] || [ -f "$BUILD_DIR/Pipfile.lock"] # Check if Pipenv is the package manager
 then
     if [! -f "$BUILD_DIR/runtime.txt"] # Check if managed by Pipenv and runtime.txt file not set by user.
