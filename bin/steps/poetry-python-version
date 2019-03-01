@@ -13,9 +13,9 @@ then
         set +e
         if [ -f "$BUILD_DIR/poetry.lock" ]
         then #Priority for Poetry python version extraction using poetry.lock lock file.
-            POETRY_PYTHON_VERSION=$(sed -nr "/^\[metadata\]/ { :l /^python_versions[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/poetry.lock" | tr -d '"') 
+            POETRY_PYTHON_VERSION=$(sed -nr "/^\[metadata\]/ { :l /^python-versions[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/poetry.lock" | tr -d '"^') 
         else #Alternative Poetry python version extraction using pyproject.toml configuration file.
-            POETRY_PYTHON_VERSION =  $(sed -nr "/^\[tool.poetry.dependencies\]/ { :l /^python[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/pyproject.toml" | tr -d '"')
+            POETRY_PYTHON_VERSION =  $(sed -nr "/^\[tool.poetry.dependencies\]/ { :l /^python[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/pyproject.toml" | tr -d '"^')
         fi
         set -e
         # Extraction done. Setting the version captured.
@@ -43,4 +43,3 @@ then
         fi
     fi
 fi
-
