@@ -6,12 +6,12 @@
 # If does not have Pipfile.lock uses Pipfile to get python version from this config file. Returns default if not found.
 # Note it must have one of the two as defined in detect if is a Pipenv managed project.
 
-if [ -f "$BUILD_DIR/Pipfile" ] || [ -f "$BUILD_DIR/Pipfile.lock"]; # Check if Pipenv is the package manager
+if [ -f "$BUILD_DIR/Pipfile" ] || [ -f "$BUILD_DIR/Pipfile.lock"] # Check if Pipenv is the package manager
 then
-    if [! -f "$BUILD_DIR/runtime.txt"]; # Check if managed by Pipenv and runtime.txt file not set by user.
+    if [! -f "$BUILD_DIR/runtime.txt"] # Check if managed by Pipenv and runtime.txt file not set by user.
     then 
         set +e
-        if [ -f "$BUILD_DIR/Pipfile.lock" ]; 
+        if [ -f "$BUILD_DIR/Pipfile.lock" ]
         then #Priority for Pipenv python verions extraction using Pipfile.lock lock file.
             PIPENV_PYTHON_FULL_VERSION=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock" | tr -d '"') 
             PIPENV_PYTHON_VERSION=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock" | tr -d '"')
@@ -21,24 +21,24 @@ then
         fi
         set -e
         # Extraction done. Setting the version captured.
-        if is_full_python_version "$PIPENV_PYTHON_FULL_VERSION" #Priority for full python version
+        if is_full_version "$PIPENV_PYTHON_FULL_VERSION" #Priority for full python version
         then
             echo "python-$PIPENV_PYTHON_FULL_VERSION" > "$BUILD_DIR/runtime.txt" #Alternative latest python version
-        elif is_major_python_version "$PIPENV_PYTHON_VERSION"
+        elif is_major_version "$PIPENV_PYTHON_VERSION"
         then
-            if [ "$PIPENV_PYTHON_VERSION" = 2.7 ]; 
+            if [ "$PIPENV_PYTHON_VERSION" = 2.7 ]
             then
                 echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
-            elif [ "$PIPENV_PYTHON_VERSION" = 3.4 ]; 
+            elif [ "$PIPENV_PYTHON_VERSION" = 3.4 ] 
             then
                 echo "$LATEST_34" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.4
-            elif [ "$PIPENV_PYTHON_VERSION" = 3.5 ]; 
+            elif [ "$PIPENV_PYTHON_VERSION" = 3.5 ] 
             then
                 echo "$LATEST_35" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.5
-            elif [ "$PIPENV_PYTHON_VERSION" = 3.6 ]; 
+            elif [ "$PIPENV_PYTHON_VERSION" = 3.6 ]
             then
                 echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
-            elif [ "$PIPENV_PYTHON_VERSION" = 3.7 ]; 
+            elif [ "$PIPENV_PYTHON_VERSION" = 3.7 ]
             then
                 echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
             fi

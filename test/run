@@ -40,6 +40,12 @@ testPipenvFullVersion() {
   assertCapturedSuccess
 }
 
+testPoetry(){
+  compile "poetry"
+  assertCapturedSuccess
+}
+
+
 testNoRequirements() {
   compile "no-requirements"
   assertCapturedError
