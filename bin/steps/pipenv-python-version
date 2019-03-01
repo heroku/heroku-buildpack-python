@@ -10,19 +10,16 @@ if [ -f "$BUILD_DIR/Pipfile" ] || [ -f "$BUILD_DIR/Pipfile.lock"]; # Check if Pi
 then
     if [! -f "$BUILD_DIR/runtime.txt"]; # Check if managed by Pipenv and runtime.txt file not set by user.
     then 
+        set +e
         if [ -f "$BUILD_DIR/Pipfile.lock" ]; 
         then #Priority for Pipenv python verions extraction using Pipfile.lock lock file.
-            set +e
             PIPENV_PYTHON_FULL_VERSION=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock" | tr -d '"') 
             PIPENV_PYTHON_VERSION=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock" | tr -d '"')
-            set -e
-        elif [ -f "$BUILD_DIR/Pipfile" ]; #Alternative Pipenv python version extraction using Pipfile configuration file.
-        then
-            set +e
+        else #Alternative Pipenv python version extraction using Pipfile configuration file.
             PIPENV_PYTHON_FULL_VERSION = $(sed -nr "/^\[requires\]/ { :l /^python_full_version[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/Pipfile" | tr -d '"')  
             PIPENV_PYTHON_VERSION =  $(sed -nr "/^\[requires\]/ { :l /^python_version[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/Pipfile" | tr -d '"')
-            set -e
         fi
+        set -e
         # Extraction done. Setting the version captured.
         if is_full_python_version "$PIPENV_PYTHON_FULL_VERSION" #Priority for full python version
         then
