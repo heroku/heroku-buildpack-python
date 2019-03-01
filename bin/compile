@@ -205,11 +205,18 @@ fi
 export CACHED_PYTHON_STACK
 
 # Pipenv Python version support.
-# Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).
+# Detect the version of Python requested from a Pipfile or Pipfile.lock file.
 # Convert it to a runtime.txt file.
 
 # shellcheck source=bin/steps/pipenv-python-version
 source "$BIN_DIR/steps/pipenv-python-version"
+
+# Poetry Python version support.
+# Detect the version of Python requested from a pyproject.toml or poetry.lock file.
+# Convert it to a runtime.txt file.
+
+# shellcheck source=bin/steps/poetry-python-version
+source "$BIN_DIR/steps/poetry-python-version"
 
 # If no runtime was provided by the user, assume the default Python runtime version.
 if [ ! -f runtime.txt ]; then
