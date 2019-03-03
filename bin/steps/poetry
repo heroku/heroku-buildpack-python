@@ -59,24 +59,29 @@ if [ ! "$SKIP_POETRY_INSTALL" ]; then
 
         # Install the dependencies.
         if [[ ! -f poetry.lock ]]; then
-            puts-step "Locking dependencies with Poetry $POETRY_VERSION…"
-            /app/.heroku/python/bin/poetry lock 2>&1 | indent
-        fi
-
-        poetry-to-pip poetry.lock > requirements.txt
-        "$BIN_DIR/steps/pip-uninstall"
-        cp requirements.txt .heroku/python/requirements-declared.txt
-        openssl dgst -sha256 poetry.lock > .heroku/python/poetry.lock.sha256
-
-        # Install the test dependencies, for CI.
-        if [ "$INSTALL_TEST" ]; then
-            puts-step "Installing development dependencies with Poetry $POETRY_VERSION…"
-            /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
+            # Install the test dependencies, for CI.
+            if [ "$INSTALL_TEST" ]; then
+                puts-step "Installing development dependencies with Poetry $POETRY_VERSION…"
+                /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
+            else
+                puts-step "Installing deployment dependencies with Poetry $POETRY_VERSION…"
+                /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
+            fi
         else
-            puts-step "Installing deployment dependencies with Poetry $POETRY_VERSION…"
-            /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
+            poetry-to-pip poetry.lock > requirements.txt
+            "$BIN_DIR/steps/pip-uninstall"
+            cp requirements.txt .heroku/python/requirements-declared.txt
+            openssl dgst -sha256 poetry.lock > .heroku/python/poetry.lock.sha256
+
+            # Install the test dependencies, for CI.
+            if [ "$INSTALL_TEST" ]; then
+                puts-step "Installing development dependencies with Poetry $POETRY_VERSION…"
+                /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
+            else
+                puts-step "Installing deployment dependencies with Poetry $POETRY_VERSION…"
+                /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
+            fi
         fi
-        
     fi
 else
     export SKIP_PIP_INSTALL=1
