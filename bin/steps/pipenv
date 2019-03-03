@@ -34,6 +34,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         # Skip pip install, later.
         export SKIP_PIP_INSTALL=1
 
+
         # Set Pip env vars
         # This reads certain environment variables set on the Heroku app config
         # and makes them accessible to the pip install process.
