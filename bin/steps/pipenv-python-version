@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+source "$BIN_DIR/utils"
 # Detect Python-version with Pipenv.
 set +e
 if [[ -f $BUILD_DIR/Pipfile || -f $BUILD_DIR/Pipfile.lock && ! -f $BUILD_DIR/runtime.txt]]; then
@@ -11,9 +12,9 @@ if [[ -f $BUILD_DIR/Pipfile || -f $BUILD_DIR/Pipfile.lock && ! -f $BUILD_DIR/run
         PYTHON_FULL=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock")
         PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
     fi
-    if ! [ -z "$PYTHON_FULL"]; then
+    if is_python_full_version $PYTHON_FULL; then
         echo "python-$PYTHON_FULL" > "$BUILD_DIR/runtime.txt"
-    elif ! [ -z "$PYTHON"]; then
+    elif is_python_version $PYTHON; then
         if [ "$PYTHON" = 2.7 ]; then
             echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
         elif [ "$PYTHON" = 3.4 ]; then
