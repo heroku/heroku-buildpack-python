@@ -80,5 +80,5 @@ if [ ! "$SKIP_POETRY_INSTALL" ]; then
     fi
 else
     export SKIP_PIP_INSTALL=1
-    pipenv-to-pip Pipfile.lock > requirements.txt
+    poetry-to-pip poetry.lock > requirements.txt
 fi
