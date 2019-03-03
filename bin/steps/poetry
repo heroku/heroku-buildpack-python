@@ -6,18 +6,18 @@
 source "$BIN_DIR/utils"
 set -e
 
-if [[ -f Pipfile.lock ]]; then
-    if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
-        if [[ $(openssl dgst -sha256 Pipfile.lock) == $(cat .heroku/python/Pipfile.lock.sha256) ]]; then
-            # Measure that we're using Pipenv.
-            mcount "tool.pipenv"
+if [[ -f poetry.lock ]]; then
+    if [[ -f .heroku/python/poetry.lock.sha256 ]]; then
+        if [[ $(openssl dgst -sha256 poetry.lock) == $(cat .heroku/python/poetry.lock.sha256) ]]; then
+            # Measure that we're using Poetry.
+            mcount "tool.poetry"
 
             # Don't skip installation of there are git deps.
-            if ! grep -q 'git' Pipfile.lock; then
-                echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
+            if ! grep -q 'git' poetry.lock; then
+                echo "Skipping installation, as poetry.lock hasn't changed since last deploy." | indent
 
-                mcount "tool.pipenv"
-                export SKIP_PIPENV_INSTALL=1
+                mcount "tool.poetry"
+                export SKIP_POETRY_INSTALL=1
                 export SKIP_PIP_INSTALL=1
             fi
         fi
@@ -25,11 +25,11 @@ if [[ -f Pipfile.lock ]]; then
 fi
 
 
-if [ ! "$SKIP_PIPENV_INSTALL" ]; then
-    # Pipenv support (Generate requriements.txt with pipenv).
-    if [[ -f Pipfile ]]; then
+if [ ! "$SKIP_POETRY_INSTALL" ]; then
+    # Poetry support (Generate requriements.txt with pipenv).
+    if [[ -f pyproject.toml ]]; then
         # Measure that we're using Pipenv.
-        mcount "tool.pipenv"
+        mcount "tool.poetry"
 
         # Skip pip install, later.
         export SKIP_PIP_INSTALL=1
@@ -52,33 +52,31 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
         fi
 
-        export PIPENV_VERSION="2018.5.18"
+        export POETRY_VERSION=$(sed -nr "/^\[build-system\]/ { :l /^requires[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/pyproject.toml" | tr -d '"]')
 
-        # Install pipenv.
-        # Due to weird old pip behavior and pipenv behavior, pipenv upgrades pip
-        # to latest if only --upgrade is specified. Specify upgrade strategy to
-        # avoid this eager behavior.
-        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
+        # Install poetry.
+        /app/.heroku/python/bin/pip install pipenv==$POETRY_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
 
         # Install the dependencies.
-        if [[ ! -f Pipfile.lock ]]; then
-            puts-step "Installing dependencies with Pipenv $PIPENV_VERSION…"
-            /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
-        else
-            pipenv-to-pip Pipfile.lock > requirements.txt
-            "$BIN_DIR/steps/pip-uninstall"
-            cp requirements.txt .heroku/python/requirements-declared.txt
-            openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
-
-            puts-step "Installing dependencies with Pipenv $PIPENV_VERSION…"
-            /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
+        if [[ ! -f poetry.lock ]]; then
+            puts-step "Locking dependencies with Poetry $POETRY_VERSION…"
+            /app/.heroku/python/bin/poetry lock 2>&1 | indent
         fi
+
+        poetry-to-pip poetry.lock > requirements.txt
+        "$BIN_DIR/steps/pip-uninstall"
+        cp requirements.txt .heroku/python/requirements-declared.txt
+        openssl dgst -sha256 poetry.lock > .heroku/python/poetry.lock.sha256
 
         # Install the test dependencies, for CI.
         if [ "$INSTALL_TEST" ]; then
-            puts-step "Installing test dependencies…"
-            /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
+            puts-step "Installing development dependencies with Poetry $POETRY_VERSION…"
+            /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
+        else
+            puts-step "Installing deployment dependencies with Poetry $POETRY_VERSION…"
+            /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
         fi
+        
     fi
 else
     export SKIP_PIP_INSTALL=1
