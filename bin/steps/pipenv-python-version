@@ -15,20 +15,22 @@ if [[ -f $BUILD_DIR/Pipfile || -f $BUILD_DIR/Pipfile.lock ]]; then
             set -e
             if [[ "$PYTHON" == "null" ]]; then
                 PYTHON=$(sed -nr "/^\[requires\]/ { :l /^python_version[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/Pipfile" | tr -d '"')
-                if [ "$PYTHON" = 2.7 ]; then
-                    echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.4 ]; then
-                    echo "$LATEST_34" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.5 ]; then
-                    echo "$LATEST_35" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.6 ]; then
-                    echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.7 ]; then
-                    echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                if [[ "$PYTHON" != "null" ]]; then
+                    if [ "$PYTHON" = 2.7 ]; then
+                        echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.4 ]; then
+                        echo "$LATEST_34" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.5 ]; then
+                        echo "$LATEST_35" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.6 ]; then
+                        echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.7 ]; then
+                        echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                    fi
                 fi
             fi
         else
@@ -38,23 +40,24 @@ if [[ -f $BUILD_DIR/Pipfile || -f $BUILD_DIR/Pipfile.lock ]]; then
                 echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
             fi
             set -e
-
             if [[ "$PYTHON" == "null" ]]; then
                 PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
-                if [ "$PYTHON" = 2.7 ]; then
-                    echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.4 ]; then
-                    echo "$LATEST_34" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.5 ]; then
-                    echo "$LATEST_35" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.6 ]; then
-                    echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.7 ]; then
-                    echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                if [[ "$PYTHON" != "null" ]]; then
+                    if [ "$PYTHON" = 2.7 ]; then
+                        echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.4 ]; then
+                        echo "$LATEST_34" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.5 ]; then
+                        echo "$LATEST_35" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.6 ]; then
+                        echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.7 ]; then
+                        echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                    fi
                 fi
             fi
         fi
