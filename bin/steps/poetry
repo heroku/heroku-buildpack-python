@@ -6,84 +6,48 @@
 source "$BIN_DIR/utils"
 set -e
 
-if [[ -f poetry.lock ]]; then
-    if [[ -f .heroku/python/poetry.lock.sha256 ]]; then
-        if [[ $(openssl dgst -sha256 poetry.lock) == $(cat .heroku/python/poetry.lock.sha256) ]]; then
-            # Measure that we're using Poetry.
-            mcount "tool.poetry"
+if [[ -f pyproject.toml ]] || [[ -f poetry.py ]]; then
+    # Measure that we're using Pipenv.
+    mcount "tool.poetry"
 
-            # Don't skip installation of there are git deps.
-            if ! grep -q 'git' poetry.lock; then
-                echo "Skipping installation, as poetry.lock hasn't changed since last deploy." | indent
-
-                mcount "tool.poetry"
-                export SKIP_POETRY_INSTALL=1
-                export SKIP_PIP_INSTALL=1
-            fi
-        fi
+    # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+    if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
+        PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
+        export PIP_EXTRA_INDEX_URL
+        mcount "buildvar.PIP_EXTRA_INDEX_URL"
     fi
-fi
 
+    # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
+    if [[ -r "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE" ]]; then
+        SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
+        export SLUGIFY_USES_TEXT_UNIDECODE
+        mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
+    fi
 
-if [ ! "$SKIP_POETRY_INSTALL" ]; then
-    # Poetry support (Generate requriements.txt with pipenv).
     if [[ -f pyproject.toml ]]; then
-        # Measure that we're using Pipenv.
-        mcount "tool.poetry"
-
-        # Skip pip install, later.
-        export SKIP_PIP_INSTALL=1
-
-        # Set Pip env vars
-        # This reads certain environment variables set on the Heroku app config
-        # and makes them accessible to the pip install process.
-        #
-        # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
-        if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
-            PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
-            export PIP_EXTRA_INDEX_URL
-            mcount "buildvar.PIP_EXTRA_INDEX_URL"
-        fi
-
-        # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
-        if [[ -r "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE" ]]; then
-            SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
-            export SLUGIFY_USES_TEXT_UNIDECODE
-            mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
-        fi
-
         export POETRY_VERSION=$(sed -nr "/^\[build-system\]/ { :l /^requires[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/pyproject.toml" | tr -d '"]')
-
-        # Install poetry.
+        puts-step "Installing Poetry version $POETRY_VERSION…"
         /app/.heroku/python/bin/pip install pipenv==$POETRY_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
-
-        # Install the dependencies.
-        if [[ ! -f poetry.lock ]]; then
-            # Install the test dependencies, for CI.
-            if [ "$INSTALL_TEST" ]; then
-                puts-step "Installing development dependencies with Poetry $POETRY_VERSION…"
-                /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
-            else
-                puts-step "Installing deployment dependencies with Poetry $POETRY_VERSION…"
-                /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
-            fi
-        else
-            poetry-to-pip poetry.lock > requirements.txt
-            "$BIN_DIR/steps/pip-uninstall"
-            cp requirements.txt .heroku/python/requirements-declared.txt
-            openssl dgst -sha256 poetry.lock > .heroku/python/poetry.lock.sha256
-
-            # Install the test dependencies, for CI.
-            if [ "$INSTALL_TEST" ]; then
-                puts-step "Installing development dependencies with Poetry $POETRY_VERSION…"
-                /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
-            else
-                puts-step "Installing deployment dependencies with Poetry $POETRY_VERSION…"
-                /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
-            fi
-        fi
+    else
+        puts-step "Installing Poetry latest version…"
+        /app/.heroku/python/bin/pip install pipenv --upgrade --upgrade-strategy only-if-needed &> /dev/null
     fi
-else
+     
+    # Install the dependencies (lock file if does not exist it is generated here). 
+    # These dependencies will only exist on the virtualenv but they can be exported (without any artifacts) using pip (see below) to be installed system-wide.
+    # Do not skip pip install later.
+
+    if [ "$INSTALL_TEST" ]; then
+        puts-step "Installing development dependencies with Poetry…"
+        /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
+    else
+        puts-step "Installing deployment dependencies with Poetry…"
+        /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
+    fi
+
+    # Export requirements.txt
+    /app/.heroku/python/bin/poetry run pip freeze . > requirements.txt 
     export SKIP_PIP_INSTALL=1
-    poetry-to-pip poetry.lock > requirements.txt
+
 fi
+
