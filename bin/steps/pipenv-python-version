@@ -13,7 +13,7 @@ if [[ -f $BUILD_DIR/Pipfile || -f $BUILD_DIR/Pipfile.lock && ! -f $BUILD_DIR/run
     fi
     if ! [ -z "$PYTHON_FULL"]; then
         echo "python-$PYTHON_FULL" > "$BUILD_DIR/runtime.txt"
-    elif ! [ -z "$PYTHON_FULL"]; then
+    elif ! [ -z "$PYTHON"]; then
         if [ "$PYTHON" = 2.7 ]; then
             echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
         elif [ "$PYTHON" = 3.4 ]; then
