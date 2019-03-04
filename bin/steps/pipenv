@@ -26,7 +26,14 @@ if [[ -f Pipfile || -f Pipfile.lock ]]; then
         mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
     fi
 
-    export PIPENV_VERSION="2018.5.18"
+    # Set PIPEN_VERSION implicitly
+    if [[ -r "$ENV_DIR/PIPENV_VERSION" ]]; then
+        PIPENV_VERSION="$(cat "$ENV_DIR/PIPENV_VERSION")"
+        export PIPENV_VERSION
+        mcount "buildvar.PIPENV_VERSION"
+    else
+        export PIPENV_VERSION="2018.5.18"
+    fi
 
     # Install pipenv.
     # Due to weird old pip behavior and pipenv behavior, pipenv upgrades pip
