@@ -32,7 +32,7 @@ if [[ -f Pipfile || -f Pipfile.lock ]]; then
         export PIPENV_VERSION
         mcount "buildvar.PIPENV_VERSION"
     else
-        export PIPENV_VERSION="2018.11.26"
+        export PIPENV_VERSION="2018.5.18"
     fi
 
     # Install pipenv.
