@@ -49,16 +49,14 @@ if [[ -f Pipfile || -f Pipfile.lock ]]; then
 
     if [ "$INSTALL_TEST" ]; then
         puts-step "Installing default and development dependencies with Pipenv $PIPENV_VERSION…"
-        /app/.heroku/python/bin/pipenv install --system --dev 2>&1 | cleanup | indent
+        /app/.heroku/python/bin/pipenv install --system --ignore-pipfile --dev 2>&1 | cleanup | indent
     else
         puts-step "Installing default dependencies with Pipenv $PIPENV_VERSION…"
-        /app/.heroku/python/bin/pipenv install --system 2>&1 | cleanup | indent
+        /app/.heroku/python/bin/pipenv install --system --ignore-pipfile 2>&1 | cleanup | indent
     fi
 
-     /app/.heroku/python/bin/pipenv run pip freeze > requirements.txt
-
-    # Skip pip install, later.
-    export SKIP_PIP_INSTALL=0
+    # Skip pip install later on.
+    export SKIP_PIP_INSTALL=1
 
 fi
 set +e
