@@ -52,7 +52,7 @@ if [[ -f Pipfile || -f Pipfile.lock ]]; then
         /app/.heroku/python/bin/pipenv install --dev 2>&1 | cleanup | indent
     else
         puts-step "Installing default dependencies with Pipenv $PIPENV_VERSION…"
-        /app/.heroku/python/bin/pipenv install --system 2>&1 | cleanup | indent
+        /app/.heroku/python/bin/pipenv install 2>&1 | cleanup | indent
     fi
 
      /app/.heroku/python/bin/pipenv run pip freeze > requirements.txt
