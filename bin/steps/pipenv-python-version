@@ -12,9 +12,9 @@ if [[ -f $BUILD_DIR/Pipfile || -f $BUILD_DIR/Pipfile.lock && ! -f $BUILD_DIR/run
         PYTHON_FULL=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock")
         PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
     fi
-    if is_python_full_version $PYTHON_FULL; then
+    if [ -n "$PYTHON_FULL" ] && [ "$PYTHON_FULL" != "null" ]; then
         echo "python-$PYTHON_FULL" > "$BUILD_DIR/runtime.txt"
-    elif is_python_version $PYTHON; then
+    elif [ -n "$PYTHON" ] && [ "$PYTHON" != "null" ]; then
         if [ "$PYTHON" = 2.7 ]; then
             echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
         elif [ "$PYTHON" = 3.4 ]; then
