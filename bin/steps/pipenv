@@ -46,20 +46,20 @@ if [[ -f Pipfile || -f Pipfile.lock ]]; then
         
         if [ "$INSTALL_TEST" ]; then
             puts-step "Installing default and development dependencies with Pipenv $PIPENV_VERSION…"
-            /app/.heroku/python/bin/pipenv install --system --ignore-pipfile --dev 2>&1 | cleanup | indent
+            /app/.heroku/python/bin/pipenv install --ignore-pipfile --dev 2>&1 | cleanup | indent
         else
             puts-step "Installing default dependencies with Pipenv $PIPENV_VERSION…"
-            /app/.heroku/python/bin/pipenv install --system --ignore-pipfile 2>&1 | cleanup | indent
+            /app/.heroku/python/bin/pipenv install --ignore-pipfile 2>&1 | cleanup | indent
         fi
     
     else
 
         if [ "$INSTALL_TEST" ]; then
             puts-step "Installing default and development dependencies with Pipenv $PIPENV_VERSION…"
-            /app/.heroku/python/bin/pipenv install --system --skip-lock --dev 2>&1 | cleanup | indent
+            /app/.heroku/python/bin/pipenv install --skip-lock --dev 2>&1 | cleanup | indent
         else
             puts-step "Installing default dependencies with Pipenv $PIPENV_VERSION…"
-            /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | cleanup | indent
+            /app/.heroku/python/bin/pipenv install --skip-lock 2>&1 | cleanup | indent
         fi
 
     
