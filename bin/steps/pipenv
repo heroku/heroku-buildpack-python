@@ -42,17 +42,27 @@ if [[ -f Pipfile || -f Pipfile.lock ]]; then
     /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
 
     # Install the dependencies.
-    if [[ ! -f Pipfile.lock ]]; then
-        puts-step "Locking dependencies with Pipenv $PIPENV_VERSION…"
-        /app/.heroku/python/bin/pipenv lock 2>&1 | cleanup | indent
-    fi
-
-    if [ "$INSTALL_TEST" ]; then
-        puts-step "Installing default and development dependencies with Pipenv $PIPENV_VERSION…"
-        /app/.heroku/python/bin/pipenv install --system --ignore-pipfile --dev 2>&1 | cleanup | indent
+    if [[ -f Pipfile.lock ]]; then
+        
+        if [ "$INSTALL_TEST" ]; then
+            puts-step "Installing default and development dependencies with Pipenv $PIPENV_VERSION…"
+            /app/.heroku/python/bin/pipenv install --system --ignore-pipfile --dev 2>&1 | cleanup | indent
+        else
+            puts-step "Installing default dependencies with Pipenv $PIPENV_VERSION…"
+            /app/.heroku/python/bin/pipenv install --system --ignore-pipfile 2>&1 | cleanup | indent
+        fi
+    
     else
-        puts-step "Installing default dependencies with Pipenv $PIPENV_VERSION…"
-        /app/.heroku/python/bin/pipenv install --system --ignore-pipfile 2>&1 | cleanup | indent
+
+        if [ "$INSTALL_TEST" ]; then
+            puts-step "Installing default and development dependencies with Pipenv $PIPENV_VERSION…"
+            /app/.heroku/python/bin/pipenv install --system --skip-lock --dev 2>&1 | cleanup | indent
+        else
+            puts-step "Installing default dependencies with Pipenv $PIPENV_VERSION…"
+            /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | cleanup | indent
+        fi
+
+    
     fi
 
     # Skip pip install later on.
