@@ -1,48 +1,47 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash            
 
-# Detect Python-version with Poetry.
-# If has runtime.txt does nothing.
-# If has poetry.lock file tries to get version from python version from this lock file. Returns default if not found.
-# If does not have poetry.lock uses pyproject.toml to get python version from this config file. Returns default if not found.
-# Note it must have one of the two as defined in detect if is a Poetry managed project.
+set +e
+if [[ -f $BUILD_DIR/pyproject.toml || -f $BUILD_DIR/poetry.lock ]]; then
 
-# shellcheck source=bin/utils
-source "$BIN_DIR/utils"
+    if [[ ! -f $BUILD_DIR/runtime.txt ]]; then
 
-if [ -f "$BUILD_DIR/pyproject.toml" ] || [ -f "$BUILD_DIR/poetry.lock"] # Check if Poetry is the package manager
-then
-    if [! -f "$BUILD_DIR/runtime.txt"] # Check if managed by Poetry and runtime.txt file not set by user.
-    then 
-        set +e
-        if [ -f "$BUILD_DIR/poetry.lock" ]
-        then #Priority for Poetry python version extraction using poetry.lock lock file.
-            POETRY_PYTHON_VERSION=$(sed -nr "/^\[metadata\]/ { :l /^python-versions[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/poetry.lock" | tr -d '"^') 
-        else #Alternative Poetry python version extraction using pyproject.toml configuration file.
-            POETRY_PYTHON_VERSION =  $(sed -nr "/^\[tool.poetry.dependencies\]/ { :l /^python[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/pyproject.toml" | tr -d '"^')
-        fi
-        set -e
-        # Extraction done. Setting the version captured.
-        if is_full_version "$POETRY_PYTHON_VERSION" #Priority for full python version
-        then
-            echo "python-$POETRY_PYTHON_VERSION" > "$BUILD_DIR/runtime.txt" #Alternative latest python version
-        elif is_major_version "$POETRY_PYTHON_VERSION"
-        then
-            if [ "$POETRY_PYTHON_VERSION" = 2.7 ]
-            then
-                echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
-            elif [ "$POETRY_PYTHON_VERSION" = 3.4 ] 
-            then
-                echo "$LATEST_34" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.4
-            elif [ "$POETRY_PYTHON_VERSION" = 3.5 ] 
-            then
-                echo "$LATEST_35" > "$BUILD_DIR/runtime.txt" # Added missing latest 3.5
-            elif [ "$POETRY_PYTHON_VERSION" = 3.6 ]
-            then
-                echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
-            elif [ "$POETRY_PYTHON_VERSION" = 3.7 ]
-            then
-                echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+        if [[ ! -f $BUILD_DIR/poetry.lock ]]; then
+
+            puts-warn "No 'poetry.lock' found! We recommend you commit this into your repository."
+            PYTHON=$(sed -nr "/^\[tool.poetry.dependencies\]/ { :l /^python[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/pyproject.toml")
+            if ! [ -z $PYTHON]; then
+                if [ $PYTHON = "^2.7" ]; then
+                    echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
+                elif [ "$PYTHON" = "^3.4" ]; then
+                    echo "$LATEST_34" > "$BUILD_DIR/runtime.txt"
+                elif [ "$PYTHON" = "^3.5" ]; then
+                    echo "$LATEST_35" > "$BUILD_DIR/runtime.txt"
+                elif [ "$PYTHON" = "^3.6" ]; then
+                    echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
+                elif [ "$PYTHON" = "^3.7" ]; then
+                    echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                else #Assuming the version is complete
+                    echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
+                fi 
+            fi
+        else
+            PYTHON=$(sed -nr "/^\[metadata\]/ { :l /^python-versions[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/poetry.lock")
+            if ! [ -z $PYTHON]; then
+                if [ $PYTHON = "^2.7" ]; then
+                    echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
+                elif [ "$PYTHON" = "^3.4" ]; then
+                    echo "$LATEST_34" > "$BUILD_DIR/runtime.txt"
+                elif [ "$PYTHON" = "^3.5" ]; then
+                    echo "$LATEST_35" > "$BUILD_DIR/runtime.txt"
+                elif [ "$PYTHON" = "^3.6" ]; then
+                    echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
+                elif [ "$PYTHON" = "^3.7" ]; then
+                    echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                else #Assuming the version is complete
+                    echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
+                fi 
             fi
         fi
     fi
 fi
+            set -e
