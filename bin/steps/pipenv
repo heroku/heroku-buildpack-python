@@ -59,9 +59,6 @@ if [[ -f Pipfile || -f Pipfile.lock ]]; then
             /app/.heroku/python/bin/pipenv install --dev --skip-lock 2>&1 | cleanup | indent
         fi
     fi
-    
-    # Install the test dependencies, for CI.
-
 
     # Skip pip install, later.
     export SKIP_PIP_INSTALL=1
