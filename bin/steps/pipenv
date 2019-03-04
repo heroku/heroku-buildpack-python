@@ -42,17 +42,17 @@ if [[ -f Pipfile || -f Pipfile.lock ]]; then
     /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
 
     # Install the dependencies.
-    if [[ -f Pipfile.lock ]]; then
+    if [[ ! -f Pipfile.lock ]]; then
         puts-step "Locking dependencies with Pipenv $PIPENV_VERSION…"
         /app/.heroku/python/bin/pipenv lock 2>&1 | cleanup | indent
     fi
 
     if [ "$INSTALL_TEST" ]; then
         puts-step "Installing default and development dependencies with Pipenv $PIPENV_VERSION…"
-        /app/.heroku/python/bin/pipenv install --dev 2>&1 | cleanup | indent
+        /app/.heroku/python/bin/pipenv install --system --dev 2>&1 | cleanup | indent
     else
         puts-step "Installing default dependencies with Pipenv $PIPENV_VERSION…"
-        /app/.heroku/python/bin/pipenv install 2>&1 | cleanup | indent
+        /app/.heroku/python/bin/pipenv install --system 2>&1 | cleanup | indent
     fi
 
      /app/.heroku/python/bin/pipenv run pip freeze > requirements.txt
