@@ -45,6 +45,8 @@ if [[ -f pyproject.toml || -f poetry.lock ]]; then
         /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
     fi
 
+    /app/.heroku/python/bin/poetry run pip freeze > requirements.txt
+    
     # Skip pip install later on.
     export SKIP_PIP_INSTALL=1
 
