@@ -101,19 +101,15 @@ testPythonDefault() {
 
 testPython2() {
     compile "python2"
-    assertCaptured "python-2.7.15"
+    assertCaptured "python-2.7.16"
     assertCapturedSuccess
 }
 
 testPython2_warn() {
     compile "python2_warn"
-    if [[ $STACK = "heroku-18" ]]; then
-      assertCapturedError
-    else
-      assertCaptured "python-2.7.14"
-      assertCaptured "security update!"
-      assertCapturedSuccess
-    fi
+    assertCaptured "python-2.7.15"
+    assertCaptured "security update!"
+    assertCapturedSuccess
 }
 
 testPython2_fail() {

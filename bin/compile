@@ -54,7 +54,7 @@ LATEST_36="python-3.6.8"
 LATEST_37="python-3.7.2"
 LATEST_35="python-3.5.6"
 LATEST_34="python-3.4.9"
-LATEST_27="python-2.7.15"
+LATEST_27="python-2.7.16"
 
 # Supported Python Branches
 PY37="python-3.7"
