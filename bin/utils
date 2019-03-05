@@ -59,7 +59,7 @@ measure-size() {
 
 # Check if is a full version, X.X.X
 is_full_version() {
-  if [[ "$1" == [0-9][0-9].[0-9][0-9].[0-9][0-9] ]]; then
+  if [[ "$1" == +([0-9]).+([0-9]).+([0-9]) ]]; then
     return 0
   else
     return 1
