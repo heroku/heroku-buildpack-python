@@ -54,7 +54,7 @@ testPoetryFullVersion(){
 
 testPoetryFullVersion2(){
   compile "poetry-full-version2"
-  assertCaptured "2.7.5"
+  assertCaptured "2.7.15"
   assertCapturedSuccess
 }
 
