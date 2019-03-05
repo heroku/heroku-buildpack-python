@@ -17,11 +17,6 @@ testPipenvLock() {
   assertCapturedSuccess
 }
 
-testPipenvLockOnly() {
-  compile "pipenv-lock-only"
-  assertCapturedSuccess
-}
-
 testPipenvVersion() {
   compile "pipenv-version"
   assertCaptured "3.6.8"

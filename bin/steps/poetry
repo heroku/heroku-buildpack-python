@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-# export CLINT_FORCE_COLOR=1
-# export PIPENV_FORCE_COLOR=1
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
 set -e
 
-if [[ -f pyproject.toml ]] || [[ -f poetry.py ]]; then
-    # Measure that we're using Pipenv.
+if [[ -f pyproject.toml || -f poetry.lock ]]; then
     mcount "tool.poetry"
 
+    # Set Pip env varsz
+    # This reads certain environment variables set on the Heroku app config
+    # and makes them accessible to the pip install process.
     # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
     if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
         PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
@@ -24,30 +24,30 @@ if [[ -f pyproject.toml ]] || [[ -f poetry.py ]]; then
         mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
     fi
 
-    if [[ -f pyproject.toml ]]; then
-        export POETRY_VERSION=$(sed -nr "/^\[build-system\]/ { :l /^requires[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/pyproject.toml" | tr -d '"]')
-        puts-step "Installing Poetry version $POETRY_VERSION…"
-        /app/.heroku/python/bin/pip install pipenv==$POETRY_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
+    # Get Poetry Version from file
+    if [[ -r "$ENV_DIR/POETRY_VERSION" ]]; then
+        POETRY_VERSION="$(cat "$ENV_DIR/POETRY_VERSION")"
+        export POETRY_VERSION
+        mcount "buildvar.POETRY_VERSION"
     else
-        puts-step "Installing Poetry latest version…"
-        /app/.heroku/python/bin/pip install pipenv --upgrade --upgrade-strategy only-if-needed &> /dev/null
+        export POETRY_VERSION="0.12.11"
     fi
-     
-    # Install the dependencies (lock file if does not exist it is generated here). 
-    # These dependencies will only exist on the virtualenv but they can be exported (without any artifacts) using pip (see below) to be installed system-wide.
-    # Do not skip pip install later.
 
+    # Install poetry.
+    /app/.heroku/python/bin/pip install pipenv==$POETRY_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
+
+    # Install the dependencies.
     if [ "$INSTALL_TEST" ]; then
-        puts-step "Installing development dependencies with Poetry…"
+        puts-step "Installing default and development dependencies with Poetry $POETRY_VERSION…"
         /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
     else
-        puts-step "Installing deployment dependencies with Poetry…"
+        puts-step "Installing default dependencies with Pipenv $POETRY_VERSION…"
         /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
     fi
 
-    # Export requirements.txt
-    /app/.heroku/python/bin/poetry run pip freeze . > requirements.txt 
+    # Skip pip install later on.
     export SKIP_PIP_INSTALL=1
 
 fi
+set +e
 
