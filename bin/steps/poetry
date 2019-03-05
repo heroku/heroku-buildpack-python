@@ -34,7 +34,7 @@ if [[ -f pyproject.toml || -f poetry.lock ]]; then
     # fi
 
     # Install poetry.
-    /app/.heroku/python/bin/pip install pipenv 2>&1 | cleanup | indent
+    /app/.heroku/python/bin/pip install poetry 2>&1 | cleanup | indent
 
     # Install the dependencies.
     if [ "$INSTALL_TEST" ]; then
