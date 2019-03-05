@@ -1,35 +1,60 @@
 #!/usr/bin/env bash
-
-# Detect Python-version with Pipenv.
-
-if [[ -f $BUILD_DIR/Pipfile ]]; then
+if [[ -f $BUILD_DIR/Pipfile || -f $BUILD_DIR/Pipfile.lock ]]; then
 
     if [[ ! -f $BUILD_DIR/runtime.txt ]]; then
         if [[ ! -f $BUILD_DIR/Pipfile.lock ]]; then
             puts-warn "No 'Pipfile.lock' found! We recommend you commit this into your repository."
-        fi
-        if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
+            set +e
+            PYTHON=$(sed -nr "/^\[requires\]/ { :l /^python_full_version[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/Pipfile" | tr -d '"')
+            if ! [ -z "$PYTHON"]; then
+                echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
+            else
+                PYTHON=$(sed -nr "/^\[requires\]/ { :l /^python_version[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" "$BUILD_DIR/Pipfile" | tr -d '"')
+                if ! [ -z "$PYTHON"]; then
+                    if [ "$PYTHON" = 2.7 ]; then
+                        echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.4 ]; then
+                        echo "$LATEST_34" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.5 ]; then
+                        echo "$LATEST_35" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.6 ]; then
+                        echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.7 ]; then
+                        echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                    fi
+                fi
+            fi
+            set -e
+        else
             set +e
             PYTHON=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock")
             if [[ "$PYTHON" != "null" ]]; then
                 echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
+            else
+                PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
+                if [[ "$PYTHON" != "null" ]]; then
+                    if [ "$PYTHON" = 2.7 ]; then
+                        echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.4 ]; then
+                        echo "$LATEST_34" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.5 ]; then
+                        echo "$LATEST_35" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.6 ]; then
+                        echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
+                    fi
+                    if [ "$PYTHON" = 3.7 ]; then
+                        echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
+                    fi
+                fi
             fi
             set -e
-
-            if [[ "$PYTHON" == "null" ]]; then
-                PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
-                if [ "$PYTHON" = 2.7 ]; then
-                    echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.6 ]; then
-                    echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.7 ]; then
-                    echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
-                fi
-            fi
-
-
         fi
     fi
 fi
