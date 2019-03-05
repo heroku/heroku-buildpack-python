@@ -1,39 +1,39 @@
 #!/usr/bin/env bash
 
-# testAirflow() {
-#   export SLUGIFY_USES_TEXT_UNIDECODE="yes"
-#   compile "airflow"
-#   assertCaptured "apache-airflow==1.10.2"
-#   assertCapturedSuccess
-# }
+testAirflow() {
+  export SLUGIFY_USES_TEXT_UNIDECODE="yes"
+  compile "airflow"
+  assertCaptured "apache-airflow==1.10.2"
+  assertCapturedSuccess
+}
 
-# testPipenv() {
-#   compile "pipenv"
-#   assertCapturedSuccess
-# }
+testPipenv() {
+  compile "pipenv"
+  assertCapturedSuccess
+}
 
-# testPipenvLock() {
-#   compile "pipenv-lock"
-#   assertCapturedSuccess
-# }
+testPipenvLock() {
+  compile "pipenv-lock"
+  assertCapturedSuccess
+}
 
-# testPipenvVersion() {
-#   compile "pipenv-version"
-#   assertCaptured "3.6.8"
-#   assertCapturedSuccess
-# }
+testPipenvVersion() {
+  compile "pipenv-version"
+  assertCaptured "3.6.8"
+  assertCapturedSuccess
+}
 
-# testPipenvVersion2() {
-#   compile "pipenv-version2"
-#   assertCaptured "2.7.15"
-#   assertCapturedSuccess
-# }
+testPipenvVersion2() {
+  compile "pipenv-version2"
+  assertCaptured "2.7.15"
+  assertCapturedSuccess
+}
 
-# testPipenvFullVersion() {
-#   compile "pipenv-full-version"
-#   assertCaptured "3.6.3"
-#   assertCapturedSuccess
-# }
+testPipenvFullVersion() {
+  compile "pipenv-full-version"
+  assertCaptured "3.6.3"
+  assertCapturedSuccess
+}
 
 testPoetry(){
   compile "poetry"
