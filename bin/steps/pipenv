@@ -65,8 +65,10 @@ if [[ -f Pipfile || -f Pipfile.lock ]]; then
     
     fi
 
+    /app/.heroku/python/bin/pipenv run pip freeze > requirements.txt
+
     # Skip pip install later on.
-    export SKIP_PIP_INSTALL=1
+    export SKIP_PIP_INSTALL=0
 
 fi
 set +e
