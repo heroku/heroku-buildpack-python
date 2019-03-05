@@ -1,7 +1,5 @@
 #!/usr/bin/env bash            
 
-source "$BIN_DIR/utils"
-
 set +e
 if [[ -f $BUILD_DIR/pyproject.toml || -f $BUILD_DIR/poetry.lock ]]; then
 
@@ -23,7 +21,7 @@ if [[ -f $BUILD_DIR/pyproject.toml || -f $BUILD_DIR/poetry.lock ]]; then
                     echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
                 elif [ "$PYTHON" = 3.7 ]; then
                     echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
-                elif [ is_full_version "$PYTHON" ]; then
+                elif [[ "$PYTHON" == +([0-9]).+([0-9]).+([0-9]) ]]; then
                     echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
                 fi 
             fi
@@ -40,7 +38,7 @@ if [[ -f $BUILD_DIR/pyproject.toml || -f $BUILD_DIR/poetry.lock ]]; then
                     echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
                 elif [ "$PYTHON" = 3.7 ]; then
                     echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
-                elif [ is_full_version "$PYTHON" ]; then
+                elif [[ "$PYTHON" == +([0-9]).+([0-9]).+([0-9]) ]]; then
                     echo "python-$PYTHON" > "$BUILD_DIR/runtime.txt"
                 fi 
             fi
