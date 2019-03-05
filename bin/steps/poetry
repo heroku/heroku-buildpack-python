@@ -41,12 +41,12 @@ if [[ -f pyproject.toml || -f poetry.lock ]]; then
         puts-step "Installing default and development dependencies with Poetry $POETRY_VERSION…"
         /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
     else
-        puts-step "Installing default dependencies with Pipenv $POETRY_VERSION…"
+        puts-step "Installing default dependencies with Poetry $POETRY_VERSION…"
         /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
     fi
 
     /app/.heroku/python/bin/poetry run pip freeze > requirements.txt
-    
+
     # Skip pip install later on.
     export SKIP_PIP_INSTALL=1
 
