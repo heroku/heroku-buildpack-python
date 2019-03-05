@@ -68,6 +68,11 @@ testCollectstatic() {
   assertCaptured "collectstatic"
 }
 
+testCollectstaticPoetry() {
+  compile "collectstatic-poetry"
+  assertCaptured "collectstatic"
+}
+
 testGEOS() {
   export BUILD_WITH_GEO_LIBRARIES=1
   compile "geos"
