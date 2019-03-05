@@ -24,17 +24,17 @@ if [[ -f pyproject.toml || -f poetry.lock ]]; then
         mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
     fi
 
-    # Get Poetry Version from file
-    if [[ -r "$ENV_DIR/POETRY_VERSION" ]]; then
-        POETRY_VERSION="$(cat "$ENV_DIR/POETRY_VERSION")"
-        export POETRY_VERSION
-        mcount "buildvar.POETRY_VERSION"
-    else
-        export POETRY_VERSION="0.12.11"
-    fi
+    # # Get Poetry Version from file
+    # if [[ -r "$ENV_DIR/POETRY_VERSION" ]]; then
+    #     POETRY_VERSION="$(cat "$ENV_DIR/POETRY_VERSION")"
+    #     export POETRY_VERSION
+    #     mcount "buildvar.POETRY_VERSION"
+    # else
+    #     export POETRY_VERSION="0.12.11"
+    # fi
 
     # Install poetry.
-    /app/.heroku/python/bin/pip install pipenv==$POETRY_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
+    /app/.heroku/python/bin/pip install pipenv | cleanup | indent
 
     # Install the dependencies.
     if [ "$INSTALL_TEST" ]; then
@@ -42,7 +42,7 @@ if [[ -f pyproject.toml || -f poetry.lock ]]; then
         /app/.heroku/python/bin/poetry install 2>&1 | cleanup | indent
     else
         puts-step "Installing default dependencies with Pipenv $POETRY_VERSION…"
-        /app/.heroku/python/bin/poetry install --no-dev 2>&1 | cleanup | indent
+        /app/.heroku/python/bin/poetry install --no-dev 2>&1 
     fi
 
     # Skip pip install later on.
