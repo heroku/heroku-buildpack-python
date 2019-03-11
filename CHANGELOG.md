@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 149 (2019-03-04)
+
+Hotfix for broken Cedar 14 deploys
+
 # 148 (2019-02-21)
 
 No user facing changes, improving internal metrics
