@@ -1,6 +1,11 @@
 # Python Buildpack Changelog
 
-# 139
+# 140 (2018-10-09)
+
+Add support for detecting SLUGIFY_USES_TEXT_UNIDECODE, which is required to
+install Apache Airflow version 1.10 or higher.
+
+# 139 (2018-10-08)
 
 Improvements to Python install messaging
 
