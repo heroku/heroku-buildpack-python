@@ -27,7 +27,8 @@ if (pip-grep -s requirements.txt pylibmc &> /dev/null) then
     echo "-----> Noticed pylibmc. Bootstrapping libmemcached."
     mkdir -p .scalingo/vendor
     # Download and extract libmemcached into target vendor directory.
-    curl "$VENDORED_MEMCACHED" -s | tar zxv -L .scalingo/vendor &> /dev/null
+    curl "$VENDORED_MEMCACHED" -s | tar zxv -C .scalingo/vendor &> /dev/null
+    mcount "steps.vendor.pylibmc"
   fi
 
   LIBMEMCACHED=$(pwd)/vendor
