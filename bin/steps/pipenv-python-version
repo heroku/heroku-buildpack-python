@@ -19,7 +19,7 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
             if [[ "$PYTHON" == "null" ]]; then
                 PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
                 if [ "$PYTHON" = 2.7 ]; then
-                    echo "$LATEST_2" > "$BUILD_DIR/runtime.txt"
+                    echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
                 fi
                 if [ "$PYTHON" = 3.6 ]; then
                     echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
@@ -33,4 +33,3 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
         fi
     fi
 fi
-

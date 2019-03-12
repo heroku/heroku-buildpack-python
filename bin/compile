@@ -54,9 +54,9 @@ export VENDOR_URL
 # These variables are used to specify which versions of Python to install by default,
 # as well as prompt the user to upgrade if they are using an un–supported version.
 # Note: When 3.7 lands, I recommend switching to LATEST_36 and LATEST_37.
-DEFAULT_PYTHON_VERSION="python-3.6.6"
-LATEST_36="python-3.6.6"
-LATEST_37="python-3.7.0"
+DEFAULT_PYTHON_VERSION="python-3.6.7"
+LATEST_36="python-3.6.7"
+LATEST_37="python-3.7.1"
 LATEST_35="python-3.5.6"
 LATEST_34="python-3.4.9"
 LATEST_27="python-2.7.15"
