@@ -163,8 +163,6 @@ cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
 cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
 # A plain text file which contains the current python version being used (used for cache busting).
 cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
-# A plain text file which contains the current sqlite3 version being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
 # Any pre-compiled binaries, provided by the buildpack.
 cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
 # "editable" installations of code repositories, via pip or pipenv.
@@ -278,16 +276,6 @@ sub_env "$BIN_DIR/steps/geo-libs"
 # This is part of the Geo support.
 # shellcheck source=bin/steps/gdal
 source "$BIN_DIR/steps/gdal"
-
-# SQLite3 support.
-# This sets up and installs sqlite3 dev headers and the sqlite3 binary but not the
-# libsqlite3-0 library since that exists on the stack image.
-# Note: This only applies to Python 2.7.15+ and Python 3.6.6+
-(( start=$(nowms) ))
-# shellcheck source=bin/steps/sqlite3
-source "$BIN_DIR/steps/sqlite3"
-buildpack_sqlite3_install
-mtime "sqlite3.install.time" "${start}"
 
 # pip install
 # -----------
