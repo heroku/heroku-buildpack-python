@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 150 (2019-03-13)
+
+Python 2.7.16 now available on all Heroku stacks.
+
 # 149 (2019-03-04)
 
 Hotfix for broken Cedar 14 deploys
