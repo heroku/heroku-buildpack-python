@@ -38,7 +38,9 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
         mcount "failure.none-version"
     fi
 
-
+    if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
+        exit 1
+    fi
     /app/.heroku/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
     PIP_STATUS="${PIPESTATUS[0]}"
     set -e

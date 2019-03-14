@@ -27,6 +27,8 @@ if sp-grep -s nltk; then
         python -m nltk.downloader -d "$BUILD_DIR/.heroku/python/nltk_data" "${nltk_packages[@]}" | indent
         set_env NLTK_DATA "/app/.heroku/python/nltk_data"
 
+        mcount "buildvar.NLTK_PACKAGES_DEFINITION"
+        mcount "steps.nltk"
     else
         puts-warn "'nltk.txt' not found, not downloading any corpora"
         puts-warn "Learn more: https://devcenter.heroku.com/articles/python-nltk"
