@@ -39,7 +39,7 @@ export BUILD_DIR CACHE_DIR ENV_DIR
 # The user can provide BUILDPACK_VENDOR_URL to specify a custom target.
 # Note: this is designed for non-Heroku use, as it does not use the user-provided
 # environment variable mechanism (the ENV_DIR).
-VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
+VENDOR_URL="https://lang-python.s3.amazonaws.com/heroku-16-staging"
 if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
     VENDOR_URL="$BUILDPACK_VENDOR_URL"
 fi
