@@ -5,12 +5,8 @@ OUT_PREFIX=$1
 BIN_DIR="$(cd "$(dirname "$0")"/../.. || exit; pwd)/bin"
 export BIN_DIR
 
-# shellcheck source=bin/utils
-source "$BIN_DIR/steps/sqlite3"
-
-sqlite3_version
-echo "Setting up SQLite3 Headers for $SQLITE3_VERSION"
-sqlite3_install "$OUT_PREFIX" "$SQLITE3_VERSION" 1
+apt-get update
+apt-get install libsqlite3-dev
 
 echo "Building Python…"
 SOURCE_TARBALL='https://python.org/ftp/python/3.7.2/Python-3.7.2.tgz'
@@ -30,3 +26,9 @@ find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -
 LOCATION=${OUT_PREFIX%?}
 
 ln $LOCATION/bin/python3 $LOCATION/bin/python
+
+# copy over sqlite3 headers
+cp "/usr/include/sqlite3"* "$LOCATION/include/"
+
+# create generic .so symlink against stack image
+ln -s "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0" "$LOCATION/lib/libsqlite3.so"
