@@ -1,5 +1,9 @@
 # Python Buildpack Changelog
 
+# 151 (2019-03-)
+
+Python 3.5.7 and 3.4.10 now available on all Heroku stacks.
+
 # 150 (2019-03-13)
 
 Python 2.7.16 now available on all Heroku stacks.
