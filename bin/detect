@@ -14,8 +14,17 @@
 
 BUILD_DIR=$1
 
+# Setup Path variables, for later use in the Buildpack.
+BIN_DIR=$(cd "$(dirname "$0")"; pwd) # absolute path
+
+# Import the utils script, which contains helper functions used throughout the buildpack.
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
+
 # Exit early if app is clearly not Python.
-if [ ! -f "$BUILD_DIR/requirements.txt" ] && [ ! -f "$BUILD_DIR/setup.py" ] && [ ! -f "$BUILD_DIR/Pipfile" ]; then
+PACKAGING_TOOL="$(python_determine_packaging_tool "$BUILD_DIR")"
+echo Detected packaging tool $PACKAGING_TOOL
+if $PACKAGING_TOOL -eq "INDETERMINATE"; then
   exit 1
 fi
 

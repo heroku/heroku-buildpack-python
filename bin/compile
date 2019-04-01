@@ -59,7 +59,7 @@ PY27="python-2.7"
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
 DEFAULT_PYTHON_STACK="cedar-14"
 # If pip doesn't match this version (the version we install), run the installer.
-PIP_UPDATE="9.0.2"
+PIP_UPDATE="19.0.3"
 
 export DEFAULT_PYTHON_STACK PIP_UPDATE
 export PY37 PY36 PY35 PY27 PY34
@@ -196,12 +196,19 @@ fi
 
 export CACHED_PYTHON_STACK
 
-# Pipenv Python version support.
-# Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).
-# Convert it to a runtime.txt file.
+# Determine build system
+PACKAGING_TOOL="$(python_determine_packaging_tool "$BUILD_DIR")"
 
-# shellcheck source=bin/steps/pipenv-python-version
-source "$BIN_DIR/steps/pipenv-python-version"
+if [[ "$PACKAGING_TOOL" = "PIPENV" ]]; then
+    # Pipenv Python version support.
+    # Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).
+    # Convert it to a runtime.txt file.
+
+    # shellcheck source=bin/steps/pipenv-python-version
+    source "$BIN_DIR/steps/pipenv-python-version"
+fi
+
+# TODO extract poetry version
 
 # If no runtime was provided by the user, assume the default Python runtime version.
 if [ ! -f runtime.txt ]; then
@@ -232,9 +239,17 @@ fi
 source "$BIN_DIR/steps/python"
 mtime "python.install.time" "${start}"
 
-# Install Pipenv dependencies, if a Pipfile was provided.
-# shellcheck source=bin/steps/pipenv
-source "$BIN_DIR/steps/pipenv"
+if [ "$PACKAGING_TOOL" = "PIPENV" ]; then
+    # Install Pipenv dependencies, if a Pipfile was provided.
+    # shellcheck source=bin/steps/pipenv
+    source "$BIN_DIR/steps/pipenv"
+fi
+
+if [ "$PACKAGING_TOOL" = "POETRY" ]; then
+    # Install Pipenv dependencies, if a Pipfile was provided.
+    # shellcheck source=bin/steps/poetry
+    source "$BIN_DIR/steps/poetry"
+fi
 
 # Uninstall removed dependencies with Pip.
 # The buildpack will automatically remove any declared dependencies (in requirements.txt)
@@ -248,8 +263,9 @@ mtime "pip.uninstall.time" "${start}"
 # This allows for people to ship a setup.py application to Heroku
 # (which is rare, but I vouch that it should work!)
 
-if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
+if [ "$PACKAGING_TOOL" = "SETUP_DEVELOP" ]; then
   echo "-e ." > requirements.txt
+  PACKAGING_TOOL=PIP
 fi
 
 # Fix egg-links.
@@ -295,7 +311,9 @@ mtime "sqlite3.install.time" "${start}"
 # Install dependencies with pip (where the magic happens).
 (( start=$(nowms) ))
 # shellcheck source=bin/steps/pip-install
-source "$BIN_DIR/steps/pip-install"
+if [ "$PACKAGING_TOOL" = "PIPENV" ]; then
+    source "$BIN_DIR/steps/pip-install"
+fi
 mtime "pip.install.time" "${start}"
 
 # Support for NLTK corpora.
