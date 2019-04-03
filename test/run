@@ -2,7 +2,7 @@
 
 # Default Python Versions
 # shellcheck source=bin/default_pythons
-source "$BIN_DIR/default_pythons"
+source "bin/default_pythons"
 
 testAirflow() {
   export SLUGIFY_USES_TEXT_UNIDECODE="yes"
@@ -98,14 +98,19 @@ testPylibmc() {
 }
 
 testPythonDefault() {
+  updateVersion "pythonDefault" $DEFAULT_PYTHON_VERSION
   compile "pythonDefault"
   assertCaptured $DEFAULT_PYTHON_VERSION
+  assertNotCaptured "security update"
   assertCapturedSuccess
 }
 
 testPython2() {
+    updateVersion "python2" $LATEST_27
+    echo $LATEST_27 > "runtime.txt"
     compile "python2"
     assertCaptured $LATEST_27
+    assertNotCaptured "security update"
     assertCapturedSuccess
 }
 
@@ -123,8 +128,10 @@ testPython2_fail() {
 }
 
 testPython3_4() {
+  updateVersion "python3_4" $LATEST_34
   compile "python3_4"
   assertCaptured $LATEST_34
+  assertNotCaptured "security update"
   assertCapturedSuccess
 }
 
@@ -146,8 +153,10 @@ testPython3_4_fail() {
 }
 
 testPython3_5() {
+  updateVersion "python3_5" $LATEST_35
   compile "python3_5"
   assertCaptured $LATEST_35
+  assertNotCaptured "security update"
   assertCapturedSuccess
 }
 
@@ -169,8 +178,10 @@ testPython3_5_fail() {
 }
 
 testPython3_6() {
+  updateVersion "python3_6" $LATEST_36
   compile "python3_6"
   assertCaptured $LATEST_36
+  assertNotCaptured "security update"
   assertCapturedSuccess
 }
 
@@ -188,10 +199,12 @@ testPython3_6_fail() {
 }
 
 testPython3_7() {
+  updateVersion "python3_7" $LATEST_37
   compile "python3_7"
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
   else
+    assertNotCaptured "security update"
     assertCaptured $LATEST_37
     assertCapturedSuccess
   fi
