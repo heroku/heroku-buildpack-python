@@ -71,6 +71,11 @@ release()
   capture ${BUILDPACK_HOME}/bin/release ${BUILD_DIR}
 }
 
+updateVersion()
+{
+  echo "$2" > "test/fixtures/${1}/runtime.txt"
+}
+
 assertCapturedEquals()
 {
   assertEquals "$@" "$(cat ${STD_OUT})"
