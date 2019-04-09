@@ -3,67 +3,64 @@
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
 
-if [ ! "$SKIP_PIP_INSTALL" ]; then
+# Install dependencies with Pip.
+puts-step "Installing requirements with pip"
 
-    # Install dependencies with Pip.
-    puts-step "Installing requirements with pip"
+# Set Pip env vars
+# This reads certain environment variables set on the Heroku app config
+# and makes them accessible to the pip install process.
+#
+# PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
+    PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
+    export PIP_EXTRA_INDEX_URL
+    mcount "buildvar.PIP_EXTRA_INDEX_URL"
+fi
 
-    # Set Pip env vars
-    # This reads certain environment variables set on the Heroku app config
-    # and makes them accessible to the pip install process.
-    #
-    # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
-    if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
-        PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
-        export PIP_EXTRA_INDEX_URL
-        mcount "buildvar.PIP_EXTRA_INDEX_URL"
-    fi
+set +e
 
-    set +e
+# Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
+if [[ -r "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE" ]]; then
+    SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
+    export SLUGIFY_USES_TEXT_UNIDECODE
+    mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
+fi
 
-    # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
-    if [[ -r "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE" ]]; then
-        SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
-        export SLUGIFY_USES_TEXT_UNIDECODE
-        mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
-    fi
+set +e
 
-    set +e
+# Measure that we're using pip.
+mcount "tool.pip"
 
-    # Measure that we're using pip.
-    mcount "tool.pip"
+# Count expected build failures.
+if grep -q '==0.0.0' requirements.txt; then
+    mcount "failure.none-version"
+fi
 
-    # Count expected build failures.
-    if grep -q '==0.0.0' requirements.txt; then
-        mcount "failure.none-version"
-    fi
+if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
+    exit 1
+fi
+puts-step `/app/.heroku/python/bin/pip -V`
+/app/.heroku/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee "$WARNINGS_LOG"  | indent
+PIP_STATUS="${PIPESTATUS[0]}"
+set -e
 
-    if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
-        exit 1
-    fi
-    puts-step `/app/.heroku/python/bin/pip -V`
-    /app/.heroku/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee "$WARNINGS_LOG"  | indent
-    PIP_STATUS="${PIPESTATUS[0]}"
-    set -e
+show-warnings
 
-    show-warnings
+if [[ ! $PIP_STATUS -eq 0 ]]; then
+    mcount "failure.pip-install"
+    exit 1
+fi
 
-    if [[ ! $PIP_STATUS -eq 0 ]]; then
-        mcount "failure.pip-install"
-        exit 1
-    fi
+# Smart Requirements handling
+cp requirements.txt .heroku/python/requirements-declared.txt
+/app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
 
-    # Smart Requirements handling
-    cp requirements.txt .heroku/python/requirements-declared.txt
-    /app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
+echo
 
-    echo
-
-    # Install test dependencies, for CI.
-    if [ "$INSTALL_TEST" ]; then
-        if [[ -f "$1/requirements-test.txt" ]]; then
-            puts-step "Installing test dependencies…"
-            /app/.heroku/python/bin/pip install -r "$1/requirements-test.txt" --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent
-        fi
+# Install test dependencies, for CI.
+if [ "$INSTALL_TEST" ]; then
+    if [[ -f "$1/requirements-test.txt" ]]; then
+        puts-step "Installing test dependencies…"
+        /app/.heroku/python/bin/pip install -r "$1/requirements-test.txt" --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent
     fi
 fi

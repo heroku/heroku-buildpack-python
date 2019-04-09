@@ -102,10 +102,6 @@ python_determine_packaging_tool() {
     echo "PIP"
     return
   fi
-  if [ -f "$BUILD_DIR/setup.py" ]; then
-    echo "PIP"
-    return
-  fi
   if [ -f "$BUILD_DIR/Pipfile" ]; then
     echo "PIPENV"
     return
@@ -113,6 +109,10 @@ python_determine_packaging_tool() {
   if [ -f "$BUILD_DIR/pyproject.toml" ] && grep -Fq [tool.poetry] "$BUILD_DIR/pyproject.toml"; then
     echo "POETRY"
     return
-  fi   
+  fi
+  if [ -f "$BUILD_DIR/setup.py" ]; then
+    echo "SETUP_DEVELOP"
+    return
+  fi
   echo "INDETERMINATE"
 }
