@@ -31,11 +31,11 @@ if [[ -f pyproject.toml ]]; then
 
     # Install poetry.
     /app/.heroku/python/bin/python "$ROOT_DIR/vendor/get-poetry.py" # &> /dev/null
-    poetry -V
+    /app/.poetry/bin/poetry -V
 
     # Install the dependencies.
     puts-step "Installing dependencies with poetry…"
-    poetry update 2>&1 | indent
+    /app/.poetry/bin/poetry update 2>&1 | indent
 
 
 fi
