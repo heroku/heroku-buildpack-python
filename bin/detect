@@ -14,6 +14,9 @@
 
 BUILD_DIR=$1
 
+# Setup Path variables, for later use in the Buildpack.
+BIN_DIR=$(cd "$(dirname "$0")"; pwd) # absolute path
+
 # Import the utils script, which contains helper functions used throughout the buildpack.
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
