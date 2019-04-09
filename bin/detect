@@ -19,8 +19,8 @@ BUILD_DIR=$1
 source "$BIN_DIR/utils"
 
 # Exit early if app is clearly not Python.
-PACKAGING_TOOL=`python_determine_packaging_tool "$BUILD_DIR"`
-echo Detected "$PACKAGING_TOOL"
+PACKAGING_TOOL=$(python_determine_packaging_tool "$BUILD_DIR")
+echo Detected packaging tool $PACKAGING_TOOL
 if $PACKAGING_TOOL -eq "INDETERMINATE"; then
   exit 1
 fi
