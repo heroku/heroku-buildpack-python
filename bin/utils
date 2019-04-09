@@ -106,7 +106,7 @@ python_determine_packaging_tool() {
     echo "PIPENV"
     return
   fi
-  if [ -f "$BUILD_DIR/pyproject.toml" ] && grep -Fq [tool.poetry] "$BUILD_DIR/pyproject.toml"; then
+  if [ -f "$BUILD_DIR/pyproject.toml" ] && grep -Fq "[tool.poetry]" "$BUILD_DIR/pyproject.toml"; then
     echo "POETRY"
     return
   fi

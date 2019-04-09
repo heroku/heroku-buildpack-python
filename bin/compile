@@ -199,7 +199,7 @@ export CACHED_PYTHON_STACK
 # Determine build system
 PACKAGING_TOOL="$(python_determine_packaging_tool "$BUILD_DIR")"
 
-if [ "$PACKAGING_TOOL" = "PIPENV" ];
+if [[ "$PACKAGING_TOOL" = "PIPENV" ]]; then
     # Pipenv Python version support.
     # Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).
     # Convert it to a runtime.txt file.
@@ -239,13 +239,13 @@ fi
 source "$BIN_DIR/steps/python"
 mtime "python.install.time" "${start}"
 
-if [ "$PACKAGING_TOOL" = "PIPENV" ];
+if [ "$PACKAGING_TOOL" = "PIPENV" ]; then
     # Install Pipenv dependencies, if a Pipfile was provided.
     # shellcheck source=bin/steps/pipenv
     source "$BIN_DIR/steps/pipenv"
 fi
 
-if [ "$PACKAGING_TOOL" = "POETRY" ];
+if [ "$PACKAGING_TOOL" = "POETRY" ]; then
     # Install Pipenv dependencies, if a Pipfile was provided.
     # shellcheck source=bin/steps/poetry
     source "$BIN_DIR/steps/poetry"
@@ -263,7 +263,7 @@ mtime "pip.uninstall.time" "${start}"
 # This allows for people to ship a setup.py application to Heroku
 # (which is rare, but I vouch that it should work!)
 
-if [ "$PACKAGING_TOOL" = "SETUP_DEVELOP" ];
+if [ "$PACKAGING_TOOL" = "SETUP_DEVELOP" ]; then
   echo "-e ." > requirements.txt
   PACKAGING_TOOL=PIP
 fi
@@ -311,7 +311,7 @@ mtime "sqlite3.install.time" "${start}"
 # Install dependencies with pip (where the magic happens).
 (( start=$(nowms) ))
 # shellcheck source=bin/steps/pip-install
-if [ "$PACKAGING_TOOL" = "PIPENV" ];
+if [ "$PACKAGING_TOOL" = "PIPENV" ]; then
     source "$BIN_DIR/steps/pip-install"
 fi
 mtime "pip.install.time" "${start}"
