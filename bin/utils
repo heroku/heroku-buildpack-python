@@ -95,3 +95,20 @@ python_sqlite3_check() {
   ( python2_check "$VERSION" && version_gte "$VERSION" "$MIN_PYTHON_2" ) \
     || ( python3_check "$VERSION" && version_gte "$VERSION" "$MIN_PYTHON_3" )
 }
+
+python_determine_packaging_tool() {
+  BUILD_DIR=$1
+  if [ -f "$BUILD_DIR/requirements.txt" ]; then
+    return "PIP"
+  fi
+  if [ -f "$BUILD_DIR/setup.py" ]; then
+    return "PIP"
+  fi
+  if [ -f "$BUILD_DIR/Pipfile" ]; then
+    return "PIPENV"
+  fi
+  if [ -f "$BUILD_DIR/pyproject.toml" ] && grep -Fq [tool.poetry] "$BUILD_DIR/pyproject.toml"; then
+    return "POETRY"
+  fi   
+  return "INDETERMINATE"
+}
