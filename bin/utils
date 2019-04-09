@@ -99,16 +99,20 @@ python_sqlite3_check() {
 python_determine_packaging_tool() {
   BUILD_DIR=$1
   if [ -f "$BUILD_DIR/requirements.txt" ]; then
-    return "PIP"
+    echo "PIP"
+    return
   fi
   if [ -f "$BUILD_DIR/setup.py" ]; then
-    return "PIP"
+    echo "PIP"
+    return
   fi
   if [ -f "$BUILD_DIR/Pipfile" ]; then
-    return "PIPENV"
+    echo "PIPENV"
+    return
   fi
   if [ -f "$BUILD_DIR/pyproject.toml" ] && grep -Fq [tool.poetry] "$BUILD_DIR/pyproject.toml"; then
-    return "POETRY"
+    echo "POETRY"
+    return
   fi   
-  return "INDETERMINATE"
+  echo "INDETERMINATE"
 }
