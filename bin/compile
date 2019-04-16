@@ -35,16 +35,12 @@ ENV_DIR=$3
 # Export Path variables, for use in sub-scripts.
 export BUILD_DIR CACHE_DIR ENV_DIR
 
-# Require for multibuildpack as there is no local dependency cache here
-if [ "$STACK" = "scalingo" ] ; then
-  export STACK="cedar-14"
-fi
-
 # Set the Buildpack's internet target for downloading Python distributions.
 # The user can provide BUILDPACK_VENDOR_URL to specify a custom target.
 # Note: this is designed for non-Scalingo use, as it does not use the user-provided
 # environment variable mechanism (the ENV_DIR).
-VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
+# VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
+VENDOR_URL="https://python-binaries.scalingo.com/$STACK"
 if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
     VENDOR_URL="$BUILDPACK_VENDOR_URL"
 fi
@@ -69,7 +65,7 @@ PY34="python-3.4"
 PY27="python-2.7"
 
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
-DEFAULT_PYTHON_STACK="cedar-14"
+DEFAULT_PYTHON_STACK="scalingo"
 # If pip doesn't match this version (the version we install), run the installer.
 PIP_UPDATE="9.0.2"
 
