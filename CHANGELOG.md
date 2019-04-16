@@ -1,5 +1,21 @@
 # Python Buildpack Changelog
 
+# 152 (2019-04-04)
+
+Python 3.7.3 now available.
+
+# 151 (2019-03-21)
+
+Python 3.5.7 and 3.4.10 now available on all Heroku stacks.
+
+# 150 (2019-03-13)
+
+Python 2.7.16 now available on all Heroku stacks.
+
+# 149 (2019-03-04)
+
+Hotfix for broken Cedar 14 deploys
+
 # 148 (2019-02-21)
 
 No user facing changes, improving internal metrics

@@ -74,6 +74,11 @@ if [ -f .scalingo/python-version ]; then
   fi
 fi
 
+if [[ "$STACK" = "scalingo" && "$PYTHON_VERSION" == $PY37* ]]; then
+  puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
+  puts-warn "Aborting.  More info: https://doc.scalingo.com/languages/python/start"
+  exit 1
+fi
 
 if [ ! "$SKIP_INSTALL" ]; then
     puts-step "Installing $PYTHON_VERSION"

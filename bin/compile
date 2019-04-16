@@ -35,31 +35,20 @@ ENV_DIR=$3
 # Export Path variables, for use in sub-scripts.
 export BUILD_DIR CACHE_DIR ENV_DIR
 
-# Require for multibuildpack as there is no local dependency cache here
-if [ "$STACK" = "scalingo" ] ; then
-  export STACK="cedar-14"
-fi
-
 # Set the Buildpack's internet target for downloading Python distributions.
 # The user can provide BUILDPACK_VENDOR_URL to specify a custom target.
 # Note: this is designed for non-Scalingo use, as it does not use the user-provided
 # environment variable mechanism (the ENV_DIR).
-VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
+# VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
+VENDOR_URL="https://python-binaries.scalingo.com/$STACK"
 if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
     VENDOR_URL="$BUILDPACK_VENDOR_URL"
 fi
 export VENDOR_URL
 
-# Which versions of Python are we using?
-# These variables are used to specify which versions of Python to install by default,
-# as well as prompt the user to upgrade if they are using an un–supported version.
-# Note: When 3.7 lands, I recommend switching to LATEST_36 and LATEST_37.
-DEFAULT_PYTHON_VERSION="python-3.6.8"
-LATEST_36="python-3.6.8"
-LATEST_37="python-3.7.2"
-LATEST_35="python-3.5.6"
-LATEST_34="python-3.4.9"
-LATEST_27="python-2.7.15"
+# Default Python Versions
+# shellcheck source=bin/default_pythons
+source "$BIN_DIR/default_pythons"
 
 # Supported Python Branches
 PY37="python-3.7"
@@ -69,12 +58,11 @@ PY34="python-3.4"
 PY27="python-2.7"
 
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
-DEFAULT_PYTHON_STACK="cedar-14"
+DEFAULT_PYTHON_STACK="scalingo"
 # If pip doesn't match this version (the version we install), run the installer.
 PIP_UPDATE="9.0.2"
 
-export DEFAULT_PYTHON_VERSION DEFAULT_PYTHON_STACK PIP_UPDATE
-export LATEST_27 LATEST_36 LATEST_37 LATEST_35 LATEST_34
+export DEFAULT_PYTHON_STACK PIP_UPDATE
 export PY37 PY36 PY35 PY27 PY34
 
 # Common Problem Warnings:
