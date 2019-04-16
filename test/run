@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Default Python Versions
+# shellcheck source=bin/default_pythons
+source "bin/default_pythons"
+
 testAirflow() {
   export SLUGIFY_USES_TEXT_UNIDECODE="yes"
   compile "airflow"
@@ -19,13 +23,13 @@ testPipenvLock() {
 
 testPipenvVersion() {
   compile "pipenv-version"
-  assertCaptured "3.6.8"
+  assertCaptured $DEFAULT_PYTHON_VERSION
   assertCapturedSuccess
 }
 
 testPipenvVersion2() {
   compile "pipenv-version2"
-  assertCaptured "2.7.15"
+  assertCaptured $LATEST_27
   assertCapturedSuccess
 }
 testPipenvFullVersion() {
@@ -94,26 +98,27 @@ testPylibmc() {
 }
 
 testPythonDefault() {
+  updateVersion "pythonDefault" $DEFAULT_PYTHON_VERSION
   compile "pythonDefault"
-  assertCaptured "python-3.6.8"
+  assertCaptured $DEFAULT_PYTHON_VERSION
+  assertNotCaptured "security update"
   assertCapturedSuccess
 }
 
 testPython2() {
+    updateVersion "python2" $LATEST_27
+    echo $LATEST_27 > "runtime.txt"
     compile "python2"
-    assertCaptured "python-2.7.15"
+    assertCaptured $LATEST_27
+    assertNotCaptured "security update"
     assertCapturedSuccess
 }
 
 testPython2_warn() {
     compile "python2_warn"
-    if [[ $STACK = "heroku-18" ]]; then
-      assertCapturedError
-    else
-      assertCaptured "python-2.7.14"
-      assertCaptured "security update!"
-      assertCapturedSuccess
-    fi
+    assertCaptured "python-2.7.15"
+    assertCaptured "security update!"
+    assertCapturedSuccess
 }
 
 testPython2_fail() {
@@ -123,9 +128,13 @@ testPython2_fail() {
 }
 
 testPython3_4() {
-  compile "python3_4"
-  assertCaptured "python-3.4.9"
-  assertCapturedSuccess
+  if [[ $STACK != "cedar-14" ]]; then
+    updateVersion "python3_4" $LATEST_34
+    compile "python3_4"
+    assertCaptured $LATEST_34
+    assertNotCaptured "security update"
+    assertCapturedSuccess
+  fi
 }
 
 testPython3_4_warn() {
@@ -146,9 +155,13 @@ testPython3_4_fail() {
 }
 
 testPython3_5() {
-  compile "python3_5"
-  assertCaptured "python-3.5.6"
-  assertCapturedSuccess
+  if [[ $STACK != "cedar-14" ]]; then
+    updateVersion "python3_5" $LATEST_35
+    compile "python3_5"
+    assertCaptured $LATEST_35
+    assertNotCaptured "security update"
+    assertCapturedSuccess
+  fi
 }
 
 testPython3_5_warn() {
@@ -169,8 +182,10 @@ testPython3_5_fail() {
 }
 
 testPython3_6() {
+  updateVersion "python3_6" $LATEST_36
   compile "python3_6"
-  assertCaptured "python-3.6.8"
+  assertCaptured $LATEST_36
+  assertNotCaptured "security update"
   assertCapturedSuccess
 }
 
@@ -188,11 +203,13 @@ testPython3_6_fail() {
 }
 
 testPython3_7() {
+  updateVersion "python3_7" $LATEST_37
   compile "python3_7"
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
   else
-    assertCaptured "python-3.7.2"
+    assertNotCaptured "security update"
+    assertCaptured $LATEST_37
     assertCapturedSuccess
   fi
 }
