@@ -52,7 +52,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
         fi
 
-        export PIPENV_VERSION="2018.5.18"
+        export PIPENV_VERSION="${PIPENV_VERSION:-2018.11.26}"
 
         # Install pipenv.
         # Due to weird old pip behavior and pipenv behavior, pipenv upgrades pip
