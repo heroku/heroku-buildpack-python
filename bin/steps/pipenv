@@ -6,6 +6,12 @@
 source "$BIN_DIR/utils"
 set -e
 
+# Allow skipping Pipenv, without skipping Pip too.
+if [ "$SKIP_PIPENV" ]; then
+    return
+fi
+
+
 if [[ -f Pipfile.lock ]]; then
     if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
         if [[ $(openssl dgst -sha256 Pipfile.lock) == $(cat .heroku/python/Pipfile.lock.sha256) ]]; then
