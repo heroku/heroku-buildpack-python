@@ -5,7 +5,9 @@ runtime-fixer runtime.txt
 PYTHON_VERSION=$(cat runtime.txt)
 
 # The location of the pre-compiled python binary.
-VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
+# VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
+# testing location
+VENDORED_PYTHON="https://lang-python.s3.amazonaws.com/staging/$PYTHON_VERSION.tar.gz"
 
 SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
 
@@ -57,13 +59,13 @@ if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
     rm -fr .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor .heroku/python .heroku/python-sqlite3-version
 fi
 
-# need to clear the cache for first time installing SQLite3,
-# since the version is changing and could lead to runtime errors
-# with compiled extensions.
-if [ -d .heroku/python ] && [ ! -f .heroku/python-sqlite3-version ] && python_sqlite3_check "$PYTHON_VERSION"; then
-  puts-step "Need to update SQLite3, clearing cache"
-  rm -fr .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor
-fi
+# # need to clear the cache for first time installing SQLite3,
+# # since the version is changing and could lead to runtime errors
+# # with compiled extensions.
+# if [ -d .heroku/python ] && [ ! -f .heroku/python-sqlite3-version ] && python_sqlite3_check "$PYTHON_VERSION"; then
+#   puts-step "Need to update SQLite3, clearing cache"
+#   rm -fr .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor
+# fi
 
 if [ -f .heroku/python-version ]; then
   if [ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]; then
