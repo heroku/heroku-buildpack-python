@@ -1,5 +1,10 @@
 # Python Buildpack Changelog
 
+# 153 (2019-06-20)
+
+Bugfix: Add opt-in support for using Python built without Sqlite3 as a dependency.
+Use PYTHON_NO_SQLITE3=True to opt-in.
+
 # 152 (2019-04-04)
 
 Python 3.7.3 now available.
