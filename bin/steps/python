@@ -4,10 +4,17 @@ set +e
 runtime-fixer runtime.txt
 PYTHON_VERSION=$(cat runtime.txt)
 
-# The location of the pre-compiled python binary.
-# VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
-# testing location
-VENDORED_PYTHON="https://lang-python.s3.amazonaws.com/staging/$PYTHON_VERSION.tar.gz"
+
+# PYTHON_NO_SQLITE3 specifies if the pre-compiled python runtime binary should be built
+# without the sqlite3 package.
+if [[ -r "$ENV_DIR/PYTHON_NO_SQLITE3" ]]; then
+    VENDORED_PYTHON="${VENDOR_URL}/runtimes/sqlite-free/$PYTHON_VERSION.tar.gz"
+    echo "Running python without sqlite3"
+    mcount "buildvar.PYTHON_NO_SQLITE3"
+else
+  # The location of the pre-compiled python binary.
+  VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
+fi
 
 SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
 
