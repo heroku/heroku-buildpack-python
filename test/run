@@ -101,6 +101,7 @@ testPythonDefault() {
   updateVersion "pythonDefault" $DEFAULT_PYTHON_VERSION
   compile "pythonDefault"
   assertCaptured $DEFAULT_PYTHON_VERSION
+  assertCaptured "Running standard Python"
   assertNotCaptured "security update"
   assertCapturedSuccess
 }
@@ -237,6 +238,14 @@ testGitEgg() {
   assertCapturedSuccess
 }
 
+testNoSqlite() {
+  export PYTHON_NO_SQLITE3="true"
+  compile "no-sqlite"
+  assertCaptured "Installing python"
+  assertCaptured "Running Python without sqlite3"
+  assertCapturedSuccess
+}
+
 testSmartRequirements() {
   local cache_dir="$(mktmpdir)"
   compile "requirements-standard" "$cache_dir"
@@ -257,7 +266,6 @@ testStackChange() {
   assertFile "$STACK" ".heroku/python-stack"
   assertCapturedSuccess
 }
-
 
 pushd $(dirname 0) >/dev/null
 popd >/dev/null

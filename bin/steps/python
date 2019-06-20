@@ -9,11 +9,12 @@ PYTHON_VERSION=$(cat runtime.txt)
 # without the sqlite3 package.
 if [[ -r "$ENV_DIR/PYTHON_NO_SQLITE3" ]]; then
     VENDORED_PYTHON="${VENDOR_URL}/runtimes/sqlite-free/$PYTHON_VERSION.tar.gz"
-    echo "Running python without sqlite3"
+    echo "Running Python without sqlite3"
     mcount "buildvar.PYTHON_NO_SQLITE3"
 else
   # The location of the pre-compiled python binary.
   VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
+  echo "Running standard Python"
 fi
 
 SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
