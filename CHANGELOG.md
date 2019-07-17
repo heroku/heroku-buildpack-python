@@ -1,5 +1,13 @@
 # Python Buildpack Changelog
 
+# 154 (2019-07-17)
+
+Fix python 3.5.7 formula actually building 3.7.2
+
+# 153 (2019-06-21)
+
+Hotfix for broken heroku-16 deploys
+
 # 152 (2019-04-04)
 
 Python 3.7.3 now available.
