@@ -4,7 +4,7 @@
 source "$BIN_DIR/utils"
 
 sqlite3_version() {
-  if [ "$STACK" = "cedar-14" ]; then
+  if [ "$STACK" = "scalingo-14" -o "$STACK" = "cedar-14" ]; then
     SQLITE3_VERSION="3.8.2-1ubuntu2.2"
   else
     SQLITE3_VERSION=${SQLITE3_VERSION:-$(dpkg -s libsqlite3-0 | grep Version | sed 's/Version: //')}
