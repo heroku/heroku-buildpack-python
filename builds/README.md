@@ -37,5 +37,11 @@ For Heroku-16 stack
 2. From the root of the buildpack repository, run: `make buildenv-heroku-16`
 3. Follow the instructions displayed!
 
+For Heroku-18 stack
+-------------------
+
+1. Ensure GNU Make and Docker are installed.
+2. From the root of the buildpack repository, run: `make buildenv-heroku-18`
+3. Follow the instructions displayed!
 
 Enjoy :)
