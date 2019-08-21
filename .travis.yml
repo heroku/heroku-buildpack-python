@@ -19,10 +19,6 @@ jobs:
     services: docker
     env: STACK=heroku-16
     script: "./tests.sh"
-  - stage: Stack Unit Tests
-    services: docker
-    env: STACK=cedar-14
-    script: "./tests.sh"
   - stage: Hatchet Integration
     script: "bundle exec rspec"
 env:
