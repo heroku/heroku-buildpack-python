@@ -62,7 +62,7 @@ PY27="python-2.7"
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
 DEFAULT_PYTHON_STACK="cedar-14"
 # If pip doesn't match this version (the version we install), run the installer.
-PIP_UPDATE="9.0.2"
+PIP_UPDATE="19.2.3"
 
 export DEFAULT_PYTHON_STACK PIP_UPDATE
 export PY37 PY36 PY35 PY27 PY34
