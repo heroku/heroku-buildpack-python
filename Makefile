@@ -36,6 +36,19 @@ buildenv-heroku-16:
 	@echo
 	@docker run -it --rm python-buildenv-heroku-16
 
+buildenv-heroku-18:
+	@echo "Creating build environment (heroku-18)..."
+	@echo
+	@docker build --pull -f Dockerfile.heroku-18 -t python-buildenv-heroku-18 .
+	@echo
+	@echo "Usage..."
+	@echo
+	@echo "  $$ export AWS_ACCESS_KEY_ID=foo AWS_SECRET_ACCESS_KEY=bar  # Optional unless deploying"
+	@echo "  $$ bob build runtimes/python-2.7.13"
+	@echo "  $$ bob deploy runtimes/python-2.7.13"
+	@echo
+	@docker run -it --rm python-buildenv-heroku-18
+
 tools:
 	git clone https://github.com/kennethreitz/pip-pop.git
 	mv pip-pop/bin/* vendor/pip-pop/
