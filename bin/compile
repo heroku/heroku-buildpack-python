@@ -64,6 +64,19 @@ DEFAULT_PYTHON_STACK="cedar-14"
 # If pip doesn't match this version (the version we install), run the installer.
 PIP_UPDATE="19.2.3"
 
+for file in "$BUILD_DIR/runtime.txt" "$CACHE_DIR/.heroku/python-version" ; do
+    [ -f "$file" ] || continue
+
+    version=$(tr -d '[:space:]' < "$file")
+
+    case "$version" in "$PY34"*)
+        # Python 3.4 support was dropped in pip >= 19.2.
+        PIP_UPDATE="19.1.1"
+        break
+        ;;
+    esac
+done
+
 export DEFAULT_PYTHON_STACK PIP_UPDATE
 export PY37 PY36 PY35 PY27 PY34
 
