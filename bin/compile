@@ -269,8 +269,13 @@ mtime "pip.uninstall.time" "${start}"
 # This allows for people to ship a setup.py application to Heroku
 # (which is rare, but I vouch that it should work!)
 
-if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
-  echo "-e ." > requirements.txt
+if [ ! -f requirements.txt ] && [ ! -f Pipfile ] ; then
+    if [ -f pyproject.toml ] ; then
+        # Editable installs are not supported for pyproject.toml-style projects.
+        echo "." > requirements.txt
+    else
+        echo "-e ." > requirements.txt
+    fi
 fi
 
 # Fix egg-links.
