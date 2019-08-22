@@ -80,6 +80,16 @@ testPoetryLock() {
     assertCapturedSuccess
 }
 
+testFlit() {
+    compile "flit"
+    assertCapturedSuccess
+}
+
+testFlitRequires() {
+    compile "flit-requires"
+    assertCapturedSuccess
+}
+
 testNoRequirements() {
   compile "no-requirements"
   assertCapturedError
