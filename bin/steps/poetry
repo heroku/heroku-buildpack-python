@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+set -e
+
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
+
+if [ ! -f requirements.txt ] && [ -f pyproject.toml ] && [ -f poetry.lock ]; then
+    # Measure that we're using Poetry.
+    mcount "tool.poetry"
+
+    # Hash poetry.lock to detect changes.
+    POETRY_LOCK_SHA=$(openssl dgst -sha256 poetry.lock)
+
+    # Use cached requirements.txt if poetry.lock is unchanged.
+    CACHED_REQUIREMENTS=$CACHE_DIR/requirements.txt
+    CACHED_POETRY_LOCK_SHA=$CACHE_DIR/poetry.lock.sha256
+
+    if [ -f "$CACHED_REQUIREMENTS" ] && [ -f "$CACHED_POETRY_LOCK_SHA" ] &&
+           [ "$POETRY_LOCK_SHA" == "$(cat "$CACHED_POETRY_LOCK_SHA")" ]; then
+        echo "Skipping requirements export, as poetry.lock hasn't changed since last deploy." | indent
+        cp "$CACHED_REQUIREMENTS" requirements.txt
+    else
+        # Set environment variables for pip
+        # This reads certain environment variables set on the Heroku app config
+        # and makes them accessible to the pip install process.
+        #
+        # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+        if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
+            PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
+            export PIP_EXTRA_INDEX_URL
+            mcount "buildvar.PIP_EXTRA_INDEX_URL"
+        fi
+
+        # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
+        if [[ -r "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE" ]]; then
+            SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
+            export SLUGIFY_USES_TEXT_UNIDECODE
+            mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
+        fi
+
+        # Install Poetry.
+        #
+        # Poetry is not used to install the project because it does not clean up
+        # stale requirements (see sdispater/poetry#648), so we need to export
+        # requirements.txt anyway for the pip-uninstall step.
+        #
+        # Since we only use Poetry to export a requirements.txt file, ignore the
+        # Poetry version specified in pyproject.toml. Install a pre-release of
+        # 1.0.0 because the export command is not available before 1.0.0a0.
+        export POETRY_VERSION="1.0.0b1"
+        puts-step "Exporting requirements with Poetry $POETRY_VERSION…"
+        /app/.heroku/python/bin/pip install "poetry==$POETRY_VERSION" \
+            --disable-pip-version-check &> /dev/null
+
+        # Export requirements.
+        /app/.heroku/python/bin/poetry export -f requirements.txt > requirements.txt
+
+        # Write SHA and requirements.txt to cache dir.
+        echo "$POETRY_LOCK_SHA" > "$CACHED_POETRY_LOCK_SHA"
+        cp requirements.txt "$CACHED_REQUIREMENTS"
+    fi
+fi

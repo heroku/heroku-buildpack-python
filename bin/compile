@@ -257,6 +257,10 @@ mtime "python.install.time" "${start}"
 # shellcheck source=bin/steps/pipenv
 source "$BIN_DIR/steps/pipenv"
 
+# Export requirements.txt from poetry.lock, if present.
+# shellcheck source=bin/steps/poetry
+source "$BIN_DIR/steps/poetry"
+
 # Uninstall removed dependencies with Pip.
 # The buildpack will automatically remove any declared dependencies (in requirements.txt)
 # that were explicitly removed. This machinery is a bit complex, but it is not complicated.
