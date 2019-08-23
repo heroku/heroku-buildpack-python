@@ -1,19 +1,20 @@
 [[package]]
 category = "main"
-description = "Classes Without Boilerplate"
-name = "attrs"
+description = "A lightweight library for converting complex datatypes to and from native Python datatypes."
+name = "marshmallow"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "19.1.0"
+python-versions = ">=3.5"
+version = "3.0.0"
 
 [package.extras]
-dev = ["coverage", "hypothesis", "pympler", "pytest", "six", "zope.interface", "sphinx", "pre-commit"]
-docs = ["sphinx", "zope.interface"]
-tests = ["coverage", "hypothesis", "pympler", "pytest", "six", "zope.interface"]
+dev = ["pytest", "pytz", "simplejson", "flake8 (3.7.8)", "flake8-bugbear (19.8.0)", "pre-commit (>=1.17,<2.0)", "tox"]
+docs = ["sphinx (2.2.0)", "sphinx-issues (1.2.0)", "alabaster (0.7.12)", "sphinx-version-warning (1.1.2)"]
+lint = ["flake8 (3.7.8)", "flake8-bugbear (19.8.0)", "pre-commit (>=1.17,<2.0)"]
+tests = ["pytest", "pytz", "simplejson"]
 
 [metadata]
-content-hash = "9c92739040d45f898575877e69198d92bb9477423fe80c60a14376bf1f3d010e"
-python-versions = "^3.7"
+content-hash = "11b18d7787605b57a1019436950c60105518d3f3a8a60030493402031355e2f2"
+python-versions = "^3.6"
 
 [metadata.hashes]
-attrs = ["69c0dbf2ed392de1cb5ec704444b08a5ef81680a61cb899dc08127123af36a79", "f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399"]
+marshmallow = ["e5e9fd0c2e919b4ece915eb30808206349a49a45df72e99ed20e27a9053d574b", "fa2d8a4b61d09b0e161a14acc5ad8ab7aaaf1477f3dd52819ddd6c6c8275733a"]

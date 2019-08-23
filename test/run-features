@@ -82,6 +82,7 @@ testPoetry() {
 
 testPoetryLock() {
     compile "poetry-lock"
+    assertCaptured "marshmallow==3.0.0"
     assertCapturedSuccess
 }
 
