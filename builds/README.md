@@ -4,7 +4,6 @@
 
 **After every change to your formulae, perform the following** from the root of the Git repository (not from `builds/`) to rebuild the images for each stack:
 
-    $ docker build --pull --tag heroku-python-build-cedar-14 --file $(pwd)/builds/cedar-14.Dockerfile .
     $ docker build --pull --tag heroku-python-build-heroku-16 --file $(pwd)/builds/heroku-16.Dockerfile .
     $ docker build --pull --tag heroku-python-build-heroku-18 --file $(pwd)/builds/heroku-18.Dockerfile .
 
