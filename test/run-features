@@ -70,6 +70,11 @@ testPipenvFullVersion() {
   assertCapturedSuccess
 }
 
+testPyProjectToml() {
+    compile "pyproject-toml"
+    assertCapturedSuccess
+}
+
 testPoetry() {
     compile "poetry"
     assertCapturedSuccess
