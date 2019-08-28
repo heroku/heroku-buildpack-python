@@ -34,15 +34,26 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     mcount "tool.pip"
 
     # Count expected build failures.
-    if grep -q '==0.0.0' requirements.txt; then
+    if [ -f requirements.txt ] && grep -q '==0.0.0' requirements.txt; then
         mcount "failure.none-version"
     fi
 
     if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
         exit 1
     fi
-    /app/.heroku/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
-    PIP_STATUS="${PIPESTATUS[0]}"
+
+    if [ -f requirements.txt ]; then
+        /app/.heroku/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+        PIP_STATUS="${PIPESTATUS[0]}"
+    else
+        PIP_STATUS=0
+    fi
+
+    if [ "$PIP_STATUS" -eq 0 ] && [ -f pyproject.toml ]; then
+        /app/.heroku/python/bin/pip install . --exists-action=w --disable-pip-version-check --no-cache-dir 2>&1 | tee -a "$WARNINGS_LOG" | cleanup | indent
+        PIP_STATUS="${PIPESTATUS[0]}"
+    fi
+
     set -e
 
     show-warnings
@@ -53,8 +64,10 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     fi
 
     # Smart Requirements handling
-    cp requirements.txt .heroku/python/requirements-declared.txt
-    /app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
+    if [ -f requirements.txt ]; then
+        cp requirements.txt .heroku/python/requirements-declared.txt
+        /app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
+    fi
 
     echo
 
