@@ -10,24 +10,24 @@ OUT_PREFIX=$1
 dep_formula=${0#$WORKSPACE_DIR/} # this is the original script, e.g. pypy-5.3.1
 dep_name=$(basename $BASH_SOURCE) # this is us
 dep_version=${dep_formula##*"/${dep_name}-"} # "subtract" our name from full version name
-dep_package=${dep_name}-${dep_version} # it's always "Python-…"
-dep_dirname=${dep_package}-linux64
-dep_archive_name=${dep_dirname}.tar.bz2
+dep_package=$(echo $dep_name | tr p P)-${dep_version} # it's always "Python-…"
+dep_dirname=${dep_package}-linux64 # this is uppercased
+dep_archive_name=${dep_dirname}.tar.bz2 # this is uppercased too
 dep_url=https://python.org/ftp/python/${dep_version}/${dep_package}.tgz
 
 
-echo "Installing necesary sqlite headers"
-# install the necessary sqlite headers
-apt-get update
-apt-get install -y libsqlite3-dev
+# echo "Installing necesary sqlite headers"
+# # install the necessary sqlite headers
+# apt-get update
+# apt-get install -y libsqlite3-dev
 
-# # Old way of installing sqlite
-# # shellcheck source=bin/utils
-# source "$BIN_DIR/steps/sqlite3"
+# Old way of installing sqlite
+# shellcheck source=bin/utils
+source "$BIN_DIR/steps/sqlite3"
 
-# sqlite3_version
-# echo "Setting up SQLite3 Headers for $SQLITE3_VERSION"
-# sqlite3_install "$OUT_PREFIX" "$SQLITE3_VERSION" 1
+sqlite3_version
+echo "Setting up SQLite3 Headers for $SQLITE3_VERSION"
+sqlite3_install "$OUT_PREFIX" "$SQLITE3_VERSION" 1
 
 echo "Building Python 3..."
 
@@ -49,8 +49,8 @@ LOCATION=${OUT_PREFIX%?}
 
 ln $LOCATION/bin/python3 $LOCATION/bin/python
 
-# copy over sqlite3 headers
-cp "/usr/include/sqlite3"* "$LOCATION/include/"
+# # copy over sqlite3 headers
+# cp "/usr/include/sqlite3"* "$LOCATION/include/"
 
-# create generic .so symlink against stack image
-ln -s "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0" "$LOCATION/lib/libsqlite3.so"
+# # create generic .so symlink against stack image
+# ln -s "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0" "$LOCATION/lib/libsqlite3.so"
