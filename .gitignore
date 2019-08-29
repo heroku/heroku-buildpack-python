@@ -8,4 +8,5 @@ repos/*
 #Venv
 buildpack/*
 
-builds/dockerenv
+builds/dockerenv.staging*
+builds/dockerenv.production
