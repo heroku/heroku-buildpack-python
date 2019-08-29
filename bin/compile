@@ -45,7 +45,7 @@ if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
 fi
 
 # Build binaries (python runtimes, etc) in the /staging/ directory on S3. Test
-these binaries for compatibility when passed this environment variable.
+# these binaries for compatibility when passed this environment variable.
 if [ "$TEST_STAGED_S3_BINARIES" == "1" ]; then
     echo "Testing staged binaries..."
     VENDOR_URL="https://lang-python.s3.amazonaws.com/staging/$STACK"
