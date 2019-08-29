@@ -17,12 +17,6 @@ python_version=${BASE^}
 version_number=$(echo "$python_version" | cut -d- -f2)
 dep_url=https://python.org/ftp/python/${version_number}/${python_version}.tgz
 
-# echo "Installing necesary sqlite headers"
-# # install the necessary sqlite headers
-# apt-get update
-# apt-get install -y libsqlite3-dev
-
-# Old way of installing sqlite
 # shellcheck source=bin/utils
 source "$BIN_DIR/steps/sqlite3"
 
@@ -34,8 +28,7 @@ echo "Building Python 3..."
 echo "Pulling from source: ${dep_url}"
 
 
-curl -L "${dep_url}" | tar xz -C "${OUT_PREFIX}" # --strip-components 1 # extract to $OUT_PREFIX, drop the first directory level, which is the archive name
-echo "`ls`"
+curl -L "${dep_url}" | tar xz -C "${OUT_PREFIX}"
 mv "${OUT_PREFIX}/${python_version}" src
 cd src
 
@@ -51,9 +44,3 @@ find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -
 LOCATION=${OUT_PREFIX%?}
 
 ln $LOCATION/bin/python3 $LOCATION/bin/python
-
-# # copy over sqlite3 headers
-# cp "/usr/include/sqlite3"* "$LOCATION/include/"
-
-# # create generic .so symlink against stack image
-# ln -s "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0" "$LOCATION/lib/libsqlite3.so"
