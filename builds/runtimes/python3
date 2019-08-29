@@ -6,15 +6,16 @@ set -o pipefail
 set -eu
 
 OUT_PREFIX=$1
+BIN_DIR="$(cd "$(dirname "$0")"/../.. || exit; pwd)/bin"
+export BIN_DIR
 
 dep_formula=${0#$WORKSPACE_DIR/} # this is the original script, e.g. pypy-5.3.1
 dep_name=$(basename $BASH_SOURCE) # this is us
-dep_version=${dep_formula##*"/${dep_name}-"} # "subtract" our name from full version name
-dep_package=$(echo $dep_name | tr p P)-${dep_version} # it's always "Python-…"
-dep_dirname=${dep_package}-linux64 # this is uppercased
-dep_archive_name=${dep_dirname}.tar.bz2 # this is uppercased too
-dep_url=https://python.org/ftp/python/${dep_version}/${dep_package}.tgz
 
+BASE=${dep_formula##*/}
+python_version=${BASE^}
+version_number=$(echo "$python_version" | cut -d- -f2)
+dep_url=https://python.org/ftp/python/${version_number}/${python_version}.tgz
 
 # echo "Installing necesary sqlite headers"
 # # install the necessary sqlite headers
@@ -30,10 +31,12 @@ echo "Setting up SQLite3 Headers for $SQLITE3_VERSION"
 sqlite3_install "$OUT_PREFIX" "$SQLITE3_VERSION" 1
 
 echo "Building Python 3..."
+echo "Pulling from source: ${dep_url}"
 
-curl -L "${dep_url}" | tar jx -C "${OUT_PREFIX}" --strip-components 1 # extract to $OUT_PREFIX, drop the first directory level, which is the archive name
 
-mv "${dep_package}" src
+curl -L "${dep_url}" | tar xz -C "${OUT_PREFIX}" # --strip-components 1 # extract to $OUT_PREFIX, drop the first directory level, which is the archive name
+echo "`ls`"
+mv "${OUT_PREFIX}/${python_version}" src
 cd src
 
 ./configure --prefix=$OUT_PREFIX --with-ensurepip=no
