@@ -4,6 +4,7 @@
 
 **After every change to your formulae, perform the following** from the root of the Git repository (not from `builds/`) to rebuild the images for each stack:
 
+    $ docker build --pull --tag heroku-python-build-cedar-14 --file $(pwd)/builds/cedar-14.Dockerfile .
     $ docker build --pull --tag heroku-python-build-heroku-16 --file $(pwd)/builds/heroku-16.Dockerfile .
     $ docker build --pull --tag heroku-python-build-heroku-18 --file $(pwd)/builds/heroku-18.Dockerfile .
 
@@ -28,8 +29,6 @@ File `dockerenv.default` contains a list of required env vars; most of these hav
 Out of the box, each `Dockerfile` has the correct values predefined for `S3_BUCKET`, `S3_PREFIX`, and `S3_REGION`. If you're building your own packages, you'll likely want to change `S3_BUCKET` and `S3_PREFIX` to match your info. Instead of setting `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` into that file, you may also pass them to `docker run` through the environment, or explicitly using `--env`, in order to prevent accidental commits of credentials.
 
 ### Passing AWS credentials to the container
-
-If you want to deploy packages and thus need to pass `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, you can either pass them explicitly, through your environment, or through an env file.
 
 If you want to deploy packages and thus need to pass `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, you can either pass them explicitly, through your environment, or through an env file.
 
