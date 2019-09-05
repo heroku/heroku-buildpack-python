@@ -10,6 +10,6 @@ ENV WORKSPACE_DIR="/app/builds" \
 RUN apt-get update && apt-get install -y python-pip && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /app/
-RUN pip install --disable-pip-version-check --no-cache-dir -r /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 
 COPY . /app
