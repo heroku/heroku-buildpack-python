@@ -1,7 +1,6 @@
 language: ruby
 dist: trusty
 sudo: required
-install: travis_wait mvn install
 rvm:
 - 2.4.4
 before_script:
@@ -15,11 +14,11 @@ jobs:
   - stage: Stack Unit Tests
     services: docker
     env: STACK=heroku-18
-    script: "./tests.sh"
+    script: travis_wait "./tests.sh"
   - stage: Stack Unit Tests
     services: docker
     env: STACK=heroku-16
-    script: "./tests.sh"
+    script: travis_wait "./tests.sh"
   - stage: Hatchet Integration
     script: "bundle exec rspec"
 env:
