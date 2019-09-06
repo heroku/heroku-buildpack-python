@@ -1,6 +1,7 @@
 language: ruby
 dist: trusty
 sudo: required
+install: travis_wait mvn install
 rvm:
 - 2.4.4
 before_script:
