@@ -15,7 +15,7 @@ jobs:
     script: make check
   - stage: Heroku 18 Test
     name: Build Heroku 18
-    script: docker run --rm heroku-python-build-heroku-18 bash $TESTFOLDER
+    script: docker run --rm -e "STACK=heroku-18" heroku-python-build-heroku-18 bash $TESTFOLDER
   - stage: Hatchet Integration
     if: branch = master
     name: Run Hatchet
