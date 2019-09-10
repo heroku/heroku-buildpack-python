@@ -1,6 +1,7 @@
 language: ruby
 dist: trusty
 sudo: required
+
 rvm:
 - 2.4.4
 before_script:
@@ -11,16 +12,16 @@ jobs:
   - stage: Bash linting (shellcheck)
     sudo: false
     script: make check
-  - stage: Stack Unit Tests
-    services: docker
-    env: STACK=heroku-18
-    script: "./tests.sh"
-  - stage: Stack Unit Tests
-    services: docker
-    env: STACK=heroku-16
-    script: "./tests.sh"
-  - stage: Hatchet Integration
-    script: "bundle exec rspec"
+  - stage: Build Docker Containers
+    script:
+      - docker build --pull --tag heroku-python-build-heroku-18 --file $(pwd)/builds/heroku-18.Dockerfile .
+  - stage: test
+      script: docker run --rm -ti heroku-python-build-heroku-18 bash test/run-deps
+      script: docker run --rm -ti heroku-python-build-heroku-18 bash test/run-versions
+      script: docker run --rm -ti heroku-python-build-heroku-18 bash test/run-features
+  - stages: Hatchet Integration
+      if: branch = master
+      script: "bundle exec rspec"
 env:
   global:
   - HATCHET_RETRIES=3
