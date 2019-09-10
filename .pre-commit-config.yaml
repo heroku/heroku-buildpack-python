@@ -1,9 +1,7 @@
 repos:
--   repo: git://github.com/detailyang/pre-commit-shell
-    rev: 1.0.4
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
     hooks:
-    - id: shell-lint
--   repo: git://github.com/alphagov/verify-travis-pre-commit-hook
-    sha: master
-    hooks:
-    -   id: travis-yml-lint
+    # -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
