@@ -12,12 +12,14 @@ jobs:
   - stage: Bash linting (shellcheck)
     sudo: false
     script: make check
-  - stage: Build Docker Containers
+  - stage: Heroku 18 Test
     name: Build Heroku 18
     script: docker build --pull --tag heroku-python-build-heroku-18 --file $(pwd)/Dockerfile.heroku-18 .
-  - stage: Test Runs
+    name: Test Deps
     script: docker run --rm heroku-python-build-heroku-18 bash test/run-deps
+    name: Test Python Versions
     script: docker run --rm heroku-python-build-heroku-18 bash test/run-versions
+    name: Test Feature Steps
     script: docker run --rm heroku-python-build-heroku-18 bash test/run-features
   - stage: Hatchet Integration
     if: branch = master
