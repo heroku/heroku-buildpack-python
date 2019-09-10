@@ -3,3 +3,7 @@ repos:
     rev: 1.0.4
     hooks:
     - id: shell-lint
+-   repo: git://github.com/alphagov/verify-travis-pre-commit-hook
+    sha: master
+    hooks:
+    -   id: travis-yml-lint
