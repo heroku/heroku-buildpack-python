@@ -8,16 +8,7 @@ before_script:
   - gem install bundler -v 1.16.2
   - bundle exec hatchet ci:setup
 
-matrix:
-  include:
-    - name: Test Dependencies
-      env: TESTFOLDER=test/run-deps
-    - name: Test Python Versions
-      env: TESTFOLDER=test/run-versions
-    - name: Test Steps
-      env: TESTFOLDER=test/run-features
-script: docker build --pull --tag heroku-python-build-heroku-18 --file $(pwd)/Dockerfile.heroku-18 .
-after_script: docker run --rm -e "STACK=heroku-18" heroku-python-build-heroku-18 bash $TESTFOLDER
+script: docker build --pull --file $(pwd)/${DOCKERFILE} .; docker run --rm -e "STACK=heroku-18" bash $TESTFOLDER
 
 jobs:
   include:
@@ -29,6 +20,12 @@ jobs:
     name: Run Hatchet
     script: "bundle exec rspec"
 env:
+  matrix:
+    - TESTFOLDER=test/run-deps
+    - TESTFOLDER=test/run-versions
+    - TESTFOLDER=test/run-features
+    - DOCKERFILE=Dockerfile.heroku-18
+    - DOCKERFILE=Dockerfile
   global:
     - HATCHET_RETRIES=3
     - IS_RUNNING_ON_CI=true
