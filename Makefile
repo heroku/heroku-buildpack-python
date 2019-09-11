@@ -8,17 +8,6 @@ check:
 	@shellcheck -x bin/steps/collectstatic bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/gdal bin/steps/geo-libs bin/steps/mercurial bin/steps/nltk bin/steps/pip-install bin/steps/pip-uninstall bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/pylibmc bin/steps/python
 	@shellcheck -x bin/steps/hooks/*
 
-test-staging:
-	@echo "Running tests against staged binaries (cedar-14)..."
-	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=cedar-14" -e "TEST_STAGED_S3_BINARIES=1" heroku/cedar-14 bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run;'
-	@echo ""
-	@echo "Running tests against staged binaries (heroku-16)..."
-	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=heroku-16" -e "TEST_STAGED_S3_BINARIES=1" heroku/heroku:16-build bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run;'
-	@echo ""
-	@echo "Running tests against staged binaries (heroku-18)..."
-	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=heroku-18" -e "TEST_STAGED_S3_BINARIES=1" heroku/heroku:18-build bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run;'
-	@echo ""
-
 test-cedar-14:
 	@echo "Running tests in docker (cedar-14)..."
 	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=cedar-14" heroku/cedar-14 bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run;'
