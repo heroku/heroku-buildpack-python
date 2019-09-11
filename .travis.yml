@@ -9,9 +9,11 @@ before_script:
   - bundle exec hatchet ci:setup
 
 script:
-  - docker build --pull --tag heroku-python-build-heroku-16 --file $(pwd)/Dockerfile .
+  - docker build --pull --tag heroku-python-build-cedar-14 --file $(pwd)/builds/cedar-14.Dockerfile .
+  - docker run --rm -e "STACK=cedar-14" heroku-python-build-heroku-16 bash $TESTFOLDER
+  - docker build --pull --tag heroku-python-build-heroku-16 --file $(pwd)/builds/heroku-16.Dockerfile .
   - docker run --rm -e "STACK=heroku-16" heroku-python-build-heroku-16 bash $TESTFOLDER
-  - docker build --pull --tag heroku-python-build-heroku-18 --file $(pwd)/Dockerfile.heroku-18 .
+  - docker build --pull --tag heroku-python-build-heroku-18 --file $(pwd)/builds/heroku-18.Dockerfile .
   - docker run --rm -e "STACK=heroku-18" heroku-python-build-heroku-18 bash $TESTFOLDER
 
 jobs:
