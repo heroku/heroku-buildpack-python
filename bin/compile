@@ -43,6 +43,7 @@ VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
 if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
     VENDOR_URL="$BUILDPACK_VENDOR_URL"
 fi
+export VENDOR_URL
 
 # Default Python Versions
 # shellcheck source=bin/default_pythons
