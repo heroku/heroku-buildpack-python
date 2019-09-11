@@ -1,5 +1,15 @@
 # Python Buildpack Changelog
 
+# 156 (2019-08)
+
+Move get-pip utility to S3
+Build utility and documentation updates
+Python 3.6.9 and 3.7.4 now available.
+
+# 155 (2019-08-22)
+
+add docs and make target for heroku-18 bob builds
+
 # 154 (2019-07-17)
 
 Fix python 3.5.7 formula actually building 3.7.2
