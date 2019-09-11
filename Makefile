@@ -1,7 +1,7 @@
 # These targets are not files
 .PHONY: tests
 
-test: test-heroku-18 test-heroku-16
+test: test-heroku-18 test-heroku-16 test-cedar-14
 
 check:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings bin/default_pythons
@@ -10,17 +10,17 @@ check:
 
 test-cedar-14:
 	@echo "Running tests in docker (cedar-14)..."
-	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=cedar-14" heroku/cedar-14 bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run;'
+	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=cedar-14" heroku/cedar:14 bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run-deps; test/run-features; test/run-versions;'
 	@echo ""
 
 test-heroku-16:
 	@echo "Running tests in docker (heroku-16)..."
-	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=heroku-16" heroku/heroku:16-build bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run;'
+	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=heroku-16" heroku/heroku:16-build bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run-deps; test/run-features; test/run-versions;'
 	@echo ""
 
 test-heroku-18:
 	@echo "Running tests in docker (heroku-18)..."
-	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=heroku-18" heroku/heroku:18-build bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run;'
+	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=heroku-18" heroku/heroku:18-build bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run-deps; test/run-features; test/run-versions;'
 	@echo ""
 
 buildenv-heroku-16:
