@@ -10,17 +10,6 @@ testGitEgg() {
   assertCapturedSuccess
 }
 
-testSmartRequirements() {
-  local cache_dir="$(mktmpdir)"
-  compile "requirements-standard" "$cache_dir"
-  assertFile "requests" ".heroku/python/requirements-declared.txt"
-  assertCapturedSuccess
-  compile "psycopg2" "$cache_dir"
-  assertCaptured "Uninstalling requests"
-  assertFile "psycopg2" ".heroku/python/requirements-declared.txt"
-  assertCapturedSuccess
-}
-
 testStackChange() {
   local cache_dir="$(mktmpdir)"
   mkdir -p "${cache_dir}/.heroku"
