@@ -1,5 +1,29 @@
 # Python Buildpack Changelog
 
+# Master
+
+- Bump Hatchet tests to point at new default python version.
+
+- Python 3.6.9 and 3.7.4 now available.
+
+- Move get-pip utility to S3
+
+- Build utility and documentation updates
+
+--------------------------------------------------------------------------------
+
+# 155 (2019-08-22)
+
+add docs and make target for heroku-18 bob builds
+
+# 154 (2019-07-17)
+
+Fix python 3.5.7 formula actually building 3.7.2
+
+# 153 (2019-06-21)
+
+Hotfix for broken heroku-16 deploys
+
 # 152 (2019-04-04)
 
 Python 3.7.3 now available.

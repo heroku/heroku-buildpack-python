@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+
+OUT_PREFIX=$1
+BIN_DIR="$(cd "$(dirname "$0")"/../.. || exit; pwd)/bin"
+export BIN_DIR
+
+# Orient ourselves and build download link
+dep_formula=${0#$WORKSPACE_DIR/} # this is the original script, e.g. pypy-5.3.1
+BASE=${dep_formula##*/} # this gives us relative path
+python_version=${BASE^} # this gives us only the filename with version number
+version_number=$(echo "$python_version" | cut -d- -f2) # this returns just X.X.X
+dep_url=https://python.org/ftp/python/${version_number}/${python_version}.tgz
+
+# shellcheck source=bin/utils
+source "$BIN_DIR/steps/sqlite3"
+
+sqlite3_version
+echo "Setting up SQLite3 Headers for $SQLITE3_VERSION"
+sqlite3_install "$OUT_PREFIX" "$SQLITE3_VERSION" 1
+
+echo "Building Python 3..."
+echo "Pulling from source: ${dep_url}"
+
+curl -L "${dep_url}" | tar xz -C "${OUT_PREFIX}"
+mv "${OUT_PREFIX}/${python_version}" src
+cd src
+
+./configure --prefix=$OUT_PREFIX  --enable-unicode=ucs4 --with-ensurepip=no
+make
+make install
+
+# Remove unneeded test directories, similar to the official Docker Python images:
+# https://github.com/docker-library/python
+find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -rf '{}' +

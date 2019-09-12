@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+
+# Default Python Versions
+# shellcheck source=bin/default_pythons
+source "bin/default_pythons"
+
+testGitEgg() {
+  compile "git-egg"
+  assertCaptured "requests"
+  assertCapturedSuccess
+}
+
+testSmartRequirements() {
+  local cache_dir="$(mktmpdir)"
+  compile "requirements-standard" "$cache_dir"
+  assertFile "requests" ".heroku/python/requirements-declared.txt"
+  assertCapturedSuccess
+  compile "psycopg2" "$cache_dir"
+  assertCaptured "Uninstalling requests"
+  assertFile "psycopg2" ".heroku/python/requirements-declared.txt"
+  assertCapturedSuccess
+}
+
+testStackChange() {
+  local cache_dir="$(mktmpdir)"
+  mkdir -p "${cache_dir}/.heroku"
+  echo "different-stack" > "${cache_dir}/.heroku/python-stack"
+  compile "requirements-standard" "$cache_dir"
+  assertCaptured "clearing cache"
+  assertFile "$STACK" ".heroku/python-stack"
+  assertCapturedSuccess
+}
+
+testSetupPy() {
+  compile "setup-py"
+  assertCaptured "maya"
+  assertCapturedSuccess
+}
+
+testStandardRequirements() {
+  compile "requirements-standard"
+  assertCaptured "requests"
+  assertCapturedSuccess
+}
+
+testPipenv() {
+  compile "pipenv"
+  assertCapturedSuccess
+}
+
+testPipenvLock() {
+  compile "pipenv-lock"
+  assertCapturedSuccess
+}
+
+testPipenvVersion() {
+  compile "pipenv-version"
+  assertCaptured $DEFAULT_PYTHON_VERSION
+  assertCapturedSuccess
+}
+
+testPipenvVersion2() {
+  compile "pipenv-version2"
+  assertCaptured $LATEST_27
+  assertCapturedSuccess
+}
+testPipenvFullVersion() {
+  compile "pipenv-full-version"
+  assertCaptured "3.6.3"
+  assertCapturedSuccess
+}
+
+testNoRequirements() {
+  compile "no-requirements"
+  assertCapturedError
+}
+
+pushd $(dirname 0) >/dev/null
+popd >/dev/null
+
+source $(pwd)/test/utils
+source $(pwd)/test/shunit2
