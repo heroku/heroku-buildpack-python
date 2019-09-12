@@ -157,8 +157,6 @@ mkdir -p "$CACHE_DIR"
 # Restore old artifacts from the cache.
 mkdir -p .heroku
 
-# The Python installation.
-cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
 # A plain text file which contains the current stack being used (used for cache busting).
 cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
 # A plain text file which contains the current python version being used (used for cache busting).
@@ -373,7 +371,6 @@ rm -rf "$CACHE_DIR/.heroku/vendor"
 rm -rf "$CACHE_DIR/.heroku/src"
 
 mkdir -p "$CACHE_DIR/.heroku"
-cp -R .heroku/python "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-version "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &> /dev/null || true
 cp -R .heroku/vendor "$CACHE_DIR/.heroku/" &> /dev/null || true

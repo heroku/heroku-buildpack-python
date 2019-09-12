@@ -69,8 +69,6 @@ if [ -f .heroku/python-version ]; then
   if [ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]; then
       puts-step "Found $(cat .heroku/python-version), removing"
       rm -fr .heroku/python
-  else
-    SKIP_INSTALL=1
   fi
 fi
 
