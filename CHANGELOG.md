@@ -2,15 +2,15 @@
 
 # Master
 
-- Bump Hatchet tests to point at new default python version.
+--------------------------------------------------------------------------------
+
+# 156 (2019-09-12)
 
 - Python 3.6.9 and 3.7.4 now available.
 
 - Move get-pip utility to S3
-
 - Build utility and documentation updates
-
---------------------------------------------------------------------------------
+- Bump Hatchet tests to point at new default python version.
 
 # 155 (2019-08-22)
 
