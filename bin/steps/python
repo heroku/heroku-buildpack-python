@@ -101,7 +101,7 @@ fi
 # https://github.com/pypa/get-pip
 GETPIP="https://lang-python.s3.amazonaws.com/etc/get-pip.py"
 
-if ! curl "${GETPIP}" -o "$ROOT_DIR/get-pip.py"; then
+if ! curl -s "${GETPIP}" -o "$ROOT_DIR/get-pip.py" &> /dev/null; then
     mcount "failure.python.get-pip"
     echo "Failed to pull down get-pip"
     exit 1
