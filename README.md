@@ -26,7 +26,7 @@ remote: Compressing source files... done.
 remote: Building source:
 remote:
 remote: -----> Python app detected
-remote: -----> Installing python-3.7.1
+remote: -----> Installing python-3.7.4
 remote: -----> Installing pip
 remote: -----> Installing SQLite3
 remote: -----> Installing requirements with pip
@@ -44,7 +44,7 @@ A `requirements.txt` must be present at the root of your application's repositor
 
 To specify your python version, you also need a `runtime.txt` file - unless you are using the default Python runtime version.
 
-Current default Python Runtime: Python 3.6.7
+Current default Python Runtime: Python 3.6.9
 
 Alternatively, you can provide a `setup.py` file, or a `Pipfile`. Using `Pipenv` will generate `runtime.txt` based on `python-version` at build time.
 
@@ -61,9 +61,9 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.7.1`
-- `python-3.6.7`
-- `python-2.7.15`
+- `python-3.7.4`
+- `python-3.6.9`
+- `python-2.7.16`
 
 ## Tests
 
