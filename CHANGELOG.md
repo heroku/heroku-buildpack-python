@@ -1,10 +1,18 @@
 # Python Buildpack Changelog
 
-# 156 (2019-08)
+# 156 (2019-09)
 
-Move get-pip utility to S3
-Build utility and documentation updates
+## (2019-09-12)
+Bump Hatchet tests to point at new default python version.
+
+## (2019-09-11)
 Python 3.6.9 and 3.7.4 now available.
+
+## (2019-09-11)
+Move get-pip utility to S3
+
+## (2019-09-10)
+Build utility and documentation updates
 
 # 155 (2019-08-22)
 
