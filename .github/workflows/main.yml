@@ -1,0 +1,16 @@
+name: Check Changelog
+
+# Pulled verbatim from:
+# https://github.com/zombocom/wait_for_it/blob/master/.github/workflows/check_changelog.yml
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Check that CHANGELOG is touched
+      run: |
+        git diff remotes/origin/${{ github.base_ref }} --name-only | grep CHANGELOG.md
