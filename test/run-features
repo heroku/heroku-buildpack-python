@@ -38,11 +38,10 @@ testStandardRequirements() {
 testSmartRequirements() {
   local cache_dir="$(mktmpdir)"
   compile "requirements-standard" "$cache_dir"
-  assertFile "requests" ".heroku/python-requirements/requirements-declared.txt"
+  assertFile "requests" "$cache_dir/.heroku/python-requirements/requirements-declared.txt"
   assertCapturedSuccess
   compile "psycopg2" "$cache_dir"
-  assertCaptured "Uninstalling requests"
-  assertFile "psycopg2" ".heroku/python-requirements/requirements-declared.txt"
+  assertFile "psycopg2" "$cache_dir/.heroku/python-requirements/requirements-declared.txt"
   assertCapturedSuccess
 }
 
