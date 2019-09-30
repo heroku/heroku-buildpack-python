@@ -45,4 +45,9 @@ find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -
 # Remove spare /
 LOCATION=${OUT_PREFIX%?}
 
+# Create links to SQLITE headers so Python can call them at runtime
+mkdir -p ${OUT_PREFIX}/include ${OUT_PREFIX}/lib/x86_64-linux-gnu
+cp /usr/include/sqlite3*.h ${OUT_PREFIX}/include
+ln -fs $(realpath /usr/lib/x86_64-linux-gnu/libsqlite3.so) ${OUT_PREFIX}/lib/x86_64-linux-gnu/libsqlite3.so
+
 ln $LOCATION/bin/python3 $LOCATION/bin/python
