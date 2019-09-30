@@ -13,7 +13,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
 
 
     if ! pip-diff --stale requirements-declared.txt requirements.txt --exclude setuptools pip wheel > .heroku/python/requirements-stale.txt; then
-      mount "failure.bad-requirements"
+      mcount "failure.bad-requirements"
     fi
 
     rm -fr requirements-declared.txt

@@ -3,6 +3,8 @@
 # Master
 
 - Test staged binaries on Travis
+- Unpin Heroku-18 binary build deps
+- Typo fixes
 
 --------------------------------------------------------------------------------
 
