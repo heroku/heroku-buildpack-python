@@ -2,7 +2,8 @@
 
 # Master
 
-Typo fixes
+- Unpin Heroku-18 binary build deps
+- Typo fixes
 
 --------------------------------------------------------------------------------
 
