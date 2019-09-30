@@ -19,7 +19,7 @@ dep_url=https://python.org/ftp/python/${version_number}/${python_version}.tgz
 # Install SQLITE, as headers are not available out of the box on the stack
 apt-get install libsqlite3-dev
 needed=( libsqlite3-dev )
-if [[ $STACK != "heroku-16" && $STACK != "heroku-16" ]]; then
+if [[ $STACK == "cedar-14" ]]; then
 	needed+=( realpath )
 
 # Check whether our packages are missing on the stack
