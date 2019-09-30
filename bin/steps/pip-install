@@ -52,6 +52,12 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
         exit 1
     fi
 
+    # Since builds should be deterministic, we should capture if
+    # peer dependencies are the same between installs.
+    cp requirements.txt .heroku/python-requirements/requirements-declared.txt
+    /app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python-requirements/requirements-installed.txt
+
+
     # Install test dependencies, for CI.
     if [ "$INSTALL_TEST" ]; then
         if [[ -f "$1/requirements-test.txt" ]]; then
