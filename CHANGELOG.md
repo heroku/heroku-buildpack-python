@@ -2,6 +2,8 @@
 
 # Master
 
+- Builds no longer cache the python runtime binary
+
 - Unpin Heroku-18 binary build deps
 - Typo fixes
 
