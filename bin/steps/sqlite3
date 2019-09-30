@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
+
+sqlite3_version() {
+  if [ "$STACK" = "cedar-14" ]; then
+    SQLITE3_VERSION="3.8.2-1ubuntu2.2"
+  elif [ "$STACK" = "heroku-16" ]; then
+    SQLITE3_VERSION="3.11.0-1ubuntu1.2"
+  else
+    SQLITE3_VERSION=${SQLITE3_VERSION:-$(dpkg -s libsqlite3-0 | grep Version | sed 's/Version: //')}
+  fi
+
+  export SQLITE3_VERSION
+}
+
+sqlite3_install() {
+  HEROKU_PYTHON_DIR="$1"
+  SQLITE3_VERSION="$2"
+  HEADERS_ONLY="$3"
+
+  mkdir -p "$HEROKU_PYTHON_DIR"
+
+  APT_CACHE_DIR="$HEROKU_PYTHON_DIR/apt/cache"
+  APT_STATE_DIR="$HEROKU_PYTHON_DIR/apt/state"
+
+  mkdir -p "$APT_CACHE_DIR/archives/partial"
+  mkdir -p "$APT_STATE_DIR/lists/partial"
+
+  APT_OPTIONS="-o debug::nolocking=true"
+  APT_OPTIONS="$APT_OPTIONS -o dir::cache=$APT_CACHE_DIR"
+  APT_OPTIONS="$APT_OPTIONS -o dir::state=$APT_STATE_DIR"
+  APT_OPTIONS="$APT_OPTIONS -o dir::etc::sourcelist=/etc/apt/sources.list"
+
+  apt-get $APT_OPTIONS update > /dev/null 2>&1
+  if [ -z "$HEADERS_ONLY" ]; then
+    apt-get $APT_OPTIONS -y -d --reinstall install libsqlite3-dev="$SQLITE3_VERSION" sqlite3="$SQLITE3_VERSION" > /dev/null 2>&1
+  else
+    apt-get $APT_OPTIONS -y -d --reinstall install libsqlite3-dev="$SQLITE3_VERSION"
+  fi
+
+  find "$APT_CACHE_DIR/archives/" -name "*.deb" -exec dpkg -x {} "$HEROKU_PYTHON_DIR/sqlite3/" \;
+
+  mkdir -p "$HEROKU_PYTHON_DIR/include"
+  mkdir -p "$HEROKU_PYTHON_DIR/lib"
+
+  # remove old sqlite3 libraries/binaries
+  find "$HEROKU_PYTHON_DIR/include/" -name "sqlite3*.h" -exec rm -f {} \;
+  find "$HEROKU_PYTHON_DIR/lib/" -name "libsqlite3.*" -exec rm -f {} \;
+  rm -f "$HEROKU_PYTHON_DIR/lib/pkgconfig/sqlite3.pc"
+  rm -f "$HEROKU_PYTHON_DIR/bin/sqlite3"
+
+  # copy over sqlite3 headers & bins and setup linking against the stack image library
+  mv "$HEROKU_PYTHON_DIR/sqlite3/usr/include/"* "$HEROKU_PYTHON_DIR/include/"
+  mv "$HEROKU_PYTHON_DIR/sqlite3/usr/lib/x86_64-linux-gnu"/libsqlite3.*a "$HEROKU_PYTHON_DIR/lib/"
+  mkdir -p "$HEROKU_PYTHON_DIR/lib/pkgconfig"
+  # set the right prefix/lib directories
+  sed -e 's/prefix=\/usr/prefix=\/app\/.heroku\/python/' -e 's/\/x86_64-linux-gnu//' "$HEROKU_PYTHON_DIR/sqlite3/usr/lib/x86_64-linux-gnu/pkgconfig/sqlite3.pc" > "$HEROKU_PYTHON_DIR/lib/pkgconfig/sqlite3.pc"
+  # need to point the libsqlite3.so to the stack image library for /usr/bin/ld -lsqlite3
+  SQLITE3_LIBFILE="/usr/lib/x86_64-linux-gnu/$(readlink -n "$HEROKU_PYTHON_DIR/sqlite3/usr/lib/x86_64-linux-gnu/libsqlite3.so")"
+  ln -s "$SQLITE3_LIBFILE" "$HEROKU_PYTHON_DIR/lib/libsqlite3.so"
+  if [ -z "$HEADERS_ONLY" ]; then
+    mv "$HEROKU_PYTHON_DIR/sqlite3/usr/bin"/* "$HEROKU_PYTHON_DIR/bin/"
+  fi
+
+  # cleanup
+  rm -rf "$HEROKU_PYTHON_DIR/sqlite3/"
+  rm -rf "$HEROKU_PYTHON_DIR/apt/"
+}
+
+buildpack_sqlite3_install() {
+  sqlite3_version
+  HEROKU_PYTHON_DIR="$BUILD_DIR/.heroku/python"
+
+  SQLITE3_VERSION_FILE="$BUILD_DIR/.heroku/python-sqlite3-version"
+  if [ -f "$SQLITE3_VERSION_FILE" ]; then
+    INSTALLED_SQLITE3_VERSION=$(cat "$SQLITE3_VERSION_FILE")
+  fi
+
+  # python version check
+  if python_sqlite3_check "$PYTHON_VERSION"; then
+    # only install if the sqlite3 version has changed
+    if [ "$INSTALLED_SQLITE3_VERSION" != "$SQLITE3_VERSION" ]; then
+      puts-step "Installing SQLite3"
+      sqlite3_install "$BUILD_DIR/.heroku/python" "$SQLITE3_VERSION"
+
+      # save version installed
+      mkdir -p "$CACHE_DIR/.heroku/"
+      echo "$SQLITE3_VERSION" > "$CACHE_DIR/.heroku/python-sqlite3-version"
+    fi
+  fi
+}
