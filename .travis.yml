@@ -25,20 +25,14 @@ jobs:
     if: branch = master
     name: Run Hatchet
     script: "bundle exec rspec"
-
-matrix:
-  include:
-    - env: TESTFOLDER=test/run-deps
-    - env: TESTFOLDER=test/run-deps
-           VENDOR_URL=https://lang-python.s3.amazonaws.com/staging/$STACK
-    - env: TESTFOLDER=test/run-versions
-    - env: TESTFOLDER=test/run-versions
-           VENDOR_URL=https://lang-python.s3.amazonaws.com/staging/$STACK
-    - env: TESTFOLDER=test/run-features
-    - env: TESTFOLDER=test/run-features
-           VENDOR_URL=https://lang-python.s3.amazonaws.com/staging/$STACK
-
 env:
+  matrix:
+    - TESTFOLDER=test/run-deps
+    - TESTFOLDER=test/run-deps VENDOR_URL=https://lang-python.s3.amazonaws.com/staging/$STACK
+    - TESTFOLDER=test/run-versions
+    - TESTFOLDER=test/run-versions VENDOR_URL=https://lang-python.s3.amazonaws.com/staging/$STACK
+    - TESTFOLDER=test/run-features
+    - TESTFOLDER=test/run-features VENDOR_URL=https://lang-python.s3.amazonaws.com/staging/$STACK
   global:
     - HATCHET_RETRIES=3
     - IS_RUNNING_ON_CI=true
