@@ -376,14 +376,15 @@ source "$BIN_DIR/steps/hooks/post_compile"
 source "$BIN_DIR/steps/eggpath-fix2"
 
 # Store new artifacts in the cache.
-rm -rf "$CACHE_DIR/.heroku/python"
 rm -rf "$CACHE_DIR/.heroku/python-version"
+rm -rf "$CACHE_DIR/.heroku/python-requirements"
 rm -rf "$CACHE_DIR/.heroku/python-stack"
 rm -rf "$CACHE_DIR/.heroku/vendor"
 rm -rf "$CACHE_DIR/.heroku/src"
 
 mkdir -p "$CACHE_DIR/.heroku"
 cp -R .heroku/python-version "$CACHE_DIR/.heroku/"
+cp -R .heroku/python-requirements "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &> /dev/null || true
 cp -R .heroku/vendor "$CACHE_DIR/.heroku/" &> /dev/null || true
 if [[ -d .heroku/src ]]; then
