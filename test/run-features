@@ -32,16 +32,15 @@ testStandardRequirements() {
   assertCapturedSuccess
 }
 
-# This test checks that secondary dependencies are captured in pip-install
-# Necessary for deterministic builds, because pip will install more than what
-# is in the user's requirements file as needed
+# This tests that the full pip installation is captured in the cache.
+# This is necessary for deterministic builds
 testSmartRequirements() {
   local cache_dir="$(mktmpdir)"
   compile "requirements-standard" "$cache_dir"
-  assertFile "requests" "$cache_dir/.heroku/python-requirements/requirements-declared.txt"
+  assertFile "requests" ".heroku/python-requirements/requirements-installed.txt"
   assertCapturedSuccess
   compile "psycopg2" "$cache_dir"
-  assertFile "psycopg2" "$cache_dir/.heroku/python-requirements/requirements-declared.txt"
+  assertFile "psycopg2" ".heroku/python-requirements/requirements-installed.txt"
   assertCapturedSuccess
 }
 
