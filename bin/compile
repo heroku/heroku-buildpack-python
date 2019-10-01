@@ -164,7 +164,12 @@ cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
 cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
 
 # Cache the requirements files generated during pip-install
-cp -R "$CACHE_DIR/.heroku/python-requirements" .heroku/ &> /dev/null || true
+# Since this is a new cache directory, create if it does not exist
+if [[ ! -f $CACHE_DIR/.heroku/python-requirements ]]; then
+  mkdir -p .heroku/python-requirements
+else
+  cp -R "$CACHE_DIR/.heroku/python-requirements" .heroku/ &> /dev/null || true
+fi
 
 # A plain text file which contains the current sqlite3 version being used (used for cache busting).
 cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
