@@ -70,24 +70,26 @@ sqlite3_install() {
 }
 
 buildpack_sqlite3_install() {
-  sqlite3_version
-  HEROKU_PYTHON_DIR="$BUILD_DIR/.heroku/python"
+  if [ ! $DISABLE_SQLITE_INSTALL ]; then
+    sqlite3_version
+    HEROKU_PYTHON_DIR="$BUILD_DIR/.heroku/python"
 
-  SQLITE3_VERSION_FILE="$BUILD_DIR/.heroku/python-sqlite3-version"
-  if [ -f "$SQLITE3_VERSION_FILE" ]; then
-    INSTALLED_SQLITE3_VERSION=$(cat "$SQLITE3_VERSION_FILE")
-  fi
+    SQLITE3_VERSION_FILE="$BUILD_DIR/.heroku/python-sqlite3-version"
+    if [ -f "$SQLITE3_VERSION_FILE" ]; then
+      INSTALLED_SQLITE3_VERSION=$(cat "$SQLITE3_VERSION_FILE")
+    fi
 
-  # python version check
-  if python_sqlite3_check "$PYTHON_VERSION"; then
-    # only install if the sqlite3 version has changed
-    if [ "$INSTALLED_SQLITE3_VERSION" != "$SQLITE3_VERSION" ]; then
-      puts-step "Installing SQLite3"
-      sqlite3_install "$BUILD_DIR/.heroku/python" "$SQLITE3_VERSION"
+    # python version check
+    if python_sqlite3_check "$PYTHON_VERSION"; then
+      # only install if the sqlite3 version has changed
+      if [ "$INSTALLED_SQLITE3_VERSION" != "$SQLITE3_VERSION" ]; then
+        puts-step "Installing SQLite3"
+        sqlite3_install "$BUILD_DIR/.heroku/python" "$SQLITE3_VERSION"
 
-      # save version installed
-      mkdir -p "$CACHE_DIR/.heroku/"
-      echo "$SQLITE3_VERSION" > "$CACHE_DIR/.heroku/python-sqlite3-version"
+        # save version installed
+        mkdir -p "$CACHE_DIR/.heroku/"
+        echo "$SQLITE3_VERSION" > "$CACHE_DIR/.heroku/python-sqlite3-version"
+      fi
     fi
   fi
 }
