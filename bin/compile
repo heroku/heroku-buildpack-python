@@ -45,16 +45,9 @@ if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
 fi
 export VENDOR_URL
 
-# Which versions of Python are we using?
-# These variables are used to specify which versions of Python to install by default,
-# as well as prompt the user to upgrade if they are using an un–supported version.
-# Note: When 3.7 lands, I recommend switching to LATEST_36 and LATEST_37.
-DEFAULT_PYTHON_VERSION="python-3.6.7"
-LATEST_36="python-3.6.7"
-LATEST_37="python-3.7.1"
-LATEST_35="python-3.5.6"
-LATEST_34="python-3.4.9"
-LATEST_27="python-2.7.15"
+# Default Python Versions
+# shellcheck source=bin/default_pythons
+source "$BIN_DIR/default_pythons"
 
 # Supported Python Branches
 PY37="python-3.7"
@@ -68,8 +61,7 @@ DEFAULT_PYTHON_STACK="cedar-14"
 # If pip doesn't match this version (the version we install), run the installer.
 PIP_UPDATE="9.0.2"
 
-export DEFAULT_PYTHON_VERSION DEFAULT_PYTHON_STACK PIP_UPDATE
-export LATEST_27 LATEST_36 LATEST_37 LATEST_35 LATEST_34
+export DEFAULT_PYTHON_STACK PIP_UPDATE
 export PY37 PY36 PY35 PY27 PY34
 
 # Common Problem Warnings:

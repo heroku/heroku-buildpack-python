@@ -71,6 +71,11 @@ release()
   capture ${BUILDPACK_HOME}/bin/release ${BUILD_DIR}
 }
 
+updateVersion()
+{
+  echo "$2" > "test/fixtures/${1}/runtime.txt"
+}
+
 assertCapturedEquals()
 {
   assertEquals "$@" "$(cat ${STD_OUT})"
@@ -83,7 +88,8 @@ assertCapturedNotEquals()
 
 assertCaptured()
 {
-  assertFileContains "$@" "${STD_OUT}"
+  stdroute=${2:-STD_OUT}
+  assertFileContains "$1" "${!stdroute}"
 }
 
 assertNotCaptured()
@@ -94,7 +100,7 @@ assertNotCaptured()
 assertCapturedSuccess()
 {
   assertEquals "Captured exit code -" "0" "${RETURN}"
-  assertEquals "STD_ERR -" "" "$(cat ${STD_ERR})"
+  # assertEquals "STD_ERR -" "" "$(cat ${STD_ERR})"
 
   if [ $RETURN -ne 0 -a -z "$(cat ${STD_ERR})" ]; then
     # Failing exit code but stderr was empty. Display stdout to help debugging.
@@ -205,4 +211,56 @@ assertFileMD5()
   fi
 
   assertEquals "${expected_md5_cmd_output}" "`${md5_cmd}`"
+}
+
+# Test helpers
+mktmpdir() {
+  dir=$(mktemp -t testXXXXX)
+  rm -rf $dir
+  mkdir $dir
+  echo $dir
+}
+
+detect() {
+  capture $(pwd)/bin/detect $(pwd)/test/fixtures/$1
+}
+
+compile_dir=""
+
+default_process_types_cleanup() {
+  file="/tmp/default_process_types"
+  if [ -f "$file" ]; then
+    rm "$file"
+  fi
+}
+
+compile() {
+  default_process_types_cleanup
+  bp_dir=$(mktmpdir)
+  compile_dir=$(mktmpdir)
+  cp -a $(pwd)/* ${bp_dir}
+  cp -a ${bp_dir}/test/fixtures/$1/. ${compile_dir}
+  capture ${bp_dir}/bin/compile ${compile_dir} ${2:-$(mktmpdir)} $3
+}
+
+compileDir() {
+  default_process_types_cleanup
+
+  local bp_dir=$(mktmpdir)
+  local compile_dir=${1:-$(mktmpdir)}
+  local cache_dir=${2:-$(mktmpdir)}
+  local env_dir=$3
+
+  cp -a $(pwd)/* ${bp_dir}
+  capture ${bp_dir}/bin/compile ${compile_dir} ${cache_dir} ${env_dir}
+}
+
+release() {
+  bp_dir=$(mktmpdir)
+  cp -a $(pwd)/* ${bp_dir}
+  capture ${bp_dir}/bin/release ${bp_dir}/test/fixtures/$1
+}
+
+assertFile() {
+  assertEquals "$1" "$(cat ${compile_dir}/$2)"
 }

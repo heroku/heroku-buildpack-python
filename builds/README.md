@@ -1,41 +1,57 @@
 # Python Buildpack Binaries
 
-For Cedar-14 stack
-------------------
+## Building the Docker Images
 
-To get started with it, create an app on Heroku inside a clone of this repository, and set your S3 config vars:
+**After every change to your formulae, perform the following** from the root of the Git repository (not from `builds/`) to rebuild the images for each stack:
 
-    $ heroku create --buildpack https://github.com/heroku/heroku-buildpack-python#not-heroku
-    $ heroku config:set WORKSPACE_DIR=builds
-    $ heroku config:set AWS_ACCESS_KEY_ID=<your_aws_key>
-    $ heroku config:set AWS_SECRET_ACCESS_KEY=<your_aws_secret>
-    $ heroku config:set S3_BUCKET=<your_s3_bucket_name>
+    $ docker build --pull --tag heroku-python-build-cedar-14 --file $(pwd)/builds/cedar-14.Dockerfile .
+    $ docker build --pull --tag heroku-python-build-heroku-16 --file $(pwd)/builds/heroku-16.Dockerfile .
+    $ docker build --pull --tag heroku-python-build-heroku-18 --file $(pwd)/builds/heroku-18.Dockerfile .
 
+## Using the Image
 
-Then, shell into an instance and run a build by giving the name of the formula inside `builds`:
+You can e.g. `bash` into each of the images you built using their tag:
 
-    $ heroku run bash
-    Running `bash` attached to terminal... up, run.6880
-    ~ $ bob build runtimes/python-2.7.6
+    docker run --rm -ti heroku-python-build-cedar-14 bash
+    docker run --rm -ti heroku-python-build-heroku-16 bash
+    docker run --rm -ti heroku-python-build-heroku-18 bash
 
-    Fetching dependencies... found 2:
-      - libraries/sqlite
+You then have a shell where you can run `bob build`, `bob deploy`, and so forth. You can of course also invoke these programs directly with `docker run`:
 
-    Building formula runtimes/python-2.7.6:
-        === Building Python 2.7.6
-        Fetching Python v2.7.6 source...
-        Compiling...
+    docker run --rm -ti heroku-python-build-heroku-18 bob build runtimes/python-2.7.15
 
-If this works, run `bob deploy` instead of `bob build` to have the result uploaded to S3 for you.
+In order to `bob deploy`, AWS credentials must be set up, as well as name and prefix of your custom S3 bucket (unless you're deploying to the Heroku production buckets that are pre-defined in each `Dockerfile`); see next section for details.
 
-To speed things up drastically, it'll usually be a good idea to `heroku run bash --size PX` instead.
+## Configuration
 
-For Heroku-16 stack
--------------------
+File `dockerenv.default` contains a list of required env vars; most of these have default values defined in `Dockerfile`. You can copy this file to a location outside the buildpack and modify it with the values you desire and pass its location with `--env-file`, or pass the env vars to `docker run` using `--env`.
 
-1. Ensure GNU Make and Docker are installed.
-2. From the root of the buildpack repository, run: `make buildenv-heroku-16`
-3. Follow the instructions displayed!
+Out of the box, each `Dockerfile` has the correct values predefined for `S3_BUCKET`, `S3_PREFIX`, and `S3_REGION`. If you're building your own packages, you'll likely want to change `S3_BUCKET` and `S3_PREFIX` to match your info. Instead of setting `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` into that file, you may also pass them to `docker run` through the environment, or explicitly using `--env`, in order to prevent accidental commits of credentials.
 
+### Passing AWS credentials to the container
 
-Enjoy :)
+If you want to deploy packages and thus need to pass `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, you can either pass them explicitly, through your environment, or through an env file.
+
+#### Passing credentials explicitly
+
+    docker run --rm -ti -e AWS_ACCESS_KEY_ID=... -e AWS_SECRET_ACCESS_KEY=... heroku-python-build-heroku-18 bash
+
+#### Passing credentials through  the environment
+
+The two environment variables `AWS_ACCESS_KEY_ID`and `AWS_SECRET_ACCESS_KEY` are defined in `builds/dockerenv.default`, without values. This will cause Docker to "forward" values for these variables from the current environment, so you can pass them in:
+
+    AWS_ACCESS_KEY_ID=... AWS_SECRET_ACCESS_KEY=... docker run --rm -ti --env-file=builds/dockerenv.default heroku-python-build-heroku-18 bash
+
+or
+
+    export AWS_ACCESS_KEY_ID=...
+    export AWS_SECRET_ACCESS_KEY=...
+    docker run --rm -ti --env-file=builds/dockerenv.default heroku-python-build-heroku-18 bash
+
+#### Passing credentials through a separate env file
+
+This method is the easiest for users who want to build packages in their own S3 bucket, as they will have to adjust the `S3_BUCKET` and `S3_PREFIX` environment variable values anyway from their default values.
+
+For this method, it is important to keep the credentials file in a location outside the buildpack, so that your credentials aren't accidentally committed. Copy `builds/dockerenv.default` **to a safe location outside the buildpack directory**, and insert your values for `AWS_ACCESS_KEY_ID`and `AWS_SECRET_ACCESS_KEY`.
+
+    docker run --rm -ti --env-file=../SOMEPATHOUTSIDE/s3.env heroku-python-build-heroku-18 bash

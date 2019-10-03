@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+
+OUT_PREFIX=$1
+BIN_DIR="$(cd "$(dirname "$0")"/../.. || exit; pwd)/bin"
+export BIN_DIR
+
+# shellcheck source=bin/utils
+source "$BIN_DIR/steps/sqlite3"
+
+sqlite3_version
+echo "Setting up SQLite3 Headers for $SQLITE3_VERSION"
+sqlite3_install "$OUT_PREFIX" "$SQLITE3_VERSION" 1
+
+echo "Building Python…"
+SOURCE_TARBALL='https://python.org/ftp/python/3.5.7/Python-3.5.7.tgz'
+curl -L $SOURCE_TARBALL | tar xz
+mv Python-3.5.7 src
+cd src
+
+./configure --prefix=$OUT_PREFIX --with-ensurepip=no
+make
+make install
+
+# Remove unneeded test directories, similar to the official Docker Python images:
+# https://github.com/docker-library/python
+find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -rf '{}' +
+
+# Remove spare /
+LOCATION=${OUT_PREFIX%?}
+
+ln $LOCATION/bin/python3 $LOCATION/bin/python

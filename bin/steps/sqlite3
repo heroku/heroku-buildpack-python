@@ -4,7 +4,13 @@
 source "$BIN_DIR/utils"
 
 sqlite3_version() {
-  SQLITE3_VERSION=${SQLITE3_VERSION:-$(dpkg -s libsqlite3-0 | grep Version | sed 's/Version: //')}
+  if [ "$STACK" = "cedar-14" ]; then
+    SQLITE3_VERSION="3.8.2-1ubuntu2.2"
+  elif [ "$STACK" = "heroku-16" ]; then
+    SQLITE3_VERSION="3.11.0-1ubuntu1.2"
+  else
+    SQLITE3_VERSION=${SQLITE3_VERSION:-$(dpkg -s libsqlite3-0 | grep Version | sed 's/Version: //')}
+  fi
 
   export SQLITE3_VERSION
 }
