@@ -77,6 +77,11 @@ for file in "$BUILD_DIR/runtime.txt" "$CACHE_DIR/.heroku/python-version" ; do
     esac
 done
 
+if [[ -f "$BUILD_DIR/Pipfile" ]]; then
+    # Do not force pipenv users to re-install pipenv locally.
+    PIP_UPDATE="9.0.2"
+fi
+
 export DEFAULT_PYTHON_STACK PIP_UPDATE
 export PY37 PY36 PY35 PY27 PY34
 
