@@ -2,11 +2,4 @@
 # Build Path: /app/.heroku/python/
 # Build Deps: libraries/sqlite
 
-OUT_PREFIX=$1
-
-echo "Building PyPy…"
-SOURCE_TARBALL='https://bitbucket.org/pypy/pypy/downloads/pypy3-v5.8.0-linux64.tar.bz2'
-curl -L $SOURCE_TARBALL | tar jx
-cp -R pypy3-v5.8.0-linux64/* $OUT_PREFIX
-
-ln $OUT_PREFIX/bin/pypy3 $OUT_PREFIX/bin/python
+source $(dirname $0)/pypy3

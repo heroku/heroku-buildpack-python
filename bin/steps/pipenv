@@ -32,7 +32,7 @@ fi
 
 
 if [ ! "$SKIP_PIPENV_INSTALL" ]; then
-    # Pipenv support (Generate requriements.txt with pipenv).
+    # Pipenv support (Generate requirements.txt with pipenv).
     if [[ -f Pipfile ]]; then
         # Measure that we're using Pipenv.
         mcount "tool.pipenv"
