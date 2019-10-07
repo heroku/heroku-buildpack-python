@@ -2,6 +2,8 @@
 
 # Master
 
+- Bug fix: pipenv no longer installs twice on CI
+- Unpin Heroku-18 binary build deps
 - Typo fixes
 
 --------------------------------------------------------------------------------
