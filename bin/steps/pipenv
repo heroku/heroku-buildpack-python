@@ -12,7 +12,7 @@ if [[ -f Pipfile.lock ]]; then
             # Measure that we're using Pipenv.
             mcount "tool.pipenv"
 
-            # Don't skip installation of there are git deps.
+            # Don't skip installation if there are git deps.
             if ! grep -q 'git' Pipfile.lock; then
                 echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
 
@@ -58,18 +58,17 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         # Due to weird old pip behavior and pipenv behavior, pipenv upgrades pip
         # to latest if only --upgrade is specified. Specify upgrade strategy to
         # avoid this eager behavior.
-        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
+        "$BUILD_DIR/.heroku/python/bin/pip" install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
 
         # Install the test dependencies, for CI.
         if [ "$INSTALL_TEST" ]; then
             puts-step "Installing test dependencies…"
-            /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
+            "$BUILD_DIR/.heroku/python/bin/pipenv" install --dev --system --deploy 2>&1 | cleanup | indent
 
         # Install the dependencies.
         elif [[ ! -f Pipfile.lock ]]; then
             puts-step "Installing dependencies with Pipenv $PIPENV_VERSION…"
-            /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
-
+            "$BUILD_DIR/.heroku/python/bin/pipenv" install --system --skip-lock 2>&1 | indent
         else
             pipenv-to-pip Pipfile.lock > requirements.txt
             "$BIN_DIR/steps/pip-uninstall"
@@ -77,7 +76,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
 
             puts-step "Installing dependencies with Pipenv $PIPENV_VERSION…"
-            /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
+            "$BUILD_DIR/.heroku/python/bin/pipenv" install --system --deploy 2>&1 | indent
         fi
     fi
 else

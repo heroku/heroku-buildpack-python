@@ -90,6 +90,7 @@ export PATH=$PATH:$ROOT_DIR/vendor/:$ROOT_DIR/vendor/pip-pop
 unset GIT_DIR PYTHONHOME PYTHONPATH
 unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN
 unset CYTOKINE_LOG_FILE GEM_PATH
+export PYTHONPATH="$BUILD_DIR"
 
 # Import the utils script, which contains helper functions used throughout the buildpack.
 # shellcheck source=bin/utils
@@ -104,7 +105,7 @@ source "$BIN_DIR/warnings"
 # to `/app`.
 # Symlinks are required, since Python is not a portable installation.
 # More on this topic later.
-mkdir -p /app/.heroku
+mkdir -p "BUILD_DIR/.heroku"
 
 # This buildpack programatically generates (or simply copies) a number of files for
 # buildpack machinery: an export script, and a number of `.profile.d` scripts. This
@@ -122,7 +123,7 @@ export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH EXPORT_PATH
 # Notes on each variable included.
 
 # PATH is relatively obvious, we need to be able to execute 'python'.
-export PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin:$PATH
+export PATH="$BUILD_DIR/.heroku/python/bin:$BUILD_DIR/.heroku/vendor/bin:$PATH"
 # Tell Python to not buffer it's stdin/stdout.
 export PYTHONUNBUFFERED=1
 # Set the locale to a well-known and expected standard.
@@ -130,11 +131,11 @@ export LANG=en_US.UTF-8
 # `~/.heroku/vendor` is an place where the buildpack may stick pre-build binaries for known
 # C dependencies (e.g. libmemcached on cedar-14). This section configures Python (GCC, more specifically)
 # and pip to automatically include these paths when building binaries.
-export C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$C_INCLUDE_PATH
-export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$CPLUS_INCLUDE_PATH
-export LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH
-export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH
-export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH
+export C_INCLUDE_PATH="$BUILD_DIR/.heroku/vendor/include:$BUILD_DIR/.heroku/python/include:$C_INCLUDE_PATH"
+export CPLUS_INCLUDE_PATH="$BUILD_DIR/.heroku/vendor/include:$BUILD_DIR/.heroku/python/include:$CPLUS_INCLUDE_PATH"
+export LIBRARY_PATH="$BUILD_DIR/.heroku/vendor/lib:$BUILD_DIR/.heroku/python/lib:$LIBRARY_PATH"
+export LD_LIBRARY_PATH="$BUILD_DIR/.heroku/vendor/lib:$BUILD_DIR/.heroku/python/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="$BUILD_DIR/.heroku/vendor/lib/pkg-config:$BUILD_DIR/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH"
 
 # The Application Code
 # --------------------
@@ -211,15 +212,16 @@ fi
 # Create the directory for .profile.d, if it doesn't exist.
 mkdir -p "$(dirname "$PROFILE_PATH")"
 # Create the directory for editable source code installation, if it doesn't exist.
-mkdir -p /app/.heroku/src
+mkdir -p "$BUILD_DIR/.heroku/src"
 
 # On Heroku CI, builds happen in `/app`. Otherwise, on the Heroku platform,
 # they occur in a temp directory. Beacuse Python is not portable, we must create
 # symlinks to emulate that we are operating in `/app` during the build process.
 # This is (hopefully obviously) because apps end up running from `/app` in production.
-if [[ $BUILD_DIR != '/app' ]]; then
+if [[ "$BUILD_DIR" != '/app' ]]; then
     # python expects to reside in /app, so set up symlinks
     # we will not remove these later so subsequent buildpacks can still invoke it
+    mkdir -p /app/.heroku
     ln -nsf "$BUILD_DIR/.heroku/python" /app/.heroku/python
     ln -nsf "$BUILD_DIR/.heroku/vendor" /app/.heroku/vendor
     # Note: .heroku/src is copied in later.
@@ -310,8 +312,7 @@ mtime "nltk.download.time" "${start}"
 # and copying it into the proper place (the logical place to do this was early, but it must be done here).
 # In CI, $BUILD_DIR is /app.
 if [[ ! "$BUILD_DIR" == "/app" ]]; then
-  rm -fr "$BUILD_DIR/.heroku/src"
-  deep-cp /app/.heroku/src "$BUILD_DIR/.heroku/src"
+  ln -nsf "$BUILD_DIR/.heroku/src" /app/.heroku/src
 fi
 
 
@@ -343,13 +344,12 @@ set_default_env PYTHONHASHSEED random
 # Tell Python to look for Python modules in the /app dir. Don't change this.
 set_default_env PYTHONPATH "\$HOME"
 
-# Python expects to be in /app, if at runtime, it is not, set
+# Python expects to be in "$BUILD_DIR," if at runtime, it is not, set
 # up symlinks… this can occur when the subdir buildpack is used.
 cat <<EOT >> "$PROFILE_PATH"
-if [[ \$HOME != "/app" ]]; then
-    mkdir -p /app/.heroku
-    ln -nsf "\$HOME/.heroku/python" /app/.heroku/python
-    ln -nsf "\$HOME/.heroku/vendor" /app/.heroku/vendor
+if [[ \$HOME != "$BUILD_DIR" ]]; then
+    ln -nsf "\$HOME/.heroku/python" "$BUILD_DIR/.heroku/python"
+    ln -nsf "\$HOME/.heroku/vendor" "$BUILD_DIR/.heroku/vendor"
 fi
 EOT
 

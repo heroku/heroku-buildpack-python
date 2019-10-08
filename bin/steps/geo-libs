@@ -14,7 +14,7 @@ VENDORED_GDAL="${VENDOR_URL}/libraries/vendor/gdal.tar.gz"
 VENDORED_GEOS="${VENDOR_URL}/libraries/vendor/geos.tar.gz"
 VENDORED_PROJ="${VENDOR_URL}/libraries/vendor/proj.tar.gz"
 
-PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
+PKG_CONFIG_PATH="$BUILD_DIR/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Syntax sugar.
 # shellcheck source=bin/utils
