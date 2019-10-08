@@ -16,20 +16,6 @@ python_version=${BASE^} # this gives us only the filename with version number
 version_number=$(echo "$python_version" | cut -d- -f2) # this returns just X.X.X
 dep_url=https://python.org/ftp/python/${version_number}/${python_version}.tgz
 
-# Install SQLITE, as headers are not available out of the box on the stack
-apt-get install libsqlite3-dev
-needed=( libsqlite3-dev )
-if [[ $STACK == "cedar-14" ]]; then
-	needed+=( realpath )
-
-# Check whether our packages are missing on the stack
-missing=$(comm -1 -3 <(dpkg-query -W -f '${package}\n' | sort) <(IFS=$'\n'; echo "${needed[*]}" | sort))
-if [[ "$missing" ]]; then
-    # install missing and needed packages
-	apt-get update -qq || { echo "Failed to 'apt-get update'. You must build this formula using Docker."; exit 1; }
-	apt-get install -q -y $missing
-fi
-
 curl -L "${dep_url}" | tar xz -C "${OUT_PREFIX}"
 mv "${OUT_PREFIX}/${python_version}" src
 cd src
