@@ -2,6 +2,8 @@
 
 # Master
 
+- Sqlite fix:
+  - base Python3 file corrected
 - Test staged binaries on Travis
 
 --------------------------------------------------------------------------------
