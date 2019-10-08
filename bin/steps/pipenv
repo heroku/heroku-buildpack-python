@@ -58,12 +58,12 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         # Due to weird old pip behavior and pipenv behavior, pipenv upgrades pip
         # to latest if only --upgrade is specified. Specify upgrade strategy to
         # avoid this eager behavior.
-        $BUILD_DIR/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
+        "$BUILD_DIR/.heroku/python/bin/pip" install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
 
         # Install the test dependencies, for CI.
         if [ "$INSTALL_TEST" ]; then
             puts-step "Installing test dependencies…"
-            /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
+            "$BUILD_DIR/.heroku/python/bin/pipenv" install --dev --system --deploy 2>&1 | cleanup | indent
 
         # Install the dependencies.
         elif [[ ! -f Pipfile.lock ]]; then
