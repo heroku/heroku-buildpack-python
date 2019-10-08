@@ -4,7 +4,7 @@
 OUT_PREFIX=$1
 
 # Use new path, containing autoconf.
-export PATH="/app/.heroku/python/bin/:$PATH"
+export PATH="$BUILD_DIR/.heroku/python/bin/:$PATH"
 hash -r
 
 
