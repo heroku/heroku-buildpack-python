@@ -45,7 +45,6 @@ testPython3_4() {
     compile "python3_4"
     assertCaptured $LATEST_34
     assertNotCaptured "security update"
-    assertCaptured "Installing SQLite3"
     assertCapturedSuccess
   fi
 }
