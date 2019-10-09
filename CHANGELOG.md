@@ -4,7 +4,6 @@
 
 - Sqlite3 Update:
   - Add Tests
-- Refactor: use variable rather than hardcoded /app
 - Bug fix: pipenv no longer installs twice on CI
 
 --------------------------------------------------------------------------------
