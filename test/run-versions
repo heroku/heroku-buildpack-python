@@ -54,7 +54,6 @@ testPython3_4_warn() {
   if [[ $STACK = "cedar-14" ]]; then
     assertCaptured "python-3.4.0"
     assertCaptured "security update!"
-    assertCaptured "Installing SQLite3"
     assertCapturedSuccess
   else
     assertCapturedError
