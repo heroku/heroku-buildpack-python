@@ -105,7 +105,7 @@ source "$BIN_DIR/warnings"
 # to `/app`.
 # Symlinks are required, since Python is not a portable installation.
 # More on this topic later.
-mkdir -p "BUILD_DIR/.heroku"
+mkdir -p "$BUILD_DIR/.heroku"
 
 # This buildpack programatically generates (or simply copies) a number of files for
 # buildpack machinery: an export script, and a number of `.profile.d` scripts. This

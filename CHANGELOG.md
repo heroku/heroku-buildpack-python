@@ -4,6 +4,7 @@
 
 - Refactor: use variable rather than hardcoded /app
 - Bug fix: pipenv no longer installs twice on CI
+- Bug fix: BUILD_DIR syntax issue in bin/compile
 
 --------------------------------------------------------------------------------
 
