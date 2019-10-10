@@ -40,6 +40,12 @@ testPsycopg2() {
   assertCapturedSuccess
 }
 
+testPysqlite() {
+  compile "pysqlite"
+  assertCaptured "pysqlite"
+  assertCapturedSuccess
+}
+
 testCffi() {
   compile "cffi"
   assertCaptured "cffi"
