@@ -2,6 +2,8 @@
 
 # Master
 
+- Sqlite3 Update:
+  - Add Tests
 - Bug fix: pipenv no longer installs twice on CI
 
 --------------------------------------------------------------------------------
