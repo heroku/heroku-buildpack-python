@@ -2,7 +2,9 @@
 
 # Master
 
-- Test for Pysqlite install
+- Sqlite3 Update:
+  - Add Tests
+  - Test for Pysqlite
 - Bug fix: pipenv no longer installs twice on CI
 
 --------------------------------------------------------------------------------
