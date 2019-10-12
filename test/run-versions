@@ -4,11 +4,14 @@
 # shellcheck source=bin/default_pythons
 source "bin/default_pythons"
 
+assertCaptured "Installing SQLite3"
+
 testPythonDefault() {
   updateVersion "pythonDefault" $DEFAULT_PYTHON_VERSION
   compile "pythonDefault"
   assertCaptured $DEFAULT_PYTHON_VERSION
   assertNotCaptured "security update"
+  assertCaptured "Installing SQLite3"
   assertCapturedSuccess
 }
 
@@ -18,6 +21,7 @@ testPython2() {
     compile "python2"
     assertCaptured $LATEST_27
     assertNotCaptured "security update"
+    assertCaptured "Installing SQLite3"
     assertCapturedSuccess
 }
 
@@ -25,6 +29,7 @@ testPython2_warn() {
     compile "python2_warn"
     assertCaptured "python-2.7.15"
     assertCaptured "security update!"
+    assertCaptured "Installing SQLite3"
     assertCapturedSuccess
 }
 
@@ -67,6 +72,7 @@ testPython3_5() {
     compile "python3_5"
     assertCaptured $LATEST_35
     assertNotCaptured "security update"
+    assertCaptured "Installing SQLite3"
     assertCapturedSuccess
   fi
 }
@@ -93,6 +99,7 @@ testPython3_6() {
   compile "python3_6"
   assertCaptured $LATEST_36
   assertNotCaptured "security update"
+  assertCaptured "Installing SQLite3"
   assertCapturedSuccess
 }
 
@@ -100,6 +107,7 @@ testPython3_6_warn() {
   compile "python3_6_warn"
   assertCaptured "python-3.6.7"
   assertCaptured "security update!"
+  assertCaptured "Installing SQLite3"
   assertCapturedSuccess
 }
 
@@ -117,6 +125,7 @@ testPython3_7() {
   else
     assertNotCaptured "security update"
     assertCaptured $LATEST_37
+    assertCaptured "Installing SQLite3"
     assertCapturedSuccess
   fi
 }
@@ -128,6 +137,7 @@ testPython3_7_warn() {
   else
     assertCaptured "python-3.7.1"
     assertCaptured "security update!"
+    assertCaptured "Installing SQLite3"
     assertCapturedSuccess
   fi
 }
