@@ -4,8 +4,6 @@
 # shellcheck source=bin/default_pythons
 source "bin/default_pythons"
 
-assertCaptured "Installing SQLite3"
-
 testPythonDefault() {
   updateVersion "pythonDefault" $DEFAULT_PYTHON_VERSION
   compile "pythonDefault"

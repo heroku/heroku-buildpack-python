@@ -42,6 +42,8 @@ export BUILD_DIR CACHE_DIR ENV_DIR
 VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
 if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
     VENDOR_URL="$BUILDPACK_VENDOR_URL"
+elif [[ -n ${USE_STAGING_BINARIES} ]]; then
+    VENDOR_URL="$USE_STAGING_BINARIES/$STACK"
 fi
 export VENDOR_URL
 
