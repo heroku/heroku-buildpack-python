@@ -7,7 +7,7 @@
   - Add Tests
   - Test for Pysqlite
 - Bug fix: pipenv no longer installs twice on CI
-
+- Add support for staging binary testing
 --------------------------------------------------------------------------------
 
 # 157 (2019-09-18)
