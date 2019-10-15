@@ -3,6 +3,7 @@
 # Master
 
 - Sqlite3 Update:
+  - Enable dynamic linking flags for staged binaries
   - Add Tests
   - Test for Pysqlite
 - Bug fix: pipenv no longer installs twice on CI
