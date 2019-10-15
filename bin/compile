@@ -294,6 +294,11 @@ mtime "sqlite3.install.time" "${start}"
 # pip install
 # -----------
 
+if [[ -n ${USE_STAGING_BINARIES} ]]; then
+  export CFLAGS="-I/app/.heroku/python/include ${CFLAGS:-}"
+  export LDFLAGS="-L/app/.heroku/lib/x86_64-linux-gnu ${LDFLAGS:-}"
+fi
+
 # Install dependencies with pip (where the magic happens).
 (( start=$(nowms) ))
 # shellcheck source=bin/steps/pip-install
