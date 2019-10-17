@@ -18,7 +18,6 @@ if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
     fi
   fi
-if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
   if [[ "$PYTHON_VERSION" == $PY37* ]]; then
     # do things to alert the user of security release available
     if [ "$PYTHON_VERSION" != "$LATEST_37" ]; then
