@@ -49,13 +49,9 @@ testPython3_4() {
 
 testPython3_4_warn() {
   compile "python3_4_warn"
-  if [[ $STACK = "cedar-14" ]]; then
-    assertCaptured "python-3.4.9"
-    assertCaptured "security update!"
-    assertCapturedSuccess
-  else
-    assertCapturedError
-  fi
+  assertCaptured "python-3.4.9"
+  assertCaptured "security update!"
+  assertCapturedSuccess
 }
 
 testPython3_4_fail() {
