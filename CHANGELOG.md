@@ -5,7 +5,6 @@
 - Sqlite3 Update:
   - Add Tests
   - Test for Pysqlite
-- Bug fix: pipenv no longer installs twice on CI
 - Add support for staging binary testing
 --------------------------------------------------------------------------------
 
