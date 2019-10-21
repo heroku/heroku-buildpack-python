@@ -3,8 +3,7 @@
 # Master
 
 - Sqlite3 Update:
-  - Test improvements
-- Bug fix: pipenv no longer installs twice on CI
+  - Test Improvements
 - Add support for staging binary testing
 --------------------------------------------------------------------------------
 
