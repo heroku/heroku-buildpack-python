@@ -52,6 +52,7 @@ export VENDOR_URL
 source "$BIN_DIR/default_pythons"
 
 # Supported Python Branches
+PY38="python-3.8"
 PY37="python-3.7"
 PY36="python-3.6"
 PY35="python-3.5"

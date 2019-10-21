@@ -2,6 +2,7 @@
 
 # Master
 
+- Add support for Python 3.8 branch
 - Sqlite3 Update:
   - Test Improvements
 - Add support for staging binary testing
