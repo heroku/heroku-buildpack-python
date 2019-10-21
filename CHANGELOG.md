@@ -2,6 +2,7 @@
 
 # Master
 
+- Python 3.7.5 and 3.8.0 now available on Heroku 18 and 16.
 - Add support for Python 3.8 branch
 - Sqlite3 Update:
   - Test Improvements
