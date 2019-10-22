@@ -26,14 +26,14 @@ remote: Compressing source files... done.
 remote: Building source:
 remote:
 remote: -----> Python app detected
-remote: -----> Installing python-3.7.4
+remote: -----> Installing python-3.8.0
 remote: -----> Installing pip
 remote: -----> Installing SQLite3
 remote: -----> Installing requirements with pip
 remote:        Collecting flask (from -r /tmp/build_c2c067ef79ff14c9bf1aed6796f9ed1f/requirements.txt (line 1))
 remote:          Downloading ...
 remote:        Installing collected packages: Werkzeug, click, MarkupSafe, Jinja2, itsdangerous, flask
-remote:        Successfully installed Jinja2-2.10 MarkupSafe-1.1.0 Werkzeug-0.14.1 click-7.0 flask-1.0.2 itsdangerous-1.1.0
+remote:        Successfully installed Jinja2-2.10 MarkupSafe-1.1.1 Werkzeug-0.16.0 click-7.0 flask-1.1.1 itsdangerous-1.1.0
 remote:
 remote: -----> Discovering process types
 remote:        Procfile declares types -> (none)
@@ -61,7 +61,7 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.7.4`
+- `python-3.7.5`
 - `python-3.6.9`
 - `python-2.7.16`
 
