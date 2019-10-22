@@ -2,6 +2,7 @@
 
 # Master
 
+- Bugfix: Pipenv no longer installs twice in CI
 - Python 2.7.17 now available on Heroku 18 and 16.
 
 --------------------------------------------------------------------------------
