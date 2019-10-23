@@ -2,9 +2,11 @@
 
 # Master
 
-- Bugfix: Pipenv no longer installs twice in CI
-
 --------------------------------------------------------------------------------
+
+# 160 (2019-10-23)
+
+- Bugfix: Pipenv no longer installs twice in CI
 
 # 159 (2019-10-22)
 
