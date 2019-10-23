@@ -26,7 +26,8 @@ testGEOS() {
 testGEOSDeprecation() {
   export BUILD_WITH_GEO_LIBRARIES=1
   compile "geos"
-  assertCaptured "The GDAL, GEOS and PROJ binaries and BUILD_WITH_GEO_LIBRARIES functionality are now deprecated."
+  assertCaptured " !     The GDAL, GEOS and PROJ binaries and BUILD_WITH_GEO_LIBRARIES functonality are now deprecated.
+ !     An alternative buildpack to enable GDAL, GEOS and PROJ use is available here - https://github.com/heroku/heroku-geo-buildpack"
   assertCapturedSuccess
 }
 
