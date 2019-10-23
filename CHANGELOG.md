@@ -2,10 +2,13 @@
 
 # Master
 
+--------------------------------------------------------------------------------
+
+# 159 (2019-10-22)
+
 - Python 2.7.17 now available on Heroku 18 and 16.
 - Deprecation warning: BUILD_WITH_GEO_LIBRARIES is now deprecated. See warning for details.
 
---------------------------------------------------------------------------------
 # 158 (2019-10-21)
 
 - Python 3.7.5 and 3.8.0 now available on Heroku 18 and 16.
