@@ -73,10 +73,14 @@ testPython3_5() {
 
 testPython3_5_warn() {
   compile "python3_5_warn"
-  if [[ $STACK = "cedar-14" ]]; then
+  if [[ $STACK = "cedar-14" ]] ; then
     assertCaptured "python-3.5.3"
     assertCaptured "security update!"
     assertCapturedError
+  elif [[ -n ${USE_STAGING_BINARIES} ]]; then
+    assertCaptured "python-3.5.3"
+    assertCaptured "security update!"
+    assertCapturedSuccess
   else
     assertCapturedError
   fi
