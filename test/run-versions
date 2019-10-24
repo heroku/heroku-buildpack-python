@@ -61,23 +61,17 @@ testPython3_4_fail() {
 }
 
 testPython3_5() {
-  if [[ $STACK != "cedar-14" ]]; then
-    updateVersion "python3_5" $LATEST_35
-    compile "python3_5"
-    assertCaptured $LATEST_35
-    assertNotCaptured "security update"
-    assertCaptured "Installing SQLite3"
-    assertCapturedSuccess
-  fi
+  updateVersion "python3_5" $LATEST_35
+  compile "python3_5"
+  assertCaptured $LATEST_35
+  assertNotCaptured "security update"
+  assertCaptured "Installing SQLite3"
+  assertCapturedSuccess
 }
 
 testPython3_5_warn() {
   compile "python3_5_warn"
-  if [[ $STACK = "cedar-14" ]] ; then
-    assertCaptured "python-3.5.3"
-    assertCaptured "security update!"
-    assertCapturedError
-  elif [[ -n ${USE_STAGING_BINARIES} ]]; then
+  if [[ $STACK == "cedar-14" ]] || [[ -n ${USE_STAGING_BINARIES} ]]; then
     assertCaptured "python-3.5.3"
     assertCaptured "security update!"
     assertCapturedSuccess
