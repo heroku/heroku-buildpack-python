@@ -36,7 +36,7 @@ if [[ -f pyproject.toml ]]; then
     # Install the dependencies.
     puts-step "Installing dependencies with poetry…"
     /app/.poetry/bin/poetry config virtualenvs.create false
-    /app/.poetry/bin/poetry update -vv --no-dev 2>&1 | indent
+    /app/.poetry/bin/poetry update -vvv --no-dev 2>&1 | indent
 
 
 fi
