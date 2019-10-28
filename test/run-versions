@@ -76,7 +76,6 @@ testPython3_4_fail() {
 }
 
 testPython3_5() {
-  updateVersion "python3_5" $LATEST_35
   compile "python3_5"
   assertCaptured $LATEST_35
   assertNotCaptured "security update"
@@ -86,13 +85,9 @@ testPython3_5() {
 
 testPython3_5_warn() {
   compile "python3_5_warn"
-  if [[ $STACK == "cedar-14" ]] || [[ -n ${USE_STAGING_BINARIES} ]]; then
-    assertCaptured "python-3.5.3"
-    assertCaptured "security update!"
-    assertCapturedSuccess
-  else
-    assertCapturedError
-  fi
+  assertCaptured "python-3.5.6"
+  assertCaptured "security update!"
+  assertCapturedSuccess
 }
 
 testPython3_5_fail() {
