@@ -18,6 +18,7 @@ if [[ $PYTHON_VERSION == *"*"* ]]; then
   else
     echo "Error: Branch $PYTHON_VERSION is not supported."
     exit 1
+  fi
 fi
 
 # The location of the pre-compiled python binary.
