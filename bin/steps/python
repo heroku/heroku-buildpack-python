@@ -15,7 +15,9 @@ if [[ $PYTHON_VERSION == *"*"* ]]; then
     PYTHON_VERSION=$LATEST_35
   elif [[ $PYTHON_VERSION == *"2.7"* ]]; then
     PYTHON_VERSION=$LATEST_27
-  fi
+  else
+    echo "Error: Branch $PYTHON_VERSION is not supported."
+    exit 1
 fi
 
 # The location of the pre-compiled python binary.

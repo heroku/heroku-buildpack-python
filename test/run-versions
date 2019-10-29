@@ -24,6 +24,12 @@ testUseLatestPatch() {
   fi
 }
 
+testUseLatestPatchFail() {
+  echo "python-3.*"
+  compile "use-latest-patch"
+  assertCapturedError
+}
+
 testPython2() {
     updateVersion "python2" $LATEST_27
     echo $LATEST_27 > "runtime.txt"
