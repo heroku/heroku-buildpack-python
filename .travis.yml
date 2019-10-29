@@ -10,11 +10,11 @@ before_script:
 
 script:
   - docker build --pull --tag travis-build-cedar-14 --file $(pwd)/builds/cedar-14.Dockerfile .
-  - docker run --rm -e "STACK=cedar-14" travis-build-cedar-14 bash $TESTFOLDER
+  - docker run --rm -e "STACK=cedar-14" -e "USE_STAGING_BINARIES=$USE_STAGING_BINARIES" travis-build-cedar-14 bash $TESTFOLDER
   - docker build --pull --tag travis-build-heroku-16 --file $(pwd)/builds/heroku-16.Dockerfile .
-  - docker run --rm -e "STACK=heroku-16" travis-build-heroku-16 bash $TESTFOLDER
+  - docker run --rm -e "STACK=heroku-16" -e "USE_STAGING_BINARIES=$USE_STAGING_BINARIES" travis-build-heroku-16 bash $TESTFOLDER
   - docker build --pull --tag travis-build-heroku-18 --file $(pwd)/builds/heroku-18.Dockerfile .
-  - docker run --rm -e "STACK=heroku-18" travis-build-heroku-18 bash $TESTFOLDER
+  - docker run --rm -e "STACK=heroku-18" -e "USE_STAGING_BINARIES=$USE_STAGING_BINARIES" travis-build-heroku-18 bash $TESTFOLDER
 
 jobs:
   include:
@@ -28,8 +28,11 @@ jobs:
 env:
   matrix:
     - TESTFOLDER=test/run-deps
+    - TESTFOLDER=test/run-deps USE_STAGING_BINARIES=https://lang-python.s3.amazonaws.com/staging
     - TESTFOLDER=test/run-versions
+    - TESTFOLDER=test/run-versions USE_STAGING_BINARIES=https://lang-python.s3.amazonaws.com/staging
     - TESTFOLDER=test/run-features
+    - TESTFOLDER=test/run-features USE_STAGING_BINARIES=https://lang-python.s3.amazonaws.com/staging
   global:
     - HATCHET_RETRIES=3
     - IS_RUNNING_ON_CI=true
