@@ -57,11 +57,8 @@ testPython3_4_warn() {
   compile "python3_4_warn"
   assertCaptured "python-3.4.9"
   assertCaptured "security update!"
-  # if cedar 14 and legacy binaries, fail. if cedar 14 and staging, succeed.
-  if [[ ! -n $USE_STAGING_BINARIES ]] && [[ $STACK == "cedar-14" ]]; then
-      assertCapturedError
 # if heroku 18 and legacy binaries, succeed. if heroku 18 and staging, fail.
-  elif [[ -n $USE_STAGING_BINARIES ]] && [[ $STACK == "heroku-18" ]]; then
+  if [[ -n $USE_STAGING_BINARIES ]] && [[ $STACK == "heroku-18" ]]; then
       assertCapturedError
   else
 #   all else succeed
