@@ -2,6 +2,8 @@
 
 # Master
 
+- Sqlite fix:
+  - Update Python3 base formula
 - Test staged binaries on Travis
 
 --------------------------------------------------------------------------------
