@@ -27,6 +27,7 @@ testUseLatestPatch() {
 testUseLatestPatchFail() {
   echo "python-3.*"
   compile "use-latest-patch"
+  assertCaptured "Error: Branch"
   assertCapturedError
 }
 
