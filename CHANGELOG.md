@@ -4,7 +4,7 @@
 
 - Sqlite fix:
   - Update Python3 base formula
-  - Update Python formulas 3.6.x, 3.7.4
+  - Update Python formulas 3.6.x, 3.7.x
 - Test staged binaries on Travis
 
 --------------------------------------------------------------------------------
