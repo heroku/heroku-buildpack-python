@@ -11,8 +11,6 @@ if [[ $PYTHON_VERSION == *"*"* ]]; then
     PYTHON_VERSION=$LATEST_37
   elif [[ $PYTHON_VERSION == *"3.6"* ]]; then
     PYTHON_VERSION=$LATEST_36
-  elif [[ $PYTHON_VERSION == *"3.5"* ]]; then
-    PYTHON_VERSION=$LATEST_35
   elif [[ $PYTHON_VERSION == *"2.7"* ]]; then
     PYTHON_VERSION=$LATEST_27
   else
