@@ -3,7 +3,7 @@
 # Master
 
 - Sqlite fix:
-  - base Python3 file corrected
+  - Update Python3 base formula
 - Test staged binaries on Travis
 
 --------------------------------------------------------------------------------
