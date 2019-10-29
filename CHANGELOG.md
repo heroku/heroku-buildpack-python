@@ -2,6 +2,8 @@
 
 # Master
 
+- Add support for runtime formatting: X.X.* to get the latest available patch version
+
 --------------------------------------------------------------------------------
 
 # 160 (2019-10-23)
