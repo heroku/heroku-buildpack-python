@@ -4,6 +4,20 @@ set +e
 runtime-fixer runtime.txt
 PYTHON_VERSION=$(cat runtime.txt)
 
+if [[ $PYTHON_VERSION == *"*"* ]]; then
+  if [[ $PYTHON_VERSION == *"3.8"* ]]; then
+    PYTHON_VERSION=$LATEST_38
+  elif [[ $PYTHON_VERSION == *"3.7"* ]]; then
+    PYTHON_VERSION=$LATEST_37
+  elif [[ $PYTHON_VERSION == *"3.6"* ]]; then
+    PYTHON_VERSION=$LATEST_36
+  elif [[ $PYTHON_VERSION == *"3.5"* ]]; then
+    PYTHON_VERSION=$LATEST_35
+  elif [[ $PYTHON_VERSION == *"2.7"* ]]; then
+    PYTHON_VERSION=$LATEST_27
+  fi
+fi
+
 # The location of the pre-compiled python binary.
 VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
 

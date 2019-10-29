@@ -13,6 +13,17 @@ testPythonDefault() {
   assertCapturedSuccess
 }
 
+testUseLatestPatch() {
+  compile "use-latest-patch"
+  if [[ $STACK != "cedar-14" ]]; then
+    assertCaptured $LATEST_37
+    assertNotCaptured "security update"
+    assertCapturedSuccess
+  else
+    assertCapturedError
+  fi
+}
+
 testPython2() {
     updateVersion "python2" $LATEST_27
     echo $LATEST_27 > "runtime.txt"
