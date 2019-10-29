@@ -2,7 +2,7 @@
 
 # Master
 
-- Add support for runtime formatting: X.X.* to get the latest available patch version
+- Add support for runtime formatting: python-X.X.* to get the latest available patch version
 
 --------------------------------------------------------------------------------
 
