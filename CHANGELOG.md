@@ -2,6 +2,8 @@
 
 # Master
 
+- Bugfix: Fix support for naive latest version declaration in Python 3.8
+
 --------------------------------------------------------------------------------
 
 # 160 (2019-10-23)
