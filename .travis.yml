@@ -18,10 +18,7 @@ script:
 
 jobs:
   include:
-  - stage: Bash linting (shellcheck)
-    sudo: false
-    script: make check
-  - stage: Hatchet Integration
+ - stage: Hatchet Integration
     if: branch = master
     name: Run Hatchet
     script: "bundle exec rspec"

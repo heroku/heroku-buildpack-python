@@ -8,6 +8,7 @@
 - Bugfix: Clearing pip dependencies
 - Correct ftp to https in vendored file
 - Warn for Django 1.11 approaching EOL, provide link to roadmap
+- Move shellcheck from Travis-CI to GitHub actions
 
 --------------------------------------------------------------------------------
 
