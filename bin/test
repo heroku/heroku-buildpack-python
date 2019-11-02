@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Locale support for Pipenv.
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
+if [ ! -f "${1:-}/setup.py" ]; then
+  echo "No setup.py found. Please create a setup.py to run tests."
+  exit 1
+fi
+
+"python $(dirname "${1:-}")/setup.py test"

@@ -9,6 +9,10 @@
 
 --------------------------------------------------------------------------------
 
+# 161 (2019-11-02)
+
+- Add bin/test to support running tests with setup.py
+
 # 160 (2019-10-23)
 
 - Bugfix: Pipenv no longer installs twice in CI
