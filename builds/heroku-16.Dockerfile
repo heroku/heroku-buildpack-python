@@ -7,7 +7,7 @@ ENV WORKSPACE_DIR="/app/builds" \
     DEBIAN_FRONTEND=noninteractive \
     STACK="heroku-16"
 
-RUN apt-get update && apt-get install -y python-pip && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python-pip libsqlite3-dev && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /app/
 RUN pip install --disable-pip-version-check --no-cache-dir -r /app/requirements.txt
