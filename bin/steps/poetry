@@ -54,7 +54,7 @@ if [ ! -f requirements.txt ] && [ -f pyproject.toml ] && [ -f poetry.lock ]; the
             --disable-pip-version-check &> /dev/null
 
         # Export requirements.
-        /app/.heroku/python/bin/poetry export -f requirements.txt > requirements.txt
+        /app/.heroku/python/bin/poetry export -f requirements.txt -o requirements.txt
 
         # Write SHA and requirements.txt to cache dir.
         echo "$POETRY_LOCK_SHA" > "$CACHED_POETRY_LOCK_SHA"
