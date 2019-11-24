@@ -48,7 +48,7 @@ if [ ! -f requirements.txt ] && [ -f pyproject.toml ] && [ -f poetry.lock ]; the
         # Since we only use Poetry to export a requirements.txt file, ignore the
         # Poetry version specified in pyproject.toml. Install a pre-release of
         # 1.0.0 because the export command is not available before 1.0.0a0.
-        export POETRY_VERSION="1.0.0b1"
+        export POETRY_VERSION="1.0.0b7"
         puts-step "Exporting requirements with Poetry $POETRY_VERSION…"
         /app/.heroku/python/bin/pip install "poetry==$POETRY_VERSION" \
             --disable-pip-version-check &> /dev/null
