@@ -7,9 +7,9 @@ sqlite3_version() {
   if [ "$STACK" = "cedar-14" ]; then
     SQLITE3_VERSION="3.8.2-1ubuntu2.2"
   elif [ "$STACK" = "heroku-16" ]; then
-    SQLITE3_VERSION="3.11.0-1ubuntu1.2"
+    SQLITE3_VERSION="3.11.0-1ubuntu1.3"
   else
-    SQLITE3_VERSION=${SQLITE3_VERSION:-$(dpkg -s libsqlite3-0 | grep Version | sed 's/Version: //')}
+    SQLITE3_VERSION="3.22.0-1ubuntu0.2"
   fi
 
   export SQLITE3_VERSION
