@@ -46,6 +46,13 @@ testPysqlite() {
   assertCapturedSuccess
 }
 
+testSqliteInstall() {
+  compile "pythonDefault"
+  assertCaptured "Sqlite3 successfully installed."
+  assertNotCaptured "Sqlite3 failed to install."
+  assertCapturedSuccess
+}
+
 testCffi() {
   compile "cffi"
   assertCaptured "cffi"
