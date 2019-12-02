@@ -61,7 +61,8 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.7.4`
+- `python-3.8.0`
+- `python-3.7.5`
 - `python-3.6.9`
 - `python-2.7.17`
 
