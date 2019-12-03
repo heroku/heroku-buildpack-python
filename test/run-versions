@@ -1,0 +1,173 @@
+#!/usr/bin/env bash
+
+# Default Python Versions
+# shellcheck source=bin/default_pythons
+source "bin/default_pythons"
+
+testPythonDefault() {
+  updateVersion "pythonDefault" $DEFAULT_PYTHON_VERSION
+  compile "pythonDefault"
+  assertCaptured $DEFAULT_PYTHON_VERSION
+  assertNotCaptured "security update"
+  assertCaptured "Installing SQLite3"
+  assertCapturedSuccess
+}
+
+testPython2() {
+    updateVersion "python2" $LATEST_27
+    echo $LATEST_27 > "runtime.txt"
+    compile "python2"
+    assertCaptured $LATEST_27
+    assertNotCaptured "security update"
+    assertCaptured "Installing SQLite3"
+    assertCapturedSuccess
+}
+
+testPython2_warn() {
+    compile "python2_warn"
+    assertCaptured "python-2.7.15"
+    assertCaptured "security update!"
+    assertCaptured "Installing SQLite3"
+    assertCapturedSuccess
+}
+
+testPython2_fail() {
+    compile "python2_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
+}
+
+testPython3_4() {
+  compile "python3_4"
+  assertCaptured $LATEST_34
+  assertNotCaptured "security update"
+  # if cedar 14 and legacy binaries, fail. if cedar 14 and staging, succeed.
+  if [[ ! -n $USE_STAGING_BINARIES ]] && [[ $STACK == "cedar-14" ]]; then
+      assertCapturedError
+# if heroku 18 and legacy binaries, succeed. if heroku 18 and staging, fail.
+  elif [[ -n $USE_STAGING_BINARIES ]] && [[ $STACK == "heroku-18" ]]; then
+      assertCapturedError
+  else
+#   all else succeed
+    assertCapturedSuccess
+  fi
+}
+
+testPython3_4_warn() {
+  compile "python3_4_warn"
+  assertCaptured "python-3.4.9"
+  assertCaptured "security update!"
+# if heroku 18 and legacy binaries, succeed. if heroku 18 and staging, fail.
+  if [[ -n $USE_STAGING_BINARIES ]] && [[ $STACK == "heroku-18" ]]; then
+      assertCapturedError
+  else
+#   all else succeed
+    assertCapturedSuccess
+  fi
+}
+
+testPython3_4_fail() {
+    compile "python3_4_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
+}
+
+testPython3_5() {
+  compile "python3_5"
+  assertCaptured $LATEST_35
+  assertNotCaptured "security update"
+  assertCaptured "Installing SQLite3"
+  assertCapturedSuccess
+}
+
+testPython3_5_warn() {
+  compile "python3_5_warn"
+  assertCaptured "python-3.5.6"
+  assertCaptured "security update!"
+  assertCapturedSuccess
+}
+
+testPython3_5_fail() {
+    compile "python3_5_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
+}
+
+testPython3_6() {
+  updateVersion "python3_6" $LATEST_36
+  compile "python3_6"
+  assertCaptured $LATEST_36
+  assertNotCaptured "security update"
+  assertCaptured "Installing SQLite3"
+  assertCapturedSuccess
+}
+
+testPython3_6_warn() {
+  compile "python3_6_warn"
+  assertCaptured "python-3.6.7"
+  assertCaptured "security update!"
+  assertCaptured "Installing SQLite3"
+  assertCapturedSuccess
+}
+
+testPython3_6_fail() {
+    compile "python3_6_fail"
+    assertCaptured "Aborting"
+    assertCapturedError
+}
+
+testPython3_7() {
+  updateVersion "python3_7" $LATEST_37
+  compile "python3_7"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCapturedError
+  else
+    assertNotCaptured "security update"
+    assertCaptured $LATEST_37
+    assertCaptured "Installing SQLite3"
+    assertCapturedSuccess
+  fi
+}
+
+testPython3_7_warn() {
+  compile "python3_7_warn"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCapturedError
+  else
+    assertCaptured "python-3.7.1"
+    assertCaptured "security update!"
+    assertCaptured "Installing SQLite3"
+    assertCapturedSuccess
+  fi
+}
+
+testPython3_7_fail() {
+  compile "python3_7_fail"
+  assertCaptured "Aborting"
+  assertCapturedError
+}
+
+testPython3_8() {
+  updateVersion "python3_8" $LATEST_38
+  compile "python3_8"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCapturedError
+  else
+    assertNotCaptured "security update"
+    assertCaptured $LATEST_38
+    assertCaptured "Installing SQLite3"
+    assertCapturedSuccess
+  fi
+}
+
+testPython3_8_fail() {
+  compile "python3_8_fail"
+  assertCaptured "Aborting"
+  assertCapturedError
+}
+
+pushd $(dirname 0) >/dev/null
+popd >/dev/null
+
+source $(pwd)/test/utils
+source $(pwd)/test/shunit2

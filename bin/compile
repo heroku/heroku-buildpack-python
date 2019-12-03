@@ -43,6 +43,8 @@ export BUILD_DIR CACHE_DIR ENV_DIR
 VENDOR_URL="https://python-binaries.scalingo.com/$STACK"
 if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
     VENDOR_URL="$BUILDPACK_VENDOR_URL"
+elif [[ -n ${USE_STAGING_BINARIES} ]]; then
+    VENDOR_URL="$USE_STAGING_BINARIES/$STACK"
 fi
 export VENDOR_URL
 
@@ -51,6 +53,7 @@ export VENDOR_URL
 source "$BIN_DIR/default_pythons"
 
 # Supported Python Branches
+PY38="python-3.8"
 PY37="python-3.7"
 PY36="python-3.6"
 PY35="python-3.5"

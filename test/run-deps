@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+# Default Python Versions
+# shellcheck source=bin/default_pythons
+source "bin/default_pythons"
+
+testAirflow() {
+  export SLUGIFY_USES_TEXT_UNIDECODE="yes"
+  compile "airflow"
+  assertCaptured "apache-airflow==1.10.2"
+  assertCapturedSuccess
+}
+
+testCollectstatic() {
+  compile "collectstatic"
+  assertCaptured "collectstatic"
+}
+
+testGEOS() {
+  export BUILD_WITH_GEO_LIBRARIES=1
+  compile "geos"
+  assertCaptured "geos"
+  assertCapturedSuccess
+}
+
+testNLTK() {
+  # NOTE: This is a RuntimeWarning emitted by Python 3's runpy.py script
+  # which is what is used when you call `python -m <module>`. This is due to
+  # how nltk imports things. It's not actually an error, but it would probably
+  # be bad to silence in Production.
+  export PYTHONWARNINGS="ignore::RuntimeWarning"
+  compile "nltk"
+  assertCaptured "[nltk_data] Downloading package city_database" "STD_ERR"
+  assertCapturedSuccess
+}
+
+testPsycopg2() {
+  compile "psycopg2"
+  assertCaptured "psycopg2"
+  assertCapturedSuccess
+}
+
+testPysqlite() {
+  compile "pysqlite"
+  assertCaptured "pysqlite"
+  assertCapturedSuccess
+}
+
+testSqliteInstall() {
+  compile "pythonDefault"
+  assertCaptured "Sqlite3 successfully installed."
+  assertNotCaptured "Sqlite3 failed to install."
+  assertCapturedSuccess
+}
+
+testCffi() {
+  compile "cffi"
+  assertCaptured "cffi"
+  assertCapturedSuccess
+}
+
+testPylibmc() {
+  compile "pylibmc"
+  assertCaptured "pylibmc"
+  assertCapturedSuccess
+}
+
+pushd $(dirname 0) >/dev/null
+popd >/dev/null
+
+source $(pwd)/test/utils
+source $(pwd)/test/shunit2

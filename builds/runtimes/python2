@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+
+OUT_PREFIX=$1
+BIN_DIR="$(cd "$(dirname "$0")"/../.. || exit; pwd)/bin"
+export BIN_DIR
+
+# Orient ourselves and build download link
+dep_formula=${0#$WORKSPACE_DIR/} # this is the original script, e.g. pypy-5.3.1
+BASE=${dep_formula##*/} # this gives us relative path
+python_version=${BASE^} # this gives us only the filename with version number
+version_number=$(echo "$python_version" | cut -d- -f2) # this returns just X.X.X
+dep_url=https://python.org/ftp/python/${version_number}/${python_version}.tgz
+
+echo "Building ${python_version}..."
+echo "Pulling from source: ${dep_url}"
+
+curl -L "${dep_url}" | tar xz -C "${OUT_PREFIX}"
+mv "${OUT_PREFIX}/${python_version}" src
+cd src
+
+./configure --prefix=$OUT_PREFIX  --enable-unicode=ucs4 --with-ensurepip=no
+make
+make install
+
+# Remove unneeded test directories, similar to the official Docker Python images:
+# https://github.com/docker-library/python
+find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -rf '{}' +
+
+# Create links to SQLITE headers so Python can call them at runtime
+mkdir -p ${OUT_PREFIX}/include ${OUT_PREFIX}/lib/x86_64-linux-gnu
+cp /usr/include/sqlite3*.h ${OUT_PREFIX}/include
+ln -fs $(realpath /usr/lib/x86_64-linux-gnu/libsqlite3.so) ${OUT_PREFIX}/lib/x86_64-linux-gnu/libsqlite3.so

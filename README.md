@@ -23,7 +23,7 @@ remote: Compressing source files... done.
 remote: Building source:
 remote:
 remote: -----> Python app detected
-remote: -----> Installing python-3.7.1
+remote: -----> Installing python-3.7.4
 remote: -----> Installing pip
 remote: -----> Installing SQLite3
 remote: -----> Installing requirements with pip
@@ -52,7 +52,7 @@ Deploying a Python application couldn't be easier:
     $ git push scalingo master
     …
     -----> Python app detected
-    -----> Installing python-3.6.7
+    -----> Installing python-3.6.9
     -----> Installing pip
     -----> Installing requirements with Pipenv 2018.5.18…
            ...
@@ -77,9 +77,9 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.7.1`
-- `python-3.6.7`
-- `python-2.7.15`
+- `python-3.7.4`
+- `python-3.6.9`
+- `python-2.7.17`
 
 ## Tests
 

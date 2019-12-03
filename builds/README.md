@@ -11,28 +11,21 @@ To get started with it, create an app on Scalingo inside a clone of this reposit
   $ scalingo env-set S3_BUCKET=<your_s3_bucket_name>
 ```
 
-Then, shell into an instance and run a build by giving the name of the formula inside `builds`:
+You can e.g. `bash` into each of the images you built using their tag:
 
     $ scalingo run bash
     ~ $ bob build runtimes/python-2.7.6
 
-    Fetching dependencies... found 2:
-      - libraries/sqlite
+You then have a shell where you can run `bob build`, `bob deploy`, and so forth. You can of course also invoke these programs directly with `docker run`:
 
-    Building formula runtimes/python-2.7.6:
-        === Building Python 2.7.6
-        Fetching Python v2.7.6 source...
-        Compiling...
+    docker run --rm -ti heroku-python-build-heroku-18 bob build runtimes/python-2.7.15
 
-If this works, run `bob deploy` instead of `bob build` to have the result uploaded to S3 for you.
+In order to `bob deploy`, AWS credentials must be set up, as well as name and prefix of your custom S3 bucket (unless you're deploying to the Heroku production buckets that are pre-defined in each `Dockerfile`); see next section for details.
 
 To speed things up drastically, it'll usually be a good idea to `scalingo run bash --size 2XL` instead.
 
-For Heroku-16 stack
--------------------
+File `dockerenv.default` contains a list of required env vars; most of these have default values defined in `Dockerfile`. You can copy this file to a location outside the buildpack and modify it with the values you desire and pass its location with `--env-file`, or pass the env vars to `docker run` using `--env`.
 
-1. Ensure GNU Make and Docker are installed.
-2. From the root of the buildpack repository, run: `make buildenv-heroku-16`
-3. Follow the instructions displayed!
+Out of the box, each `Dockerfile` has the correct values predefined for `S3_BUCKET`, `S3_PREFIX`, and `S3_REGION`. If you're building your own packages, you'll likely want to change `S3_BUCKET` and `S3_PREFIX` to match your info. Instead of setting `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` into that file, you may also pass them to `docker run` through the environment, or explicitly using `--env`, in order to prevent accidental commits of credentials.
 
 Enjoy :)
