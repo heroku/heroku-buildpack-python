@@ -2,13 +2,13 @@
 
 # Master
 
-- Sqlite fix:
-  - Update Python3 and Python2 base formula
-  - Update Python formulas 3.6.x, 3.7.x, 3.5.x, and 2.7.17-2.7.9
-- Test staged binaries on Travis
-- Bug fix: Sqlite3 version bump
+- Bug fix: fragile sqlite3 install
 
 --------------------------------------------------------------------------------
+
+# 161 (2019-12-2)
+
+- Bug fix: Sqlite3 version bump
 
 # 160 (2019-10-23)
 
