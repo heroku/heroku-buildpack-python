@@ -7,9 +7,9 @@ sqlite3_version() {
   if [ "$STACK" = "cedar-14" ]; then
     SQLITE3_VERSION="3.8.2-1ubuntu2.2"
   elif [ "$STACK" = "heroku-16" ]; then
-    SQLITE3_VERSION="3.11.0-1ubuntu1.2"
+    SQLITE3_VERSION="3.11.0-1ubuntu1.3"
   else
-    SQLITE3_VERSION=${SQLITE3_VERSION:-$(dpkg -s libsqlite3-0 | grep Version | sed 's/Version: //')}
+    SQLITE3_VERSION="3.22.0-1ubuntu0.2"
   fi
 
   export SQLITE3_VERSION
@@ -83,7 +83,14 @@ buildpack_sqlite3_install() {
     # only install if the sqlite3 version has changed
     if [ "$INSTALLED_SQLITE3_VERSION" != "$SQLITE3_VERSION" ]; then
       puts-step "Installing SQLite3"
-      sqlite3_install "$BUILD_DIR/.heroku/python" "$SQLITE3_VERSION"
+
+      if sqlite3_install "$BUILD_DIR/.heroku/python" "$SQLITE3_VERSION" ; then
+        echo "Sqlite3 successfully installed."
+        mcount "success.python.sqlite3"
+      else
+        echo "Sqlite3 failed to install."
+        mcount "failure.python.sqlite3"
+      fi
 
       # save version installed
       mkdir -p "$CACHE_DIR/.heroku/"
