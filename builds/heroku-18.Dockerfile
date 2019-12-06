@@ -7,7 +7,7 @@ ENV WORKSPACE_DIR="/app/builds" \
     DEBIAN_FRONTEND=noninteractive \
     STACK="heroku-18"
 
-RUN apt-get update && apt-get install --no-install-recommends -y python-pip-whl=9.0.1-2 python-pip=9.0.1-2 python-setuptools python-wheel && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install --no-install-recommends -y python-pip-whl=9.0.1-2 python-pip=9.0.1-2 python-setuptools python-wheel libsqlite3-dev && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /app/
 RUN pip install --disable-pip-version-check --no-cache-dir -r /app/requirements.txt
