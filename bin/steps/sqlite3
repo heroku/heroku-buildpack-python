@@ -73,4 +73,6 @@ buildpack_sqlite3_install() {
     echo "Sqlite3 failed to install."
     mcount "failure.python.sqlite3"
   fi
+
+  mkdir -p "$CACHE_DIR/.heroku/"
 }
