@@ -2,6 +2,7 @@
 
 # Master
 
+- Doc: fix runtime.txt generation when using pipenv
 - Update requirements.txt builds to use Pip 20.0.2
 - Download get-pip.py to tmpdir instead of root dir
 
