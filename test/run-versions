@@ -180,20 +180,22 @@ testPypy3_6() {
   compile "pypy3_6"
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
+  else
+    assertCaptured "Installing pypy"
+    assertCaptured "$PYPY_36"
+    assertCapturedSuccess
   fi
-  assertCaptured "Installing pypy"
-  assertCaptured "$PYPY_36"
-  assertCapturedSuccess
 }
 
 testPypy2_7() {
   compile "pypy2_7"
   if [[ $STACK = "cedar-14" ]]; then
     assertCapturedError
+  else
+    assertCaptured "Installing pypy"
+    assertCaptured "$PYPY_27"
+    assertCapturedSuccess
   fi
-  assertCaptured "Installing pypy"
-  assertCaptured "$PYPY_27"
-  assertCapturedSuccess
 }
 
 pushd $(dirname 0) >/dev/null
