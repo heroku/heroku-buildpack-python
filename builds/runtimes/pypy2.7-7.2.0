@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Build Path: /app/.heroku/python/
+
+source $(dirname $0)/pypy2.7
