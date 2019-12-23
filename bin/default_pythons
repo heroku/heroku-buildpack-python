@@ -7,6 +7,8 @@ LATEST_36="python-3.6.10"
 LATEST_35="python-3.5.7"
 LATEST_34="python-3.4.10"
 LATEST_27="python-2.7.17"
+PYPY_36="pypy3.6-7.2.0"
+PYPY_27="pypy2.7-7.2.0"
 
 export DEFAULT_PYTHON_VERSION \
     LATEST_38 \
@@ -14,4 +16,6 @@ export DEFAULT_PYTHON_VERSION \
     LATEST_36 \
     LATEST_35 \
     LATEST_34 \
-    LATEST_27
+    LATEST_27 \
+    PYPY_36 \
+    PYPY_27
