@@ -168,6 +168,20 @@ testPython3_8_fail() {
   assertCapturedError
 }
 
+testPypy3_6() {
+  compile "pypy3_6"
+  assertCaptured "Installing Pypy 3.6"
+  assertCaptured "$PYPY_36"
+  assertCapturedSuccess
+}
+
+testPypy2_7() {
+  compile "pypy2_7"
+  assertCaptured "Installing Pypy 2.7"
+  assertCaptured "$PYPY_27"
+  assertCapturedSuccess
+}
+
 pushd $(dirname 0) >/dev/null
 popd >/dev/null
 
