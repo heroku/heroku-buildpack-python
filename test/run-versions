@@ -18,7 +18,11 @@ testPython2() {
     echo $LATEST_27 > "runtime.txt"
     compile "python2"
     assertCaptured $LATEST_27
-    assertCaptured "python-2-7-eol-faq"
+    if [[ $(date "+%Y") > "2019" ]]; then
+      assertCaptured "python-2-7-eol-faq";
+    else
+      assertNotCaptured "python-2-7-eol-faq";
+    fi
     assertNotCaptured "security update"
     assertCaptured "Installing SQLite3"
     assertCapturedSuccess
@@ -27,7 +31,11 @@ testPython2() {
 testPython2_warn() {
     compile "python2_warn"
     assertCaptured "python-2.7.15"
-    assertCaptured "python-2-7-eol-faq"
+    if [[ $(date "+%Y") > "2019" ]]; then
+      assertCaptured "python-2-7-eol-faq";
+    else
+      assertNotCaptured "python-2-7-eol-faq";
+    fi
     assertCaptured "Only the latest version"
     assertCaptured "Installing SQLite3"
     assertCapturedSuccess
@@ -170,14 +178,14 @@ testPython3_8_fail() {
 
 testPypy3_6() {
   compile "pypy3_6"
-  assertCaptured "Installing Pypy 3.6"
+  assertCaptured "Installing pypy"
   assertCaptured "$PYPY_36"
   assertCapturedSuccess
 }
 
 testPypy2_7() {
   compile "pypy2_7"
-  assertCaptured "Installing Pypy 2.7"
+  assertCaptured "Installing pypy"
   assertCaptured "$PYPY_27"
   assertCapturedSuccess
 }
