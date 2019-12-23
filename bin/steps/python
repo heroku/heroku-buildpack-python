@@ -52,7 +52,7 @@ if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
   fi
   if [[ "$PYTHON_VERSION" == $PY27* ]]; then
     # security update note
-    if [[ $(date "+%Y") > "2019" ]]; then
+    if [[ "$(date "+%Y")" -gt "2019" ]]; then
       puts-warn "$PYTHON_2_EOL_UPDATE"
       echo "       Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq"
     fi
