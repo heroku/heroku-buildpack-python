@@ -3,7 +3,7 @@
 # Master
 
 - New pythons released:
-  CPython 3.8.1, 3.7.6, 3.6.10 and 3.9.0a2
+  Python 3.8.1, 3.7.6, 3.6.10 (CPython)
   Beta Release: Pypy 2.7 and 3.6, version 7.2.0
 
 --------------------------------------------------------------------------------
