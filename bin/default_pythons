@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 
-DEFAULT_PYTHON_VERSION="python-3.6.9"
-LATEST_38="python-3.8.0"
-LATEST_37="python-3.7.5"
-LATEST_36="python-3.6.9"
+DEFAULT_PYTHON_VERSION="python-3.6.10"
+LATEST_38="python-3.8.1"
+LATEST_37="python-3.7.6"
+LATEST_36="python-3.6.10"
 LATEST_35="python-3.5.7"
 LATEST_34="python-3.4.10"
 LATEST_27="python-2.7.17"
 
-export DEFAULT_PYTHON_VERSION LATEST_38 LATEST_37 LATEST_36 LATEST_35 LATEST_34 LATEST_27
+export DEFAULT_PYTHON_VERSION \
+    LATEST_38 \
+    LATEST_37 \
+    LATEST_36 \
+    LATEST_35 \
+    LATEST_34 \
+    LATEST_27
