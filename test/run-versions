@@ -18,6 +18,7 @@ testPython2() {
     echo $LATEST_27 > "runtime.txt"
     compile "python2"
     assertCaptured $LATEST_27
+    assertCaptured "python-2-7-eol-faq"
     assertNotCaptured "security update"
     assertCaptured "Installing SQLite3"
     assertCapturedSuccess
@@ -26,7 +27,8 @@ testPython2() {
 testPython2_warn() {
     compile "python2_warn"
     assertCaptured "python-2.7.15"
-    assertCaptured "security update!"
+    assertCaptured "python-2-7-eol-faq"
+    assertCaptured "Only the latest version"
     assertCaptured "Installing SQLite3"
     assertCapturedSuccess
 }
