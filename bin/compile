@@ -168,8 +168,6 @@ cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
 cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
 # A plain text file which contains the current python version being used (used for cache busting).
 cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
-# A plain text file which contains the current sqlite3 version being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
 # Any pre-compiled binaries, provided by the buildpack.
 cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
 # "editable" installations of code repositories, via pip or pipenv.
