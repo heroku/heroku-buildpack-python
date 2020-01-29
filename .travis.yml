@@ -28,11 +28,8 @@ jobs:
 env:
   matrix:
     - TESTFOLDER=test/run-deps
-    - TESTFOLDER=test/run-deps USE_STAGING_BINARIES=https://lang-python.s3.amazonaws.com/staging
     - TESTFOLDER=test/run-versions
-    - TESTFOLDER=test/run-versions USE_STAGING_BINARIES=https://lang-python.s3.amazonaws.com/staging
     - TESTFOLDER=test/run-features
-    - TESTFOLDER=test/run-features USE_STAGING_BINARIES=https://lang-python.s3.amazonaws.com/staging
   global:
     - HATCHET_RETRIES=3
     - IS_RUNNING_ON_CI=true
