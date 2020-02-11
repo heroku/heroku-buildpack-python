@@ -58,6 +58,8 @@ PY36="python-3.6"
 PY35="python-3.5"
 PY34="python-3.4"
 PY27="python-2.7"
+PYPY27="pypy2.7"
+PYPY36="pypy3.6"
 
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
 DEFAULT_PYTHON_STACK="cedar-14"
