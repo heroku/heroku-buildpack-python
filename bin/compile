@@ -64,7 +64,7 @@ PYPY36="pypy3.6"
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
 DEFAULT_PYTHON_STACK="cedar-14"
 # If pip doesn't match this version (the version we install), run the installer.
-PIP_UPDATE="19.2.3"
+PIP_UPDATE="20.0.2"
 
 for file in "$BUILD_DIR/runtime.txt" "$CACHE_DIR/.heroku/python-version" ; do
     [ -f "$file" ] || continue
