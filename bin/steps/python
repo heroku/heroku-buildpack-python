@@ -128,9 +128,10 @@ fi
 
 # Heroku uses the get-pip utility maintained by the Python community to vendor Pip.
 # https://github.com/pypa/get-pip
-GETPIP="https://lang-python.s3.amazonaws.com/etc/get-pip.py"
+GETPIP_URL="https://lang-python.s3.amazonaws.com/etc/get-pip.py"
+GETPIP_PY="${TMPDIR:-/tmp}/get-pip.py"
 
-if ! curl -s "${GETPIP}" -o "$ROOT_DIR/get-pip.py" &> /dev/null; then
+if ! curl -s "${GETPIP_URL}" -o "$GETPIP_PY" &> /dev/null; then
     mcount "failure.python.get-pip"
     echo "Failed to pull down get-pip"
     exit 1
@@ -145,7 +146,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
   rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
   rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
 
-  /app/.heroku/python/bin/python "$ROOT_DIR/get-pip.py" pip=="$PIP_UPDATE" &> /dev/null
+  /app/.heroku/python/bin/python "$GETPIP_PY" pip=="$PIP_UPDATE" &> /dev/null
   /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
 fi
 

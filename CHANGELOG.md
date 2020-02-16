@@ -2,6 +2,7 @@
 
 # Master
 
+- Download get-pip.py to tmpdir instead of root dir
 - New pythons released:
   Python 3.8.1, 3.7.6, 3.6.10 (CPython)
   Beta Release: Pypy 2.7 and 3.6, version 7.2.0
