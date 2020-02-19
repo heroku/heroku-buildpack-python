@@ -2,6 +2,7 @@
 
 # Master
 
+- Update requirements.txt builds to use Pip 20.0.2
 - Download get-pip.py to tmpdir instead of root dir
 
 --------------------------------------------------------------------------------
