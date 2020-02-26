@@ -2,6 +2,7 @@
 
 # Master
 
+- Allow other Pipenv versions than 2018.5.18
 - Update requirements.txt builds to use Pip 20.0.2
 - Download get-pip.py to tmpdir instead of root dir
 
