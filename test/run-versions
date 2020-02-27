@@ -157,6 +157,18 @@ testPython3_7_fail() {
   assertCapturedError
 }
 
+testPython3_7_warn() {
+  compile "python3_8_warn"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCapturedError
+  else
+    assertCaptured "python-3.8.0"
+    assertCaptured "security update!"
+    assertCaptured "Installing SQLite3"
+    assertCapturedSuccess
+  fi
+}
+
 testPython3_8() {
   updateVersion "python3_8" $LATEST_38
   compile "python3_8"
