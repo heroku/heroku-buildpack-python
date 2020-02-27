@@ -2,10 +2,15 @@
 
 # Master
 
-- Update requirements.txt builds to use Pip 20.0.2
-- Download get-pip.py to tmpdir instead of root dir
+- Python 3.8.2 now available.
+
 
 --------------------------------------------------------------------------------
+
+# 163 (2020-02-20)
+
+- Update requirements.txt builds to use Pip 20.0.2
+- Download get-pip.py to tmpdir instead of root dir
 
 # 163 (2019-12-23)
 
