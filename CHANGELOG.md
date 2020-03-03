@@ -2,12 +2,15 @@
 
 # Master
 
-- Python 3.8.2 now available.
-
+- Correct ftp to https in vendored file
 
 --------------------------------------------------------------------------------
 
-# 163 (2020-02-20)
+# 165 (2020-02-27)
+
+- Python 3.8.2 now available.
+
+# 164 (2020-02-20)
 
 - Update requirements.txt builds to use Pip 20.0.2
 - Download get-pip.py to tmpdir instead of root dir
