@@ -3,6 +3,7 @@
 # Master
 
 - Correct ftp to https in vendored file
+- Warn for Django 1.11 approaching EOL, provide link to roadmap
 
 --------------------------------------------------------------------------------
 
