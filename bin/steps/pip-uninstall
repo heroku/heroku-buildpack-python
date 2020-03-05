@@ -5,7 +5,7 @@ set +e
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
 
-if [ ! "$SKIP_PIP_INSTALL" ]; then
+if [ ! "$SKIP_PIP_INSTALL" ] && [ -f requirements.txt ]; then
 
   if [[ -f .heroku/python/requirements-declared.txt ]]; then
 

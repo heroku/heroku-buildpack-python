@@ -1,0 +1,20 @@
+[[package]]
+category = "main"
+description = "A lightweight library for converting complex datatypes to and from native Python datatypes."
+name = "marshmallow"
+optional = false
+python-versions = ">=3.5"
+version = "3.0.0"
+
+[package.extras]
+dev = ["pytest", "pytz", "simplejson", "flake8 (3.7.8)", "flake8-bugbear (19.8.0)", "pre-commit (>=1.17,<2.0)", "tox"]
+docs = ["sphinx (2.2.0)", "sphinx-issues (1.2.0)", "alabaster (0.7.12)", "sphinx-version-warning (1.1.2)"]
+lint = ["flake8 (3.7.8)", "flake8-bugbear (19.8.0)", "pre-commit (>=1.17,<2.0)"]
+tests = ["pytest", "pytz", "simplejson"]
+
+[metadata]
+content-hash = "11b18d7787605b57a1019436950c60105518d3f3a8a60030493402031355e2f2"
+python-versions = "^3.6"
+
+[metadata.hashes]
+marshmallow = ["e5e9fd0c2e919b4ece915eb30808206349a49a45df72e99ed20e27a9053d574b", "fa2d8a4b61d09b0e161a14acc5ad8ab7aaaf1477f3dd52819ddd6c6c8275733a"]

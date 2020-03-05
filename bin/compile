@@ -259,6 +259,10 @@ mtime "python.install.time" "${start}"
 # shellcheck source=bin/steps/pipenv
 source "$BIN_DIR/steps/pipenv"
 
+# Export requirements.txt from poetry.lock, if present.
+# shellcheck source=bin/steps/poetry
+source "$BIN_DIR/steps/poetry"
+
 # Uninstall removed dependencies with Pip.
 # The buildpack will automatically remove any declared dependencies (in requirements.txt)
 # that were explicitly removed. This machinery is a bit complex, but it is not complicated.
@@ -270,9 +274,8 @@ mtime "pip.uninstall.time" "${start}"
 # If no requirements.txt file given, assume `setup.py develop` is intended.
 # This allows for people to ship a setup.py application to Heroku
 # (which is rare, but I vouch that it should work!)
-
-if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
-  echo "-e ." > requirements.txt
+if [ ! -f requirements.txt ] && [ ! -f Pipfile ] && [ ! -f pyproject.toml ]; then
+    echo "-e ." > requirements.txt
 fi
 
 # Fix egg-links.

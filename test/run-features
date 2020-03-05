@@ -69,6 +69,32 @@ testPipenvFullVersion() {
   assertCapturedSuccess
 }
 
+testPyProjectToml() {
+    compile "pyproject-toml"
+    assertCapturedSuccess
+}
+
+testPoetry() {
+    compile "poetry"
+    assertCapturedSuccess
+}
+
+testPoetryLock() {
+    compile "poetry-lock"
+    assertCaptured "marshmallow==3.0.0"
+    assertCapturedSuccess
+}
+
+testFlit() {
+    compile "flit"
+    assertCapturedSuccess
+}
+
+testFlitRequires() {
+    compile "flit-requires"
+    assertCapturedSuccess
+}
+
 testNoRequirements() {
   compile "no-requirements"
   assertCapturedError
