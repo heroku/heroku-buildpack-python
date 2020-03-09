@@ -38,10 +38,10 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
         mcount "failure.none-version"
     fi
 
-    if grep -q 'django==1.*' requirements.txt; then
+    if grep -qi '^django==1.*' requirements.txt; then
         puts-warn "Your Django version is nearing the end of its community support."
         puts-warn "Upgrade to continue to receive security updates and for the best experience with Django."
-        puts-warn "For more information, check out https://www.djangoproject.com/weblog/2015/jun/25/roadmap/"
+        puts-warn "For more information, check out https://www.djangoproject.com/download/#supported-versions"
     fi
 
     if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
