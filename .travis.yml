@@ -18,7 +18,7 @@ script:
 
 jobs:
   include:
- - stage: Hatchet Integration
+  - stage: Hatchet Integration
     if: branch = master
     name: Run Hatchet
     script: "bundle exec rspec"
