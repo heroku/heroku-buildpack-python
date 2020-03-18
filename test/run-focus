@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Default Python Versions
+# shellcheck source=bin/default_pythons
+source "bin/default_pythons"
+
+testDeployingTwiceUsesTheCache() {
+  compile "pythonDefault"
+  assertNotCaptured "Installing collected packages:"
+  assertCapturedSuccess
+  compile "pythonDefault"
+  assertCaptured "Requirement already satisfied:"
+  assertNotCaptured "Installing collected packages:"
+  assertCapturedSuccess
+}
+
+pushd $(dirname 0) >/dev/null
+popd >/dev/null
+
+source $(pwd)/test/utils
+source $(pwd)/test/shunit2
