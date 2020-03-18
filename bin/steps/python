@@ -9,6 +9,10 @@ VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
 
 SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
 
+ONLY_SUPPORTED_2_VERSION="Only the latest version of Python 2 is supported on the platform. Please consider upgrading to"
+
+PYTHON_2_EOL_UPDATE="Python 2 has reached it's community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible."
+
 # check if runtime exists
 if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
   if [[ "$PYTHON_VERSION" == $PY38* ]]; then
@@ -48,8 +52,26 @@ if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
   fi
   if [[ "$PYTHON_VERSION" == $PY27* ]]; then
     # security update note
+    if [[ "$(date "+%Y")" -gt "2019" ]]; then
+      puts-warn "$PYTHON_2_EOL_UPDATE"
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq"
+    fi
     if [ "$PYTHON_VERSION" != "$LATEST_27" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_27"
+      puts-warn "$ONLY_SUPPORTED_2_VERSION" "$LATEST_27"
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+    fi
+  fi
+  if [[ "$PYTHON_VERSION" == $PYPY27* ]]; then
+    # security update note
+    if [ "$PYTHON_VERSION" != "$PYPY_27" ]; then
+      puts-warn "Could not find that Pypy version. Did you mean" "${PYPY_27}?"
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+    fi
+  fi
+  if [[ "$PYTHON_VERSION" == $PYPY36* ]]; then
+    # security update note
+    if [ "$PYTHON_VERSION" != "$PYPY_36" ]; then
+      puts-warn "Could not find that Pypy version. Did you mean" "${PYPY_36}?"
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
     fi
   fi
@@ -106,9 +128,10 @@ fi
 
 # Heroku uses the get-pip utility maintained by the Python community to vendor Pip.
 # https://github.com/pypa/get-pip
-GETPIP="https://lang-python.s3.amazonaws.com/etc/get-pip.py"
+GETPIP_URL="https://lang-python.s3.amazonaws.com/etc/get-pip.py"
+GETPIP_PY="${TMPDIR:-/tmp}/get-pip.py"
 
-if ! curl -s "${GETPIP}" -o "$ROOT_DIR/get-pip.py" &> /dev/null; then
+if ! curl -s "${GETPIP_URL}" -o "$GETPIP_PY" &> /dev/null; then
     mcount "failure.python.get-pip"
     echo "Failed to pull down get-pip"
     exit 1
@@ -123,7 +146,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
   rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
   rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
 
-  /app/.heroku/python/bin/python "$ROOT_DIR/get-pip.py" pip=="$PIP_UPDATE" &> /dev/null
+  /app/.heroku/python/bin/python "$GETPIP_PY" pip=="$PIP_UPDATE" &> /dev/null
   /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
 fi
 
