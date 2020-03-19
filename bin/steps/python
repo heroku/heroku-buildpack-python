@@ -106,6 +106,7 @@ if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
     # if there are any differences, clear the Python cache
     # Installing Python over again does not take noticably more time
     rm -rf .heroku/python
+    unset SKIP_INSTALL
   fi
 else
   # IF there IS a cached directory, check for differences with the new one
@@ -114,6 +115,7 @@ else
     # if there are any differences, clear the Python cache
     # Installing Python over again does not take noticably more time
     rm -rf .heroku/python
+    unset SKIP_INSTALL
   fi
 fi
 
