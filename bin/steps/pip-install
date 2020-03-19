@@ -47,6 +47,8 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
         exit 1
     fi
+
+
     /app/.heroku/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check | tee "$WARNINGS_LOG" | cleanup | indent
     PIP_STATUS="${PIPESTATUS[0]}"
     set -e
@@ -60,6 +62,10 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
 
     # Cache pip packages ourselves
     ## TODO: Update to cache pip's built-in cache
+
+    # Update cached version of requirements.txt
+    cp -R $BUILD_DIR/requirements.txt "$CACHE_DIR/.heroku/requirements.txt"
+
     cp requirements.txt .heroku/python/requirements-declared.txt
     /app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
 

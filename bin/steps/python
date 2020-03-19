@@ -96,6 +96,15 @@ if [ -f .heroku/python-version ]; then
 fi
 
 
+
+echo "$(diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt")"
+
+# Remove python dependencies
+if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]] || [[ diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" ]]; then
+    puts-step "Clearing cached dependencies"
+    rm -rf .heroku/python
+fi
+
 if [ ! "$SKIP_INSTALL" ]; then
     puts-step "Installing $PYTHON_VERSION"
 
@@ -129,7 +138,7 @@ if ! curl -s "${GETPIP_URL}" -o "$GETPIP_PY" &> /dev/null; then
     exit 1
 fi
 
-# If Pip isn't up to date:
+# If a new Python has been installed or Pip isn't up to date:
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
 
   puts-step "Installing pip"
