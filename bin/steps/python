@@ -100,7 +100,7 @@ fi
 echo "$(diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt")"
 
 # Remove python dependencies
-if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]] || [[ diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" ]]; then
+if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]] || ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" ; then
     puts-step "Clearing cached dependencies"
     rm -rf .heroku/python
 fi

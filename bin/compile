@@ -262,14 +262,14 @@ source "$BIN_DIR/steps/pipenv"
 # Uninstall removed dependencies with Pip.
 # The buildpack will automatically remove any declared dependencies (in requirements.txt)
 # that were explicitly removed. This machinery is a bit complex, but it is not complicated.
-(( start=$(nowms) ))
+# (( start=$(nowms) ))
 # shellcheck source=bin/steps/pip-uninstall
-source "$BIN_DIR/steps/pip-uninstall"
-mtime "pip.uninstall.time" "${start}"
+# source "$BIN_DIR/steps/pip-uninstall"
+# mtime "pip.uninstall.time" "${start}"
 
 # If no requirements.txt file given, assume `setup.py develop` is intended.
 # This allows for people to ship a setup.py application to Heroku
-# (which is rare, but I vouch that it should work!)
+# TODO: hatchet test to confirm
 
 if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
   echo "-e ." > requirements.txt
@@ -320,6 +320,8 @@ mtime "sqlite3.install.time" "${start}"
 # shellcheck source=bin/steps/pip-install
 source "$BIN_DIR/steps/pip-install"
 mtime "pip.install.time" "${start}"
+
+
 
 # Support for NLTK corpora.
 # Note: this may only work on Python 2.7. I don't think many customers use this functionality,
