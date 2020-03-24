@@ -1,0 +1,2 @@
+pwned-passwords-django==1.4
+Django==2.1
