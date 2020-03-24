@@ -4,14 +4,9 @@
 # shellcheck source=bin/default_pythons
 source "bin/default_pythons"
 
-testDeployingTwiceUsesTheCache() {
+# Start with this to quickly run just one local test
+testNewTestCase() {
   compile "pythonDefault"
-  assertNotCaptured "Installing collected packages:"
-  assertCapturedSuccess
-  compile "pythonDefault"
-  assertCaptured "Requirement already satisfied:"
-  assertNotCaptured "Installing collected packages:"
-  assertCapturedSuccess
 }
 
 pushd $(dirname 0) >/dev/null
