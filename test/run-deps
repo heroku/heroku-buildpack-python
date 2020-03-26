@@ -65,16 +65,6 @@ testPylibmc() {
   assertCapturedSuccess
 }
 
-testDeployingTwiceUsesTheCache() {
-  compile "pythonDefault"
-  assertNotCaptured "Installing collected packages:"
-  assertCapturedSuccess
-  compile "pythonDefault"
-  assertCaptured "Requirement already satisfied:"
-  assertNotCaptured "Installing collected packages:"
-  assertCapturedSuccess
-}
-
 pushd $(dirname 0) >/dev/null
 popd >/dev/null
 
