@@ -2,12 +2,16 @@
 
 # Master
 
-- Add failcase for cache busting
+--------------------------------------------------------------------------------
+
+# 167 (2020-03-26)
+
 - Bugfix: Clearing pip dependencies
+
+# 166 (2020-03-05)
+
 - Correct ftp to https in vendored file
 - Warn for Django 1.11 approaching EOL, provide link to roadmap
-
---------------------------------------------------------------------------------
 
 # 165 (2020-02-27)
 
