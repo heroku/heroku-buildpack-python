@@ -86,14 +86,6 @@ if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
     rm -fr .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor .heroku/python .heroku/python-sqlite3-version
 fi
 
-# need to clear the cache for first time installing SQLite3,
-# since the version is changing and could lead to runtime errors
-# with compiled extensions.
-if [ -d .heroku/python ] && [ ! -f .heroku/python-sqlite3-version ] && python_sqlite3_check "$PYTHON_VERSION"; then
-  puts-step "Need to update SQLite3, clearing cache"
-  rm -fr .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor
-fi
-
 if [ -f .heroku/python-version ]; then
   if [ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]; then
       puts-step "Found $(cat .heroku/python-version), removing"
@@ -103,6 +95,29 @@ if [ -f .heroku/python-version ]; then
   fi
 fi
 
+# Check if we should reinstall python dependencies
+if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
+  # IF there's no cached dependencies, update cached version of requirements.txt
+  # This should only run for new apps and first deploys after this update
+  cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
+  # If we don't already have a python version, this is a new app
+  if [ -f .heroku/python-version ]; then
+    puts-step "Clearing cached dependencies"
+    # if there are any differences, clear the Python cache
+    # Installing Python over again does not take noticably more time
+    rm -rf .heroku/python
+    unset SKIP_INSTALL
+  fi
+else
+  # IF there IS a cached directory, check for differences with the new one
+  if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"; then
+    puts-step "Clearing cached dependencies"
+    # if there are any differences, clear the Python cache
+    # Installing Python over again does not take noticably more time
+    rm -rf .heroku/python
+    unset SKIP_INSTALL
+  fi
+fi
 
 if [ ! "$SKIP_INSTALL" ]; then
     puts-step "Installing $PYTHON_VERSION"
@@ -137,7 +152,7 @@ if ! curl -s "${GETPIP_URL}" -o "$GETPIP_PY" &> /dev/null; then
     exit 1
 fi
 
-# If Pip isn't up to date:
+# If a new Python has been installed or Pip isn't up to date:
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
 
   puts-step "Installing pip"

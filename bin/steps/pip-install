@@ -47,6 +47,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
         exit 1
     fi
+
     /app/.heroku/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
     PIP_STATUS="${PIPESTATUS[0]}"
     set -e
@@ -58,11 +59,8 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
         exit 1
     fi
 
-    # Smart Requirements handling
     cp requirements.txt .heroku/python/requirements-declared.txt
     /app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
-
-    echo
 
     # Install test dependencies, for CI.
     if [ "$INSTALL_TEST" ]; then
