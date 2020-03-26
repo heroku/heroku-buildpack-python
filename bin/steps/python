@@ -99,7 +99,7 @@ fi
 if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
   # IF there's no cached dependencies, update cached version of requirements.txt
   # This should only run for new apps and first deploys after this update
-  cp -R $BUILD_DIR/requirements.txt "$CACHE_DIR/.heroku/requirements.txt"
+  cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
   # If we don't already have a python version, this is a new app
   if [ -f .heroku/python-version ]; then
     puts-step "Clearing cached dependencies"
