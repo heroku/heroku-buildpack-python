@@ -312,8 +312,6 @@ mtime "sqlite3.install.time" "${start}"
 source "$BIN_DIR/steps/pip-install"
 mtime "pip.install.time" "${start}"
 
-
-
 # Support for NLTK corpora.
 # Note: this may only work on Python 2.7. I don't think many customers use this functionality,
 # and it should probably be undocumented.
