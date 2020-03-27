@@ -3,6 +3,7 @@
 # Master
 
 - Doc: Update Readme with version numbers
+- update Code Owners to include the Heroku Buildpack Maintainers team
 - Add failcase for cache busting
 - Bugfix: Clearing pip dependencies
 - Correct ftp to https in vendored file
