@@ -20,4 +20,10 @@ if ENV['TRAVIS']
   exit 0 if ENV['TRAVIS_PULL_REQUEST'] != 'false' && ENV['TRAVIS_BRANCH'] == 'master'
 end
 
-DEFAULT_STACK = 'heroku-16'
+DEFAULT_STACK = 'heroku-18'
+
+def run!(cmd)
+  out = `#{cmd}`
+  raise "Error running command #{cmd} with output: #{out}" unless $?.success?
+  return out
+end
