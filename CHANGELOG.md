@@ -2,6 +2,7 @@
 
 # Master
 
+- Doc: Update Readme with version numbers
 - Add failcase for cache busting
 - Bugfix: Clearing pip dependencies
 - Correct ftp to https in vendored file
