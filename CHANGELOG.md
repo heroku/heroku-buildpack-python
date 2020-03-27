@@ -3,6 +3,7 @@
 # Master
 
 - Report version of pip used to build log
+- update Code Owners to include the Heroku Buildpack Maintainers team
 - Add failcase for cache busting
 - Bugfix: Clearing pip dependencies
 - Correct ftp to https in vendored file
