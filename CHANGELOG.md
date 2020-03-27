@@ -5,8 +5,21 @@
 - Doc: fix runtime.txt generation when using pipenv
 - Update requirements.txt builds to use Pip 20.0.2
 - Download get-pip.py to tmpdir instead of root dir
+- Add failcase for cache busting
+- Bugfix: Clearing pip dependencies
+- Correct ftp to https in vendored file
+- Warn for Django 1.11 approaching EOL, provide link to roadmap
 
 --------------------------------------------------------------------------------
+
+# 165 (2020-02-27)
+
+- Python 3.8.2 now available.
+
+# 164 (2020-02-20)
+
+- Update requirements.txt builds to use Pip 20.0.2
+- Download get-pip.py to tmpdir instead of root dir
 
 # 163 (2019-12-23)
 
