@@ -2,6 +2,7 @@
 
 # Master
 
+- Report version of pip used to build log
 - Add failcase for cache busting
 - Bugfix: Clearing pip dependencies
 - Correct ftp to https in vendored file
