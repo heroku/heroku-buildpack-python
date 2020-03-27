@@ -2,10 +2,13 @@
 
 # Master
 
+- update Code Owners to include the Heroku Buildpack Maintainers team
+
 --------------------------------------------------------------------------------
 
 # 167 (2020-03-26)
 
+- Add failcase for cache busting
 - Bugfix: Clearing pip dependencies
 
 # 166 (2020-03-05)
