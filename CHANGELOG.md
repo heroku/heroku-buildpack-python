@@ -4,6 +4,8 @@
 
 - Doc: Update Readme with version numbers
 - update Code Owners to include the Heroku Buildpack Maintainers team
+- Clean up build log output
+
 - Add failcase for cache busting
 - Bugfix: Clearing pip dependencies
 - Correct ftp to https in vendored file
