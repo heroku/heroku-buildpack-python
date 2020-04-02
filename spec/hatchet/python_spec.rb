@@ -8,6 +8,7 @@ describe "Default Python Deploy" do
 
 
       expect(app.output).to_not match("Clearing cached dependencies")
+      expect(app.output).to_not match("cp: cannot create regular file")
 
       # Redeploy
       run!(%Q{echo "flask" >> requirements.txt})
