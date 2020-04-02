@@ -110,7 +110,7 @@ if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
   fi
 else
   # IF there IS a cached directory, check for differences with the new one
-  if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"; then
+  if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" &> /dev/null; then
     puts-step "Clearing cached dependencies"
     # if there are any differences, clear the Python cache
     # Installing Python over again does not take noticably more time
