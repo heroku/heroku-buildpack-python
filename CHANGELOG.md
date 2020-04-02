@@ -2,7 +2,9 @@
 
 # Master
 
+- Doc: Update Readme with version numbers
 - update Code Owners to include the Heroku Buildpack Maintainers team
+- Clean up build log output
 
 --------------------------------------------------------------------------------
 
@@ -15,6 +17,7 @@
 
 - Correct ftp to https in vendored file
 - Warn for Django 1.11 approaching EOL, provide link to roadmap
+- Update Python versions in README to match docs
 
 # 165 (2020-02-27)
 
