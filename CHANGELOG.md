@@ -2,10 +2,15 @@
 
 # Master
 
+- Doc: Update Readme with version numbers
+- update Code Owners to include the Heroku Buildpack Maintainers team
+- Clean up build log output
+
 - Add failcase for cache busting
 - Bugfix: Clearing pip dependencies
 - Correct ftp to https in vendored file
 - Warn for Django 1.11 approaching EOL, provide link to roadmap [fixed detection]
+- Update Python versions in README to match docs
 
 --------------------------------------------------------------------------------
 
