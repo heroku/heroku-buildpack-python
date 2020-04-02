@@ -3,6 +3,7 @@
 # Master
 
 - update Code Owners to include the Heroku Buildpack Maintainers team
+- Clean up build log output
 
 - Add failcase for cache busting
 - Bugfix: Clearing pip dependencies
