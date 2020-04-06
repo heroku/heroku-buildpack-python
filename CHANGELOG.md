@@ -2,14 +2,16 @@
 
 # Master
 
+--------------------------------------------------------------------------------
+
+# 168 (2020-04-06)
+
 - Doc: Update Readme with version numbers
 - update Code Owners to include the Heroku Buildpack Maintainers team
 - Deprecation warning: BUILD_WITH_GEO_LIBRARIES is now deprecated. See warning for details.
 - Clean up build log output
 - Update Python versions in README to match docs
 - Django version detection fixed, link updated
-
---------------------------------------------------------------------------------
 
 # 167 (2020-03-26)
 
