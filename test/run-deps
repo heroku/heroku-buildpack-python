@@ -23,6 +23,14 @@ testGEOS() {
   assertCapturedSuccess
 }
 
+testGEOSDeprecation() {
+  export BUILD_WITH_GEO_LIBRARIES=1
+  compile "geos"
+  assertCaptured " !     The GDAL, GEOS and PROJ binaries and BUILD_WITH_GEO_LIBRARIES functonality are now deprecated.
+ !     An alternative buildpack to enable GDAL, GEOS and PROJ use is available here - https://github.com/heroku/heroku-geo-buildpack"
+  assertCapturedSuccess
+}
+
 testNLTK() {
   # NOTE: This is a RuntimeWarning emitted by Python 3's runpy.py script
   # which is what is used when you call `python -m <module>`. This is due to

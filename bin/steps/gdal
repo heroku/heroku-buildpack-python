@@ -22,6 +22,10 @@ source "$BIN_DIR/utils"
 if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
 
   if [ ! -f ".heroku/vendor/bin/gdalserver" ]; then
+
+    puts-warn "The vendored GDAL package in the Heroku Python Buildpack now deprecated."
+    puts-warn "To enable GDAL use an alternative buildpack is available here - https://github.com/heroku/heroku-geo-buildpack"
+
     echo "-----> Noticed GDAL. Bootstrapping gdal."
     mkdir -p .heroku/vendor
     # Download and extract cryptography into target vendor directory.
