@@ -7,6 +7,7 @@
 - Deprecation warning: BUILD_WITH_GEO_LIBRARIES is now deprecated. See warning for details.
 - Clean up build log output
 - Update Python versions in README to match docs
+- Django version detection fixed, link updated
 
 --------------------------------------------------------------------------------
 
