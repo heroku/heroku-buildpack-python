@@ -102,7 +102,7 @@ if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
   cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
   # If we don't already have a python version, this is a new app
   if [ -f .heroku/python-version ]; then
-    puts-step "Clearing cached dependencies"
+    puts-step "1 Clearing cached dependencies"
     # if there are any differences, clear the Python cache
     # Installing Python over again does not take noticably more time
     rm -rf .heroku/python
@@ -111,7 +111,7 @@ if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
 else
   # IF there IS a cached directory, check for differences with the new one
   if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" &> /dev/null; then
-    puts-step "Clearing cached dependencies"
+    puts-step "2 Clearing cached dependencies"
     # if there are any differences, clear the Python cache
     # Installing Python over again does not take noticably more time
     rm -rf .heroku/python
