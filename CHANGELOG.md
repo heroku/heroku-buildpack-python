@@ -2,7 +2,7 @@
 
 # Master
 
-- Fix: Improve dependency caching and output
+- Bugfix: Caching on subsequent redeploys
 
 --------------------------------------------------------------------------------
 
