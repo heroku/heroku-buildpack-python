@@ -101,13 +101,6 @@ if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
   # This should only run for new apps and first deploys after this update
   puts-step "No dependencies found, preparing to install"
   cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
-  # If we don't already have a python version, this is a new app
-  # if [ -f .heroku/python-version ]; then
-  #   # if there are any differences, clear the Python cache
-  #   # Installing Python over again does not take noticably more time
-  #   rm -rf .heroku/python
-  #   unset SKIP_INSTALL
-  # fi
 else
   # IF there IS a cached directory, check for differences with the new one
   if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" &> /dev/null; then
