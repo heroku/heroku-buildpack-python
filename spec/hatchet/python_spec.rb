@@ -6,7 +6,6 @@ describe "Default Python Deploy" do
 
       # What should happen on first deploy
       expect(app.output).to           match(/Installing pip/)
-      expect(app.output).to match("No dependencies found, preparing to install")
 
       # What should not happen
       expect(app.output).to_not match("Requirements file has been changed, updating cache")
