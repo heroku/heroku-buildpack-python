@@ -12,7 +12,7 @@ if [[ -f Pipfile.lock ]]; then
             # Measure that we're using Pipenv.
             mcount "tool.pipenv"
 
-            # Don't skip installation of there are git deps.
+            # Don't skip installation if there are git deps.
             if ! grep -q 'git' Pipfile.lock; then
                 echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
 
