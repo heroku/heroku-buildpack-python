@@ -12,9 +12,24 @@ Options:
 """
 import os
 from docopt import docopt
-from pip.req import parse_requirements
-from pip.index import PackageFinder
-from pip._vendor.requests import session
+
+try:  # pip >= 10
+    from pip._internal.req import parse_requirements
+    from pip._internal.download import PipSession as session
+
+    def PackageFinder(find_links, index_urls, session=None):
+        from pip._internal.index import PackageFinder
+        from pip._internal.models.search_scope import SearchScope
+        from pip._internal.models.selection_prefs import SelectionPreferences
+
+        search_scope = SearchScope.create(find_links, index_urls)
+        selection_prefs = SelectionPreferences(allow_yanked=False)
+        return PackageFinder.create(search_scope, selection_prefs, session=session)
+
+except ImportError:  # pip <= 9.0.3
+    from pip.req import parse_requirements
+    from pip.index import PackageFinder
+    from pip._vendor.requests import session
 
 requests = session()
 

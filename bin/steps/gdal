@@ -22,6 +22,10 @@ source "$BIN_DIR/utils"
 if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
 
   if [ ! -f ".scalingo/vendor/bin/gdalserver" ]; then
+
+    puts-warn "The vendored GDAL package in the Scalingo Python Buildpack now deprecated."
+    puts-warn "To enable GDAL, install 'libgdal-dev' thanks to our APT buildpack - https://doc.scalingo.com/platform/deployment/buildpacks/apt"
+
     echo "-----> Noticed GDAL. Bootstrapping gdal."
     mkdir -p .scalingo/vendor
     # Download and extract cryptography into target vendor directory.

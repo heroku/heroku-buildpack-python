@@ -16,7 +16,6 @@ testSmartRequirements() {
   assertFile "requests" ".heroku/python/requirements-declared.txt"
   assertCapturedSuccess
   compile "psycopg2" "$cache_dir"
-  assertCaptured "Uninstalling requests"
   assertFile "psycopg2" ".heroku/python/requirements-declared.txt"
   assertCapturedSuccess
 }
@@ -73,6 +72,18 @@ testPipenvFullVersion() {
 testNoRequirements() {
   compile "no-requirements"
   assertCapturedError
+}
+
+testWarnOldDjango() {
+  compile "old-django"
+  assertCaptured "Your Django version is nearing the end of its community support."
+  assertCapturedSuccess
+}
+
+testDontWarnOldDjango() {
+  compile "not-old-django"
+  assertNotCaptured "Your Django version is nearing the end of its community support."
+  assertCapturedSuccess
 }
 
 pushd $(dirname 0) >/dev/null
