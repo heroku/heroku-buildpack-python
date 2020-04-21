@@ -36,7 +36,7 @@ describe "Default Python Deploy" do
       expect(app.output).to_not match("Requirements file has been changed, updating cache")
       expect(app.output).to_not match("No dependencies found, preparing to install")
 
-      expect(app.run('python -V')).to match(/3.7.3/)
+      expect(app.run('python -V')).to match(/3.7.6/)
     end
   end
 end
