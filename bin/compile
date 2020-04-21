@@ -175,7 +175,7 @@ cd "$BUILD_DIR"
 # - Once the build is complete, `~/.heroku/{known-paths}` is copied back into the cache.
 
 # Create the cache directory, if it doesn't exist.
-mkdir -p "$CACHE_DIR"
+mkdir -p "$CACHE_DIR/.heroku"
 
 # Restore old artifacts from the cache.
 mkdir -p .heroku
