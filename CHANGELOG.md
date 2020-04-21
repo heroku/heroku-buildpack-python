@@ -4,6 +4,7 @@
 
 - Bugfix: Caching on subsequent redeploys
 - Update tests to support latest version of Python
+- Python 2.7.18 now available.
 
 --------------------------------------------------------------------------------
 
