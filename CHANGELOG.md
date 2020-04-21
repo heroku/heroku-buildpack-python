@@ -4,6 +4,7 @@
 
 - Set Code Owners to @heroku/langauges
 - Bugfix: Caching on subsequent redeploys
+- Update tests to support latest version of Python
 
 --------------------------------------------------------------------------------
 
