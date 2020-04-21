@@ -67,7 +67,6 @@ buildpack_sqlite3_install() {
   puts-step "Installing SQLite3"
 
   if sqlite3_install "$BUILD_DIR/.heroku/python" ; then
-    echo "Sqlite3 successfully installed."
     mcount "success.python.sqlite3"
   else
     echo "Sqlite3 failed to install."
