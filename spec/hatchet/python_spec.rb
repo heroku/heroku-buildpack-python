@@ -26,7 +26,7 @@ describe "Default Python Deploy" do
           expect(app.output).to           match(/Installing pip/)
 
           # What should not happen
-          expect(app.output).to_not match("Requirements file has been changed, updating cache")
+          expect(app.output).to_not match("Requirements file has been changed, clearing cached dependencies")
           expect(app.output).to_not match("No change in requirements detected, installing from cache")
           expect(app.output).to_not match("No such file or directory")
           expect(app.output).to_not match("cp: cannot create regular file")
@@ -38,7 +38,7 @@ describe "Default Python Deploy" do
           app.push!
 
           # Check for the cache to have cleared
-          expect(app.output).to match("Requirements file has been changed, updating cache")
+          expect(app.output).to match("Requirements file has been changed, clearing cached dependencies")
 
           # What should not happen when the requirements file is changed
           expect(app.output).to_not match("No dependencies found, preparing to install")
@@ -51,7 +51,7 @@ describe "Default Python Deploy" do
           expect(app.output).to match("No change in requirements detected, installing from cache")
 
           # With no changes on redeploy, the cache should not
-          expect(app.output).to_not match("Requirements file has been changed, updating cache")
+          expect(app.output).to_not match("Requirements file has been changed, clearing cached dependencies")
           expect(app.output).to_not match("No dependencies found, preparing to install")
 
           expect(app.run('python -V')).to match(version)
