@@ -37,9 +37,16 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
         mcount "failure.none-version"
     fi
 
+    if grep -qi '^django==1.*' requirements.txt; then
+        puts-warn "Your Django version is nearing the end of its community support."
+        puts-warn "Upgrade to continue to receive security updates and for the best experience with Django."
+        puts-warn "For more information, check out https://www.djangoproject.com/download/#supported-versions"
+    fi
+
     if [ ! -f "$BUILD_DIR/.scalingo/python/bin/pip" ]; then
         exit 1
     fi
+
     /app/.scalingo/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.scalingo/src --disable-pip-version-check --no-cache-dir 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
     PIP_STATUS="${PIPESTATUS[0]}"
     set -e
@@ -50,11 +57,8 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
         exit 1
     fi
 
-    # Smart Requirements handling
     cp requirements.txt .scalingo/python/requirements-declared.txt
     /app/.scalingo/python/bin/pip freeze --disable-pip-version-check > .scalingo/python/requirements-installed.txt
-
-    echo
 
     # Install test dependencies, for CI.
     if [ "$INSTALL_TEST" ]; then

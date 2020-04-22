@@ -3,21 +3,8 @@
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
 
-sqlite3_version() {
-  if [ "$STACK" = "scalingo-14" -o "$STACK" = "cedar-14" ]; then
-    SQLITE3_VERSION="3.8.2-1ubuntu2.2"
-  elif [ "$STACK" = "heroku-16" ]; then
-    SQLITE3_VERSION="3.11.0-1ubuntu1.3"
-  else
-    SQLITE3_VERSION="3.22.0-1ubuntu0.2"
-  fi
-
-  export SQLITE3_VERSION
-}
-
 sqlite3_install() {
   SCALINGO_PYTHON_DIR="$1"
-  SQLITE3_VERSION="$2"
   HEADERS_ONLY="$3"
 
   mkdir -p "$SCALINGO_PYTHON_DIR"
@@ -35,9 +22,9 @@ sqlite3_install() {
 
   apt-get $APT_OPTIONS update > /dev/null 2>&1
   if [ -z "$HEADERS_ONLY" ]; then
-    apt-get $APT_OPTIONS -y -d --reinstall install libsqlite3-dev="$SQLITE3_VERSION" sqlite3="$SQLITE3_VERSION" > /dev/null 2>&1
+    apt-get $APT_OPTIONS -y -d --reinstall install libsqlite3-dev sqlite3 > /dev/null 2>&1
   else
-    apt-get $APT_OPTIONS -y -d --reinstall install libsqlite3-dev="$SQLITE3_VERSION"
+    apt-get $APT_OPTIONS -y -d --reinstall install libsqlite3-dev
   fi
 
   find "$APT_CACHE_DIR/archives/" -name "*.deb" -exec dpkg -x {} "$SCALINGO_PYTHON_DIR/sqlite3/" \;
@@ -70,7 +57,6 @@ sqlite3_install() {
 }
 
 buildpack_sqlite3_install() {
-  sqlite3_version
   SCALINGO_PYTHON_DIR="$BUILD_DIR/.scalingo/python"
 
   SQLITE3_VERSION_FILE="$BUILD_DIR/.scalingo/python-sqlite3-version"
@@ -78,23 +64,15 @@ buildpack_sqlite3_install() {
     INSTALLED_SQLITE3_VERSION=$(cat "$SQLITE3_VERSION_FILE")
   fi
 
-  # python version check
-  if python_sqlite3_check "$PYTHON_VERSION"; then
-    # only install if the sqlite3 version has changed
-    if [ "$INSTALLED_SQLITE3_VERSION" != "$SQLITE3_VERSION" ]; then
-      puts-step "Installing SQLite3"
+  puts-step "Installing SQLite3"
 
-      if sqlite3_install "$BUILD_DIR/.scalingo/python" "$SQLITE3_VERSION" ; then
-        echo "Sqlite3 successfully installed."
-        mcount "success.python.sqlite3"
-      else
-        echo "Sqlite3 failed to install."
-        mcount "failure.python.sqlite3"
-      fi
-
-      # save version installed
-      mkdir -p "$CACHE_DIR/.scalingo/"
-      echo "$SQLITE3_VERSION" > "$CACHE_DIR/.scalingo/python-sqlite3-version"
-    fi
+  if sqlite3_install "$BUILD_DIR/.scalingo/python" ; then
+    echo "Sqlite3 successfully installed."
+    mcount "success.python.sqlite3"
+  else
+    echo "Sqlite3 failed to install."
+    mcount "failure.python.sqlite3"
   fi
+
+  mkdir -p "$CACHE_DIR/.scalingo/"
 }

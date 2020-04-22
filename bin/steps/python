@@ -9,6 +9,10 @@ VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
 
 SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
 
+ONLY_SUPPORTED_2_VERSION="Only the latest version of Python 2 is supported on the platform. Please consider upgrading to"
+
+PYTHON_2_EOL_UPDATE="Python 2 has reached it's community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible."
+
 # check if runtime exists
 if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
   if [[ "$PYTHON_VERSION" == $PY38* ]]; then
@@ -48,8 +52,26 @@ if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
   fi
   if [[ "$PYTHON_VERSION" == $PY27* ]]; then
     # security update note
+    if [[ "$(date "+%Y")" -gt "2019" ]]; then
+      puts-warn "$PYTHON_2_EOL_UPDATE"
+      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
+    fi
     if [ "$PYTHON_VERSION" != "$LATEST_27" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_27"
+      puts-warn "$ONLY_SUPPORTED_2_VERSION" "$LATEST_27"
+      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
+    fi
+  fi
+  if [[ "$PYTHON_VERSION" == $PYPY27* ]]; then
+    # security update note
+    if [ "$PYTHON_VERSION" != "$PYPY_27" ]; then
+      puts-warn "Could not find that Pypy version. Did you mean" "${PYPY_27}?"
+      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
+    fi
+  fi
+  if [[ "$PYTHON_VERSION" == $PYPY36* ]]; then
+    # security update note
+    if [ "$PYTHON_VERSION" != "$PYPY_36" ]; then
+      puts-warn "Could not find that Pypy version. Did you mean" "${PYPY_36}?"
       echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
     fi
   fi
@@ -64,14 +86,6 @@ if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
     rm -fr .scalingo/python-stack .scalingo/python-version .scalingo/python .scalingo/vendor .scalingo/python .scalingo/python-sqlite3-version
 fi
 
-# need to clear the cache for first time installing SQLite3,
-# since the version is changing and could lead to runtime errors
-# with compiled extensions.
-if [ -d .scalingo/python ] && [ ! -f .scalingo/python-sqlite3-version ] && python_sqlite3_check "$PYTHON_VERSION"; then
-  puts-step "Need to update SQLite3, clearing cache"
-  rm -fr .scalingo/python-stack .scalingo/python-version .scalingo/python .scalingo/vendor
-fi
-
 if [ -f .scalingo/python-version ]; then
   if [ ! "$(cat .scalingo/python-version)" = "$PYTHON_VERSION" ]; then
       puts-step "Found $(cat .scalingo/python-version), removing"
@@ -81,10 +95,28 @@ if [ -f .scalingo/python-version ]; then
   fi
 fi
 
-if [[ "$STACK" = "scalingo" && "$PYTHON_VERSION" == $PY37* ]]; then
-  puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
-  puts-warn "Aborting.  More info: https://doc.scalingo.com/languages/python/start"
-  exit 1
+# Check if we should reinstall python dependencies
+if [[ ! -f "$CACHE_DIR/.scalingo/requirements.txt" ]]; then
+  # IF there's no cached dependencies, update cached version of requirements.txt
+  # This should only run for new apps and first deploys after this update
+  cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt"
+  # If we don't already have a python version, this is a new app
+  if [ -f .scalingo/python-version ]; then
+    puts-step "Clearing cached dependencies"
+    # if there are any differences, clear the Python cache
+    # Installing Python over again does not take noticably more time
+    rm -rf .scalingo/python
+    unset SKIP_INSTALL
+  fi
+else
+  # IF there IS a cached directory, check for differences with the new one
+  if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt" &> /dev/null; then
+    puts-step "Clearing cached dependencies"
+    # if there are any differences, clear the Python cache
+    # Installing Python over again does not take noticably more time
+    rm -rf .scalingo/python
+    unset SKIP_INSTALL
+  fi
 fi
 
 if [ ! "$SKIP_INSTALL" ]; then
@@ -107,17 +139,18 @@ if [ ! "$SKIP_INSTALL" ]; then
   hash -r
 fi
 
-# Heroku uses the get-pip utility maintained by the Python community to vendor Pip.
+# Scalingo uses the get-pip utility maintained by the Python community to vendor Pip.
 # https://github.com/pypa/get-pip
-GETPIP="https://lang-python.s3.amazonaws.com/etc/get-pip.py"
+GETPIP_URL="https://lang-python.s3.amazonaws.com/etc/get-pip.py"
+GETPIP_PY="${TMPDIR:-/tmp}/get-pip.py"
 
-if ! curl -s "${GETPIP}" -o "$ROOT_DIR/get-pip.py" &> /dev/null; then
+if ! curl -s "${GETPIP_URL}" -o "$GETPIP_PY" &> /dev/null; then
     mcount "failure.python.get-pip"
     echo "Failed to pull down get-pip"
     exit 1
 fi
 
-# If Pip isn't up to date:
+# If a new Python has been installed or Pip isn't up to date:
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
 
   puts-step "Installing pip"
@@ -126,7 +159,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
   rm -fr /app/.scalingo/python/lib/python*/site-packages/pip-*
   rm -fr /app/.scalingo/python/lib/python*/site-packages/setuptools-*
 
-  /app/.scalingo/python/bin/python "$ROOT_DIR/get-pip.py" pip=="$PIP_UPDATE" &> /dev/null
+  /app/.scalingo/python/bin/python "$GETPIP_PY" pip=="$PIP_UPDATE" &> /dev/null
   /app/.scalingo/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
 fi
 

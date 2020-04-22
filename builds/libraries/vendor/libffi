@@ -15,11 +15,11 @@ hash -r
 
 echo "Building libffi…"
 
-SOURCE_TARBALL='ftp://sourceware.org/pub/libffi/libffi-3.1.tar.gz'
+SOURCE_TARBALL='https://github.com/libffi/libffi/archive/v3.1.tar.gz'
 
 curl -L $SOURCE_TARBALL | tar x
 
-cd libffi-3.1
+cd v3.1
 ./configure --prefix=$OUT_PREFIX --disable-static &&
 make
 make install
