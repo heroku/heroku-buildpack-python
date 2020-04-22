@@ -41,6 +41,7 @@
 - New pythons released:
   Python 3.8.1, 3.7.6, 3.6.10 (CPython)
   Beta Release: Pypy 2.7 and 3.6, version 7.2.0
+- Bugfix: Fix support for naive latest version declaration in Python 3.8
 
 # 162 (2019-12-06)
 
