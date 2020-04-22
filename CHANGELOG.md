@@ -2,6 +2,7 @@
 
 # Master
 
+- Add a Hatchet test for python 3.8.2
 - Set Code Owners to @heroku/langauges
 - Bugfix: Caching on subsequent redeploys
 - Update tests to support latest version of Python
