@@ -1,6 +1,9 @@
 language: ruby
 dist: trusty
 sudo: required
+branches:
+  only:
+  - master
 
 rvm:
 - 2.4.4
