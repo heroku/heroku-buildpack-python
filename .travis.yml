@@ -1,5 +1,5 @@
 language: ruby
-dist: trusty
+dist: bionic
 sudo: required
 branches:
   only:
