@@ -27,3 +27,8 @@ def run!(cmd)
   raise "Error running command #{cmd} with output: #{out}" unless $?.success?
   return out
 end
+
+def init_app(app, stack=DEFAULT_STACK)
+  app.setup!
+  app.platform_api.app.update(app.name, {"build_stack" => ENV["HEROKU_TEST_STACK"] || stack})
+end
