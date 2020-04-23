@@ -17,7 +17,12 @@ end
 
 if ENV['TRAVIS']
   # Don't execute tests against "merge" commits
-  exit 0 if ENV['TRAVIS_PULL_REQUEST'] != 'false' && ENV['TRAVIS_BRANCH'] == 'master'
+  if ENV['TRAVIS_PULL_REQUEST'] != 'false' &&
+      ENV['TRAVIS_BRANCH'] == 'master' &&
+      ENV["TRAVIS_PULL_REQUEST_SLUG"] != ENV['TRAVIS_REPO_SLUG'] # forked PR
+    puts "Skipping Hatchet tests"
+    exit 0
+  end
 end
 
 DEFAULT_STACK = 'heroku-18'
