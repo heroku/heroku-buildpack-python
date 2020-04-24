@@ -3,9 +3,9 @@
 
 OUT_PREFIX=$1
 
-# Skip the build for heroku-16.
-if [[ $S3_PREFIX == "heroku-16" ]]; then
-    exit 0
+if [[ $S3_PREFIX != "cedar-14" ]]; then
+    echo "libmemcached only needs to be built for cedar-14, since newer stacks include it in the base image"
+    exit 1
 fi
 
 # fail hard
