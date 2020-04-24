@@ -2,10 +2,8 @@
 
 # Master
 
-- Doc: fix runtime.txt generation when using pipenv
-- Update requirements.txt builds to use Pip 20.0.2
-- Download get-pip.py to tmpdir instead of root dir
-- Bugfix: Fix support for naive latest version declaration in Python 3.8
+- Docs: Fix explanation of runtime.txt generation when using pipenv
+- Bugfix: Correctly detect Python version when using a `python_version` of `3.8` in `Pipfile.lock`
 
 --------------------------------------------------------------------------------
 
