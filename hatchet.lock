@@ -1,3 +1,5 @@
 ---
 - - "./repos/python/python-getting-started"
-  - 443a90c58be6881583cd7ef628e3869e3c30bb98
+  - master
+- - "./repos/python/python_default"
+  - ca947f69027b2a30be5d26f9a42f25e54f4d7a1a

@@ -1,5 +1,6 @@
 {
   "python": [
-    "heroku/python-getting-started"
+    "heroku/python-getting-started",
+    "sharpstone/python_default"
   ]
 }
