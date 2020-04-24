@@ -74,6 +74,18 @@ testNoRequirements() {
   assertCapturedError
 }
 
+testWarnOldDjango() {
+  compile "old-django"
+  assertCaptured "Your Django version is nearing the end of its community support."
+  assertCapturedSuccess
+}
+
+testDontWarnOldDjango() {
+  compile "not-old-django"
+  assertNotCaptured "Your Django version is nearing the end of its community support."
+  assertCapturedSuccess
+}
+
 pushd $(dirname 0) >/dev/null
 popd >/dev/null
 

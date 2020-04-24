@@ -5,12 +5,35 @@
 - Doc: fix runtime.txt generation when using pipenv
 - Update requirements.txt builds to use Pip 20.0.2
 - Download get-pip.py to tmpdir instead of root dir
-- Add failcase for cache busting
-- Bugfix: Clearing pip dependencies
-- Correct ftp to https in vendored file
-- Warn for Django 1.11 approaching EOL, provide link to roadmap
+- Bugfix: Fix support for naive latest version declaration in Python 3.8
 
 --------------------------------------------------------------------------------
+
+# 169 (2020-04-22)
+
+- Add a Hatchet test for python 3.8.2
+- Set Code Owners to @heroku/langauges
+- Bugfix: Caching on subsequent redeploys
+- Update tests to support latest version of Python
+
+# 168 (2020-04-06)
+
+- Doc: Update Readme with version numbers
+- update Code Owners to include the Heroku Buildpack Maintainers team
+- Deprecation warning: BUILD_WITH_GEO_LIBRARIES is now deprecated. See warning for details.
+- Clean up build log output
+- Update Python versions in README to match docs
+- Django version detection fixed, link updated
+
+# 167 (2020-03-26)
+
+- Add failcase for cache busting
+- Bugfix: Clearing pip dependencies
+
+# 166 (2020-03-05)
+
+- Correct ftp to https in vendored file
+- Warn for Django 1.11 approaching EOL, provide link to roadmap
 
 # 165 (2020-02-27)
 
