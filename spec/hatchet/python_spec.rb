@@ -31,6 +31,9 @@ describe "Default Python Deploy" do
           expect(app.output).to_not match("No such file or directory")
           expect(app.output).to_not match("cp: cannot create regular file")
 
+          # let the previous build finish
+          sleep(5)
+
           # Redeploy with changed requirements file
           run!(%Q{echo "" >> requirements.txt})
           run!(%Q{echo "flask" >> requirements.txt})
@@ -43,6 +46,9 @@ describe "Default Python Deploy" do
           # What should not happen when the requirements file is changed
           expect(app.output).to_not match("No dependencies found, preparing to install")
           expect(app.output).to_not match("No change in requirements detected, installing from cache")
+
+          # let the previous build finish
+          sleep(5)
 
           run!(%Q{git commit --allow-empty -m next})
           app.push!

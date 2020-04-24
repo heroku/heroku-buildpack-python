@@ -1,12 +1,14 @@
 language: ruby
-dist: trusty
+dist: bionic
 sudo: required
+branches:
+  only:
+  - master
 
 rvm:
 - 2.4.4
 before_script:
   - gem install bundler -v 1.16.2
-  - bundle exec hatchet ci:setup
 
 script:
   - docker build --pull --tag travis-build-cedar-14 --file $(pwd)/builds/cedar-14.Dockerfile .
@@ -24,7 +26,9 @@ jobs:
   - stage: Hatchet Integration
     if: branch = master
     name: Run Hatchet
-    script: "bundle exec rspec"
+    script:
+      - bundle exec hatchet ci:setup
+      - bundle exec rspec
 env:
   matrix:
     - TESTFOLDER=test/run-deps

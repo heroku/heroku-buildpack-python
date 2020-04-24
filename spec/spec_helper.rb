@@ -17,7 +17,12 @@ end
 
 if ENV['TRAVIS']
   # Don't execute tests against "merge" commits
-  exit 0 if ENV['TRAVIS_PULL_REQUEST'] != 'false' && ENV['TRAVIS_BRANCH'] == 'master'
+  if ENV['TRAVIS_PULL_REQUEST'] != 'false' &&
+      ENV['TRAVIS_BRANCH'] == 'master' &&
+      ENV["TRAVIS_PULL_REQUEST_SLUG"] != ENV['TRAVIS_REPO_SLUG'] # forked PR
+    puts "Skipping Hatchet tests"
+    exit 0
+  end
 end
 
 DEFAULT_STACK = 'heroku-18'
@@ -26,4 +31,9 @@ def run!(cmd)
   out = `#{cmd}`
   raise "Error running command #{cmd} with output: #{out}" unless $?.success?
   return out
+end
+
+def init_app(app, stack=DEFAULT_STACK)
+  app.setup!
+  app.platform_api.app.update(app.name, {"build_stack" => ENV["HEROKU_TEST_STACK"] || stack})
 end
