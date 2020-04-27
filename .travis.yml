@@ -24,7 +24,7 @@ jobs:
     sudo: false
     script: make check
   - stage: Hatchet Integration
-    if: branch = master
+    if: env(TRAVIS_PULL_REQUEST_SLUG) = env(TRAVIS_REPO_SLUG)
     name: Run Hatchet
     script:
       - bundle exec hatchet ci:setup
