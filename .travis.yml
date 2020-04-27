@@ -6,7 +6,7 @@ branches:
   - master
 
 rvm:
-- 2.4.4
+- 2.6.6
 before_script:
   - gem install bundler -v 1.16.2
 
@@ -28,7 +28,8 @@ jobs:
     name: Run Hatchet
     script:
       - bundle exec hatchet ci:setup
-      - bundle exec rspec
+      - PARALLEL_SPLIT_TEST_PROCESSES=11 bundle exec parallel_split_test spec/hatchet/
+
 env:
   matrix:
     - TESTFOLDER=test/run-deps
@@ -37,7 +38,7 @@ env:
   global:
     - HATCHET_RETRIES=3
     - IS_RUNNING_ON_CI=true
-    - HATCHET_APP_LIMIT=5
+    - HATCHET_APP_LIMIT=80
     - HATCHET_DEPLOY_STRATEGY=git
     - secure: yjtlPE5FbVxTKnjUy/tZUBgSEf4qADD3QOxtgziuid73S0U/1IEXlMGFULsQzIjtlHKmHeywZqpVVEpthIH4RuT7uoX1Pb7SSM/g0T8fT3VoEFbFK1uYl0oZQbUS4Klxv9tPiumj8if3m6ULEGIz1X0wZcMOC0tMLwVCnwmap0E=
     - secure: ZeFTHWwnpIKE9nAqs88ocmiQh7bKce84lilGm5J23nf3N6V4wNyLwqlkvsM008WGBCaOg9AUx7ZunasT0ANsR5gLP3eV2UUg7ILdRgV2Gy13eNRFheC4PHdN92RqQ3aKoqlIv2K999xlhVjod0NzhkQQXB6PddfQINbuU7ks6As=
