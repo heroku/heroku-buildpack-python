@@ -157,7 +157,12 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
   rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
 
   /app/.heroku/python/bin/python "$GETPIP_PY" pip=="$PIP_UPDATE" &> /dev/null
-  /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
+  if [ "$PYTHON_VERSION" == "$PYPY_27" ]; then
+    /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
+  else
+    /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-46.1.3-py3-none-any.whl" &> /dev/null
+  fi
+
 fi
 
 set -e

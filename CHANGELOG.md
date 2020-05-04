@@ -4,6 +4,7 @@
 
 - Docs: Fix explanation of runtime.txt generation when using pipenv
 - Bugfix: Correctly detect Python version when using a `python_version` of `3.8` in `Pipfile.lock`
+- Updated setuptools to v46.1.3 for python3 installations.
 
 --------------------------------------------------------------------------------
 
