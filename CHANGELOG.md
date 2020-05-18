@@ -2,6 +2,8 @@
 
 # Master
 
+- Python 2.7.18, 3.5.9, 3.7.7 and 3.8.3 are now available (CPython).
+- PyPy 2.7 and 3.6, version 7.3.1 are now available (Note: PyPy support is in beta)
 - Docs: Fix explanation of runtime.txt generation when using pipenv
 - Bugfix: Correctly detect Python version when using a `python_version` of `3.8` in `Pipfile.lock`
 
