@@ -1,6 +1,6 @@
 # Python Buildpack Changelog
 
-# Master
+# 170 (2020-05-19)
 
 - Python 2.7.18, 3.5.9, 3.7.7 and 3.8.3 are now available (CPython).
 - PyPy 2.7 and 3.6, version 7.3.1 are now available (Note: PyPy support is in beta)
