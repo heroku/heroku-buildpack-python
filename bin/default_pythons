@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 DEFAULT_PYTHON_VERSION="python-3.6.10"
-LATEST_38="python-3.8.2"
-LATEST_37="python-3.7.6"
+LATEST_38="python-3.8.3"
+LATEST_37="python-3.7.7"
 LATEST_36="python-3.6.10"
-LATEST_35="python-3.5.7"
+LATEST_35="python-3.5.9"
 LATEST_34="python-3.4.10"
-LATEST_27="python-2.7.17"
-PYPY_36="pypy3.6-7.2.0"
-PYPY_27="pypy2.7-7.2.0"
+LATEST_27="python-2.7.18"
+PYPY_36="pypy3.6-7.3.1"
+PYPY_27="pypy2.7-7.3.1"
 
 export DEFAULT_PYTHON_VERSION \
     LATEST_38 \
