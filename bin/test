@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# bin/test <build-dir> <env-dir>
+# Inspired by test script in heroku/heroku-buildpack-php
+set -eo pipefail
+
+# Setup Path variables, for later use in the Buildpack.
+BIN_DIR=$(cd "$(dirname "$0")"; pwd)
+export PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin:$PATH
+
+function unit_test_framework_is()
+{
+  local framework="$1"
+  cat requirements.txt 2> /dev/null | grep --quiet -- "\s*${framework}\b" || \
+    cat Pipfile 2> /dev/null | grep --quiet -- "\s*${framework}\b"
+}
+
+# unlike a regular app.json "test" script, this one isn't run with the app dir as the CWD
+# we `cd` with a default value, so that the script can also be called from inside the app dir (`cd ""` does not change cwd)
+cd "${1-}"
+
+# Import the utils script, which contains helper functions used throughout the buildpack.
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
+
+puts-step "Detecting test framework; first match will be used."
+
+if [[ -n "${UNIT_TEST_COMMAND}" ]]; then
+  puts-step "Running test: ${UNIT_TEST_COMMAND}"
+  ${UNIT_TEST_COMMAND} | indent
+elif unit_test_framework_is "pytest"; then
+  puts-step "Running test: pytest"
+  pytest | indent
+elif unit_test_framework_is "nose2"; then
+  puts-step "Running test: nose2"
+  nose2 | indent
+elif unit_test_framework_is "nose"; then
+  puts-step "Running test: nosetests"
+  nosetests | indent
+elif [[ -f manage.py ]]; then
+  puts-step "Running test: ./manage.py test"
+  ./manage.py test | indent
+else
+  puts-step "Running test: python -m unittest discover"
+  python -m unittest discover | indent
+fi

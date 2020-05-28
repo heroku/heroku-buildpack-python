@@ -259,6 +259,25 @@ release() {
   capture run_in_clean_env ${bp_dir}/bin/release ${bp_dir}/test/fixtures/$1
 }
 
+compile_and_test() {
+  default_process_types_cleanup
+  bp_dir=$(mktmpdir)
+  compile_dir=$(mktmpdir)
+  cp -a $(pwd)/* ${bp_dir}
+  cp -a ${bp_dir}/test/fixtures/$1/. ${compile_dir}
+  capture ${bp_dir}/bin/compile ${compile_dir} ${2:-$(mktmpdir)} $3
+  capture ${bp_dir}/bin/test ${compile_dir} $3
+}
+
+detect_test() {
+  default_process_types_cleanup
+  bp_dir=$(mktmpdir)
+  compile_dir=$(mktmpdir)
+  cp -a $(pwd)/* ${bp_dir}
+  cp -a ${bp_dir}/test/fixtures/$1/. ${compile_dir}
+  capture ${bp_dir}/bin/test ${compile_dir} $3
+}
+
 assertFile() {
   assertEquals "$1" "$(cat ${compile_dir}/$2)"
 }

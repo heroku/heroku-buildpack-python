@@ -153,6 +153,56 @@ testHooks() {
   assertCapturedSuccess
 }
 
+testRequirementsTestFramework() {
+  detect_test "requirements-nose"
+  assertCaptured "Running test: nosetests"
+}
+
+testRequirementsNoTestFramework() {
+  detect_test "requirements-standard"
+  assertCaptured "Running test: python -m unittest discover"
+}
+
+testPipenvTestFramework() {
+  detect_test "pipenv-pytest"
+  assertCaptured "Running test: pytest"
+}
+
+testPipenvNoTestFramework() {
+  detect_test "pipenv"
+  assertCaptured "Running test: python -m unittest discover"
+}
+
+testDjangoTest() {
+  compile_and_test "collectstatic"
+  assertCaptured "Running test: ./manage.py test"
+  assertCapturedSuccess
+}
+
+testPytest() {
+  compile_and_test "pytest"
+  assertCaptured "Running test: pytest"
+  assertCapturedSuccess
+}
+
+testUnittest() {
+  compile_and_test "unittest"
+  assertCaptured "Running test: python -m unittest discover"
+  assertCapturedSuccess
+}
+
+testNose() {
+  compile_and_test "nose"
+  assertCaptured "Running test: nosetests"
+  assertCapturedSuccess
+}
+
+testNose2() {
+  compile_and_test "nose2"
+  assertCaptured "Running test: nose2"
+  assertCapturedSuccess
+}
+
 pushd $(dirname 0) >/dev/null
 popd >/dev/null
 

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `bin/test` to detect and trigger unit tests if desired
 
 ## v184 (2020-10-21)
 
