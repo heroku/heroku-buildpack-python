@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DEFAULT_PYTHON_VERSION="python-3.6.11"
-LATEST_38="python-3.8.4"
+LATEST_38="python-3.8.5"
 LATEST_37="python-3.7.8"
 LATEST_36="python-3.6.11"
 LATEST_35="python-3.5.9"
