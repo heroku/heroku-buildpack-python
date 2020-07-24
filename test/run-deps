@@ -5,8 +5,9 @@
 source "bin/default_pythons"
 
 testAirflow() {
-  export SLUGIFY_USES_TEXT_UNIDECODE="yes"
-  compile "airflow"
+  local env_dir="$(mktmpdir)"
+  echo 'yes' > "${env_dir}/SLUGIFY_USES_TEXT_UNIDECODE"
+  compile 'airflow' '' "${env_dir}"
   assertCaptured "apache-airflow==1.10.2"
   assertCapturedSuccess
 }
@@ -17,27 +18,30 @@ testCollectstatic() {
 }
 
 testGEOS() {
-  export BUILD_WITH_GEO_LIBRARIES=1
-  compile "geos"
+  local env_dir="$(mktmpdir)"
+  echo '1' > "${env_dir}/BUILD_WITH_GEO_LIBRARIES"
+  compile 'geos' '' "${env_dir}"
   assertCaptured "geos"
   assertCapturedSuccess
 }
 
 testGEOSDeprecation() {
-  export BUILD_WITH_GEO_LIBRARIES=1
-  compile "geos"
+  local env_dir="$(mktmpdir)"
+  echo '1' > "${env_dir}/BUILD_WITH_GEO_LIBRARIES"
+  compile 'geos' '' "${env_dir}"
   assertCaptured " !     The GDAL, GEOS and PROJ binaries and BUILD_WITH_GEO_LIBRARIES functonality are now deprecated.
  !     An alternative buildpack to enable GDAL, GEOS and PROJ use is available here - https://github.com/heroku/heroku-geo-buildpack"
   assertCapturedSuccess
 }
 
 testNLTK() {
+  local env_dir="$(mktmpdir)"
   # NOTE: This is a RuntimeWarning emitted by Python 3's runpy.py script
   # which is what is used when you call `python -m <module>`. This is due to
   # how nltk imports things. It's not actually an error, but it would probably
   # be bad to silence in Production.
-  export PYTHONWARNINGS="ignore::RuntimeWarning"
-  compile "nltk"
+  echo 'ignore::RuntimeWarning' > "${env_dir}/PYTHONWARNINGS"
+  compile 'nltk' '' "${env_dir}"
   assertCaptured "[nltk_data] Downloading package city_database" "STD_ERR"
   assertCapturedSuccess
 }
