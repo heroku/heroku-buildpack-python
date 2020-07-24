@@ -56,21 +56,6 @@ resetCapture()
   unset rtrn # deprecated
 }
 
-detect()
-{
-  capture ${BUILDPACK_HOME}/bin/detect ${BUILD_DIR}
-}
-
-compile()
-{
-  capture ${BUILDPACK_HOME}/bin/compile ${BUILD_DIR} ${CACHE_DIR}
-}
-
-release()
-{
-  capture ${BUILDPACK_HOME}/bin/release ${BUILD_DIR}
-}
-
 updateVersion()
 {
   echo "$2" > "test/fixtures/${1}/runtime.txt"
