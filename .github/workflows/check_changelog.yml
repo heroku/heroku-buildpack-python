@@ -1,14 +1,17 @@
 name: Check Changelog
 
 on:
- pull_request:
-  types: [opened, reopened, edited, synchronize]
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
 
 jobs:
- build:
-   runs-on: ubuntu-latest
-   steps:
-   - uses: actions/checkout@v1
-   - name: Check that CHANGELOG is touched
-     run: |
-       cat $GITHUB_EVENT_PATH | jq .pull_request.title |  grep -i '\[\(\(changelog skip\)\|\(ci skip\)\)\]' ||  git diff remotes/origin/${{ github.base_ref }} --name-only | grep CHANGELOG.md
+  check:
+    runs-on: ubuntu-latest
+    if: |
+      !contains(github.event.pull_request.body, '[skip changelog]') &&
+      !contains(github.event.pull_request.body, '[changelog skip]') &&
+      !contains(github.event.pull_request.body, '[skip ci]')
+    steps:
+      - uses: actions/checkout@v1
+      - name: Check that CHANGELOG is touched
+        run: git diff remotes/origin/${{ github.base_ref }} --name-only | grep CHANGELOG.md
