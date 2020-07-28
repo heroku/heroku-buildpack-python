@@ -136,6 +136,18 @@ if [ ! "$SKIP_INSTALL" ]; then
   hash -r
 fi
 
+PIP_VERSION='20.0.2'
+
+if [[ "${PYTHON_VERSION}" == ${PY34}* ]]; then
+  # Python 3.4 support was dropped in pip 19.2+.
+  PIP_VERSION='19.1.1'
+fi
+
+if [[ -f "$BUILD_DIR/Pipfile" ]]; then
+  # The buildpack is pinned to old pipenv, which requires older pip.
+  PIP_VERSION='9.0.2'
+fi
+
 # Heroku uses the get-pip utility maintained by the Python community to vendor Pip.
 # https://github.com/pypa/get-pip
 GETPIP_URL="https://lang-python.s3.amazonaws.com/etc/get-pip.py"
@@ -148,15 +160,15 @@ if ! curl -s "${GETPIP_URL}" -o "$GETPIP_PY" &> /dev/null; then
 fi
 
 # If a new Python has been installed or Pip isn't up to date:
-if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
+if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *${PIP_VERSION}* ]]; then
 
-  puts-step "Installing pip ${PIP_UPDATE}"
+  puts-step "Installing pip ${PIP_VERSION}"
 
   # Remove old installations.
   rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
   rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
 
-  /app/.heroku/python/bin/python "$GETPIP_PY" pip=="$PIP_UPDATE" &> /dev/null
+  /app/.heroku/python/bin/python "$GETPIP_PY" pip=="${PIP_VERSION}" &> /dev/null
   /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
 fi
 
