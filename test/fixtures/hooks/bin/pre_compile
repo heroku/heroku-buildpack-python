@@ -1,0 +1,4 @@
+set -euo pipefail
+
+echo "pre_compile ran!"
+echo "pre_compile env: $(printenv | cut -d '=' -f 1 | sort | xargs)."

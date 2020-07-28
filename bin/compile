@@ -16,7 +16,9 @@
 set -eo pipefail
 
 # Boostrap the Buildpack Standard Library.
-export BPLOG_PREFIX="buildpack.python"
+# Disable unused env var warning since shellcheck doesn't know about the stdlib.
+# shellcheck disable=2034
+BPLOG_PREFIX="buildpack.python"
 export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
 
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
@@ -84,16 +86,12 @@ if [[ -f "$BUILD_DIR/Pipfile" ]]; then
     PIP_UPDATE="9.0.2"
 fi
 
-export DEFAULT_PYTHON_STACK PIP_UPDATE
-export PY37 PY36 PY35 PY27 PY34
-
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.
 # The `warnings` subscript then greps through this for common problems and guides
 # the user towards resolution of known issues.
 WARNINGS_LOG=$(mktemp)
-export WARNINGS_LOG
-export RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
+RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
 
 # The buildpack ships with a few executable tools (e.g. pip-grep, etc).
 # This installs them into the path, so we can execute them directly.
@@ -216,8 +214,6 @@ if [ -f "$CACHE_DIR/.heroku/python-stack" ]; then
 else
   CACHED_PYTHON_STACK=$STACK
 fi
-
-export CACHED_PYTHON_STACK
 
 # Pipenv Python version support.
 # Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).

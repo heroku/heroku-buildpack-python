@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Disable unused env var warning, since shellcheck doesn't take into account
+# that this file is sourced. We don't want to use export since it exposes
+# the env vars to subprocesses.
+# shellcheck disable=2034
+
 DEFAULT_PYTHON_VERSION="python-3.6.11"
 LATEST_38="python-3.8.5"
 LATEST_37="python-3.7.8"
@@ -9,13 +14,3 @@ LATEST_34="python-3.4.10"
 LATEST_27="python-2.7.18"
 PYPY_36="pypy3.6-7.3.1"
 PYPY_27="pypy2.7-7.3.1"
-
-export DEFAULT_PYTHON_VERSION \
-    LATEST_38 \
-    LATEST_37 \
-    LATEST_36 \
-    LATEST_35 \
-    LATEST_34 \
-    LATEST_27 \
-    PYPY_36 \
-    PYPY_27

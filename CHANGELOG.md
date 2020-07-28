@@ -2,6 +2,7 @@
 
 # Master
 
+- Reduce the number of environment variables exposed to `bin/{pre,post}_compile` and other subprocesses (#1011)
 
 # 173 (2020-07-21)
 

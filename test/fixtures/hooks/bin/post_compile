@@ -1,0 +1,4 @@
+set -euo pipefail
+
+echo "post_compile ran!"
+echo "post_compile env: $(printenv | cut -d '=' -f 1 | sort | xargs)."
