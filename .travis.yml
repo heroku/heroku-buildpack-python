@@ -1,37 +1,40 @@
-language: ruby
+language: minimal
 dist: bionic
-sudo: required
 branches:
   only:
   - master
 
-rvm:
-- 2.6.6
-before_script:
-  - gem install bundler -v 1.16.2
-
 script:
-  - make test STACK="cedar-14" TEST_CMD="${TESTFOLDER}"
-  - make test STACK="heroku-16" TEST_CMD="${TESTFOLDER}"
-  - make test STACK="heroku-18" TEST_CMD="${TESTFOLDER}"
+  - make test STACK="${STACK}" TEST_CMD="${TEST_CMD}"
 
 jobs:
   include:
-  - stage: Bash linting (shellcheck)
-    sudo: false
+  - name: Bash linting (shellcheck)
     script: make check
-  - stage: Hatchet Integration
+  - name: Hatchet integration tests
     if: env(TRAVIS_PULL_REQUEST_SLUG) = env(TRAVIS_REPO_SLUG)
-    name: Run Hatchet
+    language: ruby
+    rvm:
+      - 2.6.6
+    before_script:
+      - gem install bundler -v 1.16.2
     script:
       - bundle exec hatchet ci:setup
       - PARALLEL_SPLIT_TEST_PROCESSES=11 bundle exec parallel_split_test spec/hatchet/
 
 env:
-  matrix:
-    - TESTFOLDER=test/run-deps
-    - TESTFOLDER=test/run-versions
-    - TESTFOLDER=test/run-features
+  jobs:
+    - STACK=cedar-14 TEST_CMD=test/run-deps
+    - STACK=cedar-14 TEST_CMD=test/run-versions
+    - STACK=cedar-14 TEST_CMD=test/run-features
+
+    - STACK=heroku-16 TEST_CMD=test/run-deps
+    - STACK=heroku-16 TEST_CMD=test/run-versions
+    - STACK=heroku-16 TEST_CMD=test/run-features
+
+    - STACK=heroku-18 TEST_CMD=test/run-deps
+    - STACK=heroku-18 TEST_CMD=test/run-versions
+    - STACK=heroku-18 TEST_CMD=test/run-features
   global:
     - HATCHET_RETRIES=3
     - IS_RUNNING_ON_CI=true
