@@ -138,10 +138,12 @@ fi
 
 PIP_VERSION='20.0.2'
 SETUPTOOLS_VERSION='39.0.1'
+WHEEL_VERSION='0.34.2'
 
 if [[ "${PYTHON_VERSION}" == ${PY34}* ]]; then
-  # Python 3.4 support was dropped in pip 19.2+.
+  # Python 3.4 support was dropped in pip 19.2+ and wheel 0.34.0+.
   PIP_VERSION='19.1.1'
+  WHEEL_VERSION='0.33.6'
 fi
 
 if [[ -f "$BUILD_DIR/Pipfile" ]]; then
@@ -163,13 +165,13 @@ fi
 # If a new Python has been installed or Pip isn't up to date:
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *${PIP_VERSION}* ]]; then
 
-  puts-step "Installing pip ${PIP_VERSION} and setuptools ${SETUPTOOLS_VERSION}"
+  puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
   # Remove old installations.
   rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
   rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
 
-  /app/.heroku/python/bin/python "$GETPIP_PY" pip=="${PIP_VERSION}" "setuptools==${SETUPTOOLS_VERSION}" &> /dev/null
+  /app/.heroku/python/bin/python "$GETPIP_PY" pip=="${PIP_VERSION}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}" &> /dev/null
 fi
 
 set -e
