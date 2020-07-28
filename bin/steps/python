@@ -167,10 +167,6 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *${PIP_VERSION}* ]]; then
 
   puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
-  # Remove old installations.
-  rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
-  rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
-
   /app/.heroku/python/bin/python "$GETPIP_PY" pip=="${PIP_VERSION}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}" &> /dev/null
 fi
 
