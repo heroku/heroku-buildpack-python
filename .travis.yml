@@ -11,12 +11,9 @@ before_script:
   - gem install bundler -v 1.16.2
 
 script:
-  - docker build --pull --tag travis-build-cedar-14 --file $(pwd)/builds/cedar-14.Dockerfile .
-  - docker run --rm -e "STACK=cedar-14" travis-build-cedar-14 bash $TESTFOLDER
-  - docker build --pull --tag travis-build-heroku-16 --file $(pwd)/builds/heroku-16.Dockerfile .
-  - docker run --rm -e "STACK=heroku-16" travis-build-heroku-16 bash $TESTFOLDER
-  - docker build --pull --tag travis-build-heroku-18 --file $(pwd)/builds/heroku-18.Dockerfile .
-  - docker run --rm -e "STACK=heroku-18" travis-build-heroku-18 bash $TESTFOLDER
+  - make test STACK="cedar-14" TEST_CMD="${TESTFOLDER}"
+  - make test STACK="heroku-16" TEST_CMD="${TESTFOLDER}"
+  - make test STACK="heroku-18" TEST_CMD="${TESTFOLDER}"
 
 jobs:
   include:
