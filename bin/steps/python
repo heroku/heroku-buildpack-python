@@ -137,6 +137,7 @@ if [ ! "$SKIP_INSTALL" ]; then
 fi
 
 PIP_VERSION='20.0.2'
+SETUPTOOLS_VERSION='39.0.1'
 
 if [[ "${PYTHON_VERSION}" == ${PY34}* ]]; then
   # Python 3.4 support was dropped in pip 19.2+.
@@ -162,14 +163,14 @@ fi
 # If a new Python has been installed or Pip isn't up to date:
 if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *${PIP_VERSION}* ]]; then
 
-  puts-step "Installing pip ${PIP_VERSION}"
+  puts-step "Installing pip ${PIP_VERSION} and setuptools ${SETUPTOOLS_VERSION}"
 
   # Remove old installations.
   rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
   rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
 
   /app/.heroku/python/bin/python "$GETPIP_PY" pip=="${PIP_VERSION}" &> /dev/null
-  /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-39.0.1-py2.py3-none-any.whl" &> /dev/null
+  /app/.heroku/python/bin/pip install "$ROOT_DIR/vendor/setuptools-${SETUPTOOLS_VERSION}-py2.py3-none-any.whl" &> /dev/null
 fi
 
 set -e

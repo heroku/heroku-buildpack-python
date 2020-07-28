@@ -2,7 +2,7 @@
 
 # Master
 
-- Output the installed version of pip in the build log (#1007).
+- Output the installed version of pip and setuptools in the build log (#1007).
 - Reduce the number of environment variables exposed to `bin/{pre,post}_compile` and other subprocesses (#1011)
 
 # 173 (2020-07-21)
