@@ -169,8 +169,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *${PIP_VERSION}* ]]; then
   rm -fr /app/.heroku/python/lib/python*/site-packages/pip-*
   rm -fr /app/.heroku/python/lib/python*/site-packages/setuptools-*
 
-  /app/.heroku/python/bin/python "$GETPIP_PY" pip=="${PIP_VERSION}" &> /dev/null
-  /app/.heroku/python/bin/pip install "setuptools==${SETUPTOOLS_VERSION}" &> /dev/null
+  /app/.heroku/python/bin/python "$GETPIP_PY" pip=="${PIP_VERSION}" "setuptools==${SETUPTOOLS_VERSION}" &> /dev/null
 fi
 
 set -e
