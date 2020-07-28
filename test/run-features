@@ -44,6 +44,7 @@ testStandardRequirements() {
 
 testPipenv() {
   compile "pipenv"
+  assertCaptured "Installing pip 9.0.2"
   assertCapturedSuccess
 }
 
