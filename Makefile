@@ -1,26 +1,26 @@
 # These targets are not files
-.PHONY: tests
+.PHONY: check test buildenv-heroku-16 buildenv-heroku-18 tools
 
-test: test-heroku-18 test-heroku-16 test-cedar-14
+STACK ?= heroku-18
+TEST_CMD ?= test/run-versions && test/run-features && test/run-deps
+
+ifeq ($(STACK),cedar-14)
+	# Cedar-14 doesn't have a build image varient.
+	IMAGE_TAG := heroku/cedar:14
+else
+	# Converts a stack name of `heroku-NN` to its build Docker image tag of `heroku/heroku:NN-build`.
+	IMAGE_TAG := heroku/$(subst -,:,$(STACK))-build
+endif
 
 check:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings bin/default_pythons
 	@shellcheck -x bin/steps/collectstatic bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/gdal bin/steps/geo-libs bin/steps/mercurial bin/steps/nltk bin/steps/pip-install bin/steps/pip-uninstall bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/pylibmc bin/steps/python
 	@shellcheck -x bin/steps/hooks/*
 
-test-cedar-14:
-	@echo "Running tests in docker (cedar-14)..."
-	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=cedar-14" heroku/cedar:14 bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run-deps; test/run-features; test/run-versions;'
+test:
+	@echo "Running tests using: STACK=$(STACK) TEST_CMD='$(TEST_CMD)'"
 	@echo ""
-
-test-heroku-16:
-	@echo "Running tests in docker (heroku-16)..."
-	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=heroku-16" heroku/heroku:16-build bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run-deps; test/run-features; test/run-versions;'
-	@echo ""
-
-test-heroku-18:
-	@echo "Running tests in docker (heroku-18)..."
-	@docker run -v $(shell pwd):/buildpack:ro --rm -it -e "STACK=heroku-18" heroku/heroku:18-build bash -c 'cp -r /buildpack /buildpack_test; cd /buildpack_test/; test/run-deps; test/run-features; test/run-versions;'
+	@docker run --rm -it -v $(PWD):/buildpack:ro -e "STACK=$(STACK)" "$(IMAGE_TAG)" bash -c 'cp -r /buildpack /buildpack_test && cd /buildpack_test && $(TEST_CMD)'
 	@echo ""
 
 buildenv-heroku-16:
