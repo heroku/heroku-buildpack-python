@@ -65,26 +65,6 @@ PYPY36="pypy3.6"
 
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
 DEFAULT_PYTHON_STACK="cedar-14"
-# If pip doesn't match this version (the version we install), run the installer.
-PIP_UPDATE="20.0.2"
-
-for file in "$BUILD_DIR/runtime.txt" "$CACHE_DIR/.heroku/python-version" ; do
-    [ -f "$file" ] || continue
-
-    version=$(tr -d '[:space:]' < "$file")
-
-    case "$version" in "$PY34"*)
-        # Python 3.4 support was dropped in pip >= 19.2.
-        PIP_UPDATE="19.1.1"
-        break
-        ;;
-    esac
-done
-
-if [[ -f "$BUILD_DIR/Pipfile" ]]; then
-    # Do not force pipenv users to re-install pipenv locally.
-    PIP_UPDATE="9.0.2"
-fi
 
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.
