@@ -5,6 +5,7 @@
 - For repeat builds, also manage the installed versions of setuptools/wheel, rather than just that of pip (#1007).
 - Install an explicit version of wheel rather than the latest release at the time (#1007).
 - Output the installed version of pip, setuptools and wheel in the build log (#1007).
+- Errors installing pip/setuptools/wheel are now displayed in the build output and fail the build early (#1007).
 - Install pip using itself rather than `get-pip.py` (#1007).
 - Disable pip's version check + cache when installing pip/setuptools/wheel (#1007).
 - Install setuptools from PyPI rather than a vendored copy (#1007).
