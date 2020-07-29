@@ -145,25 +145,36 @@ if [[ "${PYTHON_VERSION}" == ${PY34}* ]]; then
   WHEEL_VERSION='0.33.6'
 fi
 
-if [[ -f "$BUILD_DIR/Pipfile" ]]; then
-  # The buildpack is pinned to old pipenv, which requires older pip.
-  PIP_VERSION='9.0.2'
+# We don't use get-pip.py, since:
+#  - it uses `--force-reinstall`, which is unnecessary here and slows down repeat builds
+#  - it means downloading pip twice (once embedded in get-pip.py, and again during
+#    the install, since get-pip.py can't install the embedded version directly)
+#  - we would still have to manage several versions of get-pip.py, to support older Pythons.
+# Instead, we use the pip wheel to install itself, using the method described here:
+# https://github.com/pypa/pip/issues/2351#issuecomment-69994524
+PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py2.py3-none-any.whl"
+PIP_WHEEL_URL="https://lang-python.s3.amazonaws.com/common/${PIP_WHEEL_FILENAME}"
+PIP_WHEEL="${TMPDIR:-/tmp}/${PIP_WHEEL_FILENAME}"
+
+if ! curl -sSf "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
+  mcount "failure.python.download-pip"
+  puts-warn "Failed to download pip"
+  exit 1
 fi
 
-# Heroku uses the get-pip utility maintained by the Python community to vendor Pip.
-# https://github.com/pypa/get-pip
-GETPIP_URL="https://lang-python.s3.amazonaws.com/etc/get-pip.py"
-GETPIP_PY="${TMPDIR:-/tmp}/get-pip.py"
-
-if ! curl -s "${GETPIP_URL}" -o "$GETPIP_PY" &> /dev/null; then
-    mcount "failure.python.get-pip"
-    echo "Failed to pull down get-pip"
-    exit 1
+if [[ -f "$BUILD_DIR/Pipfile" ]]; then
+  # The buildpack is pinned to old pipenv, which requires older pip.
+  # Pip 9.0.2 doesn't support installing itself from a wheel, so we have to use split
+  # versions here (ie: installer pip version different from target pip version).
+  PIP_VERSION='9.0.2'
+  PIP_TO_INSTALL="pip==${PIP_VERSION}"
+else
+  PIP_TO_INSTALL="${PIP_WHEEL}"
 fi
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
-/app/.heroku/python/bin/python "$GETPIP_PY" pip=="${PIP_VERSION}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}" &> /dev/null
+/app/.heroku/python/bin/python "${PIP_WHEEL}/pip" install "${PIP_TO_INSTALL}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}" &> /dev/null
 
 set -e
 hash -r
