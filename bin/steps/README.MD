@@ -2,13 +2,6 @@
 
 TODO: Add context on Python install steps, such as why symlinking vs copying
 
-## Installing the Pip tool
-
-The Python Buildpack uses a tool called `get-pip` to install the pip tool. This
-is done in the `python` script.
-
-This is in part because Python historically did not come with pip by default.
-
 ## Installing Python packages using Pip
 
 ### Convention: Use `python` process to invoke Pip
