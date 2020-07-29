@@ -138,13 +138,19 @@ fi
 set -e
 
 PIP_VERSION='20.0.2'
-SETUPTOOLS_VERSION='39.0.1'
+# Must use setuptools <47.2.0 until we fix:
+# https://github.com/heroku/heroku-buildpack-python/issues/1006
+SETUPTOOLS_VERSION='47.1.1'
 WHEEL_VERSION='0.34.2'
 
 if [[ "${PYTHON_VERSION}" == ${PY34}* ]]; then
-  # Python 3.4 support was dropped in pip 19.2+ and wheel 0.34.0+.
+  # Python 3.4 support was dropped in pip 19.2+, setuptools 44+ and wheel 0.34+.
   PIP_VERSION='19.1.1'
+  SETUPTOOLS_VERSION='43.0.0'
   WHEEL_VERSION='0.33.6'
+elif [[ "${PYTHON_VERSION}" == ${PY27}* || "${PYTHON_VERSION}" == ${PYPY27}* ]]; then
+  # Python 2.7 support was dropped in setuptools 45+.
+  SETUPTOOLS_VERSION='44.1.1'
 fi
 
 # We don't use get-pip.py, since:
