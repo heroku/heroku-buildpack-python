@@ -2,6 +2,10 @@
 
 # Unreleased
 
+- Update setuptools from 39.0.1 to: (#1024)
+  - 44.1.1 for Python 2.7
+  - 43.0.0 for Python 3.4
+  - 47.1.1 for Python 3.5+
 - Switch the `heroku-buildpack-python` repository default branch from `master` to `main` (#1029).
 
 # 174 (2020-07-30)
