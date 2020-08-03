@@ -137,6 +137,10 @@ export LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PAT
 export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH
 export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH
 
+# Global pip options (https://pip.pypa.io/en/stable/user_guide/#environment-variables).
+# Disable pip's warnings about EOL Python since we show our own.
+export PIP_NO_PYTHON_VERSION_WARNING=1
+
 # The Application Code
 # --------------------
 
