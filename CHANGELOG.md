@@ -1,7 +1,8 @@
 # Python Buildpack Changelog
 
-# Master
+# Unreleased
 
+- Switch the `heroku-buildpack-python` repository default branch from `master` to `main` (#1029).
 
 # 174 (2020-07-30)
 

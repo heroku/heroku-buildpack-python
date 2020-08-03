@@ -14,9 +14,9 @@ case "$choice" in
   * ) exit 1;;
 esac
 
-originMaster=$(git rev-parse origin/master)
-echo "Tagging commit $originMaster with $newVersion... "
-git tag "$newVersion" "${originMaster:?}"
+originMain=$(git rev-parse origin/main)
+echo "Tagging commit $originMain with $newVersion... "
+git tag "$newVersion" "${originMain:?}"
 git push origin refs/tags/$newVersion
 
 heroku buildpacks:publish "$BP_NAME" "$newVersion"
@@ -31,7 +31,7 @@ if [ $(git tag | grep -q latest-version) ]; then
     echo "Updating latest-version tag"
     git tag -d latest-version
     git push origin :latest-version
-    git tag latest-version "${originMaster:?}"
+    git tag latest-version "${originMain:?}"
     git push --tags
 fi
 

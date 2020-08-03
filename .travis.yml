@@ -2,7 +2,7 @@ language: minimal
 dist: bionic
 branches:
   only:
-  - master
+  - main
 
 script:
   - make test STACK="${STACK}" TEST_CMD="${TEST_CMD}"

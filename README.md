@@ -2,7 +2,7 @@
 
 # Heroku Buildpack: Python
 
-[![Build Status](https://travis-ci.org/heroku/heroku-buildpack-python.svg?branch=master)](https://travis-ci.org/heroku/heroku-buildpack-python)
+[![Build Status](https://travis-ci.com/heroku/heroku-buildpack-python.svg?branch=main)](https://travis-ci.com/heroku/heroku-buildpack-python)
 
 This is the official [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) for Python apps.
 
@@ -16,7 +16,7 @@ See it in Action
 $ ls
 my-application		requirements.txt	runtime.txt
 
-$ git push heroku master
+$ git push heroku main
 Counting objects: 4, done.
 Delta compression using up to 8 threads.
 Compressing objects: 100% (2/2), done.
