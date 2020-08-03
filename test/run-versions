@@ -9,7 +9,7 @@ testPythonDefault() {
   compile "pythonDefault"
   assertCaptured $DEFAULT_PYTHON_VERSION
   assertNotCaptured "security update"
-  assertCaptured "Installing pip 20.0.2, setuptools 47.1.1 and wheel 0.34.2"
+  assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
   assertCaptured "Installing SQLite3"
   assertCapturedSuccess
 }
@@ -25,7 +25,7 @@ testPython2() {
       assertNotCaptured "python-2-7-eol-faq";
     fi
     assertNotCaptured "security update"
-    assertCaptured "Installing pip 20.0.2, setuptools 44.1.1 and wheel 0.34.2"
+    assertCaptured "Installing pip 20.1.1, setuptools 44.1.1 and wheel 0.34.2"
     assertCaptured "Installing SQLite3"
     assertCapturedSuccess
 }
@@ -89,7 +89,7 @@ testPython3_5() {
   compile "python3_5"
   assertCaptured $LATEST_35
   assertNotCaptured "security update"
-  assertCaptured "Installing pip 20.0.2, setuptools 47.1.1 and wheel 0.34.2"
+  assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
   assertCaptured "Installing SQLite3"
   assertCapturedSuccess
 }
@@ -112,7 +112,7 @@ testPython3_6() {
   compile "python3_6"
   assertCaptured $LATEST_36
   assertNotCaptured "security update"
-  assertCaptured "Installing pip 20.0.2, setuptools 47.1.1 and wheel 0.34.2"
+  assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
   assertCaptured "Installing SQLite3"
   assertCapturedSuccess
 }
@@ -139,7 +139,7 @@ testPython3_7() {
   else
     assertNotCaptured "security update"
     assertCaptured $LATEST_37
-    assertCaptured "Installing pip 20.0.2, setuptools 47.1.1 and wheel 0.34.2"
+    assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
     assertCaptured "Installing SQLite3"
     assertCapturedSuccess
   fi
@@ -183,7 +183,7 @@ testPython3_8() {
   else
     assertNotCaptured "security update"
     assertCaptured $LATEST_38
-    assertCaptured "Installing pip 20.0.2, setuptools 47.1.1 and wheel 0.34.2"
+    assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
     assertCaptured "Installing SQLite3"
     assertCapturedSuccess
   fi
@@ -202,7 +202,7 @@ testPypy3_6() {
   else
     assertCaptured "Installing pypy"
     assertCaptured "$PYPY_36"
-    assertCaptured "Installing pip 20.0.2, setuptools 47.1.1 and wheel 0.34.2"
+    assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
     assertCapturedSuccess
   fi
 }
@@ -214,7 +214,7 @@ testPypy2_7() {
   else
     assertCaptured "Installing pypy"
     assertCaptured "$PYPY_27"
-    assertCaptured "Installing pip 20.0.2, setuptools 44.1.1 and wheel 0.34.2"
+    assertCaptured "Installing pip 20.1.1, setuptools 44.1.1 and wheel 0.34.2"
     assertCapturedSuccess
   fi
 }
