@@ -9,6 +9,7 @@
 # Runtime arguments:
 #   - $DISABLE_COLLECTSTATIC: disables this functionality.
 #   - $DEBUG_COLLECTSTATIC: upon failure, print out environment variables.
+#   - $SYMLINK_COLLECTSTATIC: symlink static files where possible.
 
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
@@ -36,7 +37,11 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALL
     # Create a temporary file for collecting the collectstaic logs.
     COLLECTSTATIC_LOG=$(mktemp)
 
-    python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | tee "$COLLECTSTATIC_LOG" | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
+    if [ "$SYMLINK_COLLECTSTATIC" ]; then
+      python "$MANAGE_FILE" collectstatic --link --noinput --traceback 2>&1 | tee "$COLLECTSTATIC_LOG"
+    else
+      python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | tee "$COLLECTSTATIC_LOG" | sed '/^Post-processed/d;/^Copying/d;/^$/d' | indent
+    fi
     COLLECTSTATIC_STATUS="${PIPESTATUS[0]}"
 
     set -e
