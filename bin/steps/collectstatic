@@ -28,7 +28,7 @@ sp-grep -s django && DJANGO_INSTALLED=1
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ] && [ "$DJANGO_INSTALLED" ]; then
     set +e
 
-    puts-step "$ python $MANAGE_FILE collectstatic --noinput"
+    puts-step "$ python $MANAGE_FILE collectstatic"
 
     # Run collectstatic, cleanup some of the noisy output.
     PYTHONPATH=${PYTHONPATH:-.}
