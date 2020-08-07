@@ -15,9 +15,8 @@ jobs:
     if: env(TRAVIS_PULL_REQUEST_SLUG) = env(TRAVIS_REPO_SLUG)
     language: ruby
     rvm:
-      - 2.6.6
+      - 2.7
     before_script:
-      - gem install bundler -v 1.16.2
       - bundle exec hatchet ci:setup
     script:
       - PARALLEL_SPLIT_TEST_PROCESSES=11 bundle exec parallel_split_test spec/hatchet/
