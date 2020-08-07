@@ -18,8 +18,8 @@ jobs:
       - 2.6.6
     before_script:
       - gem install bundler -v 1.16.2
-    script:
       - bundle exec hatchet ci:setup
+    script:
       - PARALLEL_SPLIT_TEST_PROCESSES=11 bundle exec parallel_split_test spec/hatchet/
 
 env:
