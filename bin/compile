@@ -240,7 +240,8 @@ mkdir -p /app/.heroku/src
 # they occur in a temp directory. Beacuse Python is not portable, we must create
 # symlinks to emulate that we are operating in `/app` during the build process.
 # This is (hopefully obviously) because apps end up running from `/app` in production.
-if [[ $(realpath "$BUILD_DIR") != $(realpath /app) ]]; then
+# Realpath is used to support use-cases where one of the locations is a symlink to the other.
+if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
     # python expects to reside in /app, so set up symlinks
     # we will not remove these later so subsequent buildpacks can still invoke it
     ln -nsf "$BUILD_DIR/.heroku/python" /app/.heroku/python

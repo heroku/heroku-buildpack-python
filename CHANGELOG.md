@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Bugfix: handle build environments where `$BUILD_DIR` is set to a symlink of `/app`
+- Support build environments where `$BUILD_DIR` is set to a symlink of `/app` (#992).
 
 ## v192 (2021-04-06)
 
