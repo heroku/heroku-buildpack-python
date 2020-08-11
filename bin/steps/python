@@ -8,6 +8,7 @@ PYTHON_VERSION=$(cat runtime.txt)
 VENDORED_PYTHON="${VENDOR_URL}/runtimes/$PYTHON_VERSION.tar.gz"
 
 SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
+SECURITY_UPDATE_PYPY="The PyPy project has released a security update! Please consider upgrading to"
 
 ONLY_SUPPORTED_2_VERSION="Only the latest version of Python 2 is supported on the platform. Please consider upgrading to"
 
@@ -64,14 +65,14 @@ if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
   if [[ "$PYTHON_VERSION" == $PYPY27* ]]; then
     # security update note
     if [ "$PYTHON_VERSION" != "$PYPY_27" ]; then
-      puts-warn "Could not find that Pypy version. Did you mean" "${PYPY_27}?"
+      puts-warn "$SECURITY_UPDATE_PYPY" "$PYPY_27"
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
     fi
   fi
   if [[ "$PYTHON_VERSION" == $PYPY36* ]]; then
     # security update note
     if [ "$PYTHON_VERSION" != "$PYPY_36" ]; then
-      puts-warn "Could not find that Pypy version. Did you mean" "${PYPY_36}?"
+      puts-warn "$SECURITY_UPDATE_PYPY" "$PYPY_36"
       echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
     fi
   fi
