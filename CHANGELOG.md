@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fix the security update version check message for apps using PyPy (#1040).
 
 ## v175 (2020-08-05)
 
