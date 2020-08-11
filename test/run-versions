@@ -199,7 +199,7 @@ testPypy3_6() {
   compile "pypy3_6"
   assertCaptured "Installing pypy"
   assertNotCaptured "security update"
-  assertCaptured "$PYPY_36"
+  assertCaptured "$LATEST_PYPY_36"
   assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
   assertCapturedSuccess
 }
@@ -211,7 +211,7 @@ testPypy3_6_warn() {
   else
     assertCaptured "Installing pypy"
     assertCaptured "security update!"
-    assertCaptured "$PYPY_36"
+    assertCaptured "$LATEST_PYPY_36"
     assertCapturedSuccess
   fi
 }
@@ -220,7 +220,7 @@ testPypy2_7() {
   compile "pypy2_7"
   assertCaptured "Installing pypy"
   assertNotCaptured "security update"
-  assertCaptured "$PYPY_27"
+  assertCaptured "$LATEST_PYPY_27"
   assertCaptured "Installing pip 20.1.1, setuptools 44.1.1 and wheel 0.34.2"
   assertCapturedSuccess
 }
@@ -232,7 +232,7 @@ testPypy2_7_warn() {
   else
     assertCaptured "Installing pypy"
     assertCaptured "security update!"
-    assertCaptured "$PYPY_27"
+    assertCaptured "$LATEST_PYPY_27"
     assertCapturedSuccess
   fi
 }
