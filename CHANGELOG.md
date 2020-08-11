@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Fix the security update version check message for apps using PyPy (#1040).
+- Remove `vendor/test-utils` (#1043).
 
 ## v175 (2020-08-05)
 
