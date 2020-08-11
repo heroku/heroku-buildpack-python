@@ -1,13 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.0.3.2)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (>= 0.7, < 2)
-      minitest (~> 5.1)
-      tzinfo (~> 1.1)
-      zeitwerk (~> 2.2, >= 2.2.2)
-    concurrent-ruby (1.1.7)
     diff-lcs (1.4.4)
     erubis (2.7.0)
     excon (0.76.0)
@@ -16,30 +9,24 @@ GEM
       excon
       moneta
       multi_json (>= 1.9.2)
-    heroku_hatchet (6.0.0)
+    heroku_hatchet (7.0.0)
       excon (~> 0)
-      platform-api (= 3.0.0.pre.1)
-      repl_runner (~> 0.0.3)
+      platform-api (~> 3)
       rrrretry (~> 1)
       thor (~> 0)
       threaded (~> 0)
-    i18n (1.8.5)
-      concurrent-ruby (~> 1.0)
-    minitest (5.14.1)
     moneta (1.0.0)
     multi_json (1.15.0)
     parallel (1.19.2)
     parallel_split_test (0.8.0)
       parallel (>= 0.5.13)
       rspec (>= 3.1.0)
-    platform-api (3.0.0.pre.1)
+    platform-api (3.0.0)
       heroics (~> 0.1.1)
       moneta (~> 1.0.0)
       rate_throttle_client (~> 0.1.0)
     rake (13.0.1)
     rate_throttle_client (0.1.2)
-    repl_runner (0.0.3)
-      activesupport
     rrrretry (1.0.0)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
@@ -57,11 +44,7 @@ GEM
       rspec-core (> 3.3)
     rspec-support (3.9.3)
     thor (0.20.3)
-    thread_safe (0.3.6)
     threaded (0.0.4)
-    tzinfo (1.2.7)
-      thread_safe (~> 0.1)
-    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
