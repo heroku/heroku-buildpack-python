@@ -12,7 +12,7 @@ jobs:
   - name: Bash linting (shellcheck)
     script: make check
   - name: Hatchet integration tests
-    if: env(TRAVIS_PULL_REQUEST_SLUG) = env(TRAVIS_REPO_SLUG)
+    if: env(HEROKU_API_USER) IS present AND env(HEROKU_API_KEY) IS present
     language: ruby
     rvm:
       - 2.7
