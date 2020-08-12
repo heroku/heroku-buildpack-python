@@ -1,5 +1,5 @@
 language: minimal
-dist: bionic
+dist: focal
 branches:
   only:
   - main
