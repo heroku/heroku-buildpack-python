@@ -19,11 +19,7 @@ testPython2() {
     echo $LATEST_27 > "runtime.txt"
     compile "python2"
     assertCaptured $LATEST_27
-    if [[ $(date "+%Y") > "2019" ]]; then
-      assertCaptured "python-2-7-eol-faq";
-    else
-      assertNotCaptured "python-2-7-eol-faq";
-    fi
+    assertCaptured "python-2-7-eol-faq";
     assertNotCaptured "security update"
     assertCaptured "Installing pip 20.1.1, setuptools 44.1.1 and wheel 0.34.2"
     assertCaptured "Installing SQLite3"
@@ -33,11 +29,7 @@ testPython2() {
 testPython2_warn() {
     compile "python2_warn"
     assertCaptured "python-2.7.15"
-    if [[ $(date "+%Y") > "2019" ]]; then
-      assertCaptured "python-2-7-eol-faq";
-    else
-      assertNotCaptured "python-2-7-eol-faq";
-    fi
+    assertCaptured "python-2-7-eol-faq";
     assertCaptured "Only the latest version"
     assertCaptured "Installing SQLite3"
     assertCapturedSuccess
