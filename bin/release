@@ -5,6 +5,7 @@ BUILD_DIR=$1
 
 MANAGE_FILE=$(cd "$BUILD_DIR" && find . -maxdepth 3 -type f -name 'manage.py' | head -1)
 MANAGE_FILE=${MANAGE_FILE:2}
+PYTHON_BUILDPACK_NO_DEFAULT_ADDON=${PYTHON_BUILDPACK_NO_DEFAULT_ADDON:-}
 
 cat <<EOF
 ---
@@ -13,7 +14,7 @@ config_vars:
 EOF
 
 
-if [[ $MANAGE_FILE ]]; then
+if [[ $MANAGE_FILE && -z $PYTHON_BUILDPACK_NO_DEFAULT_ADDON ]]; then
 cat <<EOF
 
 addons:
