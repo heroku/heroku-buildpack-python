@@ -1,11 +1,12 @@
 # Python Buildpack Changelog
 
 ## Unreleased
+- Custom PIP_WHEEL_URL environment variable (#1058).
 
 
 ## v177 (2020-08-18)
 
-- Python 3.6.12 and 3.7.9 are now available (CPython) (#1054).
+- Python 3.6.12 and 3.7.9 are now available (CPython) (#1059).
 - The default Python version for new apps is now 3.6.12 (previously 3.6.11) (#1054).
 
 ## v176 (2020-08-12)

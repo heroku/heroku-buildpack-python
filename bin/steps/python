@@ -160,7 +160,7 @@ fi
 # Instead, we use the pip wheel to install itself, using the method described here:
 # https://github.com/pypa/pip/issues/2351#issuecomment-69994524
 PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py2.py3-none-any.whl"
-PIP_WHEEL_URL="https://lang-python.s3.amazonaws.com/common/${PIP_WHEEL_FILENAME}"
+PIP_WHEEL_URL="${USE_STAGING_BINARIES:-https://lang-python.s3.amazonaws.com}/common/${PIP_WHEEL_FILENAME}"
 PIP_WHEEL="${TMPDIR:-/tmp}/${PIP_WHEEL_FILENAME}"
 
 if ! curl -sSf "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
