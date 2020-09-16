@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Emit Python version metric events for all builds, not just clean installs (#1066).
 
 ## v178 (2020-09-07)
 

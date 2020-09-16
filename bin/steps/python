@@ -80,6 +80,8 @@ else
   exit 1
 fi
 
+mcount "version.python.${PYTHON_VERSION}"
+
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
     puts-step "Stack has changed from $CACHED_PYTHON_STACK to $STACK, clearing cache"
     rm -fr .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor .heroku/python .heroku/python-sqlite3-version
@@ -118,8 +120,6 @@ if [ ! "$SKIP_INSTALL" ]; then
 
     # Prepare destination directory.
     mkdir -p .heroku/python
-
-    mcount "version.python.$PYTHON_VERSION"
 
     if ! curl "${VENDORED_PYTHON}" -s | tar zxv -C .heroku/python &> /dev/null; then
       puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
