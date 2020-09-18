@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove duplicate pipenv metric event (#1070).
 - Emit metrics for how the Python version was chosen for an app (#1069).
 - Emit Python version metric events for all builds, not just clean installs (#1066).
 
