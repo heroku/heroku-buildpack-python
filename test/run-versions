@@ -214,6 +214,30 @@ testPypy2_7_warn() {
   fi
 }
 
+testStickyPythonVersion() {
+  local cache_dir="$(mktmpdir)"
+  compile "python3_6_warn" "$cache_dir"
+  assertCaptured "Installing python-3.6.7"
+  assertCapturedSuccess
+  compile "no-runtime-txt" "$cache_dir"
+  assertCaptured "Installing python-3.6.7"
+  assertCapturedSuccess
+  # Whilst this file seems like an implementation detail (so something that should
+  # not be tested), we must guarantee the filename remains consistent for backwards
+  # compatibility across buildpack versions for already-built apps.
+  assertFile "python-3.6.7" ".heroku/python-version"
+}
+
+testPythonVersionChange() {
+  local cache_dir="$(mktmpdir)"
+  compile "python3_6_warn" "$cache_dir"
+  assertCaptured "Installing python-3.6.7"
+  assertCapturedSuccess
+  compile "python3_6" "$cache_dir"
+  assertCaptured "Found python-3.6.7, removing"
+  assertCapturedSuccess
+}
+
 pushd $(dirname 0) >/dev/null
 popd >/dev/null
 
