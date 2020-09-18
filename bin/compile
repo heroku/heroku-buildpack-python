@@ -189,7 +189,7 @@ source "$BIN_DIR/steps/hooks/pre_compile"
 # continue to use that version of Python in perpituity (warnings will be raised if
 # they are out–of–date).
 if [ -f "$CACHE_DIR/.heroku/python-version" ]; then
-  DEFAULT_PYTHON_VERSION=$(cat "$CACHE_DIR/.heroku/python-version")
+  CACHED_PYTHON_VERSION=$(cat "$CACHE_DIR/.heroku/python-version")
 fi
 
 # We didn't always record the stack version. This code is in place because of that.
@@ -206,9 +206,14 @@ fi
 # shellcheck source=bin/steps/pipenv-python-version
 source "$BIN_DIR/steps/pipenv-python-version"
 
-# If no runtime was provided by the user, assume the default Python runtime version.
-if [ ! -f runtime.txt ]; then
-  echo "$DEFAULT_PYTHON_VERSION" > runtime.txt
+if [[ -f runtime.txt ]]; then
+  mcount "version.reason.python.specified"
+elif [[ -n "${CACHED_PYTHON_VERSION:-}" ]]; then
+  mcount "version.reason.python.cached"
+  echo "${CACHED_PYTHON_VERSION}" > runtime.txt
+else
+  mcount "version.reason.python.default"
+  echo "${DEFAULT_PYTHON_VERSION}" > runtime.txt
 fi
 
 # Create the directory for .profile.d, if it doesn't exist.
