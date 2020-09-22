@@ -140,18 +140,6 @@ testPython3_7_fail() {
   assertCapturedError
 }
 
-testPython3_7_warn() {
-  compile "python3_8_warn"
-  if [[ $STACK = "cedar-14" ]]; then
-    assertCapturedError
-  else
-    assertCaptured "python-3.8.0"
-    assertCaptured "security update!"
-    assertCaptured "Installing SQLite3"
-    assertCapturedSuccess
-  fi
-}
-
 testPython3_8() {
   updateVersion "python3_8" $LATEST_38
   compile "python3_8"
@@ -161,6 +149,18 @@ testPython3_8() {
     assertNotCaptured "security update"
     assertCaptured $LATEST_38
     assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
+    assertCaptured "Installing SQLite3"
+    assertCapturedSuccess
+  fi
+}
+
+testPython3_8_warn() {
+  compile "python3_8_warn"
+  if [[ $STACK = "cedar-14" ]]; then
+    assertCapturedError
+  else
+    assertCaptured "python-3.8.0"
+    assertCaptured "security update!"
     assertCaptured "Installing SQLite3"
     assertCapturedSuccess
   fi
