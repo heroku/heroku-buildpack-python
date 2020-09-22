@@ -35,12 +35,6 @@ testPython2_warn() {
     assertCapturedSuccess
 }
 
-testPython2_fail() {
-    compile "python2_fail"
-    assertCaptured "Aborting"
-    assertCapturedError
-}
-
 testPython3_4() {
   compile "python3_4"
   assertCaptured $LATEST_34
@@ -54,12 +48,6 @@ testPython3_4_warn() {
   assertCaptured "python-3.4.9"
   assertCaptured "security update!"
   assertCapturedSuccess
-}
-
-testPython3_4_fail() {
-    compile "python3_4_fail"
-    assertCaptured "Aborting"
-    assertCapturedError
 }
 
 testPython3_5() {
@@ -78,12 +66,6 @@ testPython3_5_warn() {
   assertCapturedSuccess
 }
 
-testPython3_5_fail() {
-    compile "python3_5_fail"
-    assertCaptured "Aborting"
-    assertCapturedError
-}
-
 testPython3_6() {
   updateVersion "python3_6" $LATEST_36
   compile "python3_6"
@@ -100,12 +82,6 @@ testPython3_6_warn() {
   assertCaptured "security update!"
   assertCaptured "Installing SQLite3"
   assertCapturedSuccess
-}
-
-testPython3_6_fail() {
-    compile "python3_6_fail"
-    assertCaptured "Aborting"
-    assertCapturedError
 }
 
 testPython3_7() {
@@ -134,12 +110,6 @@ testPython3_7_warn() {
   fi
 }
 
-testPython3_7_fail() {
-  compile "python3_7_fail"
-  assertCaptured "Aborting"
-  assertCapturedError
-}
-
 testPython3_8() {
   updateVersion "python3_8" $LATEST_38
   compile "python3_8"
@@ -166,8 +136,9 @@ testPython3_8_warn() {
   fi
 }
 
-testPython3_8_fail() {
-  compile "python3_8_fail"
+testPythonVersionInvalid() {
+  compile "python_version_invalid"
+  assertCaptured "Requested runtime (python-3.8.99) is not available for this stack"
   assertCaptured "Aborting"
   assertCapturedError
 }
