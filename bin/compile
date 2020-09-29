@@ -309,7 +309,7 @@ mtime "nltk.download.time" "${start}"
 # and copying it into the proper place (the logical place to do this was early, but it must be done here).
 # In CI, $BUILD_DIR is /app.
 if [[ ! "$BUILD_DIR" == "/app" ]]; then
-  rm -fr "$BUILD_DIR/.heroku/src"
+  rm -rf "$BUILD_DIR/.heroku/src"
   deep-cp /app/.heroku/src "$BUILD_DIR/.heroku/src"
 fi
 

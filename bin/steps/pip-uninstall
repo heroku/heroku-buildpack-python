@@ -16,7 +16,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
       mcount "failure.bad-requirements"
     fi
 
-    rm -fr requirements-declared.txt
+    rm -rf requirements-declared.txt
 
     if [[ -s .heroku/python/requirements-stale.txt ]]; then
       puts-step "Uninstalling stale dependencies"
