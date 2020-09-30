@@ -10,7 +10,7 @@
 # This script is invoked by [`bin/compile`](/).
 
 # The location of the pre-compiled cryptography binary.
-VENDORED_GDAL="${VENDOR_URL}/libraries/vendor/gdal.tar.gz"
+VENDORED_GDAL="${S3_BASE_URL}/${STACK}/libraries/vendor/gdal.tar.gz"
 
 PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 
