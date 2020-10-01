@@ -15,7 +15,7 @@ if [[ "$STACK" != "cedar-14" ]]; then
 fi
 
 # The location of the pre-compiled libmemcached binary.
-VENDORED_MEMCACHED="${VENDOR_URL}/libraries/vendor/libmemcache.tar.gz"
+VENDORED_MEMCACHED="${S3_BASE_URL}/${STACK}/libraries/vendor/libmemcache.tar.gz"
 
 # Syntax sugar.
 # shellcheck source=bin/utils

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Replace `BUILDPACK_VENDOR_URL` and `USE_STAGING_BINARIES` with `BUILDPACK_S3_BASE_URL` (#1085).
 
 ## v181 (2020-09-29)
 

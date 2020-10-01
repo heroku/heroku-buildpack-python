@@ -37,17 +37,15 @@ ENV_DIR=$3
 # Export Path variables, for use in sub-scripts.
 export BUILD_DIR CACHE_DIR ENV_DIR
 
-# Set the Buildpack's internet target for downloading Python distributions.
-# The user can provide BUILDPACK_VENDOR_URL to specify a custom target.
+# Set the base URL for downloading buildpack assets like Python runtimes.
+# The user can provide BUILDPACK_S3_BASE_URL to specify a custom target.
 # Note: this is designed for non-Heroku use, as it does not use the user-provided
 # environment variable mechanism (the ENV_DIR).
-VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
-if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
-    VENDOR_URL="$BUILDPACK_VENDOR_URL"
-elif [[ -n ${USE_STAGING_BINARIES} ]]; then
-    VENDOR_URL="$USE_STAGING_BINARIES/$STACK"
-fi
-export VENDOR_URL
+DEFAULT_S3_BASE_URL='https://lang-python.s3.amazonaws.com'
+S3_BASE_URL="${BUILDPACK_S3_BASE_URL:-${DEFAULT_S3_BASE_URL}}"
+# This has to be exported since it's used by the geo-libs step which is run in a subshell.
+# TODO: Stop exporting once the geo-libs step is removed or no longer uses `sub_env`.
+export S3_BASE_URL
 
 # Default Python Versions
 # shellcheck source=bin/default_pythons
