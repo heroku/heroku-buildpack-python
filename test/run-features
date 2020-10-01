@@ -33,7 +33,9 @@ testStackChange() {
 testSetupPy() {
   compile "setup-py"
   assertCaptured "maya"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
 testStandardRequirements() {
@@ -45,29 +47,39 @@ testStandardRequirements() {
 testPipenv() {
   compile "pipenv"
   assertCaptured "Installing pip 9.0.2, setuptools 47.1.1 and wheel 0.34.2"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
 testPipenvLock() {
   compile "pipenv-lock"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
 testPipenvVersion() {
   compile "pipenv-version"
   assertCaptured $DEFAULT_PYTHON_VERSION
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
 testPipenvVersion2() {
   compile "pipenv-version2"
   assertCaptured $LATEST_27
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 testPipenvFullVersion() {
   compile "pipenv-full-version"
   assertCaptured "3.6.3"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
 testNoRequirements() {

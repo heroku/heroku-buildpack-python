@@ -43,7 +43,9 @@ testNLTK() {
   echo 'ignore::RuntimeWarning' > "${env_dir}/PYTHONWARNINGS"
   compile 'nltk' '' "${env_dir}"
   assertCaptured "[nltk_data] Downloading package city_database" "STD_ERR"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since the NLTK downloader outputs all
+  # progress/status messages to stderr (W-8146040).
+  assertCapturedSuccessWithStdErr
 }
 
 testPsycopg2() {

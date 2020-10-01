@@ -40,14 +40,18 @@ testPython3_4() {
   assertCaptured $LATEST_34
   assertNotCaptured "security update"
   assertCaptured "Installing pip 19.1.1, setuptools 43.0.0 and wheel 0.33.6"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since Pip outputs a Python 3.4 EOL warning to stderr,
+  # and the newest Pip that works on Python 3.4 doesn't support `PIP_NO_PYTHON_VERSION_WARNING`.
+  assertCapturedSuccessWithStdErr
 }
 
 testPython3_4_warn() {
   compile "python3_4_warn"
   assertCaptured "python-3.4.9"
   assertCaptured "security update!"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since Pip outputs a Python 3.4 EOL warning to stderr,
+  # and the newest Pip that works on Python 3.4 doesn't support `PIP_NO_PYTHON_VERSION_WARNING`.
+  assertCapturedSuccessWithStdErr
 }
 
 testPython3_5() {
