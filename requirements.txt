@@ -1,5 +1,5 @@
 # Dependencies for generating/publishing Python binaries.
-bob-builder==0.0.18
+bob-builder==0.0.19
 
 # Sub-dependencies of bob-builder.
 boto==2.49.0
