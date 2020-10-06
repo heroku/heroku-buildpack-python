@@ -1,7 +1,7 @@
 FROM heroku/heroku:18-build
 
 ENV WORKSPACE_DIR="/app/builds" \
-    S3_BUCKET="lang-python" \
+    S3_BUCKET="heroku-buildpack-python" \
     S3_PREFIX="heroku-18/" \
     STACK="heroku-18"
 
