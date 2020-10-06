@@ -57,6 +57,7 @@ export S3_BASE_URL
 source "$BIN_DIR/default_pythons"
 
 # Supported Python Branches
+PY39="python-3.9"
 PY38="python-3.8"
 PY37="python-3.7"
 PY36="python-3.6"

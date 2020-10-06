@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Python 3.9.0 is now available (CPython) (#1090).
 - Migrate from the `lang-python` S3 bucket to `heroku-buildpack-python` (#1089).
 - Remove `vendor/shunit2` (#1086).
 - Replace `BUILDPACK_VENDOR_URL` and `USE_STAGING_BINARIES` with `BUILDPACK_S3_BASE_URL` (#1085).
