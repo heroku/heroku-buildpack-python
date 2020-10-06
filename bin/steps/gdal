@@ -21,8 +21,11 @@ source "$BIN_DIR/utils"
 # If GDAL exists within requirements, use vendored gdal.
 if (pip-grep -s requirements.txt GDAL gdal pygdal &> /dev/null) then
 
-  if [ ! -f ".heroku/vendor/bin/gdalserver" ]; then
+  if [[ ! -f ".heroku/vendor/bin/gdalserver" && "${STACK}" == 'heroku-20' ]]; then
+    puts-warn "The buildpack's built-in GDAL functonality is not supported on Heroku-20."
+    puts-warn "Please use this buildpack instead: https://github.com/heroku/heroku-geo-buildpack"
 
+  elif [[ ! -f ".heroku/vendor/bin/gdalserver" ]]; then
     puts-warn "The vendored GDAL package in the Heroku Python Buildpack now deprecated."
     puts-warn "To enable GDAL use an alternative buildpack is available here - https://github.com/heroku/heroku-geo-buildpack"
 

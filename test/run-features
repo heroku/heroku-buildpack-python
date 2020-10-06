@@ -68,6 +68,10 @@ testPipenvPythonVersion3_6() {
 }
 
 testPipenvPythonVersion2_7() {
+  # Python 2.7 is EOL, so it has not been built for Heroku-20.
+  if [[ $STACK == "heroku-20" ]]; then
+    return
+  fi
   compile "pipenv-version2"
   assertCaptured "Installing ${LATEST_27}"
   # Can't use `assertCapturedSuccess` since stderr contains:
@@ -76,8 +80,12 @@ testPipenvPythonVersion2_7() {
 }
 
 testPipenvPythonFullVersion() {
+  # Python 3.7+ requires newer libssl than is present on Cedar-14.
+  if [[ "${STACK}" = "cedar-14" ]]; then
+    return
+  fi
   compile "pipenv-full-version"
-  assertCaptured "3.6.3"
+  assertCaptured "3.7.8"
   # Can't use `assertCapturedSuccess` since stderr contains:
   # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
   assertCapturedSuccessWithStdErr

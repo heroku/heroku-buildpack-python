@@ -20,8 +20,11 @@ PKG_CONFIG_PATH="/app/.heroku/vendor/lib/pkgconfig:$PKG_CONFIG_PATH"
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
 
-# If GDAL exists within requirements, use vendored gdal.
-if [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
+if [[ "$BUILD_WITH_GEO_LIBRARIES" && "${STACK}" == 'heroku-20' ]]; then
+  puts-warn "The GDAL, GEOS and PROJ binaries and BUILD_WITH_GEO_LIBRARIES functonality is not supported on Heroku-20."
+  puts-warn "Please use this buildpack for GDAL, GEOS and PROJ: https://github.com/heroku/heroku-geo-buildpack"
+  puts-warn "To hide this message, unset the BUILD_WITH_GEO_LIBRARIES variable using: heroku config:unset BUILD_WITH_GEO_LIBRARIES"
+elif [[ "$BUILD_WITH_GEO_LIBRARIES" ]]; then
   mcount "buildvar.BUILD_WITH_GEO_LIBRARIES"
 
   puts-warn "The GDAL, GEOS and PROJ binaries and BUILD_WITH_GEO_LIBRARIES functonality are now deprecated."

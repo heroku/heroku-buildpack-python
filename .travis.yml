@@ -34,6 +34,10 @@ env:
     - STACK=heroku-18 TEST_CMD=test/run-deps
     - STACK=heroku-18 TEST_CMD=test/run-versions
     - STACK=heroku-18 TEST_CMD=test/run-features
+
+    - STACK=heroku-20 TEST_CMD=test/run-deps
+    - STACK=heroku-20 TEST_CMD=test/run-versions
+    - STACK=heroku-20 TEST_CMD=test/run-features
   global:
     - HATCHET_RETRIES=3
     - IS_RUNNING_ON_CI=true
