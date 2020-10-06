@@ -41,7 +41,12 @@ export BUILD_DIR CACHE_DIR ENV_DIR
 # The user can provide BUILDPACK_S3_BASE_URL to specify a custom target.
 # Note: this is designed for non-Heroku use, as it does not use the user-provided
 # environment variable mechanism (the ENV_DIR).
-DEFAULT_S3_BASE_URL='https://lang-python.s3.amazonaws.com'
+if [[ "${STACK}" == "cedar-14" ]]; then
+  # Since Cedar-14 is EOL on 2020-11-02 it's not worth migrating it to the new bucket.
+  DEFAULT_S3_BASE_URL='https://lang-python.s3.amazonaws.com'
+else
+  DEFAULT_S3_BASE_URL='https://heroku-buildpack-python.s3.amazonaws.com'
+fi
 S3_BASE_URL="${BUILDPACK_S3_BASE_URL:-${DEFAULT_S3_BASE_URL}}"
 # This has to be exported since it's used by the geo-libs step which is run in a subshell.
 # TODO: Stop exporting once the geo-libs step is removed or no longer uses `sub_env`.
