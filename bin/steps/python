@@ -16,6 +16,12 @@ PYTHON_2_EOL_UPDATE="Python 2 has reached it's community EOL. Upgrade your Pytho
 
 # check if runtime exists
 if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
+  if [[ "$PYTHON_VERSION" == $PY39* ]]; then
+    if [ "$PYTHON_VERSION" != "$LATEST_39" ]; then
+      puts-warn "$SECURITY_UPDATE" "$LATEST_39"
+      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
+    fi
+  fi
   if [[ "$PYTHON_VERSION" == $PY38* ]]; then
     # do things to alert the user of security release available
     if [ "$PYTHON_VERSION" != "$LATEST_38" ]; then

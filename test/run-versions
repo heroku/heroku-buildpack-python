@@ -140,6 +140,34 @@ testPython3_8_warn() {
   fi
 }
 
+testPython3_9() {
+  # Cedar-14 is EOL, so we're not building new major Python versions for it.
+  if [[ "${STACK}" = "cedar-14" ]]; then
+    return
+  fi
+  compile "python3_9"
+  assertNotCaptured "security update"
+  assertCaptured $LATEST_39
+  assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
+  assertCaptured "Installing SQLite3"
+  assertCapturedSuccess
+}
+
+testPython3_9_warn() {
+  # Cedar-14 is EOL, so we're not building new major Python versions for it.
+  if [[ "${STACK}" = "cedar-14" ]]; then
+    return
+  fi
+  # Can't test the version warning until there is at least one old version of Python 3.9.
+  if [[ "${LATEST_39}" = "python-3.9.0" ]]; then
+    return
+  fi
+  compile "python3_9_warn"
+  assertCaptured "python-3.9.0"
+  assertCaptured "security update!"
+  assertCapturedSuccess
+}
+
 testPythonVersionInvalid() {
   compile "python_version_invalid"
   assertCaptured "Requested runtime (python-3.8.99) is not available for this stack"

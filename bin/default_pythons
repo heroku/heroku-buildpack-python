@@ -6,6 +6,7 @@
 # shellcheck disable=2034
 
 DEFAULT_PYTHON_VERSION="python-3.6.12"
+LATEST_39="python-3.9.0"
 LATEST_38="python-3.8.6"
 LATEST_37="python-3.7.9"
 LATEST_36="python-3.6.12"
