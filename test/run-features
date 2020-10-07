@@ -59,22 +59,23 @@ testPipenvLock() {
   assertCapturedSuccessWithStdErr
 }
 
-testPipenvVersion() {
+testPipenvPythonVersion3_6() {
   compile "pipenv-version"
-  assertCaptured $DEFAULT_PYTHON_VERSION
+  assertCaptured "Installing ${LATEST_36}"
   # Can't use `assertCapturedSuccess` since stderr contains:
   # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
   assertCapturedSuccessWithStdErr
 }
 
-testPipenvVersion2() {
+testPipenvPythonVersion2_7() {
   compile "pipenv-version2"
-  assertCaptured $LATEST_27
+  assertCaptured "Installing ${LATEST_27}"
   # Can't use `assertCapturedSuccess` since stderr contains:
   # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
   assertCapturedSuccessWithStdErr
 }
-testPipenvFullVersion() {
+
+testPipenvPythonFullVersion() {
   compile "pipenv-full-version"
   assertCaptured "3.6.3"
   # Can't use `assertCapturedSuccess` since stderr contains:

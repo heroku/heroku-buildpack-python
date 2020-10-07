@@ -56,11 +56,6 @@ resetCapture()
   unset rtrn # deprecated
 }
 
-updateVersion()
-{
-  echo "$2" > "test/fixtures/${1}/runtime.txt"
-}
-
 assertCapturedEquals()
 {
   assertEquals "$@" "$(cat ${STD_OUT})"
