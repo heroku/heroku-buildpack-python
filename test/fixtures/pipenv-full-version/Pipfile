@@ -6,4 +6,4 @@ verify_ssl = true
 requests = "*"
 
 [requires]
-python_full_version = "3.6.3"
+python_full_version = "3.7.8"

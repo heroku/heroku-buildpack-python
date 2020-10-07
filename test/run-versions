@@ -14,6 +14,10 @@ testPythonVersionUnspecified() {
 }
 
 testPython2_7() {
+  # Python 2.7 is EOL, so it has not been built for Heroku-20.
+  if [[ $STACK == "heroku-20" ]]; then
+    return
+  fi
   compile "python2"
   assertCaptured "Installing ${LATEST_27}"
   assertCaptured "python-2-7-eol-faq";
@@ -24,6 +28,10 @@ testPython2_7() {
 }
 
 testPython2_7_warn() {
+  # Python 2.7 is EOL, so it has not been built for Heroku-20.
+  if [[ $STACK == "heroku-20" ]]; then
+    return
+  fi
   compile "python2_warn"
   assertCaptured "Installing python-2.7.15"
   assertCaptured "python-2-7-eol-faq";
@@ -33,6 +41,10 @@ testPython2_7_warn() {
 }
 
 testPython3_4() {
+  # Python 3.4 is EOL, so it has not been built for Heroku-20.
+  if [[ $STACK == "heroku-20" ]]; then
+    return
+  fi
   compile "python3_4"
   assertCaptured "Installing ${LATEST_34}"
   assertNotCaptured "security update"
@@ -44,6 +56,10 @@ testPython3_4() {
 }
 
 testPython3_4_warn() {
+  # Python 3.4 is EOL, so it has not been built for Heroku-20.
+  if [[ $STACK == "heroku-20" ]]; then
+    return
+  fi
   compile "python3_4_warn"
   assertCaptured "Installing python-3.4.9"
   assertCaptured "security update!"
@@ -54,6 +70,10 @@ testPython3_4_warn() {
 }
 
 testPython3_5() {
+  # Python 3.5 is EOL, so it has not been built for Heroku-20.
+  if [[ $STACK == "heroku-20" ]]; then
+    return
+  fi
   compile "python3_5"
   assertCaptured "Installing ${LATEST_35}"
   assertNotCaptured "security update"
@@ -63,6 +83,10 @@ testPython3_5() {
 }
 
 testPython3_5_warn() {
+  # Python 3.5 is EOL, so it has not been built for Heroku-20.
+  if [[ $STACK == "heroku-20" ]]; then
+    return
+  fi
   compile "python3_5_warn"
   assertCaptured "Installing python-3.5.6"
   assertCaptured "security update!"
@@ -81,7 +105,7 @@ testPython3_6() {
 
 testPython3_6_warn() {
   compile "python3_6_warn"
-  assertCaptured "Installing python-3.6.7"
+  assertCaptured "Installing python-3.6.11"
   assertCaptured "security update!"
   assertCaptured "${LATEST_36}"
   assertCapturedSuccess
@@ -106,7 +130,7 @@ testPython3_7_warn() {
     return
   fi
   compile "python3_7_warn"
-  assertCaptured "Installing python-3.7.1"
+  assertCaptured "Installing python-3.7.8"
   assertCaptured "security update!"
   assertCaptured "${LATEST_37}"
   assertCapturedSuccess
@@ -131,7 +155,7 @@ testPython3_8_warn() {
     return
   fi
   compile "python3_8_warn"
-  assertCaptured "Installing python-3.8.0"
+  assertCaptured "Installing python-3.8.5"
   assertCaptured "security update!"
   assertCaptured "${LATEST_38}"
   assertCapturedSuccess
@@ -208,7 +232,7 @@ testPypy2_7_warn() {
 testStickyPythonVersion() {
   local cache_dir="$(mktmpdir)"
   compile "python3_6_warn" "$cache_dir"
-  assertCaptured "Installing python-3.6.7"
+  assertCaptured "Installing python-3.6.11"
   assertCapturedSuccess
   compile "python_version_unspecified" "$cache_dir"
   assertNotCaptured "Installing python"
@@ -217,16 +241,16 @@ testStickyPythonVersion() {
   # Whilst this file seems like an implementation detail (so something that should
   # not be tested), we must guarantee the filename remains consistent for backwards
   # compatibility across buildpack versions for already-built apps.
-  assertFile "python-3.6.7" ".heroku/python-version"
+  assertFile "python-3.6.11" ".heroku/python-version"
 }
 
 testPythonVersionChange() {
   local cache_dir="$(mktmpdir)"
   compile "python3_6_warn" "$cache_dir"
-  assertCaptured "Installing python-3.6.7"
+  assertCaptured "Installing python-3.6.11"
   assertCapturedSuccess
   compile "python3_6" "$cache_dir"
-  assertCaptured "Found python-3.6.7, removing"
+  assertCaptured "Found python-3.6.11, removing"
   assertCapturedSuccess
 }
 
