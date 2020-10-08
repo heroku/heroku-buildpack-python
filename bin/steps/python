@@ -179,7 +179,12 @@ if [[ -f "$BUILD_DIR/Pipfile" ]]; then
   # The buildpack is pinned to old pipenv, which requires older pip.
   # Pip 9.0.2 doesn't support installing itself from a wheel, so we have to use split
   # versions here (ie: installer pip version different from target pip version).
-  PIP_VERSION='9.0.2'
+  if [ -z "$PIP_VERSION_OVERRIDE" ]
+    then
+      PIP_VERSION='9.0.2'
+    else
+      PIP_VERSION=PIP_VERSION_OVERRIDE
+  fi
   PIP_TO_INSTALL="pip==${PIP_VERSION}"
 else
   PIP_TO_INSTALL="${PIP_WHEEL}"
