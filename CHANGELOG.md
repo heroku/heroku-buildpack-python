@@ -3,7 +3,7 @@
 ## Unreleased
 
 - Add support for Heroku-20 (#968).
-- allow pipenv users to specify pip version via `PIP_VERSION_OVERRIDE` variable (#1094)
+- Allow pipenv users to specify pip version via `PIP_VERSION_OVERRIDE` variable (#1094)
 
 ## v182 (2020-10-06)
 
