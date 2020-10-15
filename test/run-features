@@ -116,6 +116,7 @@ testHooks() {
   local expected_env_vars=(
     _
     BIN_DIR
+    BPLOG_PREFIX
     BUILD_DIR
     BUILDPACK_LOG_FILE
     CACHE_DIR

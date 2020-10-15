@@ -18,7 +18,7 @@ set -eo pipefail
 # Boostrap the Buildpack Standard Library.
 # Disable unused env var warning since shellcheck doesn't know about the stdlib.
 # shellcheck disable=2034
-BPLOG_PREFIX="buildpack.python"
+export BPLOG_PREFIX="buildpack.python"
 export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
 
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
