@@ -175,15 +175,9 @@ if ! curl -sSf "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
   exit 1
 fi
 
-if [[ -f "$BUILD_DIR/Pipfile" ]]; then
-  # The buildpack is pinned to old pipenv, which requires older pip.
-  # Pip 9.0.2 doesn't support installing itself from a wheel, so we have to use split
-  # versions here (ie: installer pip version different from target pip version).
-  PIP_VERSION='9.0.2'
-  PIP_TO_INSTALL="pip==${PIP_VERSION}"
-else
-  PIP_TO_INSTALL="${PIP_WHEEL}"
-fi
+
+PIP_TO_INSTALL="pip==${PIP_VERSION}"
+
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
