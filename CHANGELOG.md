@@ -2,12 +2,12 @@
 
 ## Unreleased
 
+- Vendor buildpack-stdlib instead of fetching from S3 (#1100).
+- Fix metric names for metrics emitted within `sub_env` (#1099).
 
 ## v183 (2020-10-12)
 
 - Add support for Heroku-20 (#968).
-- Vendor buildpack-stdlib instead of fetching from S3 (#1100).
-- Fix metric names for metrics emitted within `sub_env` (#1099).
 
 ## v182 (2020-10-06)
 
