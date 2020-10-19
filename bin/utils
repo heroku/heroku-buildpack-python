@@ -2,12 +2,13 @@
 shopt -s extglob
 shopt -s nullglob
 
-# The standard library.
-if [[ ! -f  /tmp/stdlib.sh ]]; then
-  curl --retry 3 -s https://lang-common.s3.amazonaws.com/buildpack-stdlib/v8/stdlib.sh > /tmp/stdlib.sh
-fi
-# shellcheck source=/dev/null
-source /tmp/stdlib.sh
+# This is necessary since this script is sometimes sourced from
+# subshells that don't have the variables from bin/compile.
+# Remove this once we no longer wrap all the things in `sub_env`.
+BIN_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+ROOT_DIR=$(dirname "${BIN_DIR}")
+# shellcheck source=vendor/buildpack-stdlib_v8.sh
+source "${ROOT_DIR}/vendor/buildpack-stdlib_v8.sh"
 
 if [ "$(uname)" == Darwin ]; then
     sed() { command sed -l "$@"; }

@@ -15,9 +15,7 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
-# Boostrap the Buildpack Standard Library.
-# Disable unused env var warning since shellcheck doesn't know about the stdlib.
-# shellcheck disable=2034
+# Used by buildpack-stdlib's metrics features.
 export BPLOG_PREFIX="buildpack.python"
 export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
 
