@@ -3,13 +3,13 @@ GEM
   specs:
     diff-lcs (1.4.4)
     erubis (2.7.0)
-    excon (0.76.0)
+    excon (0.78.0)
     heroics (0.1.1)
       erubis (~> 2.0)
       excon
       moneta
       multi_json (>= 1.9.2)
-    heroku_hatchet (7.3.1)
+    heroku_hatchet (7.3.3)
       excon (~> 0)
       platform-api (~> 3)
       rrrretry (~> 1)
