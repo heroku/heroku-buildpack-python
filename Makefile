@@ -2,7 +2,7 @@
 .PHONY: check test builder-image buildenv deploy-runtimes tools
 
 STACK ?= heroku-18
-STACKS ?= cedar-14 heroku-16 heroku-18
+STACKS ?= cedar-14 heroku-16 heroku-18 heroku-20
 TEST_CMD ?= test/run-versions && test/run-features && test/run-deps
 ENV_FILE ?= builds/dockerenv.default
 BUILDER_IMAGE_PREFIX := heroku-python-build
