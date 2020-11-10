@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove redundant Mercurial install step (#1111).
 - Remove support for the Cedar-14 stack (#1110).
 
 ## v184 (2020-10-21)

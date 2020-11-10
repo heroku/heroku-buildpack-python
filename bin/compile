@@ -263,12 +263,6 @@ fi
 # shellcheck source=bin/steps/eggpath-fix
 source "$BIN_DIR/steps/eggpath-fix"
 
-# Mercurial support.
-# If a customer appears to be using mercurial for dependency resolution, we install it first.
-# Note: this only applies to pip, not pipenv. This can likely be removed, over time. Measure it first.
-# shellcheck source=bin/steps/mercurial
-source "$BIN_DIR/steps/mercurial"
-
 # Support for Geo libraries. This is deprecated functionality.
 # It is undocumented.
 # shellcheck source=bin/steps/geo-libs

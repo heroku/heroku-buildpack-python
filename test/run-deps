@@ -74,6 +74,12 @@ testPylibmc() {
   assertCapturedSuccess
 }
 
+testMercurial() {
+  compile "requirements-mercurial"
+  assertCaptured "Cloning hg"
+  assertCapturedSuccess
+}
+
 pushd $(dirname 0) >/dev/null
 popd >/dev/null
 
