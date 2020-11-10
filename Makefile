@@ -2,22 +2,17 @@
 .PHONY: check test builder-image buildenv deploy-runtimes tools
 
 STACK ?= heroku-18
-STACKS ?= cedar-14 heroku-16 heroku-18 heroku-20
+STACKS ?= heroku-16 heroku-18 heroku-20
 TEST_CMD ?= test/run-versions && test/run-features && test/run-deps
 ENV_FILE ?= builds/dockerenv.default
 BUILDER_IMAGE_PREFIX := heroku-python-build
 
-ifeq ($(STACK),cedar-14)
-	# Cedar-14 doesn't have a build image varient.
-	STACK_IMAGE_TAG := heroku/cedar:14
-else
-	# Converts a stack name of `heroku-NN` to its build Docker image tag of `heroku/heroku:NN-build`.
-	STACK_IMAGE_TAG := heroku/$(subst -,:,$(STACK))-build
-endif
+# Converts a stack name of `heroku-NN` to its build Docker image tag of `heroku/heroku:NN-build`.
+STACK_IMAGE_TAG := heroku/$(subst -,:,$(STACK))-build
 
 check:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings bin/default_pythons
-	@shellcheck -x bin/steps/collectstatic bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/gdal bin/steps/geo-libs bin/steps/mercurial bin/steps/nltk bin/steps/pip-install bin/steps/pip-uninstall bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/pylibmc bin/steps/python
+	@shellcheck -x bin/steps/collectstatic bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/gdal bin/steps/geo-libs bin/steps/mercurial bin/steps/nltk bin/steps/pip-install bin/steps/pip-uninstall bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/python
 	@shellcheck -x bin/steps/hooks/*
 
 test:

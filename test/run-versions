@@ -112,10 +112,6 @@ testPython3_6_warn() {
 }
 
 testPython3_7() {
-  # Python 3.7+ requires newer libssl than is present on Cedar-14.
-  if [[ "${STACK}" = "cedar-14" ]]; then
-    return
-  fi
   compile "python3_7"
   assertCaptured "Installing ${LATEST_37}"
   assertNotCaptured "security update"
@@ -125,10 +121,6 @@ testPython3_7() {
 }
 
 testPython3_7_warn() {
-  # Python 3.7+ requires newer libssl than is present on Cedar-14.
-  if [[ "${STACK}" = "cedar-14" ]]; then
-    return
-  fi
   compile "python3_7_warn"
   assertCaptured "Installing python-3.7.8"
   assertCaptured "security update!"
@@ -137,10 +129,6 @@ testPython3_7_warn() {
 }
 
 testPython3_8() {
-  # Python 3.7+ requires newer libssl than is present on Cedar-14.
-  if [[ "${STACK}" = "cedar-14" ]]; then
-    return
-  fi
   compile "python3_8"
   assertCaptured "Installing ${LATEST_38}"
   assertNotCaptured "security update"
@@ -150,10 +138,6 @@ testPython3_8() {
 }
 
 testPython3_8_warn() {
-  # Python 3.7+ requires newer libssl than is present on Cedar-14.
-  if [[ "${STACK}" = "cedar-14" ]]; then
-    return
-  fi
   compile "python3_8_warn"
   assertCaptured "Installing python-3.8.5"
   assertCaptured "security update!"
@@ -162,10 +146,6 @@ testPython3_8_warn() {
 }
 
 testPython3_9() {
-  # Cedar-14 is EOL, so we're not building new major Python versions for it.
-  if [[ "${STACK}" = "cedar-14" ]]; then
-    return
-  fi
   compile "python3_9"
   assertCaptured "Installing ${LATEST_39}"
   assertNotCaptured "security update"
@@ -175,10 +155,6 @@ testPython3_9() {
 }
 
 testPython3_9_warn() {
-  # Cedar-14 is EOL, so we're not building new major Python versions for it.
-  if [[ "${STACK}" = "cedar-14" ]]; then
-    return
-  fi
   # Can't test the version warning until there is at least one old version of Python 3.9.
   if [[ "${LATEST_39}" = "python-3.9.0" ]]; then
     return
