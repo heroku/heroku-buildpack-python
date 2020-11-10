@@ -23,10 +23,6 @@ jobs:
 
 env:
   jobs:
-    - STACK=cedar-14 TEST_CMD=test/run-deps
-    - STACK=cedar-14 TEST_CMD=test/run-versions
-    - STACK=cedar-14 TEST_CMD=test/run-features
-
     - STACK=heroku-16 TEST_CMD=test/run-deps
     - STACK=heroku-16 TEST_CMD=test/run-versions
     - STACK=heroku-16 TEST_CMD=test/run-features
