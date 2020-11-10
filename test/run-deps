@@ -17,18 +17,18 @@ testCollectstatic() {
   assertCaptured "collectstatic"
 }
 
-testGEOS() {
+testBuildWithGeoLibrariesWarning() {
   local env_dir="$(mktmpdir)"
   echo '1' > "${env_dir}/BUILD_WITH_GEO_LIBRARIES"
-  compile 'geos' '' "${env_dir}"
-  if [[ $STACK == "heroku-20" ]]; then
-    assertCaptured " !     The GDAL, GEOS and PROJ binaries and BUILD_WITH_GEO_LIBRARIES functonality is not supported on Heroku-20."
-  else
-    assertCaptured " !     The GDAL, GEOS and PROJ binaries and BUILD_WITH_GEO_LIBRARIES functonality are now deprecated."
-  fi
-  # This should assertCapturedError on Heroku-20, but the test doesn't actually
-  # install anything that uses GEOS so succeeds (see W-8145375)
-  assertCapturedSuccess
+  compile 'gdal' '' "${env_dir}"
+  assertCaptured " !     The Python buildpack's BUILD_WITH_GEO_LIBRARIES functonality is no longer supported"
+  assertCapturedError
+}
+
+testGDALWarning() {
+  compile 'gdal'
+  assertCaptured " !     Hello! Package installation failed since the GDAL library was not found."
+  assertCapturedError
 }
 
 testNLTK() {

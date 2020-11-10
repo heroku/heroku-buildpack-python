@@ -50,8 +50,6 @@ fi
 # environment variable mechanism (the ENV_DIR).
 S3_BASE_URL="${BUILDPACK_S3_BASE_URL:-"https://heroku-buildpack-python.s3.amazonaws.com"}"
 # This has to be exported since it's used by the geo-libs step which is run in a subshell.
-# TODO: Stop exporting once the geo-libs step is removed or no longer uses `sub_env`.
-export S3_BASE_URL
 
 # Default Python Versions
 # shellcheck source=bin/default_pythons
@@ -137,6 +135,7 @@ export LANG=en_US.UTF-8
 # `~/.heroku/vendor` is an place where the buildpack may stick pre-build binaries for known
 # C dependencies. This section configures Python (GCC, more specifically)
 # and pip to automatically include these paths when building binaries.
+# TODO: Stop adding .heroku/vendor here now that the buildpack no longer vendors anything.
 export C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$C_INCLUDE_PATH
 export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$CPLUS_INCLUDE_PATH
 export LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH
@@ -176,8 +175,6 @@ cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
 cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
 # A plain text file which contains the current sqlite3 version being used (used for cache busting).
 cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
-# Any pre-compiled binaries, provided by the buildpack.
-cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
 # "editable" installations of code repositories, via pip or pipenv.
 if [[ -d "$CACHE_DIR/.heroku/src" ]]; then
   cp -R "$CACHE_DIR/.heroku/src" .heroku/ &> /dev/null || true
@@ -262,16 +259,6 @@ fi
 # We must re-write all of Python's eggpath links to target the proper directory.
 # shellcheck source=bin/steps/eggpath-fix
 source "$BIN_DIR/steps/eggpath-fix"
-
-# Support for Geo libraries. This is deprecated functionality.
-# It is undocumented.
-# shellcheck source=bin/steps/geo-libs
-sub_env "$BIN_DIR/steps/geo-libs"
-
-# GDAL support.
-# This is part of the Geo support.
-# shellcheck source=bin/steps/gdal
-source "$BIN_DIR/steps/gdal"
 
 # SQLite3 support.
 # This sets up and installs sqlite3 dev headers and the sqlite3 binary but not the
@@ -370,7 +357,6 @@ mkdir -p "$CACHE_DIR/.heroku"
 cp -R .heroku/python "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-version "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &> /dev/null || true
-cp -R .heroku/vendor "$CACHE_DIR/.heroku/" &> /dev/null || true
 if [[ -d .heroku/src ]]; then
   cp -R .heroku/src "$CACHE_DIR/.heroku/" &> /dev/null || true
 fi
