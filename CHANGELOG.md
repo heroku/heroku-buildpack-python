@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove vendored `jq` binary (#1112).
 - Remove redundant Mercurial install step (#1111).
 - Remove support for the Cedar-14 stack (#1110).
 
