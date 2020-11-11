@@ -46,21 +46,7 @@ six-included() {
   fi
 }
 
-geo-gdal-support() {
-  if [[ -f "${ENV_DIR}/BUILD_WITH_GEO_LIBRARIES" ]]; then
-    mcount "warnings.BUILD_WITH_GEO_LIBRARIES"
-    echo
-    puts-warn "The Python buildpack's BUILD_WITH_GEO_LIBRARIES functonality is no longer supported:"
-    puts-warn "https://help.heroku.com/D5INLB1A/python-s-build_with_geo_libraries-legacy-feature-is-now-deprecated"
-    puts-warn
-    puts-warn "For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:"
-    puts-warn "https://github.com/heroku/heroku-geo-buildpack"
-    puts-warn
-    puts-warn "To hide this message, unset the BUILD_WITH_GEO_LIBRARIES variable using:"
-    puts-warn "heroku config:unset BUILD_WITH_GEO_LIBRARIES"
-    echo
-    return
-  fi
+gdal-missing() {
   if grep -qi 'Could not find gdal-config' "$WARNINGS_LOG"; then
     mcount 'warnings.gdal'
     echo
@@ -76,6 +62,6 @@ show-warnings() {
   scipy-included
   distribute-included
   six-included
-  geo-gdal-support
+  gdal-missing
 }
 

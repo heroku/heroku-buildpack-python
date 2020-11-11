@@ -35,15 +35,6 @@ ENV_DIR=$3
 # Export Path variables, for use in sub-scripts.
 export BUILD_DIR CACHE_DIR ENV_DIR
 
-if [[ "${STACK}" == "cedar-14" ]]; then
-  puts-warn "The Cedar-14 stack is no longer supported by the latest release of this buildpack."
-  puts-warn "Please switch to the Cedar-14 support branch by using this buildpack URL:"
-  puts-warn "https://github.com/heroku/heroku-buildpack-python#cedar-14"
-  puts-warn "For instructions on how to change the buildpacks used by an app, see:"
-  puts-warn "https://devcenter.heroku.com/articles/buildpacks#setting-a-buildpack-on-an-application"
-  exit 1
-fi
-
 # Set the base URL for downloading buildpack assets like Python runtimes.
 # The user can provide BUILDPACK_S3_BASE_URL to specify a custom target.
 # Note: this is designed for non-Heroku use, as it does not use the user-provided
@@ -104,6 +95,31 @@ source "$BIN_DIR/utils"
 # (mentioned and explained above)
 # shellcheck source=bin/warnings
 source "$BIN_DIR/warnings"
+
+if [[ "${STACK}" == "cedar-14" ]]; then
+  mcount "failure.unsupported.cedar-14"
+  puts-warn "The Cedar-14 stack is no longer supported by the latest release of this buildpack."
+  puts-warn
+  puts-warn "Please switch to the Cedar-14 support branch by using this buildpack URL:"
+  puts-warn "https://github.com/heroku/heroku-buildpack-python#cedar-14"
+  puts-warn
+  puts-warn "For instructions on how to change the buildpacks used by an app, see:"
+  puts-warn "https://devcenter.heroku.com/articles/buildpacks#setting-a-buildpack-on-an-application"
+  exit 1
+fi
+
+if [[ -f "${ENV_DIR}/BUILD_WITH_GEO_LIBRARIES" ]]; then
+  mcount "failure.unsupported.BUILD_WITH_GEO_LIBRARIES"
+  puts-warn "The Python buildpack's BUILD_WITH_GEO_LIBRARIES functonality is no longer supported:"
+  puts-warn "https://help.heroku.com/D5INLB1A/python-s-build_with_geo_libraries-legacy-feature-is-now-deprecated"
+  puts-warn
+  puts-warn "For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:"
+  puts-warn "https://github.com/heroku/heroku-geo-buildpack"
+  puts-warn
+  puts-warn "To remove this error message, unset the BUILD_WITH_GEO_LIBRARIES variable using:"
+  puts-warn "heroku config:unset BUILD_WITH_GEO_LIBRARIES"
+  exit 1
+fi
 
 # Make the directory in which we will create symlinks from the temporary build directory
 # to `/app`.
