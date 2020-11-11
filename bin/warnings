@@ -12,16 +12,6 @@ old-platform() {
   fi
 }
 
-pylibmc-missing() {
-  if grep -qi 'fatal error: libmemcached/memcached.h: No such file or directory' "$WARNINGS_LOG"; then
-    echo
-    puts-warn "Hello! There was a problem with your build related to libmemcache."
-    puts-warn "The Python library 'pylibmc' must be explicitly specified in 'requirements.txt' in order to build correctly."
-    puts-warn "Once you do that, everything should work as expected.   -- Much Love, Heroku."
-    mcount 'warnings.libmemcache'
-  fi
-}
-
 scipy-included() {
   if grep -qi 'running setup.py install for scipy' "$WARNINGS_LOG"; then
     echo
@@ -58,7 +48,6 @@ six-included() {
 
 show-warnings() {
   old-platform
-  pylibmc-missing
   scipy-included
   distribute-included
   six-included

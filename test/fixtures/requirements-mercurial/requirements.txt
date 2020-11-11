@@ -1,0 +1,1 @@
+hg+https://www.mercurial-scm.org/repo/python-hglib/#egg=python-hglib
