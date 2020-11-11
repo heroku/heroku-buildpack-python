@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## v185 (2020-11-12)
+
 - Error if the unsupported `BUILD_WITH_GEO_LIBRARIES` env var is set (#1115).
 - Remove deprecated GDAL/GEOS/PROJ support (#1113).
 - Remove vendored `jq` binary (#1112).
