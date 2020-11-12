@@ -69,7 +69,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
 
         else
             pipenv-to-pip Pipfile.lock > requirements.txt
-            "$BIN_DIR/steps/pip-uninstall"
             cp requirements.txt .heroku/python/requirements-declared.txt
             openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
 
