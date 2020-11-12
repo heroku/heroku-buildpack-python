@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Switch NLTK feature detection away from `sp-grep` (#1119).
+- Switch Django collectstatic feature detection away from `sp-grep` (#1119).
+- Remove vendored `sp-grep` script (#1119).
 - Remove vendored `pip-diff` script (#1118).
 - Remove vendored `pip-grep` script (#1116).
 

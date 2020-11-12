@@ -68,9 +68,9 @@ DEFAULT_PYTHON_STACK="heroku-18"
 WARNINGS_LOG=$(mktemp)
 RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
 
-# The buildpack ships with a few executable tools (e.g. pip-grep, etc).
+# The buildpack ships with a few executable tools.
 # This installs them into the path, so we can execute them directly.
-export PATH=$PATH:$ROOT_DIR/vendor/:$ROOT_DIR/vendor/pip-pop
+export PATH=$PATH:$ROOT_DIR/vendor/
 
 # Set environment variables if they weren't set by the platform.
 # Note: this is legacy, for a deprecated build system known as Anvil.
