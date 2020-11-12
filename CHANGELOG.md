@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove vendored `pip-diff` script (#1118).
 - Remove vendored `pip-grep` script (#1116).
 
 ## v185 (2020-11-12)
