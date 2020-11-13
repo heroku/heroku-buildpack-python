@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Update the `BUILD_WITH_GEO_LIBRARIES` error message (#1121).
 - Switch NLTK feature detection away from `sp-grep` (#1119).
 - Switch Django collectstatic feature detection away from `sp-grep` (#1119).
 - Remove vendored `sp-grep` script (#1119).

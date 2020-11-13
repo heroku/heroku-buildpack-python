@@ -21,7 +21,7 @@ testBuildWithGeoLibrariesWarning() {
   local env_dir="$(mktmpdir)"
   echo '1' > "${env_dir}/BUILD_WITH_GEO_LIBRARIES"
   compile 'gdal' '' "${env_dir}"
-  assertCaptured " !     The Python buildpack's BUILD_WITH_GEO_LIBRARIES functonality is no longer supported"
+  assertCaptured " !     The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functonality"
   assertCapturedError
 }
 
