@@ -1,9 +1,10 @@
 # These targets are not files
-.PHONY: check test builder-image buildenv deploy-runtimes tools
+.PHONY: check test compile builder-image buildenv deploy-runtimes tools
 
 STACK ?= heroku-18
 STACKS ?= heroku-16 heroku-18 heroku-20
 TEST_CMD ?= test/run-versions && test/run-features && test/run-deps
+FIXTURE ?= test/fixtures/requirements-standard
 ENV_FILE ?= builds/dockerenv.default
 BUILDER_IMAGE_PREFIX := heroku-python-build
 
@@ -19,6 +20,13 @@ test:
 	@echo "Running tests using: STACK=$(STACK) TEST_CMD='$(TEST_CMD)'"
 	@echo
 	@docker run --rm -it -v $(PWD):/buildpack:ro -e "STACK=$(STACK)" "$(STACK_IMAGE_TAG)" bash -c 'cp -r /buildpack /buildpack_test && cd /buildpack_test && $(TEST_CMD)'
+	@echo
+
+compile:
+	@echo "Running compile using: STACK=$(STACK) FIXTURE=$(FIXTURE)"
+	@echo
+	@docker run --rm -it -v $(PWD):/src:ro -e "STACK=$(STACK)" -w /buildpack "$(STACK_IMAGE_TAG)" \
+		bash -c 'cp -r /src/{bin,vendor} /buildpack && cp -r /src/$(FIXTURE) /build && mkdir /cache /env && bin/compile /build /cache /env'
 	@echo
 
 builder-image:
