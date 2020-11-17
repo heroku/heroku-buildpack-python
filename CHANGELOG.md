@@ -2,6 +2,47 @@
 
 ## Unreleased
 
+- Update the `BUILD_WITH_GEO_LIBRARIES` error message (#1121).
+- Switch NLTK feature detection away from `sp-grep` (#1119).
+- Switch Django collectstatic feature detection away from `sp-grep` (#1119).
+- Remove vendored `sp-grep` script (#1119).
+- Remove vendored `pip-diff` script (#1118).
+- Remove vendored `pip-grep` script (#1116).
+
+## v185 (2020-11-12)
+
+- Error if the unsupported `BUILD_WITH_GEO_LIBRARIES` env var is set (#1115).
+- Remove deprecated GDAL/GEOS/PROJ support (#1113).
+- Remove vendored `jq` binary (#1112).
+- Remove redundant Mercurial install step (#1111).
+- Remove support for the Cedar-14 stack (#1110).
+
+## v184 (2020-10-21)
+
+- Vendor buildpack-stdlib instead of fetching from S3 (#1100).
+- Fix metric names for metrics emitted within `sub_env` (#1099).
+
+## v183 (2020-10-12)
+
+- Add support for Heroku-20 (#968).
+
+## v182 (2020-10-06)
+
+- Python 3.9.0 is now available (CPython) (#1090).
+- Migrate from the `lang-python` S3 bucket to `heroku-buildpack-python` (#1089).
+- Remove `vendor/shunit2` (#1086).
+- Replace `BUILDPACK_VENDOR_URL` and `USE_STAGING_BINARIES` with `BUILDPACK_S3_BASE_URL` (#1085).
+
+## v181 (2020-09-29)
+
+- PyPy 2.7 and 3.6, version 7.3.2 are now available (Note: PyPy support is in beta) (#1081).
+
+## v180 (2020-09-24)
+
+- Python 3.8.6 is now available (CPython) (#1072).
+
+## v179 (2020-09-23)
+
 - Remove duplicate pipenv metric event (#1070).
 - Emit metrics for how the Python version was chosen for an app (#1069).
 - Emit Python version metric events for all builds, not just clean installs (#1066).

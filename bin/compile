@@ -15,10 +15,8 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
-# Boostrap the Buildpack Standard Library.
-# Disable unused env var warning since shellcheck doesn't know about the stdlib.
-# shellcheck disable=2034
-BPLOG_PREFIX="buildpack.python"
+# Used by buildpack-stdlib's metrics features.
+export BPLOG_PREFIX="buildpack.python"
 export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
 
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
@@ -37,23 +35,19 @@ ENV_DIR=$3
 # Export Path variables, for use in sub-scripts.
 export BUILD_DIR CACHE_DIR ENV_DIR
 
-# Set the Buildpack's internet target for downloading Python distributions.
-# The user can provide BUILDPACK_VENDOR_URL to specify a custom target.
+# Set the base URL for downloading buildpack assets like Python runtimes.
+# The user can provide BUILDPACK_S3_BASE_URL to specify a custom target.
 # Note: this is designed for non-Heroku use, as it does not use the user-provided
 # environment variable mechanism (the ENV_DIR).
-VENDOR_URL="https://lang-python.s3.amazonaws.com/$STACK"
-if [[ -n ${BUILDPACK_VENDOR_URL:-} ]]; then
-    VENDOR_URL="$BUILDPACK_VENDOR_URL"
-elif [[ -n ${USE_STAGING_BINARIES} ]]; then
-    VENDOR_URL="$USE_STAGING_BINARIES/$STACK"
-fi
-export VENDOR_URL
+S3_BASE_URL="${BUILDPACK_S3_BASE_URL:-"https://heroku-buildpack-python.s3.amazonaws.com"}"
+# This has to be exported since it's used by the geo-libs step which is run in a subshell.
 
 # Default Python Versions
 # shellcheck source=bin/default_pythons
 source "$BIN_DIR/default_pythons"
 
 # Supported Python Branches
+PY39="python-3.9"
 PY38="python-3.8"
 PY37="python-3.7"
 PY36="python-3.6"
@@ -64,7 +58,8 @@ PYPY27="pypy2.7"
 PYPY36="pypy3.6"
 
 # Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
-DEFAULT_PYTHON_STACK="cedar-14"
+# TODO: Remove this and require that STACK be set explicitly.
+DEFAULT_PYTHON_STACK="heroku-18"
 
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.
@@ -73,24 +68,18 @@ DEFAULT_PYTHON_STACK="cedar-14"
 WARNINGS_LOG=$(mktemp)
 RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
 
-# The buildpack ships with a few executable tools (e.g. pip-grep, etc).
+# The buildpack ships with a few executable tools.
 # This installs them into the path, so we can execute them directly.
-export PATH=$PATH:$ROOT_DIR/vendor/:$ROOT_DIR/vendor/pip-pop
+export PATH=$PATH:$ROOT_DIR/vendor/
 
 # Set environment variables if they weren't set by the platform.
-# Note: this is legacy, for a deprecated build system known as Anvil.
-# This can likely be removed, with caution.
-[ ! "$SLUG_ID" ] && SLUG_ID="defaultslug"
-[ ! "$REQUEST_ID" ] && REQUEST_ID=$SLUG_ID
 [ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitize externally-provided environment variables:
 # The following environment variables are either problematic or simply unneccessary
 # for the buildpack to have knowledge of, so we unset them, to keep the environment
 # as clean and pristine as possible.
-unset GIT_DIR PYTHONHOME PYTHONPATH
-unset RECEIVE_DATA RUN_KEY BUILD_INFO DEPLOY LOG_TOKEN
-unset CYTOKINE_LOG_FILE GEM_PATH
+unset PYTHONHOME PYTHONPATH
 
 # Import the utils script, which contains helper functions used throughout the buildpack.
 # shellcheck source=bin/utils
@@ -100,6 +89,33 @@ source "$BIN_DIR/utils"
 # (mentioned and explained above)
 # shellcheck source=bin/warnings
 source "$BIN_DIR/warnings"
+
+if [[ "${STACK}" == "cedar-14" ]]; then
+  mcount "failure.unsupported.cedar-14"
+  puts-warn "The Cedar-14 stack is no longer supported by the latest release of this buildpack."
+  puts-warn
+  puts-warn "Please switch to the Cedar-14 support branch by using this buildpack URL:"
+  puts-warn "https://github.com/heroku/heroku-buildpack-python#cedar-14"
+  puts-warn
+  puts-warn "For instructions on how to change the buildpacks used by an app, see:"
+  puts-warn "https://devcenter.heroku.com/articles/buildpacks#setting-a-buildpack-on-an-application"
+  exit 1
+fi
+
+if [[ -f "${ENV_DIR}/BUILD_WITH_GEO_LIBRARIES" ]]; then
+  mcount "failure.unsupported.BUILD_WITH_GEO_LIBRARIES"
+  puts-warn "The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functonality is"
+  puts-warn "no longer supported:"
+  puts-warn "https://devcenter.heroku.com/changelog-items/1947"
+  puts-warn
+  puts-warn "To continue to use GDAL, GEOS or PROJ support, see the migration guide:"
+  puts-warn "https://help.heroku.com/D5INLB1A/python-s-build_with_geo_libraries-legacy-feature-is-no-longer-supported"
+  puts-warn
+  puts-warn "Or if you no longer need those libraries, this message can be hidden by"
+  puts-warn "unsetting the BUILD_WITH_GEO_LIBRARIES environment variable, using:"
+  puts-warn "heroku config:unset BUILD_WITH_GEO_LIBRARIES"
+  exit 1
+fi
 
 # Make the directory in which we will create symlinks from the temporary build directory
 # to `/app`.
@@ -129,8 +145,9 @@ export PYTHONUNBUFFERED=1
 # Set the locale to a well-known and expected standard.
 export LANG=en_US.UTF-8
 # `~/.heroku/vendor` is an place where the buildpack may stick pre-build binaries for known
-# C dependencies (e.g. libmemcached on cedar-14). This section configures Python (GCC, more specifically)
+# C dependencies. This section configures Python (GCC, more specifically)
 # and pip to automatically include these paths when building binaries.
+# TODO: Stop adding .heroku/vendor here now that the buildpack no longer vendors anything.
 export C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$C_INCLUDE_PATH
 export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$CPLUS_INCLUDE_PATH
 export LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH
@@ -170,8 +187,6 @@ cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
 cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
 # A plain text file which contains the current sqlite3 version being used (used for cache busting).
 cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
-# Any pre-compiled binaries, provided by the buildpack.
-cp -R "$CACHE_DIR/.heroku/vendor" .heroku/ &> /dev/null || true
 # "editable" installations of code repositories, via pip or pipenv.
 if [[ -d "$CACHE_DIR/.heroku/src" ]]; then
   cp -R "$CACHE_DIR/.heroku/src" .heroku/ &> /dev/null || true
@@ -257,27 +272,6 @@ fi
 # shellcheck source=bin/steps/eggpath-fix
 source "$BIN_DIR/steps/eggpath-fix"
 
-# Mercurial support.
-# If a customer appears to be using mercurial for dependency resolution, we install it first.
-# Note: this only applies to pip, not pipenv. This can likely be removed, over time. Measure it first.
-# shellcheck source=bin/steps/mercurial
-source "$BIN_DIR/steps/mercurial"
-
-# Pylibmc support.
-# On cedar-14, libmemcached was not available. The buildpack provides its own version, instead.
-# shellcheck source=bin/steps/pylibmc
-source "$BIN_DIR/steps/pylibmc"
-
-# Support for Geo libraries. This is deprecated functionality, only functional on cedar-14.
-# It is undocumented.
-# shellcheck source=bin/steps/geo-libs
-sub_env "$BIN_DIR/steps/geo-libs"
-
-# GDAL support.
-# This is part of the Geo support.
-# shellcheck source=bin/steps/gdal
-source "$BIN_DIR/steps/gdal"
-
 # SQLite3 support.
 # This sets up and installs sqlite3 dev headers and the sqlite3 binary but not the
 # libsqlite3-0 library since that exists on the stack image.
@@ -309,7 +303,7 @@ mtime "nltk.download.time" "${start}"
 # and copying it into the proper place (the logical place to do this was early, but it must be done here).
 # In CI, $BUILD_DIR is /app.
 if [[ ! "$BUILD_DIR" == "/app" ]]; then
-  rm -fr "$BUILD_DIR/.heroku/src"
+  rm -rf "$BUILD_DIR/.heroku/src"
   deep-cp /app/.heroku/src "$BUILD_DIR/.heroku/src"
 fi
 
@@ -375,7 +369,6 @@ mkdir -p "$CACHE_DIR/.heroku"
 cp -R .heroku/python "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-version "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &> /dev/null || true
-cp -R .heroku/vendor "$CACHE_DIR/.heroku/" &> /dev/null || true
 if [[ -d .heroku/src ]]; then
   cp -R .heroku/src "$CACHE_DIR/.heroku/" &> /dev/null || true
 fi

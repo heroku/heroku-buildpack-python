@@ -17,21 +17,18 @@ testCollectstatic() {
   assertCaptured "collectstatic"
 }
 
-testGEOS() {
+testBuildWithGeoLibrariesWarning() {
   local env_dir="$(mktmpdir)"
   echo '1' > "${env_dir}/BUILD_WITH_GEO_LIBRARIES"
-  compile 'geos' '' "${env_dir}"
-  assertCaptured "geos"
-  assertCapturedSuccess
+  compile 'gdal' '' "${env_dir}"
+  assertCaptured " !     The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functonality"
+  assertCapturedError
 }
 
-testGEOSDeprecation() {
-  local env_dir="$(mktmpdir)"
-  echo '1' > "${env_dir}/BUILD_WITH_GEO_LIBRARIES"
-  compile 'geos' '' "${env_dir}"
-  assertCaptured " !     The GDAL, GEOS and PROJ binaries and BUILD_WITH_GEO_LIBRARIES functonality are now deprecated.
- !     An alternative buildpack to enable GDAL, GEOS and PROJ use is available here - https://github.com/heroku/heroku-geo-buildpack"
-  assertCapturedSuccess
+testGDALWarning() {
+  compile 'gdal'
+  assertCaptured " !     Hello! Package installation failed since the GDAL library was not found."
+  assertCapturedError
 }
 
 testNLTK() {
@@ -43,7 +40,9 @@ testNLTK() {
   echo 'ignore::RuntimeWarning' > "${env_dir}/PYTHONWARNINGS"
   compile 'nltk' '' "${env_dir}"
   assertCaptured "[nltk_data] Downloading package city_database" "STD_ERR"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since the NLTK downloader outputs all
+  # progress/status messages to stderr (W-8146040).
+  assertCapturedSuccessWithStdErr
 }
 
 testPsycopg2() {
@@ -53,14 +52,13 @@ testPsycopg2() {
 }
 
 testPysqlite() {
+  # pysqlite does not support Python 3 (since the sqlite3 stdlib can be used there),
+  # so we have to test with Python 2, which we've not made available for Heroku-20.
+  if [[ $STACK == "heroku-20" ]]; then
+    return
+  fi
   compile "pysqlite"
   assertCaptured "pysqlite"
-  assertCapturedSuccess
-}
-
-testSqliteInstall() {
-  compile "pythonDefault"
-  assertNotCaptured "Sqlite3 failed to install."
   assertCapturedSuccess
 }
 
@@ -73,6 +71,12 @@ testCffi() {
 testPylibmc() {
   compile "pylibmc"
   assertCaptured "pylibmc"
+  assertCapturedSuccess
+}
+
+testMercurial() {
+  compile "requirements-mercurial"
+  assertCaptured "Cloning hg"
   assertCapturedSuccess
 }
 

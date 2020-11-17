@@ -9,7 +9,7 @@ set -e
 if [[ -f Pipfile.lock ]]; then
     if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
         if [[ $(openssl dgst -sha256 Pipfile.lock) == $(cat .heroku/python/Pipfile.lock.sha256) ]]; then
-            # Don't skip installation of there are git deps.
+            # Don't skip installation if there are git deps.
             if ! grep -q 'git' Pipfile.lock; then
                 echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
 
@@ -69,7 +69,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
 
         else
             pipenv-to-pip Pipfile.lock > requirements.txt
-            "$BIN_DIR/steps/pip-uninstall"
             cp requirements.txt .heroku/python/requirements-declared.txt
             openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
 

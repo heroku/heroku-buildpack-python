@@ -13,11 +13,11 @@ dep_version=${dep_formula##*"/${dep_name}-"} # "subtract" our name from full ver
 dep_package=${dep_name}${dep_version_prefix:-}-v${dep_version}${dep_version_suffix:-}
 dep_dirname=${dep_package}-linux64
 dep_archive_name=${dep_dirname}.tar.bz2
-dep_url=https://bitbucket.org/pypy/pypy/downloads/${dep_archive_name}
+dep_url="https://downloads.python.org/pypy/${dep_archive_name}"
 
 echo "Building PyPy3…"
 echo "${dep_url}"
 
-curl -L "${dep_url}" | tar jx -C "${OUT_PREFIX}" --strip-components 1 # extract to $OUT_PREFIX, drop the first directory level, which is the archive name
+curl -fL "${dep_url}" | tar jx -C "${OUT_PREFIX}" --strip-components 1 # extract to $OUT_PREFIX, drop the first directory level, which is the archive name
 
 ln "$OUT_PREFIX/bin/pypy3" "$OUT_PREFIX/bin/python"

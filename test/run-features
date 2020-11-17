@@ -33,7 +33,9 @@ testStackChange() {
 testSetupPy() {
   compile "setup-py"
   assertCaptured "maya"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
 testStandardRequirements() {
@@ -45,29 +47,44 @@ testStandardRequirements() {
 testPipenv() {
   compile "pipenv"
   assertCaptured "Installing pip 9.0.2, setuptools 47.1.1 and wheel 0.34.2"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
 testPipenvLock() {
   compile "pipenv-lock"
-  assertCapturedSuccess
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
-testPipenvVersion() {
+testPipenvPythonVersion3_6() {
   compile "pipenv-version"
-  assertCaptured $DEFAULT_PYTHON_VERSION
-  assertCapturedSuccess
+  assertCaptured "Installing ${LATEST_36}"
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
-testPipenvVersion2() {
+testPipenvPythonVersion2_7() {
+  # Python 2.7 is EOL, so it has not been built for Heroku-20.
+  if [[ $STACK == "heroku-20" ]]; then
+    return
+  fi
   compile "pipenv-version2"
-  assertCaptured $LATEST_27
-  assertCapturedSuccess
+  assertCaptured "Installing ${LATEST_27}"
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
-testPipenvFullVersion() {
+
+testPipenvPythonFullVersion() {
   compile "pipenv-full-version"
-  assertCaptured "3.6.3"
-  assertCapturedSuccess
+  assertCaptured "3.7.8"
+  # Can't use `assertCapturedSuccess` since stderr contains:
+  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
+  assertCapturedSuccessWithStdErr
 }
 
 testNoRequirements() {
@@ -95,6 +112,7 @@ testHooks() {
   local expected_env_vars=(
     _
     BIN_DIR
+    BPLOG_PREFIX
     BUILD_DIR
     BUILDPACK_LOG_FILE
     CACHE_DIR
@@ -116,9 +134,8 @@ testHooks() {
     SHLVL
     SOME_APP_CONFIG_VAR
     STACK
-    VENDOR_URL
   )
-  if [[ "${STACK}" == "cedar-14" || "${STACK}" == "heroku-16" ]]; then
+  if [[ "${STACK}" == "heroku-16" ]]; then
     # Remove "OLDPWD" from expected_env_vars since for bash <4.4 it's not exported to subshells:
     # https://github.com/heroku/heroku-buildpack-python/pull/1011#issuecomment-665117835
     read -ra expected_env_vars <<< "${expected_env_vars[@]/OLDPWD/}"
