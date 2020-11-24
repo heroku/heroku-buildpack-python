@@ -1,13 +1,21 @@
 [buildpack]
 name = "Python"
 
-  [publish.Ignore]
-  files = [
-    "test/",
-    ".gitignore",
-    ".dockerignore",
-    ".github/",
-    "Dockerfile",
-    "Pipfile",
-    "Pipfile.lock"
-  ]
+[publish.Ignore]
+files = [
+  ".git2gus/",
+  ".github/",
+  "builds/",
+  "spec/",
+  "test/",
+  ".dockerignore",
+  ".gitignore",
+  ".travis.yml",
+  "Gemfile",
+  "Gemfile.lock",
+  "hatchet.json",
+  "hatchet.lock",
+  "Makefile",
+  "Rakefile",
+  "requirements.txt",
+]
