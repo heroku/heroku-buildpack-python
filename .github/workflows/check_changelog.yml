@@ -5,12 +5,13 @@ on:
     types: [opened, reopened, edited, synchronize]
 
 jobs:
-  check:
+  check-changelog:
     runs-on: ubuntu-latest
     if: |
       !contains(github.event.pull_request.body, '[skip changelog]') &&
       !contains(github.event.pull_request.body, '[changelog skip]') &&
-      !contains(github.event.pull_request.body, '[skip ci]')
+      !contains(github.event.pull_request.body, '[skip ci]') &&
+      !contains(github.event.pull_request.labels.*.name, 'c: dependencies')
     steps:
       - uses: actions/checkout@v1
       - name: Check that CHANGELOG is touched
