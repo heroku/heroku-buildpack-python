@@ -155,10 +155,6 @@ testPython3_9() {
 }
 
 testPython3_9_warn() {
-  # Can't test the version warning until there is at least one old version of Python 3.9.
-  if [[ "${LATEST_39}" = "python-3.9.0" ]]; then
-    return
-  fi
   compile "python3_9_warn"
   assertCaptured "Installing python-3.9.0"
   assertCaptured "security update!"
