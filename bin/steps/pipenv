@@ -10,7 +10,7 @@ if [[ -f Pipfile.lock ]]; then
     if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
         if [[ $(openssl dgst -sha256 Pipfile.lock) == $(cat .heroku/python/Pipfile.lock.sha256) ]]; then
             # Don't skip installation if there are git deps.
-            if ! grep -q 'git' Pipfile.lock; then
+            if ! grep -q '\.git' Pipfile.lock; then
                 echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
 
                 mcount "tool.pipenv"

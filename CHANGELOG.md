@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed `pipenv` not caching dependencies when `git` mentioned in package names.
+
 ## v187 (2020-12-08)
 
 - Python 3.9.1 is now available (CPython) (#1127).
