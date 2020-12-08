@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v187 (2020-12-08)
+
 - Python 3.9.1 is now available (CPython) (#1127).
 
 ## v186 (2020-11-18)
