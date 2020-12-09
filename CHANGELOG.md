@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Build with `--enable-loadable-sqlite-extensions` (CPython).
+
 ## v187 (2020-12-08)
 
 - Python 3.9.1 is now available (CPython) (#1127).
