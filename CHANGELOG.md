@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## v188 (2020-12-21)
+
 - Python 3.8.7 is now available (CPython) (#1125).
 
 ## v187 (2020-12-08)
