@@ -7,7 +7,7 @@
 
 DEFAULT_PYTHON_VERSION="python-3.6.12"
 LATEST_39="python-3.9.1"
-LATEST_38="python-3.8.6"
+LATEST_38="python-3.8.7"
 LATEST_37="python-3.7.9"
 LATEST_36="python-3.6.12"
 LATEST_35="python-3.5.10"
