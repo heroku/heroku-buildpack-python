@@ -1,6 +1,8 @@
 source "https://rubygems.org"
 
-gem "rspec"
-gem "heroku_hatchet"
-gem "rspec-retry"
-gem "parallel_split_test"
+group :test, :development do
+  gem "heroku_hatchet"
+  gem "parallel_split_test"
+  gem "rspec"
+  gem "rspec-retry"
+end
