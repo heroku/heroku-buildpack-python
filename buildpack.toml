@@ -16,6 +16,5 @@ files = [
   "hatchet.json",
   "hatchet.lock",
   "Makefile",
-  "Rakefile",
   "requirements.txt",
 ]
