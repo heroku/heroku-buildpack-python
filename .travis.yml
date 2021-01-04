@@ -10,7 +10,7 @@ script:
 jobs:
   include:
   - name: Bash linting (shellcheck)
-    script: make check
+    script: make lint-scripts
   - name: Hatchet integration tests
     if: env(HEROKU_API_USER) IS present AND env(HEROKU_API_KEY) IS present
     language: ruby
@@ -19,6 +19,7 @@ jobs:
     before_script:
       - bundle exec hatchet ci:setup
     script:
+      - make lint-ruby
       - PARALLEL_SPLIT_TEST_PROCESSES=11 bundle exec parallel_split_test spec/hatchet/
 
 env:
