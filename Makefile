@@ -11,10 +11,15 @@ BUILDER_IMAGE_PREFIX := heroku-python-build
 # Converts a stack name of `heroku-NN` to its build Docker image tag of `heroku/heroku:NN-build`.
 STACK_IMAGE_TAG := heroku/$(subst -,:,$(STACK))-build
 
-check:
+lint: lint-scripts lint-ruby
+
+lint-scripts:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings bin/default_pythons
 	@shellcheck -x bin/steps/collectstatic bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/nltk bin/steps/pip-install bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/python
 	@shellcheck -x bin/steps/hooks/*
+
+lint-ruby:
+	@bundle exec rubocop
 
 test:
 	@echo "Running tests using: STACK=$(STACK) TEST_CMD='$(TEST_CMD)'"

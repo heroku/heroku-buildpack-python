@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require_relative '../spec_helper'
 
-describe "Heroku CI" do
-  it "works" do
-    before_deploy = Proc.new do
-      File.open("app.json", "w+") do |f|
-        f.puts <<~EOM
+describe 'Heroku CI' do
+  it 'works' do
+    before_deploy = proc do
+      File.open('app.json', 'w+') do |f|
+        f.puts <<~MANIFEST
           {
             "environments": {
               "test": {
@@ -14,20 +16,20 @@ describe "Heroku CI" do
               }
             }
           }
-        EOM
+        MANIFEST
       end
 
-      run!("echo nose >> requirements.txt")
+      run!('echo nose >> requirements.txt')
     end
 
-    Hatchet::Runner.new("python_default", before_deploy: before_deploy).run_ci do |test_run|
-      expect(test_run.output).to match("Downloading nose")
-      expect(test_run.output).to match("OK")
+    Hatchet::Runner.new('python_default', before_deploy: before_deploy).run_ci do |test_run|
+      expect(test_run.output).to match('Downloading nose')
+      expect(test_run.output).to match('OK')
 
       test_run.run_again
 
-      expect(test_run.output).to match("installing from cache")
-      expect(test_run.output).to_not match("Downloading nose")
+      expect(test_run.output).to match('installing from cache')
+      expect(test_run.output).not_to match('Downloading nose')
     end
   end
 end

@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    ast (2.4.1)
     diff-lcs (1.4.4)
     erubis (2.7.0)
     excon (0.78.1)
@@ -21,11 +22,16 @@ GEM
     parallel_split_test (0.8.0)
       parallel (>= 0.5.13)
       rspec (>= 3.1.0)
+    parser (3.0.0.0)
+      ast (~> 2.4.1)
     platform-api (3.2.0)
       heroics (~> 0.1.1)
       moneta (~> 1.0.0)
       rate_throttle_client (~> 0.1.0)
+    rainbow (3.0.0)
     rate_throttle_client (0.1.2)
+    regexp_parser (2.0.3)
+    rexml (3.2.4)
     rrrretry (1.0.0)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
@@ -42,8 +48,24 @@ GEM
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.10.1)
+    rubocop (1.7.0)
+      parallel (~> 1.10)
+      parser (>= 2.7.1.5)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8, < 3.0)
+      rexml
+      rubocop-ast (>= 1.2.0, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 2.0)
+    rubocop-ast (1.4.0)
+      parser (>= 2.7.1.5)
+    rubocop-rspec (2.1.0)
+      rubocop (~> 1.0)
+      rubocop-ast (>= 1.1.0)
+    ruby-progressbar (1.11.0)
     thor (1.0.1)
     threaded (0.0.4)
+    unicode-display_width (1.7.0)
 
 PLATFORMS
   ruby
@@ -53,6 +75,11 @@ DEPENDENCIES
   parallel_split_test
   rspec
   rspec-retry
+  rubocop
+  rubocop-rspec
+
+RUBY VERSION
+   ruby 2.7.2p137
 
 BUNDLED WITH
    2.1.4

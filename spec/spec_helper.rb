@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 ENV['HATCHET_BUILDPACK_BASE'] = 'https://github.com/heroku/heroku-buildpack-python.git'
+
+require 'English'
 
 require 'rspec/core'
 require 'rspec/retry'
 require 'hatchet'
-
-require 'date'
 
 RSpec.configure do |config|
   config.full_backtrace      = true
@@ -19,6 +21,7 @@ DEFAULT_STACK = 'heroku-18'
 
 def run!(cmd)
   out = `#{cmd}`
-  raise "Error running command #{cmd} with output: #{out}" unless $?.success?
-  return out
+  raise "Error running command #{cmd} with output: #{out}" unless $CHILD_STATUS.success?
+
+  out
 end
