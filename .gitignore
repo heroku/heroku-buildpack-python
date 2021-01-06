@@ -3,7 +3,7 @@ site
 .DS_Store
 
 /.envrc
-repos/*
+.hatchet/repos/
 
 #Venv
 buildpack/*
