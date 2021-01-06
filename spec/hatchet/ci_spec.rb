@@ -22,7 +22,7 @@ describe 'Heroku CI' do
       run!('echo nose >> requirements.txt')
     end
 
-    Hatchet::Runner.new('python_default', before_deploy: before_deploy).run_ci do |test_run|
+    new_app('python_default', before_deploy: before_deploy).run_ci do |test_run|
       expect(test_run.output).to match('Downloading nose')
       expect(test_run.output).to match('OK')
 
