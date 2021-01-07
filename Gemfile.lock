@@ -45,8 +45,6 @@ GEM
     rspec-mocks (3.10.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
-    rspec-retry (0.6.2)
-      rspec-core (> 3.3)
     rspec-support (3.10.1)
     rubocop (1.7.0)
       parallel (~> 1.10)
@@ -74,7 +72,6 @@ DEPENDENCIES
   heroku_hatchet
   parallel_split_test
   rspec
-  rspec-retry
   rubocop
   rubocop-rspec
 
