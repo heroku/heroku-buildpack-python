@@ -2,7 +2,7 @@
 
 require_relative '../spec_helper'
 
-describe 'Heroku CI' do
+RSpec.describe 'Heroku CI' do
   it 'works' do
     before_deploy = proc do
       File.open('app.json', 'w+') do |f|
