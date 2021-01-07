@@ -17,7 +17,14 @@ RSpec.configure do |config|
   end
 end
 
-DEFAULT_STACK = 'heroku-18'
+DEFAULT_STACK = ENV['STACK'] || 'heroku-18'
+
+def new_app(*args, **kwargs)
+  # Wrapping app creation to set the default stack, in lieu of being able to configure it globally:
+  # https://github.com/heroku/hatchet/issues/163
+  kwargs[:stack] ||= DEFAULT_STACK
+  Hatchet::Runner.new(*args, **kwargs)
+end
 
 def run!(cmd)
   out = `#{cmd}`

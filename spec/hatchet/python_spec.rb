@@ -5,7 +5,7 @@ require_relative '../spec_helper'
 describe 'Python' do
   describe 'cache' do
     it 'functions correctly' do
-      Hatchet::Runner.new('python_default').deploy do |app|
+      new_app('python_default').deploy do |app|
         expect(app.output).to match(/Installing pip/)
 
         expect(app.output).not_to match('Requirements file has been changed, clearing cached dependencies')
@@ -36,20 +36,18 @@ describe 'Python' do
   end
 
   describe 'python versions' do
-    let(:stack) { ENV['HEROKU_TEST_STACK'] || DEFAULT_STACK }
-
-    it 'works with 3.7.6' do
-      version = '3.7.6'
+    it 'works with 3.7.9' do
+      version = '3.7.9'
       before_deploy = -> { run!(%(echo "python-#{version}" >> runtime.txt)) }
-      Hatchet::Runner.new('python_default', before_deploy: before_deploy, stack: stack).deploy do |app|
+      new_app('python_default', before_deploy: before_deploy).deploy do |app|
         expect(app.run('python -V')).to match(version)
       end
     end
 
-    it 'works with 3.8.2' do
-      version = '3.8.2'
+    it 'works with 3.8.7' do
+      version = '3.8.7'
       before_deploy = -> { run!(%(echo "python-#{version}" >> runtime.txt)) }
-      Hatchet::Runner.new('python_default', before_deploy: before_deploy, stack: stack).deploy do |app|
+      new_app('python_default', before_deploy: before_deploy).deploy do |app|
         expect(app.run('python -V')).to match(version)
       end
     end
@@ -57,8 +55,7 @@ describe 'Python' do
     it 'fails with a bad version' do
       version = '3.8.2.lol'
       before_deploy = -> { run!(%(echo "python-#{version}" >> runtime.txt)) }
-      Hatchet::Runner.new('python_default', before_deploy: before_deploy, stack: stack,
-                                            allow_failure: true).deploy do |app|
+      new_app('python_default', before_deploy: before_deploy, allow_failure: true).deploy do |app|
         expect(app.output).to match('not available for this stack')
       end
     end
@@ -69,7 +66,7 @@ describe 'Python' do
       :default,
       'https://github.com/sharpstone/force_absolute_paths_buildpack'
     ]
-    Hatchet::Runner.new('python-getting-started', buildpacks: buildpacks).deploy do |app|
+    new_app('python-getting-started', buildpacks: buildpacks).deploy do |app|
       # Deploy works
     end
   end
