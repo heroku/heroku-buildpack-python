@@ -2,7 +2,7 @@
 
 require_relative '../spec_helper'
 
-describe 'Python' do
+RSpec.describe 'Python' do
   describe 'cache' do
     it 'functions correctly' do
       new_app('python_default').deploy do |app|
