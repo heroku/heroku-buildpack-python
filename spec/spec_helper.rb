@@ -5,13 +5,10 @@ ENV['HATCHET_BUILDPACK_BASE'] = 'https://github.com/heroku/heroku-buildpack-pyth
 require 'English'
 
 require 'rspec/core'
-require 'rspec/retry'
 require 'hatchet'
 
 RSpec.configure do |config|
-  config.full_backtrace      = true
-  config.verbose_retry       = true # show retry status in spec process
-  config.default_retry_count = 2 if ENV['IS_RUNNING_ON_CI'] # retry all tests that fail again
+  config.full_backtrace = true
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
