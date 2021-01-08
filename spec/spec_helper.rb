@@ -9,6 +9,14 @@ require 'hatchet'
 
 DEFAULT_STACK = ENV['STACK'] || 'heroku-18'
 
+LATEST_PYTHON_2_7 = '2.7.18'
+LATEST_PYTHON_3_5 = '3.5.10'
+LATEST_PYTHON_3_6 = '3.6.12'
+LATEST_PYTHON_3_7 = '3.7.9'
+LATEST_PYTHON_3_8 = '3.8.7'
+LATEST_PYTHON_3_9 = '3.9.1'
+DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_6
+
 RSpec.configure do |config|
   # Disables the legacy rspec globals and monkey-patched `should` syntax.
   config.disable_monkey_patching!
@@ -17,6 +25,8 @@ RSpec.configure do |config|
   # Allows limiting a spec run to individual examples or groups by tagging them
   # with `:focus` metadata via the `fit`, `fcontext` and `fdescribe` aliases.
   config.filter_run_when_matching :focus
+  # Allows declaring on which stacks a test/group should run by tagging it with `stacks`.
+  config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(DEFAULT_STACK) }
 end
 
 def new_app(*args, **kwargs)
@@ -24,6 +34,12 @@ def new_app(*args, **kwargs)
   # https://github.com/heroku/hatchet/issues/163
   kwargs[:stack] ||= DEFAULT_STACK
   Hatchet::Runner.new(*args, **kwargs)
+end
+
+def clean_output(output)
+  # Remove trailing whitespace characters added by Git:
+  # https://github.com/heroku/hatchet/issues/162
+  output.gsub(/ {8}(?=\R)/, '')
 end
 
 def run!(cmd)
