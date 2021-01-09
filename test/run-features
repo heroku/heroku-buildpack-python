@@ -87,6 +87,31 @@ testPipenvPythonFullVersion() {
   assertCapturedSuccessWithStdErr
 }
 
+testPyProjectToml() {
+    compile "pyproject-toml"
+    assertCapturedSuccess
+}
+
+testPoetry() {
+    compile "poetry"
+    assertCapturedSuccess
+}
+
+testPoetryLock() {
+    compile "poetry-lock"
+    assertCapturedSuccess
+}
+
+testFlit() {
+    compile "flit"
+    assertCapturedSuccess
+}
+
+testFlitRequires() {
+    compile "flit-requires"
+    assertCapturedSuccess
+}
+
 testNoRequirements() {
   compile "no-requirements"
   assertCapturedError
