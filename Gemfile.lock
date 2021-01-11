@@ -33,16 +33,9 @@ GEM
     regexp_parser (2.0.3)
     rexml (3.2.4)
     rrrretry (1.0.0)
-    rspec (3.10.0)
-      rspec-core (~> 3.10.0)
-      rspec-expectations (~> 3.10.0)
-      rspec-mocks (~> 3.10.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.1)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.10.0)
-    rspec-mocks (3.10.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.1)
@@ -71,7 +64,8 @@ PLATFORMS
 DEPENDENCIES
   heroku_hatchet
   parallel_split_test
-  rspec
+  rspec-core
+  rspec-expectations
   rubocop
   rubocop-rspec
 
