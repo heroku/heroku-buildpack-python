@@ -7,7 +7,7 @@ require 'English'
 require 'rspec/core'
 require 'hatchet'
 
-DEFAULT_STACK = ENV['STACK'] || 'heroku-18'
+DEFAULT_STACK = ENV['STACK'] || 'heroku-20'
 
 LATEST_PYTHON_2_7 = '2.7.18'
 LATEST_PYTHON_3_5 = '3.5.10'

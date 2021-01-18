@@ -1,7 +1,7 @@
 # These targets are not files
 .PHONY: check test compile builder-image buildenv deploy-runtimes tools
 
-STACK ?= heroku-18
+STACK ?= heroku-20
 STACKS ?= heroku-16 heroku-18 heroku-20
 TEST_CMD ?= test/run-versions && test/run-features && test/run-deps
 FIXTURE ?= test/fixtures/requirements-standard
