@@ -44,11 +44,6 @@ testStandardRequirements() {
   assertCapturedSuccess
 }
 
-testNoRequirements() {
-  compile "no-requirements"
-  assertCapturedError
-}
-
 testWarnOldDjango() {
   compile "old-django"
   assertCaptured "Your Django version is nearing the end of its community support."
