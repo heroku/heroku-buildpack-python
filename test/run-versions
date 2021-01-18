@@ -27,19 +27,6 @@ testPython2_7() {
   assertCapturedSuccess
 }
 
-testPython2_7_warn() {
-  # Python 2.7 is EOL, so it has not been built for Heroku-20.
-  if [[ $STACK == "heroku-20" ]]; then
-    return
-  fi
-  compile "python2_warn"
-  assertCaptured "Installing python-2.7.15"
-  assertCaptured "python-2-7-eol-faq";
-  assertCaptured "Only the latest version"
-  assertCaptured "${LATEST_27}"
-  assertCapturedSuccess
-}
-
 testPython3_4() {
   # Python 3.4 is EOL, so it has not been built for Heroku-20.
   if [[ $STACK == "heroku-20" ]]; then
@@ -50,20 +37,6 @@ testPython3_4() {
   assertNotCaptured "security update"
   assertCaptured "Installing pip 19.1.1, setuptools 43.0.0 and wheel 0.33.6"
   assertCaptured "Installing SQLite3"
-  # Can't use `assertCapturedSuccess` since Pip outputs a Python 3.4 EOL warning to stderr,
-  # and the newest Pip that works on Python 3.4 doesn't support `PIP_NO_PYTHON_VERSION_WARNING`.
-  assertCapturedSuccessWithStdErr
-}
-
-testPython3_4_warn() {
-  # Python 3.4 is EOL, so it has not been built for Heroku-20.
-  if [[ $STACK == "heroku-20" ]]; then
-    return
-  fi
-  compile "python3_4_warn"
-  assertCaptured "Installing python-3.4.9"
-  assertCaptured "security update!"
-  assertCaptured "${LATEST_34}"
   # Can't use `assertCapturedSuccess` since Pip outputs a Python 3.4 EOL warning to stderr,
   # and the newest Pip that works on Python 3.4 doesn't support `PIP_NO_PYTHON_VERSION_WARNING`.
   assertCapturedSuccessWithStdErr
@@ -82,32 +55,12 @@ testPython3_5() {
   assertCapturedSuccess
 }
 
-testPython3_5_warn() {
-  # Python 3.5 is EOL, so it has not been built for Heroku-20.
-  if [[ $STACK == "heroku-20" ]]; then
-    return
-  fi
-  compile "python3_5_warn"
-  assertCaptured "Installing python-3.5.6"
-  assertCaptured "security update!"
-  assertCaptured "${LATEST_35}"
-  assertCapturedSuccess
-}
-
 testPython3_6() {
   compile "python3_6"
   assertCaptured "Installing ${LATEST_36}"
   assertNotCaptured "security update"
   assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
   assertCaptured "Installing SQLite3"
-  assertCapturedSuccess
-}
-
-testPython3_6_warn() {
-  compile "python3_6_warn"
-  assertCaptured "Installing python-3.6.11"
-  assertCaptured "security update!"
-  assertCaptured "${LATEST_36}"
   assertCapturedSuccess
 }
 
@@ -120,14 +73,6 @@ testPython3_7() {
   assertCapturedSuccess
 }
 
-testPython3_7_warn() {
-  compile "python3_7_warn"
-  assertCaptured "Installing python-3.7.8"
-  assertCaptured "security update!"
-  assertCaptured "${LATEST_37}"
-  assertCapturedSuccess
-}
-
 testPython3_8() {
   compile "python3_8"
   assertCaptured "Installing ${LATEST_38}"
@@ -137,28 +82,12 @@ testPython3_8() {
   assertCapturedSuccess
 }
 
-testPython3_8_warn() {
-  compile "python3_8_warn"
-  assertCaptured "Installing python-3.8.5"
-  assertCaptured "security update!"
-  assertCaptured "${LATEST_38}"
-  assertCapturedSuccess
-}
-
 testPython3_9() {
   compile "python3_9"
   assertCaptured "Installing ${LATEST_39}"
   assertNotCaptured "security update"
   assertCaptured "Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2"
   assertCaptured "Installing SQLite3"
-  assertCapturedSuccess
-}
-
-testPython3_9_warn() {
-  compile "python3_9_warn"
-  assertCaptured "Installing python-3.9.0"
-  assertCaptured "security update!"
-  assertCaptured "${LATEST_39}"
   assertCapturedSuccess
 }
 
@@ -177,27 +106,11 @@ testPypy3_6() {
   assertCapturedSuccess
 }
 
-testPypy3_6_warn() {
-  compile "pypy3_6_warn"
-  assertCaptured "Installing pypy3.6-7.3.1"
-  assertCaptured "security update!"
-  assertCaptured "${LATEST_PYPY_36}"
-  assertCapturedSuccess
-}
-
 testPypy2_7() {
   compile "pypy2_7"
   assertCaptured "Installing ${LATEST_PYPY_27}"
   assertNotCaptured "security update"
   assertCaptured "Installing pip 20.1.1, setuptools 44.1.1 and wheel 0.34.2"
-  assertCapturedSuccess
-}
-
-testPypy2_7_warn() {
-  compile "pypy2_7_warn"
-  assertCaptured "Installing pypy2.7-7.3.1"
-  assertCaptured "security update!"
-  assertCaptured "${LATEST_PYPY_27}"
   assertCapturedSuccess
 }
 
