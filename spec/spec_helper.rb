@@ -45,6 +45,13 @@ def clean_output(output)
   output.gsub(/ {8}(?=\R)/, '')
 end
 
+def update_buildpacks(app, buildpacks)
+  # Updates the list of buildpacks for an existing app, until Hatchet supports this natively:
+  # https://github.com/heroku/hatchet/issues/166
+  buildpack_list = buildpacks.map { |b| { buildpack: (b == :default ? app.class.default_buildpack : b) } }
+  app.api_rate_limit.call.buildpack_installation.update(app.name, updates: buildpack_list)
+end
+
 def run!(cmd)
   out = `#{cmd}`
   raise "Error running command #{cmd} with output: #{out}" unless $CHILD_STATUS.success?

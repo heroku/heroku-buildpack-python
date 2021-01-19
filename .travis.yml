@@ -56,15 +56,12 @@ jobs:
 env:
   jobs:
     - STACK=heroku-16 TEST_CMD=test/run-deps
-    - STACK=heroku-16 TEST_CMD=test/run-versions
     - STACK=heroku-16 TEST_CMD=test/run-features
 
     - STACK=heroku-18 TEST_CMD=test/run-deps
-    - STACK=heroku-18 TEST_CMD=test/run-versions
     - STACK=heroku-18 TEST_CMD=test/run-features
 
     - STACK=heroku-20 TEST_CMD=test/run-deps
-    - STACK=heroku-20 TEST_CMD=test/run-versions
     - STACK=heroku-20 TEST_CMD=test/run-features
   global:
     - HATCHET_APP_LIMIT=100

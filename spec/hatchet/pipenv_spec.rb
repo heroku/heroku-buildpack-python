@@ -2,7 +2,7 @@
 
 require_relative '../spec_helper'
 
-RSpec.shared_examples 'builds with the requested Python version' do |python_version|
+RSpec.shared_examples 'builds using Pipenv with the requested Python version' do |python_version|
   it "builds with Python #{python_version}" do
     app.deploy do |app|
       # TODO: Fix the "cp: cannot stat" error here and in the other testcases below (W-7924941).
@@ -19,7 +19,7 @@ RSpec.shared_examples 'builds with the requested Python version' do |python_vers
   end
 end
 
-RSpec.describe 'An app using Pipenv' do
+RSpec.describe 'Pipenv support' do
   context 'without a Pipfile.lock' do
     let(:app) { new_app('spec/fixtures/pipenv_no_lockfile') }
 
@@ -83,6 +83,7 @@ RSpec.describe 'An app using Pipenv' do
       let(:allow_failure) { true }
 
       it 'fails the build' do
+        # Python 2.7 is EOL, so it has not been built for Heroku-20.
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
@@ -100,37 +101,37 @@ RSpec.describe 'An app using Pipenv' do
           skip: 'python_version mapping does not currently support 3.5' do
     let(:app) { new_app('spec/fixtures/pipenv_python_3.5') }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_5
+    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_5
   end
 
   context 'with a Pipfile.lock containing python_version 3.6' do
     let(:app) { new_app('spec/fixtures/pipenv_python_3.6') }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_6
+    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_6
   end
 
   context 'with a Pipfile.lock containing python_version 3.7' do
     let(:app) { new_app('spec/fixtures/pipenv_python_3.7') }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_7
+    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_7
   end
 
   context 'with a Pipfile.lock containing python_version 3.8' do
     let(:app) { new_app('spec/fixtures/pipenv_python_3.8') }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_8
+    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_8
   end
 
   context 'with a Pipfile.lock containing python_version 3.9' do
     let(:app) { new_app('spec/fixtures/pipenv_python_3.9') }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
+    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_9
   end
 
   context 'with a Pipfile.lock containing python_full_version 3.9.1' do
     let(:app) { new_app('spec/fixtures/pipenv_python_full_version') }
 
-    include_examples 'builds with the requested Python version', '3.9.1'
+    include_examples 'builds using Pipenv with the requested Python version', '3.9.1'
   end
 
   context 'with a Pipfile.lock containing an invalid python_version',
