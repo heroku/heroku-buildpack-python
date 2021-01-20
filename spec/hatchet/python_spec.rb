@@ -35,32 +35,6 @@ RSpec.describe 'Python' do
     end
   end
 
-  describe 'python versions' do
-    it 'works with 3.7.9' do
-      version = '3.7.9'
-      before_deploy = -> { run!(%(echo "python-#{version}" >> runtime.txt)) }
-      new_app('python_default', before_deploy: before_deploy).deploy do |app|
-        expect(app.run('python -V')).to match(version)
-      end
-    end
-
-    it 'works with 3.8.7' do
-      version = '3.8.7'
-      before_deploy = -> { run!(%(echo "python-#{version}" >> runtime.txt)) }
-      new_app('python_default', before_deploy: before_deploy).deploy do |app|
-        expect(app.run('python -V')).to match(version)
-      end
-    end
-
-    it 'fails with a bad version' do
-      version = '3.8.2.lol'
-      before_deploy = -> { run!(%(echo "python-#{version}" >> runtime.txt)) }
-      new_app('python_default', before_deploy: before_deploy, allow_failure: true).deploy do |app|
-        expect(app.output).to match('not available for this stack')
-      end
-    end
-  end
-
   it 'getting started app has no relative paths' do
     buildpacks = [
       :default,

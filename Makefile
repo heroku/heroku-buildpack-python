@@ -3,7 +3,7 @@
 
 STACK ?= heroku-20
 STACKS ?= heroku-16 heroku-18 heroku-20
-TEST_CMD ?= test/run-versions && test/run-features && test/run-deps
+TEST_CMD ?= test/run-features && test/run-deps
 FIXTURE ?= test/fixtures/requirements-standard
 ENV_FILE ?= builds/dockerenv.default
 BUILDER_IMAGE_PREFIX := heroku-python-build
