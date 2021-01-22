@@ -65,7 +65,7 @@ RSpec.describe 'Python version support' do
           # so that users know why their app is on an older Python version.
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote:  !     Python has released a security update! Please consider upgrading to python-3.6.12
+            remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_6}
             remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
           OUTPUT
           expect(app.run('python -V')).to include('Python 3.6.11')
