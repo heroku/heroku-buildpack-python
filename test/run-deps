@@ -5,20 +5,6 @@ testCollectstatic() {
   assertCaptured "collectstatic"
 }
 
-testNLTK() {
-  local env_dir="$(mktmpdir)"
-  # NOTE: This is a RuntimeWarning emitted by Python 3's runpy.py script
-  # which is what is used when you call `python -m <module>`. This is due to
-  # how nltk imports things. It's not actually an error, but it would probably
-  # be bad to silence in Production.
-  echo 'ignore::RuntimeWarning' > "${env_dir}/PYTHONWARNINGS"
-  compile 'nltk' '' "${env_dir}"
-  assertCaptured "[nltk_data] Downloading package city_database" "STD_ERR"
-  # Can't use `assertCapturedSuccess` since the NLTK downloader outputs all
-  # progress/status messages to stderr (W-8146040).
-  assertCapturedSuccessWithStdErr
-}
-
 pushd $(dirname 0) >/dev/null
 popd >/dev/null
 
