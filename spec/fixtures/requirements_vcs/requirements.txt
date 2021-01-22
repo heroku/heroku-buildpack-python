@@ -1,0 +1,3 @@
+# These rely upon the VCS binaries from the stack image.
+hg+https://www.mercurial-scm.org/repo/python-hglib/#egg=python-hglib
+git+https://github.com/certifi/python-certifi

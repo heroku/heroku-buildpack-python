@@ -1,0 +1,6 @@
+# Packages that rely on headers from the stack image (depending on wheel availability).
+cffi
+mysqlclient
+psycopg2
+pylibmc
+pysqlite3

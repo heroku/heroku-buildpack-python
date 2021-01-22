@@ -5,7 +5,7 @@ branches:
   - main
 
 script:
-  - make test STACK="${STACK}" TEST_CMD="${TEST_CMD}"
+  - make test STACK="${STACK}"
 
 jobs:
   include:
@@ -55,15 +55,10 @@ jobs:
 
 env:
   jobs:
-    - STACK=heroku-16 TEST_CMD=test/run-deps
-    - STACK=heroku-16 TEST_CMD=test/run-features
-
-    - STACK=heroku-18 TEST_CMD=test/run-deps
-    - STACK=heroku-18 TEST_CMD=test/run-features
-
-    - STACK=heroku-20 TEST_CMD=test/run-deps
-    - STACK=heroku-20 TEST_CMD=test/run-features
+    - STACK=heroku-16
+    - STACK=heroku-18
+    - STACK=heroku-20
   global:
-    - HATCHET_APP_LIMIT=100
+    - HATCHET_APP_LIMIT=200
     - HATCHET_RETRIES=3
-    - PARALLEL_SPLIT_TEST_PROCESSES=20
+    - PARALLEL_SPLIT_TEST_PROCESSES=30

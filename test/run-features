@@ -1,25 +1,5 @@
 #!/usr/bin/env bash
 
-# Default Python Versions
-# shellcheck source=bin/default_pythons
-source "bin/default_pythons"
-
-testGitEgg() {
-  compile "git-egg"
-  assertCaptured "requests"
-  assertCapturedSuccess
-}
-
-testSmartRequirements() {
-  local cache_dir="$(mktmpdir)"
-  compile "requirements-standard" "$cache_dir"
-  assertFile "requests" ".heroku/python/requirements-declared.txt"
-  assertCapturedSuccess
-  compile "psycopg2" "$cache_dir"
-  assertFile "psycopg2" ".heroku/python/requirements-declared.txt"
-  assertCapturedSuccess
-}
-
 testStackChange() {
   local cache_dir="$(mktmpdir)"
   mkdir -p "${cache_dir}/.heroku"
@@ -27,20 +7,6 @@ testStackChange() {
   compile "requirements-standard" "$cache_dir"
   assertCaptured "clearing cache"
   assertFile "$STACK" ".heroku/python-stack"
-  assertCapturedSuccess
-}
-
-testSetupPy() {
-  compile "setup-py"
-  assertCaptured "maya"
-  # Can't use `assertCapturedSuccess` since stderr contains:
-  # "cp: cannot stat '/tmp/build_*/requirements.txt': No such file or directory" (W-7924941)
-  assertCapturedSuccessWithStdErr
-}
-
-testStandardRequirements() {
-  compile "requirements-standard"
-  assertCaptured "requests"
   assertCapturedSuccess
 }
 
