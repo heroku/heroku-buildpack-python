@@ -1,34 +1,8 @@
 #!/usr/bin/env bash
 
-# Default Python Versions
-# shellcheck source=bin/default_pythons
-source "bin/default_pythons"
-
-testAirflow() {
-  local env_dir="$(mktmpdir)"
-  echo 'yes' > "${env_dir}/SLUGIFY_USES_TEXT_UNIDECODE"
-  compile 'airflow' '' "${env_dir}"
-  assertCaptured "apache-airflow==1.10.2"
-  assertCapturedSuccess
-}
-
 testCollectstatic() {
   compile "collectstatic"
   assertCaptured "collectstatic"
-}
-
-testBuildWithGeoLibrariesWarning() {
-  local env_dir="$(mktmpdir)"
-  echo '1' > "${env_dir}/BUILD_WITH_GEO_LIBRARIES"
-  compile 'gdal' '' "${env_dir}"
-  assertCaptured " !     The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functonality"
-  assertCapturedError
-}
-
-testGDALWarning() {
-  compile 'gdal'
-  assertCaptured " !     Hello! Package installation failed since the GDAL library was not found."
-  assertCapturedError
 }
 
 testNLTK() {
@@ -43,41 +17,6 @@ testNLTK() {
   # Can't use `assertCapturedSuccess` since the NLTK downloader outputs all
   # progress/status messages to stderr (W-8146040).
   assertCapturedSuccessWithStdErr
-}
-
-testPsycopg2() {
-  compile "psycopg2"
-  assertCaptured "psycopg2"
-  assertCapturedSuccess
-}
-
-testPysqlite() {
-  # pysqlite does not support Python 3 (since the sqlite3 stdlib can be used there),
-  # so we have to test with Python 2, which we've not made available for Heroku-20.
-  if [[ $STACK == "heroku-20" ]]; then
-    return
-  fi
-  compile "pysqlite"
-  assertCaptured "pysqlite"
-  assertCapturedSuccess
-}
-
-testCffi() {
-  compile "cffi"
-  assertCaptured "cffi"
-  assertCapturedSuccess
-}
-
-testPylibmc() {
-  compile "pylibmc"
-  assertCaptured "pylibmc"
-  assertCapturedSuccess
-}
-
-testMercurial() {
-  compile "requirements-mercurial"
-  assertCaptured "Cloning hg"
-  assertCapturedSuccess
 }
 
 pushd $(dirname 0) >/dev/null
