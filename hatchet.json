@@ -2,8 +2,7 @@
   "hatchet": {
     "directory": ".hatchet/"
   },
-  "python": [
-    "https://github.com/heroku/python-getting-started",
-    "https://github.com/sharpstone/python_default"
+  "heroku": [
+    "https://github.com/heroku/python-getting-started"
   ]
 }

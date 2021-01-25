@@ -2,7 +2,7 @@
 
 require_relative '../spec_helper'
 
-RSpec.describe 'Python' do
+RSpec.describe 'Python getting started project' do
   it 'getting started app has no relative paths' do
     buildpacks = [
       :default,
