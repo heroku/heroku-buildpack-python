@@ -1,27 +1,20 @@
-language: minimal
 dist: focal
+language: ruby
+rvm:
+  - 2.7
 branches:
   only:
   - main
 
-script:
-  - make test STACK="${STACK}"
-
 jobs:
   include:
   - name: Linters (shellcheck and rubocop)
-    language: ruby
-    rvm:
-      - 2.7
     script:
       - make lint-scripts
       - make lint-ruby
 
   - name: Hatchet integration tests (Heroku-16)
     if: env(HEROKU_API_USER) IS present AND env(HEROKU_API_KEY) IS present
-    language: ruby
-    rvm:
-      - 2.7
     env:
       - STACK=heroku-16
     before_script:
@@ -31,9 +24,6 @@ jobs:
 
   - name: Hatchet integration tests (Heroku-18)
     if: env(HEROKU_API_USER) IS present AND env(HEROKU_API_KEY) IS present
-    language: ruby
-    rvm:
-      - 2.7
     env:
       - STACK=heroku-18
     before_script:
@@ -43,9 +33,6 @@ jobs:
 
   - name: Hatchet integration tests (Heroku-20)
     if: env(HEROKU_API_USER) IS present AND env(HEROKU_API_KEY) IS present
-    language: ruby
-    rvm:
-      - 2.7
     env:
       - STACK=heroku-20
     before_script:
@@ -54,10 +41,6 @@ jobs:
       - bundle exec parallel_split_test spec/hatchet/
 
 env:
-  jobs:
-    - STACK=heroku-16
-    - STACK=heroku-18
-    - STACK=heroku-20
   global:
     - HATCHET_APP_LIMIT=200
     - HATCHET_RETRIES=3

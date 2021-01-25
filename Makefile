@@ -1,9 +1,8 @@
 # These targets are not files
-.PHONY: check test compile builder-image buildenv deploy-runtimes tools
+.PHONY: lint lint-scripts lint-ruby compile builder-image buildenv deploy-runtimes
 
 STACK ?= heroku-20
 STACKS ?= heroku-16 heroku-18 heroku-20
-TEST_CMD ?= test/run-features && test/run-deps
 FIXTURE ?= spec/fixtures/python_version_unspecified
 ENV_FILE ?= builds/dockerenv.default
 BUILDER_IMAGE_PREFIX := heroku-python-build
@@ -20,12 +19,6 @@ lint-scripts:
 
 lint-ruby:
 	@bundle exec rubocop
-
-test:
-	@echo "Running tests using: STACK=$(STACK) TEST_CMD='$(TEST_CMD)'"
-	@echo
-	@docker run --rm -it -v $(PWD):/buildpack:ro -e "STACK=$(STACK)" "$(STACK_IMAGE_TAG)" bash -c 'cp -r /buildpack /buildpack_test && cd /buildpack_test && $(TEST_CMD)'
-	@echo
 
 compile:
 	@echo "Running compile using: STACK=$(STACK) FIXTURE=$(FIXTURE)"
