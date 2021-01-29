@@ -2,7 +2,7 @@
 
 # Heroku Buildpack: Python
 
-[![Build Status](https://travis-ci.com/heroku/heroku-buildpack-python.svg?branch=main)](https://travis-ci.com/heroku/heroku-buildpack-python)
+[![CircleCI](https://circleci.com/gh/heroku/heroku-buildpack-python.svg?style=svg)](https://circleci.com/gh/heroku/heroku-buildpack-python)
 
 This is the official [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) for Python apps.
 
