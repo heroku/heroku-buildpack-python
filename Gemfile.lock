@@ -39,6 +39,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.1)
+    rspec_junit_formatter (0.4.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (1.8.1)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
@@ -66,6 +68,7 @@ DEPENDENCIES
   parallel_split_test
   rspec-core
   rspec-expectations
+  rspec_junit_formatter
   rubocop
   rubocop-rspec
 

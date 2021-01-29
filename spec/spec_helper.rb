@@ -20,6 +20,12 @@ LATEST_PYPY_2_7 = '7.3.2'
 LATEST_PYPY_3_6 = '7.3.2'
 DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_6
 
+# Work around the return value for `default_buildpack` changing after deploy:
+# https://github.com/heroku/hatchet/issues/180
+# Once we've updated to Hatchet release that includes the fix, consumers
+# of this can switch back to using `app.class.default_buildpack`
+DEFAULT_BUILDPACK_URL = Hatchet::App.default_buildpack
+
 RSpec.configure do |config|
   # Disables the legacy rspec globals and monkey-patched `should` syntax.
   config.disable_monkey_patching!
@@ -48,7 +54,7 @@ end
 def update_buildpacks(app, buildpacks)
   # Updates the list of buildpacks for an existing app, until Hatchet supports this natively:
   # https://github.com/heroku/hatchet/issues/166
-  buildpack_list = buildpacks.map { |b| { buildpack: (b == :default ? app.class.default_buildpack : b) } }
+  buildpack_list = buildpacks.map { |b| { buildpack: (b == :default ? DEFAULT_BUILDPACK_URL : b) } }
   app.api_rate_limit.call.buildpack_installation.update(app.name, updates: buildpack_list)
 end
 

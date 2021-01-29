@@ -12,7 +12,7 @@ RSpec.describe 'Buildpack detection' do
     it 'fails detection' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> App not compatible with buildpack: #{Hatchet::App.default_buildpack}
+          remote: -----> App not compatible with buildpack: #{DEFAULT_BUILDPACK_URL}
           remote:        More info: https://devcenter.heroku.com/articles/buildpacks#detection-failure
         OUTPUT
       end
