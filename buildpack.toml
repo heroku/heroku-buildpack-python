@@ -4,7 +4,6 @@ name = "Python"
 [publish.Ignore]
 files = [
   ".circleci/",
-  ".git2gus/",
   ".github/",
   "builds/",
   "spec/",
