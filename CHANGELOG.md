@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Update pipenv from `2018.5.18` to `2020.11.15` ([#1169](https://github.com/heroku/heroku-buildpack-python/pull/1169)).
+- Remove pinning of pip to `9.0.2` when using pipenv ([#1169](https://github.com/heroku/heroku-buildpack-python/pull/1169)).
 
 ## v188 (2020-12-21)
 

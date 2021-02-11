@@ -49,22 +49,22 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
         fi
 
-        export PIPENV_VERSION="2018.5.18"
+        PIPENV_VERSION='2020.11.15'
 
         # Install pipenv.
         # Due to weird old pip behavior and pipenv behavior, pipenv upgrades pip
         # to latest if only --upgrade is specified. Specify upgrade strategy to
         # avoid this eager behavior.
-        /app/.heroku/python/bin/pip install pipenv==$PIPENV_VERSION --upgrade --upgrade-strategy only-if-needed &> /dev/null
+        /app/.heroku/python/bin/pip install "pipenv==${PIPENV_VERSION}" --upgrade --upgrade-strategy only-if-needed &> /dev/null
 
         # Install the test dependencies, for CI.
         if [ "$INSTALL_TEST" ]; then
-            puts-step "Installing test dependencies…"
+            puts-step "Installing test dependencies"
             /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
 
         # Install the dependencies.
         elif [[ ! -f Pipfile.lock ]]; then
-            puts-step "Installing dependencies with Pipenv $PIPENV_VERSION…"
+            puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
             /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
 
         else
@@ -72,7 +72,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             cp requirements.txt .heroku/python/requirements-declared.txt
             openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
 
-            puts-step "Installing dependencies with Pipenv $PIPENV_VERSION…"
+            puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
             /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
         fi
     fi
