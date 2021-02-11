@@ -5,93 +5,93 @@
 
 ## v188 (2020-12-21)
 
-- Python 3.8.7 is now available (CPython) (#1125).
+- Python 3.8.7 is now available (CPython) ([#1125](https://github.com/heroku/heroku-buildpack-python/pull/1125)).
 
 ## v187 (2020-12-08)
 
-- Python 3.9.1 is now available (CPython) (#1127).
+- Python 3.9.1 is now available (CPython) ([#1127](https://github.com/heroku/heroku-buildpack-python/pull/1127)).
 
 ## v186 (2020-11-18)
 
-- Update the `BUILD_WITH_GEO_LIBRARIES` error message (#1121).
-- Switch NLTK feature detection away from `sp-grep` (#1119).
-- Switch Django collectstatic feature detection away from `sp-grep` (#1119).
-- Remove vendored `sp-grep` script (#1119).
-- Remove vendored `pip-diff` script (#1118).
-- Remove vendored `pip-grep` script (#1116).
+- Update the `BUILD_WITH_GEO_LIBRARIES` error message ([#1121](https://github.com/heroku/heroku-buildpack-python/pull/1121)).
+- Switch NLTK feature detection away from `sp-grep` ([#1119](https://github.com/heroku/heroku-buildpack-python/pull/1119)).
+- Switch Django collectstatic feature detection away from `sp-grep` ([#1119](https://github.com/heroku/heroku-buildpack-python/pull/1119)).
+- Remove vendored `sp-grep` script ([#1119](https://github.com/heroku/heroku-buildpack-python/pull/1119)).
+- Remove vendored `pip-diff` script ([#1118](https://github.com/heroku/heroku-buildpack-python/pull/1118)).
+- Remove vendored `pip-grep` script ([#1116](https://github.com/heroku/heroku-buildpack-python/pull/1116)).
 
 ## v185 (2020-11-12)
 
-- Error if the unsupported `BUILD_WITH_GEO_LIBRARIES` env var is set (#1115).
-- Remove deprecated GDAL/GEOS/PROJ support (#1113).
-- Remove vendored `jq` binary (#1112).
-- Remove redundant Mercurial install step (#1111).
-- Remove support for the Cedar-14 stack (#1110).
+- Error if the unsupported `BUILD_WITH_GEO_LIBRARIES` env var is set ([#1115](https://github.com/heroku/heroku-buildpack-python/pull/1115)).
+- Remove deprecated GDAL/GEOS/PROJ support ([#1113](https://github.com/heroku/heroku-buildpack-python/pull/1113)).
+- Remove vendored `jq` binary ([#1112](https://github.com/heroku/heroku-buildpack-python/pull/1112)).
+- Remove redundant Mercurial install step ([#1111](https://github.com/heroku/heroku-buildpack-python/pull/1111)).
+- Remove support for the Cedar-14 stack ([#1110](https://github.com/heroku/heroku-buildpack-python/pull/1110)).
 
 ## v184 (2020-10-21)
 
-- Vendor buildpack-stdlib instead of fetching from S3 (#1100).
-- Fix metric names for metrics emitted within `sub_env` (#1099).
+- Vendor buildpack-stdlib instead of fetching from S3 ([#1100](https://github.com/heroku/heroku-buildpack-python/pull/1100)).
+- Fix metric names for metrics emitted within `sub_env` ([#1099](https://github.com/heroku/heroku-buildpack-python/pull/1099)).
 
 ## v183 (2020-10-12)
 
-- Add support for Heroku-20 (#968).
+- Add support for Heroku-20 ([#968](https://github.com/heroku/heroku-buildpack-python/pull/968)).
 
 ## v182 (2020-10-06)
 
-- Python 3.9.0 is now available (CPython) (#1090).
-- Migrate from the `lang-python` S3 bucket to `heroku-buildpack-python` (#1089).
-- Remove `vendor/shunit2` (#1086).
-- Replace `BUILDPACK_VENDOR_URL` and `USE_STAGING_BINARIES` with `BUILDPACK_S3_BASE_URL` (#1085).
+- Python 3.9.0 is now available (CPython) ([#1090](https://github.com/heroku/heroku-buildpack-python/pull/1090)).
+- Migrate from the `lang-python` S3 bucket to `heroku-buildpack-python` ([#1089](https://github.com/heroku/heroku-buildpack-python/pull/1089)).
+- Remove `vendor/shunit2` ([#1086](https://github.com/heroku/heroku-buildpack-python/pull/1086)).
+- Replace `BUILDPACK_VENDOR_URL` and `USE_STAGING_BINARIES` with `BUILDPACK_S3_BASE_URL` ([#1085](https://github.com/heroku/heroku-buildpack-python/pull/1085)).
 
 ## v181 (2020-09-29)
 
-- PyPy 2.7 and 3.6, version 7.3.2 are now available (Note: PyPy support is in beta) (#1081).
+- PyPy 2.7 and 3.6, version 7.3.2 are now available (Note: PyPy support is in beta) ([#1081](https://github.com/heroku/heroku-buildpack-python/pull/1081)).
 
 ## v180 (2020-09-24)
 
-- Python 3.8.6 is now available (CPython) (#1072).
+- Python 3.8.6 is now available (CPython) ([#1072](https://github.com/heroku/heroku-buildpack-python/pull/1072)).
 
 ## v179 (2020-09-23)
 
-- Remove duplicate pipenv metric event (#1070).
-- Emit metrics for how the Python version was chosen for an app (#1069).
-- Emit Python version metric events for all builds, not just clean installs (#1066).
+- Remove duplicate pipenv metric event ([#1070](https://github.com/heroku/heroku-buildpack-python/pull/1070)).
+- Emit metrics for how the Python version was chosen for an app ([#1069](https://github.com/heroku/heroku-buildpack-python/pull/1069)).
+- Emit Python version metric events for all builds, not just clean installs ([#1066](https://github.com/heroku/heroku-buildpack-python/pull/1066)).
 
 ## v178 (2020-09-07)
 
-- Python 3.5.10 is now available (CPython) (#1062).
+- Python 3.5.10 is now available (CPython) ([#1062](https://github.com/heroku/heroku-buildpack-python/pull/1062)).
 
 ## v177 (2020-08-18)
 
-- Python 3.6.12 and 3.7.9 are now available (CPython) (#1054).
-- The default Python version for new apps is now 3.6.12 (previously 3.6.11) (#1054).
+- Python 3.6.12 and 3.7.9 are now available (CPython) ([#1054](https://github.com/heroku/heroku-buildpack-python/pull/1054)).
+- The default Python version for new apps is now 3.6.12 (previously 3.6.11) ([#1054](https://github.com/heroku/heroku-buildpack-python/pull/1054)).
 
 ## v176 (2020-08-12)
 
-- Rebuild the Python 3.4.10 archives with the correct version of Python (#1048).
-- Fix the security update version check message for apps using PyPy (#1040).
-- Remove `vendor/test-utils` (#1043).
+- Rebuild the Python 3.4.10 archives with the correct version of Python ([#1048](https://github.com/heroku/heroku-buildpack-python/pull/1048)).
+- Fix the security update version check message for apps using PyPy ([#1040](https://github.com/heroku/heroku-buildpack-python/pull/1040)).
+- Remove `vendor/test-utils` ([#1043](https://github.com/heroku/heroku-buildpack-python/pull/1043)).
 
 ## v175 (2020-08-05)
 
-- Update pip from 20.0.2 to 20.1.1 for Python 2.7 and Python 3.5+ (#1030).
-- Update setuptools from 39.0.1 to: (#1024)
+- Update pip from 20.0.2 to 20.1.1 for Python 2.7 and Python 3.5+ ([#1030](https://github.com/heroku/heroku-buildpack-python/pull/1030)).
+- Update setuptools from 39.0.1 to: ([#1024](https://github.com/heroku/heroku-buildpack-python/pull/1024))
   - 44.1.1 for Python 2.7
   - 43.0.0 for Python 3.4
   - 47.1.1 for Python 3.5+
-- Switch the `heroku-buildpack-python` repository default branch from `master` to `main` (#1029).
+- Switch the `heroku-buildpack-python` repository default branch from `master` to `main` ([#1029](https://github.com/heroku/heroku-buildpack-python/pull/1029)).
 
 ## v174 (2020-07-30)
 
-- For repeat builds, also manage the installed versions of setuptools/wheel, rather than just that of pip (#1007).
-- Install an explicit version of wheel rather than the latest release at the time (#1007).
-- Output the installed version of pip, setuptools and wheel in the build log (#1007).
-- Errors installing pip/setuptools/wheel are now displayed in the build output and fail the build early (#1007).
-- Install pip using itself rather than `get-pip.py` (#1007).
-- Disable pip's version check + cache when installing pip/setuptools/wheel (#1007).
-- Install setuptools from PyPI rather than a vendored copy (#1007).
-- Reduce the number of environment variables exposed to `bin/{pre,post}_compile` and other subprocesses (#1011).
+- For repeat builds, also manage the installed versions of setuptools/wheel, rather than just that of pip ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Install an explicit version of wheel rather than the latest release at the time ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Output the installed version of pip, setuptools and wheel in the build log ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Errors installing pip/setuptools/wheel are now displayed in the build output and fail the build early ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Install pip using itself rather than `get-pip.py` ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Disable pip's version check + cache when installing pip/setuptools/wheel ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Install setuptools from PyPI rather than a vendored copy ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Reduce the number of environment variables exposed to `bin/{pre,post}_compile` and other subprocesses ([#1011](https://github.com/heroku/heroku-buildpack-python/pull/1011)).
 
 ## v173 (2020-07-21)
 
@@ -416,9 +416,7 @@ General improvements.
 
 - Fix for Heroku CI.
 - Use `pkg_resources` to check if a distribution is installed instead of
-  parsing `requirements.txt`. ([#395][395])
-
-[395]: https://github.com/heroku/heroku-buildpack-python/pull/395
+  parsing `requirements.txt`. ([#395](https://github.com/heroku/heroku-buildpack-python/pull/395))
 
 ## v103
 
