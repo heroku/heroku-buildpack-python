@@ -9,7 +9,7 @@ RSpec.describe 'Stack changes' do
     # can successfully read the stack metadata written to the build cache in the past.
     # The buildpack version chosen is one which had an older default Python version, so
     # we can also prove that clearing the cache didn't lose the Python version metadata.
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v171'] }
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v189'] }
     let(:app) { new_app('spec/fixtures/python_version_unspecified', buildpacks: buildpacks) }
 
     it 'clears the cache before installing again whilst preserving the sticky Python version' do
@@ -28,7 +28,7 @@ RSpec.describe 'Stack changes' do
           remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Stack has changed from heroku-18 to heroku-20, clearing cache
           remote: -----> No change in requirements detected, installing from cache
-          remote: -----> Installing python-3.6.11
+          remote: -----> Installing python-3.6.12
           remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
