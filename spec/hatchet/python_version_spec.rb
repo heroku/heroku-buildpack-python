@@ -46,15 +46,11 @@ RSpec.describe 'Python version support' do
       end
     end
 
-    context 'with an app last built using an older default Python version', stacks: %w[heroku-16 heroku-18] do
+    context 'with an app last built using an older default Python version' do
       # This test performs an initial build using an older buildpack version, followed
       # by a build using the current version. This ensures that the current buildpack
       # can successfully read the version metadata written to the build cache in the past.
-      # The test has to be skipped on Heroku-20, since v171 of the buildpack uses the old
-      # S3 bucket, which doesn't have any runtimes for Heroku-20. Once the default Python
-      # version changes again in the future, this test can be updated to use a slightly
-      # newer historic buildpack release that does support Heroku-20.
-      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v171'] }
+      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v189'] }
 
       it 'builds with the same Python version as the last build' do
         app.deploy do |app|
@@ -68,7 +64,7 @@ RSpec.describe 'Python version support' do
             remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_6}
             remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
           OUTPUT
-          expect(app.run('python -V')).to include('Python 3.6.11')
+          expect(app.run('python -V')).to include('Python 3.6.12')
         end
       end
     end
@@ -152,13 +148,13 @@ RSpec.describe 'Python version support' do
     end
   end
 
-  context 'when runtime.txt contains python-3.6.12' do
+  context 'when runtime.txt contains python-3.6.13' do
     let(:app) { new_app('spec/fixtures/python_3.6') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_6
   end
 
-  context 'when runtime.txt contains python-3.7.9' do
+  context 'when runtime.txt contains python-3.7.10' do
     let(:app) { new_app('spec/fixtures/python_3.7') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_7
