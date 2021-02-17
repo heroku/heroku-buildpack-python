@@ -3,8 +3,6 @@
 ENV['HATCHET_BUILDPACK_BASE'] ||= 'https://github.com/heroku/heroku-buildpack-python.git'
 ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-20'
 
-require 'English'
-
 require 'rspec/core'
 require 'hatchet'
 
@@ -48,11 +46,4 @@ def update_buildpacks(app, buildpacks)
   # https://github.com/heroku/hatchet/issues/166
   buildpack_list = buildpacks.map { |b| { buildpack: (b == :default ? DEFAULT_BUILDPACK_URL : b) } }
   app.api_rate_limit.call.buildpack_installation.update(app.name, updates: buildpack_list)
-end
-
-def run!(cmd)
-  out = `#{cmd}`
-  raise "Error running command #{cmd} with output: #{out}" unless $CHILD_STATUS.success?
-
-  out
 end
