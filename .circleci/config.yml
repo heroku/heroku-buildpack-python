@@ -63,11 +63,6 @@ jobs:
       - checkout
       - install-ruby-dependencies
       - run:
-          # This step can be removed once we have a newer Hatchet release that includes:
-          # https://github.com/heroku/hatchet/pull/171
-          name: Install Heroku CLI
-          command: curl --fail --retry 3 --retry-delay 1 --connect-timeout 3 --max-time 30 https://cli-assets.heroku.com/install.sh | sh
-      - run:
           name: Hatchet setup
           command: bundle exec hatchet ci:setup
       - run:
