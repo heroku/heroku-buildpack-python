@@ -37,10 +37,6 @@ RSpec.configure do |config|
   config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(ENV['HATCHET_DEFAULT_STACK']) }
 end
 
-def new_app(*args, **kwargs)
-  Hatchet::Runner.new(*args, **kwargs)
-end
-
 def clean_output(output)
   # Remove trailing whitespace characters added by Git:
   # https://github.com/heroku/hatchet/issues/162

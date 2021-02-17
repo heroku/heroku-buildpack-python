@@ -7,7 +7,7 @@ RSpec.describe 'Buildpack detection' do
   # are already tested in the specs for general buildpack functionality.
 
   context 'when there are no recognised Python project files' do
-    let(:app) { new_app('spec/fixtures/no_python_project_files', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/no_python_project_files', allow_failure: true) }
 
     it 'fails detection' do
       app.deploy do |app|

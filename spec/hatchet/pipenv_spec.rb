@@ -21,7 +21,7 @@ end
 
 RSpec.describe 'Pipenv support' do
   context 'without a Pipfile.lock' do
-    let(:app) { new_app('spec/fixtures/pipenv_no_lockfile') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_no_lockfile') }
 
     it 'builds with the default Python version using just the Pipfile' do
       app.deploy do |app|
@@ -40,7 +40,7 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'with a Pipfile.lock but no Python version specified' do
-    let(:app) { new_app('spec/fixtures/pipenv_python_version_unspecified') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_unspecified') }
 
     it 'builds with the default Python version' do
       app.deploy do |app|
@@ -59,7 +59,7 @@ RSpec.describe 'Pipenv support' do
 
   context 'with a Pipfile.lock containing python_version 2.7' do
     let(:allow_failure) { false }
-    let(:app) { new_app('spec/fixtures/pipenv_python_2.7', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_2.7', allow_failure: allow_failure) }
 
     context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
       it 'builds with the latest Python 2.7' do
@@ -99,44 +99,44 @@ RSpec.describe 'Pipenv support' do
   # Python version to be used instead, due to W-8104668.
   context 'with a Pipfile.lock containing python_version 3.5',
           skip: 'python_version mapping does not currently support 3.5' do
-    let(:app) { new_app('spec/fixtures/pipenv_python_3.5') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.5') }
 
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_5
   end
 
   context 'with a Pipfile.lock containing python_version 3.6' do
-    let(:app) { new_app('spec/fixtures/pipenv_python_3.6') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.6') }
 
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_6
   end
 
   context 'with a Pipfile.lock containing python_version 3.7' do
-    let(:app) { new_app('spec/fixtures/pipenv_python_3.7') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.7') }
 
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_7
   end
 
   context 'with a Pipfile.lock containing python_version 3.8' do
-    let(:app) { new_app('spec/fixtures/pipenv_python_3.8') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.8') }
 
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_8
   end
 
   context 'with a Pipfile.lock containing python_version 3.9' do
-    let(:app) { new_app('spec/fixtures/pipenv_python_3.9') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.9') }
 
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_9
   end
 
   context 'with a Pipfile.lock containing python_full_version 3.9.1' do
-    let(:app) { new_app('spec/fixtures/pipenv_python_full_version') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version') }
 
     include_examples 'builds using Pipenv with the requested Python version', '3.9.1'
   end
 
   context 'with a Pipfile.lock containing an invalid python_version',
           skip: 'unknown python_version values are currently ignored (W-8104668)' do
-    let(:app) { new_app('spec/fixtures/pipenv_python_version_invalid', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_invalid', allow_failure: true) }
 
     it 'fails the build' do
       app.deploy do |app|
@@ -150,7 +150,7 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'with a Pipfile.lock containing an invalid python_full_version' do
-    let(:app) { new_app('spec/fixtures/pipenv_python_full_version_invalid', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version_invalid', allow_failure: true) }
 
     it 'fails the build' do
       app.deploy do |app|
@@ -164,7 +164,7 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'when there is a both a Pipfile.lock python_version and a runtime.txt' do
-    let(:app) { new_app('spec/fixtures/pipenv_and_runtime_txt') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_and_runtime_txt') }
 
     it 'builds with the Python version from runtime.txt' do
       app.deploy do |app|
@@ -182,7 +182,7 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'when there is both a Pipfile.lock and a requirements.txt' do
-    let(:app) { new_app('spec/fixtures/pipenv_and_requirements_txt') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_and_requirements_txt') }
 
     it 'builds with Pipenv rather than pip' do
       app.deploy do |app|
@@ -199,7 +199,7 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'when the Pipfile.lock is out of sync with Pipfile' do
-    let(:app) { new_app('spec/fixtures/pipenv_lockfile_out_of_sync', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_lockfile_out_of_sync', allow_failure: true) }
 
     it 'fails the build' do
       app.deploy do |app|

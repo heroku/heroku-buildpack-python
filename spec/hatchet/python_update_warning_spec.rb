@@ -30,7 +30,7 @@ end
 RSpec.describe 'Python update warnings' do
   context 'with a runtime.txt containing python-2.7.17' do
     let(:allow_failure) { false }
-    let(:app) { new_app('spec/fixtures/python_2.7_outdated', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_2.7_outdated', allow_failure: allow_failure) }
 
     context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
       it 'warns that Python 2.7.17 is both EOL and not the latest patch release' do
@@ -56,7 +56,7 @@ RSpec.describe 'Python update warnings' do
 
   context 'with a runtime.txt containing python-3.4.9' do
     let(:allow_failure) { false }
-    let(:app) { new_app('spec/fixtures/python_3.4_outdated', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.4_outdated', allow_failure: allow_failure) }
 
     context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
       include_examples 'warns there is a Python update available', '3.4.9', LATEST_PYTHON_3_4
@@ -71,7 +71,7 @@ RSpec.describe 'Python update warnings' do
 
   context 'with a runtime.txt containing python-3.5.9' do
     let(:allow_failure) { false }
-    let(:app) { new_app('spec/fixtures/python_3.5_outdated', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.5_outdated', allow_failure: allow_failure) }
 
     context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
       include_examples 'warns there is a Python update available', '3.5.9', LATEST_PYTHON_3_5
@@ -85,31 +85,31 @@ RSpec.describe 'Python update warnings' do
   end
 
   context 'with a runtime.txt containing python-3.6.11' do
-    let(:app) { new_app('spec/fixtures/python_3.6_outdated') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6_outdated') }
 
     include_examples 'warns there is a Python update available', '3.6.11', LATEST_PYTHON_3_6
   end
 
   context 'with a runtime.txt containing python-3.7.8' do
-    let(:app) { new_app('spec/fixtures/python_3.7_outdated') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.7_outdated') }
 
     include_examples 'warns there is a Python update available', '3.7.8', LATEST_PYTHON_3_7
   end
 
   context 'with a runtime.txt containing python-3.8.6' do
-    let(:app) { new_app('spec/fixtures/python_3.8_outdated') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.8_outdated') }
 
     include_examples 'warns there is a Python update available', '3.8.6', LATEST_PYTHON_3_8
   end
 
   context 'with a runtime.txt containing python-3.9.0' do
-    let(:app) { new_app('spec/fixtures/python_3.9_outdated') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9_outdated') }
 
     include_examples 'warns there is a Python update available', '3.9.0', LATEST_PYTHON_3_9
   end
 
   context 'with a runtime.txt containing pypy2.7-7.3.1' do
-    let(:app) { new_app('spec/fixtures/pypy_2.7_outdated') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pypy_2.7_outdated') }
 
     it 'warns there is a PyPy update available' do
       app.deploy do |app|
@@ -123,7 +123,7 @@ RSpec.describe 'Python update warnings' do
   end
 
   context 'with a runtime.txt containing pypy3.6-7.3.1' do
-    let(:app) { new_app('spec/fixtures/pypy_3.6_outdated') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pypy_3.6_outdated') }
 
     it 'warns there is a PyPy update available' do
       app.deploy do |app|
