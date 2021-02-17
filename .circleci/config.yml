@@ -53,10 +53,10 @@ jobs:
     working_directory: /mnt/ramdisk/project
     environment:
       HATCHET_APP_LIMIT: 200
+      HATCHET_DEFAULT_STACK: << parameters.stack >>
       HATCHET_RETRIES: 3
       HEROKU_DISABLE_AUTOUPDATE: 1
       PARALLEL_SPLIT_TEST_PROCESSES: 60
-      STACK: << parameters.stack >>
       # Make Hatchet create the temporary Git repos on the faster ramdisk.
       TMPDIR: /mnt/ramdisk
     steps:

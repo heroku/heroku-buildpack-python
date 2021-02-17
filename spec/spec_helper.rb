@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-ENV['HATCHET_BUILDPACK_BASE'] = 'https://github.com/heroku/heroku-buildpack-python.git'
+ENV['HATCHET_BUILDPACK_BASE'] ||= 'https://github.com/heroku/heroku-buildpack-python.git'
+ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-20'
 
 require 'English'
 
 require 'rspec/core'
 require 'hatchet'
-
-DEFAULT_STACK = ENV['STACK'] || 'heroku-20'
 
 LATEST_PYTHON_2_7 = '2.7.18'
 LATEST_PYTHON_3_4 = '3.4.10'
@@ -35,13 +34,10 @@ RSpec.configure do |config|
   # with `:focus` metadata via the `fit`, `fcontext` and `fdescribe` aliases.
   config.filter_run_when_matching :focus
   # Allows declaring on which stacks a test/group should run by tagging it with `stacks`.
-  config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(DEFAULT_STACK) }
+  config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(ENV['HATCHET_DEFAULT_STACK']) }
 end
 
 def new_app(*args, **kwargs)
-  # Wrapping app creation to set the default stack, in lieu of being able to configure it globally:
-  # https://github.com/heroku/hatchet/issues/163
-  kwargs[:stack] ||= DEFAULT_STACK
   Hatchet::Runner.new(*args, **kwargs)
 end
 
