@@ -53,20 +53,15 @@ jobs:
     working_directory: /mnt/ramdisk/project
     environment:
       HATCHET_APP_LIMIT: 200
+      HATCHET_DEFAULT_STACK: << parameters.stack >>
       HATCHET_RETRIES: 3
       HEROKU_DISABLE_AUTOUPDATE: 1
       PARALLEL_SPLIT_TEST_PROCESSES: 60
-      STACK: << parameters.stack >>
       # Make Hatchet create the temporary Git repos on the faster ramdisk.
       TMPDIR: /mnt/ramdisk
     steps:
       - checkout
       - install-ruby-dependencies
-      - run:
-          # This step can be removed once we have a newer Hatchet release that includes:
-          # https://github.com/heroku/hatchet/pull/171
-          name: Install Heroku CLI
-          command: curl --fail --retry 3 --retry-delay 1 --connect-timeout 3 --max-time 30 https://cli-assets.heroku.com/install.sh | sh
       - run:
           name: Hatchet setup
           command: bundle exec hatchet ci:setup

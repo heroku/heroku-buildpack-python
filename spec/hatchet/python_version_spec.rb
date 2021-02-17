@@ -33,7 +33,7 @@ end
 RSpec.describe 'Python version support' do
   context 'when no Python version is specified' do
     let(:buildpacks) { [:default] }
-    let(:app) { new_app('spec/fixtures/python_version_unspecified', buildpacks: buildpacks) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', buildpacks: buildpacks) }
 
     context 'with a new app' do
       it 'builds with the default Python version' do
@@ -72,7 +72,7 @@ RSpec.describe 'Python version support' do
 
   context 'when runtime.txt contains python-2.7.18' do
     let(:allow_failure) { false }
-    let(:app) { new_app('spec/fixtures/python_2.7', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_2.7', allow_failure: allow_failure) }
 
     context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
       it 'builds with Python 2.7.18' do
@@ -102,7 +102,7 @@ RSpec.describe 'Python version support' do
 
   context 'when runtime.txt contains python-3.4.10' do
     let(:allow_failure) { false }
-    let(:app) { new_app('spec/fixtures/python_3.4', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.4', allow_failure: allow_failure) }
 
     context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
       it 'builds with Python 3.4.10' do
@@ -134,7 +134,7 @@ RSpec.describe 'Python version support' do
 
   context 'when runtime.txt contains python-3.5.10' do
     let(:allow_failure) { false }
-    let(:app) { new_app('spec/fixtures/python_3.5', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.5', allow_failure: allow_failure) }
 
     context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
       include_examples 'builds with the requested Python version', LATEST_PYTHON_3_5
@@ -149,31 +149,31 @@ RSpec.describe 'Python version support' do
   end
 
   context 'when runtime.txt contains python-3.6.13' do
-    let(:app) { new_app('spec/fixtures/python_3.6') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_6
   end
 
   context 'when runtime.txt contains python-3.7.10' do
-    let(:app) { new_app('spec/fixtures/python_3.7') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.7') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_7
   end
 
   context 'when runtime.txt contains python-3.8.7' do
-    let(:app) { new_app('spec/fixtures/python_3.8') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.8') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_8
   end
 
   context 'when runtime.txt contains python-3.9.1' do
-    let(:app) { new_app('spec/fixtures/python_3.9') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
   end
 
   context 'when runtime.txt contains pypy2.7-7.3.2' do
-    let(:app) { new_app('spec/fixtures/pypy_2.7') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pypy_2.7') }
 
     it 'builds with PyPy2.7 v7.3.2' do
       app.deploy do |app|
@@ -191,7 +191,7 @@ RSpec.describe 'Python version support' do
   end
 
   context 'when runtime.txt contains pypy3.6-7.3.2' do
-    let(:app) { new_app('spec/fixtures/pypy_3.6') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pypy_3.6') }
 
     it 'builds with PyPy3.6 v7.3.2' do
       app.deploy do |app|
@@ -209,25 +209,25 @@ RSpec.describe 'Python version support' do
   end
 
   context 'when runtime.txt contains an invalid python version string' do
-    let(:app) { new_app('spec/fixtures/python_version_invalid', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_invalid', allow_failure: true) }
 
     include_examples 'aborts the build with a runtime not available message', 'X.Y.Z'
   end
 
   context 'when runtime.txt contains stray whitespace' do
-    let(:app) { new_app('spec/fixtures/runtime_txt_with_stray_whitespace') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_with_stray_whitespace') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
   end
 
   context 'when there is only a runtime.txt and no requirements.txt', skip: 'not currently supported (W-8720280)' do
-    let(:app) { new_app('spec/fixtures/runtime_txt_only', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_only', allow_failure: true) }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
   end
 
   context 'when the requested Python version has changed since the last build' do
-    let(:app) { new_app('spec/fixtures/python_3.6') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6') }
 
     it 'builds with the new Python version after removing the old install' do
       app.deploy do |app|

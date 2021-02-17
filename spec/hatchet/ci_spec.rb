@@ -4,7 +4,7 @@ require_relative '../spec_helper'
 
 RSpec.describe 'Heroku CI' do
   it 'works' do
-    new_app('spec/fixtures/ci_nose').run_ci do |test_run|
+    Hatchet::Runner.new('spec/fixtures/ci_nose').run_ci do |test_run|
       expect(test_run.output).to match('Downloading nose')
       expect(test_run.output).to match('OK')
 

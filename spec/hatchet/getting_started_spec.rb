@@ -8,7 +8,7 @@ RSpec.describe 'Python getting started project' do
       :default,
       'https://github.com/sharpstone/force_absolute_paths_buildpack'
     ]
-    new_app('python-getting-started', buildpacks: buildpacks).deploy do |app|
+    Hatchet::Runner.new('python-getting-started', buildpacks: buildpacks).deploy do |app|
       # Deploy works
     end
   end

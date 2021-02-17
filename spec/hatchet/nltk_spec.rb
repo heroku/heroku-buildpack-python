@@ -4,7 +4,7 @@ require_relative '../spec_helper'
 
 RSpec.describe 'NLTK corpora support' do
   context 'when the NLTK package is installed and nltk.txt is present' do
-    let(:app) { new_app('spec/fixtures/nltk_dependency_and_nltk_txt') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/nltk_dependency_and_nltk_txt') }
 
     it 'installs the specified NLTK corpora' do
       app.deploy do |app|
@@ -25,7 +25,7 @@ RSpec.describe 'NLTK corpora support' do
   end
 
   context 'when the NLTK package is installed but there is no nltk.txt' do
-    let(:app) { new_app('spec/fixtures/nltk_dependency_only') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/nltk_dependency_only') }
 
     it 'warns that nltk.txt was not found' do
       app.deploy do |app|
@@ -39,7 +39,7 @@ RSpec.describe 'NLTK corpora support' do
   end
 
   context 'when only nltk.txt is present' do
-    let(:app) { new_app('spec/fixtures/nltk_txt_but_no_dependency') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/nltk_txt_but_no_dependency') }
 
     it 'does not try to install the specified NLTK corpora' do
       app.deploy do |app|

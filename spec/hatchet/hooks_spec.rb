@@ -4,7 +4,7 @@ require_relative '../spec_helper'
 
 RSpec.describe 'Compile hooks' do
   context 'when an app has bin/pre_compile and bin/post_compile scripts' do
-    let(:app) { new_app('spec/fixtures/hooks', config: { 'SOME_APP_CONFIG_VAR' => '1' }) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/hooks', config: { 'SOME_APP_CONFIG_VAR' => '1' }) }
 
     it 'runs the hooks with the correct environment' do
       expected_env_vars = %w[
