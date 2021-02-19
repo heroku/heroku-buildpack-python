@@ -60,8 +60,8 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.9.1`
-- `python-3.8.7`
+- `python-3.9.2`
+- `python-3.8.8`
 - `python-3.7.10`
 - `python-3.6.13`
 - `python-2.7.18`
