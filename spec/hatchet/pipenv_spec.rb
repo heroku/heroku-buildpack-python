@@ -131,7 +131,21 @@ RSpec.describe 'Pipenv support' do
   context 'with a Pipfile.lock containing python_full_version 3.9.1' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version') }
 
-    include_examples 'builds using Pipenv with the requested Python version', '3.9.1'
+    it 'builds with the outdated Python version specified' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Python app detected
+          remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_9}
+          remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
+          remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
+          remote: -----> Installing python-3.9.1
+          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing dependencies with Pipenv 2020.11.15
+          remote:        Installing dependencies from Pipfile.lock \\(e13df1\\)...
+          remote: -----> Installing SQLite3
+        REGEX
+      end
+    end
   end
 
   context 'with a Pipfile.lock containing an invalid python_version',
