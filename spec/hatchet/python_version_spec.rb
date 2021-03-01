@@ -79,7 +79,7 @@ RSpec.describe 'Python version support' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote:  !     Python 2 has reached it's community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
+            remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
             remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote: -----> Installing python-#{LATEST_PYTHON_2_7}
             remote: -----> Installing pip 20.1.1, setuptools 44.1.1 and wheel 0.34.2
