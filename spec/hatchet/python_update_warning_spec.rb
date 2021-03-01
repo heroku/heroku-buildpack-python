@@ -37,7 +37,7 @@ RSpec.describe 'Python update warnings' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote:  !     Python 2 has reached it's community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
+            remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
             remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote:  !     Only the latest version of Python 2 is supported on the platform. Please consider upgrading to python-#{LATEST_PYTHON_2_7}
             remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes

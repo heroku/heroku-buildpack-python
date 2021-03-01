@@ -66,7 +66,7 @@ RSpec.describe 'Pipenv support' do
         app.deploy do |app|
           expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
             remote: -----> Python app detected
-            remote:  !     Python 2 has reached it's community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
+            remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
             remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
             remote: -----> Installing python-#{LATEST_PYTHON_2_7}
