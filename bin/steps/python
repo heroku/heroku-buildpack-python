@@ -106,7 +106,7 @@ fi
 if [[ ! -f "$CACHE_DIR/.scalingo/requirements.txt" ]]; then
   # IF there's no cached dependencies, update cached version of requirements.txt
   # This should only run for new apps and first deploys after this update
-  cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt"
+  [[ -f "$BUILD_DIR/requirements.txt" ]] && cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt"
 else
   # IF there IS a cached directory, check for differences with the new one
   if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt" &> /dev/null; then
