@@ -20,7 +20,10 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
 
     set +e
 
-    # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
+    # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions 1.10.0 to 1.10.2,
+    # in order to acknowledge a GPL package issue:
+    # https://github.com/apache/airflow/blob/master/UPDATING.md#airflow-110
+    # TODO: Remove this functionality since newer versions of Airflow do not need this.
     if [[ -r "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE" ]]; then
         SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
         export SLUGIFY_USES_TEXT_UNIDECODE
@@ -37,6 +40,8 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
         mcount "failure.none-version"
     fi
 
+    # TODO: Either remove this or fix since it's pretty broken at the moment - for example it
+    # doesn't match against a requirements specifier of 'Django >=1.11,<2' amongst others.
     if grep -qi '^django==1.*' requirements.txt; then
         puts-warn "Your Django version is nearing the end of its community support."
         puts-warn "Upgrade to continue to receive security updates and for the best experience with Django."

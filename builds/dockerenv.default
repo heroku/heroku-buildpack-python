@@ -1,5 +1,8 @@
+# Since no values are specified here, these variables will be read from the environment at run time:
+# https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
-S3_BUCKET
-S3_PREFIX
-S3_REGION
+
+# Uncomment these if you need to override the default S3 bucket and/or path prefixes.
+# S3_BUCKET
+# S3_PREFIX
