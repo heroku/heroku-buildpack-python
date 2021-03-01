@@ -15,6 +15,10 @@
 # Fail fast and fail hard.
 set -eo pipefail
 
+if [[ -n "$BUILDPACK_DEBUG" ]]; then
+  set -x
+fi
+
 # Used by buildpack-stdlib's metrics features.
 export BPLOG_PREFIX="buildpack.python"
 export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
