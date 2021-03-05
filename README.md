@@ -2,13 +2,11 @@
 
 # Heroku Buildpack: Python
 
-[![Build Status](https://travis-ci.com/heroku/heroku-buildpack-python.svg?branch=main)](https://travis-ci.com/heroku/heroku-buildpack-python)
+[![CircleCI](https://circleci.com/gh/heroku/heroku-buildpack-python.svg?style=svg)](https://circleci.com/gh/heroku/heroku-buildpack-python)
 
 This is the official [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) for Python apps.
 
 Recommended web frameworks include **Django** and **Flask**, among others. The recommended webserver is **Gunicorn**. There are no restrictions around what software can be used (as long as it's pip-installable). Web processes must bind to `$PORT`, and only the HTTP protocol is permitted for incoming connections.
-
-Python packages with C dependencies that are not [available on the stack image](https://devcenter.heroku.com/articles/stack-packages) are generally not supported, unless `manylinux` wheels are provided by the package maintainers (common). For recommended solutions, check out [this article](https://devcenter.heroku.com/articles/python-c-deps) for more information.
 
 See it in Action
 ----------------
@@ -62,35 +60,8 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.9.1`
-- `python-3.8.6`
-- `python-3.7.9`
-- `python-3.6.12`
+- `python-3.9.2`
+- `python-3.8.8`
+- `python-3.7.10`
+- `python-3.6.13`
 - `python-2.7.18`
-
-## Tests
-
-The buildpack tests use [Docker](https://www.docker.com/) to simulate
-Heroku's [stack images.](https://devcenter.heroku.com/articles/stack)
-
-To run the test suite against the default stack:
-
-```
-make test
-```
-
-Or to test against a particular stack:
-
-```
-make test STACK=heroku-16
-```
-
-To run only a subset of the tests:
-
-```
-make test TEST_CMD=tests/versions
-```
-
-The tests are run via the vendored
-[shunit2](https://github.com/kward/shunit2)
-test framework.

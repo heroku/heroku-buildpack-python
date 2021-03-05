@@ -1,26 +1,24 @@
 # These targets are not files
-.PHONY: check test compile builder-image buildenv deploy-runtimes tools
+.PHONY: lint lint-scripts lint-ruby compile builder-image buildenv deploy-runtimes
 
-STACK ?= heroku-18
+STACK ?= heroku-20
 STACKS ?= heroku-16 heroku-18 heroku-20
-TEST_CMD ?= test/run-versions && test/run-features && test/run-deps
-FIXTURE ?= test/fixtures/requirements-standard
+FIXTURE ?= spec/fixtures/python_version_unspecified
 ENV_FILE ?= builds/dockerenv.default
 BUILDER_IMAGE_PREFIX := heroku-python-build
 
 # Converts a stack name of `heroku-NN` to its build Docker image tag of `heroku/heroku:NN-build`.
 STACK_IMAGE_TAG := heroku/$(subst -,:,$(STACK))-build
 
-check:
+lint: lint-scripts lint-ruby
+
+lint-scripts:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings bin/default_pythons
 	@shellcheck -x bin/steps/collectstatic bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/nltk bin/steps/pip-install bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/python
 	@shellcheck -x bin/steps/hooks/*
 
-test:
-	@echo "Running tests using: STACK=$(STACK) TEST_CMD='$(TEST_CMD)'"
-	@echo
-	@docker run --rm -it -v $(PWD):/buildpack:ro -e "STACK=$(STACK)" "$(STACK_IMAGE_TAG)" bash -c 'cp -r /buildpack /buildpack_test && cd /buildpack_test && $(TEST_CMD)'
-	@echo
+lint-ruby:
+	@bundle exec rubocop
 
 compile:
 	@echo "Running compile using: STACK=$(STACK) FIXTURE=$(FIXTURE)"

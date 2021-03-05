@@ -3,19 +3,17 @@ name = "Python"
 
 [publish.Ignore]
 files = [
-  ".git2gus/",
+  ".circleci/",
   ".github/",
   "builds/",
   "spec/",
-  "test/",
   ".dockerignore",
   ".gitignore",
-  ".travis.yml",
+  ".rubocop.yml",
   "Gemfile",
   "Gemfile.lock",
   "hatchet.json",
   "hatchet.lock",
   "Makefile",
-  "Rakefile",
   "requirements.txt",
 ]

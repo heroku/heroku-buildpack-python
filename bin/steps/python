@@ -12,7 +12,7 @@ SECURITY_UPDATE_PYPY="The PyPy project has released a security update! Please co
 
 ONLY_SUPPORTED_2_VERSION="Only the latest version of Python 2 is supported on the platform. Please consider upgrading to"
 
-PYTHON_2_EOL_UPDATE="Python 2 has reached it's community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible."
+PYTHON_2_EOL_UPDATE="Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible."
 
 # check if runtime exists
 if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
@@ -158,6 +158,8 @@ elif [[ "${PYTHON_VERSION}" == ${PY27}* || "${PYTHON_VERSION}" == ${PYPY27}* ]];
   SETUPTOOLS_VERSION='44.1.1'
 fi
 
+puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
+
 # We don't use get-pip.py, since:
 #  - it uses `--force-reinstall`, which is unnecessary here and slows down repeat builds
 #  - it means downloading pip twice (once embedded in get-pip.py, and again during
@@ -175,19 +177,7 @@ if ! curl -sSf "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
   exit 1
 fi
 
-if [[ -f "$BUILD_DIR/Pipfile" ]]; then
-  # The buildpack is pinned to old pipenv, which requires older pip.
-  # Pip 9.0.2 doesn't support installing itself from a wheel, so we have to use split
-  # versions here (ie: installer pip version different from target pip version).
-  PIP_VERSION='9.0.2'
-  PIP_TO_INSTALL="pip==${PIP_VERSION}"
-else
-  PIP_TO_INSTALL="${PIP_WHEEL}"
-fi
-
-puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
-
 /app/.heroku/python/bin/python "${PIP_WHEEL}/pip" install --quiet --disable-pip-version-check --no-cache \
-  "${PIP_TO_INSTALL}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}"
+  "${PIP_WHEEL}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}"
 
 hash -r

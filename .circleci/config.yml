@@ -1,0 +1,90 @@
+version: 2.1
+
+commands:
+  # Not using the Ruby orb since its choice of cache key is suboptimal.
+  install-ruby-dependencies:
+    steps:
+      - restore_cache:
+          key: gems-v1-{{ arch }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Install Ruby dependencies
+          command: bundle install --deployment --jobs 2
+      - save_cache:
+          key: gems-v1-{{ arch }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+jobs:
+  shellcheck:
+    # TODO: Switch to the shellcheck docker image once we no longer need to use a make target.
+    docker:
+      - image: cimg/base:stable
+    working_directory: /mnt/ramdisk/project
+    steps:
+      - checkout
+      - run:
+          name: Install shellcheck
+          command: |
+            curl -L --fail --retry 3 --retry-delay 1 --connect-timeout 3 --max-time 30 \
+                https://github.com/koalaman/shellcheck/releases/download/v0.7.1/shellcheck-v0.7.1.linux.x86_64.tar.xz \
+              | sudo tar -xJ --strip-components=1 -C /usr/local/bin
+      - run:
+          name: Lint bash scripts with shellcheck
+          command: make lint-scripts
+
+  rubocop:
+    docker:
+      - image: cimg/ruby:2.7
+    working_directory: /mnt/ramdisk/project
+    steps:
+      - checkout
+      - install-ruby-dependencies
+      - run:
+          name: Lint Ruby files with Rubocop
+          command: bundle exec rubocop
+
+  hatchet:
+    parameters:
+      stack:
+        type: enum
+        enum: ["heroku-16", "heroku-18", "heroku-20"]
+    docker:
+      - image: cimg/ruby:2.7
+    working_directory: /mnt/ramdisk/project
+    environment:
+      HATCHET_APP_LIMIT: 200
+      HATCHET_DEFAULT_STACK: << parameters.stack >>
+      HATCHET_RETRIES: 3
+      HEROKU_DISABLE_AUTOUPDATE: 1
+      PARALLEL_SPLIT_TEST_PROCESSES: 60
+      # Make Hatchet create the temporary Git repos on the faster ramdisk.
+      TMPDIR: /mnt/ramdisk
+    steps:
+      - checkout
+      - install-ruby-dependencies
+      - run:
+          name: Hatchet setup
+          command: bundle exec hatchet ci:setup
+      - run:
+          name: Run Hatchet rspec tests
+          # parallel_split_test runs rspec in parallel with concurrency equal to
+          # PARALLEL_SPLIT_TEST_PROCESSES. The JUnit output enables Circle CI to
+          # display test result summaries. parallel_split_test automatically splits
+          # the output to separate files based in the process number, however would
+          # automatically concatenate the files (which would result in invalid XML)
+          # were it not for --no-merge. Circle CI is able to handle multiple results
+          # files, so leaving them separate works fine.
+          command: bundle exec parallel_split_test spec/hatchet/ --format progress --format RspecJunitFormatter --out test-results/rspec/results.xml --no-merge
+      - store_test_results:
+          path: test-results
+
+workflows:
+  version: 2.1
+  default-ci-workflow:
+    jobs:
+      - shellcheck
+      - rubocop
+      - hatchet:
+          matrix:
+            parameters:
+              stack: ["heroku-16", "heroku-18", "heroku-20"]
