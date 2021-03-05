@@ -94,7 +94,7 @@ source "$BIN_DIR/utils"
 # shellcheck source=bin/warnings
 source "$BIN_DIR/warnings"
 
-if [[ "${STACK}" == "cedar-14" ]] || [[ "${STACK}" == "scalingo-14" ]]; then
+if [[ "${STACK}" == "cedar-14" || "${STACK}" == "scalingo-14" ]]; then
   mcount "failure.unsupported.cedar-14"
   puts-warn "The scalingo-14 stack is no longer supported by the latest release of this buildpack."
   puts-warn
