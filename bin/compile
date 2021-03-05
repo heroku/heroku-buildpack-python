@@ -188,6 +188,12 @@ cp -R "$CACHE_DIR/.scalingo/python-stack" .scalingo/ &> /dev/null || true
 cp -R "$CACHE_DIR/.scalingo/python-version" .scalingo/ &> /dev/null || true
 # A plain text file which contains the current sqlite3 version being used (used for cache busting).
 cp -R "$CACHE_DIR/.scalingo/python-sqlite3-version" .scalingo/ &> /dev/null || true
+# Starting with the stack scalingo-18:v14, jq is included in the base stack.
+# We keep this waiting for scalingo-18:v14 to be fully deployed.
+if [[ -f "$CACHE_DIR/.scalingo/vendor/jq" ]]; then
+  # Any pre-compiled binaries, provided by the buildpack.
+  cp -R "$CACHE_DIR/.scalingo/vendor" .scalingo/ &> /dev/null || true
+fi
 # "editable" installations of code repositories, via pip or pipenv.
 if [[ -d "$CACHE_DIR/.scalingo/src" ]]; then
   cp -R "$CACHE_DIR/.scalingo/src" .scalingo/ &> /dev/null || true
