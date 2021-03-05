@@ -1,60 +1,189 @@
 # Python Buildpack Changelog
 
-# Master
+## Unreleased
 
---------------------------------------------------------------------------------
 
-# 168 (2020-04-06)
+## v191 (2021-02-19)
+
+- Python 3.8.8 and 3.9.2 are now available (CPython) ([#1178](https://github.com/heroku/heroku-buildpack-python/pull/1178)).
+
+## v190 (2021-02-16)
+
+- Python 3.6.13 and 3.7.10 are now available (CPython) ([#1174](https://github.com/heroku/heroku-buildpack-python/pull/1174)).
+- The default Python version for new apps is now 3.6.13 (previously 3.6.12) ([#1174](https://github.com/heroku/heroku-buildpack-python/pull/1174)).
+
+## v189 (2021-02-12)
+
+- Update pipenv from `2018.5.18` to `2020.11.15` ([#1169](https://github.com/heroku/heroku-buildpack-python/pull/1169)).
+- Remove pinning of pip to `9.0.2` when using pipenv ([#1169](https://github.com/heroku/heroku-buildpack-python/pull/1169)).
+
+## v188 (2020-12-21)
+
+- Python 3.8.7 is now available (CPython) ([#1125](https://github.com/heroku/heroku-buildpack-python/pull/1125)).
+
+## v187 (2020-12-08)
+
+- Python 3.9.1 is now available (CPython) ([#1127](https://github.com/heroku/heroku-buildpack-python/pull/1127)).
+
+## v186 (2020-11-18)
+
+- Update the `BUILD_WITH_GEO_LIBRARIES` error message ([#1121](https://github.com/heroku/heroku-buildpack-python/pull/1121)).
+- Switch NLTK feature detection away from `sp-grep` ([#1119](https://github.com/heroku/heroku-buildpack-python/pull/1119)).
+- Switch Django collectstatic feature detection away from `sp-grep` ([#1119](https://github.com/heroku/heroku-buildpack-python/pull/1119)).
+- Remove vendored `sp-grep` script ([#1119](https://github.com/heroku/heroku-buildpack-python/pull/1119)).
+- Remove vendored `pip-diff` script ([#1118](https://github.com/heroku/heroku-buildpack-python/pull/1118)).
+- Remove vendored `pip-grep` script ([#1116](https://github.com/heroku/heroku-buildpack-python/pull/1116)).
+
+## v185 (2020-11-12)
+
+- Error if the unsupported `BUILD_WITH_GEO_LIBRARIES` env var is set ([#1115](https://github.com/heroku/heroku-buildpack-python/pull/1115)).
+- Remove deprecated GDAL/GEOS/PROJ support ([#1113](https://github.com/heroku/heroku-buildpack-python/pull/1113)).
+- Remove vendored `jq` binary ([#1112](https://github.com/heroku/heroku-buildpack-python/pull/1112)).
+- Remove redundant Mercurial install step ([#1111](https://github.com/heroku/heroku-buildpack-python/pull/1111)).
+- Remove support for the Cedar-14 stack ([#1110](https://github.com/heroku/heroku-buildpack-python/pull/1110)).
+
+## v184 (2020-10-21)
+
+- Vendor buildpack-stdlib instead of fetching from S3 ([#1100](https://github.com/heroku/heroku-buildpack-python/pull/1100)).
+- Fix metric names for metrics emitted within `sub_env` ([#1099](https://github.com/heroku/heroku-buildpack-python/pull/1099)).
+
+## v183 (2020-10-12)
+
+- Add support for Heroku-20 ([#968](https://github.com/heroku/heroku-buildpack-python/pull/968)).
+
+## v182 (2020-10-06)
+
+- Python 3.9.0 is now available (CPython) ([#1090](https://github.com/heroku/heroku-buildpack-python/pull/1090)).
+- Migrate from the `lang-python` S3 bucket to `heroku-buildpack-python` ([#1089](https://github.com/heroku/heroku-buildpack-python/pull/1089)).
+- Remove `vendor/shunit2` ([#1086](https://github.com/heroku/heroku-buildpack-python/pull/1086)).
+- Replace `BUILDPACK_VENDOR_URL` and `USE_STAGING_BINARIES` with `BUILDPACK_S3_BASE_URL` ([#1085](https://github.com/heroku/heroku-buildpack-python/pull/1085)).
+
+## v181 (2020-09-29)
+
+- PyPy 2.7 and 3.6, version 7.3.2 are now available (Note: PyPy support is in beta) ([#1081](https://github.com/heroku/heroku-buildpack-python/pull/1081)).
+
+## v180 (2020-09-24)
+
+- Python 3.8.6 is now available (CPython) ([#1072](https://github.com/heroku/heroku-buildpack-python/pull/1072)).
+
+## v179 (2020-09-23)
+
+- Remove duplicate pipenv metric event ([#1070](https://github.com/heroku/heroku-buildpack-python/pull/1070)).
+- Emit metrics for how the Python version was chosen for an app ([#1069](https://github.com/heroku/heroku-buildpack-python/pull/1069)).
+- Emit Python version metric events for all builds, not just clean installs ([#1066](https://github.com/heroku/heroku-buildpack-python/pull/1066)).
+
+## v178 (2020-09-07)
+
+- Python 3.5.10 is now available (CPython) ([#1062](https://github.com/heroku/heroku-buildpack-python/pull/1062)).
+
+## v177 (2020-08-18)
+
+- Python 3.6.12 and 3.7.9 are now available (CPython) ([#1054](https://github.com/heroku/heroku-buildpack-python/pull/1054)).
+- The default Python version for new apps is now 3.6.12 (previously 3.6.11) ([#1054](https://github.com/heroku/heroku-buildpack-python/pull/1054)).
+
+## v176 (2020-08-12)
+
+- Rebuild the Python 3.4.10 archives with the correct version of Python ([#1048](https://github.com/heroku/heroku-buildpack-python/pull/1048)).
+- Fix the security update version check message for apps using PyPy ([#1040](https://github.com/heroku/heroku-buildpack-python/pull/1040)).
+- Remove `vendor/test-utils` ([#1043](https://github.com/heroku/heroku-buildpack-python/pull/1043)).
+
+## v175 (2020-08-05)
+
+- Update pip from 20.0.2 to 20.1.1 for Python 2.7 and Python 3.5+ ([#1030](https://github.com/heroku/heroku-buildpack-python/pull/1030)).
+- Update setuptools from 39.0.1 to: ([#1024](https://github.com/heroku/heroku-buildpack-python/pull/1024))
+  - 44.1.1 for Python 2.7
+  - 43.0.0 for Python 3.4
+  - 47.1.1 for Python 3.5+
+- Switch the `heroku-buildpack-python` repository default branch from `master` to `main` ([#1029](https://github.com/heroku/heroku-buildpack-python/pull/1029)).
+
+## v174 (2020-07-30)
+
+- For repeat builds, also manage the installed versions of setuptools/wheel, rather than just that of pip ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Install an explicit version of wheel rather than the latest release at the time ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Output the installed version of pip, setuptools and wheel in the build log ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Errors installing pip/setuptools/wheel are now displayed in the build output and fail the build early ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Install pip using itself rather than `get-pip.py` ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Disable pip's version check + cache when installing pip/setuptools/wheel ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Install setuptools from PyPI rather than a vendored copy ([#1007](https://github.com/heroku/heroku-buildpack-python/pull/1007)).
+- Reduce the number of environment variables exposed to `bin/{pre,post}_compile` and other subprocesses ([#1011](https://github.com/heroku/heroku-buildpack-python/pull/1011)).
+
+## v173 (2020-07-21)
+
+- Python 3.8.5 is now available (CPython).
+
+## v172 (2020-07-17)
+
+- Python 3.8.4 is now available (CPython).
+
+## v171 (2020-07-07)
+
+- Python 3.6.11 and 3.7.8 are now available (CPython).
+
+## v170 (2020-05-19)
+
+- Python 2.7.18, 3.5.9, 3.7.7 and 3.8.3 are now available (CPython).
+- PyPy 2.7 and 3.6, version 7.3.1 are now available (Note: PyPy support is in beta).
+- Docs: Fix explanation of runtime.txt generation when using pipenv.
+- Bugfix: Correctly detect Python version when using a `python_version` of `3.8` in `Pipfile.lock`.
+
+## v169 (2020-04-22)
+
+- Add a Hatchet test for python 3.8.2
+- Set Code Owners to @heroku/langauges
+- Bugfix: Caching on subsequent redeploys
+- Update tests to support latest version of Python
+
+## v168 (2020-04-06)
 
 - Doc: Update Readme with version numbers
 - update Code Owners to include the Heroku Buildpack Maintainers team
-- Deprecation warning: BUILD_WITH_GEO_LIBRARIES is now deprecated. See warning for details.
+- Deprecation warning: `BUILD_WITH_GEO_LIBRARIES` is now deprecated. See warning for details.
 - Clean up build log output
 - Update Python versions in README to match docs
 - Django version detection fixed, link updated
 
-# 167 (2020-03-26)
+## v167 (2020-03-26)
 
 - Add failcase for cache busting
 - Bugfix: Clearing pip dependencies
 
-# 166 (2020-03-05)
+## v166 (2020-03-05)
 
 - Correct ftp to https in vendored file
 - Warn for Django 1.11 approaching EOL, provide link to roadmap
 
-# 165 (2020-02-27)
+## v165 (2020-02-27)
 
 - Python 3.8.2 now available.
 
-# 164 (2020-02-20)
+## v164 (2020-02-20)
 
 - Update requirements.txt builds to use Pip 20.0.2
 - Download get-pip.py to tmpdir instead of root dir
 
-# 163 (2019-12-23)
+## v163 (2019-12-23)
 
 - New pythons released:
   Python 3.8.1, 3.7.6, 3.6.10 (CPython)
   Beta Release: Pypy 2.7 and 3.6, version 7.2.0
 
-# 162 (2019-12-06)
+## v162 (2019-12-06)
 
 - Bug fix: fragile sqlite3 install
 
-# 161 (2019-12-2)
+## v161 (2019-12-2)
 
 - Bug fix: Sqlite3 version bump
 
-# 160 (2019-10-23)
+## v160 (2019-10-23)
 
 - Bugfix: Pipenv no longer installs twice in CI
 
-# 159 (2019-10-22)
+## v159 (2019-10-22)
 
 - Python 2.7.17 now available on Heroku 18 and 16.
 
-# 158 (2019-10-21)
+## v158 (2019-10-21)
 
 - Python 3.7.5 and 3.8.0 now available on Heroku 18 and 16.
 - Add support for Python 3.8 branch
@@ -62,11 +191,11 @@
   - Test Improvements
 - Add support for staging binary testing
 
-# 157 (2019-09-18)
+## v157 (2019-09-18)
 
 - Typo fixes
 
-# 156 (2019-09-12)
+## v156 (2019-09-12)
 
 - Python 3.6.9 and 3.7.4 now available.
 
@@ -74,125 +203,125 @@
 - Build utility and documentation updates
 - Bump Hatchet tests to point at new default python version.
 
-# 155 (2019-08-22)
+## v155 (2019-08-22)
 
 add docs and make target for heroku-18 bob builds
 
-# 154 (2019-07-17)
+## v154 (2019-07-17)
 
 Fix python 3.5.7 formula actually building 3.7.2
 
-# 153 (2019-06-21)
+## v153 (2019-06-21)
 
 Hotfix for broken heroku-16 deploys
 
-# 152 (2019-04-04)
+## v152 (2019-04-04)
 
 Python 3.7.3 now available.
 
-# 151 (2019-03-21)
+## v151 (2019-03-21)
 
 Python 3.5.7 and 3.4.10 now available on all Heroku stacks.
 
-# 150 (2019-03-13)
+## v150 (2019-03-13)
 
 Python 2.7.16 now available on all Heroku stacks.
 
-# 149 (2019-03-04)
+## v149 (2019-03-04)
 
 Hotfix for broken Cedar 14 deploys
 
-# 148 (2019-02-21)
+## v148 (2019-02-21)
 
 No user facing changes, improving internal metrics
 
-# 147 (2019-02-07)
+## v147 (2019-02-07)
 
 Python 3.7.2 and 3.6.8 now available on all Heroku stacks.
 
-# 146 (2018-11-11)
+## v146 (2018-11-11)
 
 Python 3.7.1, 3.6.7, 3.5.6 and 3.4.9 now available on all Heroku stacks.
 
-# 145 (2018-11-08)
+## v145 (2018-11-08)
 
 Testing and tooling expanded to better support new runtimes
 
-# 144 (2018-10-10)
+## v144 (2018-10-10)
 
 Switch to cautious upgrade for Pipenv install to ensure the pinned pip version
 is used with Pipenv
 
-# 143 (2018-10-09)
+## v143 (2018-10-09)
 
-Add support for detecting SLUGIFY_USES_TEXT_UNIDECODE, which is required to
+Add support for detecting `SLUGIFY_USES_TEXT_UNIDECODE`, which is required to
 install Apache Airflow version 1.10 or higher.
 
-# 142 (2018-10-08)
+## v142 (2018-10-08)
 
 Improvements to Python install messaging
 
-# 139, 140, 141
+## v139, 140, 141
 
 No user-facing changes, documenting for version clarity
 
-# 138 (2018-08-01)
+## v138 (2018-08-01)
 
 Use stack image SQLite3 instead of vendoring
 
-# 137 (2018-07-17)
+## v137 (2018-07-17)
 
 Prevent 3.7.0 from appearing as unsupported in buildpack messaging.
 
-# 136 (2018-06-28)
+## v136 (2018-06-28)
 
 Upgrade to 3.6.6 and support 3.7.0 on all runtimes.
 
-# 135 (2018-05-29)
+## v135 (2018-05-29)
 
 Upgrade Pipenv to v2018.5.18.
 
-# 134 (2018-05-02)
+## v134 (2018-05-02)
 
 Default to 3.6.5, bugfixes.
 
-# 133
+## v133
 
 Fixes for Pip 10 release.
 
-# 132
+## v132
 
 Improve pip installation, with the release of v9.0.2.
 
-# 131
+## v131
 
 Fix bug with pip.
 
-# 130
+## v130
 
 Better upgrade strategy for pip.
 
-# 129
+## v129
 
 Don't upgrade pip (from v128).
 
-# 128
+## v128
 
 Upgrade pip, pin to Pipenv v11.8.2.
 
-# 127
+## v127
 
 Pin to Pipenv v11.7.1.
 
-# 126
+## v126
 
 Bugfixes.
 
-# 125
+## v125
 
 Bugfixes.
 
-# 124
+## v124
 
 Update buildpack to automatically install `[dev-packages]` during Heroku CI Pipenv builds.
 
@@ -201,156 +330,154 @@ Update buildpack to automatically install `[dev-packages]` during Heroku CI Pipe
 - No longer warn if there is no `Procfile`.
 - Update Pipenv's "3.6" runtime specifier to point to "3.6.4".
 
-# 123
+## v123
 
 Update gunicorn `init.d` script to allow overrides.
 
-# 122
+## v122
 
 Update default Python to v3.6.4.
 
-# 121
+## v121
 
 Update default Python to v3.6.3.
 
-# 120
+## v120
 
 Use `$ pipenv --deploy`.
 
-# 119
+## v119
 
 Improvements to Pipenv support, warning on unsupported Python versions.
 
 - We now warn when a user is not using latest 2.x or 3.x Python.
 - Heroku now supports `[requires]` `python_full_version` in addition to `python_version`.
 
-# 118
+## v118
 
 Improvements to Pipenv support.
 
-# 117
+## v117
 
 Bug fix.
 
-# 116
+## v116
 
 Vendoring improvements.
 
 - Geos libraries should work on Heroku-16 now.
 - The libffi/libmemcached vendoring step is now skipped on Heroku-16 (since they are installed in the base image).
 
-# 115
+## v115
 
 Revert a pull request.
 
 - No longer using `sub_env` for `pip install` step.
 
-# 114
+## v114
 
 - Bugfixes.
 
 Blacklisting `PYTHONHOME` and `PYTHONPATH` for older apps. Upgrades to nltk support.
 
-# 113
+## v113
 
 Updates to Pipenv support.
 
-# 112
+## v112
 
 Bugfix.
 
 - Fixed grep output bug.
 
-# 111
+## v111
 
 Linting, bugfixes.
 
-# 110
+## v110
 
 Update default Python to 3.6.2.
 
-# 109
+## v109
 
 Update Default Python to 3.6.1, bugfixes.
 
 - Fixed automatic pip uninstall of dependencies removed from requirements.txt.
 
-# 108
+## v108
 
 Fix output for collectstatic step.
 
-# 107
+## v107
 
 Bugfix for C dependency installation.
 
-# 106
+## v106
 
- Don't install packages that could mess up packaging.
+Don't install packages that could mess up packaging.
 
  - The Python buildpack will automatically remove `six`, `pyparsing`, `appdirs`,
    `setuptools`, and `distribute` from a `requirements.txt` file now, as these
    packages are provided by the Python buildpack.
 
- # 105
+## v105
 
- Improvements to output messaging.
+Improvements to output messaging.
 
-# 104
+## v104
 
 General improvements.
 
 - Fix for Heroku CI.
 - Use `pkg_resources` to check if a distribution is installed instead of
-  parsing `requirements.txt`. ([#395][395])
+  parsing `requirements.txt`. ([#395](https://github.com/heroku/heroku-buildpack-python/pull/395))
 
-[395]: https://github.com/heroku/heroku-buildpack-python/pull/395
-
-## 103
+## v103
 
 Bug fixes and improvements.
 
 - Fix for Pipenv.
 - Fix for Heroku CI.
-- Improve handling of WEB_CONCURRENCY when using multiple buildpacks.
-- Adjust environment variables set during the build to more closely match those in the dyno environment (DYNO is now available, STACK is not).
+- Improve handling of `WEB_CONCURRENCY` when using multiple buildpacks.
+- Adjust environment variables set during the build to more closely match those in the dyno environment (`DYNO` is now available, `STACK` is not).
 - Restore the build cache prior to running bin/pre_compile.
 
-## 102
+## v102
 
 Buildpack code cleanup.
 
 - Improved messaging around NLTK.
 
-## 101
+## v101
 
 Updated setuptools installation method.
 
 - Improved pipenv support.
 
-## 100
+## v100
 
 Preliminary pipenv support.
 
-## 99
+## v99
 
 Cleanup.
 
-## 98
+## v98
 
 Official NLTK support and other improvements.
 
 - Support for `nltk.txt` file for declaring corpora to be downloaded.
-- Leading zeros for auto-set WEB_CONCURRENCY.
+- Leading zeros for auto-set `WEB_CONCURRENCY`.
 
-## 97
+## v97
 
 Improved egg-link functionality.
 
-## 96
+## v96
 
 Bugfix.
 
-## 95
+## v95
 
 Improved output support.
 
@@ -386,7 +513,7 @@ Fixed bug with editable pip installations.
 
 Updated default Python 2.7.13.
 
-- Python 2.7.13 uses UCS-4 build, more compatibile with linux wheels.
+- Python 2.7.13 uses UCS-4 build, more compatible with linux wheels.
 - Updated setuptools to v32.1.0.
 
 ## v86
@@ -412,7 +539,7 @@ Support for Heroku CI.
 
 ## v82 (2016-08-22)
 
-Update to library detection mechnisms (pip-pop).
+Update to library detection mechanisms (pip-pop).
 
 - Updated setuptools to v25.5.0
 
@@ -486,7 +613,7 @@ Revert to v66.
 
 ## v68 (2015-10-12)
 
-Fixed .heroku/venv error with modern apps.
+Fixed `.heroku/venv` error with modern apps.
 
 ## v67 (2015-10-12)
 
@@ -510,7 +637,6 @@ Updated Pip and Setuptools.
 
 - Setuptools updated to v18.3.2
 - Pip updated to v7.1.2
-
 
 ## v62 (2015-08-07)
 

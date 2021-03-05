@@ -14,7 +14,7 @@
 source "$BIN_DIR/utils"
 
 # Check that nltk was installed by pip, otherwise obviously not needed
-if sp-grep -s nltk; then
+if is_module_available 'nltk'; then
     puts-step "Downloading NLTK corpora…"
 
     nltk_packages_definition="$BUILD_DIR/nltk.txt"

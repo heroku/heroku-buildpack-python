@@ -1,3 +1,6 @@
+# Dependencies for generating/publishing Python binaries.
+bob-builder==0.0.19
+
+# Sub-dependencies of bob-builder.
+boto==2.49.0
 docopt==0.6.2
-bob-builder==0.0.17
-boto==2.48.0

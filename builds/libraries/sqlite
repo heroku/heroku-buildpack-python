@@ -19,4 +19,4 @@ make install
 
 # Cleanup
 cd ..
-rm -fr sqlite
+rm -rf sqlite

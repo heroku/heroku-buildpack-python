@@ -1,9 +1,0 @@
-[[source]]
-url = "https://pypi.python.org/simple"
-verify_ssl = true
-
-[packages]
-requests = "*"
-
-[requires]
-python_full_version = "3.6.3"

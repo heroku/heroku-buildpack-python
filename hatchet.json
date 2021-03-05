@@ -1,5 +1,8 @@
 {
-  "python": [
-    "heroku/python-getting-started"
+  "hatchet": {
+    "directory": ".hatchet/"
+  },
+  "heroku": [
+    "https://github.com/heroku/python-getting-started"
   ]
 }

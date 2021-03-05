@@ -1,1 +1,0 @@
--e git+https://github.com/requests/requests.git#egg=requests
