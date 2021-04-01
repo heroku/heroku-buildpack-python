@@ -11,7 +11,7 @@ RSpec.describe 'NLTK corpora support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Downloading NLTK corpora…
           remote: -----> Downloading NLTK packages: city_database stopwords
-          remote: /app/.heroku/python/lib/python3.6/runpy.py:125: RuntimeWarning: 'nltk.downloader' found in sys.modules after import of package 'nltk', but prior to execution of 'nltk.downloader'; this may result in unpredictable behaviour
+          remote: .*: RuntimeWarning: 'nltk.downloader' found in sys.modules after import of package 'nltk', but prior to execution of 'nltk.downloader'; this may result in unpredictable behaviour
           remote:   warn\\(RuntimeWarning\\(msg\\)\\)
           remote: \\[nltk_data\\] Downloading package city_database to
           remote: \\[nltk_data\\]     /tmp/build_.*/.heroku/python/nltk_data...
