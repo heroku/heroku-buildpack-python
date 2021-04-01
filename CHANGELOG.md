@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove Airflow `SLUGIFY_USES_TEXT_UNIDECODE` workaround ([#1186](https://github.com/heroku/heroku-buildpack-python/pull/1186)).
 - Fix grammar in the Python 2 EOL message ([#1182](https://github.com/heroku/heroku-buildpack-python/pull/1182)).
 
 ## v191 (2021-02-19)
