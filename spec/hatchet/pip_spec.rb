@@ -123,13 +123,6 @@ RSpec.describe 'Pip support' do
     include_examples 'installs successfully using pip'
   end
 
-  context 'when using Airflow 1.10.2 with SLUGIFY_USES_TEXT_UNIDECODE set' do
-    let(:config) { { 'SLUGIFY_USES_TEXT_UNIDECODE' => 'yes' } }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_airflow_1.10.2', config: config) }
-
-    include_examples 'installs successfully using pip'
-  end
-
   context 'when requirements.txt contains GDAL but the GDAL C++ library is missing' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_gdal', allow_failure: true) }
 
