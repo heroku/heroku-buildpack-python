@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## v192 (2021-04-06)
+
 - Python 3.8.9 and 3.9.4 are now available (CPython) ([#1188](https://github.com/heroku/heroku-buildpack-python/pull/1188)).
 - Use Python 3.9 as the default Python version for new apps (previously Python 3.6) ([#1187](https://github.com/heroku/heroku-buildpack-python/pull/1187)).
 - Remove Airflow `SLUGIFY_USES_TEXT_UNIDECODE` workaround ([#1186](https://github.com/heroku/heroku-buildpack-python/pull/1186)).
