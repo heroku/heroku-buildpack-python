@@ -5,8 +5,8 @@
 # the env vars to subprocesses.
 # shellcheck disable=2034
 
-LATEST_39="python-3.9.2"
-LATEST_38="python-3.8.8"
+LATEST_39="python-3.9.4"
+LATEST_38="python-3.8.9"
 LATEST_37="python-3.7.10"
 LATEST_36="python-3.6.13"
 LATEST_35="python-3.5.10"
