@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Support build environments where `$BUILD_DIR` is set to a symlink of `/app` ([#992](https://github.com/heroku/heroku-buildpack-python/pull/992)).
 
 ## v192 (2021-04-06)
 
