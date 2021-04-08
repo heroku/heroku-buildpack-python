@@ -142,7 +142,7 @@ fi
 
 set -e
 
-PIP_VERSION='20.1.1'
+PIP_VERSION='20.2.4'
 # Must use setuptools <47.2.0 until we fix:
 # https://github.com/heroku/heroku-buildpack-python/issues/1006
 SETUPTOOLS_VERSION='47.1.1'

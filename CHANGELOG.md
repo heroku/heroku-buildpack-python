@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Update pip from 20.1.1 to 20.2.4 for Python 2.7 and Python 3.5+ ([#1192](https://github.com/heroku/heroku-buildpack-python/pull/1192)).
 - Update wheel from 0.34.2 to 0.36.2 for Python 2.7 and Python 3.5+ ([#1191](https://github.com/heroku/heroku-buildpack-python/pull/1191)).
 - Support build environments where `$BUILD_DIR` is set to a symlink of `/app` ([#992](https://github.com/heroku/heroku-buildpack-python/pull/992)).
 
