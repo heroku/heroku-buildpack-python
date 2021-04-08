@@ -10,7 +10,7 @@ RSpec.shared_examples 'builds using Pipenv with the requested Python version' do
         remote: -----> Python app detected
         remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
         remote: -----> Installing python-#{python_version}
-        remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+        remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.36.2
         remote: -----> Installing dependencies with Pipenv 2020.11.15
         remote:        Installing dependencies from Pipfile.lock \\(.*\\)...
         remote: -----> Installing SQLite3
@@ -30,7 +30,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     No 'Pipfile.lock' found! We recommend you commit this into your repository.
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.36.2
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile...
           remote: -----> Installing SQLite3
@@ -48,7 +48,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.36.2
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock \\(aad8b1\\)...
           remote: -----> Installing SQLite3
@@ -70,7 +70,7 @@ RSpec.describe 'Pipenv support' do
             remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
             remote: -----> Installing python-#{LATEST_PYTHON_2_7}
-            remote: -----> Installing pip 20.1.1, setuptools 44.1.1 and wheel 0.34.2
+            remote: -----> Installing pip 20.1.1, setuptools 44.1.1 and wheel 0.36.2
             remote: -----> Installing dependencies with Pipenv 2020.11.15
             remote:        Installing dependencies from Pipfile.lock \\(b8efa9\\)...
             remote: -----> Installing SQLite3
@@ -139,7 +139,7 @@ RSpec.describe 'Pipenv support' do
           remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-3.9.1
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.36.2
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock \\(e13df1\\)...
           remote: -----> Installing SQLite3
@@ -186,7 +186,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{LATEST_PYTHON_3_9}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.36.2
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock \\(75eae0\\)...
           remote: -----> Installing SQLite3
@@ -203,7 +203,7 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Installing python-#{LATEST_PYTHON_3_9}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.36.2
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock (ef68d1)...
           remote: -----> Installing SQLite3
@@ -221,7 +221,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.36.2
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Your Pipfile.lock \\(aad8b1\\) is out of date. Expected: \\(ef68d1\\).
           remote:        \\[DeployException\\]: .*
