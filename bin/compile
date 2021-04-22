@@ -222,11 +222,19 @@ fi
 source "$BIN_DIR/steps/pipenv-python-version"
 
 if [[ -f runtime.txt ]]; then
+  # PYTHON_VERSION_SOURCE may have already been set by the pipenv-python-version step.
+  # TODO: Refactor this and stop pipenv-python-version using runtime.txt as an API.
+  PYTHON_VERSION_SOURCE=${PYTHON_VERSION_SOURCE:-"runtime.txt"}
+  puts-step "Using Python version specified in ${PYTHON_VERSION_SOURCE}"
   mcount "version.reason.python.specified"
 elif [[ -n "${CACHED_PYTHON_VERSION:-}" ]]; then
+  puts-step "No Python version was specified. Using the same version as the last build: ${CACHED_PYTHON_VERSION}"
+  echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
   mcount "version.reason.python.cached"
   echo "${CACHED_PYTHON_VERSION}" > runtime.txt
 else
+  puts-step "No Python version was specified. Using the buildpack default: ${DEFAULT_PYTHON_VERSION}"
+  echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
   mcount "version.reason.python.default"
   echo "${DEFAULT_PYTHON_VERSION}" > runtime.txt
 fi

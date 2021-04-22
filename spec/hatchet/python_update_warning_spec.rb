@@ -7,6 +7,7 @@ RSpec.shared_examples 'warns there is a Python update available' do |requested_v
     app.deploy do |app|
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
+        remote: -----> Using Python version specified in runtime.txt
         remote:  !     Python has released a security update! Please consider upgrading to python-#{latest_version}
         remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
         remote: -----> Installing python-#{requested_version}
@@ -20,6 +21,7 @@ RSpec.shared_examples 'aborts the build without showing an update warning' do |r
     app.deploy do |app|
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
+        remote: -----> Using Python version specified in runtime.txt
         remote:  !     Requested runtime (python-#{requested_version}) is not available for this stack (#{app.stack}).
         remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
       OUTPUT
@@ -37,6 +39,7 @@ RSpec.describe 'Python update warnings' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
+            remote: -----> Using Python version specified in runtime.txt
             remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
             remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote:  !     Only the latest version of Python 2 is supported on the platform. Please consider upgrading to python-#{LATEST_PYTHON_2_7}

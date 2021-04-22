@@ -9,6 +9,9 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
             puts-warn "No 'Pipfile.lock' found! We recommend you commit this into your repository."
         fi
         if [[ -f $BUILD_DIR/Pipfile.lock ]]; then
+            # Ignore unused env var warning since this is used by bin/compile.
+            # shellcheck disable=2034
+            PYTHON_VERSION_SOURCE='Pipfile.lock'
             set +e
             PYTHON=$(jq -r '._meta.requires.python_full_version' "$BUILD_DIR/Pipfile.lock")
             if [[ "$PYTHON" != "null" ]]; then

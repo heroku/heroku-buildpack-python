@@ -8,6 +8,7 @@ RSpec.shared_examples 'builds using Pipenv with the requested Python version' do
       # TODO: Fix the "cp: cannot stat" error here and in the other testcases below (W-7924941).
       expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
         remote: -----> Python app detected
+        remote: -----> Using Python version specified in Pipfile.lock
         remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
         remote: -----> Installing python-#{python_version}
         remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2
@@ -28,6 +29,8 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote:  !     No 'Pipfile.lock' found! We recommend you commit this into your repository.
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2
@@ -46,6 +49,8 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2
@@ -66,6 +71,7 @@ RSpec.describe 'Pipenv support' do
         app.deploy do |app|
           expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
             remote: -----> Python app detected
+            remote: -----> Using Python version specified in Pipfile.lock
             remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
             remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
@@ -87,6 +93,7 @@ RSpec.describe 'Pipenv support' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
+            remote: -----> Using Python version specified in Pipfile.lock
             remote:  !     Requested runtime (python-#{LATEST_PYTHON_2_7}) is not available for this stack (#{app.stack}).
             remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
           OUTPUT
@@ -135,6 +142,7 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
           remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_9}
           remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
@@ -156,6 +164,7 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
           remote:  !     Requested runtime (^3.9) is not available for this stack (#{app.stack}).
           remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
         OUTPUT
@@ -170,6 +179,7 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
           remote:  !     Requested runtime (python-X.Y.Z) is not available for this stack (#{app.stack}).
           remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
         OUTPUT
@@ -184,6 +194,7 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in runtime.txt
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{LATEST_PYTHON_3_9}
           remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2
@@ -202,6 +213,7 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
           remote: -----> Installing python-#{LATEST_PYTHON_3_9}
           remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2
           remote: -----> Installing dependencies with Pipenv 2020.11.15
@@ -219,6 +231,8 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2

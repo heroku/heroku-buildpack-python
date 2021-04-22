@@ -46,7 +46,7 @@ RSpec.describe 'Compile hooks' do
           remote: -----> Running pre-compile hook
           remote: pre_compile ran with env vars:
           remote: #{expected_env_vars.join("\nremote: ")}
-          remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
           remote: .*
           remote: -----> Installing requirements with pip
           remote: -----> Running post-compile hook
