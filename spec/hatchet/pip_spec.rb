@@ -19,6 +19,8 @@ RSpec.describe 'Pip support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2
           remote: -----> Installing SQLite3
@@ -32,7 +34,10 @@ RSpec.describe 'Pip support' do
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> No change in requirements detected, installing from cache
+          remote: -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
@@ -52,6 +57,8 @@ RSpec.describe 'Pip support' do
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Requirements file has been changed, clearing cached dependencies
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2

@@ -95,7 +95,7 @@ fi
 
 if [ -f .heroku/python-version ]; then
   if [ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]; then
-      puts-step "Found $(cat .heroku/python-version), removing"
+      puts-step "Python version has changed from $(cat .heroku/python-version) to ${PYTHON_VERSION}, clearing cache"
       rm -rf .heroku/python
   else
     SKIP_INSTALL=1
@@ -121,17 +121,19 @@ else
   fi
 fi
 
-if [ ! "$SKIP_INSTALL" ]; then
-    puts-step "Installing $PYTHON_VERSION"
+if [[ -n "${SKIP_INSTALL}" ]]; then
+  puts-step "Using cached install of ${PYTHON_VERSION}"
+else
+  puts-step "Installing ${PYTHON_VERSION}"
 
-    # Prepare destination directory.
-    mkdir -p .heroku/python
+  # Prepare destination directory.
+  mkdir -p .heroku/python
 
-    if ! curl "${VENDORED_PYTHON}" -s | tar zxv -C .heroku/python &> /dev/null; then
-      puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
-      puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
-      exit 1
-    fi
+  if ! curl "${VENDORED_PYTHON}" -s | tar zxv -C .heroku/python &> /dev/null; then
+    puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
+    puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+    exit 1
+  fi
 
   # Record for future reference.
   echo "$PYTHON_VERSION" > .heroku/python-version

@@ -19,11 +19,11 @@ RSpec.describe 'Stack changes' do
         update_buildpacks(app, [:default])
         app.commit!
         app.push!
-        # TODO: The build log should explain that sticky-versioning has occurred,
-        # so that users know why their app is on an older Python version.
         # TODO: The requirements output shouldn't say "installing from cache", since it's not.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the same version as the last build: python-3.6.12
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_6}
           remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Stack has changed from heroku-18 to heroku-20, clearing cache
@@ -51,6 +51,8 @@ RSpec.describe 'Stack changes' do
         # Python is always used) to avoid the glibc errors below.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: python: /lib/x86_64-linux-gnu/libm.so.6: version `GLIBC_2.29' not found (required by python)
           remote: python: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.28' not found (required by python)
           remote: -----> Stack has changed from heroku-20 to heroku-18, clearing cache
