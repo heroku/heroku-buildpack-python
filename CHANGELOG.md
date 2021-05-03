@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Python 3.8.10 and 3.9.5 are now available (CPython) ([#1204](https://github.com/heroku/heroku-buildpack-python/pull/1204)).
 
 ## v194 (2021-04-26)
 
