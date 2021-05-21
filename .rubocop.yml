@@ -13,5 +13,10 @@ RSpec/DescribeClass:
 RSpec/ExampleLength:
   Enabled: false
 
+RSpec/Focus:
+  # Disable auto-correct otherwise format-on-save will remove the annotation
+  # whilst developing locally.
+  AutoCorrect: false
+
 RSpec/MultipleExpectations:
   Enabled: false
