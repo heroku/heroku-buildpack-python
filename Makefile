@@ -1,5 +1,5 @@
 # These targets are not files
-.PHONY: lint lint-scripts lint-ruby compile builder-image buildenv deploy-runtimes
+.PHONY: lint lint-scripts lint-ruby compile builder-image buildenv deploy-runtimes publish
 
 STACK ?= heroku-20
 STACKS ?= heroku-16 heroku-18 heroku-20
@@ -57,3 +57,6 @@ endif
 			echo; \
 		done; \
 	done
+
+publish:
+	@etc/publish.sh
