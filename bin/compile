@@ -90,18 +90,6 @@ source "$BIN_DIR/utils"
 # shellcheck source=bin/warnings
 source "$BIN_DIR/warnings"
 
-if [[ "${STACK}" == "cedar-14" ]]; then
-  mcount "failure.unsupported.cedar-14"
-  puts-warn "The Cedar-14 stack is no longer supported by the latest release of this buildpack."
-  puts-warn
-  puts-warn "Please switch to the Cedar-14 support branch by using this buildpack URL:"
-  puts-warn "https://github.com/heroku/heroku-buildpack-python#cedar-14"
-  puts-warn
-  puts-warn "For instructions on how to change the buildpacks used by an app, see:"
-  puts-warn "https://devcenter.heroku.com/articles/buildpacks#setting-a-buildpack-on-an-application"
-  exit 1
-fi
-
 if [[ -f "${ENV_DIR}/BUILD_WITH_GEO_LIBRARIES" ]]; then
   mcount "failure.unsupported.BUILD_WITH_GEO_LIBRARIES"
   puts-warn "The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functonality is"
