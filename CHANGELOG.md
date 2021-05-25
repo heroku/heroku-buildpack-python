@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## v196 (2021-05-25)
+
 - Django collectstatic is no longer skipped if `DISABLE_COLLECTSTATIC` is set to `0` or the empty string ([#1208](https://github.com/heroku/heroku-buildpack-python/pull/1208)).
 - If Django collectstatic is skipped, output the reason why ([#1208](https://github.com/heroku/heroku-buildpack-python/pull/1208)).
 - Output a deprecation warning when collectstatic is skipped via the `.heroku/collectstatic_disabled` file ([#1208](https://github.com/heroku/heroku-buildpack-python/pull/1208)).
