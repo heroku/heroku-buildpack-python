@@ -68,7 +68,7 @@ By default this will deploy to all supported stacks (see `STACKS` in `Makefile`)
 but this can be overridden using `STACKS`:
 
 ```bash
-make deploy-runtimes RUNTIMES='python-X.Y.Z' STACKS='heroku-16 heroku-18'
+make deploy-runtimes RUNTIMES='python-X.Y.Z' STACKS='heroku-18'
 ```
 
 Multiple runtimes can also be specified (useful for when adding a new stack), like so:

@@ -66,7 +66,7 @@ RSpec.describe 'Pipenv support' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_2.7', allow_failure: allow_failure) }
 
-    context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
+    context 'when using Heroku-18', stacks: %w[heroku-18] do
       it 'builds with the latest Python 2.7' do
         app.deploy do |app|
           expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))

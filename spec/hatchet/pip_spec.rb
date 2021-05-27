@@ -121,7 +121,7 @@ RSpec.describe 'Pip support' do
     end
   end
 
-  context 'when using pysqlite and Python 2', stacks: %w[heroku-16 heroku-18] do
+  context 'when using pysqlite and Python 2', stacks: %w[heroku-18] do
     # This is split out from the requirements_compiled fixture, since the original
     # pysqlite package (as opposed to the newer pysqlite3) only supports Python 2.
     # This test has to be skipped on newer stacks where Python 2 is not available.
