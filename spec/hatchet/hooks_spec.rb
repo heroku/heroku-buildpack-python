@@ -36,9 +36,6 @@ RSpec.describe 'Compile hooks' do
         SOURCE_VERSION
         STACK
       ]
-      # On Heroku-16 'OLDPWD' will not be set, since for bash <4.4 it's not exported to subshells:
-      # https://github.com/heroku/heroku-buildpack-python/pull/1011#issuecomment-665117835
-      expected_env_vars.delete('OLDPWD') if app.stack == 'heroku-16'
 
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))

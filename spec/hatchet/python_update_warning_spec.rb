@@ -34,7 +34,7 @@ RSpec.describe 'Python update warnings' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_2.7_outdated', allow_failure: allow_failure) }
 
-    context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
+    context 'when using Heroku-18', stacks: %w[heroku-18] do
       it 'warns that Python 2.7.17 is both EOL and not the latest patch release' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
@@ -61,7 +61,7 @@ RSpec.describe 'Python update warnings' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.4_outdated', allow_failure: allow_failure) }
 
-    context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
+    context 'when using Heroku-18', stacks: %w[heroku-18] do
       include_examples 'warns there is a Python update available', '3.4.9', LATEST_PYTHON_3_4
     end
 
@@ -76,7 +76,7 @@ RSpec.describe 'Python update warnings' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.5_outdated', allow_failure: allow_failure) }
 
-    context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
+    context 'when using Heroku-18', stacks: %w[heroku-18] do
       include_examples 'warns there is a Python update available', '3.5.9', LATEST_PYTHON_3_5
     end
 

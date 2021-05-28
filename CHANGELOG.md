@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove testing & binary generation support for Heroku-16 ([#1214](https://github.com/heroku/heroku-buildpack-python/pull/1214)).
 
 ## v196 (2021-05-25)
 
