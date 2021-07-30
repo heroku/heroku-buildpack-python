@@ -3,13 +3,12 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "weekly"
-    labels:
-      - "c: dependencies"
-
+      interval: "daily"
   - package-ecosystem: "bundler"
     directory: "/"
     schedule:
-      interval: "weekly"
-    labels:
-      - "c: dependencies"
+      interval: "daily"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
