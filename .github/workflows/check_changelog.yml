@@ -13,6 +13,6 @@ jobs:
       !contains(github.event.pull_request.body, '[skip ci]') &&
       !contains(github.event.pull_request.labels.*.name, 'c: dependencies')
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2.3.4
       - name: Check that CHANGELOG is touched
         run: git diff remotes/origin/${{ github.base_ref }} --name-only | grep CHANGELOG.md
