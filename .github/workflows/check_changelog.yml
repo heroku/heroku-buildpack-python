@@ -11,8 +11,11 @@ jobs:
       !contains(github.event.pull_request.body, '[skip changelog]') &&
       !contains(github.event.pull_request.body, '[changelog skip]') &&
       !contains(github.event.pull_request.body, '[skip ci]') &&
-      !contains(github.event.pull_request.labels.*.name, 'c: dependencies')
+      !contains(github.event.pull_request.labels.*.name, 'skip changelog') &&
+      !contains(github.event.pull_request.labels.*.name, 'dependencies')
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Check that CHANGELOG is touched
-        run: git diff remotes/origin/${{ github.base_ref }} --name-only | grep CHANGELOG.md
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth 1 && \
+          git diff remotes/origin/${{ github.base_ref }} --name-only | grep CHANGELOG.md
