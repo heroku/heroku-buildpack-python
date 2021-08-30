@@ -42,7 +42,7 @@ A `requirements.txt` must be present at the root of your application's repositor
 
 To specify your python version, you also need a `runtime.txt` file - unless you are using the default Python runtime version.
 
-Current default Python Runtime: Python 3.9.6
+Current default Python Runtime: Python 3.9.7
 
 Alternatively, you can provide a `setup.py` file, or a `Pipfile`.
 Using `pipenv` will generate `runtime.txt` at build time if one of the field `python_version` or `python_full_version` is specified in the `requires` section of your `Pipfile`.
@@ -60,7 +60,7 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.9.6`
-- `python-3.8.11`
+- `python-3.9.7`
+- `python-3.8.12`
 - `python-3.7.11`
 - `python-3.6.14`
