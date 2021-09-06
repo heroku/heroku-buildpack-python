@@ -7,8 +7,8 @@
 
 LATEST_39="python-3.9.7"
 LATEST_38="python-3.8.12"
-LATEST_37="python-3.7.11"
-LATEST_36="python-3.6.14"
+LATEST_37="python-3.7.12"
+LATEST_36="python-3.6.15"
 LATEST_35="python-3.5.10"
 LATEST_34="python-3.4.10"
 LATEST_27="python-2.7.18"

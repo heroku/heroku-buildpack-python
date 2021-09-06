@@ -62,5 +62,5 @@ Supported runtime options include:
 
 - `python-3.9.7`
 - `python-3.8.12`
-- `python-3.7.11`
-- `python-3.6.14`
+- `python-3.7.12`
+- `python-3.6.15`
