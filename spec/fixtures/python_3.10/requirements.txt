@@ -1,1 +1,4 @@
 urllib3
+
+# Ensure setuptools minimal requirements works
+pep562; python_version < "3.7"
