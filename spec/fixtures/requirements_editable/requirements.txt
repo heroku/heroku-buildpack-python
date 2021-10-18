@@ -1,2 +1,2 @@
--e git+https://github.com/certifi/python-certifi#egg=certifi
--e .
+-e ./local_package
+-e git+https://github.com/benoitc/gunicorn@20.1.0#egg=gunicorn

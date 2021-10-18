@@ -88,12 +88,63 @@ RSpec.describe 'Pip support' do
   end
 
   context 'when requirements.txt contains editable requirements' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_editable') }
+    let(:buildpacks) { [:default, 'heroku-community/inline'] }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_editable', buildpacks: buildpacks) }
 
-    # TODO: Make this test the path rewriting, and --src directory handling,
-    # and that the packages work during all of hooks, later buildpacks, runtime,
-    # and on subsequent builds (where the paths have to be migrated back).
-    include_examples 'installs successfully using pip'
+    it 'rewrites .pth paths correctly for hooks, later buildpacks, runtime and cached builds' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Installing requirements with pip
+          remote:        Obtaining file:///tmp/build_.*/local_package \\(from -r /tmp/build_.*/requirements.txt \\(line 1\\)\\)
+          remote:        Obtaining gunicorn from git\\+https://github.com/benoitc/gunicorn@20.1.0#egg=gunicorn \\(from -r /tmp/build_.*/requirements.txt \\(line 2\\)\\)
+          remote:          Cloning https://github.com/benoitc/gunicorn \\(to revision 20.1.0\\) to /app/.heroku/src/gunicorn
+          remote:        Installing collected packages: gunicorn, local-package
+          remote:          Running setup.py develop for gunicorn
+          remote:          Running setup.py develop for local-package
+          remote:        Successfully installed gunicorn local-package
+          remote: -----> Running post-compile hook
+          remote: Running entrypoint for the local package: Hello!
+          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: -----> Inline app detected
+          remote: Running entrypoint for the local package: Hello!
+          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+        REGEX
+
+        # Test rewritten paths work at runtime.
+        expect(app.run('bin/test-entrypoints')).to include(<<~OUTPUT)
+          Running entrypoint for the local package: Hello!
+          Running entrypoint for the VCS package: gunicorn (version 20.1.0)
+        OUTPUT
+
+        # Test restoring paths in the cached .pth files works correctly.
+        app.commit!
+        app.push!
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> No change in requirements detected, installing from cache
+          remote: -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
+          remote: -----> Installing pip 20.2.4, setuptools 47.1.1 and wheel 0.36.2
+          remote: -----> Installing SQLite3
+          remote: -----> Installing requirements with pip
+          remote:        Obtaining file:///tmp/build_.*/local_package \\(from -r /tmp/build_.*/requirements.txt \\(line 1\\)\\)
+          remote:        Obtaining gunicorn from git\\+https://github.com/benoitc/gunicorn@20.1.0#egg=gunicorn \\(from -r /tmp/build_.*/requirements.txt \\(line 2\\)\\)
+          remote:          Cloning https://github.com/benoitc/gunicorn \\(to revision 20.1.0\\) to /app/.heroku/src/gunicorn
+          remote:        Installing collected packages: gunicorn, local-package
+          remote:          Attempting uninstall: gunicorn
+          remote:            Found existing installation: gunicorn 20.1.0
+          remote:            Uninstalling gunicorn-20.1.0:
+          remote:              Successfully uninstalled gunicorn-20.1.0
+          remote:          Running setup.py develop for gunicorn
+          remote:          Running setup.py develop for local-package
+          remote:        Successfully installed gunicorn local-package
+          remote: -----> Running post-compile hook
+          remote: Running entrypoint for the local package: Hello!
+          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: -----> Inline app detected
+          remote: Running entrypoint for the local package: Hello!
+          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+        REGEX
+      end
+    end
   end
 
   context 'when there is only a setup.py' do

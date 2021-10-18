@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo -n "Running entrypoint for the local package: "
+local_package
+
+echo -n "Running entrypoint for the VCS package: "
+gunicorn --version
