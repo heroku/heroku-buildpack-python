@@ -91,7 +91,7 @@ RSpec.describe 'Pip support' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_editable', buildpacks: buildpacks) }
 
-    it 'rewrites .pth paths correctly for hooks, later buildpacks, runtime and cached builds' do
+    it 'rewrites .pth and .egg-link paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Installing requirements with pip
@@ -103,18 +103,48 @@ RSpec.describe 'Pip support' do
           remote:          Running setup.py develop for local-package
           remote:        Successfully installed gunicorn local-package
           remote: -----> Running post-compile hook
+          remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
+          remote: /app/.heroku/src/gunicorn
+          remote: /tmp/build_.*/local_package
+          remote: 
+          remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
+          remote: /app/.heroku/src/gunicorn
+          remote: .
+          remote: ==> .heroku/python/lib/python.*/site-packages/local-package.egg-link <==
+          remote: /tmp/build_.*/local_package
+          remote: .
           remote: Running entrypoint for the local package: Hello!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
+          remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
+          remote: /app/.heroku/src/gunicorn
+          remote: /app/local_package
+          remote: 
+          remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
+          remote: /app/.heroku/src/gunicorn
+          remote: .
+          remote: ==> .heroku/python/lib/python.*/site-packages/local-package.egg-link <==
+          remote: /tmp/build_.*/local_package
+          remote: .
           remote: Running entrypoint for the local package: Hello!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
         REGEX
 
         # Test rewritten paths work at runtime.
-        expect(app.run('bin/test-entrypoints')).to include(<<~OUTPUT)
+        expect(app.run('bin/test-entrypoints')).to match(Regexp.new(<<~REGEX))
+          ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
+          /app/.heroku/src/gunicorn
+          /app/local_package
+
+          ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
+          /app/.heroku/src/gunicorn
+          .
+          ==> .heroku/python/lib/python.*/site-packages/local-package.egg-link <==
+          /tmp/build_.*/local_package
+          .
           Running entrypoint for the local package: Hello!
-          Running entrypoint for the VCS package: gunicorn (version 20.1.0)
-        OUTPUT
+          Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+        REGEX
 
         # Test restoring paths in the cached .pth files works correctly.
         app.commit!
@@ -137,9 +167,29 @@ RSpec.describe 'Pip support' do
           remote:          Running setup.py develop for local-package
           remote:        Successfully installed gunicorn local-package
           remote: -----> Running post-compile hook
+          remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
+          remote: /tmp/build_.*/local_package
+          remote: /app/.heroku/src/gunicorn
+          remote: 
+          remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
+          remote: /app/.heroku/src/gunicorn
+          remote: .
+          remote: ==> .heroku/python/lib/python.*/site-packages/local-package.egg-link <==
+          remote: /tmp/build_.*/local_package
+          remote: .
           remote: Running entrypoint for the local package: Hello!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
+          remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
+          remote: /app/local_package
+          remote: /app/.heroku/src/gunicorn
+          remote: 
+          remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
+          remote: /app/.heroku/src/gunicorn
+          remote: .
+          remote: ==> .heroku/python/lib/python.*/site-packages/local-package.egg-link <==
+          remote: /tmp/build_.*/local_package
+          remote: .
           remote: Running entrypoint for the local package: Hello!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
         REGEX

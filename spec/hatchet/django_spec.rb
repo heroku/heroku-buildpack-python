@@ -112,7 +112,7 @@ RSpec.describe 'Django support' do
             remote:        Traceback \\(most recent call last\\):
             remote:        .*
             remote:        ModuleNotFoundError: No module named 'gettingstarted'
-            remote:#{' '}
+            remote: 
             remote:  !     Error while running '\\$ python manage.py collectstatic --noinput'.
           REGEX
         end
