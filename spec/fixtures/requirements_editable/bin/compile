@@ -7,4 +7,6 @@ set -euo pipefail
 
 BUILD_DIR="${1}"
 
-exec "${BUILD_DIR}/bin/test-entrypoints"
+cd "${BUILD_DIR}"
+
+exec bin/test-entrypoints

@@ -4,6 +4,12 @@ require:
 AllCops:
   NewCops: enable
 
+Layout/TrailingWhitespace:
+  # Required since we use heredocs to assert against Hatchet output, and sometimes that output
+  # contains trailing newlines which we must match against. The alternative is to end the lines
+  # with the unsightly `#{' '}` workaround.
+  AllowInHeredoc: true
+
 Metrics/BlockLength:
   Enabled: false
 
