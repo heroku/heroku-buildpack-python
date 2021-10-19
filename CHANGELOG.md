@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Update setuptools from 47.1.1 to: ([#1253](https://github.com/heroku/heroku-buildpack-python/pull/1254))
+  - 50.3.2 for Python 3.5
+  - 57.5.0 for Python 3.6+
+- Update wheel from 0.36.2 to 0.37.0 ([#1253](https://github.com/heroku/heroku-buildpack-python/pull/1254)).
 - Perform editable package `.pth` and `.egg-link` path rewriting at runtime ([#1252](https://github.com/heroku/heroku-buildpack-python/pull/1252)).
 
 ## v200 (2021-10-04)
