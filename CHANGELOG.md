@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Perform editable package `.pth` and `.egg-link` path rewriting at runtime ([#1252](https://github.com/heroku/heroku-buildpack-python/pull/1252)).
 
 ## v200 (2021-10-04)
 

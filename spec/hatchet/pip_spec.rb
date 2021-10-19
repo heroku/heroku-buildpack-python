@@ -118,7 +118,7 @@ RSpec.describe 'Pip support' do
           remote: -----> Inline app detected
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
           remote: /app/.heroku/src/gunicorn
-          remote: /app/local_package
+          remote: /tmp/build_.*/local_package
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           remote: /app/.heroku/src/gunicorn
@@ -140,7 +140,7 @@ RSpec.describe 'Pip support' do
           /app/.heroku/src/gunicorn
           .
           ==> .heroku/python/lib/python.*/site-packages/local-package.egg-link <==
-          /tmp/build_.*/local_package
+          /app/local_package
           .
           Running entrypoint for the local package: Hello!
           Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
@@ -159,17 +159,13 @@ RSpec.describe 'Pip support' do
           remote:        Obtaining gunicorn from git\\+https://github.com/benoitc/gunicorn@20.1.0#egg=gunicorn \\(from -r /tmp/build_.*/requirements.txt \\(line 2\\)\\)
           remote:          Cloning https://github.com/benoitc/gunicorn \\(to revision 20.1.0\\) to /app/.heroku/src/gunicorn
           remote:        Installing collected packages: gunicorn, local-package
-          remote:          Attempting uninstall: gunicorn
-          remote:            Found existing installation: gunicorn 20.1.0
-          remote:            Uninstalling gunicorn-20.1.0:
-          remote:              Successfully uninstalled gunicorn-20.1.0
           remote:          Running setup.py develop for gunicorn
           remote:          Running setup.py develop for local-package
           remote:        Successfully installed gunicorn local-package
           remote: -----> Running post-compile hook
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          remote: /tmp/build_.*/local_package
           remote: /app/.heroku/src/gunicorn
+          remote: /tmp/build_.*/local_package
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           remote: /app/.heroku/src/gunicorn
@@ -181,8 +177,8 @@ RSpec.describe 'Pip support' do
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          remote: /app/local_package
           remote: /app/.heroku/src/gunicorn
+          remote: /tmp/build_.*/local_package
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           remote: /app/.heroku/src/gunicorn
