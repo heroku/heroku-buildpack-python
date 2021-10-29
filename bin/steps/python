@@ -150,7 +150,7 @@ fi
 
 set -e
 
-PIP_VERSION='20.2.4'
+PIP_VERSION='21.3.1'
 SETUPTOOLS_VERSION='57.5.0'
 WHEEL_VERSION='0.37.0'
 
@@ -160,10 +160,12 @@ if [[ "${PYTHON_VERSION}" == ${PY34}* ]]; then
   SETUPTOOLS_VERSION='43.0.0'
   WHEEL_VERSION='0.33.6'
 elif [[ "${PYTHON_VERSION}" == ${PY27}* || "${PYTHON_VERSION}" == ${PYPY27}* ]]; then
-  # Python 2.7 support was dropped in setuptools 45+.
+  # Python 2.7 support was dropped in pip 21+ and setuptools 45+.
+  PIP_VERSION='20.3.4'
   SETUPTOOLS_VERSION='44.1.1'
 elif [[ "${PYTHON_VERSION}" == ${PY35}* ]]; then
-  # Python 3.5 support was dropped in setuptools 51+.
+  # Python 3.5 support was dropped in pip 21+ and setuptools 51+.
+  PIP_VERSION='20.3.4'
   SETUPTOOLS_VERSION='50.3.2'
 fi
 
@@ -176,7 +178,14 @@ puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and w
 #  - we would still have to manage several versions of get-pip.py, to support older Pythons.
 # Instead, we use the pip wheel to install itself, using the method described here:
 # https://github.com/pypa/pip/issues/2351#issuecomment-69994524
-PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py2.py3-none-any.whl"
+
+PIP_MAJOR_VERSION="${PIP_VERSION%%.*}"
+if [[ "${PIP_MAJOR_VERSION}" -ge 21 ]]; then
+  # Pip 21+ dropped support for Python 2, so no longer uses universal wheels.
+  PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py3-none-any.whl"
+else
+  PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py2.py3-none-any.whl"
+fi
 PIP_WHEEL_URL="${S3_BASE_URL}/common/${PIP_WHEEL_FILENAME}"
 PIP_WHEEL="${TMPDIR:-/tmp}/${PIP_WHEEL_FILENAME}"
 
