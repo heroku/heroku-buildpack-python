@@ -22,7 +22,7 @@ RSpec.describe 'Pip support' do
           remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.2.4, setuptools 57.5.0 and wheel 0.37.0
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3
@@ -38,7 +38,7 @@ RSpec.describe 'Pip support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> No change in requirements detected, installing from cache
           remote: -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.2.4, setuptools 57.5.0 and wheel 0.37.0
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote: -----> Discovering process types
@@ -61,7 +61,7 @@ RSpec.describe 'Pip support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Requirements file has been changed, clearing cached dependencies
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.2.4, setuptools 57.5.0 and wheel 0.37.0
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3
@@ -94,21 +94,14 @@ RSpec.describe 'Pip support' do
     it 'rewrites .pth and .egg-link paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Installing requirements with pip
-          remote:        Obtaining file:///tmp/build_.*/local_package \\(from -r /tmp/build_.*/requirements.txt \\(line 1\\)\\)
-          remote:        Obtaining gunicorn from git\\+https://github.com/benoitc/gunicorn@20.1.0#egg=gunicorn \\(from -r /tmp/build_.*/requirements.txt \\(line 2\\)\\)
-          remote:          Cloning https://github.com/benoitc/gunicorn \\(to revision 20.1.0\\) to /app/.heroku/src/gunicorn
-          remote:        Installing collected packages: gunicorn, local-package
-          remote:          Running setup.py develop for gunicorn
-          remote:          Running setup.py develop for local-package
-          remote:        Successfully installed gunicorn local-package
+          remote:        Successfully installed gunicorn-20.1.0 local-package-0.0.1
           remote: -----> Running post-compile hook
           remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          remote: import os; var = 'SETUPTOOLS_USE_DISTUTILS'; enabled = os.environ.get\\(var, 'stdlib'\\) == 'local'; enabled and __import__\\('_distutils_hack'\\).add_shim\\(\\); 
+          remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          remote: /app/.heroku/src/gunicorn
           remote: /tmp/build_.*/local_package
+          remote: /app/.heroku/src/gunicorn
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           remote: /app/.heroku/src/gunicorn
@@ -120,11 +113,11 @@ RSpec.describe 'Pip support' do
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
           remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          remote: import os; var = 'SETUPTOOLS_USE_DISTUTILS'; enabled = os.environ.get\\(var, 'stdlib'\\) == 'local'; enabled and __import__\\('_distutils_hack'\\).add_shim\\(\\); 
+          remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          remote: /app/.heroku/src/gunicorn
           remote: /tmp/build_.*/local_package
+          remote: /app/.heroku/src/gunicorn
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           remote: /app/.heroku/src/gunicorn
@@ -139,11 +132,11 @@ RSpec.describe 'Pip support' do
         # Test rewritten paths work at runtime.
         expect(app.run('bin/test-entrypoints')).to match(Regexp.new(<<~REGEX))
           ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          import os; var = 'SETUPTOOLS_USE_DISTUTILS'; enabled = os.environ.get\\(var, 'stdlib'\\) == 'local'; enabled and __import__\\('_distutils_hack'\\).add_shim\\(\\); 
+          .*
 
           ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          /app/.heroku/src/gunicorn
           /app/local_package
+          /app/.heroku/src/gunicorn
 
           ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           /app/.heroku/src/gunicorn
@@ -155,25 +148,14 @@ RSpec.describe 'Pip support' do
           Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
         REGEX
 
-        # Test restoring paths in the cached .pth files works correctly.
+        # Test that the cached .pth files work correctly.
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> No change in requirements detected, installing from cache
-          remote: -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.2.4, setuptools 57.5.0 and wheel 0.37.0
-          remote: -----> Installing SQLite3
-          remote: -----> Installing requirements with pip
-          remote:        Obtaining file:///tmp/build_.*/local_package \\(from -r /tmp/build_.*/requirements.txt \\(line 1\\)\\)
-          remote:        Obtaining gunicorn from git\\+https://github.com/benoitc/gunicorn@20.1.0#egg=gunicorn \\(from -r /tmp/build_.*/requirements.txt \\(line 2\\)\\)
-          remote:          Cloning https://github.com/benoitc/gunicorn \\(to revision 20.1.0\\) to /app/.heroku/src/gunicorn
-          remote:        Installing collected packages: gunicorn, local-package
-          remote:          Running setup.py develop for gunicorn
-          remote:          Running setup.py develop for local-package
-          remote:        Successfully installed gunicorn local-package
+          remote:        Successfully installed gunicorn-20.1.0 local-package-0.0.1
           remote: -----> Running post-compile hook
           remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          remote: import os; var = 'SETUPTOOLS_USE_DISTUTILS'; enabled = os.environ.get\\(var, 'stdlib'\\) == 'local'; enabled and __import__\\('_distutils_hack'\\).add_shim\\(\\); 
+          remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
           remote: /app/.heroku/src/gunicorn
@@ -189,7 +171,7 @@ RSpec.describe 'Pip support' do
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
           remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          remote: import os; var = 'SETUPTOOLS_USE_DISTUTILS'; enabled = os.environ.get\\(var, 'stdlib'\\) == 'local'; enabled and __import__\\('_distutils_hack'\\).add_shim\\(\\); 
+          remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
           remote: /app/.heroku/src/gunicorn
