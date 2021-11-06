@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-# Build Path: /app/.heroku/python/
-# Build Deps: libraries/sqlite
-
-# version pypy3-5.5.0 is really called pypy3.3-v5.5.0-alpha
-dep_version_prefix=".3"
-dep_version_suffix="-alpha"
-source $(dirname $0)/pypy3

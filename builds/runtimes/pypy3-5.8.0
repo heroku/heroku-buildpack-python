@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-# Build Path: /app/.heroku/python/
-# Build Deps: libraries/sqlite
-
-source $(dirname $0)/pypy3
