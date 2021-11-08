@@ -54,6 +54,7 @@ RSpec.describe 'Stack changes' do
           remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: python: /lib/x86_64-linux-gnu/libm.so.6: version `GLIBC_2.29' not found (required by python)
+          remote: python: /lib/x86_64-linux-gnu/libpthread.so.0: version `GLIBC_2.30' not found (required by python)
           remote: python: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.28' not found (required by python)
           remote: -----> Stack has changed from heroku-20 to heroku-18, clearing cache
           remote: -----> No change in requirements detected, installing from cache
