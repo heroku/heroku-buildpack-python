@@ -92,13 +92,6 @@ python_sqlite3_check() {
   MIN_PYTHON_3="python-3.5.6"
   MIN_PYTHON_2="python-2.7.15"
 
-  # On the scalingo stack, sqlite is already installed no need to install it
-  # again
-  if [ "$STACK" = "scalingo" ] ; then
-    # 1 is false in bash
-    return 1
-  fi
-
   ( python2_check "$VERSION" && version_gte "$VERSION" "$MIN_PYTHON_2" ) \
     || ( python3_check "$VERSION" && version_gte "$VERSION" "$MIN_PYTHON_3" )
 }
