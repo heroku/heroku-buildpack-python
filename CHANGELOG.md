@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Python 3.10.1 is now available ([#1271](https://github.com/heroku/heroku-buildpack-python/pull/1271)).
 
 ## v204 (2021-11-16)
 
