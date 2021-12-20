@@ -5,12 +5,11 @@ set_sql_alchemy_url() {
   local environment_variables_prefix=$2
 
   local pattern="sqlalchemy"
-  for requirements_file in "requirements.txt" "Pipfile"; do
-    concerned=$(cat $requirements_file | grep -ic $pattern)
-    if [ $concerned -eq 0 ]; then
-      return 0
-    fi
-  done
+  concerned1=$(cat "requirements.txt" | grep -ic $pattern)
+  concerned2=$(cat "Pipfile" | grep -ic $pattern)
+  if [ $concerned1 -eq 0 ] && [ $concerned2 -eq 0 ]; then
+    return 0
+  fi
 
   if ! [[ $database_url =~ postgres:// ]];then
     return 0
