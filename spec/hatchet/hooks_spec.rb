@@ -36,9 +36,6 @@ RSpec.describe 'Compile hooks' do
         SOURCE_VERSION
         STACK
       ]
-      # On Heroku-16 'OLDPWD' will not be set, since for bash <4.4 it's not exported to subshells:
-      # https://github.com/heroku/heroku-buildpack-python/pull/1011#issuecomment-665117835
-      expected_env_vars.delete('OLDPWD') if app.stack == 'heroku-16'
 
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
@@ -46,7 +43,7 @@ RSpec.describe 'Compile hooks' do
           remote: -----> Running pre-compile hook
           remote: pre_compile ran with env vars:
           remote: #{expected_env_vars.join("\nremote: ")}
-          remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
           remote: .*
           remote: -----> Installing requirements with pip
           remote: -----> Running post-compile hook

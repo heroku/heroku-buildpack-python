@@ -42,7 +42,7 @@ A `requirements.txt` must be present at the root of your application's repositor
 See it in Action with Pipenv
 ----------------------------
 
-Deploying a Python application couldn't be easier:
+Current default Python Runtime: Python 3.9.9
 
     $ ls
     Pipfile		Pipfile.lock	Procfile	web.py
@@ -77,8 +77,8 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.9.2`
-- `python-3.8.8`
-- `python-3.7.10`
-- `python-3.6.13`
-- `python-2.7.18`
+- `python-3.10.1`
+- `python-3.9.9`
+- `python-3.8.12`
+- `python-3.7.12`
+- `python-3.6.15`

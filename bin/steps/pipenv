@@ -30,7 +30,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         export SKIP_PIP_INSTALL=1
 
         # Set Pip env vars
-        # This reads certain environment variables set on the Heroku app config
+        # This reads certain environment variables set on the Scalingo app config
         # and makes them accessible to the pip install process.
         #
         # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
@@ -38,13 +38,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
             export PIP_EXTRA_INDEX_URL
             mcount "buildvar.PIP_EXTRA_INDEX_URL"
-        fi
-
-        # Set SLUGIFY_USES_TEXT_UNIDECODE, required for Airflow versions >=1.10
-        if [[ -r "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE" ]]; then
-            SLUGIFY_USES_TEXT_UNIDECODE="$(cat "$ENV_DIR/SLUGIFY_USES_TEXT_UNIDECODE")"
-            export SLUGIFY_USES_TEXT_UNIDECODE
-            mcount "buildvar.SLUGIFY_USES_TEXT_UNIDECODE"
         fi
 
         PIPENV_VERSION='2020.11.15'

@@ -3,6 +3,81 @@
 ## Unreleased
 
 
+## v205 (2021-12-06)
+
+- Python 3.10.1 is now available ([#1271](https://github.com/heroku/heroku-buildpack-python/pull/1271)).
+
+## v204 (2021-11-16)
+
+- Python 3.9.9 is now available ([#1268](https://github.com/heroku/heroku-buildpack-python/pull/1268)).
+- The default Python version for new apps is now 3.9.9 (previously 3.9.8) ([#1268](https://github.com/heroku/heroku-buildpack-python/pull/1268)).
+
+## v203 (2021-11-08)
+
+- Python 3.9.8 is now available ([#1263](https://github.com/heroku/heroku-buildpack-python/pull/1263)).
+- The default Python version for new apps is now 3.9.8 (previously 3.9.7) ([#1263](https://github.com/heroku/heroku-buildpack-python/pull/1263)).
+
+## v202 (2021-11-01)
+
+- Update pip from 20.2.4 to: ([#1259](https://github.com/heroku/heroku-buildpack-python/pull/1259))
+  - 20.3.4 for Python 2.7 and 3.5
+  - 21.3.1 for Python 3.6+
+
+## v201 (2021-10-20)
+
+- Update setuptools from 47.1.1 to: ([#1254](https://github.com/heroku/heroku-buildpack-python/pull/1254))
+  - 50.3.2 for Python 3.5
+  - 57.5.0 for Python 3.6+
+- Update wheel from 0.36.2 to 0.37.0 ([#1254](https://github.com/heroku/heroku-buildpack-python/pull/1254)).
+- Perform editable package `.pth` and `.egg-link` path rewriting at runtime ([#1252](https://github.com/heroku/heroku-buildpack-python/pull/1252)).
+
+## v200 (2021-10-04)
+
+- Add support for Python 3.10 ([#1246](https://github.com/heroku/heroku-buildpack-python/pull/1246)).
+
+## v199 (2021-09-05)
+
+- Python 3.6.15 and 3.7.12 are now available (CPython) ([#1238](https://github.com/heroku/heroku-buildpack-python/pull/1238)).
+
+## v198 (2021-08-30)
+
+- Python 3.8.12 and 3.9.7 are now available (CPython) ([#1236](https://github.com/heroku/heroku-buildpack-python/pull/1236)).
+- The default Python version for new apps is now 3.9.7 (previously 3.9.6) ([#1236](https://github.com/heroku/heroku-buildpack-python/pull/1236)).
+
+## v197 (2021-06-28)
+
+- Python 3.6.14, 3.7.11, 3.8.11 and 3.9.6 are now available (CPython) ([#1219](https://github.com/heroku/heroku-buildpack-python/pull/1219)).
+- The default Python version for new apps is now 3.9.6 (previously 3.9.5) ([#1219](https://github.com/heroku/heroku-buildpack-python/pull/1219)).
+- Remove testing & binary generation support for Heroku-16 ([#1214](https://github.com/heroku/heroku-buildpack-python/pull/1214)).
+
+## v196 (2021-05-25)
+
+- Django collectstatic is no longer skipped if `DISABLE_COLLECTSTATIC` is set to `0` or the empty string ([#1208](https://github.com/heroku/heroku-buildpack-python/pull/1208)).
+- If Django collectstatic is skipped, output the reason why ([#1208](https://github.com/heroku/heroku-buildpack-python/pull/1208)).
+- Output a deprecation warning when collectstatic is skipped via the `.heroku/collectstatic_disabled` file ([#1208](https://github.com/heroku/heroku-buildpack-python/pull/1208)).
+- Remove redundant "Cedar-14 is unsupported" error ([#1212](https://github.com/heroku/heroku-buildpack-python/pull/1212)).
+
+## v195 (2021-05-03)
+
+- Python 3.8.10 and 3.9.5 are now available (CPython) ([#1204](https://github.com/heroku/heroku-buildpack-python/pull/1204)).
+
+## v194 (2021-04-26)
+
+- Always output the Python version used and reason why ([#1196](https://github.com/heroku/heroku-buildpack-python/pull/1196)).
+
+## v193 (2021-04-13)
+
+- Update pip from 20.1.1 to 20.2.4 for Python 2.7 and Python 3.5+ ([#1192](https://github.com/heroku/heroku-buildpack-python/pull/1192)).
+- Update wheel from 0.34.2 to 0.36.2 for Python 2.7 and Python 3.5+ ([#1191](https://github.com/heroku/heroku-buildpack-python/pull/1191)).
+- Support build environments where `$BUILD_DIR` is set to a symlink of `/app` ([#992](https://github.com/heroku/heroku-buildpack-python/pull/992)).
+
+## v192 (2021-04-06)
+
+- Python 3.8.9 and 3.9.4 are now available (CPython) ([#1188](https://github.com/heroku/heroku-buildpack-python/pull/1188)).
+- Use Python 3.9 as the default Python version for new apps (previously Python 3.6) ([#1187](https://github.com/heroku/heroku-buildpack-python/pull/1187)).
+- Remove Airflow `SLUGIFY_USES_TEXT_UNIDECODE` workaround ([#1186](https://github.com/heroku/heroku-buildpack-python/pull/1186)).
+- Fix grammar in the Python 2 EOL message ([#1182](https://github.com/heroku/heroku-buildpack-python/pull/1182)).
+
 ## v191 (2021-02-19)
 
 - Python 3.8.8 and 3.9.2 are now available (CPython) ([#1178](https://github.com/heroku/heroku-buildpack-python/pull/1178)).

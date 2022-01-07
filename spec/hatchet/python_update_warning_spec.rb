@@ -7,6 +7,7 @@ RSpec.shared_examples 'warns there is a Python update available' do |requested_v
     app.deploy do |app|
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
+        remote: -----> Using Python version specified in runtime.txt
         remote:  !     Python has released a security update! Please consider upgrading to python-#{latest_version}
         remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
         remote: -----> Installing python-#{requested_version}
@@ -20,6 +21,7 @@ RSpec.shared_examples 'aborts the build without showing an update warning' do |r
     app.deploy do |app|
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
+        remote: -----> Using Python version specified in runtime.txt
         remote:  !     Requested runtime (python-#{requested_version}) is not available for this stack (#{app.stack}).
         remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
       OUTPUT
@@ -32,12 +34,13 @@ RSpec.describe 'Python update warnings' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_2.7_outdated', allow_failure: allow_failure) }
 
-    context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
+    context 'when using Heroku-18', stacks: %w[heroku-18] do
       it 'warns that Python 2.7.17 is both EOL and not the latest patch release' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote:  !     Python 2 has reached it's community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
+            remote: -----> Using Python version specified in runtime.txt
+            remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
             remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote:  !     Only the latest version of Python 2 is supported on the platform. Please consider upgrading to python-#{LATEST_PYTHON_2_7}
             remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
@@ -58,7 +61,7 @@ RSpec.describe 'Python update warnings' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.4_outdated', allow_failure: allow_failure) }
 
-    context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
+    context 'when using Heroku-18', stacks: %w[heroku-18] do
       include_examples 'warns there is a Python update available', '3.4.9', LATEST_PYTHON_3_4
     end
 
@@ -73,7 +76,7 @@ RSpec.describe 'Python update warnings' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.5_outdated', allow_failure: allow_failure) }
 
-    context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
+    context 'when using Heroku-18', stacks: %w[heroku-18] do
       include_examples 'warns there is a Python update available', '3.5.9', LATEST_PYTHON_3_5
     end
 
@@ -106,6 +109,12 @@ RSpec.describe 'Python update warnings' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9_outdated') }
 
     include_examples 'warns there is a Python update available', '3.9.0', LATEST_PYTHON_3_9
+  end
+
+  context 'with a runtime.txt containing python-3.10.0' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.10_outdated') }
+
+    include_examples 'warns there is a Python update available', '3.10.0', LATEST_PYTHON_3_10
   end
 
   context 'with a runtime.txt containing pypy2.7-7.3.1' do

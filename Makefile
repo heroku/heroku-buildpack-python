@@ -1,8 +1,8 @@
 # These targets are not files
-.PHONY: lint lint-scripts lint-ruby compile builder-image buildenv deploy-runtimes
+.PHONY: lint lint-scripts lint-ruby compile builder-image buildenv deploy-runtimes publish
 
 STACK ?= heroku-20
-STACKS ?= heroku-16 heroku-18 heroku-20
+STACKS ?= heroku-18 heroku-20
 FIXTURE ?= spec/fixtures/python_version_unspecified
 ENV_FILE ?= builds/dockerenv.default
 BUILDER_IMAGE_PREFIX := heroku-python-build
@@ -14,7 +14,7 @@ lint: lint-scripts lint-ruby
 
 lint-scripts:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings bin/default_pythons
-	@shellcheck -x bin/steps/collectstatic bin/steps/eggpath-fix  bin/steps/eggpath-fix2 bin/steps/nltk bin/steps/pip-install bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/python
+	@shellcheck -x bin/steps/collectstatic bin/steps/nltk bin/steps/pip-install bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/python
 	@shellcheck -x bin/steps/hooks/*
 
 lint-ruby:
@@ -57,3 +57,6 @@ endif
 			echo; \
 		done; \
 	done
+
+publish:
+	@etc/publish.sh

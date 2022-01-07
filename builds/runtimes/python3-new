@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# This file will eventually be merged into the main `python3` build script,
+# however for Python 3.9/3.10 we are using some new configure options that we wish
+# to trial only in new Python builds first.
+
+set -euo pipefail
+
+OUT_PREFIX=$1
+BIN_DIR="$(cd "$(dirname "$0")"/../.. || exit; pwd)/bin"
+export BIN_DIR
+
+# Orient ourselves and build download link
+dep_formula=${0#$WORKSPACE_DIR/} # the path to the original script (e.g. "builds/runtimes/python-3.10.0")
+BASE=${dep_formula##*/} # just the filename (e.g. "python-3.10.0")
+python_version=${BASE^} # the filename with the first character uppercased (e.g. "Python-3.10.0")
+version_number=$(echo "$python_version" | cut -d- -f2) # this version component (e.g. "3.10.0")
+dep_url=https://python.org/ftp/python/${version_number}/${python_version}.tgz
+
+echo "Building Python ${version_number}..."
+echo "Pulling from source: ${dep_url}"
+
+mkdir src
+curl -fL "${dep_url}" | tar -xz --strip-components=1 -C src/
+cd src
+
+./configure \
+  --enable-loadable-sqlite-extensions \
+  --enable-optimizations \
+  --enable-option-checking=fatal \
+  --prefix=$OUT_PREFIX \
+  --with-ensurepip=no
+
+make -j "$(nproc)"
+make install
+
+# Remove unneeded test directories, similar to the official Docker Python images:
+# https://github.com/docker-library/python
+# Not using the new --disable-test-modules since it breaks PGO which runs the Python test suite.
+find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests -o -name idle_test \) \) -exec rm -rf '{}' +
+
+# Remove spare /
+LOCATION=${OUT_PREFIX%?}
+
+ln $LOCATION/bin/python3 $LOCATION/bin/python
