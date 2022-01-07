@@ -30,7 +30,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
         export SKIP_PIP_INSTALL=1
 
         # Set Pip env vars
-        # This reads certain environment variables set on the Heroku app config
+        # This reads certain environment variables set on the Scalingo app config
         # and makes them accessible to the pip install process.
         #
         # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.

@@ -98,15 +98,11 @@ source "$BIN_DIR/warnings"
 if [[ -f "${ENV_DIR}/BUILD_WITH_GEO_LIBRARIES" ]]; then
   mcount "failure.unsupported.BUILD_WITH_GEO_LIBRARIES"
   puts-warn "The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functonality is"
-  puts-warn "no longer supported:"
-  puts-warn "https://devcenter.heroku.com/changelog-items/1947"
-  puts-warn
-  puts-warn "To continue to use GDAL, GEOS or PROJ support, see the migration guide:"
-  puts-warn "https://help.heroku.com/D5INLB1A/python-s-build_with_geo_libraries-legacy-feature-is-no-longer-supported"
+  puts-warn "no longer supported."
   puts-warn
   puts-warn "Or if you no longer need those libraries, this message can be hidden by"
   puts-warn "unsetting the BUILD_WITH_GEO_LIBRARIES environment variable, using:"
-  puts-warn "heroku config:unset BUILD_WITH_GEO_LIBRARIES"
+  puts-warn "scalingo env-unset BUILD_WITH_GEO_LIBRARIES"
   exit 1
 fi
 
@@ -229,12 +225,12 @@ if [[ -f runtime.txt ]]; then
   mcount "version.reason.python.specified"
 elif [[ -n "${CACHED_PYTHON_VERSION:-}" ]]; then
   puts-step "No Python version was specified. Using the same version as the last build: ${CACHED_PYTHON_VERSION}"
-  echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
+  echo "       To use a different version, see: https://doc.scalingo.com/languages/python/start#supported-versions"
   mcount "version.reason.python.cached"
   echo "${CACHED_PYTHON_VERSION}" > runtime.txt
 else
   puts-step "No Python version was specified. Using the buildpack default: ${DEFAULT_PYTHON_VERSION}"
-  echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
+  echo "       To use a different version, see: https://doc.scalingo.com/languages/python/start#supported-versions"
   mcount "version.reason.python.default"
   echo "${DEFAULT_PYTHON_VERSION}" > runtime.txt
 fi
@@ -268,7 +264,7 @@ source "$BIN_DIR/steps/python"
 source "$BIN_DIR/steps/pipenv"
 
 # If no requirements.txt file given, assume `setup.py develop` is intended.
-# This allows for people to ship a setup.py application to Heroku
+# This allows for people to ship a setup.py application to Scalingo
 
 if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
   echo "-e ." > requirements.txt
@@ -351,7 +347,7 @@ EOT
 # - lib-python/3/site-packages/ (PyPy)
 if [[ "${BUILD_DIR}" != "/app" ]]; then
   cat <<EOT >> "$PROFILE_PATH"
-find .heroku/python/lib*/*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
+find .scalingo/python/lib*/*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
 EOT
 fi
 

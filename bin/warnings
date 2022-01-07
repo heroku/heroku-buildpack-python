@@ -47,8 +47,8 @@ gdal-missing() {
     echo
     puts-warn "Hello! Package installation failed since the GDAL library was not found."
     puts-warn "For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:"
-    puts-warn "https://github.com/heroku/heroku-geo-buildpack"
-    puts-warn "  -- Much Love, Heroku."
+    puts-warn "https://github.com/Scalingo/geo-buildpack"
+    puts-warn "  -- Much Love, Scalingo."
   fi
 }
 

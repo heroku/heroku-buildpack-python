@@ -13,8 +13,8 @@
 # shellcheck source=bin/utils
 source "$BIN_DIR/utils"
 
-if [[ -f .heroku/collectstatic_disabled ]]; then
-  puts-step "Skipping Django collectstatic since the file '.heroku/collectstatic_disabled' exists."
+if [[ -f .scalingo/collectstatic_disabled ]]; then
+  puts-step "Skipping Django collectstatic since the file '.scalingo/collectstatic_disabled' exists."
   puts-warn "This approach is deprecated, please set the env var DISABLE_COLLECTSTATIC=1 instead."
   mcount "warnings.collectstatic_disabled_file"
   mcount "django.collectstatic.disabled"
