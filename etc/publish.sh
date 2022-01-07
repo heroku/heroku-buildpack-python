@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 BP_NAME=${1:-"heroku/python"}
 
@@ -14,25 +14,13 @@ case "$choice" in
   * ) exit 1;;
 esac
 
+git fetch origin
 originMain=$(git rev-parse origin/main)
 echo "Tagging commit $originMain with $newVersion... "
 git tag "$newVersion" "${originMain:?}"
 git push origin refs/tags/$newVersion
 
+echo -e "\nPublishing to the buildpack registry..."
 heroku buildpacks:publish "$BP_NAME" "$newVersion"
-
-if [ $(git tag | grep -q previous-version) ]; then
-    echo "Updating previous-version tag"
-    git tag -d previous-version
-    git push origin :previous-version
-    git tag previous-version latest-version
-fi
-if [ $(git tag | grep -q latest-version) ]; then
-    echo "Updating latest-version tag"
-    git tag -d latest-version
-    git push origin :latest-version
-    git tag latest-version "${originMain:?}"
-    git push --tags
-fi
-
-echo "Done."
+echo
+heroku buildpacks:versions "${BP_NAME}" | head -n 3

@@ -8,9 +8,10 @@ RSpec.shared_examples 'builds using Pipenv with the requested Python version' do
       # TODO: Fix the "cp: cannot stat" error here and in the other testcases below (W-7924941).
       expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
         remote: -----> Python app detected
+        remote: -----> Using Python version specified in Pipfile.lock
         remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
         remote: -----> Installing python-#{python_version}
-        remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+        remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
         remote: -----> Installing dependencies with Pipenv 2020.11.15
         remote:        Installing dependencies from Pipfile.lock \\(.*\\)...
         remote: -----> Installing SQLite3
@@ -28,9 +29,11 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote:  !     No 'Pipfile.lock' found! We recommend you commit this into your repository.
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile...
           remote: -----> Installing SQLite3
@@ -46,9 +49,11 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock \\(aad8b1\\)...
           remote: -----> Installing SQLite3
@@ -61,16 +66,17 @@ RSpec.describe 'Pipenv support' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_2.7', allow_failure: allow_failure) }
 
-    context 'when using Heroku-16 or Heroku-18', stacks: %w[heroku-16 heroku-18] do
+    context 'when using Heroku-18', stacks: %w[heroku-18] do
       it 'builds with the latest Python 2.7' do
         app.deploy do |app|
           expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
             remote: -----> Python app detected
-            remote:  !     Python 2 has reached it's community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
+            remote: -----> Using Python version specified in Pipfile.lock
+            remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
             remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
             remote: -----> Installing python-#{LATEST_PYTHON_2_7}
-            remote: -----> Installing pip 20.1.1, setuptools 44.1.1 and wheel 0.34.2
+            remote: -----> Installing pip 20.3.4, setuptools 44.1.1 and wheel 0.37.0
             remote: -----> Installing dependencies with Pipenv 2020.11.15
             remote:        Installing dependencies from Pipfile.lock \\(b8efa9\\)...
             remote: -----> Installing SQLite3
@@ -87,6 +93,7 @@ RSpec.describe 'Pipenv support' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
+            remote: -----> Using Python version specified in Pipfile.lock
             remote:  !     Requested runtime (python-#{LATEST_PYTHON_2_7}) is not available for this stack (#{app.stack}).
             remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
           OUTPUT
@@ -128,6 +135,12 @@ RSpec.describe 'Pipenv support' do
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_9
   end
 
+  context 'with a Pipfile.lock containing python_version 3.10' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.10') }
+
+    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_10
+  end
+
   context 'with a Pipfile.lock containing python_full_version 3.9.1' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version') }
 
@@ -135,11 +148,12 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
           remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_9}
           remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-3.9.1
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock \\(e13df1\\)...
           remote: -----> Installing SQLite3
@@ -156,6 +170,7 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
           remote:  !     Requested runtime (^3.9) is not available for this stack (#{app.stack}).
           remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
         OUTPUT
@@ -170,6 +185,7 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
           remote:  !     Requested runtime (python-X.Y.Z) is not available for this stack (#{app.stack}).
           remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
         OUTPUT
@@ -184,9 +200,10 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in runtime.txt
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{LATEST_PYTHON_3_9}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock \\(75eae0\\)...
           remote: -----> Installing SQLite3
@@ -202,8 +219,9 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
           remote: -----> Installing python-#{LATEST_PYTHON_3_9}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock (ef68d1)...
           remote: -----> Installing SQLite3
@@ -219,9 +237,11 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Your Pipfile.lock \\(aad8b1\\) is out of date. Expected: \\(ef68d1\\).
           remote:        \\[DeployException\\]: .*

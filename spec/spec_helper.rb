@@ -9,13 +9,14 @@ require 'hatchet'
 LATEST_PYTHON_2_7 = '2.7.18'
 LATEST_PYTHON_3_4 = '3.4.10'
 LATEST_PYTHON_3_5 = '3.5.10'
-LATEST_PYTHON_3_6 = '3.6.13'
-LATEST_PYTHON_3_7 = '3.7.10'
-LATEST_PYTHON_3_8 = '3.8.8'
-LATEST_PYTHON_3_9 = '3.9.2'
+LATEST_PYTHON_3_6 = '3.6.15'
+LATEST_PYTHON_3_7 = '3.7.12'
+LATEST_PYTHON_3_8 = '3.8.12'
+LATEST_PYTHON_3_9 = '3.9.9'
+LATEST_PYTHON_3_10 = '3.10.1'
 LATEST_PYPY_2_7 = '7.3.2'
 LATEST_PYPY_3_6 = '7.3.2'
-DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_6
+DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_9
 
 # Work around the return value for `default_buildpack` changing after deploy:
 # https://github.com/heroku/hatchet/issues/180

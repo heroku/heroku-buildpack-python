@@ -39,4 +39,42 @@ To speed things up drastically, it'll usually be a good idea to `scalingo run ba
 
 ## Launching an interactive build environment
 
-Enjoy :)
+To start an interactive version of the build environment (ideal for development) use the
+`buildenv` make target, passing in the desired `STACK` name. For example:
+
+```bash
+make buildenv STACK=heroku-18
+```
+
+This will create the builder docker image based on the latest image for that stack, and
+then start a bash shell where you can run `bob build`, `bob deploy`, and so forth.
+
+The `builds/` directory is bind-mounted into the running container, so local build formula
+changes will appear there immediately without the need to rebuild the image.
+
+## Bulk deploying runtimes
+
+When a new Python version is released, binaries have to be generated for multiple stacks.
+To automate this, use the `deploy-runtimes` make target, which will ensure the builder
+image is up to date, and then run `bob deploy` for each runtime-stack combination.
+
+The build formula name(s) are passed using `RUNTIMES`, like so:
+
+```bash
+make deploy-runtimes RUNTIMES='python-X.Y.Z'
+```
+
+By default this will deploy to all supported stacks (see `STACKS` in `Makefile`),
+but this can be overridden using `STACKS`:
+
+```bash
+make deploy-runtimes RUNTIMES='python-X.Y.Z' STACKS='heroku-18'
+```
+
+Multiple runtimes can also be specified (useful for when adding a new stack), like so:
+
+```bash
+make deploy-runtimes RUNTIMES='python-A.B.C python-X.Y.Z' STACKS='heroku-20'
+```
+
+Note: Both `RUNTIMES` and `STACKS` are space delimited.

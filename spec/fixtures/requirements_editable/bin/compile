@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# This file is run by the inline buildpack, and tests that editable reqirements are
+# usable by buildpacks that run after the Python buildpack during the build.
+
+set -euo pipefail
+
+BUILD_DIR="${1}"
+
+cd "${BUILD_DIR}"
+
+exec bin/test-entrypoints

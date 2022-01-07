@@ -19,17 +19,17 @@ RSpec.describe 'Stack changes' do
         update_buildpacks(app, [:default])
         app.commit!
         app.push!
-        # TODO: The build log should explain that sticky-versioning has occurred,
-        # so that users know why their app is on an older Python version.
         # TODO: The requirements output shouldn't say "installing from cache", since it's not.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the same version as the last build: python-3.6.12
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_6}
           remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Stack has changed from heroku-18 to heroku-20, clearing cache
           remote: -----> No change in requirements detected, installing from cache
           remote: -----> Installing python-3.6.12
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3
@@ -51,12 +51,15 @@ RSpec.describe 'Stack changes' do
         # Python is always used) to avoid the glibc errors below.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: python: /lib/x86_64-linux-gnu/libm.so.6: version `GLIBC_2.29' not found (required by python)
+          remote: python: /lib/x86_64-linux-gnu/libpthread.so.0: version `GLIBC_2.30' not found (required by python)
           remote: python: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.28' not found (required by python)
           remote: -----> Stack has changed from heroku-20 to heroku-18, clearing cache
           remote: -----> No change in requirements detected, installing from cache
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 20.1.1, setuptools 47.1.1 and wheel 0.34.2
+          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3
