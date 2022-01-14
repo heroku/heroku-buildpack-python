@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Python 3.9.10 and 3.10.2 are now available (CPython) ([#1238](https://github.com/heroku/heroku-buildpack-python/pull/1238)).
+- The default Python version for new apps is now 3.9.10 (previously 3.9.9) ([#1268](https://github.com/heroku/heroku-buildpack-python/pull/1268)).
 
 ## v205 (2021-12-06)
 
