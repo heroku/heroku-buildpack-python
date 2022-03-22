@@ -246,13 +246,13 @@ RSpec.describe 'Python version support' do
   context 'when runtime.txt contains stray whitespace' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_with_stray_whitespace') }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
+    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_10
   end
 
   context 'when there is only a runtime.txt and no requirements.txt', skip: 'not currently supported (W-8720280)' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_only', allow_failure: true) }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
+    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_10
   end
 
   context 'when the requested Python version has changed since the last build' do
@@ -260,16 +260,16 @@ RSpec.describe 'Python version support' do
 
     it 'builds with the new Python version after removing the old install' do
       app.deploy do |app|
-        File.write('runtime.txt', "python-#{LATEST_PYTHON_3_9}")
+        File.write('runtime.txt', "python-#{LATEST_PYTHON_3_10}")
         app.commit!
         app.push!
         # TODO: The output shouldn't say "installing from cache", since it's not.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python version specified in runtime.txt
-          remote: -----> Python version has changed from python-#{LATEST_PYTHON_3_6} to python-#{LATEST_PYTHON_3_9}, clearing cache
+          remote: -----> Python version has changed from python-#{LATEST_PYTHON_3_6} to python-#{LATEST_PYTHON_3_10}, clearing cache
           remote: -----> No change in requirements detected, installing from cache
-          remote: -----> Installing python-#{LATEST_PYTHON_3_9}
+          remote: -----> Installing python-#{LATEST_PYTHON_3_10}
           remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
