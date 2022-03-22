@@ -16,7 +16,7 @@ LATEST_PYTHON_3_9 = '3.9.11'
 LATEST_PYTHON_3_10 = '3.10.3'
 LATEST_PYPY_2_7 = '7.3.2'
 LATEST_PYPY_3_6 = '7.3.2'
-DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_9
+DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_10
 
 # Work around the return value for `default_buildpack` changing after deploy:
 # https://github.com/heroku/hatchet/issues/180

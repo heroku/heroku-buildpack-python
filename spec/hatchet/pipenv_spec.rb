@@ -141,7 +141,7 @@ RSpec.describe 'Pipenv support' do
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_10
   end
 
-  context 'with a Pipfile.lock containing python_full_version 3.9.1' do
+  context 'with a Pipfile.lock containing python_full_version 3.10.0' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version') }
 
     it 'builds with the outdated Python version specified' do
@@ -149,13 +149,13 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
-          remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_9}
+          remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_10}
           remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
-          remote: -----> Installing python-3.9.1
+          remote: -----> Installing python-3.10.0
           remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
-          remote:        Installing dependencies from Pipfile.lock \\(e13df1\\)...
+          remote:        Installing dependencies from Pipfile.lock \\(99d8c9\\)...
           remote: -----> Installing SQLite3
         REGEX
       end
@@ -202,7 +202,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python version specified in runtime.txt
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
-          remote: -----> Installing python-#{LATEST_PYTHON_3_9}
+          remote: -----> Installing python-#{LATEST_PYTHON_3_10}
           remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock \\(75eae0\\)...
@@ -220,10 +220,10 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
-          remote: -----> Installing python-#{LATEST_PYTHON_3_9}
+          remote: -----> Installing python-#{LATEST_PYTHON_3_10}
           remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
-          remote:        Installing dependencies from Pipfile.lock (ef68d1)...
+          remote:        Installing dependencies from Pipfile.lock (2d32e8)...
           remote: -----> Installing SQLite3
         OUTPUT
       end
@@ -243,7 +243,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
           remote: -----> Installing dependencies with Pipenv 2020.11.15
-          remote:        Your Pipfile.lock \\(aad8b1\\) is out of date. Expected: \\(ef68d1\\).
+          remote:        Your Pipfile.lock \\(aad8b1\\) is out of date. Expected: \\(2d32e8\\).
           remote:        \\[DeployException\\]: .*
           remote:        ERROR:: Aborting deploy
         REGEX
