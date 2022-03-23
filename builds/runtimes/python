@@ -12,6 +12,12 @@ VERSION=$(echo "${FORMULA_FILENAME}" | cut --delimiter '-' --fields 2)
 
 echo "Building Python ${VERSION}..."
 
+if [[ "${STACK}" != "heroku-18" && "${STACK}" != "heroku-20" && "${VERSION}" == 3.[7-8].* ]]; then
+  echo "Python 3.7 and 3.8 are only supported on Heroku-20 and older!" >&2
+  echo "Override the default stacks list using: STACKS='heroku-18 heroku-20'" >&2
+  exit 1
+fi
+
 # See: https://www.python.org/downloads/ -> "OpenPGP Public Keys"
 case "${VERSION}" in
   3.10.*)

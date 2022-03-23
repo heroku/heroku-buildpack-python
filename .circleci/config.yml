@@ -47,7 +47,7 @@ jobs:
     parameters:
       stack:
         type: enum
-        enum: ["heroku-18", "heroku-20"]
+        enum: ["heroku-18", "heroku-20", "heroku-22"]
     docker:
       - image: cimg/ruby:2.7
     working_directory: /mnt/ramdisk/project
@@ -87,4 +87,4 @@ workflows:
       - hatchet:
           matrix:
             parameters:
-              stack: ["heroku-18", "heroku-20"]
+              stack: ["heroku-18", "heroku-20", "heroku-22"]
