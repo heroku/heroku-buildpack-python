@@ -3,6 +3,7 @@
 
 STACK ?= heroku-20
 STACKS ?= heroku-18 heroku-20
+PLATFORM := linux/amd64
 FIXTURE ?= spec/fixtures/python_version_unspecified
 ENV_FILE ?= builds/dockerenv.default
 BUILDER_IMAGE_PREFIX := heroku-python-build
@@ -23,14 +24,14 @@ lint-ruby:
 compile:
 	@echo "Running compile using: STACK=$(STACK) FIXTURE=$(FIXTURE)"
 	@echo
-	@docker run --rm -it -v $(PWD):/src:ro -e "STACK=$(STACK)" -w /buildpack "$(STACK_IMAGE_TAG)" \
+	@docker run --rm -it -v $(PWD):/src:ro -e "STACK=$(STACK)" -w /buildpack --platform="$(PLATFORM)" "$(STACK_IMAGE_TAG)" \
 		bash -c 'cp -r /src/{bin,vendor} /buildpack && cp -r /src/$(FIXTURE) /build && mkdir /cache /env && bin/compile /build /cache /env'
 	@echo
 
 builder-image:
 	@echo "Generating binary builder image for $(STACK)..."
 	@echo
-	@docker build --pull -f builds/$(STACK).Dockerfile -t "$(BUILDER_IMAGE_PREFIX)-$(STACK)" .
+	@docker build --pull -f builds/$(STACK).Dockerfile --platform="$(PLATFORM)" -t "$(BUILDER_IMAGE_PREFIX)-$(STACK)" .
 	@echo
 
 buildenv: builder-image
@@ -40,7 +41,7 @@ buildenv: builder-image
 	@echo
 	@echo "  $$ bob build runtimes/python-X.Y.Z"
 	@echo
-	@docker run --rm -it --env-file="$(ENV_FILE)" -v $(PWD)/builds:/app/builds "$(BUILDER_IMAGE_PREFIX)-$(STACK)" bash
+	@docker run --rm -it --env-file="$(ENV_FILE)" -v $(PWD)/builds:/app/builds --platform="$(PLATFORM)" "$(BUILDER_IMAGE_PREFIX)-$(STACK)" bash
 
 deploy-runtimes:
 ifndef RUNTIMES
@@ -53,7 +54,7 @@ endif
 		for runtime in $(RUNTIMES); do \
 			echo "Generating/deploying $${runtime} for $${stack}..."; \
 			echo; \
-			docker run --rm -it --env-file="$(ENV_FILE)" "$(BUILDER_IMAGE_PREFIX)-$${stack}" bob deploy "runtimes/$${runtime}"; \
+			docker run --rm -it --env-file="$(ENV_FILE)" --platform="$(PLATFORM)" "$(BUILDER_IMAGE_PREFIX)-$${stack}" bob deploy "runtimes/$${runtime}"; \
 			echo; \
 		done; \
 	done
