@@ -93,7 +93,7 @@ source "$BIN_DIR/warnings"
 
 if [[ -f "${ENV_DIR}/BUILD_WITH_GEO_LIBRARIES" ]]; then
   mcount "failure.unsupported.BUILD_WITH_GEO_LIBRARIES"
-  puts-warn "The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functonality is"
+  puts-warn "The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functionality is"
   puts-warn "no longer supported:"
   puts-warn "https://devcenter.heroku.com/changelog-items/1947"
   puts-warn
