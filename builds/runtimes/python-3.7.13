@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
-# Build Path: /app/.heroku/python/
+# Build Path: /app/.heroku/python
 
-source $(dirname $0)/python3
+# shellcheck source-path=SCRIPTDIR
+source "$(dirname "${0}")/python"

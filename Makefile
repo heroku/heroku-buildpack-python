@@ -17,6 +17,7 @@ lint-scripts:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings bin/default_pythons
 	@shellcheck -x bin/steps/collectstatic bin/steps/nltk bin/steps/pip-install bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/python
 	@shellcheck -x bin/steps/hooks/*
+	@shellcheck -x builds/runtimes/*
 
 lint-ruby:
 	@bundle exec rubocop
