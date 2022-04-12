@@ -4,6 +4,7 @@
 
 - Fix typo in the `BUILD_WITH_GEO_LIBRARIES` end-of-life error message ([#1307](https://github.com/heroku/heroku-buildpack-python/pull/1307)).
 - No longer set a fallback value for `$STACK`, since it is always set on Heroku ([#1308](https://github.com/heroku/heroku-buildpack-python/pull/1308)).
+- Adjust the configure options and packaging process for Python 3.7 releases, to enable loadable extensions in the `_sqlite` module, and to remove the `idle_test` module ([#1309](https://github.com/heroku/heroku-buildpack-python/pull/1309)). This change will only take effect as of the next Python 3.7 release (3.7.14).
 
 ## v209 (2022-03-24)
 
@@ -18,6 +19,7 @@
 
 - Python 3.7.13, 3.8.13, 3.9.11 and 3.10.3 are now available (CPython) ([#1293](https://github.com/heroku/heroku-buildpack-python/pull/1293)).
 - The default Python version for new apps is now 3.9.11 (previously 3.9.10) ([#1293](https://github.com/heroku/heroku-buildpack-python/pull/1293)).
+- Adjust the configure options and packaging process for Python 3.8 releases to enable PGO, enable loadable extensions in the `_sqlite` module, and to remove the `idle_test` module ([#1293](https://github.com/heroku/heroku-buildpack-python/pull/1293)). Python 3.8 releases on Heroku prior to 3.8.13 are not affected.
 
 ## v206 (2022-01-14)
 
@@ -37,6 +39,7 @@
 
 - Python 3.9.8 is now available ([#1263](https://github.com/heroku/heroku-buildpack-python/pull/1263)).
 - The default Python version for new apps is now 3.9.8 (previously 3.9.7) ([#1263](https://github.com/heroku/heroku-buildpack-python/pull/1263)).
+- Adjust the configure options and packaging process for Python 3.9 releases to enable PGO, enable loadable extensions in the `_sqlite` module, and to remove the `idle_test` module ([#1263](https://github.com/heroku/heroku-buildpack-python/pull/1263)). Python 3.9 releases on Heroku prior to 3.9.8 are not affected.
 
 ## v202 (2021-11-01)
 
@@ -55,6 +58,7 @@
 ## v200 (2021-10-04)
 
 - Add support for Python 3.10 ([#1246](https://github.com/heroku/heroku-buildpack-python/pull/1246)).
+- Adjust the configure options and packaging process for Python 3.10 to enable PGO, enable loadable extensions in the `_sqlite` module, and to remove the `idle_test` module ([#1246](https://github.com/heroku/heroku-buildpack-python/pull/1246)).
 
 ## v199 (2021-09-05)
 
