@@ -39,7 +39,4 @@ make install
 # Not using the new --disable-test-modules since it breaks PGO which runs the Python test suite.
 find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests -o -name idle_test \) \) -exec rm -rf '{}' +
 
-# Remove spare /
-LOCATION=${OUT_PREFIX%?}
-
-ln $LOCATION/bin/python3 $LOCATION/bin/python
+ln -vT python3 "${OUT_PREFIX}/bin/python"

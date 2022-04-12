@@ -31,7 +31,4 @@ make install
 # https://github.com/docker-library/python
 find "${OUT_PREFIX}" \( -type d -a \( -name test -o -name tests \) \) -exec rm -rf '{}' +
 
-# Remove spare /
-LOCATION=${OUT_PREFIX%?}
-
-ln $LOCATION/bin/python3 $LOCATION/bin/python
+ln -vT python3 "${OUT_PREFIX}/bin/python"
