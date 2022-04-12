@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# This is set by bob-builder from the "Build Path" comment line in the
+# build formula script that sourced this one.
+OUT_PREFIX=$1
+# The filename of the script that sourced this one (e.g. `python-3.10.0`).
+FORMULA_FILENAME=$(basename "${0}")
+# The version component (e.g. `3.10.0`).
+VERSION=$(echo "${FORMULA_FILENAME}" | cut --delimiter '-' --fields 2)
+
+echo "Building Python ${VERSION}..."
+
+SOURCE_URL="https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
+
+set -o xtrace
+
+curl --fail --retry 3 --connect-timeout 5 --max-time 60 -o python.tgz "${SOURCE_URL}"
+
+mkdir src
+tar --extract --file python.tgz --strip-components=1 --directory src/
+cd src
+
+# Aim to keep this roughly consistent with the options used in the Python Docker images,
+# for maximum compatibility / most battle-tested build configuration:
+# https://github.com/docker-library/python
+CONFIGURE_OPTS=(
+  # Support loadable extensions in the `_sqlite` extension module.
+  "--enable-loadable-sqlite-extensions"
+  # Make autoconf's configure option validation more strict.
+  "--enable-option-checking=fatal"
+  # Install Python into `/app/.heroku/python` rather than the default of `/usr/local`.
+  "--prefix=${OUT_PREFIX}"
+  # Skip running `ensurepip` as part of install, since the buildpack installs a curated
+  # version of pip itself (which ensures it's consistent across Python patch releases).
+  "--with-ensurepip=no"
+)
+
+if [[ "${VERSION}" != 3.7.* ]]; then
+  CONFIGURE_OPTS+=(
+    # Python 3.7 and older run the whole test suite for PGO, which takes
+    # much too long. Whilst this can be overridden via `PROFILE_TASK`, we
+    # prefer to change as few of the upstream build options as possible.
+    # As such, PGO is only enabled for Python 3.8+.
+    "--enable-optimizations"
+  )
+fi
+
+./configure "${CONFIGURE_OPTS[@]}"
+
+make -j "$(nproc)"
+make install
+
+# Remove unneeded test directories, similar to the official Docker Python images:
+# https://github.com/docker-library/python
+# TODO: Explore using --disable-test-modules once the PGO fix is in a released Python version:
+# https://bugs.python.org/issue45668
+find "${OUT_PREFIX}" -depth -type d -a \( -name 'test' -o -name 'tests' -o -name 'idle_test' \) -exec rm -rf '{}' +
+
+ln -vT python3 "${OUT_PREFIX}/bin/python"
