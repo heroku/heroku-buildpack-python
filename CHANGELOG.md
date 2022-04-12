@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fix typo in the `BUILD_WITH_GEO_LIBRARIES` end-of-life error message ([#1307](https://github.com/heroku/heroku-buildpack-python/pull/1307)).
 
 ## v209 (2022-03-24)
 

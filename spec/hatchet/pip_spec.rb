@@ -247,7 +247,7 @@ RSpec.describe 'Pip support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote:  !     The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functonality is
+          remote:  !     The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functionality is
           remote:  !     no longer supported:
           remote:  !     https://devcenter.heroku.com/changelog-items/1947
         OUTPUT
