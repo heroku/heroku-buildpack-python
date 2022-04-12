@@ -12,11 +12,36 @@ VERSION=$(echo "${FORMULA_FILENAME}" | cut --delimiter '-' --fields 2)
 
 echo "Building Python ${VERSION}..."
 
+# See: https://www.python.org/downloads/ -> "OpenPGP Public Keys"
+case "${VERSION}" in
+  3.10.*)
+    # https://keybase.io/pablogsal/
+    GPG_KEY_FINGERPRINT='A035C8C19219BA821ECEA86B64E628F8D684696D'
+    ;;
+  3.[8-9].*)
+    # https://keybase.io/ambv/
+    GPG_KEY_FINGERPRINT='E3FF2839C048B25C084DEBE9B26995E310250568'
+    ;;
+  3.7.*)
+    # https://keybase.io/nad/
+    GPG_KEY_FINGERPRINT='0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D'
+    ;;
+  *)
+    echo "Unsupported Python version!" >&2
+    exit 1
+    ;;
+esac
+
 SOURCE_URL="https://www.python.org/ftp/python/${VERSION}/Python-${VERSION}.tgz"
+SIGNATURE_URL="${SOURCE_URL}.asc"
 
 set -o xtrace
 
 curl --fail --retry 3 --connect-timeout 5 --max-time 60 -o python.tgz "${SOURCE_URL}"
+curl --fail --retry 3 --connect-timeout 5 --max-time 60 -o python.tgz.asc "${SIGNATURE_URL}"
+
+gpg --batch --recv-keys "${GPG_KEY_FINGERPRINT}"
+gpg --batch --verify python.tgz.asc python.tgz
 
 mkdir src
 tar --extract --file python.tgz --strip-components=1 --directory src/
