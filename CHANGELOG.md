@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Fix typo in the `BUILD_WITH_GEO_LIBRARIES` end-of-life error message ([#1307](https://github.com/heroku/heroku-buildpack-python/pull/1307)).
+- No longer set a fallback value for `$STACK`, since it is always set on Heroku ([#1308](https://github.com/heroku/heroku-buildpack-python/pull/1308)).
 
 ## v209 (2022-03-24)
 

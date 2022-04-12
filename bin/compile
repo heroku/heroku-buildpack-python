@@ -58,10 +58,6 @@ PY27="python-2.7"
 PYPY27="pypy2.7"
 PYPY36="pypy3.6"
 
-# Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
-# TODO: Remove this and require that STACK be set explicitly.
-DEFAULT_PYTHON_STACK="heroku-18"
-
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.
 # The `warnings` subscript then greps through this for common problems and guides
@@ -72,9 +68,6 @@ RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
 # The buildpack ships with a few executable tools.
 # This installs them into the path, so we can execute them directly.
 export PATH=$PATH:$ROOT_DIR/vendor/
-
-# Set environment variables if they weren't set by the platform.
-[ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitize externally-provided environment variables:
 # The following environment variables are either problematic or simply unneccessary
