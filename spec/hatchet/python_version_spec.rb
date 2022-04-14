@@ -9,7 +9,7 @@ RSpec.shared_examples 'builds with the requested Python version' do |python_vers
         remote: -----> Python app detected
         remote: -----> Using Python version specified in runtime.txt
         remote: -----> Installing python-#{python_version}
-        remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
+        remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
         remote: -----> Installing SQLite3
         remote: -----> Installing requirements with pip
         remote:        Collecting urllib3
@@ -89,7 +89,7 @@ RSpec.describe 'Python version support' do
             remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
             remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote: -----> Installing python-#{LATEST_PYTHON_2_7}
-            remote: -----> Installing pip 20.3.4, setuptools 44.1.1 and wheel 0.37.0
+            remote: -----> Installing pip 20.3.4, setuptools 44.1.1 and wheel 0.37.1
             remote: -----> Installing SQLite3
             remote: -----> Installing requirements with pip
             remote:        Collecting urllib3
@@ -151,7 +151,7 @@ RSpec.describe 'Python version support' do
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
             remote: -----> Installing python-#{LATEST_PYTHON_3_5}
-            remote: -----> Installing pip 20.3.4, setuptools 50.3.2 and wheel 0.37.0
+            remote: -----> Installing pip 20.3.4, setuptools 50.3.2 and wheel 0.37.1
             remote: -----> Installing SQLite3
             remote: -----> Installing requirements with pip
             remote:        Collecting urllib3
@@ -172,7 +172,20 @@ RSpec.describe 'Python version support' do
   context 'when runtime.txt contains python-3.6.15' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6') }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_6
+    it 'builds with Python 3.6.15' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python version specified in runtime.txt
+          remote: -----> Installing python-#{LATEST_PYTHON_3_6}
+          remote: -----> Installing pip 21.3.1, setuptools 59.6.0 and wheel 0.37.1
+          remote: -----> Installing SQLite3
+          remote: -----> Installing requirements with pip
+          remote:        Collecting urllib3
+        OUTPUT
+        expect(app.run('python -V')).to include("Python #{LATEST_PYTHON_3_6}")
+      end
+    end
   end
 
   context 'when runtime.txt contains python-3.7.13' do
@@ -208,7 +221,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Python app detected
           remote: -----> Using Python version specified in runtime.txt
           remote: -----> Installing pypy2.7-#{LATEST_PYPY_2_7}
-          remote: -----> Installing pip 20.3.4, setuptools 44.1.1 and wheel 0.37.0
+          remote: -----> Installing pip 20.3.4, setuptools 44.1.1 and wheel 0.37.1
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3
@@ -227,7 +240,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Python app detected
           remote: -----> Using Python version specified in runtime.txt
           remote: -----> Installing pypy3.6-#{LATEST_PYPY_3_6}
-          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
+          remote: -----> Installing pip 21.3.1, setuptools 59.6.0 and wheel 0.37.1
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3
@@ -270,7 +283,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Python version has changed from python-#{LATEST_PYTHON_3_6} to python-#{LATEST_PYTHON_3_10}, clearing cache
           remote: -----> No change in requirements detected, installing from cache
           remote: -----> Installing python-#{LATEST_PYTHON_3_10}
-          remote: -----> Installing pip 21.3.1, setuptools 57.5.0 and wheel 0.37.0
+          remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3

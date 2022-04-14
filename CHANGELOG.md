@@ -5,6 +5,11 @@
 - Fix typo in the `BUILD_WITH_GEO_LIBRARIES` end-of-life error message ([#1307](https://github.com/heroku/heroku-buildpack-python/pull/1307)).
 - No longer set a fallback value for `$STACK`, since it is always set on Heroku ([#1308](https://github.com/heroku/heroku-buildpack-python/pull/1308)).
 - Adjust the configure options and packaging process for Python 3.7 releases, to enable loadable extensions in the `_sqlite` module, and to remove the `idle_test` module ([#1309](https://github.com/heroku/heroku-buildpack-python/pull/1309)). This change will only take effect as of the next Python 3.7 release (3.7.14).
+- Update pip from 21.3.1 to 22.0.4 for Python 3.7+ ([#1310](https://github.com/heroku/heroku-buildpack-python/pull/1310))
+- Update setuptools from 57.5.0 to: ([#1310](https://github.com/heroku/heroku-buildpack-python/pull/1310))
+  - 59.6.0 for Python 3.6
+  - 60.10.0 for Python 3.7+
+- Update wheel from 0.37.0 to 0.37.1 for Python 2.7 and Python 3.5+ ([#1310](https://github.com/heroku/heroku-buildpack-python/pull/1310))
 
 ## v209 (2022-03-24)
 
@@ -52,7 +57,7 @@
 - Update setuptools from 47.1.1 to: ([#1254](https://github.com/heroku/heroku-buildpack-python/pull/1254))
   - 50.3.2 for Python 3.5
   - 57.5.0 for Python 3.6+
-- Update wheel from 0.36.2 to 0.37.0 ([#1254](https://github.com/heroku/heroku-buildpack-python/pull/1254)).
+- Update wheel from 0.36.2 to 0.37.0 for Python 2.7 and Python 3.5+ ([#1254](https://github.com/heroku/heroku-buildpack-python/pull/1254)).
 - Perform editable package `.pth` and `.egg-link` path rewriting at runtime ([#1252](https://github.com/heroku/heroku-buildpack-python/pull/1252)).
 
 ## v200 (2021-10-04)
