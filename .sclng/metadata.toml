@@ -1,0 +1,8 @@
+version = "1.0.0"
+owner = "etienne@scalingo.com"
+team = "IST"
+description = "Official Scalingo Python buildpack"
+languages = ["shell"]
+destination_server = []
+flags = ["buildpack"]
+dependencies = []
