@@ -33,7 +33,7 @@ RSpec.configure do |config|
   # with `:focus` metadata via the `fit`, `fcontext` and `fdescribe` aliases.
   config.filter_run_when_matching :focus
   # Allows declaring on which stacks a test/group should run by tagging it with `stacks`.
-  config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(ENV['HATCHET_DEFAULT_STACK']) }
+  config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(ENV.fetch('HATCHET_DEFAULT_STACK')) }
 end
 
 def clean_output(output)
