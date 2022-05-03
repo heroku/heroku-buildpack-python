@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use the `expat` package from the stack image rather than CPython's vendored version, when building
+  Python binaries ([#1319](https://github.com/heroku/heroku-buildpack-python/pull/1319)).
 
 ## v210 (2022-04-14)
 

@@ -60,6 +60,9 @@ CONFIGURE_OPTS=(
   # Skip running `ensurepip` as part of install, since the buildpack installs a curated
   # version of pip itself (which ensures it's consistent across Python patch releases).
   "--with-ensurepip=no"
+  # Build the `pyexpat` module using the `expat` library in the stack image (which will
+  # automatically receive security updates), rather than CPython's vendored version.
+  "--with-system-expat"
 )
 
 if [[ "${VERSION}" != 3.7.* ]]; then
