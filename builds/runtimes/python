@@ -83,4 +83,8 @@ make install
 # https://bugs.python.org/issue45668
 find "${OUT_PREFIX}" -depth -type d -a \( -name 'test' -o -name 'tests' -o -name 'idle_test' \) -exec rm -rf '{}' +
 
-ln -vT python3 "${OUT_PREFIX}/bin/python"
+# Support using Python 3 via the version-less `python` command, for parity with virtualenvs,
+# the Python Docker images and to also ensure buildpack Python shadows any installed system
+# Python, should that provide a version-less alias too.
+# This symlink must be relative, to ensure that the Python install remains relocatable.
+ln -srvT "${OUT_PREFIX}/bin/python3" "${OUT_PREFIX}/bin/python"
