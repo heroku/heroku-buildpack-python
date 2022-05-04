@@ -100,14 +100,33 @@ fi
 
 ./configure "${CONFIGURE_OPTS[@]}"
 
-make -j "$(nproc)"
+# Using LDFLAGS we instruct the linker to omit all symbol information from the final binary
+# and shared libraries, to reduce the size of the build. We have to use `--strip-all` and
+# not `--strip-unneeded` since `ld` only understands the former (unlike the `strip` command),
+# however it's safe to use since these options don't apply to static libraries.
+make -j "$(nproc)" LDFLAGS='-Wl,--strip-all'
 make install
+
+if [[ "${VERSION}" == 3.[7-9].* ]]; then
+  # On older versions of Python we're still building the static library, which has to be
+  # manually stripped since the linker stripping enabled in LDFLAGS doesn't cover them.
+  # We're using `--strip-unneeded` since `--strip-all` would remove the `.symtab` section
+  # that is required for static libraries to be able to be linked.
+  # `find` is used since there are multiple copies of the static library in version-specific
+  # locations, eg:
+  #   - `lib/libpython3.9.a`
+  #   - `lib/python3.9/config-3.9-x86_64-linux-gnu/libpython3.9.a`
+  find "${OUT_PREFIX}" -type f -name '*.a' -print -exec strip --strip-unneeded '{}' +
+elif ! find "${OUT_PREFIX}" -type f -name '*.a' -print -exec false '{}' +; then
+  echo "Unexpected static libraries found!" >&2
+  exit 1
+fi
 
 # Remove unneeded test directories, similar to the official Docker Python images:
 # https://github.com/docker-library/python
 # TODO: Explore using --disable-test-modules once the PGO fix is in a released Python version:
 # https://bugs.python.org/issue45668
-find "${OUT_PREFIX}" -depth -type d -a \( -name 'test' -o -name 'tests' -o -name 'idle_test' \) -exec rm -rf '{}' +
+find "${OUT_PREFIX}" -depth -type d -a \( -name 'test' -o -name 'tests' -o -name 'idle_test' \) -print -exec rm -rf '{}' +
 
 # Support using Python 3 via the version-less `python` command, for parity with virtualenvs,
 # the Python Docker images and to also ensure buildpack Python shadows any installed system
