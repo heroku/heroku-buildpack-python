@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Use shared builds + LTO when building Python 3.10 binaries ([#1320](https://github.com/heroku/heroku-buildpack-python/pull/1320)).
+  Note: This and the other Python binary changes below will only take effect for future Python
+  version releases (or future Heroku stacks) - existing Python binaries are not being recompiled.
 - Use the `expat` package from the stack image rather than CPython's vendored version, when building
   Python binaries ([#1319](https://github.com/heroku/heroku-buildpack-python/pull/1319)).
 
