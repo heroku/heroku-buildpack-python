@@ -128,6 +128,31 @@ fi
 # https://bugs.python.org/issue45668
 find "${OUT_PREFIX}" -depth -type d -a \( -name 'test' -o -name 'tests' -o -name 'idle_test' \) -print -exec rm -rf '{}' +
 
+# The `make install` step automatically generates `.pyc` files for the stdlib, however:
+# - It generates these using the default `timestamp` invalidation mode, which does
+#   not work well with the CNB file timestamp normalisation behaviour. As such, we
+#   must use one of the hash-based invalidation modes to prevent the `.pyc`s from
+#   always being treated as outdated and so being regenerated at application boot.
+# - It generates `.pyc`s for all three optimisation levels (standard, -O and -OO),
+#   when the vast majority of apps only use the standard mode. As such, we can skip
+#   regenerating/shipping those `.opt-{1,2}.pyc` files, reducing build output by 18MB.
+#
+# We use the `unchecked-hash` mode rather than `checked-hash` since it improves app startup
+# times by ~5%, and is only an issue if manual edits are made to the stdlib, which is not
+# something we support.
+#
+# See:
+# https://docs.python.org/3/reference/import.html#cached-bytecode-invalidation
+# https://docs.python.org/3/library/compileall.html
+# https://peps.python.org/pep-0488/
+# https://peps.python.org/pep-0552/
+find "${OUT_PREFIX}" -depth -type f -name "*.pyc" -delete
+# We use the Python binary from the original build output in the source directory,
+# rather than the installed binary in `$OUT_PREFIX`, for parity with the automatic
+# `.pyc` generation run by `make install`:
+# https://github.com/python/cpython/blob/v3.10.4/Makefile.pre.in#L1603-L1629
+LD_LIBRARY_PATH="${PWD}" ./python -m compileall -f --invalidation-mode unchecked-hash --workers 0 "${OUT_PREFIX}"
+
 # Support using Python 3 via the version-less `python` command, for parity with virtualenvs,
 # the Python Docker images and to also ensure buildpack Python shadows any installed system
 # Python, should that provide a version-less alias too.
