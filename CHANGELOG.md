@@ -6,6 +6,8 @@
   Note: This and the other Python binary changes below will only take effect for future Python
   version releases (or future Heroku stacks) - existing Python binaries are not being recompiled.
 - Strip debugging symbols from the Python binary and libraries ([#1321](https://github.com/heroku/heroku-buildpack-python/pull/1321)).
+- Switch the pre-generated `.pyc` files for the Python stdlib from `timestamp` to `unchecked-hash` validation mode, for improved compatibility with Cloud Native Buildpacks ([#1322](https://github.com/heroku/heroku-buildpack-python/pull/1322)).
+- Stop shipping optimisation level one and two `.pyc` files with the Python stdlib ([#1322](https://github.com/heroku/heroku-buildpack-python/pull/1322)).
 - Use the `expat` package from the stack image rather than CPython's vendored version, when building
   Python binaries ([#1319](https://github.com/heroku/heroku-buildpack-python/pull/1319)).
 
