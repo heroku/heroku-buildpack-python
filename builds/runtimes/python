@@ -40,8 +40,12 @@ set -o xtrace
 curl --fail --retry 3 --connect-timeout 5 --max-time 60 -o python.tgz "${SOURCE_URL}"
 curl --fail --retry 3 --connect-timeout 5 --max-time 60 -o python.tgz.asc "${SIGNATURE_URL}"
 
-gpg --batch --recv-keys "${GPG_KEY_FINGERPRINT}"
-gpg --batch --verify python.tgz.asc python.tgz
+# Skip GPG verification on Heroku-18 since it fails to fetch keys:
+# `gpg: keyserver receive failed: Server indicated a failure`
+if [[ "${STACK}" != "heroku-18" ]]; then
+  gpg --batch --verbose --recv-keys "${GPG_KEY_FINGERPRINT}"
+  gpg --batch --verify python.tgz.asc python.tgz
+fi
 
 mkdir src
 tar --extract --file python.tgz --strip-components=1 --directory src/
