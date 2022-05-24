@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add support for Heroku-22 ([#1299](https://github.com/heroku/heroku-buildpack-python/pull/1299)).
 
 ## v211 (2022-05-17)
 

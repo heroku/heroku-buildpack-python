@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ENV['HATCHET_BUILDPACK_BASE'] ||= 'https://github.com/heroku/heroku-buildpack-python.git'
-ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-20'
+ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-22'
 
 require 'rspec/core'
 require 'hatchet'

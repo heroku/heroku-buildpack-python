@@ -20,6 +20,19 @@ RSpec.shared_examples 'builds using Pipenv with the requested Python version' do
   end
 end
 
+RSpec.shared_examples 'aborts the build with a runtime not available message (Pipenv)' do |requested_version|
+  it 'aborts the build with a runtime not available message' do
+    app.deploy do |app|
+      expect(clean_output(app.output)).to include(<<~OUTPUT)
+        remote: -----> Python app detected
+        remote: -----> Using Python version specified in Pipfile.lock
+        remote:  !     Requested runtime (python-#{requested_version}) is not available for this stack (#{app.stack}).
+        remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
+      OUTPUT
+    end
+  end
+end
+
 RSpec.describe 'Pipenv support' do
   context 'without a Pipfile.lock' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_no_lockfile') }
@@ -85,20 +98,11 @@ RSpec.describe 'Pipenv support' do
       end
     end
 
-    context 'when using Heroku-20', stacks: %w[heroku-20] do
+    context 'when using Heroku-20 or newer', stacks: %w[heroku-20 heroku-22] do
       let(:allow_failure) { true }
 
-      it 'fails the build' do
-        # Python 2.7 is EOL, so it has not been built for Heroku-20.
-        app.deploy do |app|
-          expect(clean_output(app.output)).to include(<<~OUTPUT)
-            remote: -----> Python app detected
-            remote: -----> Using Python version specified in Pipfile.lock
-            remote:  !     Requested runtime (python-#{LATEST_PYTHON_2_7}) is not available for this stack (#{app.stack}).
-            remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
-          OUTPUT
-        end
-      end
+      # Python 2.7 is EOL, so has not been built for newer stacks.
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', LATEST_PYTHON_2_7
     end
   end
 
@@ -112,34 +116,64 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'with a Pipfile.lock containing python_version 3.6' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.6') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.6', allow_failure: allow_failure) }
 
-    it 'builds with the latest Python 3.6' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Python app detected
-          remote: -----> Using Python version specified in Pipfile.lock
-          remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
-          remote: -----> Installing python-#{LATEST_PYTHON_3_6}
-          remote: -----> Installing pip 21.3.1, setuptools 59.6.0 and wheel 0.37.1
-          remote: -----> Installing dependencies with Pipenv 2020.11.15
-          remote:        Installing dependencies from Pipfile.lock \\(.*\\)...
-          remote: -----> Installing SQLite3
-        REGEX
+    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
+      it 'builds with the latest Python 3.6' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+            remote: -----> Python app detected
+            remote: -----> Using Python version specified in Pipfile.lock
+            remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
+            remote: -----> Installing python-#{LATEST_PYTHON_3_6}
+            remote: -----> Installing pip 21.3.1, setuptools 59.6.0 and wheel 0.37.1
+            remote: -----> Installing dependencies with Pipenv 2020.11.15
+            remote:        Installing dependencies from Pipfile.lock \\(.*\\)...
+            remote: -----> Installing SQLite3
+          REGEX
+        end
       end
+    end
+
+    context 'when using Heroku-22', stacks: %w[heroku-22] do
+      let(:allow_failure) { true }
+
+      # Python 3.6 is EOL, so has not been built for newer stacks.
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', LATEST_PYTHON_3_6
     end
   end
 
   context 'with a Pipfile.lock containing python_version 3.7' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.7') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.7', allow_failure: allow_failure) }
 
-    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_7
+    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
+      include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_7
+    end
+
+    context 'when using Heroku-22', stacks: %w[heroku-22] do
+      let(:allow_failure) { true }
+
+      # Python 3.7 is in the security fix only stage of its lifecycle, so has not been built for newer stacks.
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', LATEST_PYTHON_3_7
+    end
   end
 
   context 'with a Pipfile.lock containing python_version 3.8' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.8') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.8', allow_failure: allow_failure) }
 
-    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_8
+    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
+      include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_8
+    end
+
+    context 'when using Heroku-22', stacks: %w[heroku-22] do
+      let(:allow_failure) { true }
+
+      # Python 3.8 is in the security fix only stage of its lifecycle, so has not been built for newer stacks.
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', LATEST_PYTHON_3_8
+    end
   end
 
   context 'with a Pipfile.lock containing python_version 3.9' do
@@ -155,23 +189,35 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'with a Pipfile.lock containing python_full_version 3.10.0' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version', allow_failure: allow_failure) }
 
-    it 'builds with the outdated Python version specified' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Python app detected
-          remote: -----> Using Python version specified in Pipfile.lock
-          remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_10}
-          remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
-          remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
-          remote: -----> Installing python-3.10.0
-          remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
-          remote: -----> Installing dependencies with Pipenv 2020.11.15
-          remote:        Installing dependencies from Pipfile.lock \\(99d8c9\\)...
-          remote: -----> Installing SQLite3
-        REGEX
+    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
+      it 'builds with the outdated Python version specified' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+            remote: -----> Python app detected
+            remote: -----> Using Python version specified in Pipfile.lock
+            remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_10}
+            remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
+            remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
+            remote: -----> Installing python-3.10.0
+            remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
+            remote: -----> Installing dependencies with Pipenv 2020.11.15
+            remote:        Installing dependencies from Pipfile.lock \\(99d8c9\\)...
+            remote: -----> Installing SQLite3
+          REGEX
+        end
       end
+    end
+
+    context 'when using Heroku-22', stacks: %w[heroku-22] do
+      let(:allow_failure) { true }
+
+      # Whilst Python 3.10 is supported on Heroku-22, only the latest version (3.10.4) has been built.
+      # TODO: Once newer Python 3.10 versions are released, adjust this test to use 3.10.4,
+      # which will work for all stacks.
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', '3.10.0'
     end
   end
 

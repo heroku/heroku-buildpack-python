@@ -1,8 +1,8 @@
 # These targets are not files
 .PHONY: lint lint-scripts lint-ruby compile builder-image buildenv deploy-runtimes publish
 
-STACK ?= heroku-20
-STACKS ?= heroku-18 heroku-20
+STACK ?= heroku-22
+STACKS ?= heroku-18 heroku-20 heroku-22
 PLATFORM := linux/amd64
 FIXTURE ?= spec/fixtures/python_version_unspecified
 ENV_FILE ?= builds/dockerenv.default
