@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Update pip from 22.0.4 to 22.1.2 for Python 3.7+ ([#1331](https://github.com/heroku/heroku-buildpack-python/pull/1331)).
 - Add support for Heroku-22 ([#1299](https://github.com/heroku/heroku-buildpack-python/pull/1299)).
 
 ## v211 (2022-05-17)
