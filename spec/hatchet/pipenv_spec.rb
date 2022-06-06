@@ -188,36 +188,25 @@ RSpec.describe 'Pipenv support' do
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_10
   end
 
-  context 'with a Pipfile.lock containing python_full_version 3.10.0' do
+  context 'with a Pipfile.lock containing python_full_version 3.10.4' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version', allow_failure: allow_failure) }
 
-    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
-      it 'builds with the outdated Python version specified' do
-        app.deploy do |app|
-          expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-            remote: -----> Python app detected
-            remote: -----> Using Python version specified in Pipfile.lock
-            remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_10}
-            remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
-            remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
-            remote: -----> Installing python-3.10.0
-            remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
-            remote: -----> Installing dependencies with Pipenv 2020.11.15
-            remote:        Installing dependencies from Pipfile.lock \\(99d8c9\\)...
-            remote: -----> Installing SQLite3
-          REGEX
-        end
+    it 'builds with the outdated Python version specified' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
+          remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_10}
+          remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
+          remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
+          remote: -----> Installing python-3.10.4
+          remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
+          remote: -----> Installing dependencies with Pipenv 2020.11.15
+          remote:        Installing dependencies from Pipfile.lock \\(e047bc\\)...
+          remote: -----> Installing SQLite3
+        REGEX
       end
-    end
-
-    context 'when using Heroku-22', stacks: %w[heroku-22] do
-      let(:allow_failure) { true }
-
-      # Whilst Python 3.10 is supported on Heroku-22, only the latest version (3.10.4) has been built.
-      # TODO: Once newer Python 3.10 versions are released, adjust this test to use 3.10.4,
-      # which will work for all stacks.
-      include_examples 'aborts the build with a runtime not available message (Pipenv)', '3.10.0'
     end
   end
 
