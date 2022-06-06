@@ -11,7 +11,7 @@ RSpec.shared_examples 'builds using Pipenv with the requested Python version' do
         remote: -----> Using Python version specified in Pipfile.lock
         remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
         remote: -----> Installing python-#{python_version}
-        remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
+        remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
         remote: -----> Installing dependencies with Pipenv 2020.11.15
         remote:        Installing dependencies from Pipfile.lock \\(.*\\)...
         remote: -----> Installing SQLite3
@@ -46,7 +46,7 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
+          remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile...
           remote: -----> Installing SQLite3
@@ -66,7 +66,7 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
+          remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock \\(aad8b1\\)...
           remote: -----> Installing SQLite3
@@ -202,7 +202,7 @@ RSpec.describe 'Pipenv support' do
             remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
             remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
             remote: -----> Installing python-3.10.0
-            remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
+            remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
             remote: -----> Installing dependencies with Pipenv 2020.11.15
             remote:        Installing dependencies from Pipfile.lock \\(99d8c9\\)...
             remote: -----> Installing SQLite3
@@ -262,7 +262,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python version specified in runtime.txt
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{LATEST_PYTHON_3_10}
-          remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
+          remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock \\(75eae0\\)...
           remote: -----> Installing SQLite3
@@ -280,7 +280,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
           remote: -----> Installing python-#{LATEST_PYTHON_3_10}
-          remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
+          remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Installing dependencies from Pipfile.lock (2d32e8)...
           remote: -----> Installing SQLite3
@@ -300,7 +300,7 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: cp: cannot stat '/tmp/build_.*/requirements.txt': No such file or directory
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 22.0.4, setuptools 60.10.0 and wheel 0.37.1
+          remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
           remote: -----> Installing dependencies with Pipenv 2020.11.15
           remote:        Your Pipfile.lock \\(aad8b1\\) is out of date. Expected: \\(2d32e8\\).
           remote:        \\[DeployException\\]: .*
