@@ -138,22 +138,11 @@ RSpec.describe 'Python update warnings' do
     include_examples 'warns there is a Python update available', '3.9.12', LATEST_PYTHON_3_9
   end
 
-  context 'with a runtime.txt containing python-3.10.0' do
+  context 'with a runtime.txt containing python-3.10.4' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.10_outdated', allow_failure: allow_failure) }
 
-    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
-      include_examples 'warns there is a Python update available', '3.10.0', LATEST_PYTHON_3_10
-    end
-
-    context 'when using Heroku-22', stacks: %w[heroku-22] do
-      let(:allow_failure) { true }
-
-      # Whilst Python 3.10 is supported on Heroku-22, only the latest version (3.10.4) has been built.
-      # TODO: Once newer Python 3.10 versions are released, adjust this test to use 3.10.4,
-      # which will work for all stacks.
-      include_examples 'aborts the build without showing an update warning', '3.10.0'
-    end
+    include_examples 'warns there is a Python update available', '3.10.4', LATEST_PYTHON_3_10
   end
 
   context 'with a runtime.txt containing pypy2.7-7.3.1' do

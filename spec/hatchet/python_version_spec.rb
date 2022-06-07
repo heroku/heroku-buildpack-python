@@ -65,6 +65,8 @@ RSpec.describe 'Python version support' do
             remote: -----> Python app detected
             remote: -----> No Python version was specified. Using the same version as the last build: python-3.10.4
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_10}
+            remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
             remote: -----> No change in requirements detected, installing from cache
             remote: -----> Using cached install of python-3.10.4
           OUTPUT
@@ -234,7 +236,7 @@ RSpec.describe 'Python version support' do
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
   end
 
-  context 'when runtime.txt contains python-3.10.4' do
+  context 'when runtime.txt contains python-3.10.5' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.10') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_10
