@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Switch to the recommended regional S3 domain instead of the global one ([#1334](https://github.com/heroku/heroku-buildpack-python/pull/1334)).
 
 ## v212 (2022-06-07)
 
