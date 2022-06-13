@@ -5,7 +5,7 @@ runtime-fixer runtime.txt
 PYTHON_VERSION=$(cat runtime.txt)
 
 # The location of the pre-compiled python binary.
-VENDORED_PYTHON="${S3_BASE_URL}/${STACK}/runtimes/${PYTHON_VERSION}.tar.gz"
+PYTHON_URL="${S3_BASE_URL}/${STACK}/runtimes/${PYTHON_VERSION}.tar.gz"
 
 SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
 SECURITY_UPDATE_PYPY="The PyPy project has released a security update! Please consider upgrading to"
@@ -15,7 +15,7 @@ ONLY_SUPPORTED_2_VERSION="Only the latest version of Python 2 is supported on th
 PYTHON_2_EOL_UPDATE="Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible."
 
 # check if runtime exists
-if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
+if curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PYTHON_URL}"; then
   if [[ "$PYTHON_VERSION" == $PY310* ]]; then
     if [ "$PYTHON_VERSION" != "$LATEST_310" ]; then
       puts-warn "$SECURITY_UPDATE" "$LATEST_310"
@@ -135,9 +135,10 @@ else
   # Prepare destination directory.
   mkdir -p .heroku/python
 
-  if ! curl "${VENDORED_PYTHON}" -s | tar zxv -C .heroku/python &> /dev/null; then
-    puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
-    puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+  if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PYTHON_URL}" | tar -zxC .heroku/python; then
+    # The Python version was confirmed to exist previously, so any failure here is due to
+    # a networking issue or archive/buildpack bug rather than the runtime not existing.
+    puts-warn "Failed to download/install ${PYTHON_VERSION}"
     exit 1
   fi
 
@@ -193,7 +194,7 @@ fi
 PIP_WHEEL_URL="${S3_BASE_URL}/common/${PIP_WHEEL_FILENAME}"
 PIP_WHEEL="${TMPDIR:-/tmp}/${PIP_WHEEL_FILENAME}"
 
-if ! curl -sSf "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
+if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
   mcount "failure.python.download-pip"
   puts-warn "Failed to download pip"
   exit 1

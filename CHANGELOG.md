@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enable retries and connection timeouts when using `curl` ([#1335](https://github.com/heroku/heroku-buildpack-python/pull/1335)).
+- Correct the error message shown when downloading a valid Python version fails ([#1335](https://github.com/heroku/heroku-buildpack-python/pull/1335)).
 - Switch to the recommended regional S3 domain instead of the global one ([#1334](https://github.com/heroku/heroku-buildpack-python/pull/1334)).
 
 ## v212 (2022-06-07)

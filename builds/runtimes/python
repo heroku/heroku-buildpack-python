@@ -43,8 +43,8 @@ SIGNATURE_URL="${SOURCE_URL}.asc"
 
 set -o xtrace
 
-curl --fail --retry 3 --connect-timeout 5 --max-time 60 -o python.tgz "${SOURCE_URL}"
-curl --fail --retry 3 --connect-timeout 5 --max-time 60 -o python.tgz.asc "${SIGNATURE_URL}"
+curl --fail --retry 3 --retry-connrefused --connect-timeout 5 --max-time 60 -o python.tgz "${SOURCE_URL}"
+curl --fail --retry 3 --retry-connrefused --connect-timeout 5 --max-time 60 -o python.tgz.asc "${SIGNATURE_URL}"
 
 # Skip GPG verification on Heroku-18 since it fails to fetch keys:
 # `gpg: keyserver receive failed: Server indicated a failure`
