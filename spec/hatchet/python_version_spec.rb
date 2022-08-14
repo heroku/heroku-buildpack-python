@@ -9,7 +9,7 @@ RSpec.shared_examples 'builds with the requested Python version' do |python_vers
         remote: -----> Python app detected
         remote: -----> Using Python version specified in runtime.txt
         remote: -----> Installing python-#{python_version}
-        remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
+        remote: -----> Installing pip 22.2.2, setuptools 63.4.3 and wheel 0.37.1
         remote: -----> Installing SQLite3
         remote: -----> Installing requirements with pip
         remote:        Collecting urllib3
@@ -333,7 +333,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Python version has changed from python-#{LATEST_PYTHON_3_9} to python-#{LATEST_PYTHON_3_10}, clearing cache
           remote: -----> No change in requirements detected, installing from cache
           remote: -----> Installing python-#{LATEST_PYTHON_3_10}
-          remote: -----> Installing pip 22.1.2, setuptools 60.10.0 and wheel 0.37.1
+          remote: -----> Installing pip 22.2.2, setuptools 63.4.3 and wheel 0.37.1
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3
