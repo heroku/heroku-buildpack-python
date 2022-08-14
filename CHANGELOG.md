@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove `BUILD_WITH_GEO_LIBRARIES` sunset messaging ([#1347](https://github.com/heroku/heroku-buildpack-python/pull/1347)).
 - Remove outdated Django version warning ([#1345](https://github.com/heroku/heroku-buildpack-python/pull/1345)).
 
 ## v214 (2022-08-02)
