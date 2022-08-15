@@ -238,20 +238,4 @@ RSpec.describe 'Pip support' do
       end
     end
   end
-
-  context 'when the legacy BUILD_WITH_GEO_LIBRARIES env var is set' do
-    let(:config) { { 'BUILD_WITH_GEO_LIBRARIES' => '' } }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', config: config, allow_failure: true) }
-
-    it 'aborts the build with an unsupported error message' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> Python app detected
-          remote:  !     The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functionality is
-          remote:  !     no longer supported:
-          remote:  !     https://devcenter.heroku.com/changelog-items/1947
-        OUTPUT
-      end
-    end
-  end
 end
