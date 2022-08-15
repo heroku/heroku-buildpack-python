@@ -53,48 +53,9 @@ deep-cp() {
   )
 }
 
-
 # Measure the size of the Python installation.
 measure-size() {
   echo "$(du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
-}
-
-# Python version operator >
-version_gt() {
-  test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1";
-}
-
-# Python verison operator >=
-version_gte() {
-  if [ "$1" == "$2" ]; then
-    return 0
-  fi
-
-  version_gt "$1" "$2"
-}
-
-# Check if Python 2
-python2_check() {
-  VERSION="$1"
-
-  version_gte "$VERSION" "python-2.7.0" && version_gt "python-3.0.0" "$VERSION"
-}
-
-# Check if Python 3
-python3_check() {
-  VERSION="$1"
-
-  version_gte "$VERSION" "python-3.0.0" && version_gt "python-4.0.0" "$VERSION"
-}
-
-# Check if Python version needs to install SQLite3
-python_sqlite3_check() {
-  VERSION="$1"
-  MIN_PYTHON_3="python-3.5.6"
-  MIN_PYTHON_2="python-2.7.15"
-
-  ( python2_check "$VERSION" && version_gte "$VERSION" "$MIN_PYTHON_2" ) \
-    || ( python3_check "$VERSION" && version_gte "$VERSION" "$MIN_PYTHON_3" )
 }
 
 is_module_available() {
