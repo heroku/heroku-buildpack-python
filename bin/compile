@@ -63,7 +63,6 @@ PYPY36="pypy3.6"
 # The `warnings` subscript then greps through this for common problems and guides
 # the user towards resolution of known issues.
 WARNINGS_LOG=$(mktemp)
-RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
 
 # The buildpack ships with a few executable tools.
 # This installs them into the path, so we can execute them directly.
