@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-set +e
-runtime-fixer runtime.txt
+# TODO: Replace runtime-fixer with a bash equivalent, since currently on rebuilds it
+# gets run with the cached Python install (rather than system Python), which means it
+# fails to run with glibc errors on stack downgrades (see spec/hatchet/stack_spec.rb).
+# To work around this for now, non-zero exit codes are ignored (most runtime.txt files
+# don't need fixing up, so the script not running won't normally matter).
+runtime-fixer runtime.txt || true
 PYTHON_VERSION=$(cat runtime.txt)
 
 # The location of the pre-compiled python binary.
@@ -108,22 +112,26 @@ if [ -f .heroku/python-version ]; then
   fi
 fi
 
-# Check if we should reinstall python dependencies
-if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
-  # IF there's no cached dependencies, update cached version of requirements.txt
-  # This should only run for new apps and first deploys after this update
-  cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
-else
-  # IF there IS a cached directory, check for differences with the new one
-  if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" &> /dev/null; then
-    puts-step "Requirements file has been changed, clearing cached dependencies"
-    # if there are any differences, clear the Python cache
-    # Installing Python over again does not take noticably more time
+# If using Pip, check if we should reinstall python dependencies given that requirements.txt
+# is non-deterministic (not all packages pinned, doesn't handle uninstalls etc). We don't need
+# to do this when using Pipenv, since it has a lockfile and syncs the packages for us.
+if [[ -f "${BUILD_DIR}/requirements.txt" ]]; then
+  if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
+    # This is a the first build of an app (or the build cache was cleared). Since there
+    # are no cached packages, we only need to store the requirements file for next time.
     cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
-    rm -rf .heroku/python
-    unset SKIP_INSTALL
   else
-    puts-step "No change in requirements detected, installing from cache"
+    # IF there IS a cached directory, check for differences with the new one
+    if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" &> /dev/null; then
+      puts-step "Requirements file has been changed, clearing cached dependencies"
+      # if there are any differences, clear the Python cache
+      # Installing Python over again does not take noticably more time
+      cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
+      rm -rf .heroku/python
+      unset SKIP_INSTALL
+    else
+      puts-step "No change in requirements detected, installing from cache"
+    fi
   fi
 fi
 
@@ -148,8 +156,6 @@ else
 
   hash -r
 fi
-
-set -e
 
 PIP_VERSION='22.2.2'
 SETUPTOOLS_VERSION='63.4.3'
