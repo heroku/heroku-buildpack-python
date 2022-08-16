@@ -11,90 +11,82 @@ PYTHON_VERSION=$(cat runtime.txt)
 # The location of the pre-compiled python binary.
 PYTHON_URL="${S3_BASE_URL}/${STACK}/runtimes/${PYTHON_VERSION}.tar.gz"
 
-SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
-SECURITY_UPDATE_PYPY="The PyPy project has released a security update! Please consider upgrading to"
-
-ONLY_SUPPORTED_2_VERSION="Only the latest version of Python 2 is supported on the platform. Please consider upgrading to"
-
-PYTHON_2_EOL_UPDATE="Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible."
-
-# check if runtime exists
-if curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PYTHON_URL}"; then
-  if [[ "$PYTHON_VERSION" == $PY310* ]]; then
-    if [ "$PYTHON_VERSION" != "$LATEST_310" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_310"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY39* ]]; then
-    if [ "$PYTHON_VERSION" != "$LATEST_39" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_39"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY38* ]]; then
-    # do things to alert the user of security release available
-    if [ "$PYTHON_VERSION" != "$LATEST_38" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_38"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY37* ]]; then
-    # do things to alert the user of security release available
-    if [ "$PYTHON_VERSION" != "$LATEST_37" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_37"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY36* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_36" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_36"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY35* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_35" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_35"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY34* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_34" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_34"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY27* ]]; then
-    puts-warn "$PYTHON_2_EOL_UPDATE"
-    echo "       Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq"
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_27" ]; then
-      puts-warn "$ONLY_SUPPORTED_2_VERSION" "$LATEST_27"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PYPY27* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_PYPY_27" ]; then
-      puts-warn "$SECURITY_UPDATE_PYPY" "$LATEST_PYPY_27"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PYPY36* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_PYPY_36" ]; then
-      puts-warn "$SECURITY_UPDATE_PYPY" "$LATEST_PYPY_36"
-      echo "       Learn More: https://devcenter.heroku.com/articles/python-runtimes"
-    fi
-  fi
-else
+if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PYTHON_URL}"; then
   puts-warn "Requested runtime '${PYTHON_VERSION}' is not available for this stack (${STACK})."
   puts-warn "For supported versions, see: https://devcenter.heroku.com/articles/python-support"
   exit 1
 fi
+
+function warn_eol_python_version() {
+  local major_version="${1}"
+  local eol_date="${2}"
+  puts-warn
+  puts-warn "Python ${major_version} reached upstream end-of-life on ${eol_date}, and is"
+  puts-warn "therefore no longer receiving security updates:"
+  puts-warn "https://devguide.python.org/versions/#supported-versions"
+  puts-warn
+  puts-warn "Upgrade to a newer Python version as soon as possible to keep your app secure."
+  puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
+  puts-warn
+}
+
+function warn_if_patch_update_available() {
+  local current_version="${1}"
+  local latest_patch_version="${2}"
+  if [[ "${current_version}" != "${latest_patch_version}" ]]; then
+    puts-warn
+    puts-warn "A Python security update is available! Upgrade as soon as possible to: ${latest_patch_version}"
+    puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
+    puts-warn
+  fi
+}
+
+case "${PYTHON_VERSION}" in
+  python-3.10.*)
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_310}"
+    ;;
+  python-3.9.*)
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_39}"
+    ;;
+  python-3.8.*)
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_38}"
+    ;;
+  python-3.7.*)
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_37}"
+    ;;
+  python-3.6.*)
+    warn_eol_python_version "3.6" "December 23rd, 2021"
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_36}"
+    ;;
+  python-3.5.*)
+    warn_eol_python_version "3.5" "September 30th, 2020"
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_35}"
+    ;;
+  python-3.4.*)
+    warn_eol_python_version "3.4" "March 18th, 2019"
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_34}"
+    ;;
+  python-2.7.*)
+    puts-warn
+    puts-warn "Python 2 reached upstream end-of-life on January 1st, 2020, and is"
+    puts-warn "therefore no longer receiving security updates. Upgrade to Python 3"
+    puts-warn "as soon as possible to keep your app secure."
+    puts-warn
+    puts-warn "In addition, Python 2 is only supported on our oldest stack, Heroku-18,"
+    puts-warn "which is deprecated and reaches end-of-life on April 30th, 2023."
+    puts-warn
+    puts-warn "See: https://devcenter.heroku.com/articles/python-2-7-eol-faq"
+    puts-warn
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_27}"
+    ;;
+  pypy*)
+    puts-warn
+    puts-warn "PyPy support is deprecated and the versions available on Heroku are outdated and insecure."
+    puts-warn "Please switch to one of the supported CPython versions by updating your runtime.txt."
+    puts-warn "See: https://devcenter.heroku.com/articles/python-support"
+    puts-warn
+    ;;
+esac
 
 mcount "version.python.${PYTHON_VERSION}"
 
@@ -161,24 +153,29 @@ PIP_VERSION='22.2.2'
 SETUPTOOLS_VERSION='63.4.3'
 WHEEL_VERSION='0.37.1'
 
-if [[ "${PYTHON_VERSION}" == ${PY34}* ]]; then
-  # Python 3.4 support was dropped in pip 19.2+, setuptools 44+ and wheel 0.34+.
-  PIP_VERSION='19.1.1'
-  SETUPTOOLS_VERSION='43.0.0'
-  WHEEL_VERSION='0.33.6'
-elif [[ "${PYTHON_VERSION}" == ${PY27}* || "${PYTHON_VERSION}" == ${PYPY27}* ]]; then
-  # Python 2.7 support was dropped in pip 21+ and setuptools 45+.
-  PIP_VERSION='20.3.4'
-  SETUPTOOLS_VERSION='44.1.1'
-elif [[ "${PYTHON_VERSION}" == ${PY35}* ]]; then
-  # Python 3.5 support was dropped in pip 21+ and setuptools 51+.
-  PIP_VERSION='20.3.4'
-  SETUPTOOLS_VERSION='50.3.2'
-elif [[ "${PYTHON_VERSION}" == ${PY36}* || "${PYTHON_VERSION}" == ${PYPY36}* ]]; then
-  # Python 3.6 support was dropped in pip 22+ and setuptools 59.7.0+.
-  PIP_VERSION='21.3.1'
-  SETUPTOOLS_VERSION='59.6.0'
-fi
+case "${PYTHON_VERSION}" in
+  python-3.6.*|pypy3.6-*)
+    # Python 3.6 support was dropped in pip 22+ and setuptools 59.7.0+.
+    PIP_VERSION='21.3.1'
+    SETUPTOOLS_VERSION='59.6.0'
+    ;;
+  python-3.5.*)
+    # Python 3.5 support was dropped in pip 21+ and setuptools 51+.
+    PIP_VERSION='20.3.4'
+    SETUPTOOLS_VERSION='50.3.2'
+    ;;
+  python-3.4.*)
+    # Python 3.4 support was dropped in pip 19.2+, setuptools 44+ and wheel 0.34+.
+    PIP_VERSION='19.1.1'
+    SETUPTOOLS_VERSION='43.0.0'
+    WHEEL_VERSION='0.33.6'
+    ;;
+  python-2.7.*|pypy2.7-*)
+    # Python 2.7 support was dropped in pip 21+ and setuptools 45+.
+    PIP_VERSION='20.3.4'
+    SETUPTOOLS_VERSION='44.1.1'
+    ;;
+esac
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
