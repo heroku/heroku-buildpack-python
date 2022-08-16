@@ -323,7 +323,7 @@ EOT
 # - lib-python/3/site-packages/ (PyPy)
 if [[ "${BUILD_DIR}" != "/app" ]]; then
   cat <<EOT >> "$PROFILE_PATH"
-find .heroku/python/lib*/*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
+find .heroku/python/lib*/*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
 EOT
 fi
 
