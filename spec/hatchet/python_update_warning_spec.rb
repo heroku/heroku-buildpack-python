@@ -22,8 +22,8 @@ RSpec.shared_examples 'aborts the build without showing an update warning' do |r
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
         remote: -----> Using Python version specified in runtime.txt
-        remote:  !     Requested runtime (python-#{requested_version}) is not available for this stack (#{app.stack}).
-        remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
+        remote:  !     Requested runtime 'python-#{requested_version}' is not available for this stack (#{app.stack}).
+        remote:  !     For supported versions, see: https://devcenter.heroku.com/articles/python-support
       OUTPUT
     end
   end
@@ -169,8 +169,8 @@ RSpec.describe 'Python update warnings' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
-            remote:  !     Requested runtime (pypy2.7-7.3.1) is not available for this stack (#{app.stack}).
-            remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
+            remote:  !     Requested runtime 'pypy2.7-7.3.1' is not available for this stack (#{app.stack}).
+            remote:  !     For supported versions, see: https://devcenter.heroku.com/articles/python-support
           OUTPUT
         end
       end
@@ -201,8 +201,8 @@ RSpec.describe 'Python update warnings' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
-            remote:  !     Requested runtime (pypy3.6-7.3.1) is not available for this stack (#{app.stack}).
-            remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
+            remote:  !     Requested runtime 'pypy3.6-7.3.1' is not available for this stack (#{app.stack}).
+            remote:  !     For supported versions, see: https://devcenter.heroku.com/articles/python-support
           OUTPUT
         end
       end

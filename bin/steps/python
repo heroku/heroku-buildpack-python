@@ -91,8 +91,8 @@ if curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused 
     fi
   fi
 else
-  puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
-  puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+  puts-warn "Requested runtime '${PYTHON_VERSION}' is not available for this stack (${STACK})."
+  puts-warn "For supported versions, see: https://devcenter.heroku.com/articles/python-support"
   exit 1
 fi
 
