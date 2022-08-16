@@ -25,8 +25,8 @@ RSpec.shared_examples 'aborts the build with a runtime not available message' do
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
         remote: -----> Using Python version specified in runtime.txt
-        remote:  !     Requested runtime (#{requested_runtime}) is not available for this stack (#{app.stack}).
-        remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
+        remote:  !     Requested runtime '#{requested_runtime}' is not available for this stack (#{app.stack}).
+        remote:  !     For supported versions, see: https://devcenter.heroku.com/articles/python-support
       OUTPUT
     end
   end

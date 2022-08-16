@@ -24,8 +24,8 @@ RSpec.shared_examples 'aborts the build with a runtime not available message (Pi
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
         remote: -----> Using Python version specified in Pipfile.lock
-        remote:  !     Requested runtime (python-#{requested_version}) is not available for this stack (#{app.stack}).
-        remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
+        remote:  !     Requested runtime 'python-#{requested_version}' is not available for this stack (#{app.stack}).
+        remote:  !     For supported versions, see: https://devcenter.heroku.com/articles/python-support
       OUTPUT
     end
   end
@@ -212,8 +212,8 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
-          remote:  !     Requested runtime (^3.9) is not available for this stack (#{app.stack}).
-          remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
+          remote:  !     Requested runtime '^3.9' is not available for this stack (#{app.stack}).
+          remote:  !     For supported versions, see: https://devcenter.heroku.com/articles/python-support
         OUTPUT
       end
     end
@@ -227,8 +227,8 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
-          remote:  !     Requested runtime (python-X.Y.Z) is not available for this stack (#{app.stack}).
-          remote:  !     Aborting.  More info: https://devcenter.heroku.com/articles/python-support
+          remote:  !     Requested runtime 'python-X.Y.Z' is not available for this stack (#{app.stack}).
+          remote:  !     For supported versions, see: https://devcenter.heroku.com/articles/python-support
         OUTPUT
       end
     end
