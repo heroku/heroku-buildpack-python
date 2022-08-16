@@ -65,8 +65,10 @@ RSpec.describe 'Python version support' do
             remote: -----> Python app detected
             remote: -----> No Python version was specified. Using the same version as the last build: python-3.10.5
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
-            remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_10}
-            remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
+            remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_10}
+            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
             remote: -----> No change in requirements detected, installing from cache
             remote: -----> Using cached install of python-3.10.5
           OUTPUT
@@ -86,8 +88,16 @@ RSpec.describe 'Python version support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
-            remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
-            remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
+            remote:  !     
+            remote:  !     Python 2 reached upstream end-of-life on January 1st, 2020, and is
+            remote:  !     therefore no longer receiving security updates. Upgrade to Python 3
+            remote:  !     as soon as possible to keep your app secure.
+            remote:  !     
+            remote:  !     In addition, Python 2 is only supported on our oldest stack, Heroku-18,
+            remote:  !     which is deprecated and reaches end-of-life on April 30th, 2023.
+            remote:  !     
+            remote:  !     See: https://devcenter.heroku.com/articles/python-2-7-eol-faq
+            remote:  !     
             remote: -----> Installing python-#{LATEST_PYTHON_2_7}
             remote: -----> Installing pip 20.3.4, setuptools 44.1.1 and wheel 0.37.1
             remote: -----> Installing SQLite3
@@ -119,6 +129,14 @@ RSpec.describe 'Python version support' do
           expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
+            remote:  !     
+            remote:  !     Python 3.4 reached upstream end-of-life on March 18th, 2019, and is
+            remote:  !     therefore no longer receiving security updates:
+            remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
+            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
             remote: -----> Installing python-#{LATEST_PYTHON_3_4}
             remote: -----> Installing pip 19.1.1, setuptools 43.0.0 and wheel 0.33.6
             remote: DEPRECATION: Python 3.4 support has been deprecated. pip 19.1 will be the last one supporting it. Please upgrade your Python as Python 3.4 won't be maintained after March 2019 \\(cf PEP 429\\).
@@ -150,6 +168,14 @@ RSpec.describe 'Python version support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
+            remote:  !     
+            remote:  !     Python 3.5 reached upstream end-of-life on September 30th, 2020, and is
+            remote:  !     therefore no longer receiving security updates:
+            remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
+            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
             remote: -----> Installing python-#{LATEST_PYTHON_3_5}
             remote: -----> Installing pip 20.3.4, setuptools 50.3.2 and wheel 0.37.1
             remote: -----> Installing SQLite3
@@ -179,6 +205,14 @@ RSpec.describe 'Python version support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
+            remote:  !     
+            remote:  !     Python 3.6 reached upstream end-of-life on December 23rd, 2021, and is
+            remote:  !     therefore no longer receiving security updates:
+            remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
+            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
             remote: -----> Installing python-#{LATEST_PYTHON_3_6}
             remote: -----> Installing pip 21.3.1, setuptools 59.6.0 and wheel 0.37.1
             remote: -----> Installing SQLite3
@@ -252,6 +286,11 @@ RSpec.describe 'Python version support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
+            remote:  !     
+            remote:  !     PyPy support is deprecated and the versions available on Heroku are outdated and insecure.
+            remote:  !     Please switch to one of the supported CPython versions by updating your runtime.txt.
+            remote:  !     See: https://devcenter.heroku.com/articles/python-support
+            remote:  !     
             remote: -----> Installing pypy2.7-#{LATEST_PYPY_2_7}
             remote: -----> Installing pip 20.3.4, setuptools 44.1.1 and wheel 0.37.1
             remote: -----> Installing SQLite3
@@ -281,6 +320,11 @@ RSpec.describe 'Python version support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
+            remote:  !     
+            remote:  !     PyPy support is deprecated and the versions available on Heroku are outdated and insecure.
+            remote:  !     Please switch to one of the supported CPython versions by updating your runtime.txt.
+            remote:  !     See: https://devcenter.heroku.com/articles/python-support
+            remote:  !     
             remote: -----> Installing pypy3.6-#{LATEST_PYPY_3_6}
             remote: -----> Installing pip 21.3.1, setuptools 59.6.0 and wheel 0.37.1
             remote: -----> Installing SQLite3

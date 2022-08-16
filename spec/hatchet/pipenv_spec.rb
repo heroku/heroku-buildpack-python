@@ -81,8 +81,16 @@ RSpec.describe 'Pipenv support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in Pipfile.lock
-            remote:  !     Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible.
-            remote:        Learn More: https://devcenter.heroku.com/articles/python-2-7-eol-faq
+            remote:  !     
+            remote:  !     Python 2 reached upstream end-of-life on January 1st, 2020, and is
+            remote:  !     therefore no longer receiving security updates. Upgrade to Python 3
+            remote:  !     as soon as possible to keep your app secure.
+            remote:  !     
+            remote:  !     In addition, Python 2 is only supported on our oldest stack, Heroku-18,
+            remote:  !     which is deprecated and reaches end-of-life on April 30th, 2023.
+            remote:  !     
+            remote:  !     See: https://devcenter.heroku.com/articles/python-2-7-eol-faq
+            remote:  !     
             remote: -----> Installing python-#{LATEST_PYTHON_2_7}
             remote: -----> Installing pip 20.3.4, setuptools 44.1.1 and wheel 0.37.1
             remote: -----> Installing dependencies with Pipenv 2020.11.15
@@ -120,6 +128,14 @@ RSpec.describe 'Pipenv support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in Pipfile.lock
+            remote:  !     
+            remote:  !     Python 3.6 reached upstream end-of-life on December 23rd, 2021, and is
+            remote:  !     therefore no longer receiving security updates:
+            remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
+            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
             remote: -----> Installing python-#{LATEST_PYTHON_3_6}
             remote: -----> Installing pip 21.3.1, setuptools 59.6.0 and wheel 0.37.1
             remote: -----> Installing dependencies with Pipenv 2020.11.15
@@ -191,8 +207,10 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
-          remote:  !     Python has released a security update! Please consider upgrading to python-#{LATEST_PYTHON_3_10}
-          remote:        Learn More: https://devcenter.heroku.com/articles/python-runtimes
+          remote:  !     
+          remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_10}
+          remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+          remote:  !     
           remote: -----> Installing python-3.10.4
           remote: -----> Installing pip 22.2.2, setuptools 63.4.3 and wheel 0.37.1
           remote: -----> Installing dependencies with Pipenv 2020.11.15
