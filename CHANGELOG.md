@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Ensure path rewriting works when using setuptools v64's new PEP660-based editable install mode ([#1357](https://github.com/heroku/heroku-buildpack-python/pull/1357)).
 - Display an EOL warning for Python 3.4, 3.5 and 3.6 ([#1356](https://github.com/heroku/heroku-buildpack-python/pull/1356)).
 - Improve the EOL warning for Python 2.7 ([#1356](https://github.com/heroku/heroku-buildpack-python/pull/1356)).
 - Display a deprecation warning for PyPy support ([#1356](https://github.com/heroku/heroku-buildpack-python/pull/1356)).
