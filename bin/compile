@@ -304,14 +304,14 @@ if [[ \$HOME != "/app" ]]; then
 fi
 EOT
 
-# At runtime, rewrite paths in editable package .egg-link and .pth files from the build time paths
+# At runtime, rewrite paths in editable package .egg-link, .pth and finder files from the build time paths
 # (such as `/tmp/build_<hash>`) back to `/app`. This is not done during the build itself, since later
 # buildpacks still need the build time paths. The `/lib*/*/` glob is to ensure it matches against both:
 # - lib/python3.NN/site-packages/ (CPython)
 # - lib-python/3/site-packages/ (PyPy)
 if [[ "${BUILD_DIR}" != "/app" ]]; then
   cat <<EOT >> "$PROFILE_PATH"
-find .heroku/python/lib*/*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
+find .heroku/python/lib*/*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
 EOT
 fi
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This file is run by the inline buildpack, and tests that editable reqirements are
+# This file is run by the inline buildpack, and tests that editable requirements are
 # usable by buildpacks that run after the Python buildpack during the build.
 
 set -euo pipefail
