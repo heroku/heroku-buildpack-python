@@ -304,7 +304,7 @@ if [[ \$HOME != "/app" ]]; then
 fi
 EOT
 
-# At runtime, rewrite paths in editable package .egg-link and .pth files from the build time paths
+# At runtime, rewrite paths in editable package .egg-link, .pth and finder files from the build time paths
 # (such as `/tmp/build_<hash>`) back to `/app`. This is not done during the build itself, since later
 # buildpacks still need the build time paths. The `/lib*/*/` glob is to ensure it matches against both:
 # - lib/python3.NN/site-packages/ (CPython)
