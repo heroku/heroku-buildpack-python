@@ -6,8 +6,11 @@ set -euo pipefail
 find .heroku/python/lib*/*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) | sort | xargs -exec tail -n +1
 echo
 
-echo -n "Running entrypoint for the local package: "
-local_package
+echo -n "Running entrypoint for the pyproject.toml-based local package: "
+local_package_pyproject_toml
+
+echo -n "Running entrypoint for the setup.py-based local package: "
+local_package_setup_py
 
 echo -n "Running entrypoint for the VCS package: "
 gunicorn --version
