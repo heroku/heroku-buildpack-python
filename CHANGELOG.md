@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Python 3.7.14, 3.8.14 and 3.9.14 are now available ([#1362](https://github.com/heroku/heroku-buildpack-python/pull/1362)).
 
 ## v217 (2022-09-06)
 
