@@ -6,9 +6,9 @@
 # shellcheck disable=2034
 
 LATEST_310="python-3.10.7"
-LATEST_39="python-3.9.13"
-LATEST_38="python-3.8.13"
-LATEST_37="python-3.7.13"
+LATEST_39="python-3.9.14"
+LATEST_38="python-3.8.14"
+LATEST_37="python-3.7.14"
 LATEST_36="python-3.6.15"
 LATEST_35="python-3.5.10"
 LATEST_34="python-3.4.10"

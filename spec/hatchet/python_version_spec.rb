@@ -232,7 +232,7 @@ RSpec.describe 'Python version support' do
     end
   end
 
-  context 'when runtime.txt contains python-3.7.13' do
+  context 'when runtime.txt contains python-3.7.14' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.7', allow_failure: allow_failure) }
 
@@ -248,7 +248,7 @@ RSpec.describe 'Python version support' do
     end
   end
 
-  context 'when runtime.txt contains python-3.8.13' do
+  context 'when runtime.txt contains python-3.8.14' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.8', allow_failure: allow_failure) }
 
@@ -264,7 +264,7 @@ RSpec.describe 'Python version support' do
     end
   end
 
-  context 'when runtime.txt contains python-3.9.13' do
+  context 'when runtime.txt contains python-3.9.14' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
