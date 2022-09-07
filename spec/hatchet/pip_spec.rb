@@ -81,8 +81,8 @@ RSpec.describe 'Pip support' do
     include_examples 'installs successfully using pip'
   end
 
-  context 'when requirements.txt contains Git/Mercurial requirements URLs' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_vcs') }
+  context 'when requirements.txt contains Git requirements URLs' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_git') }
 
     include_examples 'installs successfully using pip'
   end
