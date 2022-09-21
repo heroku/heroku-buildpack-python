@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The Heroku Postgres database auto-provisioning feature now provisions a DB in fewer cases ([#1363](https://github.com/heroku/heroku-buildpack-python/pull/1363)).
 
 ## v218 (2022-09-07)
 
