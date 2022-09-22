@@ -21,24 +21,32 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
 
             if [[ "$PYTHON" == "null" ]]; then
                 PYTHON=$(jq -r '._meta.requires.python_version' "$BUILD_DIR/Pipfile.lock")
-                if [ "$PYTHON" = 2.7 ]; then
-                    echo "$LATEST_27" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.6 ]; then
-                    echo "$LATEST_36" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.7 ]; then
-                    echo "$LATEST_37" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.8 ]; then
-                    echo "$LATEST_38" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = 3.9 ]; then
-                    echo "$LATEST_39" > "$BUILD_DIR/runtime.txt"
-                fi
-                if [ "$PYTHON" = "3.10" ]; then
-                    echo "$LATEST_310" > "$BUILD_DIR/runtime.txt"
-                fi
+                case "${PYTHON}" in
+                    2.7)
+                        echo "${LATEST_27}" > "${BUILD_DIR}/runtime.txt"
+                        ;;
+                    3.4)
+                        echo "${LATEST_34}" > "${BUILD_DIR}/runtime.txt"
+                        ;;
+                    3.5)
+                        echo "${LATEST_35}" > "${BUILD_DIR}/runtime.txt"
+                        ;;
+                    3.6)
+                        echo "${LATEST_36}" > "${BUILD_DIR}/runtime.txt"
+                        ;;
+                    3.7)
+                        echo "${LATEST_37}" > "${BUILD_DIR}/runtime.txt"
+                        ;;
+                    3.8)
+                        echo "${LATEST_38}" > "${BUILD_DIR}/runtime.txt"
+                        ;;
+                    3.9)
+                        echo "${LATEST_39}" > "${BUILD_DIR}/runtime.txt"
+                        ;;
+                    3.10)
+                        echo "${LATEST_310}" > "${BUILD_DIR}/runtime.txt"
+                        ;;
+                esac
             fi
 
 
