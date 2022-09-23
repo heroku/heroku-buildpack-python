@@ -157,7 +157,7 @@ case "${PYTHON_VERSION}" in
   python-3.6.*|pypy3.6-*)
     # Python 3.6 support was dropped in pip 22+ and setuptools 59.7.0+.
     PIP_VERSION='21.3.1'
-    SETUPTOOLS_VERSION='59.6.0'
+    SETUPTOOLS_VERSION='57.5.0'
     ;;
   python-3.5.*)
     # Python 3.5 support was dropped in pip 21+ and setuptools 51+.
