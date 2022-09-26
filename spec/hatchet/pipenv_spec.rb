@@ -72,50 +72,68 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'with a Pipfile.lock containing python_version 2.7' do
-    let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_2.7', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_2.7', allow_failure: true) }
 
     context 'when using Heroku-18', stacks: %w[heroku-18] do
-      it 'builds with the latest Python 2.7' do
+      it 'aborts the build with an EOL message' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python version specified in Pipfile.lock
             remote:  !     
             remote:  !     Python 2 reached upstream end-of-life on January 1st, 2020, and is
-            remote:  !     therefore no longer receiving security updates. Upgrade to Python 3
-            remote:  !     as soon as possible to keep your app secure.
+            remote:  !     therefore no longer receiving security updates. Apps still using it
+            remote:  !     contain potential security vulnerabilities and should be upgraded to
+            remote:  !     Python 3 as soon as possible.
             remote:  !     
             remote:  !     In addition, Python 2 is only supported on our oldest stack, Heroku-18,
             remote:  !     which is deprecated and reaches end-of-life on April 30th, 2023.
             remote:  !     
-            remote:  !     See: https://devcenter.heroku.com/articles/python-2-7-eol-faq
+            remote:  !     As such, it is no longer supported by the latest version of this buildpack.
             remote:  !     
-            remote: -----> Installing python-#{LATEST_PYTHON_2_7}
-            remote: -----> Installing pip 20.3.4, setuptools 44.1.1 and wheel 0.37.1
-            remote: -----> Installing dependencies with Pipenv 2020.11.15
-            remote:        Installing dependencies from Pipfile.lock (b8efa9)...
-            remote: -----> Installing SQLite3
+            remote:  !     For advice on how to upgrade to Python 3, or switch to an older version
+            remote:  !     of the buildpack that still supports Python 2, see:
+            remote:  !     https://devcenter.heroku.com/articles/python-2-7-eol-faq
+            remote:  !     
           OUTPUT
         end
       end
     end
 
     context 'when using Heroku-20 or newer', stacks: %w[heroku-20 heroku-22] do
-      let(:allow_failure) { true }
-
       # Python 2.7 is EOL, so has not been built for newer stacks.
-      include_examples 'aborts the build with a runtime not available message (Pipenv)', LATEST_PYTHON_2_7
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', '2.7.18'
     end
   end
 
-  # Python 3.5 isn't currently recognised in python_version, causing the default
-  # Python version to be used instead, due to W-8104668.
-  context 'with a Pipfile.lock containing python_version 3.5',
-          skip: 'python_version mapping does not currently support 3.5' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.5') }
+  context 'with a Pipfile.lock containing python_version 3.5' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.5', allow_failure: true) }
 
-    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_5
+    context 'when using Heroku-18', stacks: %w[heroku-18] do
+      it 'aborts the build with an EOL message' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to include(<<~OUTPUT)
+            remote: -----> Python app detected
+            remote: -----> Using Python version specified in Pipfile.lock
+            remote:  !     
+            remote:  !     Python 3.5 reached upstream end-of-life on September 30th, 2020, and is
+            remote:  !     therefore no longer receiving security updates:
+            remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     As such, it is no longer supported by the latest version of this buildpack.
+            remote:  !     
+            remote:  !     Please upgrade to a newer Python version. See:
+            remote:  !     https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
+          OUTPUT
+        end
+      end
+    end
+
+    context 'when using Heroku-20 or newer', stacks: %w[heroku-20 heroku-22] do
+      # Python 3.5 is EOL, so has not been built for newer stacks.
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', '3.5.10'
+    end
   end
 
   context 'with a Pipfile.lock containing python_version 3.6' do

@@ -255,15 +255,6 @@ RSpec.describe 'Pip support' do
     end
   end
 
-  context 'when using pysqlite and Python 2', stacks: %w[heroku-18] do
-    # This is split out from the requirements_compiled fixture, since the original
-    # pysqlite package (as opposed to the newer pysqlite3) only supports Python 2.
-    # This test has to be skipped on newer stacks where Python 2 is not available.
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_pysqlite_python_2') }
-
-    include_examples 'installs successfully using pip'
-  end
-
   context 'when requirements.txt contains GDAL but the GDAL C++ library is missing' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_gdal', allow_failure: true) }
 

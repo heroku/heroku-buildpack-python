@@ -232,7 +232,6 @@ fi
 # SQLite3 support.
 # This sets up and installs sqlite3 dev headers and the sqlite3 binary but not the
 # libsqlite3-0 library since that exists on the stack image.
-# Note: This only applies to Python 2.7.15+ and Python 3.6.6+
 (( start=$(nowms) ))
 # shellcheck source=bin/steps/sqlite3
 source "$BIN_DIR/steps/sqlite3"
@@ -249,9 +248,6 @@ source "$BIN_DIR/steps/pip-install"
 mtime "pip.install.time" "${start}"
 
 # Support for NLTK corpora.
-# Note: this may only work on Python 2.7. I don't think many customers use this functionality,
-# and it should probably be undocumented.
-# (there's an import error on 3.6 that should hopefully be fixed upstream at some point)
 (( start=$(nowms) ))
 sub_env "$BIN_DIR/steps/nltk"
 mtime "nltk.download.time" "${start}"
@@ -306,12 +302,10 @@ EOT
 
 # At runtime, rewrite paths in editable package .egg-link, .pth and finder files from the build time paths
 # (such as `/tmp/build_<hash>`) back to `/app`. This is not done during the build itself, since later
-# buildpacks still need the build time paths. The `/lib*/*/` glob is to ensure it matches against both:
-# - lib/python3.NN/site-packages/ (CPython)
-# - lib-python/3/site-packages/ (PyPy)
+# buildpacks still need the build time paths.
 if [[ "${BUILD_DIR}" != "/app" ]]; then
   cat <<EOT >> "$PROFILE_PATH"
-find .heroku/python/lib*/*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
+find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
 EOT
 fi
 

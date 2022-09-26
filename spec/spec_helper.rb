@@ -6,16 +6,11 @@ ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-22'
 require 'rspec/core'
 require 'hatchet'
 
-LATEST_PYTHON_2_7 = '2.7.18'
-LATEST_PYTHON_3_4 = '3.4.10'
-LATEST_PYTHON_3_5 = '3.5.10'
 LATEST_PYTHON_3_6 = '3.6.15'
 LATEST_PYTHON_3_7 = '3.7.14'
 LATEST_PYTHON_3_8 = '3.8.14'
 LATEST_PYTHON_3_9 = '3.9.14'
 LATEST_PYTHON_3_10 = '3.10.7'
-LATEST_PYPY_2_7 = '7.3.2'
-LATEST_PYPY_3_6 = '7.3.2'
 DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_10
 
 # Work around the return value for `default_buildpack` changing after deploy:
