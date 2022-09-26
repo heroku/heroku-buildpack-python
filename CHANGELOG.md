@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## v219 (2022-09-26)
+
 - Drop support for Python 2.7, 3.4 and 3.5 ([#1364](https://github.com/heroku/heroku-buildpack-python/pull/1364)).
 - Drop support for PyPy ([#1364](https://github.com/heroku/heroku-buildpack-python/pull/1364)).
 - The Heroku Postgres database auto-provisioning feature now provisions a DB in fewer cases ([#1363](https://github.com/heroku/heroku-buildpack-python/pull/1363)).
