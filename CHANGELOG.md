@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## v220 (2022-09-28)
+
 - Improve the wording of the Python 2.7 EOL error message ([#1367](https://github.com/heroku/heroku-buildpack-python/pull/1367)).
 
 ## v219 (2022-09-26)
