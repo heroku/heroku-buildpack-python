@@ -89,10 +89,15 @@ RSpec.describe 'Pipenv support' do
             remote:  !     In addition, Python 2 is only supported on our oldest stack, Heroku-18,
             remote:  !     which is deprecated and reaches end-of-life on April 30th, 2023.
             remote:  !     
-            remote:  !     As such, it is no longer supported by the latest version of this buildpack.
+            remote:  !     As such, it is no longer supported by the latest version of this buildpack:
+            remote:  !     https://devcenter.heroku.com/changelog-items/2473
             remote:  !     
-            remote:  !     For advice on how to upgrade to Python 3, or switch to an older version
-            remote:  !     of the buildpack that still supports Python 2, see:
+            remote:  !     You must either:
+            remote:  !       - Upgrade to Python 3 (recommended)
+            remote:  !       - Switch to the container stack and use the upstream legacy 'python:2.7' Docker images
+            remote:  !       - Switch to an older version of the Python buildpack (short term workaround only)
+            remote:  !     
+            remote:  !     For more details, see:
             remote:  !     https://devcenter.heroku.com/articles/python-2-7-eol-faq
             remote:  !     
           OUTPUT
