@@ -1,0 +1,16 @@
+name: install-ruby-dependencies
+runs:
+  using: composite
+  steps:
+  - name: restore_cache
+    uses: actions/cache@v2
+    with:
+      key: gems-v1-{{ arch }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "Gemfile.lock" }}
+  - name: Install Ruby dependencies
+    run: bundle install --deployment --jobs 2
+    shell: bash
+  - name: save_cache
+    uses: actions/cache@v2
+    with:
+      path: vendor/bundle
+      key: gems-v1-{{ arch }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "Gemfile.lock" }}
