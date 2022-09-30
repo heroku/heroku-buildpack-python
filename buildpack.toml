@@ -3,7 +3,6 @@ name = "Python"
 
 [publish.Ignore]
 files = [
-  ".circleci/",
   ".github/",
   "builds/",
   "spec/",

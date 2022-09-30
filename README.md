@@ -2,7 +2,7 @@
 
 # Heroku Buildpack: Python
 
-[![CircleCI](https://circleci.com/gh/heroku/heroku-buildpack-python.svg?style=svg)](https://circleci.com/gh/heroku/heroku-buildpack-python)
+[![CI](https://github.com/heroku/heroku-buildpack-python/actions/workflows/ci.yml/badge.svg)](https://github.com/heroku/heroku-buildpack-python/actions/workflows/ci.yml)
 
 This is the official [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) for Python apps.
 
