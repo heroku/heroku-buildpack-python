@@ -1,8 +1,8 @@
 name: CI
 
 on:
-  # Only perform branch builds for `main`, to avoid duplicate builds on PRs.
   push:
+    # Avoid duplicate builds on PRs.
     branches:
       - main
   pull_request:
@@ -11,26 +11,22 @@ permissions:
   contents: read
 
 jobs:
-  shellcheck:
+  lint:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - name: Lint bash scripts with shellcheck
-        run: make lint-scripts
-
-  rubocop:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Install Ruby and dependencies
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: '2.7'
-      - name: Lint Ruby files with Rubocop
+          ruby-version: "2.7"
+      - name: Run ShellCheck
+        run: make lint-scripts
+      - name: Run Rubocop
         run: bundle exec rubocop
 
-  hatchet:
+  integration-test:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
@@ -47,14 +43,15 @@ jobs:
       HEROKU_DISABLE_AUTOUPDATE: 1
       PARALLEL_SPLIT_TEST_PROCESSES: 60
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Install Ruby and dependencies
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: '2.7'
+          ruby-version: "2.7"
       - name: Hatchet setup
         run: bundle exec hatchet ci:setup
-      - name: Run Hatchet rspec tests
+      - name: Run Hatchet integration tests
         # parallel_split_test runs rspec in parallel, with concurrency equal to PARALLEL_SPLIT_TEST_PROCESSES.
         run: bundle exec parallel_split_test spec/hatchet/
