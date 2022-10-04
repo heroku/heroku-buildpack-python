@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fix automatic provisioning of Postgres DB addons ([#1375](https://github.com/heroku/heroku-buildpack-python/pull/1375)).
 
 ## v220 (2022-09-28)
 
