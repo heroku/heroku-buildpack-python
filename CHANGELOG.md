@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Python 3.7.15, 3.8.15, 3.9.15 and 3.10.8 are now available ([#1376](https://github.com/heroku/heroku-buildpack-python/pull/1376)).
+- The default Python version for new apps is now 3.10.8 (previously 3.10.7) ([#1376](https://github.com/heroku/heroku-buildpack-python/pull/1376)).
 - Fix automatic provisioning of Postgres DB addons ([#1375](https://github.com/heroku/heroku-buildpack-python/pull/1375)).
 
 ## v220 (2022-09-28)
