@@ -69,15 +69,7 @@ case "${PYTHON_VERSION}" in
     warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_37}"
     ;;
   python-3.6.*)
-    puts-warn
-    puts-warn "Python 3.6 reached upstream end-of-life on December 23rd, 2021, and is"
-    puts-warn "therefore no longer receiving security updates:"
-    puts-warn "https://devguide.python.org/versions/#supported-versions"
-    puts-warn
-    puts-warn "Upgrade to a newer Python version as soon as possible to keep your app secure."
-    puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
-    puts-warn
-    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_36}"
+    eol_python_version_error "3.6" "December 23rd, 2021"
     ;;
   python-3.5.*)
     eol_python_version_error "3.5" "September 30th, 2020"
@@ -184,15 +176,6 @@ fi
 PIP_VERSION='23.0.1'
 SETUPTOOLS_VERSION='63.4.3'
 WHEEL_VERSION='0.38.4'
-
-case "${PYTHON_VERSION}" in
-  python-3.6.*)
-    # Python 3.6 support was dropped in pip 22+, setuptools 59.7.0+ and wheel 0.38.0+.
-    PIP_VERSION='21.3.1'
-    SETUPTOOLS_VERSION='59.6.0'
-    WHEEL_VERSION='0.37.1'
-    ;;
-esac
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 

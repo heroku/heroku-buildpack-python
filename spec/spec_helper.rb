@@ -6,7 +6,6 @@ ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-22'
 require 'rspec/core'
 require 'hatchet'
 
-LATEST_PYTHON_3_6 = '3.6.15'
 LATEST_PYTHON_3_7 = '3.7.16'
 LATEST_PYTHON_3_8 = '3.8.16'
 LATEST_PYTHON_3_9 = '3.9.16'
