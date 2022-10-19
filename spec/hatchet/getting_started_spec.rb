@@ -3,13 +3,13 @@
 require_relative '../spec_helper'
 
 RSpec.describe 'Python getting started project' do
-  it 'getting started app has no relative paths' do
-    buildpacks = [
-      :default,
-      'https://github.com/sharpstone/force_absolute_paths_buildpack'
-    ]
-    Hatchet::Runner.new('python-getting-started', buildpacks: buildpacks).deploy do |app|
-      # Deploy works
+  it 'builds successfully' do
+    Hatchet::Runner.new('python-getting-started').deploy do |app|
+      # TODO: Decide what to do with this test given it mostly duplicates the one in django_spec.rb.
+      expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        remote: -----> \\$ python manage.py collectstatic --noinput
+        remote:        \\d+ static files copied to '/tmp/build_.*/staticfiles', \\d+ post-processed.
+      REGEX
     end
   end
 end

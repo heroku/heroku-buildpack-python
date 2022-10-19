@@ -74,7 +74,7 @@ make deploy-runtimes RUNTIMES='python-X.Y.Z' STACKS='heroku-18'
 Multiple runtimes can also be specified (useful for when adding a new stack), like so:
 
 ```bash
-make deploy-runtimes RUNTIMES='python-A.B.C python-X.Y.Z' STACKS='heroku-20'
+make deploy-runtimes RUNTIMES='python-A.B.C python-X.Y.Z' STACKS='heroku-22'
 ```
 
 Note: Both `RUNTIMES` and `STACKS` are space delimited.

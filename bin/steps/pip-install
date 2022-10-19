@@ -23,24 +23,11 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     # Measure that we're using pip.
     mcount "tool.pip"
 
-    # Count expected build failures.
-    if grep -q '==0.0.0' requirements.txt; then
-        mcount "failure.none-version"
-    fi
-
-    # TODO: Either remove this or fix since it's pretty broken at the moment - for example it
-    # doesn't match against a requirements specifier of 'Django >=1.11,<2' amongst others.
-    if grep -qi '^django==1.*' requirements.txt; then
-        puts-warn "Your Django version is nearing the end of its community support."
-        puts-warn "Upgrade to continue to receive security updates and for the best experience with Django."
-        puts-warn "For more information, check out https://www.djangoproject.com/download/#supported-versions"
-    fi
-
-    if [ ! -f "$BUILD_DIR/.scalingo/python/bin/pip" ]; then
+    if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
         exit 1
     fi
 
-    /app/.scalingo/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.scalingo/src --disable-pip-version-check --no-cache-dir 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+    /app/.scalingo/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir --progress-bar off 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
     PIP_STATUS="${PIPESTATUS[0]}"
     set -e
 

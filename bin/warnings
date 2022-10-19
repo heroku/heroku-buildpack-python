@@ -1,46 +1,6 @@
 #!/usr/bin/env bash
 shopt -s extglob
 
-old-platform() {
-  if grep -qi 'InsecurePlatformWarning' "$WARNINGS_LOG"; then
-    echo
-    puts-warn "Hello! It looks like your application is using an outdated version of Python."
-    puts-warn "This caused the security warning you saw above during the 'pip install' step."
-    puts-warn "We recommend '$RECOMMENDED_PYTHON_VERSION', which you can specify in a 'runtime.txt' file."
-    puts-warn "  -- Much Love, Scalingo."
-  fi
-}
-
-scipy-included() {
-  if grep -qi 'running setup.py install for scipy' "$WARNINGS_LOG"; then
-    echo
-    puts-warn "Hello! It looks like you're trying to use scipy on Scalingo."
-    puts-warn "Unfortunately, at this time, we do not directly support this library."
-    puts-warn "There is, however, a buildpack available that makes it possible to use it on Scalingo."
-    puts-warn "Sorry for the inconvenience.   -- Much Love, Scalingo."
-  fi
-}
-
-distribute-included() {
-  if grep -qi 'Running setup.py install for distribute' "$WARNINGS_LOG"; then
-    echo
-    puts-warn "Hello! Your requirements.txt file contains the distribute package."
-    puts-warn "This library is automatically installed by Scalingo and shouldn't be in"
-    puts-warn "Your requirements.txt file. This can cause unexpected behavior."
-    puts-warn "  -- Much Love, Scalingo."
-  fi
-}
-
-six-included() {
-  if grep -qi 'Running setup.py install for six' "$WARNINGS_LOG"; then
-    echo
-    puts-warn "Hello! Your requirements.txt file contains the six package."
-    puts-warn "This library is automatically installed by Scalingo and shouldn't be in"
-    puts-warn "Your requirements.txt file. This can cause unexpected behavior."
-    puts-warn "  -- Much Love, Scalingo."
-  fi
-}
-
 gdal-missing() {
   if grep -qi 'Could not find gdal-config' "$WARNINGS_LOG"; then
     mcount 'warnings.gdal'
@@ -53,9 +13,5 @@ gdal-missing() {
 }
 
 show-warnings() {
-  old-platform
-  scipy-included
-  distribute-included
-  six-included
   gdal-missing
 }

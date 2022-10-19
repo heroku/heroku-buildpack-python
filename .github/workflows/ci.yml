@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    # Avoid duplicate builds on PRs.
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Ruby and dependencies
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: "2.7"
+      - name: Run ShellCheck
+        run: make lint-scripts
+      - name: Run Rubocop
+        run: bundle exec rubocop
+
+  integration-test:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        stack: ["heroku-18", "heroku-20", "heroku-22"]
+    env:
+      HATCHET_APP_LIMIT: 200
+      # TODO: Remove once Hatchet supports GitHub Actions natively:
+      # https://github.com/heroku/hatchet/pull/189
+      HATCHET_BUILDPACK_BRANCH: ${{ github.head_ref || github.ref_name }}
+      HATCHET_DEFAULT_STACK: ${{ matrix.stack }}
+      HATCHET_RETRIES: 2
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_API_USER: ${{ secrets.HEROKU_API_USER }}
+      HEROKU_DISABLE_AUTOUPDATE: 1
+      PARALLEL_SPLIT_TEST_PROCESSES: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Ruby and dependencies
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: "2.7"
+      - name: Hatchet setup
+        run: bundle exec hatchet ci:setup
+      - name: Run Hatchet integration tests
+        # parallel_split_test runs rspec in parallel, with concurrency equal to PARALLEL_SPLIT_TEST_PROCESSES.
+        run: bundle exec parallel_split_test spec/hatchet/
