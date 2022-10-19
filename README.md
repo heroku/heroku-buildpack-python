@@ -77,7 +77,7 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.10.8` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
-- `python-3.9.15` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
+- `python-3.10.8` on all [supported stacks](https://doc.scalingo.com/languages/python/start)
+- `python-3.9.15` on all [supported stacks](https://doc.scalingo.com/languages/python/start)
 - `python-3.8.15` on Heroku-18 and Heroku-20 only
 - `python-3.7.15` on Heroku-18 and Heroku-20 only

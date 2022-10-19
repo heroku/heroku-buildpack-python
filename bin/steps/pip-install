@@ -23,11 +23,11 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     # Measure that we're using pip.
     mcount "tool.pip"
 
-    if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
+    if [ ! -f "$BUILD_DIR/.scalingo/python/bin/pip" ]; then
         exit 1
     fi
 
-    /app/.scalingo/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir --progress-bar off 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+    /app/.scalingo/python/bin/pip install -r "$BUILD_DIR/requirements.txt" --exists-action=w --src=/app/.scalingo/src --disable-pip-version-check --no-cache-dir --progress-bar off 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
     PIP_STATUS="${PIPESTATUS[0]}"
     set -e
 

@@ -81,7 +81,7 @@ case "${PYTHON_VERSION}" in
     puts-warn "contain potential security vulnerabilities and should be upgraded to"
     puts-warn "Python 3 as soon as possible."
     puts-warn
-    puts-warn "In addition, Python 2 is only supported on our oldest stack, Heroku-18,"
+    puts-warn "In addition, Python 2 is only supported on our oldest stack, scalingo-18,"
     puts-warn "which is deprecated and reaches end-of-life on April 30th, 2023."
     puts-warn
     puts-warn "As such, it is no longer supported by the latest version of this buildpack:"
