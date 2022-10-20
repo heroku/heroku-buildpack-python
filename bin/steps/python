@@ -85,7 +85,7 @@ case "${PYTHON_VERSION}" in
     puts-warn "which is deprecated and reaches end-of-life on April 30th, 2023."
     puts-warn
     puts-warn "As such, it is no longer supported by the latest version of this buildpack:"
-    puts-warn "https://devcenter.heroku.com/changelog-items/2473"
+    puts-warn "https://doc.scalingo.com/languages/python/start"
     puts-warn
     puts-warn "You must either:"
     puts-warn "  - Upgrade to Python 3 (recommended)"
@@ -93,7 +93,7 @@ case "${PYTHON_VERSION}" in
     puts-warn "  - Switch to an older version of the Python buildpack (short term workaround only)"
     puts-warn
     puts-warn "For more details, see:"
-    puts-warn "https://devcenter.heroku.com/articles/python-2-7-eol-faq"
+    puts-warn "https://doc.scalingo.com/languages/python/start"
     puts-warn
     exit 1
     ;;
