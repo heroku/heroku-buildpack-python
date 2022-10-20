@@ -1,2 +1,5 @@
--e ./local_package
+# The packages have to be nested under `packages/` to work around:
+# https://github.com/pypa/setuptools/issues/3535
+-e ./packages/local_package_pyproject_toml
+-e ./packages/local_package_setup_py
 -e git+https://github.com/benoitc/gunicorn@20.1.0#egg=gunicorn

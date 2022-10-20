@@ -1,22 +1,17 @@
 # frozen_string_literal: true
 
 ENV['HATCHET_BUILDPACK_BASE'] ||= 'https://github.com/heroku/heroku-buildpack-python.git'
-ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-20'
+ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-22'
 
 require 'rspec/core'
 require 'hatchet'
 
-LATEST_PYTHON_2_7 = '2.7.18'
-LATEST_PYTHON_3_4 = '3.4.10'
-LATEST_PYTHON_3_5 = '3.5.10'
 LATEST_PYTHON_3_6 = '3.6.15'
-LATEST_PYTHON_3_7 = '3.7.12'
-LATEST_PYTHON_3_8 = '3.8.12'
-LATEST_PYTHON_3_9 = '3.9.9'
-LATEST_PYTHON_3_10 = '3.10.1'
-LATEST_PYPY_2_7 = '7.3.2'
-LATEST_PYPY_3_6 = '7.3.2'
-DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_9
+LATEST_PYTHON_3_7 = '3.7.15'
+LATEST_PYTHON_3_8 = '3.8.15'
+LATEST_PYTHON_3_9 = '3.9.15'
+LATEST_PYTHON_3_10 = '3.10.8'
+DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_10
 
 # Work around the return value for `default_buildpack` changing after deploy:
 # https://github.com/heroku/hatchet/issues/180
@@ -33,7 +28,7 @@ RSpec.configure do |config|
   # with `:focus` metadata via the `fit`, `fcontext` and `fdescribe` aliases.
   config.filter_run_when_matching :focus
   # Allows declaring on which stacks a test/group should run by tagging it with `stacks`.
-  config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(ENV['HATCHET_DEFAULT_STACK']) }
+  config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(ENV.fetch('HATCHET_DEFAULT_STACK')) }
 end
 
 def clean_output(output)

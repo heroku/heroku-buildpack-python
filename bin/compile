@@ -50,35 +50,15 @@ S3_BASE_URL="${BUILDPACK_S3_BASE_URL:-"https://python-binaries.scalingo.com"}"
 # shellcheck source=bin/default_pythons
 source "$BIN_DIR/default_pythons"
 
-# Supported Python Branches
-PY310="python-3.10"
-PY39="python-3.9"
-PY38="python-3.8"
-PY37="python-3.7"
-PY36="python-3.6"
-PY35="python-3.5"
-PY34="python-3.4"
-PY27="python-2.7"
-PYPY27="pypy2.7"
-PYPY36="pypy3.6"
-
-# Which stack is used (for binary downloading), if none is provided (e.g. outside of Heroku)?
-# TODO: Remove this and require that STACK be set explicitly.
-DEFAULT_PYTHON_STACK="scalingo-20"
-
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.
 # The `warnings` subscript then greps through this for common problems and guides
 # the user towards resolution of known issues.
 WARNINGS_LOG=$(mktemp)
-RECOMMENDED_PYTHON_VERSION=$DEFAULT_PYTHON_VERSION
 
 # The buildpack ships with a few executable tools.
 # This installs them into the path, so we can execute them directly.
 export PATH=$PATH:$ROOT_DIR/vendor/
-
-# Set environment variables if they weren't set by the platform.
-[ ! "$STACK" ] && STACK=$DEFAULT_PYTHON_STACK
 
 # Sanitize externally-provided environment variables:
 # The following environment variables are either problematic or simply unneccessary
@@ -94,17 +74,6 @@ source "$BIN_DIR/utils"
 # (mentioned and explained above)
 # shellcheck source=bin/warnings
 source "$BIN_DIR/warnings"
-
-if [[ -f "${ENV_DIR}/BUILD_WITH_GEO_LIBRARIES" ]]; then
-  mcount "failure.unsupported.BUILD_WITH_GEO_LIBRARIES"
-  puts-warn "The Python buildpack's legacy BUILD_WITH_GEO_LIBRARIES functonality is"
-  puts-warn "no longer supported."
-  puts-warn
-  puts-warn "Or if you no longer need those libraries, this message can be hidden by"
-  puts-warn "unsetting the BUILD_WITH_GEO_LIBRARIES environment variable, using:"
-  puts-warn "scalingo env-unset BUILD_WITH_GEO_LIBRARIES"
-  exit 1
-fi
 
 # Make the directory in which we will create symlinks from the temporary build directory
 # to `/app`.
@@ -273,7 +242,6 @@ fi
 # SQLite3 support.
 # This sets up and installs sqlite3 dev headers and the sqlite3 binary but not the
 # libsqlite3-0 library since that exists on the stack image.
-# Note: This only applies to Python 2.7.15+ and Python 3.6.6+
 (( start=$(nowms) ))
 # shellcheck source=bin/steps/sqlite3
 source "$BIN_DIR/steps/sqlite3"
@@ -289,9 +257,6 @@ mtime "sqlite3.install.time" "${start}"
 source "$BIN_DIR/steps/pip-install"
 
 # Support for NLTK corpora.
-# Note: this may only work on Python 2.7. I don't think many customers use this functionality,
-# and it should probably be undocumented.
-# (there's an import error on 3.6 that should hopefully be fixed upstream at some point)
 (( start=$(nowms) ))
 sub_env "$BIN_DIR/steps/nltk"
 
@@ -340,14 +305,12 @@ if [[ \$HOME != "/app" ]]; then
 fi
 EOT
 
-# At runtime, rewrite paths in editable package .egg-link and .pth files from the build time paths
+# At runtime, rewrite paths in editable package .egg-link, .pth and finder files from the build time paths
 # (such as `/tmp/build_<hash>`) back to `/app`. This is not done during the build itself, since later
-# buildpacks still need the build time paths. The `/lib*/*/` glob is to ensure it matches against both:
-# - lib/python3.NN/site-packages/ (CPython)
-# - lib-python/3/site-packages/ (PyPy)
+# buildpacks still need the build time paths.
 if [[ "${BUILD_DIR}" != "/app" ]]; then
   cat <<EOT >> "$PROFILE_PATH"
-find .scalingo/python/lib*/*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
+find .scalingo/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
 EOT
 fi
 

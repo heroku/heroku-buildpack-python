@@ -3,6 +3,108 @@
 ## Unreleased
 
 
+## v221 (2022-10-12)
+
+- Python 3.7.15, 3.8.15, 3.9.15 and 3.10.8 are now available ([#1376](https://github.com/heroku/heroku-buildpack-python/pull/1376)).
+- The default Python version for new apps is now 3.10.8 (previously 3.10.7) ([#1376](https://github.com/heroku/heroku-buildpack-python/pull/1376)).
+- Fix automatic provisioning of Postgres DB addons ([#1375](https://github.com/heroku/heroku-buildpack-python/pull/1375)).
+
+## v220 (2022-09-28)
+
+- Improve the wording of the Python 2.7 EOL error message ([#1367](https://github.com/heroku/heroku-buildpack-python/pull/1367)).
+
+## v219 (2022-09-26)
+
+- Drop support for Python 2.7, 3.4 and 3.5 ([#1364](https://github.com/heroku/heroku-buildpack-python/pull/1364)).
+- Drop support for PyPy ([#1364](https://github.com/heroku/heroku-buildpack-python/pull/1364)).
+- The Heroku Postgres database auto-provisioning feature now provisions a DB in fewer cases ([#1363](https://github.com/heroku/heroku-buildpack-python/pull/1363)).
+
+## v218 (2022-09-07)
+
+- Python 3.7.14, 3.8.14 and 3.9.14 are now available ([#1362](https://github.com/heroku/heroku-buildpack-python/pull/1362)).
+
+## v217 (2022-09-06)
+
+- Python 3.10.7 is now available ([#1361](https://github.com/heroku/heroku-buildpack-python/pull/1361)).
+- The default Python version for new apps is now 3.10.7 (previously 3.10.6) ([#1361](https://github.com/heroku/heroku-buildpack-python/pull/1361)).
+
+## v216 (2022-08-17)
+
+- Ensure path rewriting works when using setuptools v64's new PEP660-based editable install mode ([#1357](https://github.com/heroku/heroku-buildpack-python/pull/1357)).
+- Display an EOL warning for Python 3.4, 3.5 and 3.6 ([#1356](https://github.com/heroku/heroku-buildpack-python/pull/1356)).
+- Improve the EOL warning for Python 2.7 ([#1356](https://github.com/heroku/heroku-buildpack-python/pull/1356)).
+- Display a deprecation warning for PyPy support ([#1356](https://github.com/heroku/heroku-buildpack-python/pull/1356)).
+
+## v215 (2022-08-15)
+
+- Update pip from 22.1.2 to 22.2.2 for Python 3.7+ ([#1344](https://github.com/heroku/heroku-buildpack-python/pull/1344)).
+- Update setuptools from 60.10.0 to 63.4.3 for Python 3.7+ ([#1344](https://github.com/heroku/heroku-buildpack-python/pull/1344)).
+- Prevent stray `cp: cannot stat ...` error message in build log output when using Pipenv ([#1350](https://github.com/heroku/heroku-buildpack-python/pull/1350)).
+- Remove `BUILD_WITH_GEO_LIBRARIES` sunset messaging ([#1347](https://github.com/heroku/heroku-buildpack-python/pull/1347)).
+- Remove outdated Django version warning ([#1345](https://github.com/heroku/heroku-buildpack-python/pull/1345)).
+- Remove redundant package install warning checks ([#1348](https://github.com/heroku/heroku-buildpack-python/pull/1348)).
+
+## v214 (2022-08-02)
+
+- Python 3.10.6 is now available ([#1342](https://github.com/heroku/heroku-buildpack-python/pull/1342)).
+- The default Python version for new apps is now 3.10.6 (previously 3.10.5) ([#1342](https://github.com/heroku/heroku-buildpack-python/pull/1342)).
+
+## v213 (2022-06-14)
+
+- Enable retries and connection timeouts when using `curl` ([#1335](https://github.com/heroku/heroku-buildpack-python/pull/1335)).
+- Correct the error message shown when downloading a valid Python version fails ([#1335](https://github.com/heroku/heroku-buildpack-python/pull/1335)).
+- Switch to the recommended regional S3 domain instead of the global one ([#1334](https://github.com/heroku/heroku-buildpack-python/pull/1334)).
+
+## v212 (2022-06-07)
+
+- Python 3.10.5 is now available ([#1332](https://github.com/heroku/heroku-buildpack-python/pull/1332)).
+- The default Python version for new apps is now 3.10.5 (previously 3.10.4) ([#1332](https://github.com/heroku/heroku-buildpack-python/pull/1332)).
+- Update pip from 22.0.4 to 22.1.2 for Python 3.7+ ([#1331](https://github.com/heroku/heroku-buildpack-python/pull/1331)).
+- Add support for Heroku-22 ([#1299](https://github.com/heroku/heroku-buildpack-python/pull/1299)).
+
+## v211 (2022-05-17)
+
+- Python 3.9.13 is now available ([#1326](https://github.com/heroku/heroku-buildpack-python/pull/1326)).
+- Use shared builds + LTO when building Python 3.10 binaries ([#1320](https://github.com/heroku/heroku-buildpack-python/pull/1320)).
+  Note: This and the other Python binary changes below will only take effect for future Python
+  version releases (or future Heroku stacks) - existing Python binaries are not being recompiled.
+- Strip debugging symbols from the Python binary and libraries ([#1321](https://github.com/heroku/heroku-buildpack-python/pull/1321)).
+- Switch the pre-generated `.pyc` files for the Python stdlib from `timestamp` to `unchecked-hash` validation mode, for improved compatibility with Cloud Native Buildpacks ([#1322](https://github.com/heroku/heroku-buildpack-python/pull/1322)).
+- Stop shipping optimisation level one and two `.pyc` files with the Python stdlib ([#1322](https://github.com/heroku/heroku-buildpack-python/pull/1322)).
+- Use the `expat` package from the stack image rather than CPython's vendored version, when building
+  Python binaries ([#1319](https://github.com/heroku/heroku-buildpack-python/pull/1319)).
+
+## v210 (2022-04-14)
+
+- Fix typo in the `BUILD_WITH_GEO_LIBRARIES` end-of-life error message ([#1307](https://github.com/heroku/heroku-buildpack-python/pull/1307)).
+- No longer set a fallback value for `$STACK`, since it is always set on Heroku ([#1308](https://github.com/heroku/heroku-buildpack-python/pull/1308)).
+- Adjust the configure options and packaging process for Python 3.7 releases, to enable loadable extensions in the `_sqlite` module, and to remove the `idle_test` module ([#1309](https://github.com/heroku/heroku-buildpack-python/pull/1309)). This change will only take effect as of the next Python 3.7 release (3.7.14).
+- Update pip from 21.3.1 to 22.0.4 for Python 3.7+ ([#1310](https://github.com/heroku/heroku-buildpack-python/pull/1310))
+- Update setuptools from 57.5.0 to: ([#1310](https://github.com/heroku/heroku-buildpack-python/pull/1310))
+  - 59.6.0 for Python 3.6
+  - 60.10.0 for Python 3.7+
+- Update wheel from 0.37.0 to 0.37.1 for Python 2.7 and Python 3.5+ ([#1310](https://github.com/heroku/heroku-buildpack-python/pull/1310))
+
+## v209 (2022-03-24)
+
+- Python 3.9.12 and 3.10.4 are now available (CPython) ([#1300](https://github.com/heroku/heroku-buildpack-python/pull/1300)).
+- The default Python version for new apps is now 3.10.4 (previously 3.10.3) ([#1300](https://github.com/heroku/heroku-buildpack-python/pull/1300)).
+
+## v208 (2022-03-23)
+
+- Use Python 3.10 as the default Python version for new apps (previously Python 3.9) ([#1296](https://github.com/heroku/heroku-buildpack-python/pull/1296)).
+
+## v207 (2022-03-16)
+
+- Python 3.7.13, 3.8.13, 3.9.11 and 3.10.3 are now available (CPython) ([#1293](https://github.com/heroku/heroku-buildpack-python/pull/1293)).
+- The default Python version for new apps is now 3.9.11 (previously 3.9.10) ([#1293](https://github.com/heroku/heroku-buildpack-python/pull/1293)).
+- Adjust the configure options and packaging process for Python 3.8 releases to enable PGO, enable loadable extensions in the `_sqlite` module, and to remove the `idle_test` module ([#1293](https://github.com/heroku/heroku-buildpack-python/pull/1293)). Python 3.8 releases on Heroku prior to 3.8.13 are not affected.
+
+## v206 (2022-01-14)
+
+- Python 3.9.10 and 3.10.2 are now available (CPython) ([#1281](https://github.com/heroku/heroku-buildpack-python/pull/1281)).
+- The default Python version for new apps is now 3.9.10 (previously 3.9.9) ([#1281](https://github.com/heroku/heroku-buildpack-python/pull/1281)).
+
 ## v205 (2021-12-06)
 
 - Python 3.10.1 is now available ([#1271](https://github.com/heroku/heroku-buildpack-python/pull/1271)).
@@ -16,6 +118,7 @@
 
 - Python 3.9.8 is now available ([#1263](https://github.com/heroku/heroku-buildpack-python/pull/1263)).
 - The default Python version for new apps is now 3.9.8 (previously 3.9.7) ([#1263](https://github.com/heroku/heroku-buildpack-python/pull/1263)).
+- Adjust the configure options and packaging process for Python 3.9 releases to enable PGO, enable loadable extensions in the `_sqlite` module, and to remove the `idle_test` module ([#1263](https://github.com/heroku/heroku-buildpack-python/pull/1263)). Python 3.9 releases on Heroku prior to 3.9.8 are not affected.
 
 ## v202 (2021-11-01)
 
@@ -28,12 +131,13 @@
 - Update setuptools from 47.1.1 to: ([#1254](https://github.com/heroku/heroku-buildpack-python/pull/1254))
   - 50.3.2 for Python 3.5
   - 57.5.0 for Python 3.6+
-- Update wheel from 0.36.2 to 0.37.0 ([#1254](https://github.com/heroku/heroku-buildpack-python/pull/1254)).
+- Update wheel from 0.36.2 to 0.37.0 for Python 2.7 and Python 3.5+ ([#1254](https://github.com/heroku/heroku-buildpack-python/pull/1254)).
 - Perform editable package `.pth` and `.egg-link` path rewriting at runtime ([#1252](https://github.com/heroku/heroku-buildpack-python/pull/1252)).
 
 ## v200 (2021-10-04)
 
 - Add support for Python 3.10 ([#1246](https://github.com/heroku/heroku-buildpack-python/pull/1246)).
+- Adjust the configure options and packaging process for Python 3.10 to enable PGO, enable loadable extensions in the `_sqlite` module, and to remove the `idle_test` module ([#1246](https://github.com/heroku/heroku-buildpack-python/pull/1246)).
 
 ## v199 (2021-09-05)
 

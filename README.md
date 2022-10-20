@@ -42,7 +42,7 @@ A `requirements.txt` must be present at the root of your application's repositor
 See it in Action with Pipenv
 ----------------------------
 
-Current default Python Runtime: Python 3.9.9
+Current default Python Runtime: Python 3.10.8
 
     $ ls
     Pipfile		Pipfile.lock	Procfile	web.py
@@ -77,8 +77,7 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.10.1`
-- `python-3.9.9`
-- `python-3.8.12`
-- `python-3.7.12`
-- `python-3.6.15`
+- `python-3.10.8` on all [supported stacks](https://doc.scalingo.com/languages/python/start)
+- `python-3.9.15` on all [supported stacks](https://doc.scalingo.com/languages/python/start)
+- `python-3.8.15` on Heroku-18 and Heroku-20 only
+- `python-3.7.15` on Heroku-18 and Heroku-20 only

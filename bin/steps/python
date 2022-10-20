@@ -1,96 +1,113 @@
 #!/usr/bin/env bash
 
-set +e
-runtime-fixer runtime.txt
+# TODO: Replace runtime-fixer with a bash equivalent, since currently on rebuilds it
+# gets run with the cached Python install (rather than system Python), which means it
+# fails to run with glibc errors on stack downgrades (see spec/hatchet/stack_spec.rb).
+# To work around this for now, non-zero exit codes are ignored (most runtime.txt files
+# don't need fixing up, so the script not running won't normally matter).
+runtime-fixer runtime.txt || true
 PYTHON_VERSION=$(cat runtime.txt)
 
 # The location of the pre-compiled python binary.
-VENDORED_PYTHON="${S3_BASE_URL}/${STACK}/runtimes/${PYTHON_VERSION}.tar.gz"
+PYTHON_URL="${S3_BASE_URL}/${STACK}/runtimes/${PYTHON_VERSION}.tar.gz"
 
-SECURITY_UPDATE="Python has released a security update! Please consider upgrading to"
-SECURITY_UPDATE_PYPY="The PyPy project has released a security update! Please consider upgrading to"
-
-ONLY_SUPPORTED_2_VERSION="Only the latest version of Python 2 is supported on the platform. Please consider upgrading to"
-
-PYTHON_2_EOL_UPDATE="Python 2 has reached its community EOL. Upgrade your Python runtime to maintain a secure application as soon as possible."
-
-# check if runtime exists
-if curl --output /dev/null --silent --head --fail "$VENDORED_PYTHON"; then
-  if [[ "$PYTHON_VERSION" == $PY310* ]]; then
-    if [ "$PYTHON_VERSION" != "$LATEST_310" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_310"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY39* ]]; then
-    if [ "$PYTHON_VERSION" != "$LATEST_39" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_39"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY38* ]]; then
-    # do things to alert the user of security release available
-    if [ "$PYTHON_VERSION" != "$LATEST_38" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_38"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY37* ]]; then
-    # do things to alert the user of security release available
-    if [ "$PYTHON_VERSION" != "$LATEST_37" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_37"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY36* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_36" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_36"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY35* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_35" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_35"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY34* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_34" ]; then
-      puts-warn "$SECURITY_UPDATE" "$LATEST_34"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PY27* ]]; then
-    puts-warn "$PYTHON_2_EOL_UPDATE"
-    echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_27" ]; then
-      puts-warn "$ONLY_SUPPORTED_2_VERSION" "$LATEST_27"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PYPY27* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_PYPY_27" ]; then
-      puts-warn "$SECURITY_UPDATE_PYPY" "$LATEST_PYPY_27"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-  if [[ "$PYTHON_VERSION" == $PYPY36* ]]; then
-    # security update note
-    if [ "$PYTHON_VERSION" != "$LATEST_PYPY_36" ]; then
-      puts-warn "$SECURITY_UPDATE_PYPY" "$LATEST_PYPY_36"
-      echo "       Learn More: https://doc.scalingo.com/languages/python/start#supported-versions"
-    fi
-  fi
-else
-  puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
-  puts-warn "Aborting.  More info: https://doc.scalingo.com/languages/python/start"
+if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PYTHON_URL}"; then
+  puts-warn "Requested runtime '${PYTHON_VERSION}' is not available for this stack (${STACK})."
+  puts-warn "For supported versions, see: https://doc.scalingo.com/languages/python/start"
   exit 1
 fi
+
+function eol_python_version_error() {
+  local major_version="${1}"
+  local eol_date="${2}"
+  puts-warn
+  puts-warn "Python ${major_version} reached upstream end-of-life on ${eol_date}, and is"
+  puts-warn "therefore no longer receiving security updates:"
+  puts-warn "https://devguide.python.org/versions/#supported-versions"
+  puts-warn
+  puts-warn "As such, it is no longer supported by the latest version of this buildpack."
+  puts-warn
+  puts-warn "Please upgrade to a newer Python version. See:"
+  puts-warn "https://doc.scalingo.com/languages/python/start"
+  puts-warn
+  exit 1
+}
+
+function warn_if_patch_update_available() {
+  local current_version="${1}"
+  local latest_patch_version="${2}"
+  if [[ "${current_version}" != "${latest_patch_version}" ]]; then
+    puts-warn
+    puts-warn "A Python security update is available! Upgrade as soon as possible to: ${latest_patch_version}"
+    puts-warn "See: https://doc.scalingo.com/languages/python/start"
+    puts-warn
+  fi
+}
+
+case "${PYTHON_VERSION}" in
+  python-3.10.*)
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_310}"
+    ;;
+  python-3.9.*)
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_39}"
+    ;;
+  python-3.8.*)
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_38}"
+    ;;
+  python-3.7.*)
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_37}"
+    ;;
+  python-3.6.*)
+    puts-warn
+    puts-warn "Python 3.6 reached upstream end-of-life on December 23rd, 2021, and is"
+    puts-warn "therefore no longer receiving security updates:"
+    puts-warn "https://devguide.python.org/versions/#supported-versions"
+    puts-warn
+    puts-warn "Upgrade to a newer Python version as soon as possible to keep your app secure."
+    puts-warn "See: https://doc.scalingo.com/languages/python/start"
+    puts-warn
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_36}"
+    ;;
+  python-3.5.*)
+    eol_python_version_error "3.5" "September 30th, 2020"
+    ;;
+  python-3.4.*)
+    eol_python_version_error "3.4" "March 18th, 2019"
+    ;;
+  python-2.7.*)
+    puts-warn
+    puts-warn "Python 2 reached upstream end-of-life on January 1st, 2020, and is"
+    puts-warn "therefore no longer receiving security updates. Apps still using it"
+    puts-warn "contain potential security vulnerabilities and should be upgraded to"
+    puts-warn "Python 3 as soon as possible."
+    puts-warn
+    puts-warn "In addition, Python 2 is only supported on our oldest stack, scalingo-18,"
+    puts-warn "which is deprecated and reaches end-of-life on April 30th, 2023."
+    puts-warn
+    puts-warn "As such, it is no longer supported by the latest version of this buildpack:"
+    puts-warn "https://doc.scalingo.com/languages/python/start"
+    puts-warn
+    puts-warn "You must either:"
+    puts-warn "  - Upgrade to Python 3 (recommended)"
+    puts-warn "  - Switch to the container stack and use the upstream legacy 'python:2.7' Docker images"
+    puts-warn "  - Switch to an older version of the Python buildpack (short term workaround only)"
+    puts-warn
+    puts-warn "For more details, see:"
+    puts-warn "https://doc.scalingo.com/languages/python/start"
+    puts-warn
+    exit 1
+    ;;
+  pypy*)
+    puts-warn
+    puts-warn "PyPy is no longer supported by the latest version of this buildpack."
+    puts-warn
+    puts-warn "Please switch to one of the supported CPython versions by updating your"
+    puts-warn "runtime.txt file. See:"
+    puts-warn "https://doc.scalingo.com/languages/python/start"
+    puts-warn
+    exit 1
+    ;;
+esac
 
 mcount "version.python.${PYTHON_VERSION}"
 
@@ -108,22 +125,26 @@ if [ -f .scalingo/python-version ]; then
   fi
 fi
 
-# Check if we should reinstall python dependencies
-if [[ ! -f "$CACHE_DIR/.scalingo/requirements.txt" ]]; then
-  # IF there's no cached dependencies, update cached version of requirements.txt
-  # This should only run for new apps and first deploys after this update
-  [[ -f "$BUILD_DIR/requirements.txt" ]] && cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt"
-else
-  # IF there IS a cached directory, check for differences with the new one
-  if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt" &> /dev/null; then
-    puts-step "Requirements file has been changed, clearing cached dependencies"
-    # if there are any differences, clear the Python cache
-    # Installing Python over again does not take noticably more time
+# If using Pip, check if we should reinstall python dependencies given that requirements.txt
+# is non-deterministic (not all packages pinned, doesn't handle uninstalls etc). We don't need
+# to do this when using Pipenv, since it has a lockfile and syncs the packages for us.
+if [[ -f "${BUILD_DIR}/requirements.txt" ]]; then
+  if [[ ! -f "$CACHE_DIR/.scalingo/requirements.txt" ]]; then
+    # This is a the first build of an app (or the build cache was cleared). Since there
+    # are no cached packages, we only need to store the requirements file for next time.
     cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt"
-    rm -rf .scalingo/python
-    unset SKIP_INSTALL
   else
-    puts-step "No change in requirements detected, installing from cache"
+    # IF there IS a cached directory, check for differences with the new one
+    if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt" &> /dev/null; then
+      puts-step "Requirements file has been changed, clearing cached dependencies"
+      # if there are any differences, clear the Python cache
+      # Installing Python over again does not take noticably more time
+      cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.scalingo/requirements.txt"
+      rm -rf .scalingo/python
+      unset SKIP_INSTALL
+    else
+      puts-step "No change in requirements detected, installing from cache"
+    fi
   fi
 fi
 
@@ -135,9 +156,10 @@ else
   # Prepare destination directory.
   mkdir -p .scalingo/python
 
-  if ! curl "${VENDORED_PYTHON}" -s | tar zxv -C .scalingo/python &> /dev/null; then
-    puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
-    puts-warn "Aborting.  More info: https://doc.scalingo.com/languages/python/start"
+  if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PYTHON_URL}" | tar -zxC .scalingo/python; then
+    # The Python version was confirmed to exist previously, so any failure here is due to
+    # a networking issue or archive/buildpack bug rather than the runtime not existing.
+    puts-warn "Failed to download/install ${PYTHON_VERSION}"
     exit 1
   fi
 
@@ -148,26 +170,17 @@ else
   hash -r
 fi
 
-set -e
+PIP_VERSION='22.2.2'
+SETUPTOOLS_VERSION='63.4.3'
+WHEEL_VERSION='0.37.1'
 
-PIP_VERSION='21.3.1'
-SETUPTOOLS_VERSION='57.5.0'
-WHEEL_VERSION='0.37.0'
-
-if [[ "${PYTHON_VERSION}" == ${PY34}* ]]; then
-  # Python 3.4 support was dropped in pip 19.2+, setuptools 44+ and wheel 0.34+.
-  PIP_VERSION='19.1.1'
-  SETUPTOOLS_VERSION='43.0.0'
-  WHEEL_VERSION='0.33.6'
-elif [[ "${PYTHON_VERSION}" == ${PY27}* || "${PYTHON_VERSION}" == ${PYPY27}* ]]; then
-  # Python 2.7 support was dropped in pip 21+ and setuptools 45+.
-  PIP_VERSION='20.3.4'
-  SETUPTOOLS_VERSION='44.1.1'
-elif [[ "${PYTHON_VERSION}" == ${PY35}* ]]; then
-  # Python 3.5 support was dropped in pip 21+ and setuptools 51+.
-  PIP_VERSION='20.3.4'
-  SETUPTOOLS_VERSION='50.3.2'
-fi
+case "${PYTHON_VERSION}" in
+  python-3.6.*)
+    # Python 3.6 support was dropped in pip 22+ and setuptools 59.7.0+.
+    PIP_VERSION='21.3.1'
+    SETUPTOOLS_VERSION='59.6.0'
+    ;;
+esac
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
@@ -179,17 +192,11 @@ puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and w
 # Instead, we use the pip wheel to install itself, using the method described here:
 # https://github.com/pypa/pip/issues/2351#issuecomment-69994524
 
-PIP_MAJOR_VERSION="${PIP_VERSION%%.*}"
-if [[ "${PIP_MAJOR_VERSION}" -ge 21 ]]; then
-  # Pip 21+ dropped support for Python 2, so no longer uses universal wheels.
-  PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py3-none-any.whl"
-else
-  PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py2.py3-none-any.whl"
-fi
+PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py3-none-any.whl"
 PIP_WHEEL_URL="${S3_BASE_URL}/common/${PIP_WHEEL_FILENAME}"
 PIP_WHEEL="${TMPDIR:-/tmp}/${PIP_WHEEL_FILENAME}"
 
-if ! curl -sSf "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
+if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
   mcount "failure.python.download-pip"
   puts-warn "Failed to download pip"
   exit 1
