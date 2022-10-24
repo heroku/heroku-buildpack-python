@@ -46,6 +46,9 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
                     3.10)
                         echo "${LATEST_310}" > "${BUILD_DIR}/runtime.txt"
                         ;;
+                    3.11)
+                        echo "${LATEST_311}" > "${BUILD_DIR}/runtime.txt"
+                        ;;
                 esac
             fi
 

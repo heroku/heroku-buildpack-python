@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add support for Python 3.11 ([#1379](https://github.com/heroku/heroku-buildpack-python/pull/1379)).
 
 ## v221 (2022-10-12)
 
