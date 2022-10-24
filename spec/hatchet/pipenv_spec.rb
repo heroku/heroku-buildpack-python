@@ -221,6 +221,26 @@ RSpec.describe 'Pipenv support' do
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_10
   end
 
+  context 'with a Pipfile.lock containing python_version 3.11' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.11') }
+
+    it 'builds with the latest Python 3.11' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Python app detected
+          remote: -----> Using Python version specified in Pipfile.lock
+          remote: -----> Installing python-#{LATEST_PYTHON_3_11}
+          remote: -----> Installing pip 22.2.2, setuptools 63.4.3 and wheel 0.37.1
+          remote: -----> Installing dependencies with Pipenv 2020.11.15
+          remote:        /tmp/build_.*/.heroku/python/lib/python3.11/site-packages/pipenv/vendor/attr/_make.py:778: RuntimeWarning: Running interpreter doesn't sufficiently support code object introspection. .*
+          remote:          set_closure_cell\\(cell, cls\\)
+          remote:        Installing dependencies from Pipfile.lock \\(.*\\)...
+          remote: -----> Installing SQLite3
+        REGEX
+      end
+    end
+  end
+
   context 'with a Pipfile.lock containing python_full_version 3.10.4' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version', allow_failure: allow_failure) }

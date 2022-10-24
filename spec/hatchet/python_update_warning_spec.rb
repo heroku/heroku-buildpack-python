@@ -113,4 +113,6 @@ RSpec.describe 'Python update warnings' do
 
     include_examples 'warns there is a Python update available', '3.10.5', LATEST_PYTHON_3_10
   end
+
+  # TODO: Add a test for Python 3.11.0 once 3.11.1 is released.
 end
