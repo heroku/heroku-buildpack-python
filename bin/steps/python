@@ -180,6 +180,9 @@ case "${PYTHON_VERSION}" in
     PIP_VERSION='21.3.1'
     SETUPTOOLS_VERSION='59.6.0'
     ;;
+  python-3.9.*)
+    PIP_VERSION='21.3.1'
+    ;;
 esac
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
