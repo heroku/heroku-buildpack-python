@@ -105,7 +105,7 @@ RSpec.describe 'Pip support' do
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           remote: .*
-          remote: MAPPING = \{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\}
+          remote: MAPPING = \\{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
           remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
@@ -129,7 +129,7 @@ RSpec.describe 'Pip support' do
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           remote: .*
-          remote: MAPPING = \{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\}
+          remote: MAPPING = \\{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
           remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
@@ -156,7 +156,7 @@ RSpec.describe 'Pip support' do
 
           ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           .*
-          MAPPING = \{'local_package_pyproject_toml': '/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'\}
+          MAPPING = \\{'local_package_pyproject_toml': '/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
           .*
 
           ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
@@ -187,7 +187,7 @@ RSpec.describe 'Pip support' do
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           remote: .*
-          remote: MAPPING = \{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\}
+          remote: MAPPING = \\{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
           remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
@@ -211,7 +211,7 @@ RSpec.describe 'Pip support' do
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           remote: .*
-          remote: MAPPING = \{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\}
+          remote: MAPPING = \\{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
           remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
