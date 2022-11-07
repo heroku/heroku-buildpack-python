@@ -31,7 +31,7 @@ RSpec.describe 'Stack changes' do
           remote: -----> Stack has changed from heroku-20 to heroku-22, clearing cache
           remote: -----> No change in requirements detected, installing from cache
           remote: -----> Installing python-3.10.5
-          remote: -----> Installing pip 22.2.2, setuptools 63.4.3 and wheel 0.37.1
+          remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.37.1
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3
@@ -63,7 +63,7 @@ RSpec.describe 'Stack changes' do
           remote: -----> Stack has changed from heroku-22 to heroku-20, clearing cache
           remote: -----> No change in requirements detected, installing from cache
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 22.2.2, setuptools 63.4.3 and wheel 0.37.1
+          remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.37.1
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3

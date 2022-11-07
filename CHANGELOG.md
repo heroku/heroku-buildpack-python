@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Update pip from 22.2.2 to 22.3.1 for Python 3.7+ ([#1387](https://github.com/heroku/heroku-buildpack-python/pull/1387)).
 
 ## v222 (2022-10-25)
 
