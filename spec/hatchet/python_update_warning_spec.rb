@@ -114,5 +114,10 @@ RSpec.describe 'Python update warnings' do
     include_examples 'warns there is a Python update available', '3.10.5', LATEST_PYTHON_3_10
   end
 
-  # TODO: Add a test for Python 3.11.0 once 3.11.1 is released.
+  context 'with a runtime.txt containing python-3.11.0' do
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.11_outdated', allow_failure: allow_failure) }
+
+    include_examples 'warns there is a Python update available', '3.11.0', LATEST_PYTHON_3_11
+  end
 end
