@@ -2,7 +2,7 @@ name: Check Changelog
 
 on:
   pull_request:
-    types: [opened, reopened, edited, labeled, unlabeled, synchronize]
+    types: [opened, reopened, labeled, unlabeled, synchronize]
 
 permissions:
   contents: read
@@ -11,9 +11,6 @@ jobs:
   check-changelog:
     runs-on: ubuntu-22.04
     if: |
-      !contains(github.event.pull_request.body, '[skip changelog]') &&
-      !contains(github.event.pull_request.body, '[changelog skip]') &&
-      !contains(github.event.pull_request.body, '[skip ci]') &&
       !contains(github.event.pull_request.labels.*.name, 'skip changelog') &&
       !contains(github.event.pull_request.labels.*.name, 'dependencies')
     steps:
