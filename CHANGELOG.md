@@ -4,6 +4,9 @@
 
 - Python 3.10.10 and 3.11.2 are now available ([#1405](https://github.com/heroku/heroku-buildpack-python/pull/1405)).
 - The default Python version for new apps is now 3.10.10 (previously 3.10.9) ([#1405](https://github.com/heroku/heroku-buildpack-python/pull/1405)).
+- Update Pipenv from 2020.11.15 to: ([#1407](https://github.com/heroku/heroku-buildpack-python/pull/1407))
+  - 2022.4.8 for Python 3.6
+  - 2023.2.4 for Python 3.7+
 - Add a deprecation warning for Python 3.7 ([#1404](https://github.com/heroku/heroku-buildpack-python/pull/1404)).
 
 ## v224 (2022-12-07)
