@@ -183,7 +183,7 @@ RSpec.describe 'Python version support' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6', allow_failure: allow_failure) }
 
     context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
-      it 'builds with Python 3.6.15' do
+      it 'builds with Python 3.6.15 but shows an EOL warning' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
@@ -220,7 +220,28 @@ RSpec.describe 'Python version support' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.7', allow_failure: allow_failure) }
 
     context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
-      include_examples 'builds with the requested Python version', LATEST_PYTHON_3_7
+      it 'builds with Python 3.7.16 but shows a deprecation warning' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to include(<<~OUTPUT)
+            remote: -----> Python app detected
+            remote: -----> Using Python version specified in runtime.txt
+            remote:  !     
+            remote:  !     Python 3.7 will reach its upstream end-of-life on June 27th, 2023, at which
+            remote:  !     point it will no longer receive security updates:
+            remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
+            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
+            remote: -----> Installing python-#{LATEST_PYTHON_3_7}
+            remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.37.1
+            remote: -----> Installing SQLite3
+            remote: -----> Installing requirements with pip
+            remote:        Collecting urllib3
+          OUTPUT
+          expect(app.run('python -V')).to include("Python #{LATEST_PYTHON_3_7}")
+        end
+      end
     end
 
     context 'when using Heroku-22', stacks: %w[heroku-22] do
