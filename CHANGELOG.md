@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add a deprecation warning for Python 3.7 ([#1404](https://github.com/heroku/heroku-buildpack-python/pull/1404)).
 
 ## v224 (2022-12-07)
 
