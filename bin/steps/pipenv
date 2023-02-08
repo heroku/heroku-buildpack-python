@@ -42,13 +42,16 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             mcount "buildvar.PIP_EXTRA_INDEX_URL"
         fi
 
-        PIPENV_VERSION='2020.11.15'
+        PIPENV_VERSION='2023.2.4'
 
-        # Install pipenv.
-        # Due to weird old pip behavior and pipenv behavior, pipenv upgrades pip
-        # to latest if only --upgrade is specified. Specify upgrade strategy to
-        # avoid this eager behavior.
-        /app/.heroku/python/bin/pip install "pipenv==${PIPENV_VERSION}" --upgrade --upgrade-strategy only-if-needed &> /dev/null
+        case "${PYTHON_VERSION}" in
+            python-3.6.*)
+                # Python 3.6 support was dropped in pipenv 2022.4.20.
+                PIPENV_VERSION='2022.4.8'
+                ;;
+        esac
+
+        /app/.heroku/python/bin/pip install --quiet --disable-pip-version-check --no-cache-dir "pipenv==${PIPENV_VERSION}"
 
         # Install the test dependencies, for CI.
         if [ "$INSTALL_TEST" ]; then
