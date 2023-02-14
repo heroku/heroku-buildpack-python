@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Use Python 3.11 as the default Python version for new apps (previously Python 3.10) ([#1408](https://github.com/heroku/heroku-buildpack-python/pull/1408)).
+- Update wheel from 0.37.1 to 0.38.4 for Python 3.7+ ([#1409](https://github.com/heroku/heroku-buildpack-python/pull/1409)).
 
 ## v225 (2023-02-08)
 
