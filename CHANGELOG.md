@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Use Python 3.11 as the default Python version for new apps (previously Python 3.10) ([#1408](https://github.com/heroku/heroku-buildpack-python/pull/1408)).
 
 ## v225 (2023-02-08)
 
