@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Update pip from 22.3.1 to 23.0.1 for Python 3.7+ ([#1413](https://github.com/heroku/heroku-buildpack-python/pull/1413)).
 - Update pipenv from 2023.2.4 to 2023.2.18 for Python 3.7+ ([#1412](https://github.com/heroku/heroku-buildpack-python/pull/1412)).
 
 ## v226 (2023-02-14)
