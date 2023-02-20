@@ -2,6 +2,8 @@
 
 require_relative '../spec_helper'
 
+PIPENV_VERSION = '2023.2.18'
+
 RSpec.shared_examples 'builds using Pipenv with the requested Python version' do |python_version|
   it "builds with Python #{python_version}" do
     app.deploy do |app|
@@ -10,7 +12,7 @@ RSpec.shared_examples 'builds using Pipenv with the requested Python version' do
         remote: -----> Using Python version specified in Pipfile.lock
         remote: -----> Installing python-#{python_version}
         remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
-        remote: -----> Installing dependencies with Pipenv 2023.2.4
+        remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
         remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         remote: -----> Installing SQLite3
       REGEX
@@ -44,7 +46,7 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
-          remote: -----> Installing dependencies with Pipenv 2023.2.4
+          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile...
           remote: -----> Installing SQLite3
         OUTPUT
@@ -63,7 +65,7 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
-          remote: -----> Installing dependencies with Pipenv 2023.2.4
+          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
         REGEX
@@ -197,7 +199,7 @@ RSpec.describe 'Pipenv support' do
             remote:  !     
             remote: -----> Installing python-#{LATEST_PYTHON_3_7}
             remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
-            remote: -----> Installing dependencies with Pipenv 2023.2.4
+            remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
             remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
             remote: -----> Installing SQLite3
           REGEX
@@ -251,7 +253,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python version specified in Pipfile.lock
           remote: -----> Installing python-#{LATEST_PYTHON_3_11}
           remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
-          remote: -----> Installing dependencies with Pipenv 2023.2.4
+          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
         REGEX
@@ -274,7 +276,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     
           remote: -----> Installing python-3.10.7
           remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
-          remote: -----> Installing dependencies with Pipenv 2023.2.4
+          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
         REGEX
@@ -323,7 +325,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python version specified in runtime.txt
           remote: -----> Installing python-#{LATEST_PYTHON_3_10}
           remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
-          remote: -----> Installing dependencies with Pipenv 2023.2.4
+          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
         REGEX
@@ -341,7 +343,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python version specified in Pipfile.lock
           remote: -----> Installing python-#{LATEST_PYTHON_3_10}
           remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
-          remote: -----> Installing dependencies with Pipenv 2023.2.4
+          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
         REGEX
@@ -360,7 +362,7 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
-          remote: -----> Installing dependencies with Pipenv 2023.2.4
+          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Your Pipfile.lock \\(.+\\) is out of date. Expected: \\(.+\\).
           remote:        .+
           remote:        ERROR:: Aborting deploy

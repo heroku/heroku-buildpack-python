@@ -42,7 +42,7 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
             mcount "buildvar.PIP_EXTRA_INDEX_URL"
         fi
 
-        PIPENV_VERSION='2023.2.4'
+        PIPENV_VERSION='2023.2.18'
 
         case "${PYTHON_VERSION}" in
             python-3.6.*)

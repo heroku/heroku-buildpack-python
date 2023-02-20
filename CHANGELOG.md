@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Update pipenv from 2023.2.4 to 2023.2.18 for Python 3.7+ ([#1412](https://github.com/heroku/heroku-buildpack-python/pull/1412)).
 
 ## v226 (2023-02-14)
 
