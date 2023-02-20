@@ -11,7 +11,7 @@ RSpec.shared_examples 'builds using Pipenv with the requested Python version' do
         remote: -----> Python app detected
         remote: -----> Using Python version specified in Pipfile.lock
         remote: -----> Installing python-#{python_version}
-        remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
+        remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
         remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
         remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         remote: -----> Installing SQLite3
@@ -45,7 +45,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile...
           remote: -----> Installing SQLite3
@@ -64,7 +64,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
@@ -198,7 +198,7 @@ RSpec.describe 'Pipenv support' do
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
             remote: -----> Installing python-#{LATEST_PYTHON_3_7}
-            remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
+            remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
             remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
             remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
             remote: -----> Installing SQLite3
@@ -252,7 +252,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
           remote: -----> Installing python-#{LATEST_PYTHON_3_11}
-          remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
@@ -275,7 +275,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
           remote:  !     
           remote: -----> Installing python-3.10.7
-          remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
@@ -324,7 +324,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python version specified in runtime.txt
           remote: -----> Installing python-#{LATEST_PYTHON_3_10}
-          remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
@@ -342,7 +342,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
           remote: -----> Installing python-#{LATEST_PYTHON_3_10}
-          remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
@@ -361,7 +361,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
-          remote: -----> Installing pip 22.3.1, setuptools 63.4.3 and wheel 0.38.4
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Your Pipfile.lock \\(.+\\) is out of date. Expected: \\(.+\\).
           remote:        .+
