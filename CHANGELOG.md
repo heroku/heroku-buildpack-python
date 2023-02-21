@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Drop support for Python 3.6 ([#1415](https://github.com/heroku/heroku-buildpack-python/pull/1415)).
 
 ## v227 (2023-02-20)
 

@@ -56,21 +56,6 @@ RSpec.shared_examples 'aborts the build without showing an update warning' do |r
 end
 
 RSpec.describe 'Python update warnings' do
-  context 'with a runtime.txt containing python-3.6.14' do
-    let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6_outdated', allow_failure: allow_failure) }
-
-    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
-      include_examples 'warns about both EOL major version and the patch update', '3.6.14', LATEST_PYTHON_3_6
-    end
-
-    context 'when using Heroku-22', stacks: %w[heroku-22] do
-      let(:allow_failure) { true }
-
-      include_examples 'aborts the build without showing an update warning', '3.6.14'
-    end
-  end
-
   context 'with a runtime.txt containing python-3.7.12' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.7_outdated', allow_failure: allow_failure) }

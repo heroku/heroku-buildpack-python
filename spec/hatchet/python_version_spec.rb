@@ -179,11 +179,10 @@ RSpec.describe 'Python version support' do
   end
 
   context 'when runtime.txt contains python-3.6.15' do
-    let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6', allow_failure: true) }
 
     context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
-      it 'builds with Python 3.6.15 but shows an EOL warning' do
+      it 'aborts the build with an EOL message' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
@@ -193,25 +192,19 @@ RSpec.describe 'Python version support' do
             remote:  !     therefore no longer receiving security updates:
             remote:  !     https://devguide.python.org/versions/#supported-versions
             remote:  !     
-            remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
-            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     As such, it is no longer supported by the latest version of this buildpack.
             remote:  !     
-            remote: -----> Installing python-#{LATEST_PYTHON_3_6}
-            remote: -----> Installing pip 21.3.1, setuptools 59.6.0 and wheel 0.37.1
-            remote: -----> Installing SQLite3
-            remote: -----> Installing requirements with pip
-            remote:        Collecting urllib3
+            remote:  !     Please upgrade to a newer Python version. See:
+            remote:  !     https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
           OUTPUT
-          expect(app.run('python -V')).to include("Python #{LATEST_PYTHON_3_6}")
         end
       end
     end
 
     context 'when using Heroku-22', stacks: %w[heroku-22] do
-      let(:allow_failure) { true }
-
       # Python 3.6 is EOL, so has not been built for newer stacks.
-      include_examples 'aborts the build with a runtime not available message', "python-#{LATEST_PYTHON_3_6}"
+      include_examples 'aborts the build with a runtime not available message', 'python-3.6.15'
     end
   end
 
