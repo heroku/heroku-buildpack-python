@@ -44,13 +44,6 @@ if [ ! "$SKIP_PIPENV_INSTALL" ]; then
 
         PIPENV_VERSION='2023.2.18'
 
-        case "${PYTHON_VERSION}" in
-            python-3.6.*)
-                # Python 3.6 support was dropped in pipenv 2022.4.20.
-                PIPENV_VERSION='2022.4.8'
-                ;;
-        esac
-
         /app/.heroku/python/bin/pip install --quiet --disable-pip-version-check --no-cache-dir "pipenv==${PIPENV_VERSION}"
 
         # Install the test dependencies, for CI.
