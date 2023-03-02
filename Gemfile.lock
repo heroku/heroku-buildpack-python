@@ -4,14 +4,14 @@ GEM
     ast (2.4.2)
     diff-lcs (1.5.0)
     erubis (2.7.0)
-    excon (0.98.0)
+    excon (0.99.0)
     heroics (0.1.2)
       erubis (~> 2.0)
       excon
       moneta
       multi_json (>= 1.9.2)
       webrick
-    heroku_hatchet (7.4.0)
+    heroku_hatchet (8.0.1)
       excon (~> 0)
       platform-api (~> 3)
       rrrretry (~> 1)
