@@ -34,9 +34,6 @@ jobs:
         stack: ["heroku-18", "heroku-20", "heroku-22"]
     env:
       HATCHET_APP_LIMIT: 200
-      # TODO: Remove once Hatchet supports GitHub Actions natively:
-      # https://github.com/heroku/hatchet/pull/189
-      HATCHET_BUILDPACK_BRANCH: ${{ github.head_ref || github.ref_name }}
       HATCHET_DEFAULT_STACK: ${{ matrix.stack }}
       HATCHET_RETRIES: 2
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
