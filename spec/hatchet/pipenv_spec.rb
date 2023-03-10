@@ -2,7 +2,7 @@
 
 require_relative '../spec_helper'
 
-PIPENV_VERSION = '2023.2.18'
+PIPENV_VERSION = '2023.2.4'
 
 RSpec.shared_examples 'builds using Pipenv with the requested Python version' do |python_version|
   it "builds with Python #{python_version}" do
@@ -323,6 +323,27 @@ RSpec.describe 'Pipenv support' do
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
         REGEX
+      end
+    end
+  end
+
+  context 'when Pipfile.lock is unchanged since the last build' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_unspecified') }
+
+    it 're-uses packages from the cache' do
+      app.deploy do |app|
+        app.commit!
+        app.push!
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          remote: -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote:        Skipping installation, as Pipfile.lock hasn't changed since last deploy.
+          remote: -----> Installing SQLite3
+          remote: -----> Discovering process types
+        OUTPUT
       end
     end
   end
