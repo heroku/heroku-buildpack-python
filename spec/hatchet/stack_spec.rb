@@ -10,7 +10,7 @@ RSpec.describe 'Stack changes' do
     # The buildpack version chosen is one which had an older default Python version, so
     # we can also prove that clearing the cache didn't lose the Python version metadata.
     let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v213'] }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', buildpacks: buildpacks) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', buildpacks:) }
 
     it 'clears the cache before installing again whilst preserving the sticky Python version' do
       app.deploy do |app|

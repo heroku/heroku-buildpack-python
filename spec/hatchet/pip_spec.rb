@@ -89,7 +89,7 @@ RSpec.describe 'Pip support' do
 
   context 'when requirements.txt contains editable requirements' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_editable', buildpacks: buildpacks) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_editable', buildpacks:) }
 
     it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|

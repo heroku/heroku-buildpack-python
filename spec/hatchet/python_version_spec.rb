@@ -35,7 +35,7 @@ end
 RSpec.describe 'Python version support' do
   context 'when no Python version is specified' do
     let(:buildpacks) { [:default] }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', buildpacks: buildpacks) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', buildpacks:) }
 
     context 'with a new app' do
       it 'builds with the default Python version' do
@@ -210,7 +210,7 @@ RSpec.describe 'Python version support' do
 
   context 'when runtime.txt contains python-3.7.16' do
     let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.7', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.7', allow_failure:) }
 
     context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
       it 'builds with Python 3.7.16 but shows a deprecation warning' do
@@ -247,7 +247,7 @@ RSpec.describe 'Python version support' do
 
   context 'when runtime.txt contains python-3.8.16' do
     let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.8', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.8', allow_failure:) }
 
     context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
       include_examples 'builds with the requested Python version', LATEST_PYTHON_3_8

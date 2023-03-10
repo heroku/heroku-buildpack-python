@@ -11,7 +11,7 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       webrick
-    heroku_hatchet (8.0.1)
+    heroku_hatchet (8.0.2)
       excon (~> 0)
       platform-api (~> 3)
       rrrretry (~> 1)
@@ -24,7 +24,7 @@ GEM
     parallel_split_test (0.10.0)
       parallel (>= 0.5.13)
       rspec-core (>= 3.9.0)
-    parser (3.2.1.0)
+    parser (3.2.1.1)
       ast (~> 2.4.1)
     platform-api (3.5.0)
       heroics (~> 0.1.1)
@@ -41,7 +41,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
-    rubocop (1.47.0)
+    rubocop (1.48.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.2.0.0)
@@ -53,12 +53,12 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.27.0)
       parser (>= 3.2.1.0)
-    rubocop-capybara (2.17.0)
+    rubocop-capybara (2.17.1)
       rubocop (~> 1.41)
-    rubocop-rspec (2.18.1)
+    rubocop-rspec (2.19.0)
       rubocop (~> 1.33)
       rubocop-capybara (~> 2.17)
-    ruby-progressbar (1.11.0)
+    ruby-progressbar (1.13.0)
     thor (1.2.1)
     threaded (0.0.4)
     unicode-display_width (2.4.2)
@@ -76,7 +76,7 @@ DEPENDENCIES
   rubocop-rspec
 
 RUBY VERSION
-   ruby 2.7.6p219
+   ruby 3.2.1p31
 
 BUNDLED WITH
-   2.3.22
+   2.4.6
