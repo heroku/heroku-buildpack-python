@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '~> 2.7.0'
+ruby '>= 3.1', '< 3.3'
 
 group :test, :development do
   gem 'heroku_hatchet'

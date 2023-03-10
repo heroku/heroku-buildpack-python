@@ -175,7 +175,7 @@ RSpec.describe 'Pipenv support' do
 
   context 'with a Pipfile.lock containing python_version 3.7' do
     let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.7', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.7', allow_failure:) }
 
     context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
       it 'builds with the latest Python 3.7 but shows a deprecation warning' do
@@ -211,7 +211,7 @@ RSpec.describe 'Pipenv support' do
 
   context 'with a Pipfile.lock containing python_version 3.8' do
     let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.8', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.8', allow_failure:) }
 
     context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
       include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_8
@@ -257,7 +257,7 @@ RSpec.describe 'Pipenv support' do
 
   context 'with a Pipfile.lock containing python_full_version 3.10.7' do
     let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version', allow_failure: allow_failure) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version', allow_failure:) }
 
     it 'builds with the outdated Python version specified' do
       app.deploy do |app|
