@@ -174,7 +174,7 @@ else
 fi
 
 PIP_VERSION='23.0.1'
-SETUPTOOLS_VERSION='63.4.3'
+SETUPTOOLS_VERSION='67.6.0'
 WHEEL_VERSION='0.38.4'
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
