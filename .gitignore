@@ -1,14 +1,4 @@
-*.pyc
-site
-.DS_Store
-
-/.envrc
+__pycache__/
 .hatchet/repos/
-
-#Venv
-buildpack/*
-
-builds/dockerenv.staging*
-builds/dockerenv.production
-
+.DS_Store
 .rspec_status

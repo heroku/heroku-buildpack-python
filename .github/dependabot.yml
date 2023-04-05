@@ -1,9 +1,5 @@
 version: 2
 updates:
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "monthly"
   - package-ecosystem: "bundler"
     directory: "/"
     schedule:
