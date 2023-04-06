@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Python 3.10.11 and 3.11.3 are now available ([#1433](https://github.com/heroku/heroku-buildpack-python/pull/1433)).
+- The default Python version for new apps is now 3.11.3 (previously 3.11.2) ([#1433](https://github.com/heroku/heroku-buildpack-python/pull/1433)).
 
 ## v229 (2023-03-10)
 
