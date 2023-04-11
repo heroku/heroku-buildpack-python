@@ -4,6 +4,7 @@
 
 - Updated setuptools from 63.4.3 to 67.6.1. ([#1437](https://github.com/heroku/heroku-buildpack-python/pull/1437))
 - Updated wheel from 0.38.4 to 0.40.0. ([#1437](https://github.com/heroku/heroku-buildpack-python/pull/1437))
+- Raise curl connection timeout threshold from 5 to 10 seconds. ([#1439](https://github.com/heroku/heroku-buildpack-python/pull/1439))
 
 ## v230 (2023-04-06)
 

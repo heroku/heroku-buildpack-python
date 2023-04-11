@@ -43,8 +43,8 @@ set -o xtrace
 
 mkdir -p "${SRC_DIR}" "${INSTALL_DIR}" "${ARCHIVES_DIR}"
 
-curl --fail --retry 3 --retry-connrefused --connect-timeout 5 --max-time 60 -o python.tgz "${SOURCE_URL}"
-curl --fail --retry 3 --retry-connrefused --connect-timeout 5 --max-time 60 -o python.tgz.asc "${SIGNATURE_URL}"
+curl --fail --retry 3 --retry-connrefused --connect-timeout 10 --max-time 60 -o python.tgz "${SOURCE_URL}"
+curl --fail --retry 3 --retry-connrefused --connect-timeout 10 --max-time 60 -o python.tgz.asc "${SIGNATURE_URL}"
 
 # Skip GPG verification on Heroku-18 since it fails to fetch keys:
 # `gpg: keyserver receive failed: Server indicated a failure`
