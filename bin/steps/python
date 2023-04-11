@@ -11,7 +11,7 @@ PYTHON_VERSION=$(cat runtime.txt)
 # The location of the pre-compiled python binary.
 PYTHON_URL="${S3_BASE_URL}/${STACK}/runtimes/${PYTHON_VERSION}.tar.gz"
 
-if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PYTHON_URL}"; then
+if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
   puts-warn "Requested runtime '${PYTHON_VERSION}' is not available for this stack (${STACK})."
   puts-warn "For supported versions, see: https://devcenter.heroku.com/articles/python-support"
   exit 1
@@ -159,7 +159,7 @@ else
   # Prepare destination directory.
   mkdir -p .heroku/python
 
-  if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PYTHON_URL}" | tar -zxC .heroku/python; then
+  if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}" | tar -zxC .heroku/python; then
     # The Python version was confirmed to exist previously, so any failure here is due to
     # a networking issue or archive/buildpack bug rather than the runtime not existing.
     puts-warn "Failed to download/install ${PYTHON_VERSION}"
@@ -191,7 +191,7 @@ PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py3-none-any.whl"
 PIP_WHEEL_URL="${S3_BASE_URL}/common/${PIP_WHEEL_FILENAME}"
 PIP_WHEEL="${TMPDIR:-/tmp}/${PIP_WHEEL_FILENAME}"
 
-if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 5 "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
+if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
   mcount "failure.python.download-pip"
   puts-warn "Failed to download pip"
   exit 1
