@@ -14,8 +14,8 @@ LATEST_PYTHON_3_11 = '3.11.3'
 DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_11
 
 PIP_VERSION = '23.0.1'
-SETUPTOOLS_VERSION = '63.4.3'
-WHEEL_VERSION = '0.38.4'
+SETUPTOOLS_VERSION = '67.6.1'
+WHEEL_VERSION = '0.40.0'
 
 # Work around the return value for `default_buildpack` changing after deploy:
 # https://github.com/heroku/hatchet/issues/180
