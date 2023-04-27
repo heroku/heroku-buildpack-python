@@ -34,7 +34,7 @@ RSpec.describe 'Stack changes' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote:        Collecting urllib3
+          remote:        Collecting urllib3 (from -r requirements.txt (line 1))
         OUTPUT
       end
     end
@@ -66,7 +66,7 @@ RSpec.describe 'Stack changes' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote:        Collecting urllib3
+          remote:        Collecting urllib3 (from -r requirements.txt (line 1))
         OUTPUT
       end
     end

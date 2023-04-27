@@ -173,8 +173,8 @@ else
   hash -r
 fi
 
-PIP_VERSION='23.0.1'
-SETUPTOOLS_VERSION='67.6.1'
+PIP_VERSION='23.1.2'
+SETUPTOOLS_VERSION='67.7.2'
 WHEEL_VERSION='0.40.0'
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
