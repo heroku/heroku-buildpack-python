@@ -4,7 +4,7 @@
 
 - Updated pip from 23.0.1 to 23.1.2. ([#1441](https://github.com/heroku/heroku-buildpack-python/pull/1441))
 - Updated setuptools from 67.6.1 to 67.7.2. ([#1441](https://github.com/heroku/heroku-buildpack-python/pull/1441))
-- The pip bootstrap step is now performed using the pip wheel bundled with the Python stdlib, rather than one downloaded from S3. ([#1442](https://github.com/heroku/heroku-buildpack-python/pull/1442))
+- The pip bootstrap step is now performed using the pip wheel bundled with the Python stdlib, rather than one downloaded from S3. ([#1442](https://github.com/heroku/heroku-buildpack-python/pull/1442) and [#1444](https://github.com/heroku/heroku-buildpack-python/pull/1444))
 
 ## v231 (2023-04-12)
 
