@@ -12,7 +12,7 @@ RSpec.shared_examples 'builds with the requested Python version' do |python_vers
         remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
         remote: -----> Installing SQLite3
         remote: -----> Installing requirements with pip
-        remote:        Collecting urllib3
+        remote:        Collecting urllib3 (from -r requirements.txt (line 1))
       OUTPUT
       expect(app.run('python -V')).to include("Python #{python_version}")
     end
@@ -230,7 +230,7 @@ RSpec.describe 'Python version support' do
             remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
             remote: -----> Installing SQLite3
             remote: -----> Installing requirements with pip
-            remote:        Collecting urllib3
+            remote:        Collecting urllib3 (from -r requirements.txt (line 1))
           OUTPUT
           expect(app.run('python -V')).to include("Python #{LATEST_PYTHON_3_7}")
         end
@@ -342,7 +342,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote:        Collecting urllib3
+          remote:        Collecting urllib3 (from -r requirements.txt (line 1))
         OUTPUT
       end
     end
