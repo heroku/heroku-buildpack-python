@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- The pip bootstrap step is now performed using the pip wheel bundled with the Python stdlib, rather than one downloaded from S3. ([#1442](https://github.com/heroku/heroku-buildpack-python/pull/1442))
 
 ## v231 (2023-04-12)
 

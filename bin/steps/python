@@ -179,25 +179,19 @@ WHEEL_VERSION='0.40.0'
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
-# We don't use get-pip.py, since:
-#  - it uses `--force-reinstall`, which is unnecessary here and slows down repeat builds
-#  - it means downloading pip twice (once embedded in get-pip.py, and again during
-#    the install, since get-pip.py can't install the embedded version directly)
-#  - we would still have to manage several versions of get-pip.py, to support older Pythons.
-# Instead, we use the pip wheel to install itself, using the method described here:
-# https://github.com/pypa/pip/issues/2351#issuecomment-69994524
+# Python bundles Pip within its standard library, which we can use to install our chosen
+# pip version from PyPI, saving us from having to download the usual pip bootstrap script.
+# We have to use a glob since the bundled wheel filename contains the pip version, which
+# differs between Python versions.
+BUNDLED_PIP_WHEEL="$(compgen -G ".heroku/python/lib/python*/ensurepip/_bundled/pip-*.whl" || true)"
 
-PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py3-none-any.whl"
-PIP_WHEEL_URL="${S3_BASE_URL}/common/${PIP_WHEEL_FILENAME}"
-PIP_WHEEL="${TMPDIR:-/tmp}/${PIP_WHEEL_FILENAME}"
-
-if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
-  mcount "failure.python.download-pip"
-  puts-warn "Failed to download pip"
+if [[ -z "${BUNDLED_PIP_WHEEL}" ]]; then
+  mcount "failure.python.locate-bundled-pip-wheel"
+  puts-warn "Failed to locate the bundled pip wheel"
   exit 1
 fi
 
-/app/.heroku/python/bin/python "${PIP_WHEEL}/pip" install --quiet --disable-pip-version-check --no-cache-dir \
-  "${PIP_WHEEL}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}"
+/app/.heroku/python/bin/python "${BUNDLED_PIP_WHEEL}/pip" install --quiet --disable-pip-version-check --no-cache-dir \
+  "pip==${PIP_VERSION}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}"
 
 hash -r
