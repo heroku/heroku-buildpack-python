@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Remove support for Heroku-18. ([#1449](https://github.com/heroku/heroku-buildpack-python/pull/1449))
 
 ## v232 (2023-04-27)
 

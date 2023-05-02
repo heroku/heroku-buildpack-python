@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        stack: ["heroku-18", "heroku-20", "heroku-22"]
+        stack: ["heroku-20", "heroku-22"]
     env:
       HATCHET_APP_LIMIT: 200
       HATCHET_DEFAULT_STACK: ${{ matrix.stack }}

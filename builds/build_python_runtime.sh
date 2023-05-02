@@ -9,10 +9,31 @@ INSTALL_DIR="/app/.heroku/python"
 SRC_DIR="/tmp/src"
 ARCHIVES_DIR="/tmp/upload/${STACK}/runtimes"
 
-echo "Building Python ${PYTHON_VERSION} for ${STACK}..."
+case "${STACK}" in
+  heroku-22)
+    SUPPORTED_PYTHON_VERSIONS=(
+      "3.9"
+      "3.10"
+      "3.11"
+    )
+    ;;
+  heroku-20)
+    SUPPORTED_PYTHON_VERSIONS=(
+      "3.7"
+      "3.8"
+      "3.9"
+      "3.10"
+      "3.11"
+    )
+    ;;
+  *)
+    echo "Error: Unsupported stack '${STACK}'!" >&2
+    exit 1
+    ;;
+esac
 
-if [[ "${STACK}" != "heroku-18" && "${STACK}" != "heroku-20" && "${PYTHON_MAJOR_VERSION}" == 3.[7-8] ]]; then
-  echo "Error: Python ${PYTHON_MAJOR_VERSION} is only supported on Heroku-20 and older!" >&2
+if [[ ! " ${SUPPORTED_PYTHON_VERSIONS[*]} " == *" ${PYTHON_MAJOR_VERSION} "* ]]; then
+  echo "Error: Python ${PYTHON_MAJOR_VERSION} is not supported on ${STACK}!" >&2
   exit 1
 fi
 
@@ -36,6 +57,8 @@ case "${PYTHON_MAJOR_VERSION}" in
     ;;
 esac
 
+echo "Building Python ${PYTHON_VERSION} for ${STACK}..."
+
 SOURCE_URL="https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz"
 SIGNATURE_URL="${SOURCE_URL}.asc"
 
@@ -46,12 +69,8 @@ mkdir -p "${SRC_DIR}" "${INSTALL_DIR}" "${ARCHIVES_DIR}"
 curl --fail --retry 3 --retry-connrefused --connect-timeout 10 --max-time 60 -o python.tgz "${SOURCE_URL}"
 curl --fail --retry 3 --retry-connrefused --connect-timeout 10 --max-time 60 -o python.tgz.asc "${SIGNATURE_URL}"
 
-# Skip GPG verification on Heroku-18 since it fails to fetch keys:
-# `gpg: keyserver receive failed: Server indicated a failure`
-if [[ "${STACK}" != "heroku-18" ]]; then
-  gpg --batch --verbose --recv-keys "${GPG_KEY_FINGERPRINT}"
-  gpg --batch --verify python.tgz.asc python.tgz
-fi
+gpg --batch --verbose --recv-keys "${GPG_KEY_FINGERPRINT}"
+gpg --batch --verify python.tgz.asc python.tgz
 
 tar --extract --file python.tgz --strip-components=1 --directory "${SRC_DIR}"
 cd "${SRC_DIR}"
