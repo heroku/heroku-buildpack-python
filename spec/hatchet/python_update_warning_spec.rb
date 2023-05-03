@@ -60,7 +60,7 @@ RSpec.describe 'Python update warnings' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.7_outdated', allow_failure:) }
 
-    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
+    context 'when using Heroku-20', stacks: %w[heroku-20] do
       it 'warns about both the deprecated major version and the patch update' do
         app.deploy do |app|
           expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
@@ -95,7 +95,7 @@ RSpec.describe 'Python update warnings' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.8_outdated', allow_failure:) }
 
-    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
+    context 'when using Heroku-20', stacks: %w[heroku-20] do
       include_examples 'warns there is a Python update available', '3.8.12', LATEST_PYTHON_3_8
     end
 

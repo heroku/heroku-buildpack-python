@@ -73,80 +73,10 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  context 'with a Pipfile.lock containing python_version 2.7' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_2.7', allow_failure: true) }
-
-    context 'when using Heroku-18', stacks: %w[heroku-18] do
-      it 'aborts the build with an EOL message' do
-        app.deploy do |app|
-          expect(clean_output(app.output)).to include(<<~OUTPUT)
-            remote: -----> Python app detected
-            remote: -----> Using Python version specified in Pipfile.lock
-            remote:  !     
-            remote:  !     Python 2 reached upstream end-of-life on January 1st, 2020, and is
-            remote:  !     therefore no longer receiving security updates. Apps still using it
-            remote:  !     contain potential security vulnerabilities and should be upgraded to
-            remote:  !     Python 3 as soon as possible.
-            remote:  !     
-            remote:  !     In addition, Python 2 is only supported on our oldest stack, Heroku-18,
-            remote:  !     which is deprecated and reaches end-of-life on April 30th, 2023.
-            remote:  !     
-            remote:  !     As such, it is no longer supported by the latest version of this buildpack:
-            remote:  !     https://devcenter.heroku.com/changelog-items/2473
-            remote:  !     
-            remote:  !     You must either:
-            remote:  !       - Upgrade to Python 3 (recommended)
-            remote:  !       - Switch to the container stack and use the upstream legacy 'python:2.7' Docker images
-            remote:  !       - Switch to an older version of the Python buildpack (short term workaround only)
-            remote:  !     
-            remote:  !     For more details, see:
-            remote:  !     https://devcenter.heroku.com/articles/python-2-7-eol-faq
-            remote:  !     
-          OUTPUT
-        end
-      end
-    end
-
-    context 'when using Heroku-20 or newer', stacks: %w[heroku-20 heroku-22] do
-      # Python 2.7 is EOL, so has not been built for newer stacks.
-      include_examples 'aborts the build with a runtime not available message (Pipenv)', '2.7.18'
-    end
-  end
-
-  context 'with a Pipfile.lock containing python_version 3.5' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.5', allow_failure: true) }
-
-    context 'when using Heroku-18', stacks: %w[heroku-18] do
-      it 'aborts the build with an EOL message' do
-        app.deploy do |app|
-          expect(clean_output(app.output)).to include(<<~OUTPUT)
-            remote: -----> Python app detected
-            remote: -----> Using Python version specified in Pipfile.lock
-            remote:  !     
-            remote:  !     Python 3.5 reached upstream end-of-life on September 30th, 2020, and is
-            remote:  !     therefore no longer receiving security updates:
-            remote:  !     https://devguide.python.org/versions/#supported-versions
-            remote:  !     
-            remote:  !     As such, it is no longer supported by the latest version of this buildpack.
-            remote:  !     
-            remote:  !     Please upgrade to a newer Python version. See:
-            remote:  !     https://devcenter.heroku.com/articles/python-runtimes
-            remote:  !     
-          OUTPUT
-        end
-      end
-    end
-
-    context 'when using Heroku-20 or newer', stacks: %w[heroku-20 heroku-22] do
-      # Python 3.5 is EOL, so has not been built for newer stacks.
-      include_examples 'aborts the build with a runtime not available message (Pipenv)', '3.5.10'
-    end
-  end
-
   context 'with a Pipfile.lock containing python_version 3.6' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.6', allow_failure: true) }
 
-    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
+    context 'when using Heroku-20', stacks: %w[heroku-20] do
       it 'aborts the build with an EOL message' do
         app.deploy do |app|
           expect(clean_output(app.output)).to match(Regexp.new(<<~OUTPUT))
@@ -177,7 +107,7 @@ RSpec.describe 'Pipenv support' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.7', allow_failure:) }
 
-    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
+    context 'when using Heroku-20', stacks: %w[heroku-20] do
       it 'builds with the latest Python 3.7 but shows a deprecation warning' do
         app.deploy do |app|
           expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
@@ -213,7 +143,7 @@ RSpec.describe 'Pipenv support' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.8', allow_failure:) }
 
-    context 'when using Heroku-18 or Heroku-20', stacks: %w[heroku-18 heroku-20] do
+    context 'when using Heroku-20', stacks: %w[heroku-20] do
       include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_8
     end
 
