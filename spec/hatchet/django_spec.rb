@@ -11,7 +11,8 @@ RSpec.describe 'Django support' do
         app.deploy do |app|
           expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
             remote: -----> \\$ python manage.py collectstatic --noinput
-            remote:        \\d+ static files copied to '/tmp/build_.*/staticfiles', \\d+ post-processed.
+            remote:        WARNING:root:No DATABASE_URL environment variable set, and so no databases setup
+            remote:        \\d+ static files? copied to '/tmp/build_.*/staticfiles', \\d+ post-processed.
           REGEX
         end
       end
@@ -36,7 +37,7 @@ RSpec.describe 'Django support' do
       it 'skips collectstatic' do
         app.deploy do |app|
           expect(app.output).to include('Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.')
-          expect(app.output).not_to include('static files copied')
+          expect(app.output).not_to include('manage.py collectstatic')
         end
       end
     end
@@ -46,7 +47,7 @@ RSpec.describe 'Django support' do
 
       it 'still runs collectstatic' do
         app.deploy do |app|
-          expect(app.output).to include('static files copied')
+          expect(app.output).to include('manage.py collectstatic')
         end
       end
     end
@@ -56,7 +57,7 @@ RSpec.describe 'Django support' do
 
       it 'still runs collectstatic' do
         app.deploy do |app|
-          expect(app.output).to include('static files copied')
+          expect(app.output).to include('manage.py collectstatic')
         end
       end
     end
@@ -70,7 +71,7 @@ RSpec.describe 'Django support' do
             remote: -----> Skipping Django collectstatic since the file '.heroku/collectstatic_disabled' exists.
             remote:  !     This approach is deprecated, please set the env var DISABLE_COLLECTSTATIC=1 instead.
           OUTPUT
-          expect(app.output).not_to include('static files copied')
+          expect(app.output).not_to include('manage.py collectstatic')
         end
       end
     end
