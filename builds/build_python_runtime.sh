@@ -9,6 +9,11 @@ INSTALL_DIR="/app/.heroku/python"
 SRC_DIR="/tmp/src"
 ARCHIVES_DIR="/tmp/upload/${STACK}/runtimes"
 
+function error() {
+  echo "Error: ${1}" >&2
+  exit 1
+}
+
 case "${STACK}" in
   heroku-22)
     SUPPORTED_PYTHON_VERSIONS=(
@@ -27,14 +32,12 @@ case "${STACK}" in
     )
     ;;
   *)
-    echo "Error: Unsupported stack '${STACK}'!" >&2
-    exit 1
+    error "Error: Unsupported stack '${STACK}'!"
     ;;
 esac
 
 if [[ ! " ${SUPPORTED_PYTHON_VERSIONS[*]} " == *" ${PYTHON_MAJOR_VERSION} "* ]]; then
-  echo "Error: Python ${PYTHON_MAJOR_VERSION} is not supported on ${STACK}!" >&2
-  exit 1
+  error "Error: Python ${PYTHON_MAJOR_VERSION} is not supported on ${STACK}!"
 fi
 
 # The release keys can be found on https://www.python.org/downloads/ -> "OpenPGP Public Keys".
@@ -52,8 +55,7 @@ case "${PYTHON_MAJOR_VERSION}" in
     GPG_KEY_FINGERPRINT='0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D'
     ;;
   *)
-    echo "Error: Unsupported Python version '${PYTHON_MAJOR_VERSION}'!" >&2
-    exit 1
+    error "Error: Unsupported Python version '${PYTHON_MAJOR_VERSION}'!"
     ;;
 esac
 
@@ -132,7 +134,6 @@ if [[ "${PYTHON_MAJOR_VERSION}" == "3.11" ]]; then
     # This feature was added in Python 3.10+, however it wasn't until Python 3.11
     # that compatibility issues between it and PGO were fixed:
     # https://github.com/python/cpython/pull/29315
-    # TODO: See if a backport of that fix would be accepted to Python 3.10.
     "--disable-test-modules"
   )
 fi
@@ -157,8 +158,7 @@ if [[ "${PYTHON_MAJOR_VERSION}" == 3.[7-9] ]]; then
   #   - `lib/python3.9/config-3.9-x86_64-linux-gnu/libpython3.9.a`
   find "${INSTALL_DIR}" -type f -name '*.a' -print -exec strip --strip-unneeded '{}' +
 elif ! find "${INSTALL_DIR}" -type f -name '*.a' -print -exec false '{}' +; then
-  echo "Error: Unexpected static libraries found!" >&2
-  exit 1
+  error "Error: Unexpected static libraries found!"
 fi
 
 # Remove unneeded test directories, similar to the official Docker Python images:
