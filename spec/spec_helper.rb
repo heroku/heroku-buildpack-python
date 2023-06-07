@@ -14,7 +14,7 @@ LATEST_PYTHON_3_11 = '3.11.4'
 DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_11
 
 PIP_VERSION = '23.1.2'
-SETUPTOOLS_VERSION = '67.7.2'
+SETUPTOOLS_VERSION = '67.8.0'
 WHEEL_VERSION = '0.40.0'
 
 # Work around the return value for `default_buildpack` changing after deploy:
