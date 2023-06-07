@@ -4,6 +4,7 @@
 
 - Python 3.7.17, 3.8.17, 3.9.17, 3.10.12 and 3.11.4 are now available ([#1454](https://github.com/heroku/heroku-buildpack-python/pull/1454)).
 - The default Python version for new apps is now 3.11.4 (previously 3.11.3) ([#1454](https://github.com/heroku/heroku-buildpack-python/pull/1454)).
+- Updated setuptools from 67.7.2 to 67.8.0. ([#1456](https://github.com/heroku/heroku-buildpack-python/pull/1456))
 - Removed support for Heroku-18. ([#1449](https://github.com/heroku/heroku-buildpack-python/pull/1449))
 
 ## v232 (2023-04-27)
