@@ -43,7 +43,7 @@ jobs:
 
   build-and-upload-heroku-22:
     # We only support Python 3.9+ on Heroku-22.
-    if: (!startsWith(inputs.python_version, '3.7.') && !startsWith(inputs.python_version,'3.8.'))
+    if: (!startsWith(inputs.python_version,'3.8.'))
     runs-on: pub-hk-ubuntu-22.04-xlarge
     env:
       STACK_VERSION: "22"

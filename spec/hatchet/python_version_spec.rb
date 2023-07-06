@@ -119,9 +119,11 @@ RSpec.describe 'Python version support' do
             remote: -----> Python app detected
             remote: -----> Using Python version specified in runtime.txt
             remote:  !     
-            remote:  !     Python 3.7 will reach its upstream end-of-life on June 27th, 2023, at which
-            remote:  !     point it will no longer receive security updates:
+            remote:  !     Python 3.7 reached its upstream end-of-life on June 27th, 2023, so no longer
+            remote:  !     receives any security updates:
             remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     Support for Python 3.7 will be removed from this buildpack in October 2023.
             remote:  !     
             remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes

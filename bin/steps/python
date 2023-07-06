@@ -59,9 +59,11 @@ case "${PYTHON_VERSION}" in
     ;;
   python-3.7.*)
     puts-warn
-    puts-warn "Python 3.7 will reach its upstream end-of-life on June 27th, 2023, at which"
-    puts-warn "point it will no longer receive security updates:"
+    puts-warn "Python 3.7 reached its upstream end-of-life on June 27th, 2023, so no longer"
+    puts-warn "receives any security updates:"
     puts-warn "https://devguide.python.org/versions/#supported-versions"
+    puts-warn
+    puts-warn "Support for Python 3.7 will be removed from this buildpack in October 2023."
     puts-warn
     puts-warn "Upgrade to a newer Python version as soon as possible to keep your app secure."
     puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
