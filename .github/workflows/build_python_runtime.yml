@@ -20,7 +20,7 @@ permissions:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_DEFAULT_REGION: "us-west-2"
+  AWS_DEFAULT_REGION: "us-east-1"
   S3_BUCKET: "heroku-buildpack-python"
 
 # Unfortunately these jobs cannot be easily written as a matrix since `matrix.exclude` does not
