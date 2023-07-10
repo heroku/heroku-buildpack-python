@@ -24,7 +24,6 @@ case "${STACK}" in
     ;;
   heroku-20)
     SUPPORTED_PYTHON_VERSIONS=(
-      "3.7"
       "3.8"
       "3.9"
       "3.10"
@@ -49,10 +48,6 @@ case "${PYTHON_MAJOR_VERSION}" in
   3.8|3.9)
     # https://keybase.io/ambv/
     GPG_KEY_FINGERPRINT='E3FF2839C048B25C084DEBE9B26995E310250568'
-    ;;
-  3.7)
-    # https://keybase.io/nad/
-    GPG_KEY_FINGERPRINT='0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D'
     ;;
   *)
     error "Error: Unsupported Python version '${PYTHON_MAJOR_VERSION}'!"
@@ -83,6 +78,8 @@ cd "${SRC_DIR}"
 CONFIGURE_OPTS=(
   # Support loadable extensions in the `_sqlite` extension module.
   "--enable-loadable-sqlite-extensions"
+  # Enable recommended release build performance optimisations such as PGO.
+  "--enable-optimizations"
   # Make autoconf's configure option validation more strict.
   "--enable-option-checking=fatal"
   # Install Python into `/app/.heroku/python` rather than the default of `/usr/local`.
@@ -95,17 +92,7 @@ CONFIGURE_OPTS=(
   "--with-system-expat"
 )
 
-if [[ "${PYTHON_MAJOR_VERSION}" != "3.7" ]]; then
-  CONFIGURE_OPTS+=(
-    # Python 3.7 and older run the whole test suite for PGO, which takes
-    # much too long. Whilst this can be overridden via `PROFILE_TASK`, we
-    # prefer to change as few of the upstream build options as possible.
-    # As such, PGO is only enabled for Python 3.8+.
-    "--enable-optimizations"
-  )
-fi
-
-if [[ "${PYTHON_MAJOR_VERSION}" != 3.[7-9] ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" != 3.[8-9] ]]; then
   CONFIGURE_OPTS+=(
     # Shared builds are beneficial for a number of reasons:
     # - Reduces the size of the build, since it avoids the duplication between
@@ -147,7 +134,7 @@ fi
 make -j "$(nproc)" LDFLAGS='-Wl,--strip-all'
 make install
 
-if [[ "${PYTHON_MAJOR_VERSION}" == 3.[7-9] ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" == 3.[8-9] ]]; then
   # On older versions of Python we're still building the static library, which has to be
   # manually stripped since the linker stripping enabled in LDFLAGS doesn't cover them.
   # We're using `--strip-unneeded` since `--strip-all` would remove the `.symtab` section

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Update the Python 3.7 deprecation message to reflect that it has now reached end-of-life. ([#1460](https://github.com/heroku/heroku-buildpack-python/pull/1460))
 
 ## v233 (2023-06-07)
 
