@@ -13,9 +13,18 @@ LATEST_PYTHON_3_10 = '3.10.12'
 LATEST_PYTHON_3_11 = '3.11.4'
 DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_11
 
-PIP_VERSION = '23.1.2'
-SETUPTOOLS_VERSION = '67.8.0'
-WHEEL_VERSION = '0.40.0'
+# The requirement versions are effectively buildpack constants, however, we want
+# Dependabot to be able to update them, which requires that they be in requirements
+# files. The requirements files contain contents like `package==1.2.3` (and not just
+# the package version) so we have to extract the version substring from it.
+def get_requirement_version(package_name)
+  requirement = File.read("requirements/#{package_name}.txt").strip
+  requirement.delete_prefix("#{package_name}==")
+end
+
+PIP_VERSION = get_requirement_version('pip')
+SETUPTOOLS_VERSION = get_requirement_version('setuptools')
+WHEEL_VERSION = get_requirement_version('wheel')
 
 # Work around the return value for `default_buildpack` changing after deploy:
 # https://github.com/heroku/hatchet/issues/180
