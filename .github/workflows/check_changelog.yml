@@ -9,10 +9,8 @@ permissions:
 
 jobs:
   check-changelog:
-    runs-on: ubuntu-22.04
-    if: |
-      !contains(github.event.pull_request.labels.*.name, 'skip changelog') &&
-      !contains(github.event.pull_request.labels.*.name, 'dependencies')
+    runs-on: ubuntu-latest
+    if: (!contains(github.event.pull_request.labels.*.name, 'skip changelog'))
     steps:
       - name: Checkout
         uses: actions/checkout@v3

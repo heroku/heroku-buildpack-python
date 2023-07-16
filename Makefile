@@ -23,7 +23,7 @@ compile:
 	@echo "Running compile using: STACK=$(STACK) FIXTURE=$(FIXTURE)"
 	@echo
 	@docker run --rm -it -v $(PWD):/src:ro -e "STACK=$(STACK)" -w /buildpack --platform="$(PLATFORM)" "$(STACK_IMAGE_TAG)" \
-		bash -c 'cp -r /src/{bin,vendor} /buildpack && cp -r /src/$(FIXTURE) /build && mkdir /cache /env && bin/compile /build /cache /env'
+		bash -c 'cp -r /src/{bin,requirements,vendor} /buildpack && cp -r /src/$(FIXTURE) /build && mkdir /cache /env && bin/compile /build /cache /env'
 	@echo
 
 publish:
