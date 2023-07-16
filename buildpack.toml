@@ -6,7 +6,6 @@ files = [
   ".github/",
   "builds/",
   "spec/",
-  ".dockerignore",
   ".gitignore",
   ".rubocop.yml",
   "Gemfile",
@@ -14,5 +13,4 @@ files = [
   "hatchet.json",
   "hatchet.lock",
   "Makefile",
-  "requirements.txt",
 ]
