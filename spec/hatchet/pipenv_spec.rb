@@ -2,8 +2,6 @@
 
 require_relative '../spec_helper'
 
-PIPENV_VERSION = '2023.2.4'
-
 RSpec.shared_examples 'builds using Pipenv with the requested Python version' do |python_version|
   it "builds with Python #{python_version}" do
     app.deploy do |app|
@@ -47,6 +45,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
+          remote:        The flag --skip-lock has been deprecated for removal.  Without running the lock resolver it is not possible to manage multiple package indexes.  Additionally it bypasses the build consistency guarantees provided by maintaining a lock file.
           remote:        Installing dependencies from Pipfile...
           remote: -----> Installing SQLite3
         OUTPUT
