@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Updated pip from 23.1.2 to 23.2. ([#1465](https://github.com/heroku/heroku-buildpack-python/pull/1465))
+- Updated setuptools from 67.8.0 to 68.0.0. ([#1467](https://github.com/heroku/heroku-buildpack-python/pull/1467))
 - Update the Python 3.7 deprecation message to reflect that it has now reached end-of-life. ([#1460](https://github.com/heroku/heroku-buildpack-python/pull/1460))
 
 ## v233 (2023-06-07)
