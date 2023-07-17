@@ -2,8 +2,6 @@
 
 require_relative '../spec_helper'
 
-PIPENV_VERSION = '2023.2.4'
-
 RSpec.shared_examples 'builds using Pipenv with the requested Python version' do |python_version|
   it "builds with Python #{python_version}" do
     app.deploy do |app|
