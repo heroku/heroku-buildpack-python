@@ -1,0 +1,337 @@
+#!/usr/bin/env bash
+
+# The Heroku Python Buildpack. This script accepts parameters for a build
+# directory, a cache directory, and a directory for app environment variables.
+
+# Warning: there are a few hacks in this script to accommodate excellent builds
+# on Heroku. No guarantee for external compatibility is made. However,
+# everything should work fine outside of the Heroku environment, if the
+# environment is setup correctly.
+
+# Usage:
+#
+#     $ bin/compile <build-dir> <cache-dir> <env-path>
+
+# Fail fast and fail hard.
+set -eo pipefail
+
+# Used by buildpack-stdlib's metrics features.
+export BPLOG_PREFIX="buildpack.python"
+export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
+
+[ "$BUILDPACK_XTRACE" ] && set -o xtrace
+
+# Prepend proper path for old-school virtualenv hackery.
+# This may not be neccessary.
+export PATH=:/usr/local/bin:$PATH
+
+# Setup Path variables, for later use in the Buildpack.
+BIN_DIR=$(cd "$(dirname "$0")"; pwd) # absolute path
+ROOT_DIR=$(dirname "$BIN_DIR")
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
+# Export Path variables, for use in sub-scripts.
+export BUILD_DIR CACHE_DIR ENV_DIR
+
+# Set the base URL for downloading buildpack assets like Python runtimes.
+# The user can provide BUILDPACK_S3_BASE_URL to specify a custom target.
+# Note: this is designed for non-Heroku use, as it does not use the user-provided
+# environment variable mechanism (the ENV_DIR).
+S3_BASE_URL="${BUILDPACK_S3_BASE_URL:-"https://heroku-buildpack-python.s3.us-east-1.amazonaws.com"}"
+# This has to be exported since it's used by the geo-libs step which is run in a subshell.
+
+# Default Python Versions
+# shellcheck source=bin/default_pythons
+source "$BIN_DIR/default_pythons"
+
+# Common Problem Warnings:
+# This section creates a temporary file in which to stick the output of `pip install`.
+# The `warnings` subscript then greps through this for common problems and guides
+# the user towards resolution of known issues.
+WARNINGS_LOG=$(mktemp)
+
+# The buildpack ships with a few executable tools.
+# This installs them into the path, so we can execute them directly.
+export PATH=$PATH:$ROOT_DIR/vendor/
+
+# Sanitize externally-provided environment variables:
+# The following environment variables are either problematic or simply unneccessary
+# for the buildpack to have knowledge of, so we unset them, to keep the environment
+# as clean and pristine as possible.
+unset PYTHONHOME PYTHONPATH
+
+# Import the utils script, which contains helper functions used throughout the buildpack.
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
+
+# Import the warnings script, which contains the `pip install` user warning mechanisms
+# (mentioned and explained above)
+# shellcheck source=bin/warnings
+source "$BIN_DIR/warnings"
+
+# Make the directory in which we will create symlinks from the temporary build directory
+# to `/app`.
+# Symlinks are required, since Python is not a portable installation.
+# More on this topic later.
+mkdir -p /app/.heroku
+
+# This buildpack programatically generates (or simply copies) a number of files for
+# buildpack machinery: an export script, and a number of `.profile.d` scripts. This
+# section declares the locations of those files and targets.
+PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
+EXPORT_PATH="$BIN_DIR/../export"
+GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
+WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
+
+# We'll need to send these statics to other scripts we `source`.
+export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH EXPORT_PATH
+
+# Python Environment Variables
+# Set Python-specific environment variables, for running Python within the buildpack.
+# Notes on each variable included.
+
+# PATH is relatively obvious, we need to be able to execute 'python'.
+export PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin:$PATH
+# Tell Python to not buffer it's stdin/stdout.
+export PYTHONUNBUFFERED=1
+# Set the locale to a well-known and expected standard.
+export LANG=en_US.UTF-8
+# `~/.heroku/vendor` is an place where the buildpack may stick pre-build binaries for known
+# C dependencies. This section configures Python (GCC, more specifically)
+# and pip to automatically include these paths when building binaries.
+# TODO: Stop adding .heroku/vendor here now that the buildpack no longer vendors anything.
+export C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$C_INCLUDE_PATH
+export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$CPLUS_INCLUDE_PATH
+export LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH
+
+# Global pip options (https://pip.pypa.io/en/stable/user_guide/#environment-variables).
+# Disable pip's warnings about EOL Python since we show our own.
+export PIP_NO_PYTHON_VERSION_WARNING=1
+
+# The Application Code
+# --------------------
+
+# Switch to the repo's context.
+cd "$BUILD_DIR"
+
+# The Cache
+# ---------
+
+# The workflow for the Python Buildpack's cache is as follows:
+#
+# - `~/.heroku/{known-paths}` are copied from the cache into the slug.
+# - The build is executed, modifying `~/.heroku/{known-paths}`.
+# - Once the build is complete, `~/.heroku/{known-paths}` is copied back into the cache.
+
+# Create the cache directory, if it doesn't exist.
+mkdir -p "$CACHE_DIR/.heroku"
+
+# Restore old artifacts from the cache.
+mkdir -p .heroku
+
+# The Python installation.
+cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
+# A plain text file which contains the current stack being used (used for cache busting).
+cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
+# A plain text file which contains the current python version being used (used for cache busting).
+cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
+# A plain text file which contains the current sqlite3 version being used (used for cache busting).
+cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
+# "editable" installations of code repositories, via pip or pipenv.
+if [[ -d "$CACHE_DIR/.heroku/src" ]]; then
+  cp -R "$CACHE_DIR/.heroku/src" .heroku/ &> /dev/null || true
+fi
+
+# The pre_compile hook. Customers rely on this. Don't remove it.
+# This part of the code is used to allow users to customize their build experience
+# without forking the buildpack by providing a `bin/pre_compile` script, which gets
+# run inline with the buildpack automatically.
+
+# shellcheck source=bin/steps/hooks/pre_compile
+source "$BIN_DIR/steps/hooks/pre_compile"
+
+# Sticky runtimes. If there was a previous build, and it used a given version of Python,
+# continue to use that version of Python in perpituity (warnings will be raised if
+# they are out–of–date).
+if [ -f "$CACHE_DIR/.heroku/python-version" ]; then
+  CACHED_PYTHON_VERSION=$(cat "$CACHE_DIR/.heroku/python-version")
+fi
+
+# We didn't always record the stack version. This code is in place because of that.
+if [ -f "$CACHE_DIR/.heroku/python-stack" ]; then
+  CACHED_PYTHON_STACK=$(cat "$CACHE_DIR/.heroku/python-stack")
+else
+  CACHED_PYTHON_STACK=$STACK
+fi
+
+# Pipenv Python version support.
+# Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).
+# Convert it to a runtime.txt file.
+
+# shellcheck source=bin/steps/pipenv-python-version
+source "$BIN_DIR/steps/pipenv-python-version"
+
+if [[ -f runtime.txt ]]; then
+  # PYTHON_VERSION_SOURCE may have already been set by the pipenv-python-version step.
+  # TODO: Refactor this and stop pipenv-python-version using runtime.txt as an API.
+  PYTHON_VERSION_SOURCE=${PYTHON_VERSION_SOURCE:-"runtime.txt"}
+  puts-step "Using Python version specified in ${PYTHON_VERSION_SOURCE}"
+  mcount "version.reason.python.specified"
+elif [[ -n "${CACHED_PYTHON_VERSION:-}" ]]; then
+  puts-step "No Python version was specified. Using the same version as the last build: ${CACHED_PYTHON_VERSION}"
+  echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
+  mcount "version.reason.python.cached"
+  echo "${CACHED_PYTHON_VERSION}" > runtime.txt
+else
+  puts-step "No Python version was specified. Using the buildpack default: ${DEFAULT_PYTHON_VERSION}"
+  echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
+  mcount "version.reason.python.default"
+  echo "${DEFAULT_PYTHON_VERSION}" > runtime.txt
+fi
+
+# Create the directory for .profile.d, if it doesn't exist.
+mkdir -p "$(dirname "$PROFILE_PATH")"
+# Create the directory for editable source code installation, if it doesn't exist.
+mkdir -p /app/.heroku/src
+
+# On Heroku CI, builds happen in `/app`. Otherwise, on the Heroku platform,
+# they occur in a temp directory. Beacuse Python is not portable, we must create
+# symlinks to emulate that we are operating in `/app` during the build process.
+# This is (hopefully obviously) because apps end up running from `/app` in production.
+# Realpath is used to support use-cases where one of the locations is a symlink to the other.
+if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
+    # python expects to reside in /app, so set up symlinks
+    # we will not remove these later so subsequent buildpacks can still invoke it
+    ln -nsf "$BUILD_DIR/.heroku/python" /app/.heroku/python
+    ln -nsf "$BUILD_DIR/.heroku/vendor" /app/.heroku/vendor
+    # Note: .heroku/src is copied in later.
+fi
+
+# Download / Install Python, from pre-build binaries available on Amazon S3.
+# This step also bootstraps pip / setuptools.
+(( start=$(nowms) ))
+# shellcheck source=bin/steps/python
+source "$BIN_DIR/steps/python"
+mtime "python.install.time" "${start}"
+
+# Install Pipenv dependencies, if a Pipfile was provided.
+# shellcheck source=bin/steps/pipenv
+source "$BIN_DIR/steps/pipenv"
+
+# If no requirements.txt file given, assume `setup.py develop` is intended.
+# This allows for people to ship a setup.py application to Heroku
+
+if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
+  echo "-e ." > requirements.txt
+fi
+
+# SQLite3 support.
+# This sets up and installs sqlite3 dev headers and the sqlite3 binary but not the
+# libsqlite3-0 library since that exists on the stack image.
+(( start=$(nowms) ))
+# shellcheck source=bin/steps/sqlite3
+source "$BIN_DIR/steps/sqlite3"
+buildpack_sqlite3_install
+mtime "sqlite3.install.time" "${start}"
+
+# pip install
+# -----------
+
+# Install dependencies with pip (where the magic happens).
+(( start=$(nowms) ))
+# shellcheck source=bin/steps/pip-install
+source "$BIN_DIR/steps/pip-install"
+mtime "pip.install.time" "${start}"
+
+# Support for NLTK corpora.
+(( start=$(nowms) ))
+sub_env "$BIN_DIR/steps/nltk"
+mtime "nltk.download.time" "${start}"
+
+# Support for editable installations. Here, we are copying pip–created src directory,
+# and copying it into the proper place (the logical place to do this was early, but it must be done here).
+# In CI, $BUILD_DIR is /app.
+# Realpath is used to support use-cases where one of the locations is a symlink to the other.
+if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
+  rm -rf "$BUILD_DIR/.heroku/src"
+  deep-cp /app/.heroku/src "$BUILD_DIR/.heroku/src"
+fi
+
+
+# Django collectstatic support.
+# The buildpack automatically runs collectstatic for Django applications.
+# This is the cause for the majority of build failures on the Python platform.
+# These failures are intentional — if collectstatic (which can be tricky, at times) fails,
+# your build fails.
+(( start=$(nowms) ))
+sub_env "$BIN_DIR/steps/collectstatic"
+mtime "collectstatic.time" "${start}"
+
+
+# Progamatically create .profile.d script for application runtime environment variables.
+
+# Set the PATH to include Python / pip / pipenv / etc.
+set_env PATH "\$HOME/.heroku/python/bin:\$PATH"
+# Tell Python to run in unbuffered mode.
+set_env PYTHONUNBUFFERED true
+# Tell Python where it lives.
+set_env PYTHONHOME "\$HOME/.heroku/python"
+# Set variables for C libraries.
+set_env LIBRARY_PATH "\$HOME/.heroku/vendor/lib:\$HOME/.heroku/python/lib:\$LIBRARY_PATH"
+set_env LD_LIBRARY_PATH "\$HOME/.heroku/vendor/lib:\$HOME/.heroku/python/lib:\$LD_LIBRARY_PATH"
+# Locale.
+set_default_env LANG en_US.UTF-8
+# The Python hash seed is set to random.
+set_default_env PYTHONHASHSEED random
+# Tell Python to look for Python modules in the /app dir. Don't change this.
+set_default_env PYTHONPATH "\$HOME"
+
+# Python expects to be in /app, if at runtime, it is not, set
+# up symlinks… this can occur when the subdir buildpack is used.
+cat <<EOT >> "$PROFILE_PATH"
+if [[ \$HOME != "/app" ]]; then
+    mkdir -p /app/.heroku
+    ln -nsf "\$HOME/.heroku/python" /app/.heroku/python
+    ln -nsf "\$HOME/.heroku/vendor" /app/.heroku/vendor
+fi
+EOT
+
+# At runtime, rewrite paths in editable package .egg-link, .pth and finder files from the build time paths
+# (such as `/tmp/build_<hash>`) back to `/app`. This is not done during the build itself, since later
+# buildpacks still need the build time paths.
+if [[ "${BUILD_DIR}" != "/app" ]]; then
+  cat <<EOT >> "$PROFILE_PATH"
+find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
+EOT
+fi
+
+# Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
+cp "$ROOT_DIR/vendor/WEB_CONCURRENCY.sh" "$WEB_CONCURRENCY_PROFILE_PATH"
+cp "$ROOT_DIR/vendor/python.gunicorn.sh" "$GUNICORN_PROFILE_PATH"
+
+# Experimental post_compile hook. Don't remove this.
+# shellcheck source=bin/steps/hooks/post_compile
+source "$BIN_DIR/steps/hooks/post_compile"
+
+# Store new artifacts in the cache.
+rm -rf "$CACHE_DIR/.heroku/python"
+rm -rf "$CACHE_DIR/.heroku/python-version"
+rm -rf "$CACHE_DIR/.heroku/python-stack"
+rm -rf "$CACHE_DIR/.heroku/vendor"
+rm -rf "$CACHE_DIR/.heroku/src"
+
+mkdir -p "$CACHE_DIR/.heroku"
+cp -R .heroku/python "$CACHE_DIR/.heroku/"
+cp -R .heroku/python-version "$CACHE_DIR/.heroku/"
+cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &> /dev/null || true
+if [[ -d .heroku/src ]]; then
+  cp -R .heroku/src "$CACHE_DIR/.heroku/" &> /dev/null || true
+fi
+
+# Measure the size of the Python installation.
+# shellcheck disable=SC2119
+mmeasure 'python.size' "$(measure-size)"

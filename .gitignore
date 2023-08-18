@@ -2,3 +2,4 @@ __pycache__/
 .hatchet/repos/
 .DS_Store
 .rspec_status
+.local_temp

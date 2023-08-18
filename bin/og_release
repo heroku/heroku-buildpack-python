@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# bin/release <build-dir>
+
+set -euo pipefail
+
+BUILD_DIR=$1
+BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
+
+# Unfortunately the build system doesn't source the `export` script before
+# running `bin/release`, so we have to do so manually to ensure the buildpack
+# Python is used by `is_module_available` instead of system Python.
+# We also have to disable Bash error on undefined variables, since not all env
+# vars used in the export script will be set by default (eg `LIBRARY_PATH`).
+set +u
+# shellcheck source=/dev/null
+source "${BUILDPACK_DIR}/export"
+set -u
+
+# shellcheck source=bin/utils
+source "${BUILDPACK_DIR}/bin/utils"
+
+if [[ -f "${BUILD_DIR}/manage.py" ]] && is_module_available 'django' && is_module_available 'psycopg2'; then
+cat <<EOF
+---
+addons:
+  - heroku-postgresql
+EOF
+fi
