@@ -171,19 +171,7 @@ RSpec.describe 'Pipenv support' do
   context 'with a Pipfile.lock containing python_version 3.11' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.11') }
 
-    it 'builds with the latest Python 3.11' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Python app detected
-          remote: -----> Using Python version specified in Pipfile.lock
-          remote: -----> Installing python-#{LATEST_PYTHON_3_11}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
-          remote: -----> Installing SQLite3
-        REGEX
-      end
-    end
+    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_11
   end
 
   context 'with a Pipfile.lock containing python_full_version 3.10.7' do
