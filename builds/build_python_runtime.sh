@@ -20,6 +20,7 @@ case "${STACK}" in
       "3.9"
       "3.10"
       "3.11"
+      "3.12"
     )
     ;;
   heroku-20)
@@ -28,6 +29,7 @@ case "${STACK}" in
       "3.9"
       "3.10"
       "3.11"
+      "3.12"
     )
     ;;
   *)
@@ -41,6 +43,10 @@ fi
 
 # The release keys can be found on https://www.python.org/downloads/ -> "OpenPGP Public Keys".
 case "${PYTHON_MAJOR_VERSION}" in
+  3.12)
+    # https://github.com/Yhg1s.gpg
+    GPG_KEY_FINGERPRINT='7169605F62C751356D054A26A821E680E5FA6305'
+    ;;
   3.10|3.11)
     # https://keybase.io/pablogsal/
     GPG_KEY_FINGERPRINT='A035C8C19219BA821ECEA86B64E628F8D684696D'
@@ -115,7 +121,7 @@ if [[ "${PYTHON_MAJOR_VERSION}" != 3.[8-9] ]]; then
   )
 fi
 
-if [[ "${PYTHON_MAJOR_VERSION}" == "3.11" ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" == "3.11" || "${PYTHON_MAJOR_VERSION}" == "3.12" ]]; then
   CONFIGURE_OPTS+=(
     # Skip building the test modules, since we remove them after the build anyway.
     # This feature was added in Python 3.10+, however it wasn't until Python 3.11

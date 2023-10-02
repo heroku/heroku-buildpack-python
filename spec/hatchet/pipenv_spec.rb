@@ -174,6 +174,12 @@ RSpec.describe 'Pipenv support' do
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_11
   end
 
+  context 'with a Pipfile.lock containing python_version 3.12' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.12') }
+
+    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_12
+  end
+
   context 'with a Pipfile.lock containing python_full_version 3.10.7' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version', allow_failure:) }

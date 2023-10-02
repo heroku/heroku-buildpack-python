@@ -45,6 +45,9 @@ function warn_if_patch_update_available() {
 }
 
 case "${PYTHON_VERSION}" in
+  python-3.12.*)
+    warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_312}"
+    ;;
   python-3.11.*)
     warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_311}"
     ;;
