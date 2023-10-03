@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fixed `pkgutil.find_loader` deprecation warning when using Python 3.12. ([#1493](https://github.com/heroku/heroku-buildpack-python/pull/1493))
 
 ## v236 (2023-10-02)
 

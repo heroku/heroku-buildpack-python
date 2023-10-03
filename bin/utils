@@ -58,12 +58,10 @@ measure-size() {
   echo "$(du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
 }
 
+# Returns 0 if the specified module exists, otherwise returns 1.
 is_module_available() {
-  # Returns 0 if the specified module exists, otherwise returns 1.
-  # Uses pkgutil rather than pkg_resources or pip's CLI, since pkgutil exists
-  # in the stdlib, and doesn't depend on the choice of package manager.
   local module_name="${1}"
-  python -c "import sys, pkgutil; sys.exit(0 if pkgutil.find_loader('${module_name}') else 1)"
+  python -c "import sys, importlib.util; sys.exit(0 if importlib.util.find_spec('${module_name}') else 1)"
 }
 
 # The requirement versions are effectively buildpack constants, however, we want
