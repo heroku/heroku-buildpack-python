@@ -22,7 +22,7 @@ updates:
       - "github actions"
       - "skip changelog"
   - package-ecosystem: "pip"
-    directory: "/requirements"
+    directory: "/"
     schedule:
       interval: "monthly"
     labels:
