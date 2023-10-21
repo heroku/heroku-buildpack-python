@@ -26,7 +26,6 @@ RSpec.describe 'Pip support' do
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3 \\(from -r requirements.txt \\(line 1\\)\\)
-          remote:          Obtaining dependency information for urllib3 from .*
           remote:          Downloading urllib3-.*
           remote:        Downloading urllib3-.*
           remote:        Installing collected packages: urllib3
@@ -67,7 +66,6 @@ RSpec.describe 'Pip support' do
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
           remote:        Collecting urllib3 \\(from -r requirements.txt \\(line 1\\)\\)
-          remote:          Obtaining dependency information for urllib3 from .*
           remote:          Downloading urllib3-.*
           remote:        Collecting six \\(from -r requirements.txt \\(line 2\\)\\)
           remote:          Downloading six-.*
