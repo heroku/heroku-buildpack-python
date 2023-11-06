@@ -1,0 +1,76 @@
+name: Prepare release
+
+on: workflow_dispatch
+
+jobs:
+  prepare-release:
+    name: Prepare Release
+    runs-on: pub-hk-ubuntu-22.04-small
+    steps:
+      - name: Get token for GH application (Linguist)
+        uses: heroku/use-app-token-action@main
+        id: generate-token
+        with:
+          app_id: ${{ vars.LINGUIST_GH_APP_ID }}
+          private_key: ${{ secrets.LINGUIST_GH_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # We always want the version bump/changelog and resultant PR to target main, not the branch of the workflow_dispatch.
+          ref: main
+          # Using the GH application token here will configure the local git config for this repo with credentials
+          # that can be used to make signed commits that are attributed to the GH application user
+          token: ${{ steps.generate-token.outputs.app_token }}
+
+      - name: Determine existing published version
+        id: existing-version
+        # This uses the buildpack registry API directly instead of the Heroku CLI, since the latter
+        # requires being logged in for version queries even though the registry API itself doesn't.
+        run: |
+          URI_ENCODED_BUILDPACK_NAME='heroku%2Fpython'
+          VERSION=$(
+            curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 10 \
+                -H 'Accept: application/vnd.heroku+json; version=3.buildpack-registry' \
+                "https://buildpack-registry.heroku.com/buildpacks/${URI_ENCODED_BUILDPACK_NAME}/revisions" \
+              | jq --exit-status --raw-output 'max_by(.release) | .release'
+          )
+          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
+
+      - name: Calculate new version
+        id: new-version
+        run: echo "version=$((${{ steps.existing-version.outputs.version }}+1))" >> "${GITHUB_OUTPUT}"
+
+      - name: Update changelog
+        run: |
+          EXISTING_VERSION='${{ steps.existing-version.outputs.version }}'
+          NEW_VERSION='${{ steps.new-version.outputs.version }}'
+          DATE_TODAY="$(date --utc --iso-8601)"
+          UNRELEASED_URL="https://github.com/${{ github.repository }}/compare/v${NEW_VERSION}...HEAD"
+          NEW_VERSION_URL="https://github.com/${{ github.repository }}/compare/v${EXISTING_VERSION}...v${NEW_VERSION}"
+
+          sed --in-place --regexp-extended \
+            --expression "s~(^## \[Unreleased\])$~\1\n\n\n## [v${NEW_VERSION}] - ${DATE_TODAY}~" \
+            --expression "s~(^\[unreleased\]:) .*$~\1 ${UNRELEASED_URL}\n[v${NEW_VERSION}]: ${NEW_VERSION_URL}~" \
+            CHANGELOG.md
+    
+      - name: Create pull request
+        id: pr
+        uses: peter-evans/create-pull-request@v5.0.2
+        with:
+          token: ${{ steps.generate-token.outputs.app_token }}
+          title: Prepare release v${{ steps.new-version.outputs.version }}
+          body: |
+            Changes:
+            https://github.com/${{ github.repository }}/compare/v${{ steps.existing-version.outputs.version }}...main
+          commit-message: Prepare release v${{ steps.new-version.outputs.version }}
+          branch: prepare-release
+          delete-branch: true
+          committer: ${{ vars.LINGUIST_GH_APP_USERNAME }} <${{ vars.LINGUIST_GH_APP_EMAIL }}>
+          author: ${{ vars.LINGUIST_GH_APP_USERNAME }} <${{ vars.LINGUIST_GH_APP_EMAIL }}>
+
+      - name: Configure pull request
+        if: steps.pr.outputs.pull-request-operation == 'created'
+        run: gh pr merge --auto --squash "${{ steps.pr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.app_token }}
