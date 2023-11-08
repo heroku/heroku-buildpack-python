@@ -58,6 +58,16 @@ case "${PYTHON_VERSION}" in
     warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_39}"
     ;;
   python-3.8.*)
+    puts-warn
+    puts-warn "Python 3.8 will reach its upstream end-of-life in October 2024, at which"
+    puts-warn "point it will no longer receive security updates:"
+    puts-warn "https://devguide.python.org/versions/#supported-versions"
+    puts-warn
+    puts-warn "Support for Python 3.8 will be removed from this buildpack on December 4th, 2024."
+    puts-warn
+    puts-warn "Upgrade to a newer Python version as soon as possible to keep your app secure."
+    puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
+    puts-warn
     warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_38}"
     ;;
   python-3.7.*)

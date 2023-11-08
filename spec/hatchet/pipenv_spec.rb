@@ -139,7 +139,29 @@ RSpec.describe 'Pipenv support' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.8', allow_failure:) }
 
     context 'when using Heroku-20', stacks: %w[heroku-20] do
-      include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_8
+      it 'builds with the latest Python 3.8 but shows a deprecation warning' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+            remote: -----> Python app detected
+            remote: -----> Using Python version specified in Pipfile.lock
+            remote:  !     
+            remote:  !     Python 3.8 will reach its upstream end-of-life in October 2024, at which
+            remote:  !     point it will no longer receive security updates:
+            remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     Support for Python 3.8 will be removed from this buildpack on December 4th, 2024.
+            remote:  !     
+            remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
+            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
+            remote: -----> Installing python-#{LATEST_PYTHON_3_8}
+            remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+            remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
+            remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+            remote: -----> Installing SQLite3
+          REGEX
+        end
+      end
     end
 
     context 'when using Heroku-22', stacks: %w[heroku-22] do

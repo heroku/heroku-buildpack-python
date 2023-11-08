@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Add a deprecation warning for Python 3.8. ([#1515](https://github.com/heroku/heroku-buildpack-python/pull/1515))
 
 ## [v240] - 2023-11-30
 

@@ -61,7 +61,29 @@ RSpec.describe 'Python update warnings' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.8_outdated', allow_failure:) }
 
     context 'when using Heroku-20', stacks: %w[heroku-20] do
-      include_examples 'warns there is a Python update available', '3.8.12', LATEST_PYTHON_3_8
+      it 'warns about both the deprecated major version and the patch update' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+            remote: -----> Python app detected
+            remote: -----> Using Python version specified in runtime.txt
+            remote:  !     
+            remote:  !     Python 3.8 will reach its upstream end-of-life in October 2024, at which
+            remote:  !     point it will no longer receive security updates:
+            remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     Support for Python 3.8 will be removed from this buildpack on December 4th, 2024.
+            remote:  !     
+            remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
+            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
+            remote:  !     
+            remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_8}
+            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote:  !     
+            remote: -----> Installing python-3.8.12
+          REGEX
+        end
+      end
     end
 
     context 'when using Heroku-22', stacks: %w[heroku-22] do
