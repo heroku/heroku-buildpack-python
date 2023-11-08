@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Drop support for Python 3.7. ([#1508](https://github.com/heroku/heroku-buildpack-python/pull/1508))
 
 ## [v238] - 2023-11-06
 
