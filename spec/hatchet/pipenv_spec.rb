@@ -45,7 +45,10 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        The flag --skip-lock has been deprecated for removal.  Without running the lock resolver it is not possible to manage multiple package indexes.  Additionally it bypasses the build consistency guarantees provided by maintaining a lock file.
+          remote:        The flag --skip-lock has been reintroduced (but is not recommended).  Without 
+          remote:        the lock resolver it is difficult to manage multiple package indexes, and hash 
+          remote:        checking is not provided.  However it can help manage installs with current 
+          remote:        deficiencies in locking across platforms.
           remote:        Installing dependencies from Pipfile...
           remote: -----> Installing SQLite3
         OUTPUT
@@ -294,7 +297,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        Your Pipfile.lock \\(.+\\) is out of date. Expected: \\(.+\\).
+          remote:        Your Pipfile.lock \\(.+\\) is out of date.  Expected: \\(.+\\).
           remote:        .+
           remote:        ERROR:: Aborting deploy
         REGEX
