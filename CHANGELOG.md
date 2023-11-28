@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Updated setuptools from 68.0.0 to 68.2.2. ([#1501](https://github.com/heroku/heroku-buildpack-python/pull/1501))
+- Updated wheel from 0.41.3 to 0.42.0. ([#1511](https://github.com/heroku/heroku-buildpack-python/pull/1511))
 - Updated pipenv from 2023.7.23 to 2023.11.15. ([#1502](https://github.com/heroku/heroku-buildpack-python/pull/1502) and [#1512](https://github.com/heroku/heroku-buildpack-python/pull/1512))
 
 ## [v239] - 2023-11-08
