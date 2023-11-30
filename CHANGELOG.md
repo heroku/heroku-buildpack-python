@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v240] - 2023-11-30
+
 - Updated setuptools from 68.0.0 to 68.2.2. ([#1501](https://github.com/heroku/heroku-buildpack-python/pull/1501))
 - Updated wheel from 0.41.3 to 0.42.0. ([#1511](https://github.com/heroku/heroku-buildpack-python/pull/1511))
 - Updated pipenv from 2023.7.23 to 2023.11.15. ([#1502](https://github.com/heroku/heroku-buildpack-python/pull/1502) and [#1512](https://github.com/heroku/heroku-buildpack-python/pull/1512))
@@ -938,7 +941,8 @@ Default Python is now latest 2.7.10. Updated Pip and Distribute.
 - Setuptools updated to v16.0
 - Pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v239...HEAD
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v240...HEAD
+[v240]: https://github.com/heroku/heroku-buildpack-python/compare/v239...v240
 [v239]: https://github.com/heroku/heroku-buildpack-python/compare/v238...v239
 [v238]: https://github.com/heroku/heroku-buildpack-python/compare/v237...v238
 [v237]: https://github.com/heroku/heroku-buildpack-python/compare/v236...v237
