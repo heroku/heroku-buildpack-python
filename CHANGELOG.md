@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 
-- Add a deprecation warning for Python 3.8. ([#1515](https://github.com/heroku/heroku-buildpack-python/pull/1515))
+- Changed the default Python version for new apps from Python 3.11 to Python 3.12. ([#1516](https://github.com/heroku/heroku-buildpack-python/pull/1516)).
+- Added a deprecation warning for Python 3.8. ([#1515](https://github.com/heroku/heroku-buildpack-python/pull/1515))
 
 ## [v240] - 2023-11-30
 
@@ -12,7 +13,7 @@
 
 ## [v239] - 2023-11-08
 
-- Drop support for Python 3.7. ([#1508](https://github.com/heroku/heroku-buildpack-python/pull/1508))
+- Dropped support for Python 3.7. ([#1508](https://github.com/heroku/heroku-buildpack-python/pull/1508))
 
 ## [v238] - 2023-11-06
 
@@ -40,7 +41,7 @@
 - Updated setuptools from 67.8.0 to 68.0.0. ([#1467](https://github.com/heroku/heroku-buildpack-python/pull/1467))
 - Updated wheel from 0.40.0 to 0.41.0. ([#1469](https://github.com/heroku/heroku-buildpack-python/pull/1469))
 - Updated pipenv from 2023.2.4 to 2023.7.23. ([#1468](https://github.com/heroku/heroku-buildpack-python/pull/1468) and [#1471](https://github.com/heroku/heroku-buildpack-python/pull/1471))
-- Update the Python 3.7 deprecation message to reflect that it has now reached end-of-life. ([#1460](https://github.com/heroku/heroku-buildpack-python/pull/1460))
+- Updated the Python 3.7 deprecation message to reflect that it has now reached end-of-life. ([#1460](https://github.com/heroku/heroku-buildpack-python/pull/1460))
 
 ## [v233] - 2023-06-07
 
@@ -59,7 +60,7 @@
 
 - Updated setuptools from 63.4.3 to 67.6.1. ([#1437](https://github.com/heroku/heroku-buildpack-python/pull/1437))
 - Updated wheel from 0.38.4 to 0.40.0. ([#1437](https://github.com/heroku/heroku-buildpack-python/pull/1437))
-- Raise curl connection timeout threshold from 5 to 10 seconds. ([#1439](https://github.com/heroku/heroku-buildpack-python/pull/1439))
+- Raised curl connection timeout threshold from 5 to 10 seconds. ([#1439](https://github.com/heroku/heroku-buildpack-python/pull/1439))
 
 ## [v230] - 2023-04-06
 
