@@ -11,7 +11,7 @@ LATEST_PYTHON_3_9 = '3.9.18'
 LATEST_PYTHON_3_10 = '3.10.13'
 LATEST_PYTHON_3_11 = '3.11.6'
 LATEST_PYTHON_3_12 = '3.12.0'
-DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_11
+DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_12
 
 # The requirement versions are effectively buildpack constants, however, we want
 # Dependabot to be able to update them, which requires that they be in requirements
