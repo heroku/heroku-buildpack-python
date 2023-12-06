@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 - Changed the default Python version for new apps from Python 3.11 to Python 3.12. ([#1516](https://github.com/heroku/heroku-buildpack-python/pull/1516)).
-- Added support for Python 3.11.7. ([#1517](https://github.com/heroku/heroku-buildpack-python/pull/1517)).
+- Added support for Python 3.11.7 and 3.12.1. ([#1517](https://github.com/heroku/heroku-buildpack-python/pull/1517) and [#1518](https://github.com/heroku/heroku-buildpack-python/pull/1518)).
 - Added a deprecation warning for Python 3.8. ([#1515](https://github.com/heroku/heroku-buildpack-python/pull/1515))
 
 ## [v240] - 2023-11-30
