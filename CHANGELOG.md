@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated pip from 23.3.1 to 23.3.2. ([#1524](https://github.com/heroku/heroku-buildpack-python/pull/1524))
 
 ## [v241] - 2023-12-08
 
