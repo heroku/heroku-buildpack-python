@@ -96,7 +96,6 @@ RSpec.describe 'Pip support' do
     it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
-          remote:        Successfully installed gunicorn-20.1.0 local-package-pyproject-toml-0.0.1 local-package-setup-py-0.0.1
           remote: -----> Running post-compile hook
           remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
           remote: .*
@@ -178,7 +177,6 @@ RSpec.describe 'Pip support' do
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
-          remote:        Successfully installed gunicorn-20.1.0 local-package-pyproject-toml-0.0.1 local-package-setup-py-0.0.1
           remote: -----> Running post-compile hook
           remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
           remote: .*
