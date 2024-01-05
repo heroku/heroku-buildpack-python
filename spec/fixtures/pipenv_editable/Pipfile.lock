@@ -1,0 +1,41 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "5de61064f835cc6b28000b3ac1b7b5c38a40829ccc38ff46088e36bb3bd628fa"
+        },
+        "pipfile-spec": 6,
+        "requires": {},
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "gunicorn": {
+            "editable": true,
+            "git": "git+https://github.com/benoitc/gunicorn",
+            "markers": "python_version >= '3.5'",
+            "ref": "61ccfd6c38d477a908e0f376757bbb884438053a"
+        },
+        "local-package-pyproject-toml": {
+            "editable": true,
+            "file": "packages/local_package_pyproject_toml"
+        },
+        "local-package-setup-py": {
+            "editable": true,
+            "file": "packages/local_package_setup_py"
+        },
+        "setuptools": {
+            "hashes": [
+                "sha256:385eb4edd9c9d5c17540511303e39a147ce2fc04bc55289c322b9e5904fe2c05",
+                "sha256:be1af57fc409f93647f2e8e4573a142ed38724b8cdd389706a867bb4efcf1e78"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==69.0.3"
+        }
+    },
+    "develop": {}
+}
