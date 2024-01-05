@@ -38,18 +38,18 @@ if [[ -f Pipfile ]]; then
     # Install the test dependencies, for CI.
     if [ "$INSTALL_TEST" ]; then
         puts-step "Installing test dependencies"
-        /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
+        /app/.heroku/python/bin/pipenv install --dev --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | cleanup | indent
 
     # Install the dependencies.
     elif [[ ! -f Pipfile.lock ]]; then
         puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
-        /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
+        /app/.heroku/python/bin/pipenv install --system --skip-lock --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
 
     else
         pipenv-to-pip Pipfile.lock > requirements.txt
         cp requirements.txt .heroku/python/requirements-declared.txt
 
         puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
-        /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
+        /app/.heroku/python/bin/pipenv install --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
     fi
 fi
