@@ -1,0 +1,9 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+local-package-pyproject-toml = {file = "packages/local_package_pyproject_toml", editable = true}
+local-package-setup-py = {file = "packages/local_package_setup_py", editable = true}
+gunicorn = {git = "git+https://github.com/benoitc/gunicorn", ref = "20.1.0", editable = true}
