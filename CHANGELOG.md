@@ -4,6 +4,7 @@
 
 - Updated pip from 23.3.1 to 23.3.2. ([#1524](https://github.com/heroku/heroku-buildpack-python/pull/1524))
 - Fixed repeat/cached Pipenv builds of local `file =` dependencies. ([#1526](https://github.com/heroku/heroku-buildpack-python/pull/1526))
+- Fixed the caching of editable VCS Pipenv dependency repositories. ([#1528](https://github.com/heroku/heroku-buildpack-python/pull/1528))
 
 ## [v241] - 2023-12-08
 

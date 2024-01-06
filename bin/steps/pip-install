@@ -28,7 +28,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
         exit 1
     fi
 
-    /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src=/app/.heroku/src --disable-pip-version-check --no-cache-dir --progress-bar off 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+    /app/.heroku/python/bin/pip install -r requirements.txt --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir --progress-bar off 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
     PIP_STATUS="${PIPESTATUS[0]}"
     set -e
 
@@ -46,7 +46,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     if [ "$INSTALL_TEST" ]; then
         if [[ -f requirements-test.txt ]]; then
             puts-step "Installing test dependencies…"
-            /app/.heroku/python/bin/pip install -r requirements-test.txt --exists-action=w --src=./.heroku/src --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent
+            /app/.heroku/python/bin/pip install -r requirements-test.txt --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent
         fi
     fi
 fi

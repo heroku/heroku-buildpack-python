@@ -341,7 +341,7 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
           remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: /tmp/build_.*/src/gunicorn
+          remote: /app/.heroku/src/gunicorn
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           remote: .*
@@ -351,7 +351,7 @@ RSpec.describe 'Pipenv support' do
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
           remote: import __editable___.*
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          remote: /tmp/build_.*/src/gunicorn
+          remote: /app/.heroku/src/gunicorn
           remote: .
           remote: ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
           remote: /tmp/build_.*/packages/local_package_setup_py
@@ -365,7 +365,7 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
           remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: /tmp/build_.*/src/gunicorn
+          remote: /app/.heroku/src/gunicorn
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           remote: .*
@@ -375,7 +375,7 @@ RSpec.describe 'Pipenv support' do
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
           remote: import __editable___.*
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          remote: /tmp/build_.*/src/gunicorn
+          remote: /app/.heroku/src/gunicorn
           remote: .
           remote: ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
           remote: /tmp/build_.*/packages/local_package_setup_py
@@ -392,7 +392,7 @@ RSpec.describe 'Pipenv support' do
 
           ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
           /app/packages/local_package_setup_py
-          /app/src/gunicorn
+          /app/.heroku/src/gunicorn
 
           ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           .*
@@ -402,7 +402,7 @@ RSpec.describe 'Pipenv support' do
           ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
           import __editable___.*
           ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          /app/src/gunicorn
+          /app/.heroku/src/gunicorn
           .
           ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
           /app/packages/local_package_setup_py
@@ -421,8 +421,8 @@ RSpec.describe 'Pipenv support' do
           remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
+          remote: /app/.heroku/src/gunicorn
           remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: /tmp/build_.*/src/gunicorn
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           remote: .*
@@ -432,7 +432,7 @@ RSpec.describe 'Pipenv support' do
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
           remote: import __editable___.*
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          remote: /tmp/build_.*/src/gunicorn
+          remote: /app/.heroku/src/gunicorn
           remote: .
           remote: ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
           remote: /tmp/build_.*/packages/local_package_setup_py
@@ -445,8 +445,8 @@ RSpec.describe 'Pipenv support' do
           remote: .*
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
+          remote: /app/.heroku/src/gunicorn
           remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: /tmp/build_.*/src/gunicorn
           remote: 
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
           remote: .*
@@ -456,7 +456,7 @@ RSpec.describe 'Pipenv support' do
           remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
           remote: import __editable___.*
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          remote: /tmp/build_.*/src/gunicorn
+          remote: /app/.heroku/src/gunicorn
           remote: .
           remote: ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
           remote: /tmp/build_.*/packages/local_package_setup_py
