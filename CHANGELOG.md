@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v242] - 2024-01-10
+
 - Updated pip from 23.3.1 to 23.3.2. ([#1524](https://github.com/heroku/heroku-buildpack-python/pull/1524))
 - Fixed repeat/cached Pipenv builds of local `file =` dependencies. ([#1526](https://github.com/heroku/heroku-buildpack-python/pull/1526))
 - Fixed the caching of editable VCS Pipenv dependency repositories. ([#1528](https://github.com/heroku/heroku-buildpack-python/pull/1528))
@@ -950,7 +953,8 @@ Default Python is now latest 2.7.10. Updated Pip and Distribute.
 - Setuptools updated to v16.0
 - Pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v241...HEAD
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v242...HEAD
+[v242]: https://github.com/heroku/heroku-buildpack-python/compare/v241...v242
 [v241]: https://github.com/heroku/heroku-buildpack-python/compare/v240...v241
 [v240]: https://github.com/heroku/heroku-buildpack-python/compare/v239...v240
 [v239]: https://github.com/heroku/heroku-buildpack-python/compare/v238...v239
