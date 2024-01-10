@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 
-## [v242] - 2024-01-10
+## [v242] - 2024-01-11
 
 - Updated pip from 23.3.1 to 23.3.2. ([#1524](https://github.com/heroku/heroku-buildpack-python/pull/1524))
 - Fixed repeat/cached Pipenv builds of local `file =` dependencies. ([#1526](https://github.com/heroku/heroku-buildpack-python/pull/1526))
