@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Added support for Python 3.11.8 and 3.12.2. ([#1538](https://github.com/heroku/heroku-buildpack-python/pull/1538)).
+- Changed the default Python version for new apps from 3.12.1 to 3.12.2. ([#1538](https://github.com/heroku/heroku-buildpack-python/pull/1538))
 
 ## [v242] - 2024-01-11
 
