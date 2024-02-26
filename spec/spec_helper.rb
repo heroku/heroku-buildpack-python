@@ -6,12 +6,12 @@ ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-22'
 require 'rspec/core'
 require 'hatchet'
 
-LATEST_PYTHON_3_7 = '3.7.17'
-LATEST_PYTHON_3_8 = '3.8.17'
-LATEST_PYTHON_3_9 = '3.9.17'
-LATEST_PYTHON_3_10 = '3.10.12'
-LATEST_PYTHON_3_11 = '3.11.4'
-DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_11
+LATEST_PYTHON_3_8 = '3.8.18'
+LATEST_PYTHON_3_9 = '3.9.18'
+LATEST_PYTHON_3_10 = '3.10.13'
+LATEST_PYTHON_3_11 = '3.11.8'
+LATEST_PYTHON_3_12 = '3.12.2'
+DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_12
 
 # The requirement versions are effectively buildpack constants, however, we want
 # Dependabot to be able to update them, which requires that they be in requirements

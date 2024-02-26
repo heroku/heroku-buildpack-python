@@ -6,66 +6,50 @@
 source "$BIN_DIR/utils"
 set -e
 
-if [[ -f Pipfile.lock ]]; then
-    if [[ -f .heroku/python/Pipfile.lock.sha256 ]]; then
-        if [[ $(openssl dgst -sha256 Pipfile.lock) == $(cat .heroku/python/Pipfile.lock.sha256) ]]; then
-            # Don't skip installation if there are git deps.
-            if ! grep -q 'git' Pipfile.lock; then
-                echo "Skipping installation, as Pipfile.lock hasn't changed since last deploy." | indent
+# Previous versions of the buildpack used to cache the checksum of the lockfile to allow
+# for skipping pipenv install if the lockfile was unchanged. However, this is not always safe
+# to do (the lockfile can refer to dependencies that can change independently of the lockfile,
+# for example, when using a local non-editable file dependency), so we no longer ever skip
+# install, and instead defer to pipenv to determine whether install is actually a no-op.
+rm -f .heroku/python/Pipfile.lock.sha256
 
-                mcount "tool.pipenv"
-                export SKIP_PIPENV_INSTALL=1
-                export SKIP_PIP_INSTALL=1
-            fi
-        fi
-    fi
-fi
+if [[ -f Pipfile ]]; then
+    # Measure that we're using Pipenv.
+    mcount "tool.pipenv"
 
-
-if [ ! "$SKIP_PIPENV_INSTALL" ]; then
-    # Pipenv support (Generate requirements.txt with pipenv).
-    if [[ -f Pipfile ]]; then
-        # Measure that we're using Pipenv.
-        mcount "tool.pipenv"
-
-        # Skip pip install, later.
-        export SKIP_PIP_INSTALL=1
-
-        # Set Pip env vars
-        # This reads certain environment variables set on the Heroku app config
-        # and makes them accessible to the pip install process.
-        #
-        # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
-        if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
-            PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
-            export PIP_EXTRA_INDEX_URL
-            mcount "buildvar.PIP_EXTRA_INDEX_URL"
-        fi
-
-        PIPENV_VERSION=$(get_requirement_version 'pipenv')
-
-        /app/.heroku/python/bin/pip install --quiet --disable-pip-version-check --no-cache-dir "pipenv==${PIPENV_VERSION}"
-
-        # Install the test dependencies, for CI.
-        if [ "$INSTALL_TEST" ]; then
-            puts-step "Installing test dependencies"
-            /app/.heroku/python/bin/pipenv install --dev --system --deploy 2>&1 | cleanup | indent
-
-        # Install the dependencies.
-        elif [[ ! -f Pipfile.lock ]]; then
-            puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
-            /app/.heroku/python/bin/pipenv install --system --skip-lock 2>&1 | indent
-
-        else
-            pipenv-to-pip Pipfile.lock > requirements.txt
-            cp requirements.txt .heroku/python/requirements-declared.txt
-            openssl dgst -sha256 Pipfile.lock > .heroku/python/Pipfile.lock.sha256
-
-            puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
-            /app/.heroku/python/bin/pipenv install --system --deploy 2>&1 | indent
-        fi
-    fi
-else
+    # Skip installing dependencies using pip later.
     export SKIP_PIP_INSTALL=1
-    pipenv-to-pip Pipfile.lock > requirements.txt
+
+    # Set Pip env vars
+    # This reads certain environment variables set on the Heroku app config
+    # and makes them accessible to the pip install process.
+    #
+    # PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+    if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
+        PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
+        export PIP_EXTRA_INDEX_URL
+        mcount "buildvar.PIP_EXTRA_INDEX_URL"
+    fi
+
+    PIPENV_VERSION=$(get_requirement_version 'pipenv')
+
+    /app/.heroku/python/bin/pip install --quiet --disable-pip-version-check --no-cache-dir "pipenv==${PIPENV_VERSION}"
+
+    # Install the test dependencies, for CI.
+    if [ "$INSTALL_TEST" ]; then
+        puts-step "Installing test dependencies"
+        /app/.heroku/python/bin/pipenv install --dev --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | cleanup | indent
+
+    # Install the dependencies.
+    elif [[ ! -f Pipfile.lock ]]; then
+        puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
+        /app/.heroku/python/bin/pipenv install --system --skip-lock --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
+
+    else
+        pipenv-to-pip Pipfile.lock > requirements.txt
+        cp requirements.txt .heroku/python/requirements-declared.txt
+
+        puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
+        /app/.heroku/python/bin/pipenv install --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
+    fi
 fi
