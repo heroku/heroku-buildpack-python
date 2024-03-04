@@ -70,6 +70,7 @@ RSpec.describe 'Pip support' do
           remote:        Collecting six \\(from -r requirements.txt \\(line 2\\)\\)
           remote:          Downloading six-.*
           remote:        Downloading urllib3-.*
+          remote:        Downloading six-.*
           remote:        Installing collected packages: urllib3, six
           remote:        Successfully installed six-.* urllib3-.*
         REGEX
