@@ -10,10 +10,14 @@ STACK_IMAGE_TAG := heroku/$(subst -,:,$(STACK))-build
 
 lint: lint-scripts lint-ruby
 
+# TODO: Enable scanning for files that are currently missed and/or restructure repo
+# layout to make it more viable to use wildcards here, given:
+# https://github.com/koalaman/shellcheck/issues/962
 lint-scripts:
 	@shellcheck -x bin/compile bin/detect bin/release bin/test-compile bin/utils bin/warnings bin/default_pythons
 	@shellcheck -x bin/steps/collectstatic bin/steps/nltk bin/steps/pip-install bin/steps/pipenv bin/steps/pipenv-python-version bin/steps/python
 	@shellcheck -x bin/steps/hooks/*
+	@shellcheck -x vendor/WEB_CONCURRENCY.sh
 	@shellcheck -x builds/*.sh
 
 lint-ruby:
