@@ -20,7 +20,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: "3.1"
+          ruby-version: "3.3"
       - name: Run ShellCheck
         run: make lint-scripts
       - name: Run Rubocop
@@ -47,7 +47,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: "3.1"
+          ruby-version: "3.3"
       - name: Hatchet setup
         run: bundle exec hatchet ci:setup
       - name: Run Hatchet integration tests
