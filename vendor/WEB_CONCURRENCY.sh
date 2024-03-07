@@ -29,8 +29,11 @@ function detect_memory_limit_in_mb() {
     # bogus value of thousands of TB RAM when there is no container memory limit set.
     if ((memory_limit_in_mb <= 1048576)); then
       echo "${memory_limit_in_mb}"
+      return 0
     fi
   fi
+
+  return 1
 }
 
 function output() {
@@ -42,24 +45,15 @@ function output() {
   fi
 }
 
-available_memory_in_mb=$(detect_memory_limit_in_mb)
-minimum_memory_per_process_in_mb=256
-
-if [[ -z "${available_memory_in_mb}" ]]; then
+if ! available_memory_in_mb=$(detect_memory_limit_in_mb); then
   output "Skipping automatic configuration of WEB_CONCURRENCY since unable to determine available memory."
   return 0
 fi
 
-# Prevents WEB_CONCURRENCY being set to zero if the environment is extremely memory constrained.
-if ((available_memory_in_mb < minimum_memory_per_process_in_mb)); then
-  max_concurrency_for_available_memory=1
-else
-  max_concurrency_for_available_memory=$((available_memory_in_mb / minimum_memory_per_process_in_mb))
+if ! cpu_cores=$(nproc); then
+  output "Skipping automatic configuration of WEB_CONCURRENCY since unable to determine number of CPU cores."
+  return 0
 fi
-
-# This buildpack only supports being run on Heroku's base images, which all have nproc installed.
-cpu_cores=$(nproc)
-max_concurrency_for_cpu_cores=$((cpu_cores * 2 + 1))
 
 output "Detected ${available_memory_in_mb} MB available memory and ${cpu_cores} CPU cores."
 
@@ -69,7 +63,21 @@ export DYNO_RAM="${available_memory_in_mb}"
 
 if [[ -v WEB_CONCURRENCY ]]; then
   output "Skipping automatic configuration of WEB_CONCURRENCY since it's already set."
-elif ((max_concurrency_for_available_memory < max_concurrency_for_cpu_cores)); then
+  return 0
+fi
+
+minimum_memory_per_process_in_mb=256
+
+# Prevents WEB_CONCURRENCY being set to zero if the environment is extremely memory constrained.
+if ((available_memory_in_mb < minimum_memory_per_process_in_mb)); then
+  max_concurrency_for_available_memory=1
+else
+  max_concurrency_for_available_memory=$((available_memory_in_mb / minimum_memory_per_process_in_mb))
+fi
+
+max_concurrency_for_cpu_cores=$((cpu_cores * 2 + 1))
+
+if ((max_concurrency_for_available_memory < max_concurrency_for_cpu_cores)); then
   export WEB_CONCURRENCY="${max_concurrency_for_available_memory}"
   output "Defaulting WEB_CONCURRENCY to ${WEB_CONCURRENCY} based on the available memory."
 else
