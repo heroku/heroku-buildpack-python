@@ -57,8 +57,8 @@ fi
 
 output "Detected ${available_memory_in_mb} MB available memory and ${cpu_cores} CPU cores."
 
-# This env var is undocumented and not consistent with what other buildpacks set,
-# however, GitHub code search shows there are apps in the wild that do rely upon it.
+# This env var is undocumented and not consistent with what other buildpacks set, however,
+# GitHub code search shows there are Python apps in the wild that do rely upon it.
 export DYNO_RAM="${available_memory_in_mb}"
 
 if [[ -v WEB_CONCURRENCY ]]; then
