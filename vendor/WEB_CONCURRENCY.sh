@@ -46,11 +46,14 @@ function output() {
 }
 
 if ! available_memory_in_mb=$(detect_memory_limit_in_mb); then
+  # This should never occur on Heroku, but will be common for non-Heroku environments such as Dokku.
   output "Couldn't determine available memory. Skipping automatic configuration of WEB_CONCURRENCY."
   return 0
 fi
 
 if ! cpu_cores=$(nproc); then
+  # This should never occur in practice, since this buildpack only supports being run on our base
+  # images, and nproc is installed in all of them.
   output "Couldn't determine number of CPU cores. Skipping automatic configuration of WEB_CONCURRENCY."
   return 0
 fi
