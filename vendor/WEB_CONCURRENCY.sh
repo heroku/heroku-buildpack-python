@@ -18,6 +18,9 @@
 # To override these default values, either set `WEB_CONCURRENCY` as an explicit config var
 # on the app, or pass `--workers <num>` when invoking gunicorn/uvicorn in your Procfile.
 
+# Note: Since this is a .profile.d/ script it will be sourced, meaning that we cannot enable
+# exit on error, have to use return not exit, and returning non-zero doesn't have an effect.
+
 function detect_memory_limit_in_mb() {
   local memory_limit_file='/sys/fs/cgroup/memory/memory.limit_in_bytes'
 
