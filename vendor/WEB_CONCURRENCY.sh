@@ -46,12 +46,12 @@ function output() {
 }
 
 if ! available_memory_in_mb=$(detect_memory_limit_in_mb); then
-  output "Skipping automatic configuration of WEB_CONCURRENCY since unable to determine available memory."
+  output "Couldn't determine available memory. Skipping automatic configuration of WEB_CONCURRENCY."
   return 0
 fi
 
 if ! cpu_cores=$(nproc); then
-  output "Skipping automatic configuration of WEB_CONCURRENCY since unable to determine number of CPU cores."
+  output "Couldn't determine number of CPU cores. Skipping automatic configuration of WEB_CONCURRENCY."
   return 0
 fi
 
