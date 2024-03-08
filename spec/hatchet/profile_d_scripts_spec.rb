@@ -71,7 +71,7 @@ RSpec.describe '.profile.d/ scripts' do
 
       # Check WEB_CONCURRENCY support when using a Standard-1X dyno.
       # We set the process type to `web` so that we can test the web-dyno-only log output.
-      app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'Standard-1X', type: 'web' }) do |output, _|
+      app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'standard-1x', type: 'web' }) do |output, _|
         expect(output).to eq(<<~OUTPUT)
           Python buildpack: Detected 512 MB available memory and 8 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 2 based on the available memory.
@@ -81,7 +81,7 @@ RSpec.describe '.profile.d/ scripts' do
       end
 
       # Standard-2X
-      app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'Standard-2X', type: 'web' }) do |output, _|
+      app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'standard-2x', type: 'web' }) do |output, _|
         expect(output).to eq(<<~OUTPUT)
           Python buildpack: Detected 1024 MB available memory and 8 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 4 based on the available memory.
@@ -91,7 +91,7 @@ RSpec.describe '.profile.d/ scripts' do
       end
 
       # Performance-M
-      app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'Performance-M', type: 'web' }) do |output, _|
+      app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'performance-m', type: 'web' }) do |output, _|
         expect(output).to eq(<<~OUTPUT)
           Python buildpack: Detected 2560 MB available memory and 2 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 5 based on the number of CPU cores.
@@ -101,7 +101,7 @@ RSpec.describe '.profile.d/ scripts' do
       end
 
       # Performance-L
-      app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'Performance-L', type: 'web' }) do |output, _|
+      app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'performance-l', type: 'web' }) do |output, _|
         expect(output).to eq(<<~OUTPUT)
           Python buildpack: Detected 14336 MB available memory and 8 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 17 based on the number of CPU cores.
