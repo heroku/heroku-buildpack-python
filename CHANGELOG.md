@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- Improved the automatic `WEB_CONCURRENCY` feature: ([#1546](https://github.com/heroku/heroku-buildpack-python/pull/1546))
+- Improved the automatic `WEB_CONCURRENCY` feature: ([#1547](https://github.com/heroku/heroku-buildpack-python/pull/1547))
   - Switched to a dynamic calculation based on dyno CPU cores and memory instead of a hardcoded mapping.
   - Decreased default concurrency on `performance-m` / `private-m` / `shield-m` dynos from `8` to `5`.
   - Increased default concurrency on `performance-l` / `private-l` / `shield-l` dynos from `11` to `17`.
