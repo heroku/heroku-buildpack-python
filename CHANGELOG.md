@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v244] - 2024-03-13
+
 - Improved the automatic `WEB_CONCURRENCY` feature: ([#1547](https://github.com/heroku/heroku-buildpack-python/pull/1547))
   - Switched to a dynamic calculation based on dyno CPU cores and memory instead of a hardcoded mapping.
   - Decreased default concurrency on `performance-m` / `private-m` / `shield-m` dynos from `8` to `5`.
@@ -963,7 +966,8 @@ Default Python is now latest 2.7.10. Updated Pip and Distribute.
 - Setuptools updated to v16.0
 - Pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v243...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v244...main
+[v244]: https://github.com/heroku/heroku-buildpack-python/compare/v243...v244
 [v243]: https://github.com/heroku/heroku-buildpack-python/compare/v242...v243
 [v242]: https://github.com/heroku/heroku-buildpack-python/compare/v241...v242
 [v241]: https://github.com/heroku/heroku-buildpack-python/compare/v240...v241
