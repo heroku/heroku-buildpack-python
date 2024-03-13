@@ -35,6 +35,7 @@ jobs:
     env:
       HATCHET_APP_LIMIT: 200
       HATCHET_DEFAULT_STACK: ${{ matrix.stack }}
+      HATCHET_EXPENSIVE_MODE: 1
       HATCHET_RETRIES: 2
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_API_USER: ${{ secrets.HEROKU_API_USER }}
