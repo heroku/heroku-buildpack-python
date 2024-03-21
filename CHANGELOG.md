@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added support for Python 3.8.19, 3.9.19 and 3.10.14. ([#1551](https://github.com/heroku/heroku-buildpack-python/pull/1551))
 
 ## [v244] - 2024-03-13
 
