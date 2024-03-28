@@ -14,6 +14,9 @@
 # - Standard-2X / Private-S / Shield-S: 4 (capped by the 1 GB available memory)
 # - Performance-M / Private-M / Shield-M: 5 (based on the 2 CPU cores)
 # - Performance-L / Private-L / Shield-L: 17 (based on the 8 CPU cores)
+# - Performance-L-RAM / Private-L-RAM / Shield-L-RAM: 9 (based on the 4 CPU cores)
+# - Performance-XL / Private-XL / Shield-XL: 17 (based on the 8 CPU cores)
+# - Performance-2XL / Private-2XL / Shield-2XL: 33 (based on the 16 CPU cores)
 #
 # To override these default values, either set `WEB_CONCURRENCY` as an explicit config var
 # on the app, or pass `--workers <num>` when invoking gunicorn/uvicorn in your Procfile.
