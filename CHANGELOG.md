@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added support for Python 3.11.9. ([#1558](https://github.com/heroku/heroku-buildpack-python/pull/1558))
 
 ## [v246] - 2024-03-25
 
