@@ -7,7 +7,7 @@ PYTHON_MAJOR_VERSION="${PYTHON_VERSION%.*}"
 
 INSTALL_DIR="/app/.heroku/python"
 SRC_DIR="/tmp/src"
-ARCHIVES_DIR="/tmp/upload/${STACK}/runtimes"
+UPLOAD_DIR="/tmp/upload/${STACK}/runtimes"
 
 function error() {
   echo "Error: ${1}" >&2
@@ -67,7 +67,7 @@ SIGNATURE_URL="${SOURCE_URL}.asc"
 
 set -o xtrace
 
-mkdir -p "${SRC_DIR}" "${INSTALL_DIR}" "${ARCHIVES_DIR}"
+mkdir -p "${SRC_DIR}" "${INSTALL_DIR}" "${UPLOAD_DIR}"
 
 curl --fail --retry 3 --retry-connrefused --connect-timeout 10 --max-time 60 -o python.tgz "${SOURCE_URL}"
 curl --fail --retry 3 --retry-connrefused --connect-timeout 10 --max-time 60 -o python.tgz.asc "${SIGNATURE_URL}"
@@ -191,13 +191,12 @@ LD_LIBRARY_PATH="${SRC_DIR}" "${SRC_DIR}/python" -m compileall -f --invalidation
 # This symlink must be relative, to ensure that the Python install remains relocatable.
 ln -srvT "${INSTALL_DIR}/bin/python3" "${INSTALL_DIR}/bin/python"
 
-cd "${ARCHIVES_DIR}"
-
 # The tar file is gzipped separately, so we can set a higher gzip compression level than
 # the default. In the future we'll also want to create a second archive that used zstd.
-TAR_FILENAME="python-${PYTHON_VERSION}.tar"
-tar --create --format=pax --sort=name --verbose --file "${TAR_FILENAME}" --directory="${INSTALL_DIR}" .
-gzip --best "${TAR_FILENAME}"
+# Results in a compressed archive filename of form: 'python-X.Y.Z.tar.gz'
+TAR_FILEPATH="${UPLOAD_DIR}/python-${PYTHON_VERSION}.tar"
+tar --create --format=pax --sort=name --file "${TAR_FILEPATH}" --directory="${INSTALL_DIR}" .
+gzip --best "${TAR_FILEPATH}"
 
 du --max-depth 1 --human-readable "${INSTALL_DIR}"
-du --all --human-readable "${ARCHIVES_DIR}"
+du --all --human-readable "${UPLOAD_DIR}"
