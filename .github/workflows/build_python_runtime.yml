@@ -26,7 +26,7 @@ env:
 # Unfortunately these jobs cannot be easily written as a matrix since `matrix.exclude` does not
 # support expression syntax, and the `inputs` context is not available inside the job `if` key.
 jobs:
-  build-and-upload-heroku-20:
+  heroku-20:
     runs-on: pub-hk-ubuntu-22.04-xlarge
     env:
       STACK_VERSION: "20"
@@ -34,15 +34,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build Docker image
-        run: docker build --pull --tag buildenv --build-arg=STACK_VERSION builds/
+        run: docker build --platform="linux/amd64" --pull --tag buildenv --build-arg=STACK_VERSION builds/
       - name: Build and package Python runtime
-        run: docker run --rm --platform="linux/amd64" --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
+        run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
       - name: Upload Python runtime archive to S3
         if: (!inputs.dry_run)
         run: aws s3 sync ./upload "s3://${S3_BUCKET}"
 
-  build-and-upload-heroku-22:
-    # We only support Python 3.9+ on Heroku-22.
+  heroku-22:
+    # On Heroku-22 we only support Python 3.9+.
     if: (!startsWith(inputs.python_version,'3.8.'))
     runs-on: pub-hk-ubuntu-22.04-xlarge
     env:
@@ -51,9 +51,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build Docker image
-        run: docker build --pull --tag buildenv --build-arg=STACK_VERSION builds/
+        run: docker build --platform="linux/amd64" --pull --tag buildenv --build-arg=STACK_VERSION builds/
       - name: Build and package Python runtime
-        run: docker run --rm --platform="linux/amd64" --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
+        run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
       - name: Upload Python runtime archive to S3
         if: (!inputs.dry_run)
         run: aws s3 sync ./upload "s3://${S3_BUCKET}"
