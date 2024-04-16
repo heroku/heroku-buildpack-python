@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Adjusted compiler options used to build Python for improved parity with the Docker Hub Python images. ([#1566](https://github.com/heroku/heroku-buildpack-python/pull/1566))
 - Excluded `LD_LIBRARY_PATH` and `PYTHONHOME` app config vars when invoking subprocesses during the build. ([#1565](https://github.com/heroku/heroku-buildpack-python/pull/1565))
 
 ## [v248] - 2024-04-09
