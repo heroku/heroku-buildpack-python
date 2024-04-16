@@ -5,7 +5,10 @@ set -euo pipefail
 PYTHON_VERSION="${1:?"Error: The Python version to build must be specified as the first argument."}"
 PYTHON_MAJOR_VERSION="${PYTHON_VERSION%.*}"
 
-INSTALL_DIR="/app/.heroku/python"
+# Python is relocated to different locations by the classic buildpack and CNB (which works since we
+# set `LD_LIBRARY_PATH` and `PYTHONHOME` appropriately at build/run-time), so for packaging purposes
+# we install Python into an arbitrary location that intentionally matches neither location.
+INSTALL_DIR="/tmp/python"
 SRC_DIR="/tmp/src"
 UPLOAD_DIR="/tmp/upload/${STACK}/runtimes"
 
@@ -82,6 +85,10 @@ cd "${SRC_DIR}"
 # for maximum compatibility / most battle-tested build configuration:
 # https://github.com/docker-library/python
 CONFIGURE_OPTS=(
+  # Explicitly set the target architecture rather than auto-detecting based on the host CPU.
+  # This only affects targets like i386 (for which we don't build), but we pass it anyway for
+  # completeness and parity with the Python Docker image builds.
+  "--build=$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"
   # Support loadable extensions in the `_sqlite` extension module.
   "--enable-loadable-sqlite-extensions"
   # Enable recommended release build performance optimisations such as PGO.
@@ -133,11 +140,26 @@ fi
 
 ./configure "${CONFIGURE_OPTS[@]}"
 
-# Using LDFLAGS we instruct the linker to omit all symbol information from the final binary
+# `-Wl,--strip-all` instructs the linker to omit all symbol information from the final binary
 # and shared libraries, to reduce the size of the build. We have to use `--strip-all` and
 # not `--strip-unneeded` since `ld` only understands the former (unlike the `strip` command),
-# however it's safe to use since these options don't apply to static libraries.
-make -j "$(nproc)" LDFLAGS='-Wl,--strip-all'
+# however, `--strip-all` is safe to use since LDFLAGS doesn't apply to static libraries.
+# `dpkg-buildflags` returns the distro's default compiler/linker options, which enable various
+# security/hardening best practices. See:
+# - https://wiki.ubuntu.com/ToolChain/CompilerFlags
+# - https://wiki.debian.org/Hardening
+# - https://github.com/docker-library/python/issues/810
+# We only use `dpkg-buildflags` for Python versions where we build in shared mode (Python 3.9+),
+# since some of the options it enables interferes with the stripping of static libraries.
+if [[ "${PYTHON_MAJOR_VERSION}" == 3.[8-9] ]]; then
+  EXTRA_CFLAGS=''
+  LDFLAGS='-Wl,--strip-all'
+else
+  EXTRA_CFLAGS="$(dpkg-buildflags --get CFLAGS)"
+  LDFLAGS="$(dpkg-buildflags --get LDFLAGS) -Wl,--strip-all"
+fi
+
+make -j "$(nproc)" "EXTRA_CFLAGS=${EXTRA_CFLAGS}" "LDFLAGS=${LDFLAGS}"
 make install
 
 if [[ "${PYTHON_MAJOR_VERSION}" == 3.[8-9] ]]; then
