@@ -46,7 +46,7 @@ RSpec.describe '.profile.d/ scripts' do
         'PYTHONHOME=/this-should-be-overridden',
         'PYTHONPATH=/this-should-be-preserved',
         'PYTHONUNBUFFERED=this-should-be-overridden',
-        'WEB_CONCURRENCY=this-should-be-preserved'
+        'WEB_CONCURRENCY=this-should-be-preserved',
       ]
       app.run_multi(list_envs_cmd, heroku: { env: user_env_vars.join(';'), type: 'example-worker' }) do |output, _|
         expect(output).to eq(<<~OUTPUT)

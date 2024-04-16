@@ -95,7 +95,7 @@ _env_blacklist() {
   if [ -n "$regex" ]; then
     regex="|$regex"
   fi
-  echo "^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH$regex)$"
+  echo "^(PATH|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|LD_LIBRARY_PATH|PYTHONHOME$regex)$"
 }
 
 # Usage: $ export-env ENV_DIR WHITELIST BLACKLIST
