@@ -10,7 +10,7 @@ PYTHON_MAJOR_VERSION="${PYTHON_VERSION%.*}"
 # we install Python into an arbitrary location that intentionally matches neither location.
 INSTALL_DIR="/tmp/python"
 SRC_DIR="/tmp/src"
-UPLOAD_DIR="/tmp/upload/${STACK}/runtimes"
+UPLOAD_DIR="/tmp/upload"
 
 function error() {
   echo "Error: ${1}" >&2
@@ -213,12 +213,12 @@ LD_LIBRARY_PATH="${SRC_DIR}" "${SRC_DIR}/python" -m compileall -f --invalidation
 # This symlink must be relative, to ensure that the Python install remains relocatable.
 ln -srvT "${INSTALL_DIR}/bin/python3" "${INSTALL_DIR}/bin/python"
 
-# The tar file is gzipped separately, so we can set a higher gzip compression level than
-# the default. In the future we'll also want to create a second archive that used zstd.
-# Results in a compressed archive filename of form: 'python-X.Y.Z.tar.gz'
-TAR_FILEPATH="${UPLOAD_DIR}/python-${PYTHON_VERSION}.tar"
+# Results in a compressed archive filename of form: 'python-X.Y.Z-ubuntu-22.04-amd64.tar.zst'
+# TODO: Switch to dynamically calculating the architecture when adding support for Heroku-24.
+UBUNTU_VERSION=$(lsb_release --short --release 2>/dev/null)
+TAR_FILEPATH="${UPLOAD_DIR}/python-${PYTHON_VERSION}-ubuntu-${UBUNTU_VERSION}-amd64.tar"
 tar --create --format=pax --sort=name --file "${TAR_FILEPATH}" --directory="${INSTALL_DIR}" .
-gzip --best "${TAR_FILEPATH}"
+zstd -T0 -22 --ultra --long --no-progress --rm "${TAR_FILEPATH}"
 
 du --max-depth 1 --human-readable "${INSTALL_DIR}"
 du --all --human-readable "${UPLOAD_DIR}"

@@ -5,6 +5,7 @@
 - Improved the error message shown for EOL Python versions when using a stack for which those versions were never built. ([#1570](https://github.com/heroku/heroku-buildpack-python/pull/1570))
 - Fixed the "Python security update is available" warning being shown when the requested version is newer than the latest version known to the buildpack. ([#1569](https://github.com/heroku/heroku-buildpack-python/pull/1569))
 - Fixed glibc warnings seen when downgrading the stack version. ([#1568](https://github.com/heroku/heroku-buildpack-python/pull/1568))
+- Changed compression format and S3 URL for Python runtime archives. ([#1567](https://github.com/heroku/heroku-buildpack-python/pull/1567))
 - Adjusted compiler options used to build Python for improved parity with the Docker Hub Python images. ([#1566](https://github.com/heroku/heroku-buildpack-python/pull/1566))
 - Excluded `LD_LIBRARY_PATH` and `PYTHONHOME` app config vars when invoking subprocesses during the build. ([#1565](https://github.com/heroku/heroku-buildpack-python/pull/1565))
 
