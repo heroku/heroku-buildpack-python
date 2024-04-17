@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 
-# TODO: Replace runtime-fixer with a bash equivalent, since currently on rebuilds it
-# gets run with the cached Python install (rather than system Python), which means it
-# fails to run with glibc errors on stack downgrades (see spec/hatchet/stack_spec.rb).
-# To work around this for now, non-zero exit codes are ignored (most runtime.txt files
-# don't need fixing up, so the script not running won't normally matter).
-runtime-fixer runtime.txt || true
 PYTHON_VERSION=$(cat runtime.txt)
+# Remove leading and trailing whitespace. Note: This implementation relies upon
+# `extglob` being set, which is the case thanks to `bin/utils` being run earlier.
+PYTHON_VERSION="${PYTHON_VERSION##+([[:space:]])}"
+PYTHON_VERSION="${PYTHON_VERSION%%+([[:space:]])}"
 
 # The location of the pre-compiled python binary.
 PYTHON_URL="${S3_BASE_URL}/${STACK}/runtimes/${PYTHON_VERSION}.tar.gz"
