@@ -49,17 +49,10 @@ RSpec.describe 'Stack changes' do
         app.update_stack('heroku-20')
         app.commit!
         app.push!
-        # TODO: Stop using Python scripts before Python is installed (or else ensure system
-        # Python is always used) to avoid the glibc errors below.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
-          remote: python: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by python)
-          remote: python: /lib/x86_64-linux-gnu/libm.so.6: version `GLIBC_2.35' not found (required by /app/.heroku/python/lib/libpython3.12.so.1.0)
-          remote: python: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by /app/.heroku/python/lib/libpython3.12.so.1.0)
-          remote: python: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found (required by /app/.heroku/python/lib/libpython3.12.so.1.0)
-          remote: python: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by /app/.heroku/python/lib/libpython3.12.so.1.0)
           remote: -----> Stack has changed from heroku-22 to heroku-20, clearing cache
           remote: -----> No change in requirements detected, installing from cache
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
