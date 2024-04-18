@@ -32,9 +32,12 @@ function eol_python_version_error() {
 }
 
 function warn_if_patch_update_available() {
-  local current_version="${1}"
+  local requested_version="${1}"
   local latest_patch_version="${2}"
-  if [[ "${current_version}" != "${latest_patch_version}" ]]; then
+  # Extract the patch version component of the version strings (ie: the '5' in '3.10.5').
+  local requested_patch_number="${requested_version##*.}"
+  local latest_patch_number="${latest_patch_version##*.}"
+  if (( requested_patch_number < latest_patch_number )); then
     puts-warn
     puts-warn "A Python security update is available! Upgrade as soon as possible to: ${latest_patch_version}"
     puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
