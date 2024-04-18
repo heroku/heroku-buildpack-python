@@ -191,7 +191,7 @@ RSpec.describe 'Pipenv support' do
     include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_12
   end
 
-  context 'with a Pipfile.lock containing python_full_version 3.10.7' do
+  context 'with a Pipfile.lock containing python_full_version 3.12.2' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version', allow_failure:) }
 
@@ -201,10 +201,10 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
           remote:  !     
-          remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_10}
+          remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_12}
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
           remote:  !     
-          remote: -----> Installing python-3.10.7
+          remote: -----> Installing python-3.12.2
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -224,7 +224,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
           remote:  !     
-          remote:  !     Requested runtime '^3.9' is not available for this stack (#{app.stack}).
+          remote:  !     Requested runtime '^3.12' is not available for this stack (#{app.stack}).
           remote:  !     
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
@@ -261,7 +261,7 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python version specified in runtime.txt
-          remote: -----> Installing python-#{LATEST_PYTHON_3_10}
+          remote: -----> Installing python-#{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -301,7 +301,7 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python version specified in Pipfile.lock
-          remote: -----> Installing python-#{LATEST_PYTHON_3_10}
+          remote: -----> Installing python-#{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -356,7 +356,7 @@ RSpec.describe 'Pipenv support' do
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           remote: /app/.heroku/src/gunicorn
           remote: .
-          remote: ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
+          remote: ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
           remote: /tmp/build_.*/packages/local_package_setup_py
           remote: .
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
@@ -380,7 +380,7 @@ RSpec.describe 'Pipenv support' do
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           remote: /app/.heroku/src/gunicorn
           remote: .
-          remote: ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
+          remote: ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
           remote: /tmp/build_.*/packages/local_package_setup_py
           remote: .
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
@@ -407,7 +407,7 @@ RSpec.describe 'Pipenv support' do
           ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           /app/.heroku/src/gunicorn
           .
-          ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
+          ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
           /app/packages/local_package_setup_py
           .
           Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
@@ -437,7 +437,7 @@ RSpec.describe 'Pipenv support' do
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           remote: /app/.heroku/src/gunicorn
           remote: .
-          remote: ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
+          remote: ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
           remote: /tmp/build_.*/packages/local_package_setup_py
           remote: .
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
@@ -461,7 +461,7 @@ RSpec.describe 'Pipenv support' do
           remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
           remote: /app/.heroku/src/gunicorn
           remote: .
-          remote: ==> .heroku/python/lib/python.*/site-packages/local_package_setup_py.egg-link <==
+          remote: ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
           remote: /tmp/build_.*/packages/local_package_setup_py
           remote: .
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!

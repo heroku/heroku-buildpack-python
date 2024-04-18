@@ -1,4 +1,5 @@
 __pycache__/
 .hatchet/repos/
+.venv/
 .DS_Store
 .rspec_status
