@@ -45,7 +45,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     # Install test dependencies, for CI.
     if [ "$INSTALL_TEST" ]; then
         if [[ -f requirements-test.txt ]]; then
-            puts-step "Installing test dependencies…"
+            puts-step "Installing test dependencies..."
             /app/.heroku/python/bin/pip install -r requirements-test.txt --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent
         fi
     fi

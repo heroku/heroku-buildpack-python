@@ -58,7 +58,7 @@ RSpec.describe 'Python version support' do
       # This test performs an initial build using an older buildpack version, followed
       # by a build using the current version. This ensures that the current buildpack
       # can successfully read the version metadata written to the build cache in the past.
-      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v213'] }
+      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v247'] }
 
       it 'builds with the same Python version as the last build' do
         app.deploy do |app|
@@ -67,16 +67,16 @@ RSpec.describe 'Python version support' do
           app.push!
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote: -----> No Python version was specified. Using the same version as the last build: python-3.10.5
+            remote: -----> No Python version was specified. Using the same version as the last build: python-3.12.2
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
-            remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_10}
+            remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_12}
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
             remote: -----> No change in requirements detected, installing from cache
-            remote: -----> Using cached install of python-3.10.5
+            remote: -----> Using cached install of python-3.12.2
           OUTPUT
-          expect(app.run('python -V')).to include('Python 3.10.5')
+          expect(app.run('python -V')).to include('Python 3.12.2')
         end
       end
     end
@@ -204,13 +204,13 @@ RSpec.describe 'Python version support' do
   context 'when runtime.txt contains stray whitespace' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_with_stray_whitespace') }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_10
+    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_12
   end
 
   context 'when there is only a runtime.txt and no requirements.txt', skip: 'not currently supported (W-8720280)' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_only', allow_failure: true) }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_10
+    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_12
   end
 
   context 'when the requested Python version has changed since the last build' do
