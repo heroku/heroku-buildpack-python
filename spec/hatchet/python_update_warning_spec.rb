@@ -18,38 +18,18 @@ RSpec.shared_examples 'warns there is a Python update available' do |requested_v
   end
 end
 
-RSpec.shared_examples 'warns about both EOL major version and the patch update' do |requested_version, latest_version|
-  it 'warns there is a Python update available' do
-    app.deploy do |app|
-      expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-        remote: -----> Python app detected
-        remote: -----> Using Python version specified in runtime.txt
-        remote:  !     
-        remote:  !     Python .* reached upstream end-of-life on .*, and is
-        remote:  !     therefore no longer receiving security updates:
-        remote:  !     https://devguide.python.org/versions/#supported-versions
-        remote:  !     
-        remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
-        remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-        remote:  !     
-        remote:  !     
-        remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{latest_version}
-        remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-        remote:  !     
-        remote: -----> Installing python-#{requested_version}
-      REGEX
-    end
-  end
-end
-
 RSpec.shared_examples 'aborts the build without showing an update warning' do |requested_version|
   it 'aborts the build without showing an update warning' do
     app.deploy do |app|
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
         remote: -----> Using Python version specified in runtime.txt
+        remote:  !     
         remote:  !     Requested runtime 'python-#{requested_version}' is not available for this stack (#{app.stack}).
-        remote:  !     For supported versions, see: https://devcenter.heroku.com/articles/python-support
+        remote:  !     
+        remote:  !     For a list of the supported Python versions, see:
+        remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+        remote:  !     
       OUTPUT
     end
   end
@@ -89,6 +69,7 @@ RSpec.describe 'Python update warnings' do
     context 'when using Heroku-22', stacks: %w[heroku-22] do
       let(:allow_failure) { true }
 
+      # We only support Python 3.8 on Heroku-20 and older.
       include_examples 'aborts the build without showing an update warning', '3.8.12'
     end
   end
