@@ -25,8 +25,12 @@ RSpec.shared_examples 'aborts the build with a runtime not available message' do
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
         remote: -----> Using Python version specified in runtime.txt
+        remote:  !     
         remote:  !     Requested runtime '#{requested_runtime}' is not available for this stack (#{app.stack}).
-        remote:  !     For supported versions, see: https://devcenter.heroku.com/articles/python-support
+        remote:  !     
+        remote:  !     For a list of the supported Python versions, see:
+        remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+        remote:  !     
       OUTPUT
     end
   end
@@ -81,59 +85,50 @@ RSpec.describe 'Python version support' do
   context 'when runtime.txt contains python-3.6.15' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6', allow_failure: true) }
 
-    context 'when using Heroku-20', stacks: %w[heroku-20] do
-      it 'aborts the build with an EOL message' do
-        app.deploy do |app|
-          expect(clean_output(app.output)).to include(<<~OUTPUT)
-            remote: -----> Python app detected
-            remote: -----> Using Python version specified in runtime.txt
-            remote:  !     
-            remote:  !     Python 3.6 reached upstream end-of-life on December 23rd, 2021, and is
-            remote:  !     therefore no longer receiving security updates:
-            remote:  !     https://devguide.python.org/versions/#supported-versions
-            remote:  !     
-            remote:  !     As such, it is no longer supported by the latest version of this buildpack.
-            remote:  !     
-            remote:  !     Please upgrade to a newer Python version. See:
-            remote:  !     https://devcenter.heroku.com/articles/python-runtimes
-            remote:  !     
-          OUTPUT
-        end
+    it 'aborts the build with an EOL message' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python version specified in runtime.txt
+          remote:  !     
+          remote:  !     Python 3.6 reached upstream end-of-life on December 23rd, 2021, and is
+          remote:  !     therefore no longer receiving security updates:
+          remote:  !     https://devguide.python.org/versions/#supported-versions
+          remote:  !     
+          remote:  !     As such, it is no longer supported by this buildpack.
+          remote:  !     
+          remote:  !     Please upgrade to a newer Python version.
+          remote:  !     
+          remote:  !     For a list of the supported Python versions, see:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+          remote:  !     
+        OUTPUT
       end
-    end
-
-    context 'when using Heroku-22', stacks: %w[heroku-22] do
-      # Python 3.6 is EOL, so has not been built for newer stacks.
-      include_examples 'aborts the build with a runtime not available message', 'python-3.6.15'
     end
   end
 
   context 'when runtime.txt contains python-3.7.17' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.7', allow_failure: true) }
 
-    context 'when using Heroku-20', stacks: %w[heroku-20] do
-      it 'aborts the build with an EOL message' do
-        app.deploy do |app|
-          expect(clean_output(app.output)).to include(<<~OUTPUT)
-            remote: -----> Python app detected
-            remote: -----> Using Python version specified in runtime.txt
-            remote:  !     
-            remote:  !     Python 3.7 reached upstream end-of-life on June 27th, 2023, and is
-            remote:  !     therefore no longer receiving security updates:
-            remote:  !     https://devguide.python.org/versions/#supported-versions
-            remote:  !     
-            remote:  !     As such, it is no longer supported by the latest version of this buildpack.
-            remote:  !     
-            remote:  !     Please upgrade to a newer Python version. See:
-            remote:  !     https://devcenter.heroku.com/articles/python-runtimes
-            remote:  !     
-          OUTPUT
-        end
+    it 'aborts the build with an EOL message' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python version specified in runtime.txt
+          remote:  !     
+          remote:  !     Python 3.7 reached upstream end-of-life on June 27th, 2023, and is
+          remote:  !     therefore no longer receiving security updates:
+          remote:  !     https://devguide.python.org/versions/#supported-versions
+          remote:  !     
+          remote:  !     As such, it is no longer supported by this buildpack.
+          remote:  !     
+          remote:  !     Please upgrade to a newer Python version.
+          remote:  !     
+          remote:  !     For a list of the supported Python versions, see:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+          remote:  !     
+        OUTPUT
       end
-    end
-
-    context 'when using Heroku-22', stacks: %w[heroku-22] do
-      include_examples 'aborts the build with a runtime not available message', 'python-3.7.17'
     end
   end
 
@@ -171,7 +166,7 @@ RSpec.describe 'Python version support' do
     context 'when using Heroku-22', stacks: %w[heroku-22] do
       let(:allow_failure) { true }
 
-      # Python 3.8 is in the security fix only stage of its lifecycle, so has not been built for newer stacks.
+      # We only support Python 3.8 on Heroku-20 and older.
       include_examples 'aborts the build with a runtime not available message', "python-#{LATEST_PYTHON_3_8}"
     end
   end
@@ -200,37 +195,10 @@ RSpec.describe 'Python version support' do
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_12
   end
 
-  context 'when runtime.txt contains pypy3.6-7.3.2' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pypy_3.6', allow_failure: true) }
-
-    context 'when using Heroku-20', stacks: %w[heroku-20] do
-      it 'aborts the build with a sunset message' do
-        app.deploy do |app|
-          expect(clean_output(app.output)).to include(<<~OUTPUT)
-            remote: -----> Python app detected
-            remote: -----> Using Python version specified in runtime.txt
-            remote:  !     
-            remote:  !     PyPy is no longer supported by the latest version of this buildpack.
-            remote:  !     
-            remote:  !     Please switch to one of the supported CPython versions by updating your
-            remote:  !     runtime.txt file. See:
-            remote:  !     https://devcenter.heroku.com/articles/python-support
-            remote:  !     
-          OUTPUT
-        end
-      end
-    end
-
-    context 'when using Heroku-22', stacks: %w[heroku-22] do
-      # The beta PyPy support is deprecated and so not being made available for new stacks.
-      include_examples 'aborts the build with a runtime not available message', 'pypy3.6-7.3.2'
-    end
-  end
-
   context 'when runtime.txt contains an invalid python version string' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_invalid', allow_failure: true) }
 
-    include_examples 'aborts the build with a runtime not available message', 'python-X.Y.Z'
+    include_examples 'aborts the build with a runtime not available message', 'python-3.12.0invalid'
   end
 
   context 'when runtime.txt contains stray whitespace' do

@@ -6,15 +6,6 @@ PYTHON_VERSION=$(cat runtime.txt)
 PYTHON_VERSION="${PYTHON_VERSION##+([[:space:]])}"
 PYTHON_VERSION="${PYTHON_VERSION%%+([[:space:]])}"
 
-# The location of the pre-compiled python binary.
-PYTHON_URL="${S3_BASE_URL}/${STACK}/runtimes/${PYTHON_VERSION}.tar.gz"
-
-if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
-  puts-warn "Requested runtime '${PYTHON_VERSION}' is not available for this stack (${STACK})."
-  puts-warn "For supported versions, see: https://devcenter.heroku.com/articles/python-support"
-  exit 1
-fi
-
 function eol_python_version_error() {
   local major_version="${1}"
   local eol_date="${2}"
@@ -23,13 +14,38 @@ function eol_python_version_error() {
   puts-warn "therefore no longer receiving security updates:"
   puts-warn "https://devguide.python.org/versions/#supported-versions"
   puts-warn
-  puts-warn "As such, it is no longer supported by the latest version of this buildpack."
+  puts-warn "As such, it is no longer supported by this buildpack."
   puts-warn
-  puts-warn "Please upgrade to a newer Python version. See:"
-  puts-warn "https://devcenter.heroku.com/articles/python-runtimes"
+  puts-warn "Please upgrade to a newer Python version."
+  puts-warn
+  puts-warn "For a list of the supported Python versions, see:"
+  puts-warn "https://devcenter.heroku.com/articles/python-support#supported-runtimes"
   puts-warn
   exit 1
 }
+
+# We check for EOL prior to checking if the archive exists on S3, to ensure the more specific EOL error
+# message is still shown for newer stacks where the EOL Python versions might not have been built.
+case "${PYTHON_VERSION}" in
+  python-3.7.+([0-9]))
+    eol_python_version_error "3.7" "June 27th, 2023"
+    ;;
+  python-3.6.+([0-9]))
+    eol_python_version_error "3.6" "December 23rd, 2021"
+    ;;
+esac
+
+PYTHON_URL="${S3_BASE_URL}/${STACK}/runtimes/${PYTHON_VERSION}.tar.gz"
+
+if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
+  puts-warn
+  puts-warn "Requested runtime '${PYTHON_VERSION}' is not available for this stack (${STACK})."
+  puts-warn
+  puts-warn "For a list of the supported Python versions, see:"
+  puts-warn "https://devcenter.heroku.com/articles/python-support#supported-runtimes"
+  puts-warn
+  exit 1
+fi
 
 function warn_if_patch_update_available() {
   local requested_version="${1}"
@@ -45,6 +61,8 @@ function warn_if_patch_update_available() {
   fi
 }
 
+# We wait until now to display outdated Python version warnings, since we only want to show them
+# if there weren't any errors with the version to avoid adding noise to the error messages.
 case "${PYTHON_VERSION}" in
   python-3.12.*)
     warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_312}"
@@ -70,22 +88,6 @@ case "${PYTHON_VERSION}" in
     puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
     puts-warn
     warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_38}"
-    ;;
-  python-3.7.*)
-    eol_python_version_error "3.7" "June 27th, 2023"
-    ;;
-  python-3.6.*)
-    eol_python_version_error "3.6" "December 23rd, 2021"
-    ;;
-  pypy*)
-    puts-warn
-    puts-warn "PyPy is no longer supported by the latest version of this buildpack."
-    puts-warn
-    puts-warn "Please switch to one of the supported CPython versions by updating your"
-    puts-warn "runtime.txt file. See:"
-    puts-warn "https://devcenter.heroku.com/articles/python-support"
-    puts-warn
-    exit 1
     ;;
 esac
 

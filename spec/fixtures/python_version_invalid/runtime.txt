@@ -1,1 +1,1 @@
-python-X.Y.Z
+python-3.12.0invalid
