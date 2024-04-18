@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v249] - 2024-04-18
+
 - Improved the error message shown for EOL Python versions when using a stack for which those versions were never built. ([#1570](https://github.com/heroku/heroku-buildpack-python/pull/1570))
 - Fixed the "Python security update is available" warning being shown when the requested version is newer than the latest version known to the buildpack. ([#1569](https://github.com/heroku/heroku-buildpack-python/pull/1569))
 - Fixed glibc warnings seen when downgrading the stack version. ([#1568](https://github.com/heroku/heroku-buildpack-python/pull/1568))
@@ -992,7 +995,8 @@ Default Python is now latest 2.7.10. Updated Pip and Distribute.
 - Setuptools updated to v16.0
 - Pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v248...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v249...main
+[v249]: https://github.com/heroku/heroku-buildpack-python/compare/v248...v249
 [v248]: https://github.com/heroku/heroku-buildpack-python/compare/v247...v248
 [v247]: https://github.com/heroku/heroku-buildpack-python/compare/v246...v247
 [v246]: https://github.com/heroku/heroku-buildpack-python/compare/v245...v246
