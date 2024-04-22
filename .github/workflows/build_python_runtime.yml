@@ -15,6 +15,7 @@ on:
           - auto
           - heroku-20
           - heroku-22
+          - heroku-24
         default: auto
         required: false
       dry_run:
@@ -62,6 +63,39 @@ jobs:
         uses: actions/checkout@v4
       - name: Build Docker image
         run: docker build --platform="linux/amd64" --pull --tag buildenv --build-arg=STACK_VERSION builds/
+      - name: Build and package Python runtime
+        run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
+      - name: Upload Python runtime archive to S3
+        if: (!inputs.dry_run)
+        run: aws s3 sync ./upload "s3://${S3_BUCKET}"
+
+  heroku-24:
+    # On Heroku-24 we only support Python 3.12+.
+    if: inputs.stack == 'heroku-24' || (inputs.stack == 'auto' && startsWith(inputs.python_version,'3.12.'))
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture: ["amd64", "arm64"]
+    runs-on: ${{ matrix.architecture == 'arm64' && 'pub-hk-ubuntu-22.04-arm-large' || 'pub-hk-ubuntu-22.04-xlarge' }}
+    env:
+      STACK_VERSION: "24"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # The beta Arm64 runners don't yet ship with the normal installed tools.
+      - name: Install Docker and AWS CLI (ARM64 only)
+        if: matrix.architecture == 'arm64'
+        run: |
+          sudo apt-get update --error-on=any
+          sudo apt-get install -y --no-install-recommends acl docker.io docker-buildx unzip
+          sudo usermod -aG docker $USER
+          sudo setfacl --modify user:$USER:rw /var/run/docker.sock
+          curl https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip -o awscliv2.zip
+          unzip awscliv2.zip
+          sudo ./aws/install
+          rm -rf awscliv2.zip ./aws/
+      - name: Build Docker image
+        run: docker build --platform="linux/${{ matrix.architecture }}" --pull --tag buildenv --build-arg=STACK_VERSION builds/
       - name: Build and package Python runtime
         run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
       - name: Upload Python runtime archive to S3
