@@ -159,7 +159,7 @@ RSpec.describe 'Pipenv support' do
       end
     end
 
-    context 'when using Heroku-22', stacks: %w[heroku-22] do
+    context 'when using Heroku-22 or newer', stacks: %w[heroku-22 heroku-24] do
       let(:allow_failure) { true }
 
       # We only support Python 3.8 on Heroku-20 and older.
@@ -168,21 +168,51 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'with a Pipfile.lock containing python_version 3.9' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.9') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.9', allow_failure:) }
 
-    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_9
+    context 'when using Heroku-22 or older', stacks: %w[heroku-20 heroku-22] do
+      include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_9
+    end
+
+    context 'when using Heroku-24', stacks: %w[heroku-24] do
+      let(:allow_failure) { true }
+
+      # We only support Python 3.9 on Heroku-22 and older.
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', LATEST_PYTHON_3_9
+    end
   end
 
   context 'with a Pipfile.lock containing python_version 3.10' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.10') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.10', allow_failure:) }
 
-    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_10
+    context 'when using Heroku-22 or older', stacks: %w[heroku-20 heroku-22] do
+      include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_10
+    end
+
+    context 'when using Heroku-24', stacks: %w[heroku-24] do
+      let(:allow_failure) { true }
+
+      # We only support Python 3.10 on Heroku-22 and older.
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', LATEST_PYTHON_3_10
+    end
   end
 
   context 'with a Pipfile.lock containing python_version 3.11' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.11') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.11', allow_failure:) }
 
-    include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_11
+    context 'when using Heroku-22 or older', stacks: %w[heroku-20 heroku-22] do
+      include_examples 'builds using Pipenv with the requested Python version', LATEST_PYTHON_3_11
+    end
+
+    context 'when using Heroku-24', stacks: %w[heroku-24] do
+      let(:allow_failure) { true }
+
+      # We only support Python 3.11 on Heroku-22 and older.
+      include_examples 'aborts the build with a runtime not available message (Pipenv)', LATEST_PYTHON_3_11
+    end
   end
 
   context 'with a Pipfile.lock containing python_version 3.12' do

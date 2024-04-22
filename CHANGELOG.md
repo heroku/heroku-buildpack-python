@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added support for Heroku-24. ([#1575](https://github.com/heroku/heroku-buildpack-python/pull/1575))
 
 ## [v249] - 2024-04-18
 

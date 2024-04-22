@@ -37,9 +37,9 @@ esac
 
 # The Python runtime archive filename is of form: 'python-X.Y.Z-ubuntu-22.04-amd64.tar.zst'
 # The Ubuntu version is calculated from `STACK` since it's faster than calling `lsb_release`.
-# TODO: Switch to dynamically calculating the architecture when adding support for Heroku-24.
 UBUNTU_VERSION="${STACK/heroku-}.04"
-PYTHON_URL="${S3_BASE_URL}/${PYTHON_VERSION}-ubuntu-${UBUNTU_VERSION}-amd64.tar.zst"
+ARCH=$(dpkg --print-architecture)
+PYTHON_URL="${S3_BASE_URL}/${PYTHON_VERSION}-ubuntu-${UBUNTU_VERSION}-${ARCH}.tar.zst"
 
 if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
   puts-warn

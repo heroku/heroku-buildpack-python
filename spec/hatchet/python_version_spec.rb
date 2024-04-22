@@ -54,7 +54,11 @@ RSpec.describe 'Python version support' do
       end
     end
 
-    context 'with an app last built using an older default Python version' do
+    # TODO: Enable on Heroku-24 after the default Python version next changes (for the 3.12.4
+    # release), since for now there isn't a historic buildpack version we can use in this test
+    # that is both compatible with the new Heroku-24 S3 asset URLs and also has a different
+    # default Python version so that we can test the sticky versions feature.
+    context 'with an app last built using an older default Python version', stacks: %w[heroku-20 heroku-22] do
       # This test performs an initial build using an older buildpack version, followed
       # by a build using the current version. This ensures that the current buildpack
       # can successfully read the version metadata written to the build cache in the past.
@@ -163,7 +167,7 @@ RSpec.describe 'Python version support' do
       end
     end
 
-    context 'when using Heroku-22', stacks: %w[heroku-22] do
+    context 'when using Heroku-22 or newer', stacks: %w[heroku-22 heroku-24] do
       let(:allow_failure) { true }
 
       # We only support Python 3.8 on Heroku-20 and older.
@@ -172,21 +176,51 @@ RSpec.describe 'Python version support' do
   end
 
   context 'when runtime.txt contains python-3.9.19' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9', allow_failure:) }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
+    context 'when using Heroku-22 or older', stacks: %w[heroku-20 heroku-22] do
+      include_examples 'builds with the requested Python version', LATEST_PYTHON_3_9
+    end
+
+    context 'when using Heroku-24', stacks: %w[heroku-24] do
+      let(:allow_failure) { true }
+
+      # We only support Python 3.9 on Heroku-22 and older.
+      include_examples 'aborts the build with a runtime not available message', "python-#{LATEST_PYTHON_3_9}"
+    end
   end
 
   context 'when runtime.txt contains python-3.10.14' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.10') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.10', allow_failure:) }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_10
+    context 'when using Heroku-22 or older', stacks: %w[heroku-20 heroku-22] do
+      include_examples 'builds with the requested Python version', LATEST_PYTHON_3_10
+    end
+
+    context 'when using Heroku-24', stacks: %w[heroku-24] do
+      let(:allow_failure) { true }
+
+      # We only support Python 3.10 on Heroku-22 and older.
+      include_examples 'aborts the build with a runtime not available message', "python-#{LATEST_PYTHON_3_10}"
+    end
   end
 
   context 'when runtime.txt contains python-3.11.9' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.11') }
+    let(:allow_failure) { false }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.11', allow_failure:) }
 
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_11
+    context 'when using Heroku-22 or older', stacks: %w[heroku-20 heroku-22] do
+      include_examples 'builds with the requested Python version', LATEST_PYTHON_3_11
+    end
+
+    context 'when using Heroku-24', stacks: %w[heroku-24] do
+      let(:allow_failure) { true }
+
+      # We only support Python 3.11 on Heroku-22 and older.
+      include_examples 'aborts the build with a runtime not available message', "python-#{LATEST_PYTHON_3_11}"
+    end
   end
 
   context 'when runtime.txt contains python-3.12.3' do
@@ -214,20 +248,24 @@ RSpec.describe 'Python version support' do
   end
 
   context 'when the requested Python version has changed since the last build' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.12') }
 
     it 'builds with the new Python version after removing the old install' do
       app.deploy do |app|
-        File.write('runtime.txt', "python-#{LATEST_PYTHON_3_10}")
+        File.write('runtime.txt', 'python-3.12.2')
         app.commit!
         app.push!
         # TODO: The output shouldn't say "installing from cache", since it's not.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python version specified in runtime.txt
-          remote: -----> Python version has changed from python-#{LATEST_PYTHON_3_9} to python-#{LATEST_PYTHON_3_10}, clearing cache
+          remote:  !     
+          remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_12}
+          remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+          remote:  !     
+          remote: -----> Python version has changed from python-#{LATEST_PYTHON_3_12} to python-3.12.2, clearing cache
           remote: -----> No change in requirements detected, installing from cache
-          remote: -----> Installing python-#{LATEST_PYTHON_3_10}
+          remote: -----> Installing python-3.12.2
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
