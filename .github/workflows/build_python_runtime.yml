@@ -5,11 +5,20 @@ on:
   workflow_dispatch:
     inputs:
       python_version:
-        description: "The Python version to build, specified as X.Y.Z"
+        description: "Python version (eg: 3.12.0)"
         type: string
         required: true
+      stack:
+        description: "Stack(s)"
+        type: choice
+        options:
+          - auto
+          - heroku-20
+          - heroku-22
+        default: auto
+        required: false
       dry_run:
-        description: "Skip deploying to S3 (e.g. for testing)"
+        description: "Skip uploading to S3 (dry run)"
         type: boolean
         default: false
         required: false
@@ -24,9 +33,10 @@ env:
   S3_BUCKET: "heroku-buildpack-python"
 
 # Unfortunately these jobs cannot be easily written as a matrix since `matrix.exclude` does not
-# support expression syntax, and the `inputs` context is not available inside the job `if` key.
+# support expression syntax, and the `matrix` context is not available inside the job `if` key.
 jobs:
   heroku-20:
+    if: inputs.stack == 'heroku-20' || inputs.stack == 'auto'
     runs-on: pub-hk-ubuntu-22.04-xlarge
     env:
       STACK_VERSION: "20"
@@ -43,7 +53,7 @@ jobs:
 
   heroku-22:
     # On Heroku-22 we only support Python 3.9+.
-    if: (!startsWith(inputs.python_version,'3.8.'))
+    if: inputs.stack == 'heroku-22' || (inputs.stack == 'auto' && !startsWith(inputs.python_version,'3.8.'))
     runs-on: pub-hk-ubuntu-22.04-xlarge
     env:
       STACK_VERSION: "22"
