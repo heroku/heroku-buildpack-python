@@ -5,6 +5,8 @@ set -euo pipefail
 PYTHON_VERSION="${1:?"Error: The Python version to build must be specified as the first argument."}"
 PYTHON_MAJOR_VERSION="${PYTHON_VERSION%.*}"
 
+ARCH=$(dpkg --print-architecture)
+
 # Python is relocated to different locations by the classic buildpack and CNB (which works since we
 # set `LD_LIBRARY_PATH` and `PYTHONHOME` appropriately at build/run-time), so for packaging purposes
 # we install Python into an arbitrary location that intentionally matches neither location.
@@ -18,6 +20,11 @@ function error() {
 }
 
 case "${STACK}" in
+  heroku-24)
+    SUPPORTED_PYTHON_VERSIONS=(
+      "3.12"
+    )
+    ;;
   heroku-22)
     SUPPORTED_PYTHON_VERSIONS=(
       "3.9"
@@ -63,7 +70,7 @@ case "${PYTHON_MAJOR_VERSION}" in
     ;;
 esac
 
-echo "Building Python ${PYTHON_VERSION} for ${STACK}..."
+echo "Building Python ${PYTHON_VERSION} for ${STACK} (${ARCH})..."
 
 SOURCE_URL="https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz"
 SIGNATURE_URL="${SOURCE_URL}.asc"
@@ -214,9 +221,8 @@ LD_LIBRARY_PATH="${SRC_DIR}" "${SRC_DIR}/python" -m compileall -f --invalidation
 ln -srvT "${INSTALL_DIR}/bin/python3" "${INSTALL_DIR}/bin/python"
 
 # Results in a compressed archive filename of form: 'python-X.Y.Z-ubuntu-22.04-amd64.tar.zst'
-# TODO: Switch to dynamically calculating the architecture when adding support for Heroku-24.
 UBUNTU_VERSION=$(lsb_release --short --release 2>/dev/null)
-TAR_FILEPATH="${UPLOAD_DIR}/python-${PYTHON_VERSION}-ubuntu-${UBUNTU_VERSION}-amd64.tar"
+TAR_FILEPATH="${UPLOAD_DIR}/python-${PYTHON_VERSION}-ubuntu-${UBUNTU_VERSION}-${ARCH}.tar"
 tar --create --format=pax --sort=name --file "${TAR_FILEPATH}" --directory="${INSTALL_DIR}" .
 zstd -T0 -22 --ultra --long --no-progress --rm "${TAR_FILEPATH}"
 
