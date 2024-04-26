@@ -70,8 +70,8 @@ jobs:
         run: aws s3 sync ./upload "s3://${S3_BUCKET}"
 
   heroku-24:
-    # On Heroku-24 we only support Python 3.12+.
-    if: inputs.stack == 'heroku-24' || (inputs.stack == 'auto' && startsWith(inputs.python_version,'3.12.'))
+    # On Heroku-24 we only support Python 3.11+.
+    if: inputs.stack == 'heroku-24' || (inputs.stack == 'auto' && !startsWith(inputs.python_version,'3.8.') && !startsWith(inputs.python_version,'3.9.') && !startsWith(inputs.python_version,'3.10.'))
     strategy:
       fail-fast: false
       matrix:

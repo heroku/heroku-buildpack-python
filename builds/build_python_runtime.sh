@@ -22,6 +22,7 @@ function error() {
 case "${STACK}" in
   heroku-24)
     SUPPORTED_PYTHON_VERSIONS=(
+      "3.11"
       "3.12"
     )
     ;;
