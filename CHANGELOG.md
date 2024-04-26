@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v250] - 2024-04-26
+
 - Added support for Heroku-24. ([#1575](https://github.com/heroku/heroku-buildpack-python/pull/1575))
 
 ## [v249] - 2024-04-18
@@ -996,7 +999,8 @@ Default Python is now latest 2.7.10. Updated Pip and Distribute.
 - Setuptools updated to v16.0
 - Pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v249...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v250...main
+[v250]: https://github.com/heroku/heroku-buildpack-python/compare/v249...v250
 [v249]: https://github.com/heroku/heroku-buildpack-python/compare/v248...v249
 [v248]: https://github.com/heroku/heroku-buildpack-python/compare/v247...v248
 [v247]: https://github.com/heroku/heroku-buildpack-python/compare/v246...v247
