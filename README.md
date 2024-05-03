@@ -62,6 +62,6 @@ Supported runtime options include:
 
 - `python-3.12.3` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
 - `python-3.11.9` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
-- `python-3.10.14` on Heroku-20 and Heroku-22 only
+- `python-3.10.14` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
 - `python-3.9.19` on Heroku-20 and Heroku-22 only
 - `python-3.8.19` on Heroku-20 only

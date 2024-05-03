@@ -70,21 +70,21 @@ jobs:
         run: aws s3 sync ./upload "s3://${S3_BUCKET}"
 
   heroku-24:
-    # On Heroku-24 we only support Python 3.11+.
-    if: inputs.stack == 'heroku-24' || (inputs.stack == 'auto' && !startsWith(inputs.python_version,'3.8.') && !startsWith(inputs.python_version,'3.9.') && !startsWith(inputs.python_version,'3.10.'))
+    # On Heroku-24 we only support Python 3.10+.
+    if: inputs.stack == 'heroku-24' || (inputs.stack == 'auto' && !startsWith(inputs.python_version,'3.8.') && !startsWith(inputs.python_version,'3.9.'))
     strategy:
       fail-fast: false
       matrix:
-        architecture: ["amd64", "arm64"]
-    runs-on: ${{ matrix.architecture == 'arm64' && 'pub-hk-ubuntu-22.04-arm-large' || 'pub-hk-ubuntu-22.04-xlarge' }}
+        arch: ["amd64", "arm64"]
+    runs-on: ${{ matrix.arch == 'arm64' && 'pub-hk-ubuntu-22.04-arm-large' || 'pub-hk-ubuntu-22.04-xlarge' }}
     env:
       STACK_VERSION: "24"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # The beta Arm64 runners don't yet ship with the normal installed tools.
+      # The beta ARM64 runners don't yet ship with the normal installed tools.
       - name: Install Docker and AWS CLI (ARM64 only)
-        if: matrix.architecture == 'arm64'
+        if: matrix.arch == 'arm64'
         run: |
           sudo apt-get update --error-on=any
           sudo apt-get install -y --no-install-recommends acl docker.io docker-buildx unzip
@@ -95,7 +95,7 @@ jobs:
           sudo ./aws/install
           rm -rf awscliv2.zip ./aws/
       - name: Build Docker image
-        run: docker build --platform="linux/${{ matrix.architecture }}" --pull --tag buildenv --build-arg=STACK_VERSION builds/
+        run: docker build --platform="linux/${{ matrix.arch }}" --pull --tag buildenv --build-arg=STACK_VERSION builds/
       - name: Build and package Python runtime
         run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
       - name: Upload Python runtime archive to S3
