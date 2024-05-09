@@ -46,8 +46,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Build Docker image
         run: docker build --platform="linux/amd64" --pull --tag buildenv --build-arg=STACK_VERSION builds/
-      - name: Build and package Python runtime
+      - name: Compile and package Python runtime
         run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
+      - name: Test Python runtime
+        run: |
+          RUN_IMAGE='heroku/heroku:${{ env.STACK_VERSION }}'
+          ARCHIVE_FILENAME='python-${{ inputs.python_version }}-ubuntu-${{ env.STACK_VERSION }}.04-amd64.tar.zst'
+          docker run --rm --volume="${PWD}/upload:/upload:ro" --volume="${PWD}/builds:/builds:ro" "${RUN_IMAGE}" /builds/test_python_runtime.sh "/upload/${ARCHIVE_FILENAME}"
       - name: Upload Python runtime archive to S3
         if: (!inputs.dry_run)
         run: aws s3 sync ./upload "s3://${S3_BUCKET}"
@@ -63,8 +68,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Build Docker image
         run: docker build --platform="linux/amd64" --pull --tag buildenv --build-arg=STACK_VERSION builds/
-      - name: Build and package Python runtime
+      - name: Compile and package Python runtime
         run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
+      - name: Test Python runtime
+        run: |
+          RUN_IMAGE='heroku/heroku:${{ env.STACK_VERSION }}'
+          ARCHIVE_FILENAME='python-${{ inputs.python_version }}-ubuntu-${{ env.STACK_VERSION }}.04-amd64.tar.zst'
+          docker run --rm --volume="${PWD}/upload:/upload:ro" --volume="${PWD}/builds:/builds:ro" "${RUN_IMAGE}" /builds/test_python_runtime.sh "/upload/${ARCHIVE_FILENAME}"
       - name: Upload Python runtime archive to S3
         if: (!inputs.dry_run)
         run: aws s3 sync ./upload "s3://${S3_BUCKET}"
@@ -96,8 +106,13 @@ jobs:
           rm -rf awscliv2.zip ./aws/
       - name: Build Docker image
         run: docker build --platform="linux/${{ matrix.arch }}" --pull --tag buildenv --build-arg=STACK_VERSION builds/
-      - name: Build and package Python runtime
+      - name: Compile and package Python runtime
         run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
+      - name: Test Python runtime
+        run: |
+          RUN_IMAGE='heroku/heroku:${{ env.STACK_VERSION }}'
+          ARCHIVE_FILENAME='python-${{ inputs.python_version }}-ubuntu-${{ env.STACK_VERSION }}.04-${{ matrix.arch }}.tar.zst'
+          docker run --rm --volume="${PWD}/upload:/upload:ro" --volume="${PWD}/builds:/builds:ro" "${RUN_IMAGE}" /builds/test_python_runtime.sh "/upload/${ARCHIVE_FILENAME}"
       - name: Upload Python runtime archive to S3
         if: (!inputs.dry_run)
         run: aws s3 sync ./upload "s3://${S3_BUCKET}"
