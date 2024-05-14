@@ -9,6 +9,7 @@ USER root
 
 RUN apt-get update --error-on=any \
     && apt-get install -y --no-install-recommends \
+      libdb-dev \
       libreadline-dev \
       libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
