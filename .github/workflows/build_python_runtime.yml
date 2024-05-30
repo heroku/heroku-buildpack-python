@@ -86,24 +86,12 @@ jobs:
       fail-fast: false
       matrix:
         arch: ["amd64", "arm64"]
-    runs-on: ${{ matrix.arch == 'arm64' && 'pub-hk-ubuntu-22.04-arm-large' || 'pub-hk-ubuntu-22.04-xlarge' }}
+    runs-on: ${{ matrix.arch == 'arm64' && 'pub-hk-ubuntu-22.04-arm-xlarge' || 'pub-hk-ubuntu-22.04-xlarge' }}
     env:
       STACK_VERSION: "24"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # The beta ARM64 runners don't yet ship with the normal installed tools.
-      - name: Install Docker and AWS CLI (ARM64 only)
-        if: matrix.arch == 'arm64'
-        run: |
-          sudo apt-get update --error-on=any
-          sudo apt-get install -y --no-install-recommends acl docker.io docker-buildx unzip
-          sudo usermod -aG docker $USER
-          sudo setfacl --modify user:$USER:rw /var/run/docker.sock
-          curl https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip -o awscliv2.zip
-          unzip awscliv2.zip
-          sudo ./aws/install
-          rm -rf awscliv2.zip ./aws/
       - name: Build Docker image
         run: docker build --platform="linux/${{ matrix.arch }}" --pull --tag buildenv --build-arg=STACK_VERSION builds/
       - name: Compile and package Python runtime
