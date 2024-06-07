@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v251] - 2024-06-07
+
 - Added support for Python 3.12.4. ([#1591](https://github.com/heroku/heroku-buildpack-python/pull/1591))
 - Changed the default Python version for new apps from 3.12.3 to 3.12.4. ([#1591](https://github.com/heroku/heroku-buildpack-python/pull/1591))
 
@@ -1001,7 +1004,8 @@ Default Python is now latest 2.7.10. Updated Pip and Distribute.
 - Setuptools updated to v16.0
 - Pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v250...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v251...main
+[v251]: https://github.com/heroku/heroku-buildpack-python/compare/v250...v251
 [v250]: https://github.com/heroku/heroku-buildpack-python/compare/v249...v250
 [v249]: https://github.com/heroku/heroku-buildpack-python/compare/v248...v249
 [v248]: https://github.com/heroku/heroku-buildpack-python/compare/v247...v248
