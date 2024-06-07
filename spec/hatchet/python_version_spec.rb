@@ -54,15 +54,11 @@ RSpec.describe 'Python version support' do
       end
     end
 
-    # TODO: Enable on Heroku-24 after the default Python version next changes (for the 3.12.4
-    # release), since for now there isn't a historic buildpack version we can use in this test
-    # that is both compatible with the new Heroku-24 S3 asset URLs and also has a different
-    # default Python version so that we can test the sticky versions feature.
-    context 'with an app last built using an older default Python version', stacks: %w[heroku-20 heroku-22] do
+    context 'with an app last built using an older default Python version' do
       # This test performs an initial build using an older buildpack version, followed
       # by a build using the current version. This ensures that the current buildpack
       # can successfully read the version metadata written to the build cache in the past.
-      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v247'] }
+      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v250'] }
 
       it 'builds with the same Python version as the last build' do
         app.deploy do |app|
@@ -71,16 +67,16 @@ RSpec.describe 'Python version support' do
           app.push!
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote: -----> No Python version was specified. Using the same version as the last build: python-3.12.2
+            remote: -----> No Python version was specified. Using the same version as the last build: python-3.12.3
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
             remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_12}
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
             remote: -----> No change in requirements detected, installing from cache
-            remote: -----> Using cached install of python-3.12.2
+            remote: -----> Using cached install of python-3.12.3
           OUTPUT
-          expect(app.run('python -V')).to include('Python 3.12.2')
+          expect(app.run('python -V')).to include('Python 3.12.3')
         end
       end
     end
@@ -203,7 +199,7 @@ RSpec.describe 'Python version support' do
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_11
   end
 
-  context 'when runtime.txt contains python-3.12.3' do
+  context 'when runtime.txt contains python-3.12.4' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.12') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_12

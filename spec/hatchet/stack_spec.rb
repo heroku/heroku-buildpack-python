@@ -9,7 +9,7 @@ RSpec.describe 'Stack changes' do
     # can successfully read the stack metadata written to the build cache in the past.
     # The buildpack version chosen is one which had an older default Python version, so
     # we can also prove that clearing the cache didn't lose the Python version metadata.
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v247'] }
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v250'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', buildpacks:) }
 
     it 'clears the cache before installing again whilst preserving the sticky Python version' do
@@ -22,7 +22,7 @@ RSpec.describe 'Stack changes' do
         # TODO: The requirements output shouldn't say "installing from cache", since it's not.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> No Python version was specified. Using the same version as the last build: python-3.12.2
+          remote: -----> No Python version was specified. Using the same version as the last build: python-3.12.3
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote:  !     
           remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_12}
@@ -30,7 +30,7 @@ RSpec.describe 'Stack changes' do
           remote:  !     
           remote: -----> Stack has changed from heroku-22 to heroku-24, clearing cache
           remote: -----> No change in requirements detected, installing from cache
-          remote: -----> Installing python-3.12.2
+          remote: -----> Installing python-3.12.3
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
