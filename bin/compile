@@ -52,10 +52,6 @@ source "$BIN_DIR/default_pythons"
 # the user towards resolution of known issues.
 WARNINGS_LOG=$(mktemp)
 
-# The buildpack ships with a few executable tools.
-# This installs them into the path, so we can execute them directly.
-export PATH=$PATH:$ROOT_DIR/vendor/
-
 # Sanitize externally-provided environment variables:
 # The following environment variables are either problematic or simply unneccessary
 # for the buildpack to have knowledge of, so we unset them, to keep the environment

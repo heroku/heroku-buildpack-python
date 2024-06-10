@@ -46,9 +46,6 @@ if [[ -f Pipfile ]]; then
         /app/.heroku/python/bin/pipenv install --system --skip-lock --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
 
     else
-        pipenv-to-pip Pipfile.lock > requirements.txt
-        cp requirements.txt .heroku/python/requirements-declared.txt
-
         puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
         /app/.heroku/python/bin/pipenv install --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
     fi

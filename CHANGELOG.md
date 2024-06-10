@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Removed export of `Pipfile.lock` to `requirements.txt` during the build. ([#1593](https://github.com/heroku/heroku-buildpack-python/pull/1593))
+- Removed internal `pipenv-to-pip` script that was unintentionally exposed onto `PATH`. ([#1593](https://github.com/heroku/heroku-buildpack-python/pull/1593))
 
 ## [v251] - 2024-06-07
 
