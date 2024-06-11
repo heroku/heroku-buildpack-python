@@ -4,6 +4,7 @@ ENV['HATCHET_BUILDPACK_BASE'] ||= 'https://github.com/heroku/heroku-buildpack-py
 ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-24'
 
 require 'rspec/core'
+require 'rspec/retry'
 require 'hatchet'
 
 LATEST_PYTHON_3_8 = '3.8.19'
@@ -43,6 +44,8 @@ RSpec.configure do |config|
   config.filter_run_when_matching :focus
   # Allows declaring on which stacks a test/group should run by tagging it with `stacks`.
   config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(ENV.fetch('HATCHET_DEFAULT_STACK')) }
+  # Make rspec-retry output a retry message when its had to retry a test.
+  config.verbose_retry = true
 end
 
 def clean_output(output)
