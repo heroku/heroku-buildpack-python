@@ -7,7 +7,7 @@ shopt -s nullglob
 
 source "${BUILDPACK_DIR}/vendor/buildpack-stdlib_v8.sh"
 
-if [ "$(uname)" == Darwin ]; then
+if [[ "$(uname)" == Darwin ]]; then
     sed() { command sed -l "$@"; }
 else
     sed() { command sed -u "$@"; }
@@ -52,7 +52,7 @@ deep-cp() {
 
 # Measure the size of the Python installation.
 measure-size() {
-  echo "$(du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
+  { du -s .heroku/python 2>/dev/null || echo 0; } | awk '{print $1}'
 }
 
 # Returns 0 if the specified module exists, otherwise returns 1.

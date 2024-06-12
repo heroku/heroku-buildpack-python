@@ -33,6 +33,7 @@ case "${PYTHON_VERSION}" in
   python-3.6.+([0-9]))
     eol_python_version_error "3.6" "December 23rd, 2021"
     ;;
+  *) ;;
 esac
 
 # The Python runtime archive filename is of form: 'python-X.Y.Z-ubuntu-22.04-amd64.tar.zst'
@@ -93,6 +94,8 @@ case "${PYTHON_VERSION}" in
     puts-warn
     warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_38}"
     ;;
+  # TODO: Make this case an error, since it should be unreachable.
+  *) ;;
 esac
 
 mcount "version.python.${PYTHON_VERSION}"
@@ -102,8 +105,8 @@ if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
     rm -rf .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor .heroku/python .heroku/python-sqlite3-version
 fi
 
-if [ -f .heroku/python-version ]; then
-  if [ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]; then
+if [[ -f .heroku/python-version ]]; then
+  if [[ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]]; then
       puts-step "Python version has changed from $(cat .heroku/python-version) to ${PYTHON_VERSION}, clearing cache"
       rm -rf .heroku/python
   else

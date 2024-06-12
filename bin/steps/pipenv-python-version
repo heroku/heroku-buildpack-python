@@ -52,6 +52,8 @@ if [[ -f $BUILD_DIR/Pipfile ]]; then
                     3.12)
                         echo "${LATEST_312}" > "${BUILD_DIR}/runtime.txt"
                         ;;
+                    # TODO: Make this case an error
+                    *) ;;
                 esac
             fi
 

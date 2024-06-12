@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! "$SKIP_PIP_INSTALL" ]; then
+if [[ -z "$SKIP_PIP_INSTALL" ]]; then
 
     puts-step "Installing requirements with pip"
 
@@ -20,7 +20,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     # Measure that we're using pip.
     mcount "tool.pip"
 
-    if [ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]; then
+    if [[ ! -f "$BUILD_DIR/.heroku/python/bin/pip" ]]; then
         exit 1
     fi
 
@@ -39,7 +39,7 @@ if [ ! "$SKIP_PIP_INSTALL" ]; then
     /app/.heroku/python/bin/pip freeze --disable-pip-version-check > .heroku/python/requirements-installed.txt
 
     # Install test dependencies, for CI.
-    if [ "$INSTALL_TEST" ]; then
+    if [[ -n "$INSTALL_TEST" ]]; then
         if [[ -f requirements-test.txt ]]; then
             puts-step "Installing test dependencies..."
             /app/.heroku/python/bin/pip install -r requirements-test.txt --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent

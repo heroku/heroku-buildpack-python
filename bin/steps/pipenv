@@ -33,7 +33,7 @@ if [[ -f Pipfile ]]; then
     /app/.heroku/python/bin/pip install --quiet --disable-pip-version-check --no-cache-dir "pipenv==${PIPENV_VERSION}"
 
     # Install the test dependencies, for CI.
-    if [ "$INSTALL_TEST" ]; then
+    if [[ -n "$INSTALL_TEST" ]]; then
         puts-step "Installing test dependencies"
         /app/.heroku/python/bin/pipenv install --dev --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | cleanup | indent
 
