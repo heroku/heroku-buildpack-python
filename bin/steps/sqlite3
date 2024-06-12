@@ -3,9 +3,6 @@
 # TODO: Remove this entirely since the Python stdlib now includes modern sqlite support,
 # and the APT buildpack should be used if an app needs the sqlite CLI/headers.
 
-# shellcheck source=bin/utils
-source "$BIN_DIR/utils"
-
 sqlite3_install() {
   HEROKU_PYTHON_DIR="$1"
   HEADERS_ONLY="$3"

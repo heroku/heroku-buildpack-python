@@ -1,18 +1,7 @@
 #!/usr/bin/env bash
+# Usage: bin/compile <build-dir> <cache-dir> <env-dir>
+# See: https://devcenter.heroku.com/articles/buildpack-api
 
-# The Heroku Python Buildpack. This script accepts parameters for a build
-# directory, a cache directory, and a directory for app environment variables.
-
-# Warning: there are a few hacks in this script to accommodate excellent builds
-# on Heroku. No guarantee for external compatibility is made. However,
-# everything should work fine outside of the Heroku environment, if the
-# environment is setup correctly.
-
-# Usage:
-#
-#     $ bin/compile <build-dir> <cache-dir> <env-path>
-
-# Fail fast and fail hard.
 set -eo pipefail
 
 # Used by buildpack-stdlib's metrics features.
@@ -21,18 +10,20 @@ export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
 
 [ "$BUILDPACK_XTRACE" ] && set -o xtrace
 
+BUILD_DIR="${1}"
+CACHE_DIR="${2}"
+ENV_DIR="${3}"
+
+# The absolute path to the root of the buildpack.
+BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
+
+source "${BUILDPACK_DIR}/bin/utils"
+
 # Prepend proper path for old-school virtualenv hackery.
-# This may not be neccessary.
+# This may not be necessary.
 export PATH=:/usr/local/bin:$PATH
 
-# Setup Path variables, for later use in the Buildpack.
-BIN_DIR=$(cd "$(dirname "$0")"; pwd) # absolute path
-ROOT_DIR=$(dirname "$BIN_DIR")
-BUILD_DIR=$1
-CACHE_DIR=$2
-ENV_DIR=$3
-
-# Export Path variables, for use in sub-scripts.
+# Exported for use in subshells, such as the steps run via sub_env.
 export BUILD_DIR CACHE_DIR ENV_DIR
 
 # Set the base URL for downloading buildpack assets like Python runtimes.
@@ -43,8 +34,7 @@ S3_BASE_URL="${BUILDPACK_S3_BASE_URL:-"https://heroku-buildpack-python.s3.us-eas
 # This has to be exported since it's used by the geo-libs step which is run in a subshell.
 
 # Default Python Versions
-# shellcheck source=bin/default_pythons
-source "$BIN_DIR/default_pythons"
+source "${BUILDPACK_DIR}/bin/default_pythons"
 
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.
@@ -53,19 +43,14 @@ source "$BIN_DIR/default_pythons"
 WARNINGS_LOG=$(mktemp)
 
 # Sanitize externally-provided environment variables:
-# The following environment variables are either problematic or simply unneccessary
+# The following environment variables are either problematic or simply unnecessary
 # for the buildpack to have knowledge of, so we unset them, to keep the environment
 # as clean and pristine as possible.
 unset PYTHONHOME PYTHONPATH
 
-# Import the utils script, which contains helper functions used throughout the buildpack.
-# shellcheck source=bin/utils
-source "$BIN_DIR/utils"
-
 # Import the warnings script, which contains the `pip install` user warning mechanisms
 # (mentioned and explained above)
-# shellcheck source=bin/warnings
-source "$BIN_DIR/warnings"
+source "${BUILDPACK_DIR}/bin/warnings"
 
 # Make the directory in which we will create symlinks from the temporary build directory
 # to `/app`.
@@ -73,22 +58,11 @@ source "$BIN_DIR/warnings"
 # More on this topic later.
 mkdir -p /app/.heroku
 
-# This buildpack programatically generates (or simply copies) a number of files for
-# buildpack machinery: an export script, and a number of `.profile.d` scripts. This
-# section declares the locations of those files and targets.
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
-EXPORT_PATH="$BIN_DIR/../export"
+EXPORT_PATH="${BUILDPACK_DIR}/bin/../export"
 GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
 
-# We'll need to send these statics to other scripts we `source`.
-export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH EXPORT_PATH
-
-# Python Environment Variables
-# Set Python-specific environment variables, for running Python within the buildpack.
-# Notes on each variable included.
-
-# PATH is relatively obvious, we need to be able to execute 'python'.
 export PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin:$PATH
 # Tell Python to not buffer it's stdin/stdout.
 export PYTHONUNBUFFERED=1
@@ -108,10 +82,6 @@ export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/li
 # Disable pip's warnings about EOL Python since we show our own.
 export PIP_NO_PYTHON_VERSION_WARNING=1
 
-# The Application Code
-# --------------------
-
-# Switch to the repo's context.
 cd "$BUILD_DIR"
 
 # The Cache
@@ -146,13 +116,10 @@ fi
 # This part of the code is used to allow users to customize their build experience
 # without forking the buildpack by providing a `bin/pre_compile` script, which gets
 # run inline with the buildpack automatically.
-
-# shellcheck source=bin/steps/hooks/pre_compile
-source "$BIN_DIR/steps/hooks/pre_compile"
+source "${BUILDPACK_DIR}/bin/steps/hooks/pre_compile"
 
 # Sticky runtimes. If there was a previous build, and it used a given version of Python,
-# continue to use that version of Python in perpituity (warnings will be raised if
-# they are out–of–date).
+# continue to use that version of Python in perpetuity.
 if [ -f "$CACHE_DIR/.heroku/python-version" ]; then
   CACHED_PYTHON_VERSION=$(cat "$CACHE_DIR/.heroku/python-version")
 fi
@@ -167,9 +134,7 @@ fi
 # Pipenv Python version support.
 # Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).
 # Convert it to a runtime.txt file.
-
-# shellcheck source=bin/steps/pipenv-python-version
-source "$BIN_DIR/steps/pipenv-python-version"
+source "${BUILDPACK_DIR}/bin/steps/pipenv-python-version"
 
 if [[ -f runtime.txt ]]; then
   # PYTHON_VERSION_SOURCE may have already been set by the pipenv-python-version step.
@@ -195,7 +160,7 @@ mkdir -p "$(dirname "$PROFILE_PATH")"
 mkdir -p /app/.heroku/src
 
 # On Heroku CI, builds happen in `/app`. Otherwise, on the Heroku platform,
-# they occur in a temp directory. Beacuse Python is not portable, we must create
+# they occur in a temp directory. Because Python is not portable, we must create
 # symlinks to emulate that we are operating in `/app` during the build process.
 # This is (hopefully obviously) because apps end up running from `/app` in production.
 # Realpath is used to support use-cases where one of the locations is a symlink to the other.
@@ -210,13 +175,11 @@ fi
 # Download / Install Python, from pre-build binaries available on Amazon S3.
 # This step also bootstraps pip / setuptools.
 (( start=$(nowms) ))
-# shellcheck source=bin/steps/python
-source "$BIN_DIR/steps/python"
+source "${BUILDPACK_DIR}/bin/steps/python"
 mtime "python.install.time" "${start}"
 
 # Install Pipenv dependencies, if a Pipfile was provided.
-# shellcheck source=bin/steps/pipenv
-source "$BIN_DIR/steps/pipenv"
+source "${BUILDPACK_DIR}/bin/steps/pipenv"
 
 # If no requirements.txt file given, assume `setup.py develop` is intended.
 # This allows for people to ship a setup.py application to Heroku
@@ -229,8 +192,7 @@ fi
 # This sets up and installs sqlite3 dev headers and the sqlite3 binary but not the
 # libsqlite3-0 library since that exists on the stack image.
 (( start=$(nowms) ))
-# shellcheck source=bin/steps/sqlite3
-source "$BIN_DIR/steps/sqlite3"
+source "${BUILDPACK_DIR}/bin/steps/sqlite3"
 buildpack_sqlite3_install
 mtime "sqlite3.install.time" "${start}"
 
@@ -239,13 +201,12 @@ mtime "sqlite3.install.time" "${start}"
 
 # Install dependencies with pip (where the magic happens).
 (( start=$(nowms) ))
-# shellcheck source=bin/steps/pip-install
-source "$BIN_DIR/steps/pip-install"
+source "${BUILDPACK_DIR}/bin/steps/pip-install"
 mtime "pip.install.time" "${start}"
 
 # Support for NLTK corpora.
 (( start=$(nowms) ))
-sub_env "$BIN_DIR/steps/nltk"
+sub_env "${BUILDPACK_DIR}/bin/steps/nltk"
 mtime "nltk.download.time" "${start}"
 
 # Support for editable installations. Here, we are copying pip–created src directory,
@@ -264,11 +225,11 @@ fi
 # These failures are intentional — if collectstatic (which can be tricky, at times) fails,
 # your build fails.
 (( start=$(nowms) ))
-sub_env "$BIN_DIR/steps/collectstatic"
+sub_env "${BUILDPACK_DIR}/bin/steps/collectstatic"
 mtime "collectstatic.time" "${start}"
 
 
-# Progamatically create .profile.d script for application runtime environment variables.
+# Programmatically create .profile.d script for application runtime environment variables.
 
 # Set the PATH to include Python / pip / pipenv / etc.
 set_env PATH "\$HOME/.heroku/python/bin:\$PATH"
@@ -306,12 +267,11 @@ EOT
 fi
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
-cp "$ROOT_DIR/vendor/WEB_CONCURRENCY.sh" "$WEB_CONCURRENCY_PROFILE_PATH"
-cp "$ROOT_DIR/vendor/python.gunicorn.sh" "$GUNICORN_PROFILE_PATH"
+cp "${BUILDPACK_DIR}/vendor/WEB_CONCURRENCY.sh" "$WEB_CONCURRENCY_PROFILE_PATH"
+cp "${BUILDPACK_DIR}/vendor/python.gunicorn.sh" "$GUNICORN_PROFILE_PATH"
 
 # Experimental post_compile hook. Don't remove this.
-# shellcheck source=bin/steps/hooks/post_compile
-source "$BIN_DIR/steps/hooks/post_compile"
+source "${BUILDPACK_DIR}/bin/steps/hooks/post_compile"
 
 # Store new artifacts in the cache.
 rm -rf "$CACHE_DIR/.heroku/python"
