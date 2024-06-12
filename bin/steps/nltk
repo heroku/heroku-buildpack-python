@@ -9,9 +9,9 @@
 #
 # This script is invoked by [`bin/compile`](/).
 
-# Syntax sugar.
-# shellcheck source=bin/utils
-source "$BIN_DIR/utils"
+# This script is run in a subshell via sub_env so doesn't inherit the vars/utils from `bin/compile`.
+BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
+source "${BUILDPACK_DIR}/bin/utils"
 
 # Check that nltk was installed by pip, otherwise obviously not needed
 if is_module_available 'nltk'; then

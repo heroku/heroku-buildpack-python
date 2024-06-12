@@ -9,7 +9,6 @@ RSpec.describe 'Compile hooks' do
     it 'runs the hooks with the correct environment' do
       expected_env_vars = %w[
         _
-        BIN_DIR
         BPLOG_PREFIX
         BUILD_DIR
         BUILDPACK_LOG_FILE
@@ -18,7 +17,6 @@ RSpec.describe 'Compile hooks' do
         CPLUS_INCLUDE_PATH
         DYNO
         ENV_DIR
-        EXPORT_PATH
         HOME
         LANG
         LD_LIBRARY_PATH
@@ -27,7 +25,6 @@ RSpec.describe 'Compile hooks' do
         PATH
         PIP_NO_PYTHON_VERSION_WARNING
         PKG_CONFIG_PATH
-        PROFILE_PATH
         PWD
         PYTHONUNBUFFERED
         REQUEST_ID

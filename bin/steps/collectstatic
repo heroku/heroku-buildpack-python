@@ -10,8 +10,9 @@
 #   - $DISABLE_COLLECTSTATIC: disables this functionality.
 #   - $DEBUG_COLLECTSTATIC: upon failure, print out environment variables.
 
-# shellcheck source=bin/utils
-source "$BIN_DIR/utils"
+# This script is run in a subshell via sub_env so doesn't inherit the vars/utils from `bin/compile`.
+BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
+source "${BUILDPACK_DIR}/bin/utils"
 
 if [[ -f .heroku/collectstatic_disabled ]]; then
   puts-step "Skipping Django collectstatic since the file '.heroku/collectstatic_disabled' exists."
