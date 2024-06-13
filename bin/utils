@@ -7,7 +7,7 @@ shopt -s nullglob
 
 source "${BUILDPACK_DIR}/vendor/buildpack-stdlib_v8.sh"
 
-if [[ "$(uname)" == Darwin ]]; then
+if [[ "$(uname)" == "Darwin" ]]; then
     sed() { command sed -l "$@"; }
 else
     sed() { command sed -u "$@"; }

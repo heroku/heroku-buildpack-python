@@ -106,7 +106,7 @@ if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
 fi
 
 if [[ -f .heroku/python-version ]]; then
-  if [[ ! "$(cat .heroku/python-version)" = "$PYTHON_VERSION" ]]; then
+  if [[ ! "$(cat .heroku/python-version)" == "$PYTHON_VERSION" ]]; then
       puts-step "Python version has changed from $(cat .heroku/python-version) to ${PYTHON_VERSION}, clearing cache"
       rm -rf .heroku/python
   else
