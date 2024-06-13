@@ -8,7 +8,7 @@ set -eo pipefail
 export BPLOG_PREFIX="buildpack.python"
 export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
 
-[ "$BUILDPACK_XTRACE" ] && set -o xtrace
+[[ -n "$BUILDPACK_XTRACE" ]] && set -o xtrace
 
 BUILD_DIR="${1}"
 CACHE_DIR="${2}"
@@ -59,7 +59,7 @@ source "${BUILDPACK_DIR}/bin/warnings"
 mkdir -p /app/.heroku
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
-EXPORT_PATH="${BUILDPACK_DIR}/bin/../export"
+EXPORT_PATH="${BUILDPACK_DIR}/export"
 GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
 
@@ -120,12 +120,12 @@ source "${BUILDPACK_DIR}/bin/steps/hooks/pre_compile"
 
 # Sticky runtimes. If there was a previous build, and it used a given version of Python,
 # continue to use that version of Python in perpetuity.
-if [ -f "$CACHE_DIR/.heroku/python-version" ]; then
+if [[ -f "$CACHE_DIR/.heroku/python-version" ]]; then
   CACHED_PYTHON_VERSION=$(cat "$CACHE_DIR/.heroku/python-version")
 fi
 
 # We didn't always record the stack version. This code is in place because of that.
-if [ -f "$CACHE_DIR/.heroku/python-stack" ]; then
+if [[ -f "$CACHE_DIR/.heroku/python-stack" ]]; then
   CACHED_PYTHON_STACK=$(cat "$CACHE_DIR/.heroku/python-stack")
 else
   CACHED_PYTHON_STACK=$STACK
@@ -184,7 +184,7 @@ source "${BUILDPACK_DIR}/bin/steps/pipenv"
 # If no requirements.txt file given, assume `setup.py develop` is intended.
 # This allows for people to ship a setup.py application to Heroku
 
-if [ ! -f requirements.txt ] && [ ! -f Pipfile ]; then
+if [[ ! -f requirements.txt ]] && [[ ! -f Pipfile ]]; then
   echo "-e ." > requirements.txt
 fi
 

@@ -19,6 +19,8 @@ RSpec.describe 'NLTK corpora support' do
           remote: \\[nltk_data\\]     /tmp/build_.*/.heroku/python/nltk_data...
           remote: \\[nltk_data\\]   Unzipping corpora/stopwords.zip.
         REGEX
+
+        # TODO: Add a test that the downloaded corpora can be found at runtime.
       end
     end
   end
