@@ -9,7 +9,6 @@ RSpec.describe 'Compile hooks' do
     it 'runs the hooks with the correct environment' do
       expected_env_vars = %w[
         _
-        BPLOG_PREFIX
         BUILD_DIR
         BUILDPACK_LOG_FILE
         CACHE_DIR

@@ -4,10 +4,6 @@
 
 set -eo pipefail
 
-# Used by buildpack-stdlib's metrics features.
-export BPLOG_PREFIX="buildpack.python"
-export BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}
-
 [[ -n "$BUILDPACK_XTRACE" ]] && set -o xtrace
 
 BUILD_DIR="${1}"
@@ -18,6 +14,13 @@ ENV_DIR="${3}"
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
 
 source "${BUILDPACK_DIR}/bin/utils"
+source "${BUILDPACK_DIR}/lib/metadata.sh"
+
+compile_start_time=$(nowms)
+
+# Initialise metadata store.
+meta_init "${CACHE_DIR}" "python"
+meta_setup
 
 # Prepend proper path for old-school virtualenv hackery.
 # This may not be necessary.
@@ -141,16 +144,16 @@ if [[ -f runtime.txt ]]; then
   # TODO: Refactor this and stop pipenv-python-version using runtime.txt as an API.
   PYTHON_VERSION_SOURCE=${PYTHON_VERSION_SOURCE:-"runtime.txt"}
   puts-step "Using Python version specified in ${PYTHON_VERSION_SOURCE}"
-  mcount "version.reason.python.specified"
+  meta_set "python_version_reason" "specified"
 elif [[ -n "${CACHED_PYTHON_VERSION:-}" ]]; then
   puts-step "No Python version was specified. Using the same version as the last build: ${CACHED_PYTHON_VERSION}"
   echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
-  mcount "version.reason.python.cached"
+  meta_set "python_version_reason" "cached"
   echo "${CACHED_PYTHON_VERSION}" > runtime.txt
 else
   puts-step "No Python version was specified. Using the buildpack default: ${DEFAULT_PYTHON_VERSION}"
   echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
-  mcount "version.reason.python.default"
+  meta_set "python_version_reason" "default"
   echo "${DEFAULT_PYTHON_VERSION}" > runtime.txt
 fi
 
@@ -174,9 +177,9 @@ fi
 
 # Download / Install Python, from pre-build binaries available on Amazon S3.
 # This step also bootstraps pip / setuptools.
-(( start=$(nowms) ))
+install_python_start_time=$(nowms)
 source "${BUILDPACK_DIR}/bin/steps/python"
-mtime "python.install.time" "${start}"
+meta_time "python_install_duration" "${install_python_start_time}"
 
 # Install Pipenv dependencies, if a Pipfile was provided.
 source "${BUILDPACK_DIR}/bin/steps/pipenv"
@@ -185,29 +188,30 @@ source "${BUILDPACK_DIR}/bin/steps/pipenv"
 # This allows for people to ship a setup.py application to Heroku
 
 if [[ ! -f requirements.txt ]] && [[ ! -f Pipfile ]]; then
+  meta_set "setup_py_only" "true"
   echo "-e ." > requirements.txt
+else
+  meta_set "setup_py_only" "false"
 fi
 
 # SQLite3 support.
 # This sets up and installs sqlite3 dev headers and the sqlite3 binary but not the
 # libsqlite3-0 library since that exists on the stack image.
-(( start=$(nowms) ))
+install_sqlite_start_time=$(nowms)
 source "${BUILDPACK_DIR}/bin/steps/sqlite3"
 buildpack_sqlite3_install
-mtime "sqlite3.install.time" "${start}"
+meta_time "sqlite_install_duration" "${install_sqlite_start_time}"
 
 # pip install
 # -----------
 
 # Install dependencies with pip (where the magic happens).
-(( start=$(nowms) ))
 source "${BUILDPACK_DIR}/bin/steps/pip-install"
-mtime "pip.install.time" "${start}"
 
 # Support for NLTK corpora.
-(( start=$(nowms) ))
+nltk_downloader_start_time=$(nowms)
 sub_env "${BUILDPACK_DIR}/bin/steps/nltk"
-mtime "nltk.download.time" "${start}"
+meta_time "nltk_downloader_duration" "${nltk_downloader_start_time}"
 
 # Support for editable installations. Here, we are copying pip–created src directory,
 # and copying it into the proper place (the logical place to do this was early, but it must be done here).
@@ -224,9 +228,9 @@ fi
 # This is the cause for the majority of build failures on the Python platform.
 # These failures are intentional — if collectstatic (which can be tricky, at times) fails,
 # your build fails.
-(( start=$(nowms) ))
+collectstatic_start_time=$(nowms)
 sub_env "${BUILDPACK_DIR}/bin/steps/collectstatic"
-mtime "collectstatic.time" "${start}"
+meta_time "django_collectstatic_duration" "${collectstatic_start_time}"
 
 
 # Programmatically create .profile.d script for application runtime environment variables.
@@ -288,6 +292,4 @@ if [[ -d .heroku/src ]]; then
   cp -R .heroku/src "$CACHE_DIR/.heroku/" &> /dev/null || true
 fi
 
-# Measure the size of the Python installation.
-# shellcheck disable=SC2119
-mmeasure 'python.size' "$(measure-size)"
+meta_time "total_duration" "${compile_start_time}"

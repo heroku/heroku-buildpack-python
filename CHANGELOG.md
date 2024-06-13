@@ -4,7 +4,8 @@
 
 - Removed export of `Pipfile.lock` to `requirements.txt` during the build. ([#1593](https://github.com/heroku/heroku-buildpack-python/pull/1593))
 - Removed internal `pipenv-to-pip` script that was unintentionally exposed onto `PATH`. ([#1593](https://github.com/heroku/heroku-buildpack-python/pull/1593))
-- Stopped exposing the internal `BIN_DIR`, `EXPORT_PATH` and `PROFILE_PATH` environment variables to `bin/{pre,post}_compile` and other subprocesses. ([#1595](https://github.com/heroku/heroku-buildpack-python/pull/1595)).
+- Stopped exposing the internal `BIN_DIR`, `BPLOG_PREFIX`, `EXPORT_PATH` and `PROFILE_PATH` environment variables to `bin/{pre,post}_compile` and other subprocesses. ([#1595](https://github.com/heroku/heroku-buildpack-python/pull/1595) and [#1597](https://github.com/heroku/heroku-buildpack-python/pull/1597))
+- Implemented the `bin/report` build report API and removed log based metrics. ([#1597](https://github.com/heroku/heroku-buildpack-python/pull/1597))
 
 ## [v251] - 2024-06-07
 

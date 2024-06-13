@@ -195,7 +195,6 @@ RSpec.describe 'Pip support' do
           remote:  !     Hello! Package installation failed since the GDAL library was not found.
           remote:  !     For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:
           remote:  !     https://github.com/heroku/heroku-geo-buildpack
-          remote:  !       -- Much Love, Heroku.
         OUTPUT
       end
     end

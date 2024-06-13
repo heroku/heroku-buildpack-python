@@ -64,11 +64,16 @@ sqlite3_install() {
 buildpack_sqlite3_install() {
   puts-step "Installing SQLite3"
 
+  # TODO: This never actual prints failure or even aborts the build, since
+  # the conditional disables `set -e` inside the called function:
+  # https://stackoverflow.com/q/19789102
+  # ...plus whoever wrote this forgot the `exit 1` in the `else` anyway.
   if sqlite3_install "$BUILD_DIR/.heroku/python" ; then
-    mcount "success.python.sqlite3"
+    # mcount "success.python.sqlite3"
+    true
   else
     echo "Sqlite3 failed to install."
-    mcount "failure.python.sqlite3"
+    # mcount "failure.python.sqlite3"
   fi
 
   mkdir -p "$CACHE_DIR/.heroku/"
