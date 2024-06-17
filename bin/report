@@ -72,7 +72,6 @@ STRING_FIELDS=(
   python_version_major
   python_version_reason
   python_version
-  setup_py_requirements_fallback
   setuptools_version
   wheel_version
 )
