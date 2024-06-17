@@ -70,7 +70,7 @@ buildpack_sqlite3_install() {
   # ...plus whoever wrote this forgot the `exit 1` in the `else` anyway.
   if sqlite3_install "$BUILD_DIR/.heroku/python" ; then
     # mcount "success.python.sqlite3"
-    true
+    :
   else
     echo "Sqlite3 failed to install."
     # mcount "failure.python.sqlite3"
