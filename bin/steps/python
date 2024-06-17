@@ -21,6 +21,7 @@ function eol_python_version_error() {
   puts-warn "For a list of the supported Python versions, see:"
   puts-warn "https://devcenter.heroku.com/articles/python-support#supported-runtimes"
   puts-warn
+  meta_set "failure_reason" "python-version-eol"
   exit 1
 }
 
@@ -49,8 +50,14 @@ if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefuse
   puts-warn "For a list of the supported Python versions, see:"
   puts-warn "https://devcenter.heroku.com/articles/python-support#supported-runtimes"
   puts-warn
+  meta_set "failure_reason" "python-version-not-found"
   exit 1
 fi
+
+# TODO: Refactor Python version usage to use the non-prefixed form everywhere.
+python_version_without_prefix="${PYTHON_VERSION#python-}"
+meta_set "python_version" "${python_version_without_prefix}"
+meta_set "python_version_major" "${python_version_without_prefix%.*}"
 
 function warn_if_patch_update_available() {
   local requested_version="${1}"
@@ -97,8 +104,6 @@ case "${PYTHON_VERSION}" in
   # TODO: Make this case an error, since it should be unreachable.
   *) ;;
 esac
-
-mcount "version.python.${PYTHON_VERSION}"
 
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
     puts-step "Stack has changed from $CACHED_PYTHON_STACK to $STACK, clearing cache"
@@ -149,6 +154,7 @@ else
     # The Python version was confirmed to exist previously, so any failure here is due to
     # a networking issue or archive/buildpack bug rather than the runtime not existing.
     puts-warn "Failed to download/install ${PYTHON_VERSION}"
+    meta_set "failure_reason" "python-download"
     exit 1
   fi
 
@@ -165,6 +171,10 @@ WHEEL_VERSION=$(get_requirement_version 'wheel')
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
+meta_set "pip_version" "${PIP_VERSION}"
+meta_set "setuptools_version" "${SETUPTOOLS_VERSION}"
+meta_set "wheel_version" "${WHEEL_VERSION}"
+
 # Python bundles Pip within its standard library, which we can use to install our chosen
 # pip version from PyPI, saving us from having to download the usual pip bootstrap script.
 # We have to use a glob since the bundled wheel filename contains the pip version, which
@@ -176,8 +186,8 @@ BUNDLED_PIP_WHEEL_LIST=(.heroku/python/lib/python*/ensurepip/_bundled/pip-*.whl)
 BUNDLED_PIP_WHEEL="${BUNDLED_PIP_WHEEL_LIST[0]}"
 
 if [[ -z "${BUNDLED_PIP_WHEEL}" ]]; then
-  mcount "failure.python.locate-bundled-pip-wheel"
   puts-warn "Failed to locate the bundled pip wheel"
+  meta_set "failure_reason" "bundled-pip-not-found"
   exit 1
 fi
 

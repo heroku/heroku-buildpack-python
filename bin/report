@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+# Usage: bin/report <build-dir> <cache-dir> <env-dir>
+
+# Produces a build report containing metadata about the build, that's consumed by the build system.
+# This script is run for both successful and failing builds, so it should not assume the build ran
+# to completion (e.g. Python or other tools may not even have been installed).
+#
+# Metadata must be emitted to stdout as valid YAML key-value pairs. Any fields that should always
+# be typed as a string must be explicitly quoted.
+#
+# Example valid stdout:
+#   python_version: 'X.Y.Z'
+#   python_install_duration: 1.234
+#
+# Failures in this script don't cause the overall build to fail (and won't appear in user
+# facing build logs) to avoid breaking builds unnecessarily / causing confusion. To debug
+# issues check the internal build system logs for `buildpack.report.failed` events, or
+# when developing run `make compile` in this repo locally, which runs `bin/report` too.
+
+set -euo pipefail
+
+CACHE_DIR="${2}"
+
+# The absolute path to the root of the buildpack.
+BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
+
+# The build system doesn't source the `export` script before running this script, so we have to do
+# so manually (if it exists) so that buildpack Python/Pip can be found (if the build succeeded).
+# We have to disable Bash error on undefined variables for now, since not all env vars used in the
+# export script will be set by default (eg `LIBRARY_PATH`).
+EXPORT_FILE="${BUILDPACK_DIR}/export"
+if [[ -f "${EXPORT_FILE}" ]]; then
+  set +u
+  # shellcheck source=/dev/null
+  source "${EXPORT_FILE}"
+  set -u
+fi
+
+source "${BUILDPACK_DIR}/lib/metadata.sh"
+meta_init "${CACHE_DIR}" "python"
+
+# Emit the key / value pair unquoted to stdout. Skips if the value is empty.
+# Based on: https://github.com/heroku/heroku-buildpack-nodejs/blob/main/bin/report
+kv_pair() {
+  local key="${1}"
+  local value="${2}"
+  if [[ -n "${value}" ]]; then
+    echo "${key}: ${value}"
+  fi
+}
+
+# Emit the key / value pair to stdout, safely quoting the string. Skips if the value is empty.
+# Based on: https://github.com/heroku/heroku-buildpack-nodejs/blob/main/bin/report
+# (Though instead uses single quotes instead of double to avoid escaping issues.)
+kv_pair_string() {
+  local key="${1}"
+  local value="${2}"
+  if [[ -n "${value}" ]]; then
+    # Escape any existing single quotes, which for YAML means replacing `'` with `''`.
+    value="${value//\'/\'\'}"
+    echo "${key}: '${value}'"
+  fi
+}
+
+STRING_FIELDS=(
+  django_collectstatic
+  failure_reason
+  nltk_downloader
+  package_manager
+  pip_version
+  pipenv_version
+  python_version_major
+  python_version_reason
+  python_version
+  setuptools_version
+  wheel_version
+)
+
+# We don't want to quote numeric or boolean fields.
+ALL_OTHER_FIELDS=(
+  dependencies_install_duration
+  django_collectstatic_duration
+  nltk_downloader_duration
+  pipenv_has_lockfile
+  post_compile_hook
+  post_compile_hook_duration
+  pre_compile_hook
+  pre_compile_hook_duration
+  python_install_duration
+  setup_py_only
+  sqlite_install_duration
+  total_duration
+)
+
+for field in "${STRING_FIELDS[@]}"; do
+  kv_pair_string "${field}" "$(meta_get "${field}")"
+done
+
+for field in "${ALL_OTHER_FIELDS[@]}"; do
+  kv_pair "${field}" "$(meta_get "${field}")"
+done
+
+# If the build failed, pip might not have been installed yet.
+if command -v pip >/dev/null; then
+  # Determine pysqlite3 usage since it's the only package that requires the sqlite3 headers.
+  if pip show pysqlite3 &>/dev/null; then
+    kv_pair pysqlite3_installed true
+  else
+    kv_pair pysqlite3_installed false
+  fi
+
+  if pip show pysqlite3-binary &>/dev/null; then
+    kv_pair pysqlite3_binary_installed true
+  else
+    kv_pair pysqlite3_binary_installed false
+  fi
+fi

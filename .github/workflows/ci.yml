@@ -54,3 +54,20 @@ jobs:
       - name: Run Hatchet integration tests
         # parallel_split_test runs rspec in parallel, with concurrency equal to PARALLEL_SPLIT_TEST_PROCESSES.
         run: bundle exec parallel_split_test spec/hatchet/
+
+  container-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # Work around lack of TTY causing errors when using `docker run -it`:
+        # https://github.com/actions/runner/issues/241
+        shell: 'script -q -e -c "bash -eo pipefail {0}"'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # These test both the local development `make run` workflow and that `bin/report` completes successfully
+      # for both passing and failing builds (since `bin/report` can't easily be tested via Hatchet tests).
+      - name: Run buildpack using default app fixture
+        run: make run
+      - name: Run buildpack using an app fixture that's expected to fail
+        run: make run FIXTURE=spec/fixtures/python_version_invalid/
