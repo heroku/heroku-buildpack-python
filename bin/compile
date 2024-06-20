@@ -271,8 +271,11 @@ EOT
 fi
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
-cp "${BUILDPACK_DIR}/vendor/WEB_CONCURRENCY.sh" "$WEB_CONCURRENCY_PROFILE_PATH"
 cp "${BUILDPACK_DIR}/vendor/python.gunicorn.sh" "$GUNICORN_PROFILE_PATH"
+# concatenate these together to avoid possible collisions with other buildpacks that use the same cgroup utils under the same name
+# in case of differences, the last buildpack that ran would "win"
+# this way, each sourced file gets its own known version of the utils just prior to execution
+cat "${BUILDPACK_DIR}/vendor/cgroups.sh" "${BUILDPACK_DIR}/vendor/WEB_CONCURRENCY.sh" >"$WEB_CONCURRENCY_PROFILE_PATH"
 
 # Experimental post_compile hook. Don't remove this.
 source "${BUILDPACK_DIR}/bin/steps/hooks/post_compile"
