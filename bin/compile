@@ -134,6 +134,41 @@ else
   CACHED_PYTHON_STACK=$STACK
 fi
 
+# TODO: Move this into a new package manager handling implementation when adding Poetry support.
+if [[ ! -f requirements.txt && ! -f Pipfile && ! -f setup.py ]]; then
+  puts-warn
+  puts-warn "Error: No supported Python package manager files were found."
+  puts-warn
+  # We intentionally don't mention `setup.py` here since it's being removed soon.
+  puts-warn "A Python app on Heroku must have either a 'requirements.txt' or"
+  puts-warn "'Pipfile' file in the root directory of its source code, so the"
+  puts-warn "buildpack knows which dependencies to install."
+  puts-warn
+  puts-warn "Currently the root directory of your app contains:"
+  puts-warn
+  # TODO: Overhaul logging helpers so they can handle prefixing multi-line strings, and switch to them.
+  # shellcheck disable=SC2012 # Using `ls` instead of `find` is absolutely fine for this use case.
+  ls -1 --indicator-style=slash "${BUILD_DIR}" | sed 's/^/ !     /'
+  puts-warn
+  puts-warn "If you believe your app already has a 'requirements.txt' or"
+  puts-warn "'Pipfile' file, check that:"
+  puts-warn
+  puts-warn "1. The file is in the top level directory (not a subdirectory)."
+  puts-warn "2. The filename has the correct spelling and capitalisation."
+  puts-warn "3. The filename isn't listed in '.gitignore' or '.slugignore'."
+  puts-warn
+  puts-warn "Otherwise, please create a 'requirements.txt' file in the root"
+  puts-warn "of your app source, which lists your app's Python dependencies"
+  puts-warn "(the file can be empty if your app has no dependencies)."
+  puts-warn
+  puts-warn "For help with using Python on Heroku, see:"
+  puts-warn "https://devcenter.heroku.com/articles/getting-started-with-python"
+  puts-warn "https://devcenter.heroku.com/articles/python-support"
+  puts-warn
+  meta_set "failure_reason" "package-manager-not-found"
+  exit 1
+fi
+
 # Pipenv Python version support.
 # Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).
 # Convert it to a runtime.txt file.

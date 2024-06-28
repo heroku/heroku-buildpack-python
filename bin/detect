@@ -6,9 +6,74 @@ set -euo pipefail
 
 BUILD_DIR="${1}"
 
-# Exit early if app is clearly not Python.
-if [[ ! -f "$BUILD_DIR/requirements.txt" ]] && [[ ! -f "$BUILD_DIR/setup.py" ]] && [[ ! -f "$BUILD_DIR/Pipfile" ]]; then
-  exit 1
-fi
+# Filenames that if found in a project mean it should be treated as a Python project,
+# and so pass this buildpack's detection phase.
+#
+# This list is deliberately larger than just the list of supported package manager files,
+# so that Python projects that are missing some of the required files still pass detection,
+# allowing us to show a helpful error message during the build phase.
+KNOWN_PYTHON_PROJECT_FILES=(
+  .python-version
+  app.py
+  main.py
+  manage.py
+  pdm.lock
+  Pipfile
+  Pipfile.lock
+  poetry.lock
+  pyproject.toml
+  requirements.txt
+  runtime.txt
+  setup.cfg
+  setup.py
+  uv.lock
+)
 
-echo Python
+for filename in "${KNOWN_PYTHON_PROJECT_FILES[@]}"; do
+  if [[ -f "${BUILD_DIR}/${filename}" ]]; then
+    echo "Python"
+    exit 0
+  fi
+done
+
+# Cytokine incorrectly indents the first line, so we have to leave it empty.
+echo 1>&2
+
+# Note: This error message intentionally doesn't list all of the filetypes above,
+# since during compile the build will still require a package manager file, so it
+# makes sense to describe the stricter requirements up front.
+# TODO: Overhaul logging helpers so they can handle prefixing multi-line strings, and switch to them.
+sed 's/^/ !     /' 1>&2 << EOF
+Error: Unable to find any Python project files.
+
+The Python buildpack is set on this app, however, no recognised
+Python related files were found.
+
+A Python app on Heroku must have either a 'requirements.txt' or
+'Pipfile' file in the root directory of its source code, so the
+buildpack knows which dependencies to install.
+
+Currently the root directory of your app contains:
+
+$(ls -1 --indicator-style=slash "${BUILD_DIR}")
+
+If you believe your app already has a 'requirements.txt' or
+'Pipfile' file, check that:
+
+1. The file is in the top level directory (not a subdirectory).
+2. The filename has the correct spelling and capitalisation.
+3. The filename isn't listed in '.gitignore' or '.slugignore'.
+
+Otherwise, please create a 'requirements.txt' file in the root
+of your app source, which lists your app's Python dependencies
+(the file can be empty if your app has no dependencies).
+
+For help with using Python on Heroku, see:
+https://devcenter.heroku.com/articles/getting-started-with-python
+https://devcenter.heroku.com/articles/python-support
+
+If you are trying to deploy an app written in another language,
+you need to change the list of buildpacks set on your app.
+EOF
+
+exit 1

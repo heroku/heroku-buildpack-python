@@ -2,22 +2,16 @@
 
 require_relative '../spec_helper'
 
-RSpec.describe 'Buildpack detection' do
-  # This spec only tests cases where detection fails, since the success cases
-  # are already tested in the specs for general buildpack functionality.
+RSpec.describe 'Package manager support' do
+  context 'when there are no supported package manager files' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_only', allow_failure: true) }
 
-  context 'when there are no recognised Python project files' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/no_python_project_files', allow_failure: true) }
-
-    it 'fails detection' do
+    it 'fails the build with an informative error message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> App not compatible with buildpack: #{DEFAULT_BUILDPACK_URL}
-          remote:        
-          remote:  !     Error: Unable to find any Python project files.
+          remote: -----> Python app detected
           remote:  !     
-          remote:  !     The Python buildpack is set on this app, however, no recognised
-          remote:  !     Python related files were found.
+          remote:  !     Error: No supported Python package manager files were found.
           remote:  !     
           remote:  !     A Python app on Heroku must have either a 'requirements.txt' or
           remote:  !     'Pipfile' file in the root directory of its source code, so the
@@ -25,7 +19,7 @@ RSpec.describe 'Buildpack detection' do
           remote:  !     
           remote:  !     Currently the root directory of your app contains:
           remote:  !     
-          remote:  !     README.md
+          remote:  !     runtime.txt
           remote:  !     subdir/
           remote:  !     
           remote:  !     If you believe your app already has a 'requirements.txt' or
@@ -43,10 +37,6 @@ RSpec.describe 'Buildpack detection' do
           remote:  !     https://devcenter.heroku.com/articles/getting-started-with-python
           remote:  !     https://devcenter.heroku.com/articles/python-support
           remote:  !     
-          remote:  !     If you are trying to deploy an app written in another language,
-          remote:  !     you need to change the list of buildpacks set on your app.
-          remote: 
-          remote:        More info: https://devcenter.heroku.com/articles/buildpacks#detection-failure
         OUTPUT
       end
     end
