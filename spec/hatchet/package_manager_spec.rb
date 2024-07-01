@@ -11,27 +11,25 @@ RSpec.describe 'Package manager support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote:  !     
-          remote:  !     Error: No supported Python package manager files were found.
+          remote:  !     Error: Couldn't find any supported Python package manager files.
           remote:  !     
           remote:  !     A Python app on Heroku must have either a 'requirements.txt' or
-          remote:  !     'Pipfile' file in the root directory of its source code, so the
-          remote:  !     buildpack knows which dependencies to install.
+          remote:  !     'Pipfile' package manager file in the root directory of its
+          remote:  !     source code.
           remote:  !     
           remote:  !     Currently the root directory of your app contains:
           remote:  !     
           remote:  !     runtime.txt
           remote:  !     subdir/
           remote:  !     
-          remote:  !     If you believe your app already has a 'requirements.txt' or
-          remote:  !     'Pipfile' file, check that:
+          remote:  !     If your app already has a package manager file, check that it:
           remote:  !     
-          remote:  !     1. The file is in the top level directory (not a subdirectory).
-          remote:  !     2. The filename has the correct spelling and capitalisation.
-          remote:  !     3. The filename isn't listed in '.gitignore' or '.slugignore'.
+          remote:  !     1. Is in the top level directory (not a subdirectory).
+          remote:  !     2. Has the correct spelling (the filenames are case-sensitive).
+          remote:  !     3. Isn't listed in '.gitignore' or '.slugignore'.
           remote:  !     
-          remote:  !     Otherwise, please create a 'requirements.txt' file in the root
-          remote:  !     of your app source, which lists your app's Python dependencies
-          remote:  !     (the file can be empty if your app has no dependencies).
+          remote:  !     Otherwise, add a package manager file to your app. If your app has
+          remote:  !     no dependencies, then create an empty 'requirements.txt' file.
           remote:  !     
           remote:  !     For help with using Python on Heroku, see:
           remote:  !     https://devcenter.heroku.com/articles/getting-started-with-python

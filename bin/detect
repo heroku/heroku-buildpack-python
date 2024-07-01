@@ -44,36 +44,29 @@ echo 1>&2
 # makes sense to describe the stricter requirements up front.
 # TODO: Overhaul logging helpers so they can handle prefixing multi-line strings, and switch to them.
 sed 's/^/ !     /' 1>&2 << EOF
-Error: Unable to find any Python project files.
-
-The Python buildpack is set on this app, however, no recognised
-Python related files were found.
+Error: Your app is configured to use the Python buildpack,
+but we couldn't find any supported Python project files.
 
 A Python app on Heroku must have either a 'requirements.txt' or
-'Pipfile' file in the root directory of its source code, so the
-buildpack knows which dependencies to install.
+'Pipfile' package manager file in the root directory of its
+source code.
 
 Currently the root directory of your app contains:
 
 $(ls -1 --indicator-style=slash "${BUILD_DIR}")
 
-If you believe your app already has a 'requirements.txt' or
-'Pipfile' file, check that:
+If your app already has a package manager file, check that it:
 
-1. The file is in the top level directory (not a subdirectory).
-2. The filename has the correct spelling and capitalisation.
-3. The filename isn't listed in '.gitignore' or '.slugignore'.
+1. Is in the top level directory (not a subdirectory).
+2. Has the correct spelling (the filenames are case-sensitive).
+3. Isn't listed in '.gitignore' or '.slugignore'.
 
-Otherwise, please create a 'requirements.txt' file in the root
-of your app source, which lists your app's Python dependencies
-(the file can be empty if your app has no dependencies).
+Otherwise, add a package manager file to your app. If your app has
+no dependencies, then create an empty 'requirements.txt' file.
 
 For help with using Python on Heroku, see:
 https://devcenter.heroku.com/articles/getting-started-with-python
 https://devcenter.heroku.com/articles/python-support
-
-If you are trying to deploy an app written in another language,
-you need to change the list of buildpacks set on your app.
 EOF
 
 exit 1
