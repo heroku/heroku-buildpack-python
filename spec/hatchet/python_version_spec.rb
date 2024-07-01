@@ -217,12 +217,6 @@ RSpec.describe 'Python version support' do
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_12
   end
 
-  context 'when there is only a runtime.txt and no requirements.txt', skip: 'not currently supported (W-8720280)' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_only', allow_failure: true) }
-
-    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_12
-  end
-
   context 'when the requested Python version has changed since the last build' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.11') }
 

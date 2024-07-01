@@ -2,20 +2,16 @@
 
 require_relative '../spec_helper'
 
-RSpec.describe 'Buildpack detection' do
-  # This spec only tests cases where detection fails, since the success cases
-  # are already tested in the specs for general buildpack functionality.
+RSpec.describe 'Package manager support' do
+  context 'when there are no supported package manager files' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_only', allow_failure: true) }
 
-  context 'when there are no recognised Python project files' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/no_python_project_files', allow_failure: true) }
-
-    it 'fails detection' do
+    it 'fails the build with an informative error message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> App not compatible with buildpack: #{DEFAULT_BUILDPACK_URL}
-          remote:        
-          remote:  !     Error: Your app is configured to use the Python buildpack,
-          remote:  !     but we couldn't find any supported Python project files.
+          remote: -----> Python app detected
+          remote:  !     
+          remote:  !     Error: Couldn't find any supported Python package manager files.
           remote:  !     
           remote:  !     A Python app on Heroku must have either a 'requirements.txt' or
           remote:  !     'Pipfile' package manager file in the root directory of its
@@ -23,7 +19,7 @@ RSpec.describe 'Buildpack detection' do
           remote:  !     
           remote:  !     Currently the root directory of your app contains:
           remote:  !     
-          remote:  !     README.md
+          remote:  !     runtime.txt
           remote:  !     subdir/
           remote:  !     
           remote:  !     If your app already has a package manager file, check that it:
@@ -38,8 +34,7 @@ RSpec.describe 'Buildpack detection' do
           remote:  !     For help with using Python on Heroku, see:
           remote:  !     https://devcenter.heroku.com/articles/getting-started-with-python
           remote:  !     https://devcenter.heroku.com/articles/python-support
-          remote: 
-          remote:        More info: https://devcenter.heroku.com/articles/buildpacks#detection-failure
+          remote:  !     
         OUTPUT
       end
     end

@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Improved the error messages shown when an app is missing the necessary Python package manager files. ([#1608](https://github.com/heroku/heroku-buildpack-python/pull/1608))
 
 ## [v252] - 2024-06-17
 
