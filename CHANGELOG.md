@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v253] - 2024-07-01
+
 - Improved the error messages shown when an app is missing the necessary Python package manager files. ([#1608](https://github.com/heroku/heroku-buildpack-python/pull/1608))
 
 ## [v252] - 2024-06-17
@@ -1012,7 +1015,8 @@ Default Python is now latest 2.7.10. Updated Pip and Distribute.
 - Setuptools updated to v16.0
 - Pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v252...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v253...main
+[v253]: https://github.com/heroku/heroku-buildpack-python/compare/v252...v253
 [v252]: https://github.com/heroku/heroku-buildpack-python/compare/v251...v252
 [v251]: https://github.com/heroku/heroku-buildpack-python/compare/v250...v251
 [v250]: https://github.com/heroku/heroku-buildpack-python/compare/v249...v250
