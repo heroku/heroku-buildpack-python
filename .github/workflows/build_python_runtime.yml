@@ -38,7 +38,7 @@ env:
 jobs:
   heroku-20:
     if: inputs.stack == 'heroku-20' || inputs.stack == 'auto'
-    runs-on: pub-hk-ubuntu-22.04-xlarge
+    runs-on: pub-hk-ubuntu-24.04-xlarge
     env:
       STACK_VERSION: "20"
     steps:
@@ -60,7 +60,7 @@ jobs:
   heroku-22:
     # On Heroku-22 we only support Python 3.9+.
     if: inputs.stack == 'heroku-22' || (inputs.stack == 'auto' && !startsWith(inputs.python_version,'3.8.'))
-    runs-on: pub-hk-ubuntu-22.04-xlarge
+    runs-on: pub-hk-ubuntu-24.04-xlarge
     env:
       STACK_VERSION: "22"
     steps:
@@ -86,7 +86,7 @@ jobs:
       fail-fast: false
       matrix:
         arch: ["amd64", "arm64"]
-    runs-on: ${{ matrix.arch == 'arm64' && 'pub-hk-ubuntu-22.04-arm-xlarge' || 'pub-hk-ubuntu-22.04-xlarge' }}
+    runs-on: ${{ matrix.arch == 'arm64' && 'pub-hk-ubuntu-24.04-arm-xlarge' || 'pub-hk-ubuntu-24.04-xlarge' }}
     env:
       STACK_VERSION: "24"
     steps:
