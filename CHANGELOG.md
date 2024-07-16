@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Updated setuptools from 69.2.0 to 70.3.0. ([#1614](https://github.com/heroku/heroku-buildpack-python/pull/1614))
+- Updated pipenv from 2023.12.1 to 2024.0.1. ([#1601](https://github.com/heroku/heroku-buildpack-python/pull/1601))
 
 ## [v253] - 2024-07-01
 
