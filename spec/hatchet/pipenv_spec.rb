@@ -41,7 +41,7 @@ RSpec.describe 'Pipenv support' do
 
     it 'builds with the default Python version using just the Pipfile' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
           remote:  !     No 'Pipfile.lock' found! We recommend you commit this into your repository.
           remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
@@ -49,13 +49,15 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        The flag --skip-lock has been reintroduced (but is not recommended).  Without 
+          remote:        The flag --skip-lock has been reintroduced \\(but is not recommended\\).  Without 
           remote:        the lock resolver it is difficult to manage multiple package indexes, and hash 
           remote:        checking is not provided.  However it can help manage installs with current 
           remote:        deficiencies in locking across platforms.
+          remote:        Pipfile.lock not found, creating...
+          .+
           remote:        Installing dependencies from Pipfile...
           remote: -----> Installing SQLite3
-        OUTPUT
+        REGEX
       end
     end
   end
