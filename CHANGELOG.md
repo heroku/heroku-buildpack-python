@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated setuptools from 69.2.0 to 70.3.0. ([#1614](https://github.com/heroku/heroku-buildpack-python/pull/1614))
 
 ## [v253] - 2024-07-01
 
