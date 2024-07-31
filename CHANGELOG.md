@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Support reading container memory limits from cgroups (v1 and v2)
 
 ## [v254] - 2024-07-16
 
