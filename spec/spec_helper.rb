@@ -11,7 +11,7 @@ LATEST_PYTHON_3_8 = '3.8.19'
 LATEST_PYTHON_3_9 = '3.9.19'
 LATEST_PYTHON_3_10 = '3.10.14'
 LATEST_PYTHON_3_11 = '3.11.9'
-LATEST_PYTHON_3_12 = '3.12.4'
+LATEST_PYTHON_3_12 = '3.12.5'
 DEFAULT_PYTHON_VERSION = LATEST_PYTHON_3_12
 
 # The requirement versions are effectively buildpack constants, however, we want
