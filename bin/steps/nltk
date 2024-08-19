@@ -1,25 +1,28 @@
 #!/usr/bin/env bash
 
-# This script serves as the NLTK build step of the
-# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
-# compiler.
-#
-# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
-# adapter between a Python application and Heroku's runtime.
-#
-# This script is invoked by [`bin/compile`](/).
+# This script is run in a subshell via sub_env so doesn't inherit the options/vars/utils from `bin/compile`.
+# TODO: Stop running this script in a subshell.
+set -eo pipefail
+BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
+source "${BUILDPACK_DIR}/bin/utils"
 
-# Syntax sugar.
-# shellcheck source=bin/utils
-source "$BIN_DIR/utils"
+# Required for `meta_set`.
+source "${BUILDPACK_DIR}/lib/metadata.sh"
+# shellcheck disable=SC2153
+meta_init "${CACHE_DIR}" "python"
+
+# These are required by `set_env`.
+PROFILE_PATH="${BUILD_DIR}/.profile.d/python.sh"
+EXPORT_PATH="${BUILDPACK_DIR}/export"
 
 # Check that nltk was installed by pip, otherwise obviously not needed
 if is_module_available 'nltk'; then
-    puts-step "Downloading NLTK corpora…"
+    puts-step "Downloading NLTK corpora..."
 
     nltk_packages_definition="$BUILD_DIR/nltk.txt"
 
-    if [ -f "$nltk_packages_definition" ]; then
+    if [[ -f "$nltk_packages_definition" ]]; then
+        meta_set "nltk_downloader" "enabled"
 
         readarray -t nltk_packages < "$nltk_packages_definition"
         puts-step "Downloading NLTK packages: ${nltk_packages[*]}"
@@ -27,9 +30,8 @@ if is_module_available 'nltk'; then
         python -m nltk.downloader -d "$BUILD_DIR/.heroku/python/nltk_data" "${nltk_packages[@]}" | indent
         set_env NLTK_DATA "/app/.heroku/python/nltk_data"
 
-        mcount "buildvar.NLTK_PACKAGES_DEFINITION"
-        mcount "steps.nltk"
     else
+        meta_set "nltk_downloader" "skipped-no-nltk-file"
         puts-warn "'nltk.txt' not found, not downloading any corpora"
         puts-warn "Learn more: https://devcenter.heroku.com/articles/python-nltk"
     fi

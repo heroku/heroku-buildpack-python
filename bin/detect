@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Usage: bin/compile <build-dir>
+# See: https://devcenter.heroku.com/articles/buildpack-api
 
 # Detection is always true.
 echo "Detection always passes for subdir builds."

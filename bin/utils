@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
+
+# Be careful about moving these to bin/compile, since this utils script is sourced
+# directly by other scripts run via subshells, and not only from bin/compile.
 shopt -s extglob
 shopt -s nullglob
 
-# This is necessary since this script is sometimes sourced from
-# subshells that don't have the variables from bin/compile.
-# Remove this once we no longer wrap all the things in `sub_env`.
-BIN_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-ROOT_DIR=$(dirname "${BIN_DIR}")
-# shellcheck source=vendor/buildpack-stdlib_v8.sh
-source "${ROOT_DIR}/vendor/buildpack-stdlib_v8.sh"
+source "${BUILDPACK_DIR}/vendor/buildpack-stdlib_v8.sh"
 
-if [ "$(uname)" == Darwin ]; then
+if [[ "$(uname)" == "Darwin" ]]; then
     sed() { command sed -l "$@"; }
 else
     sed() { command sed -u "$@"; }
@@ -55,7 +52,7 @@ deep-cp() {
 
 # Measure the size of the Python installation.
 measure-size() {
-  echo "$(du -s .heroku/python 2>/dev/null || echo 0) | awk '{print $1}')"
+  { du -s .heroku/python 2>/dev/null || echo 0; } | awk '{print $1}'
 }
 
 # Returns 0 if the specified module exists, otherwise returns 1.
@@ -71,7 +68,7 @@ is_module_available() {
 get_requirement_version() {
   local package_name="${1}"
   local requirement
-  requirement=$(cat "${ROOT_DIR}/requirements/${package_name}.txt")
+  requirement=$(cat "${BUILDPACK_DIR}/requirements/${package_name}.txt")
   local requirement_version="${requirement#"${package_name}=="}"
   echo "${requirement_version}"
 }

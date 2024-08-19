@@ -1,0 +1,15 @@
+# Enable all checks, including the optional ones that are off by default.
+enable=all
+
+# TODO: Triage and potentially enable more of these optional checks.
+
+# SC2154 (warning): var is referenced but not assigned.
+disable=SC2154
+# SC2250 (style): Prefer putting braces around variable references even when not strictly required.
+disable=SC2250
+# SC2310 (info): This function is invoked in an 'if' condition so set -e will be disabled.
+disable=SC2310
+# SC2311 (info): Bash implicitly disabled set -e for this function invocation because it's inside a command substitution.
+disable=SC2311
+# SC2312 (info): Consider invoking this command separately to avoid masking its return value
+disable=SC2312

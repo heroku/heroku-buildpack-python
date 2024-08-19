@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 
-# From:
+# Based on:
 # https://raw.githubusercontent.com/heroku/buildpack-stdlib/v8/stdlib.sh
-
-# Buildpack defaults
-# ---------------
-
-export BUILDPACK_LOG_FILE="${BUILDPACK_LOG_FILE:-/dev/null}"
 
 # Standard Output
 # ---------------
@@ -92,10 +87,10 @@ un_set_env() {
 # Outputs a regex of default blacklist env vars.
 _env_blacklist() {
   local regex=${1:-''}
-  if [ -n "$regex" ]; then
+  if [[ -n "$regex" ]]; then
     regex="|$regex"
   fi
-  echo "^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH$regex)$"
+  echo "^(PATH|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|LD_LIBRARY_PATH|PYTHONHOME$regex)$"
 }
 
 # Usage: $ export-env ENV_DIR WHITELIST BLACKLIST
@@ -105,7 +100,7 @@ export_env() {
   local whitelist=${2:-''}
   local blacklist
   blacklist="$(_env_blacklist "$3")"
-  if [ -d "$env_dir" ]; then
+  if [[ -d "$env_dir" ]]; then
     # Environment variable names won't contain characters affected by:
     # shellcheck disable=SC2045
     for e in $(ls "$env_dir"); do
@@ -132,64 +127,7 @@ sub_env() {
   )
 }
 
-# Logging
-# -------
-
-# Notice: These functions expect BPLOG_PREFIX and BUILDPACK_LOG_FILE to be defined (BUILDPACK_LOG_FILE can point to /dev/null if not provided by the buildpack).
-# Example: BUILDPACK_LOG_FILE=${BUILDPACK_LOG_FILE:-/dev/null}; BPLOG_PREFIX="buildpack.go"
-
-# Returns now, in milleseconds. Useful for logging.
-# Example: $ let start=$(nowms); sleep 30; mtime "glide.install.time" "${start}"
+# Returns the current time, in milliseconds.
 nowms() {
   date +%s%3N
-}
-
-# Log arbitrary data to the logfile (e.g. a packaging file).
-# Usage: $ bplog "$(<${vendorJSON})
-bplog() {
-  echo -n "${@}" | awk 'BEGIN {printf "msg=\""; f="%s"} {gsub(/"/, "\\\"", $0); printf f, $0} {if (NR == 1) f="\\n%s" } END { print "\"" }' >> "${BUILDPACK_LOG_FILE}"
-}
-
-# Measures time elapsed for a specific build step.
-# Usage: $ let start=$(nowms); mtime "glide.install.time" "${start}"
-# https://github.com/heroku/engineering-docs/blob/master/guides/logs-as-data.md#distributions-measure
-mtime() {
-  local key="${BPLOG_PREFIX}.${1}"
-  local start="${2}"
-  local end="${3:-$(nowms)}"
-  echo "${key} ${start} ${end}" | awk '{ printf "measure#%s=%.3f\n", $1, ($3 - $2)/1000 }' >> "${BUILDPACK_LOG_FILE}"
-}
-
-# Logs a count for a specific built step.
-# Usage: $ mcount "tool.govendor"
-# https://github.com/heroku/engineering-docs/blob/master/guides/logs-as-data.md#counting-count
-mcount() {
-  local k="${BPLOG_PREFIX}.${1}"
-  local v="${2:-1}"
-  echo "count#${k}=${v}" >> "${BUILDPACK_LOG_FILE}"
-}
-
-# Logs a measure for a specific build step.
-# Usage: $ mmeasure "tool.installed_dependencies" 42
-# https://github.com/heroku/engineering-docs/blob/master/guides/logs-as-data.md#distributions-measure
-mmeasure() {
-  local k="${BPLOG_PREFIX}.${1}"
-  local v="${2}"
-  echo "measure#${k}=${v}" >> "${BUILDPACK_LOG_FILE}"
-}
-
-# Logs a unuique measurement build step.
-# Usage: $ munique "versions.count" 2.7.13
-# https://github.com/heroku/engineering-docs/blob/master/guides/logs-as-data.md#uniques-unique
-munique() {
-  local k="${BPLOG_PREFIX}.${1}"
-  local v="${2}"
-  echo "unique#${k}=${v}" >> "${BUILDPACK_LOG_FILE}"
-}
-
-# Measures when an exit path to the buildpack is reached, given a name, then exits 1.
-# Usage: $ mcount-exi "binExists"
-mcount_exit() {
-  mcount "error.${1}"
-  exit 1
 }

@@ -1,5 +1,10 @@
 __pycache__/
 .hatchet/repos/
+.venv/
+# The setup-ruby GitHub Action creates this directory when caching is enabled, so we ignore
+# it here so it does not show up in the output of `git ls-files` for `make lint-scripts`.
+vendor/bundle/
 .DS_Store
 .rspec_status
 .local_temp
+.idea

@@ -70,6 +70,7 @@ RSpec.describe 'Pip support' do
           remote:        Collecting six \\(from -r requirements.txt \\(line 2\\)\\)
           remote:          Downloading six-.*
           remote:        Downloading urllib3-.*
+          remote:        Downloading six-.*
           remote:        Installing collected packages: urllib3, six
           remote:        Successfully installed six-.* urllib3-.*
         REGEX
@@ -97,131 +98,61 @@ RSpec.describe 'Pip support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running post-compile hook
-          remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          remote: .*
+          remote: easy-install.pth:/app/.heroku/src/gunicorn
+          remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
+          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote: gunicorn.egg-link:/app/.heroku/src/gunicorn
+          remote: local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
           remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: /app/.heroku/src/gunicorn
-          remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
-          remote: .*
-          remote: MAPPING = \\{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
-          remote: .*
-          remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
-          remote: import __editable___.*
-          remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          remote: /app/.heroku/src/gunicorn
-          remote: .
-          remote: ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
-          remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: .
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
-          remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          remote: .*
+          remote: easy-install.pth:/app/.heroku/src/gunicorn
+          remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
+          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote: gunicorn.egg-link:/app/.heroku/src/gunicorn
+          remote: local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
           remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: /app/.heroku/src/gunicorn
-          remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
-          remote: .*
-          remote: MAPPING = \\{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
-          remote: .*
-          remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
-          remote: import __editable___.*
-          remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          remote: /app/.heroku/src/gunicorn
-          remote: .
-          remote: ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
-          remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: .
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
         REGEX
 
         # Test rewritten paths work at runtime.
-        expect(app.run('bin/test-entrypoints')).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
-          ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          .*
+        expect(app.run('bin/test-entrypoints')).to include(<<~OUTPUT)
+          easy-install.pth:/app/.heroku/src/gunicorn
+          easy-install.pth:/app/packages/local_package_setup_py
+          __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          gunicorn.egg-link:/app/.heroku/src/gunicorn
+          local-package-setup-py.egg-link:/app/packages/local_package_setup_py
 
-          ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          /app/packages/local_package_setup_py
-          /app/.heroku/src/gunicorn
-
-          ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
-          .*
-          MAPPING = \\{'local_package_pyproject_toml': '/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
-          .*
-
-          ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
-          import __editable___.*
-          ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          /app/.heroku/src/gunicorn
-          .
-          ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
-          /app/packages/local_package_setup_py
-          .
           Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           Running entrypoint for the setup.py-based local package: Hello setup.py!
-          Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
-        REGEX
+          Running entrypoint for the VCS package: gunicorn (version 20.1.0)
+        OUTPUT
 
         # Test that the cached .pth files work correctly.
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running post-compile hook
-          remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          remote: .*
+          remote: easy-install.pth:/app/.heroku/src/gunicorn
+          remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
+          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote: gunicorn.egg-link:/app/.heroku/src/gunicorn
+          remote: local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
           remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          remote: /app/.heroku/src/gunicorn
-          remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
-          remote: .*
-          remote: MAPPING = \\{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
-          remote: .*
-          remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
-          remote: import __editable___.*
-          remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          remote: /app/.heroku/src/gunicorn
-          remote: .
-          remote: ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
-          remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: .
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
-          remote: ==> .heroku/python/lib/python.*/site-packages/distutils-precedence.pth <==
-          remote: .*
+          remote: easy-install.pth:/app/.heroku/src/gunicorn
+          remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
+          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote: gunicorn.egg-link:/app/.heroku/src/gunicorn
+          remote: local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
           remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/easy-install.pth <==
-          remote: /app/.heroku/src/gunicorn
-          remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/__editable___local_package_pyproject_toml_0_0_1_finder.py <==
-          remote: .*
-          remote: MAPPING = \\{'local_package_pyproject_toml': '/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'\\}
-          remote: .*
-          remote: 
-          remote: ==> .heroku/python/lib/python.*/site-packages/__editable__.local_package_pyproject_toml-0.0.1.pth <==
-          remote: import __editable___.*
-          remote: ==> .heroku/python/lib/python.*/site-packages/gunicorn.egg-link <==
-          remote: /app/.heroku/src/gunicorn
-          remote: .
-          remote: ==> .heroku/python/lib/python.*/site-packages/local-package-setup-py.egg-link <==
-          remote: /tmp/build_.*/packages/local_package_setup_py
-          remote: .
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
@@ -264,7 +195,6 @@ RSpec.describe 'Pip support' do
           remote:  !     Hello! Package installation failed since the GDAL library was not found.
           remote:  !     For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:
           remote:  !     https://github.com/heroku/heroku-geo-buildpack
-          remote:  !       -- Much Love, Heroku.
         OUTPUT
       end
     end

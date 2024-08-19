@@ -1,22 +1,72 @@
 #!/usr/bin/env bash
+# Usage: bin/compile <build-dir>
+# See: https://devcenter.heroku.com/articles/buildpack-api
 
-# This script serves as the
-# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
-# detector.
+set -euo pipefail
+
+BUILD_DIR="${1}"
+
+# Filenames that if found in a project mean it should be treated as a Python project,
+# and so pass this buildpack's detection phase.
 #
-# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
-# adapter between a Python application and Heroku's runtime.
+# This list is deliberately larger than just the list of supported package manager files,
+# so that Python projects that are missing some of the required files still pass detection,
+# allowing us to show a helpful error message during the build phase.
+KNOWN_PYTHON_PROJECT_FILES=(
+  .python-version
+  app.py
+  main.py
+  manage.py
+  pdm.lock
+  Pipfile
+  Pipfile.lock
+  poetry.lock
+  pyproject.toml
+  requirements.txt
+  runtime.txt
+  setup.cfg
+  setup.py
+  uv.lock
+)
 
-# ## Usage
-# Compiling an app into a slug is simple:
-#
-#     $ bin/detect <build-dir> <cache-dir>
+for filename in "${KNOWN_PYTHON_PROJECT_FILES[@]}"; do
+  if [[ -f "${BUILD_DIR}/${filename}" ]]; then
+    echo "Python"
+    exit 0
+  fi
+done
 
-BUILD_DIR=$1
+# Cytokine incorrectly indents the first line, so we have to leave it empty.
+echo 1>&2
 
-# Exit early if app is clearly not Python.
-if [ ! -f "$BUILD_DIR/requirements.txt" ] && [ ! -f "$BUILD_DIR/setup.py" ] && [ ! -f "$BUILD_DIR/Pipfile" ]; then
-  exit 1
-fi
+# Note: This error message intentionally doesn't list all of the filetypes above,
+# since during compile the build will still require a package manager file, so it
+# makes sense to describe the stricter requirements up front.
+# TODO: Overhaul logging helpers so they can handle prefixing multi-line strings, and switch to them.
+sed 's/^/ !     /' 1>&2 << EOF
+Error: Your app is configured to use the Python buildpack,
+but we couldn't find any supported Python project files.
 
-echo Python
+A Python app on Heroku must have either a 'requirements.txt' or
+'Pipfile' package manager file in the root directory of its
+source code.
+
+Currently the root directory of your app contains:
+
+$(ls -1 --indicator-style=slash "${BUILD_DIR}")
+
+If your app already has a package manager file, check that it:
+
+1. Is in the top level directory (not a subdirectory).
+2. Has the correct spelling (the filenames are case-sensitive).
+3. Isn't listed in '.gitignore' or '.slugignore'.
+
+Otherwise, add a package manager file to your app. If your app has
+no dependencies, then create an empty 'requirements.txt' file.
+
+For help with using Python on Heroku, see:
+https://devcenter.heroku.com/articles/getting-started-with-python
+https://devcenter.heroku.com/articles/python-support
+EOF
+
+exit 1

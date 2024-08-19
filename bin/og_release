@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
-# bin/release <build-dir>
+# Usage: bin/release <build-dir>
+# See: https://devcenter.heroku.com/articles/buildpack-api
 
 set -euo pipefail
 
-BUILD_DIR=$1
+BUILD_DIR="${1}"
+
+# The absolute path to the root of the buildpack.
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
 
 # Unfortunately the build system doesn't source the `export` script before
@@ -16,7 +19,6 @@ set +u
 source "${BUILDPACK_DIR}/export"
 set -u
 
-# shellcheck source=bin/utils
 source "${BUILDPACK_DIR}/bin/utils"
 
 if [[ -f "${BUILD_DIR}/manage.py" ]] && is_module_available 'django' && is_module_available 'psycopg2'; then

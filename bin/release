@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# bin/release <build-dir>
+# Usage: bin/release <build-dir>
+# See: https://devcenter.heroku.com/articles/buildpack-api
 
 cat <<EOF
 ---

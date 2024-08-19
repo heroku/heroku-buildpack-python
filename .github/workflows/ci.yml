@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,26 +20,27 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: "3.1"
+          ruby-version: "3.3"
       - name: Run ShellCheck
         run: make lint-scripts
       - name: Run Rubocop
         run: bundle exec rubocop
 
   integration-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        stack: ["heroku-20", "heroku-22"]
+        stack: ["heroku-20", "heroku-22", "heroku-24"]
     env:
       HATCHET_APP_LIMIT: 200
       HATCHET_DEFAULT_STACK: ${{ matrix.stack }}
-      HATCHET_RETRIES: 2
+      HATCHET_EXPENSIVE_MODE: 1
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_API_USER: ${{ secrets.HEROKU_API_USER }}
       HEROKU_DISABLE_AUTOUPDATE: 1
       PARALLEL_SPLIT_TEST_PROCESSES: 60
+      RSPEC_RETRY_RETRY_COUNT: 3
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,9 +48,26 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: "3.1"
+          ruby-version: "3.3"
       - name: Hatchet setup
         run: bundle exec hatchet ci:setup
       - name: Run Hatchet integration tests
         # parallel_split_test runs rspec in parallel, with concurrency equal to PARALLEL_SPLIT_TEST_PROCESSES.
         run: bundle exec parallel_split_test spec/hatchet/
+
+  container-test:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        # Work around lack of TTY causing errors when using `docker run -it`:
+        # https://github.com/actions/runner/issues/241
+        shell: 'script -q -e -c "bash -eo pipefail {0}"'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # These test both the local development `make run` workflow and that `bin/report` completes successfully
+      # for both passing and failing builds (since `bin/report` can't easily be tested via Hatchet tests).
+      - name: Run buildpack using default app fixture
+        run: make run
+      - name: Run buildpack using an app fixture that's expected to fail
+        run: make run FIXTURE=spec/fixtures/python_version_invalid/

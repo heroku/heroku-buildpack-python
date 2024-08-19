@@ -2,9 +2,6 @@
 
 # export CLINT_FORCE_COLOR=1
 # export PIPENV_FORCE_COLOR=1
-# shellcheck source=bin/utils
-source "$BIN_DIR/utils"
-set -e
 
 # Previous versions of the buildpack used to cache the checksum of the lockfile to allow
 # for skipping pipenv install if the lockfile was unchanged. However, this is not always safe
@@ -14,8 +11,8 @@ set -e
 rm -f .heroku/python/Pipfile.lock.sha256
 
 if [[ -f Pipfile ]]; then
-    # Measure that we're using Pipenv.
-    mcount "tool.pipenv"
+    pipenv_install_start_time=$(nowms)
+    meta_set "package_manager" "pipenv"
 
     # Skip installing dependencies using pip later.
     export SKIP_PIP_INSTALL=1
@@ -28,28 +25,31 @@ if [[ -f Pipfile ]]; then
     if [[ -r "$ENV_DIR/PIP_EXTRA_INDEX_URL" ]]; then
         PIP_EXTRA_INDEX_URL="$(cat "$ENV_DIR/PIP_EXTRA_INDEX_URL")"
         export PIP_EXTRA_INDEX_URL
-        mcount "buildvar.PIP_EXTRA_INDEX_URL"
     fi
 
     PIPENV_VERSION=$(get_requirement_version 'pipenv')
+    meta_set "pipenv_version" "${PIPENV_VERSION}"
 
     /app/.heroku/python/bin/pip install --quiet --disable-pip-version-check --no-cache-dir "pipenv==${PIPENV_VERSION}"
 
     # Install the test dependencies, for CI.
-    if [ "$INSTALL_TEST" ]; then
+    # TODO: This is currently inconsistent with the non-test path, since it assumes (but doesn't check for) a lockfile.
+    if [[ -n "$INSTALL_TEST" ]]; then
+        meta_set "pipenv_has_lockfile" "true"
         puts-step "Installing test dependencies"
         /app/.heroku/python/bin/pipenv install --dev --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | cleanup | indent
 
     # Install the dependencies.
     elif [[ ! -f Pipfile.lock ]]; then
+        meta_set "pipenv_has_lockfile" "false"
         puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
         /app/.heroku/python/bin/pipenv install --system --skip-lock --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
 
     else
-        pipenv-to-pip Pipfile.lock > requirements.txt
-        cp requirements.txt .heroku/python/requirements-declared.txt
-
+        meta_set "pipenv_has_lockfile" "true"
         puts-step "Installing dependencies with Pipenv ${PIPENV_VERSION}"
         /app/.heroku/python/bin/pipenv install --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
     fi
+
+    meta_time "dependencies_install_duration" "${pipenv_install_start_time}"
 fi

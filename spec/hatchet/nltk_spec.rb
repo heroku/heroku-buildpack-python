@@ -9,7 +9,7 @@ RSpec.describe 'NLTK corpora support' do
     it 'installs the specified NLTK corpora' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Downloading NLTK corpora…
+          remote: -----> Downloading NLTK corpora...
           remote: -----> Downloading NLTK packages: city_database stopwords
           remote: .*: RuntimeWarning: 'nltk.downloader' found in sys.modules after import of package 'nltk', but prior to execution of 'nltk.downloader'; this may result in unpredictable behaviour
           remote: \\[nltk_data\\] Downloading package city_database to
@@ -19,6 +19,8 @@ RSpec.describe 'NLTK corpora support' do
           remote: \\[nltk_data\\]     /tmp/build_.*/.heroku/python/nltk_data...
           remote: \\[nltk_data\\]   Unzipping corpora/stopwords.zip.
         REGEX
+
+        # TODO: Add a test that the downloaded corpora can be found at runtime.
       end
     end
   end
@@ -29,7 +31,7 @@ RSpec.describe 'NLTK corpora support' do
     it 'warns that nltk.txt was not found' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Downloading NLTK corpora…
+          remote: -----> Downloading NLTK corpora...
           remote:  !     'nltk.txt' not found, not downloading any corpora
           remote:  !     Learn more: https://devcenter.heroku.com/articles/python-nltk
         REGEX

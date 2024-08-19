@@ -2,8 +2,10 @@
 
 set -euo pipefail
 
-# List the filenames and contents of all .egg-link, .pth, and finder files in site-packages.
-find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) | sort | xargs -exec tail -n +1
+cd .heroku/python/lib/python*/site-packages/
+
+# List any path like strings in .egg-link, .pth, and finder files in site-packages.
+grep --extended-regexp --only-matching -- '/\S+' *.egg-link *.pth __editable___*_finder.py | sort
 echo
 
 echo -n "Running entrypoint for the pyproject.toml-based local package: "

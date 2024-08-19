@@ -42,7 +42,7 @@ A `requirements.txt` must be present at the root of your application's repositor
 
 To specify your python version, you also need a `runtime.txt` file - unless you are using the default Python runtime version.
 
-Current default Python Runtime: Python 3.12.2
+Current default Python Runtime: Python 3.12.5
 
 Alternatively, you can provide a `setup.py` file, or a `Pipfile`.
 Using `pipenv` will generate `runtime.txt` at build time if one of the field `python_version` or `python_full_version` is specified in the `requires` section of your `Pipfile`.
@@ -60,8 +60,8 @@ Specify a Python Runtime
 
 Supported runtime options include:
 
-- `python-3.12.2` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
-- `python-3.11.8` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
-- `python-3.10.13` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
-- `python-3.9.18` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
-- `python-3.8.18` on Heroku-20 only
+- `python-3.12.5` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
+- `python-3.11.9` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
+- `python-3.10.14` on all [supported stacks](https://devcenter.heroku.com/articles/stack#stack-support-details)
+- `python-3.9.19` on Heroku-20 and Heroku-22 only
+- `python-3.8.19` on Heroku-20 only

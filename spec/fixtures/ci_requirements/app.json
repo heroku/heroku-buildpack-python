@@ -2,7 +2,7 @@
   "environments": {
     "test": {
       "scripts": {
-        "test": "nosetests"
+        "test": "pytest --version"
       }
     }
   }

@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-if [ -f bin/post_compile ]; then
+if [[ -f bin/post_compile ]]; then
+    post_compile_hook_start_time=$(nowms)
+    meta_set "post_compile_hook" "true"
     echo "-----> Running post-compile hook"
     chmod +x bin/post_compile
     sub_env bin/post_compile
+    meta_time "post_compile_hook_duration" "${post_compile_hook_start_time}"
+else
+    meta_set "post_compile_hook" "false"
 fi

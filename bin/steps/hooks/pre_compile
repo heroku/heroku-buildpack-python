@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-if [ -f bin/pre_compile ]; then
+if [[ -f bin/pre_compile ]]; then
+    pre_compile_hook_start_time=$(nowms)
+    meta_set "pre_compile_hook" "true"
     echo "-----> Running pre-compile hook"
     chmod +x bin/pre_compile
     sub_env bin/pre_compile
+    meta_time "pre_compile_hook_duration" "${pre_compile_hook_start_time}"
+else
+    meta_set "pre_compile_hook" "false"
 fi

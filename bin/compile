@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
+# Usage: bin/compile <build-dir> <cache-dir> <env-dir>
+# See: https://devcenter.heroku.com/articles/buildpack-api
 
-ROOT_BUILD_DIR=$1
-CACHE_DIR=$2
-ENV_DIR=$3
+ROOT_BUILD_DIR="${1}"
+CACHE_DIR="${2}"
+ENV_DIR="${3}"
 
-BIN_DIR=$(cd "$(dirname "$0")"; pwd) # absolute path
+BIN_DIR=$(cd "$(dirname "$0")" || pwd) # absolute path
 OG_COMPILE_SCRIPT="$BIN_DIR/og_compile"
 
 CUSTOM_SCRIPT_CONFIG_VAR_PATH="$ENV_DIR/PYTHON_BUILD_SCRIPT"
