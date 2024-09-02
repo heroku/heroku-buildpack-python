@@ -25,6 +25,10 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    ignore:
+      # We're not updating to setuptools v71+ due to its new approach to vendored dependencies:
+      # https://github.com/heroku/heroku-buildpack-python/pull/1630#issuecomment-2324236653
+      - dependency-name: "setuptools"
     labels:
       - "dependencies"
       - "python"
