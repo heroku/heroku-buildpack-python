@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated wheel from 0.43.0 to 0.44.0. ([#1629](https://github.com/heroku/heroku-buildpack-python/pull/1629))
 
 ## [v255] - 2024-08-07
 
