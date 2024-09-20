@@ -30,6 +30,7 @@ RSpec.shared_examples 'aborts the build with a runtime not available message (Pi
         remote:  !     For a list of the supported Python versions, see:
         remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
         remote:  !     
+        remote:  !     Push rejected, failed to compile Python app.
       OUTPUT
     end
   end
@@ -63,10 +64,14 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'with a Pipfile.lock but no Python version specified' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_unspecified') }
+    let(:buildpacks) { [:default, 'heroku-community/inline'] }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_unspecified', buildpacks:) }
 
-    it 'builds with the default Python version' do
+    # TODO: Run this on Heroku-22 too, once it has also migrated to the new build infrastructure.
+    # (Currently the test fails on the old infrastructure due to subtle differences in system PATH elements.)
+    it 'builds with the default Python version', stacks: %w[heroku-20 heroku-24] do
       app.deploy do |app|
+        # TODO: We should not be leaking the Pipenv installation into the app environment.
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
@@ -76,6 +81,37 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Installing SQLite3
+          remote: -----> Inline app detected
+          remote: LANG=en_US.UTF-8
+          remote: LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
+          remote: LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
+          remote: PATH=/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: PYTHONHASHSEED=random
+          remote: PYTHONHOME=/app/.heroku/python
+          remote: PYTHONPATH=/app
+          remote: PYTHONUNBUFFERED=true
+          remote: 
+          remote: \\['',
+          remote:  '/app',
+          remote:  '/app/.heroku/python/lib/python312.zip',
+          remote:  '/app/.heroku/python/lib/python3.12',
+          remote:  '/app/.heroku/python/lib/python3.12/lib-dynload',
+          remote:  '/app/.heroku/python/lib/python3.12/site-packages'\\]
+          remote: 
+          remote: Package           Version
+          remote: ----------------- ---------
+          remote: certifi           .+
+          remote: distlib           .+
+          remote: filelock          .+
+          remote: pip               #{PIP_VERSION}
+          remote: pipenv            #{PIPENV_VERSION}
+          remote: platformdirs      .+
+          remote: setuptools        #{SETUPTOOLS_VERSION}
+          remote: typing_extensions 4.12.2
+          remote: virtualenv        .+
+          remote: wheel             #{WHEEL_VERSION}
+          remote: 
+          remote: \\<module 'typing_extensions' from '/app/.heroku/python/lib/python3.12/site-packages/typing_extensions.py'\\>
         REGEX
       end
     end
@@ -101,6 +137,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
           remote:  !     
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end
@@ -126,6 +163,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
           remote:  !     
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end
@@ -207,7 +245,7 @@ RSpec.describe 'Pipenv support' do
     let(:allow_failure) { false }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version', allow_failure:) }
 
-    it 'builds with the outdated Python version specified' do
+    it 'builds with the outdated Python version specified and displays a deprecation warning' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
@@ -241,6 +279,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
           remote:  !     
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end
@@ -260,6 +299,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
           remote:  !     
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end
@@ -288,6 +328,32 @@ RSpec.describe 'Pipenv support' do
 
     it 're-uses packages from the cache' do
       app.deploy do |app|
+        app.commit!
+        app.push!
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          remote: -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Installing SQLite3
+          remote: -----> Discovering process types
+        REGEX
+      end
+    end
+  end
+
+  context 'when the package manager has changed from pip to Pipenv since the last build' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified') }
+
+    # TODO: Fix this case so the cache is actually cleared.
+    it 'clears the cache before installing with Pipenv' do
+      app.deploy do |app|
+        FileUtils.rm('requirements.txt')
+        FileUtils.cp(FIXTURE_DIR.join('pipenv_python_version_unspecified/Pipfile'), '.')
+        FileUtils.cp(FIXTURE_DIR.join('pipenv_python_version_unspecified/Pipfile.lock'), '.')
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
@@ -338,6 +404,7 @@ RSpec.describe 'Pipenv support' do
           remote:        Your Pipfile.lock \\(.+\\) is out of date.  Expected: \\(.+\\).
           remote:        .+
           remote:        ERROR:: Aborting deploy
+          remote:  !     Push rejected, failed to compile Python app.
         REGEX
       end
     end
@@ -373,7 +440,7 @@ RSpec.describe 'Pipenv support' do
         REGEX
 
         # Test rewritten paths work at runtime.
-        expect(app.run('bin/test-entrypoints')).to include(<<~OUTPUT)
+        expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
           easy-install.pth:/app/.heroku/src/gunicorn
           easy-install.pth:/app/packages/local_package_setup_py
           __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}

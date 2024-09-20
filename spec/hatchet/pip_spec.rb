@@ -12,12 +12,15 @@ RSpec.shared_examples 'installs successfully using pip' do
 end
 
 RSpec.describe 'Pip support' do
-  context 'when requirements.txt is unchanged since the last build' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified') }
+  # TODO: Run this on Heroku-22 too, once it has also migrated to the new build infrastructure.
+  # (Currently the test fails on the old infrastructure due to subtle differences in system PATH elements.)
+  context 'when requirements.txt is unchanged since the last build', stacks: %w[heroku-20 heroku-24] do
+    let(:buildpacks) { [:default, 'heroku-community/inline'] }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_basic', buildpacks:) }
 
     it 're-uses packages from the cache' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
@@ -25,12 +28,37 @@ RSpec.describe 'Pip support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote:        Collecting urllib3 \\(from -r requirements.txt \\(line 1\\)\\)
-          remote:          Downloading urllib3-.*
-          remote:        Downloading urllib3-.*
-          remote:        Installing collected packages: urllib3
-          remote:        Successfully installed urllib3-.*
-        REGEX
+          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
+          remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
+          remote:        Installing collected packages: typing-extensions
+          remote:        Successfully installed typing-extensions-4.12.2
+          remote: -----> Inline app detected
+          remote: LANG=en_US.UTF-8
+          remote: LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
+          remote: LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
+          remote: PATH=/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: PYTHONHASHSEED=random
+          remote: PYTHONHOME=/app/.heroku/python
+          remote: PYTHONPATH=/app
+          remote: PYTHONUNBUFFERED=true
+          remote: 
+          remote: ['',
+          remote:  '/app',
+          remote:  '/app/.heroku/python/lib/python312.zip',
+          remote:  '/app/.heroku/python/lib/python3.12',
+          remote:  '/app/.heroku/python/lib/python3.12/lib-dynload',
+          remote:  '/app/.heroku/python/lib/python3.12/site-packages']
+          remote: 
+          remote: Package           Version
+          remote: ----------------- -------
+          remote: pip               #{PIP_VERSION}
+          remote: setuptools        #{SETUPTOOLS_VERSION}
+          remote: typing_extensions 4.12.2
+          remote: wheel             #{WHEEL_VERSION}
+          remote: 
+          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.12/site-packages/typing_extensions.py'>
+        OUTPUT
         app.commit!
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
@@ -42,21 +70,21 @@ RSpec.describe 'Pip support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote: -----> Discovering process types
+          remote: -----> Inline app detected
         OUTPUT
       end
     end
   end
 
   context 'when requirements.txt has changed since the last build' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_basic') }
 
     it 'clears the cache before installing the packages again' do
       app.deploy do |app|
         File.write('requirements.txt', 'six', mode: 'a')
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
@@ -65,14 +93,38 @@ RSpec.describe 'Pip support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote:        Collecting urllib3 \\(from -r requirements.txt \\(line 1\\)\\)
-          remote:          Downloading urllib3-.*
-          remote:        Collecting six \\(from -r requirements.txt \\(line 2\\)\\)
-          remote:          Downloading six-.*
-          remote:        Downloading urllib3-.*
-          remote:        Downloading six-.*
-          remote:        Installing collected packages: urllib3, six
-          remote:        Successfully installed six-.* urllib3-.*
+          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
+          remote:        Collecting six (from -r requirements.txt (line 3))
+          remote:          Downloading six-1.16.0-py2.py3-none-any.whl.metadata (1.8 kB)
+          remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
+          remote:        Downloading six-1.16.0-py2.py3-none-any.whl (11 kB)
+          remote:        Installing collected packages: typing-extensions, six
+          remote:        Successfully installed six-1.16.0 typing-extensions-4.12.2
+        OUTPUT
+      end
+    end
+  end
+
+  context 'when the package manager has changed from Pipenv to pip since the last build' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_unspecified') }
+
+    # TODO: Fix this case so the cache is actually cleared.
+    it 'clears the cache before installing with pip' do
+      app.deploy do |app|
+        FileUtils.rm(['Pipfile', 'Pipfile.lock'])
+        FileUtils.cp(FIXTURE_DIR.join('requirements_basic/requirements.txt'), '.')
+        app.commit!
+        app.push!
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          remote: -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing SQLite3
+          remote: -----> Installing requirements with pip
+          remote: -----> Discovering process types
         REGEX
       end
     end
@@ -84,13 +136,7 @@ RSpec.describe 'Pip support' do
     include_examples 'installs successfully using pip'
   end
 
-  context 'when requirements.txt contains Git requirements URLs' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_git') }
-
-    include_examples 'installs successfully using pip'
-  end
-
-  context 'when requirements.txt contains editable requirements' do
+  context 'when requirements.txt contains editable requirements (both VCS and local package)' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_editable', buildpacks:) }
 
@@ -120,7 +166,7 @@ RSpec.describe 'Pip support' do
         REGEX
 
         # Test rewritten paths work at runtime.
-        expect(app.run('bin/test-entrypoints')).to include(<<~OUTPUT)
+        expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
           easy-install.pth:/app/.heroku/src/gunicorn
           easy-install.pth:/app/packages/local_package_setup_py
           __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
@@ -166,8 +212,21 @@ RSpec.describe 'Pip support' do
 
     it 'installs packages from setup.py' do
       app.deploy do |app|
-        expect(app.output).to include('Running setup.py develop for test')
-        expect(app.output).to include('Successfully installed six')
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
+          remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing SQLite3
+          remote: -----> Installing requirements with pip
+          remote:        Obtaining file:///tmp/build_.* \\(from -r requirements.txt \\(line 1\\)\\)
+          remote:          Preparing metadata \\(setup.py\\): started
+          remote:          Preparing metadata \\(setup.py\\): finished with status 'done'
+          remote:        .+
+          remote:        Installing collected packages: six, test
+          remote:          Running setup.py develop for test
+        REGEX
       end
     end
   end
@@ -186,6 +245,20 @@ RSpec.describe 'Pip support' do
     end
   end
 
+  context 'when requirements.txt contains an invalid requirement' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_invalid', allow_failure: true) }
+
+    it 'aborts the build and displays the pip error' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Installing requirements with pip
+          remote:        ERROR: Invalid requirement: 'an-invalid-requirement!' (from line 1 of requirements.txt)
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
+  end
+
   context 'when requirements.txt contains GDAL but the GDAL C++ library is missing' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_gdal', allow_failure: true) }
 
@@ -195,6 +268,7 @@ RSpec.describe 'Pip support' do
           remote:  !     Hello! Package installation failed since the GDAL library was not found.
           remote:  !     For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:
           remote:  !     https://github.com/heroku/heroku-geo-buildpack
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end

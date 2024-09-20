@@ -15,6 +15,7 @@ if [[ -f Pipfile ]]; then
     meta_set "package_manager" "pipenv"
 
     # Skip installing dependencies using pip later.
+    # TODO: Stop leaking this env var into subshells such as post_compile hooks.
     export SKIP_PIP_INSTALL=1
 
     # Set Pip env vars

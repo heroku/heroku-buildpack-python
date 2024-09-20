@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# This file is run by the inline buildpack, and tests that the environment is
+# configured as expected for buildpacks that run after the Python buildpack.
+
+set -euo pipefail
+
+printenv | sort | grep -vE '^(_|BUILDPACK_LOG_FILE|DYNO|HOME|PWD|REQUEST_ID|SHLVL|SOURCE_VERSION|STACK)='
+echo
+
+python -c 'import pprint, sys; pprint.pp(sys.path)'
+echo
+
+# TODO: Remove --disable-pip-version-check in favour of exporting PIP_DISABLE_PIP_VERSION_CHECK
+pip list --disable-pip-version-check
+echo
+
+python -c 'import typing_extensions; print(typing_extensions)'

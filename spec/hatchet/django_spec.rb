@@ -97,10 +97,19 @@ RSpec.describe 'Django support' do
           expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
             remote: -----> \\$ python manage.py collectstatic --noinput
             remote:        Traceback \\(most recent call last\\):
-            remote:        .*
+            remote:        .+
             remote:        ModuleNotFoundError: No module named 'gettingstarted'
             remote: 
             remote:  !     Error while running '\\$ python manage.py collectstatic --noinput'.
+            remote:        See traceback above for details.
+            remote: 
+            remote:        You may need to update application code to resolve this error.
+            remote:        Or, you can disable collectstatic for this application:
+            remote: 
+            remote:           \\$ heroku config:set DISABLE_COLLECTSTATIC=1
+            remote: 
+            remote:        https://devcenter.heroku.com/articles/django-assets
+            remote:  !     Push rejected, failed to compile Python app.
           REGEX
         end
       end

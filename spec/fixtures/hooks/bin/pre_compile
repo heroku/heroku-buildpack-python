@@ -2,5 +2,6 @@
 
 set -euo pipefail
 
-echo 'pre_compile ran with env vars:'
-printenv | cut -d '=' -f 1 | sort
+echo '~ pre_compile ran with env vars:'
+bin/print-env-vars.sh
+echo '~ pre_compile complete'

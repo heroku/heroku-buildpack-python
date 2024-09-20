@@ -3,49 +3,62 @@
 require_relative '../spec_helper'
 
 RSpec.describe 'Compile hooks' do
-  context 'when an app has bin/pre_compile and bin/post_compile scripts' do
+  # TODO: Run this on Heroku-22 too, once it has also migrated to the new build infrastructure.
+  # (Currently the test fails on the old infrastructure due to subtle differences in system PATH elements.)
+  context 'when an app has bin/pre_compile and bin/post_compile scripts', stacks: %w[heroku-20 heroku-24] do
     let(:app) { Hatchet::Runner.new('spec/fixtures/hooks', config: { 'SOME_APP_CONFIG_VAR' => '1' }) }
 
     it 'runs the hooks with the correct environment' do
-      expected_env_vars = %w[
-        _
-        BUILD_DIR
-        BUILDPACK_LOG_FILE
-        CACHE_DIR
-        C_INCLUDE_PATH
-        CPLUS_INCLUDE_PATH
-        DYNO
-        ENV_DIR
-        HOME
-        LANG
-        LD_LIBRARY_PATH
-        LIBRARY_PATH
-        OLDPWD
-        PATH
-        PIP_NO_PYTHON_VERSION_WARNING
-        PKG_CONFIG_PATH
-        PWD
-        PYTHONUNBUFFERED
-        REQUEST_ID
-        SHLVL
-        SOME_APP_CONFIG_VAR
-        SOURCE_VERSION
-        STACK
-      ]
-
       app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
+        output = clean_output(app.output)
+
+        expect(output).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Running pre-compile hook
-          remote: pre_compile ran with env vars:
-          remote: #{expected_env_vars.join("\nremote: ")}
-          remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
-          remote: .*
+          remote: ~ pre_compile ran with env vars:
+          remote: BUILD_DIR=/tmp/build_<hash>
+          remote: CACHE_DIR=/tmp/codon/tmp/cache
+          remote: C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:
+          remote: CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:
+          remote: ENV_DIR=/tmp/...
+          remote: HOME=/app
+          remote: LANG=en_US.UTF-8
+          remote: LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
+          remote: LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
+          remote: PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: PIP_NO_PYTHON_VERSION_WARNING=1
+          remote: PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:
+          remote: PWD=/tmp/build_<hash>
+          remote: PYTHONUNBUFFERED=1
+          remote: SOME_APP_CONFIG_VAR=1
+          remote: SOURCE_VERSION=...
+          remote: STACK=#{app.stack}
+          remote: ~ pre_compile complete
+        OUTPUT
+
+        expect(output).to include(<<~OUTPUT)
           remote: -----> Installing requirements with pip
           remote: -----> Running post-compile hook
-          remote: post_compile ran with env vars:
-          remote: #{expected_env_vars.join("\nremote: ")}
-        REGEX
+          remote: ~ post_compile ran with env vars:
+          remote: BUILD_DIR=/tmp/build_<hash>
+          remote: CACHE_DIR=/tmp/codon/tmp/cache
+          remote: C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:
+          remote: CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:
+          remote: ENV_DIR=/tmp/...
+          remote: HOME=/app
+          remote: LANG=en_US.UTF-8
+          remote: LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
+          remote: LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
+          remote: PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: PIP_NO_PYTHON_VERSION_WARNING=1
+          remote: PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:
+          remote: PWD=/tmp/build_<hash>
+          remote: PYTHONUNBUFFERED=1
+          remote: SOME_APP_CONFIG_VAR=1
+          remote: SOURCE_VERSION=...
+          remote: STACK=#{app.stack}
+          remote: ~ post_compile complete
+        OUTPUT
       end
     end
   end

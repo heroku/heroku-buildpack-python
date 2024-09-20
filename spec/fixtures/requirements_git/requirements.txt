@@ -1,2 +1,0 @@
-# This relies upon the VCS binaries from the stack image.
-git+https://github.com/certifi/python-certifi

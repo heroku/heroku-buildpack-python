@@ -35,6 +35,7 @@ RSpec.describe 'Package manager support' do
           remote:  !     https://devcenter.heroku.com/articles/getting-started-with-python
           remote:  !     https://devcenter.heroku.com/articles/python-support
           remote:  !     
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end
