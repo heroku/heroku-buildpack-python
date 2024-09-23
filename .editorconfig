@@ -1,0 +1,35 @@
+# https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.sh]
+binary_next_line = true
+# We sadly have to use tabs in shell scripts otherwise we can't indent here documents:
+# https://www.gnu.org/software/bash/manual/html_node/Redirections.html#Here-Documents
+indent_style = tab
+shell_variant = bash
+switch_case_indent = true
+
+# Catches scripts that we can't give a .sh file extension, such as the Buildpack API scripts.
+[**/bin/**]
+binary_next_line = true
+indent_style = tab
+shell_variant = bash
+switch_case_indent = true
+
+[.hatchet/repos/**]
+ignore = true
+
+# The setup-ruby GitHub Action creates this directory when caching is enabled, and if
+# its not ignored will cause false positives when running shfmt in the CI lint job.
+[vendor/bundle/**]
+ignore = true
+
+[Makefile]
+indent_style = tab

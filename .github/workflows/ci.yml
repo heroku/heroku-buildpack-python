@@ -10,6 +10,10 @@ on:
 permissions:
   contents: read
 
+env:
+  # Used by shfmt and more.
+  FORCE_COLOR: 1
+
 jobs:
   lint:
     runs-on: ubuntu-24.04
@@ -23,6 +27,10 @@ jobs:
           ruby-version: "3.3"
       - name: Run ShellCheck
         run: make lint-scripts
+      - name: Run shfmt
+        uses: docker://mvdan/shfmt:latest
+        with:
+          args: "--diff ."
       - name: Run Rubocop
         run: bundle exec rubocop
 
