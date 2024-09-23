@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 gdal-missing() {
-  if grep -qi 'Could not find gdal-config' "$WARNINGS_LOG"; then
-    echo
-    puts-warn "Hello! Package installation failed since the GDAL library was not found."
-    puts-warn "For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:"
-    puts-warn "https://github.com/heroku/heroku-geo-buildpack"
-  fi
+	if grep -qi 'Could not find gdal-config' "$WARNINGS_LOG"; then
+		echo
+		puts-warn "Hello! Package installation failed since the GDAL library was not found."
+		puts-warn "For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:"
+		puts-warn "https://github.com/heroku/heroku-geo-buildpack"
+	fi
 }
 
 show-warnings() {
-  gdal-missing
+	gdal-missing
 }

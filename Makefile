@@ -1,5 +1,5 @@
 # These targets are not files
-.PHONY: lint lint-scripts lint-ruby run publish
+.PHONY: lint lint-scripts lint-ruby check-format format run publish
 
 STACK ?= heroku-24
 FIXTURE ?= spec/fixtures/python_version_unspecified
@@ -7,13 +7,19 @@ FIXTURE ?= spec/fixtures/python_version_unspecified
 # Converts a stack name of `heroku-NN` to its build Docker image tag of `heroku/heroku:NN-build`.
 STACK_IMAGE_TAG := heroku/$(subst -,:,$(STACK))-build
 
-lint: lint-scripts lint-ruby
+lint: lint-scripts check-format lint-ruby
 
 lint-scripts:
 	@git ls-files -z --cached --others --exclude-standard 'bin/*' '*/bin/*' '*.sh' | xargs -0 shellcheck --check-sourced --color=always
 
 lint-ruby:
 	@bundle exec rubocop
+
+check-format:
+	@shfmt --diff .
+
+format:
+	@shfmt --write --list .
 
 run:
 	@echo "Running buildpack using: STACK=$(STACK) FIXTURE=$(FIXTURE)"

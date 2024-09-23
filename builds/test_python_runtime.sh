@@ -22,27 +22,30 @@ tar --zstd --extract --verbose --file "${ARCHIVE_FILEPATH}" --directory "${INSTA
 # Check that all dynamically linked libraries exist in the run image (since it has fewer packages than the build image).
 LDD_OUTPUT=$(find "${INSTALL_DIR}" -type f,l \( -name 'python3' -o -name '*.so*' \) -exec ldd '{}' +)
 if grep 'not found' <<<"${LDD_OUTPUT}" | sort --unique; then
-  echo "The above dynamically linked libraries were not found!"
-  exit 1
+	echo "The above dynamically linked libraries were not found!"
+	exit 1
 fi
 
 # Check that optional and/or system library dependent stdlib modules were built.
 optional_stdlib_modules=(
-  _uuid
-  bz2
-  ctypes
-  curses
-  dbm.gnu
-  dbm.ndbm
-  decimal
-  lzma
-  readline
-  sqlite3
-  ssl
-  xml.parsers.expat
-  zlib
+	_uuid
+	bz2
+	ctypes
+	curses
+	dbm.gnu
+	dbm.ndbm
+	decimal
+	lzma
+	readline
+	sqlite3
+	ssl
+	xml.parsers.expat
+	zlib
 )
-if ! "${INSTALL_DIR}/bin/python3" -c "import $(IFS=, ; echo "${optional_stdlib_modules[*]}")"; then
-  echo "The above optional stdlib module failed to import! Check the compile logs to see if it was skipped due to missing libraries/headers."
-  exit 1
+if ! "${INSTALL_DIR}/bin/python3" -c "import $(
+	IFS=,
+	echo "${optional_stdlib_modules[*]}"
+)"; then
+	echo "The above optional stdlib module failed to import! Check the compile logs to see if it was skipped due to missing libraries/headers."
+	exit 1
 fi

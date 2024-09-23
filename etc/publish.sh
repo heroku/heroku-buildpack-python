@@ -9,9 +9,9 @@ newVersion="v$((curVersion + 1))"
 
 read -r -p "Deploy as version: $newVersion [y/n]? " choice
 case "$choice" in
-  y|Y ) echo "";;
-  n|N ) exit 0;;
-  * ) exit 1;;
+	y | Y) echo "" ;;
+	n | N) exit 0 ;;
+	*) exit 1 ;;
 esac
 
 git fetch origin
