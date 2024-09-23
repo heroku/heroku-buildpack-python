@@ -15,61 +15,61 @@ SRC_DIR="/tmp/src"
 UPLOAD_DIR="/tmp/upload"
 
 function abort() {
-  echo "Error: ${1}" >&2
-  exit 1
+	echo "Error: ${1}" >&2
+	exit 1
 }
 
 case "${STACK}" in
-  heroku-24)
-    SUPPORTED_PYTHON_VERSIONS=(
-      "3.10"
-      "3.11"
-      "3.12"
-    )
-    ;;
-  heroku-22)
-    SUPPORTED_PYTHON_VERSIONS=(
-      "3.9"
-      "3.10"
-      "3.11"
-      "3.12"
-    )
-    ;;
-  heroku-20)
-    SUPPORTED_PYTHON_VERSIONS=(
-      "3.8"
-      "3.9"
-      "3.10"
-      "3.11"
-      "3.12"
-    )
-    ;;
-  *)
-    abort "Unsupported stack '${STACK}'!"
-    ;;
+	heroku-24)
+		SUPPORTED_PYTHON_VERSIONS=(
+			"3.10"
+			"3.11"
+			"3.12"
+		)
+		;;
+	heroku-22)
+		SUPPORTED_PYTHON_VERSIONS=(
+			"3.9"
+			"3.10"
+			"3.11"
+			"3.12"
+		)
+		;;
+	heroku-20)
+		SUPPORTED_PYTHON_VERSIONS=(
+			"3.8"
+			"3.9"
+			"3.10"
+			"3.11"
+			"3.12"
+		)
+		;;
+	*)
+		abort "Unsupported stack '${STACK}'!"
+		;;
 esac
 
 if [[ ! " ${SUPPORTED_PYTHON_VERSIONS[*]} " == *" ${PYTHON_MAJOR_VERSION} "* ]]; then
-  abort "Python ${PYTHON_MAJOR_VERSION} is not supported on ${STACK}!"
+	abort "Python ${PYTHON_MAJOR_VERSION} is not supported on ${STACK}!"
 fi
 
 # The release keys can be found on https://www.python.org/downloads/ -> "OpenPGP Public Keys".
 case "${PYTHON_MAJOR_VERSION}" in
-  3.12)
-    # https://github.com/Yhg1s.gpg
-    GPG_KEY_FINGERPRINT='7169605F62C751356D054A26A821E680E5FA6305'
-    ;;
-  3.10|3.11)
-    # https://keybase.io/pablogsal/
-    GPG_KEY_FINGERPRINT='A035C8C19219BA821ECEA86B64E628F8D684696D'
-    ;;
-  3.8|3.9)
-    # https://keybase.io/ambv/
-    GPG_KEY_FINGERPRINT='E3FF2839C048B25C084DEBE9B26995E310250568'
-    ;;
-  *)
-    abort "Unsupported Python version '${PYTHON_MAJOR_VERSION}'!"
-    ;;
+	3.12)
+		# https://github.com/Yhg1s.gpg
+		GPG_KEY_FINGERPRINT='7169605F62C751356D054A26A821E680E5FA6305'
+		;;
+	3.10 | 3.11)
+		# https://keybase.io/pablogsal/
+		GPG_KEY_FINGERPRINT='A035C8C19219BA821ECEA86B64E628F8D684696D'
+		;;
+	3.8 | 3.9)
+		# https://keybase.io/ambv/
+		GPG_KEY_FINGERPRINT='E3FF2839C048B25C084DEBE9B26995E310250568'
+		;;
+	*)
+		abort "Unsupported Python version '${PYTHON_MAJOR_VERSION}'!"
+		;;
 esac
 
 echo "Building Python ${PYTHON_VERSION} for ${STACK} (${ARCH})..."
@@ -94,59 +94,59 @@ cd "${SRC_DIR}"
 # for maximum compatibility / most battle-tested build configuration:
 # https://github.com/docker-library/python
 CONFIGURE_OPTS=(
-  # Explicitly set the target architecture rather than auto-detecting based on the host CPU.
-  # This only affects targets like i386 (for which we don't build), but we pass it anyway for
-  # completeness and parity with the Python Docker image builds.
-  "--build=$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"
-  # Support loadable extensions in the `_sqlite` extension module.
-  "--enable-loadable-sqlite-extensions"
-  # Enable recommended release build performance optimisations such as PGO.
-  "--enable-optimizations"
-  # Make autoconf's configure option validation more strict.
-  "--enable-option-checking=fatal"
-  # Install Python into `/tmp/python` rather than the default of `/usr/local`.
-  "--prefix=${INSTALL_DIR}"
-  # Skip running `ensurepip` as part of install, since the buildpack installs a curated
-  # version of pip itself (which ensures it's consistent across Python patch releases).
-  "--with-ensurepip=no"
-  # Build the `pyexpat` module using the `expat` library in the base image (which will
-  # automatically receive security updates), rather than CPython's vendored version.
-  "--with-system-expat"
+	# Explicitly set the target architecture rather than auto-detecting based on the host CPU.
+	# This only affects targets like i386 (for which we don't build), but we pass it anyway for
+	# completeness and parity with the Python Docker image builds.
+	"--build=$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"
+	# Support loadable extensions in the `_sqlite` extension module.
+	"--enable-loadable-sqlite-extensions"
+	# Enable recommended release build performance optimisations such as PGO.
+	"--enable-optimizations"
+	# Make autoconf's configure option validation more strict.
+	"--enable-option-checking=fatal"
+	# Install Python into `/tmp/python` rather than the default of `/usr/local`.
+	"--prefix=${INSTALL_DIR}"
+	# Skip running `ensurepip` as part of install, since the buildpack installs a curated
+	# version of pip itself (which ensures it's consistent across Python patch releases).
+	"--with-ensurepip=no"
+	# Build the `pyexpat` module using the `expat` library in the base image (which will
+	# automatically receive security updates), rather than CPython's vendored version.
+	"--with-system-expat"
 )
 
 if [[ "${PYTHON_MAJOR_VERSION}" != 3.[8-9] ]]; then
-  CONFIGURE_OPTS+=(
-    # Shared builds are beneficial for a number of reasons:
-    # - Reduces the size of the build, since it avoids the duplication between
-    #   the Python binary and the static library.
-    # - Permits use-cases that only work with the shared Python library,
-    #   and not the static library (such as `pycall.rb` or `PyO3`).
-    # - More consistent with the official Python Docker images and other distributions.
-    #
-    # However, shared builds are slower unless `no-semantic-interposition`and LTO is used:
-    # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
-    # https://github.com/python/cpython/issues/83161
-    #
-    # It's only as of Python 3.10 that `no-semantic-interposition` is enabled by default,
-    # so we only use shared builds on Python 3.10+ to avoid needing to override the default
-    # compiler flags.
-    "--enable-shared"
-    "--with-lto"
-    # Counter-intuitively, the static library is still generated by default even when
-    # the shared library is enabled, so we disable it to reduce the build size.
-    # This option only exists for Python 3.10+.
-    "--without-static-libpython"
-  )
+	CONFIGURE_OPTS+=(
+		# Shared builds are beneficial for a number of reasons:
+		# - Reduces the size of the build, since it avoids the duplication between
+		#   the Python binary and the static library.
+		# - Permits use-cases that only work with the shared Python library,
+		#   and not the static library (such as `pycall.rb` or `PyO3`).
+		# - More consistent with the official Python Docker images and other distributions.
+		#
+		# However, shared builds are slower unless `no-semantic-interposition`and LTO is used:
+		# https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+		# https://github.com/python/cpython/issues/83161
+		#
+		# It's only as of Python 3.10 that `no-semantic-interposition` is enabled by default,
+		# so we only use shared builds on Python 3.10+ to avoid needing to override the default
+		# compiler flags.
+		"--enable-shared"
+		"--with-lto"
+		# Counter-intuitively, the static library is still generated by default even when
+		# the shared library is enabled, so we disable it to reduce the build size.
+		# This option only exists for Python 3.10+.
+		"--without-static-libpython"
+	)
 fi
 
 if [[ "${PYTHON_MAJOR_VERSION}" == "3.11" || "${PYTHON_MAJOR_VERSION}" == "3.12" ]]; then
-  CONFIGURE_OPTS+=(
-    # Skip building the test modules, since we remove them after the build anyway.
-    # This feature was added in Python 3.10+, however it wasn't until Python 3.11
-    # that compatibility issues between it and PGO were fixed:
-    # https://github.com/python/cpython/pull/29315
-    "--disable-test-modules"
-  )
+	CONFIGURE_OPTS+=(
+		# Skip building the test modules, since we remove them after the build anyway.
+		# This feature was added in Python 3.10+, however it wasn't until Python 3.11
+		# that compatibility issues between it and PGO were fixed:
+		# https://github.com/python/cpython/pull/29315
+		"--disable-test-modules"
+	)
 fi
 
 ./configure "${CONFIGURE_OPTS[@]}"
@@ -163,28 +163,28 @@ fi
 # We only use `dpkg-buildflags` for Python versions where we build in shared mode (Python 3.9+),
 # since some of the options it enables interferes with the stripping of static libraries.
 if [[ "${PYTHON_MAJOR_VERSION}" == 3.[8-9] ]]; then
-  EXTRA_CFLAGS=''
-  LDFLAGS='-Wl,--strip-all'
+	EXTRA_CFLAGS=''
+	LDFLAGS='-Wl,--strip-all'
 else
-  EXTRA_CFLAGS="$(dpkg-buildflags --get CFLAGS)"
-  LDFLAGS="$(dpkg-buildflags --get LDFLAGS) -Wl,--strip-all"
+	EXTRA_CFLAGS="$(dpkg-buildflags --get CFLAGS)"
+	LDFLAGS="$(dpkg-buildflags --get LDFLAGS) -Wl,--strip-all"
 fi
 
 make -j "$(nproc)" "EXTRA_CFLAGS=${EXTRA_CFLAGS}" "LDFLAGS=${LDFLAGS}"
 make install
 
 if [[ "${PYTHON_MAJOR_VERSION}" == 3.[8-9] ]]; then
-  # On older versions of Python we're still building the static library, which has to be
-  # manually stripped since the linker stripping enabled in LDFLAGS doesn't cover them.
-  # We're using `--strip-unneeded` since `--strip-all` would remove the `.symtab` section
-  # that is required for static libraries to be able to be linked.
-  # `find` is used since there are multiple copies of the static library in version-specific
-  # locations, eg:
-  #   - `lib/libpython3.9.a`
-  #   - `lib/python3.9/config-3.9-x86_64-linux-gnu/libpython3.9.a`
-  find "${INSTALL_DIR}" -type f -name '*.a' -print -exec strip --strip-unneeded '{}' +
+	# On older versions of Python we're still building the static library, which has to be
+	# manually stripped since the linker stripping enabled in LDFLAGS doesn't cover them.
+	# We're using `--strip-unneeded` since `--strip-all` would remove the `.symtab` section
+	# that is required for static libraries to be able to be linked.
+	# `find` is used since there are multiple copies of the static library in version-specific
+	# locations, eg:
+	#   - `lib/libpython3.9.a`
+	#   - `lib/python3.9/config-3.9-x86_64-linux-gnu/libpython3.9.a`
+	find "${INSTALL_DIR}" -type f -name '*.a' -print -exec strip --strip-unneeded '{}' +
 elif ! find "${INSTALL_DIR}" -type f -name '*.a' -print -exec false '{}' +; then
-  abort "Unexpected static libraries found!"
+	abort "Unexpected static libraries found!"
 fi
 
 # Remove unneeded test directories, similar to the official Docker Python images:

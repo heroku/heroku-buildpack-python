@@ -22,21 +22,21 @@ source "${BUILDPACK_DIR}/lib/metadata.sh"
 meta_init "${CACHE_DIR}" "python"
 
 if [[ -f .heroku/collectstatic_disabled ]]; then
-  puts-step "Skipping Django collectstatic since the file '.heroku/collectstatic_disabled' exists."
-  puts-warn "This approach is deprecated, please set the env var DISABLE_COLLECTSTATIC=1 instead."
-  meta_set "django_collectstatic" "disabled-file"
-  exit 0
+	puts-step "Skipping Django collectstatic since the file '.heroku/collectstatic_disabled' exists."
+	puts-warn "This approach is deprecated, please set the env var DISABLE_COLLECTSTATIC=1 instead."
+	meta_set "django_collectstatic" "disabled-file"
+	exit 0
 fi
 
 if [[ "${DISABLE_COLLECTSTATIC:-0}" != "0" ]]; then
-  puts-step "Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set."
-  meta_set "django_collectstatic" "disabled-env-var"
-  exit 0
+	puts-step "Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set."
+	meta_set "django_collectstatic" "disabled-env-var"
+	exit 0
 fi
 
 # Ensure that Django is actually installed.
 if ! is_module_available 'django'; then
-  exit 0
+	exit 0
 fi
 
 # Location of 'manage.py', if it exists.
@@ -44,9 +44,9 @@ MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' -printf '%d\t%P\n' | 
 MANAGE_FILE=${MANAGE_FILE:-fakepath}
 
 if [[ ! -f "${MANAGE_FILE}" ]]; then
-  puts-step "Skipping Django collectstatic since no manage.py file found."
-  meta_set "django_collectstatic" "skipped-no-manage-py"
-  exit 0
+	puts-step "Skipping Django collectstatic since no manage.py file found."
+	meta_set "django_collectstatic" "skipped-no-manage-py"
+	exit 0
 fi
 
 meta_set "django_collectstatic" "enabled"
@@ -65,20 +65,20 @@ set -e
 echo
 
 if [[ "${COLLECTSTATIC_STATUS}" == 0 ]]; then
-  exit 0
+	exit 0
 fi
 
 # Display a warning if collectstatic failed.
 if grep -q 'SyntaxError' "$COLLECTSTATIC_LOG"; then
-  meta_set "failure_reason" "collectstatic-syntax-error"
+	meta_set "failure_reason" "collectstatic-syntax-error"
 elif grep -q 'ImproperlyConfigured' "$COLLECTSTATIC_LOG"; then
-  meta_set "failure_reason" "collectstatic-improper-configuration"
+	meta_set "failure_reason" "collectstatic-improper-configuration"
 elif grep -q 'The CSS file' "$COLLECTSTATIC_LOG"; then
-  meta_set "failure_reason" "collectstatic-fancy-references"
+	meta_set "failure_reason" "collectstatic-fancy-references"
 elif grep -q 'OSError' "$COLLECTSTATIC_LOG"; then
-  meta_set "failure_reason" "collectstatic-missing-file"
+	meta_set "failure_reason" "collectstatic-missing-file"
 else
-  meta_set "failure_reason" "collectstatic-other"
+	meta_set "failure_reason" "collectstatic-other"
 fi
 
 echo " !     Error while running '$ python $MANAGE_FILE collectstatic --noinput'."
@@ -93,10 +93,10 @@ echo "       https://devcenter.heroku.com/articles/django-assets"
 
 # Additionally, dump out the environment, if debug mode is on.
 if [[ -n "$DEBUG_COLLECTSTATIC" ]]; then
-  echo
-  echo "****** Collectstatic environment variables:"
-  echo
-  env | indent
+	echo
+	echo "****** Collectstatic environment variables:"
+	echo
+	env | indent
 fi
 
 exit 1

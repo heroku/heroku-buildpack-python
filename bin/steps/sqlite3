@@ -4,77 +4,77 @@
 # and the APT buildpack should be used if an app needs the sqlite CLI/headers.
 
 sqlite3_install() {
-  HEROKU_PYTHON_DIR="$1"
-  HEADERS_ONLY="$3"
+	HEROKU_PYTHON_DIR="$1"
+	HEADERS_ONLY="$3"
 
-  mkdir -p "$HEROKU_PYTHON_DIR"
+	mkdir -p "$HEROKU_PYTHON_DIR"
 
-  APT_CACHE_DIR="$HEROKU_PYTHON_DIR/apt/cache"
-  APT_STATE_DIR="$HEROKU_PYTHON_DIR/apt/state"
+	APT_CACHE_DIR="$HEROKU_PYTHON_DIR/apt/cache"
+	APT_STATE_DIR="$HEROKU_PYTHON_DIR/apt/state"
 
-  mkdir -p "$APT_CACHE_DIR/archives/partial"
-  mkdir -p "$APT_STATE_DIR/lists/partial"
+	mkdir -p "$APT_CACHE_DIR/archives/partial"
+	mkdir -p "$APT_STATE_DIR/lists/partial"
 
-  APT_OPTIONS=(
-    "--option=debug::nolocking=true"
-    "--option=dir::cache=${APT_CACHE_DIR}"
-    "--option=dir::state=${APT_STATE_DIR}"
-    "--option=dir::etc::sourcelist=/etc/apt/sources.list"
-  )
+	APT_OPTIONS=(
+		"--option=debug::nolocking=true"
+		"--option=dir::cache=${APT_CACHE_DIR}"
+		"--option=dir::state=${APT_STATE_DIR}"
+		"--option=dir::etc::sourcelist=/etc/apt/sources.list"
+	)
 
-  apt-get "${APT_OPTIONS[@]}" update > /dev/null 2>&1
-  if [[ -z "$HEADERS_ONLY" ]]; then
-    apt-get "${APT_OPTIONS[@]}" -y -d --reinstall install libsqlite3-dev sqlite3 > /dev/null 2>&1
-  else
-    apt-get "${APT_OPTIONS[@]}" -y -d --reinstall install libsqlite3-dev
-  fi
+	apt-get "${APT_OPTIONS[@]}" update >/dev/null 2>&1
+	if [[ -z "$HEADERS_ONLY" ]]; then
+		apt-get "${APT_OPTIONS[@]}" -y -d --reinstall install libsqlite3-dev sqlite3 >/dev/null 2>&1
+	else
+		apt-get "${APT_OPTIONS[@]}" -y -d --reinstall install libsqlite3-dev
+	fi
 
-  find "$APT_CACHE_DIR/archives/" -name "*.deb" -exec dpkg -x {} "$HEROKU_PYTHON_DIR/sqlite3/" \;
+	find "$APT_CACHE_DIR/archives/" -name "*.deb" -exec dpkg -x {} "$HEROKU_PYTHON_DIR/sqlite3/" \;
 
-  mkdir -p "$HEROKU_PYTHON_DIR/include"
-  mkdir -p "$HEROKU_PYTHON_DIR/lib"
+	mkdir -p "$HEROKU_PYTHON_DIR/include"
+	mkdir -p "$HEROKU_PYTHON_DIR/lib"
 
-  # remove old sqlite3 libraries/binaries
-  find "$HEROKU_PYTHON_DIR/include/" -name "sqlite3*.h" -exec rm -f {} \;
-  find "$HEROKU_PYTHON_DIR/lib/" -name "libsqlite3.*" -exec rm -f {} \;
-  rm -f "$HEROKU_PYTHON_DIR/lib/pkgconfig/sqlite3.pc"
-  rm -f "$HEROKU_PYTHON_DIR/bin/sqlite3"
+	# remove old sqlite3 libraries/binaries
+	find "$HEROKU_PYTHON_DIR/include/" -name "sqlite3*.h" -exec rm -f {} \;
+	find "$HEROKU_PYTHON_DIR/lib/" -name "libsqlite3.*" -exec rm -f {} \;
+	rm -f "$HEROKU_PYTHON_DIR/lib/pkgconfig/sqlite3.pc"
+	rm -f "$HEROKU_PYTHON_DIR/bin/sqlite3"
 
-  # eg: `x86_64` or `aarch64`
-  GNU_ARCH=$(arch)
+	# eg: `x86_64` or `aarch64`
+	GNU_ARCH=$(arch)
 
-  # copy over sqlite3 headers & bins and setup linking against the stack image library
-  mv "$HEROKU_PYTHON_DIR/sqlite3/usr/include/"* "$HEROKU_PYTHON_DIR/include/"
-  mv "$HEROKU_PYTHON_DIR/sqlite3/usr/lib/${GNU_ARCH}-linux-gnu"/libsqlite3.*a "$HEROKU_PYTHON_DIR/lib/"
-  mkdir -p "$HEROKU_PYTHON_DIR/lib/pkgconfig"
-  # set the right prefix/lib directories
-  sed -e 's/prefix=\/usr/prefix=\/app\/.heroku\/python/' -e "s/\/${GNU_ARCH}-linux-gnu//" "$HEROKU_PYTHON_DIR/sqlite3/usr/lib/${GNU_ARCH}-linux-gnu/pkgconfig/sqlite3.pc" > "$HEROKU_PYTHON_DIR/lib/pkgconfig/sqlite3.pc"
-  # need to point the libsqlite3.so to the stack image library for /usr/bin/ld -lsqlite3
-  SQLITE3_LIBFILE="/usr/lib/${GNU_ARCH}-linux-gnu/$(readlink -n "$HEROKU_PYTHON_DIR/sqlite3/usr/lib/${GNU_ARCH}-linux-gnu/libsqlite3.so")"
-  ln -s "$SQLITE3_LIBFILE" "$HEROKU_PYTHON_DIR/lib/libsqlite3.so"
-  if [[ -z "$HEADERS_ONLY" ]]; then
-    mv "$HEROKU_PYTHON_DIR/sqlite3/usr/bin"/* "$HEROKU_PYTHON_DIR/bin/"
-  fi
+	# copy over sqlite3 headers & bins and setup linking against the stack image library
+	mv "$HEROKU_PYTHON_DIR/sqlite3/usr/include/"* "$HEROKU_PYTHON_DIR/include/"
+	mv "$HEROKU_PYTHON_DIR/sqlite3/usr/lib/${GNU_ARCH}-linux-gnu"/libsqlite3.*a "$HEROKU_PYTHON_DIR/lib/"
+	mkdir -p "$HEROKU_PYTHON_DIR/lib/pkgconfig"
+	# set the right prefix/lib directories
+	sed -e 's/prefix=\/usr/prefix=\/app\/.heroku\/python/' -e "s/\/${GNU_ARCH}-linux-gnu//" "$HEROKU_PYTHON_DIR/sqlite3/usr/lib/${GNU_ARCH}-linux-gnu/pkgconfig/sqlite3.pc" >"$HEROKU_PYTHON_DIR/lib/pkgconfig/sqlite3.pc"
+	# need to point the libsqlite3.so to the stack image library for /usr/bin/ld -lsqlite3
+	SQLITE3_LIBFILE="/usr/lib/${GNU_ARCH}-linux-gnu/$(readlink -n "$HEROKU_PYTHON_DIR/sqlite3/usr/lib/${GNU_ARCH}-linux-gnu/libsqlite3.so")"
+	ln -s "$SQLITE3_LIBFILE" "$HEROKU_PYTHON_DIR/lib/libsqlite3.so"
+	if [[ -z "$HEADERS_ONLY" ]]; then
+		mv "$HEROKU_PYTHON_DIR/sqlite3/usr/bin"/* "$HEROKU_PYTHON_DIR/bin/"
+	fi
 
-  # cleanup
-  rm -rf "$HEROKU_PYTHON_DIR/sqlite3/"
-  rm -rf "$HEROKU_PYTHON_DIR/apt/"
+	# cleanup
+	rm -rf "$HEROKU_PYTHON_DIR/sqlite3/"
+	rm -rf "$HEROKU_PYTHON_DIR/apt/"
 }
 
 buildpack_sqlite3_install() {
-  puts-step "Installing SQLite3"
+	puts-step "Installing SQLite3"
 
-  # TODO: This never actual prints failure or even aborts the build, since
-  # the conditional disables `set -e` inside the called function:
-  # https://stackoverflow.com/q/19789102
-  # ...plus whoever wrote this forgot the `exit 1` in the `else` anyway.
-  if sqlite3_install "$BUILD_DIR/.heroku/python" ; then
-    # mcount "success.python.sqlite3"
-    :
-  else
-    echo "Sqlite3 failed to install."
-    # mcount "failure.python.sqlite3"
-  fi
+	# TODO: This never actual prints failure or even aborts the build, since
+	# the conditional disables `set -e` inside the called function:
+	# https://stackoverflow.com/q/19789102
+	# ...plus whoever wrote this forgot the `exit 1` in the `else` anyway.
+	if sqlite3_install "$BUILD_DIR/.heroku/python"; then
+		# mcount "success.python.sqlite3"
+		:
+	else
+		echo "Sqlite3 failed to install."
+		# mcount "failure.python.sqlite3"
+	fi
 
-  mkdir -p "$CACHE_DIR/.heroku/"
+	mkdir -p "$CACHE_DIR/.heroku/"
 }

@@ -22,9 +22,9 @@ set -u
 source "${BUILDPACK_DIR}/bin/utils"
 
 if [[ -f "${BUILD_DIR}/manage.py" ]] && is_module_available 'django' && is_module_available 'psycopg2'; then
-cat <<EOF
----
-addons:
-  - heroku-postgresql
-EOF
+	cat <<-'EOF'
+		---
+		addons:
+		  - heroku-postgresql
+	EOF
 fi

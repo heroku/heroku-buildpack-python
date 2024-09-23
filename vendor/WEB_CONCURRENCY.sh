@@ -25,43 +25,43 @@
 # exit on error, have to use return not exit, and returning non-zero doesn't have an effect.
 
 function detect_memory_limit_in_mb() {
-  local memory_limit_file='/sys/fs/cgroup/memory/memory.limit_in_bytes'
+	local memory_limit_file='/sys/fs/cgroup/memory/memory.limit_in_bytes'
 
-  # This memory limits file only exists on Heroku, or when using cgroups v1 (Docker < 20.10).
-  if [[ -f "${memory_limit_file}" ]]; then
-    local memory_limit_in_mb=$(($(cat "${memory_limit_file}") / 1048576))
+	# This memory limits file only exists on Heroku, or when using cgroups v1 (Docker < 20.10).
+	if [[ -f "${memory_limit_file}" ]]; then
+		local memory_limit_in_mb=$(($(cat "${memory_limit_file}") / 1048576))
 
-    # Ignore values above 1TB RAM, since when using cgroups v1 the limits file reports a
-    # bogus value of thousands of TB RAM when there is no container memory limit set.
-    if ((memory_limit_in_mb <= 1048576)); then
-      echo "${memory_limit_in_mb}"
-      return 0
-    fi
-  fi
+		# Ignore values above 1TB RAM, since when using cgroups v1 the limits file reports a
+		# bogus value of thousands of TB RAM when there is no container memory limit set.
+		if ((memory_limit_in_mb <= 1048576)); then
+			echo "${memory_limit_in_mb}"
+			return 0
+		fi
+	fi
 
-  return 1
+	return 1
 }
 
 function output() {
-  # Only display log output for web dynos, to prevent breaking one-off dyno scripting use-cases,
-  # and to prevent confusion from messages about WEB_CONCURRENCY in the logs of non-web workers.
-  # (We still actually set the env vars for all dyno types for consistency and easier debugging.)
-  if [[ "${DYNO:-}" == web.* ]]; then
-    echo "Python buildpack: $*" >&2
-  fi
+	# Only display log output for web dynos, to prevent breaking one-off dyno scripting use-cases,
+	# and to prevent confusion from messages about WEB_CONCURRENCY in the logs of non-web workers.
+	# (We still actually set the env vars for all dyno types for consistency and easier debugging.)
+	if [[ "${DYNO:-}" == web.* ]]; then
+		echo "Python buildpack: $*" >&2
+	fi
 }
 
 if ! available_memory_in_mb=$(detect_memory_limit_in_mb); then
-  # This should never occur on Heroku, but will be common for non-Heroku environments such as Dokku.
-  output "Couldn't determine available memory. Skipping automatic configuration of WEB_CONCURRENCY."
-  return 0
+	# This should never occur on Heroku, but will be common for non-Heroku environments such as Dokku.
+	output "Couldn't determine available memory. Skipping automatic configuration of WEB_CONCURRENCY."
+	return 0
 fi
 
 if ! cpu_cores=$(nproc); then
-  # This should never occur in practice, since this buildpack only supports being run on our base
-  # images, and nproc is installed in all of them.
-  output "Couldn't determine number of CPU cores. Skipping automatic configuration of WEB_CONCURRENCY."
-  return 0
+	# This should never occur in practice, since this buildpack only supports being run on our base
+	# images, and nproc is installed in all of them.
+	output "Couldn't determine number of CPU cores. Skipping automatic configuration of WEB_CONCURRENCY."
+	return 0
 fi
 
 output "Detected ${available_memory_in_mb} MB available memory and ${cpu_cores} CPU cores."
@@ -71,25 +71,25 @@ output "Detected ${available_memory_in_mb} MB available memory and ${cpu_cores} 
 export DYNO_RAM="${available_memory_in_mb}"
 
 if [[ -v WEB_CONCURRENCY ]]; then
-  output "Skipping automatic configuration of WEB_CONCURRENCY since it's already set."
-  return 0
+	output "Skipping automatic configuration of WEB_CONCURRENCY since it's already set."
+	return 0
 fi
 
 minimum_memory_per_process_in_mb=256
 
 # Prevents WEB_CONCURRENCY being set to zero if the environment is extremely memory constrained.
 if ((available_memory_in_mb < minimum_memory_per_process_in_mb)); then
-  max_concurrency_for_available_memory=1
+	max_concurrency_for_available_memory=1
 else
-  max_concurrency_for_available_memory=$((available_memory_in_mb / minimum_memory_per_process_in_mb))
+	max_concurrency_for_available_memory=$((available_memory_in_mb / minimum_memory_per_process_in_mb))
 fi
 
 max_concurrency_for_cpu_cores=$((cpu_cores * 2 + 1))
 
 if ((max_concurrency_for_available_memory < max_concurrency_for_cpu_cores)); then
-  export WEB_CONCURRENCY="${max_concurrency_for_available_memory}"
-  output "Defaulting WEB_CONCURRENCY to ${WEB_CONCURRENCY} based on the available memory."
+	export WEB_CONCURRENCY="${max_concurrency_for_available_memory}"
+	output "Defaulting WEB_CONCURRENCY to ${WEB_CONCURRENCY} based on the available memory."
 else
-  export WEB_CONCURRENCY="${max_concurrency_for_cpu_cores}"
-  output "Defaulting WEB_CONCURRENCY to ${WEB_CONCURRENCY} based on the number of CPU cores."
+	export WEB_CONCURRENCY="${max_concurrency_for_cpu_cores}"
+	output "Defaulting WEB_CONCURRENCY to ${WEB_CONCURRENCY} based on the number of CPU cores."
 fi

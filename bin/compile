@@ -103,16 +103,16 @@ mkdir -p "$CACHE_DIR/.heroku"
 mkdir -p .heroku
 
 # The Python installation.
-cp -R "$CACHE_DIR/.heroku/python" .heroku/ &> /dev/null || true
+cp -R "$CACHE_DIR/.heroku/python" .heroku/ &>/dev/null || true
 # A plain text file which contains the current stack being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &> /dev/null || true
+cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &>/dev/null || true
 # A plain text file which contains the current python version being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &> /dev/null || true
+cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &>/dev/null || true
 # A plain text file which contains the current sqlite3 version being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &> /dev/null || true
+cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &>/dev/null || true
 # "editable" installations of code repositories, via pip or pipenv.
 if [[ -d "$CACHE_DIR/.heroku/src" ]]; then
-  cp -R "$CACHE_DIR/.heroku/src" .heroku/ &> /dev/null || true
+	cp -R "$CACHE_DIR/.heroku/src" .heroku/ &>/dev/null || true
 fi
 
 # The pre_compile hook. Customers rely on this. Don't remove it.
@@ -124,47 +124,47 @@ source "${BUILDPACK_DIR}/bin/steps/hooks/pre_compile"
 # Sticky runtimes. If there was a previous build, and it used a given version of Python,
 # continue to use that version of Python in perpetuity.
 if [[ -f "$CACHE_DIR/.heroku/python-version" ]]; then
-  CACHED_PYTHON_VERSION=$(cat "$CACHE_DIR/.heroku/python-version")
+	CACHED_PYTHON_VERSION=$(cat "$CACHE_DIR/.heroku/python-version")
 fi
 
 # We didn't always record the stack version. This code is in place because of that.
 if [[ -f "$CACHE_DIR/.heroku/python-stack" ]]; then
-  CACHED_PYTHON_STACK=$(cat "$CACHE_DIR/.heroku/python-stack")
+	CACHED_PYTHON_STACK=$(cat "$CACHE_DIR/.heroku/python-stack")
 else
-  CACHED_PYTHON_STACK=$STACK
+	CACHED_PYTHON_STACK=$STACK
 fi
 
 # TODO: Move this into a new package manager handling implementation when adding Poetry support.
 # We intentionally don't mention `setup.py` here since it's being removed soon.
 if [[ ! -f requirements.txt && ! -f Pipfile && ! -f setup.py ]]; then
-  puts-warn
-  puts-warn "Error: Couldn't find any supported Python package manager files."
-  puts-warn
-  puts-warn "A Python app on Heroku must have either a 'requirements.txt' or"
-  puts-warn "'Pipfile' package manager file in the root directory of its"
-  puts-warn "source code."
-  puts-warn
-  puts-warn "Currently the root directory of your app contains:"
-  puts-warn
-  # TODO: Overhaul logging helpers so they can handle prefixing multi-line strings, and switch to them.
-  # shellcheck disable=SC2012 # Using `ls` instead of `find` is absolutely fine for this use case.
-  ls -1 --indicator-style=slash "${BUILD_DIR}" | sed 's/^/ !     /'
-  puts-warn
-  puts-warn "If your app already has a package manager file, check that it:"
-  puts-warn
-  puts-warn "1. Is in the top level directory (not a subdirectory)."
-  puts-warn "2. Has the correct spelling (the filenames are case-sensitive)."
-  puts-warn "3. Isn't listed in '.gitignore' or '.slugignore'."
-  puts-warn
-  puts-warn "Otherwise, add a package manager file to your app. If your app has"
-  puts-warn "no dependencies, then create an empty 'requirements.txt' file."
-  puts-warn
-  puts-warn "For help with using Python on Heroku, see:"
-  puts-warn "https://devcenter.heroku.com/articles/getting-started-with-python"
-  puts-warn "https://devcenter.heroku.com/articles/python-support"
-  puts-warn
-  meta_set "failure_reason" "package-manager-not-found"
-  exit 1
+	puts-warn
+	puts-warn "Error: Couldn't find any supported Python package manager files."
+	puts-warn
+	puts-warn "A Python app on Heroku must have either a 'requirements.txt' or"
+	puts-warn "'Pipfile' package manager file in the root directory of its"
+	puts-warn "source code."
+	puts-warn
+	puts-warn "Currently the root directory of your app contains:"
+	puts-warn
+	# TODO: Overhaul logging helpers so they can handle prefixing multi-line strings, and switch to them.
+	# shellcheck disable=SC2012 # Using `ls` instead of `find` is absolutely fine for this use case.
+	ls -1 --indicator-style=slash "${BUILD_DIR}" | sed 's/^/ !     /'
+	puts-warn
+	puts-warn "If your app already has a package manager file, check that it:"
+	puts-warn
+	puts-warn "1. Is in the top level directory (not a subdirectory)."
+	puts-warn "2. Has the correct spelling (the filenames are case-sensitive)."
+	puts-warn "3. Isn't listed in '.gitignore' or '.slugignore'."
+	puts-warn
+	puts-warn "Otherwise, add a package manager file to your app. If your app has"
+	puts-warn "no dependencies, then create an empty 'requirements.txt' file."
+	puts-warn
+	puts-warn "For help with using Python on Heroku, see:"
+	puts-warn "https://devcenter.heroku.com/articles/getting-started-with-python"
+	puts-warn "https://devcenter.heroku.com/articles/python-support"
+	puts-warn
+	meta_set "failure_reason" "package-manager-not-found"
+	exit 1
 fi
 
 # Pipenv Python version support.
@@ -173,21 +173,21 @@ fi
 source "${BUILDPACK_DIR}/bin/steps/pipenv-python-version"
 
 if [[ -f runtime.txt ]]; then
-  # PYTHON_VERSION_SOURCE may have already been set by the pipenv-python-version step.
-  # TODO: Refactor this and stop pipenv-python-version using runtime.txt as an API.
-  PYTHON_VERSION_SOURCE=${PYTHON_VERSION_SOURCE:-"runtime.txt"}
-  puts-step "Using Python version specified in ${PYTHON_VERSION_SOURCE}"
-  meta_set "python_version_reason" "specified"
+	# PYTHON_VERSION_SOURCE may have already been set by the pipenv-python-version step.
+	# TODO: Refactor this and stop pipenv-python-version using runtime.txt as an API.
+	PYTHON_VERSION_SOURCE=${PYTHON_VERSION_SOURCE:-"runtime.txt"}
+	puts-step "Using Python version specified in ${PYTHON_VERSION_SOURCE}"
+	meta_set "python_version_reason" "specified"
 elif [[ -n "${CACHED_PYTHON_VERSION:-}" ]]; then
-  puts-step "No Python version was specified. Using the same version as the last build: ${CACHED_PYTHON_VERSION}"
-  echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
-  meta_set "python_version_reason" "cached"
-  echo "${CACHED_PYTHON_VERSION}" > runtime.txt
+	puts-step "No Python version was specified. Using the same version as the last build: ${CACHED_PYTHON_VERSION}"
+	echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
+	meta_set "python_version_reason" "cached"
+	echo "${CACHED_PYTHON_VERSION}" >runtime.txt
 else
-  puts-step "No Python version was specified. Using the buildpack default: ${DEFAULT_PYTHON_VERSION}"
-  echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
-  meta_set "python_version_reason" "default"
-  echo "${DEFAULT_PYTHON_VERSION}" > runtime.txt
+	puts-step "No Python version was specified. Using the buildpack default: ${DEFAULT_PYTHON_VERSION}"
+	echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
+	meta_set "python_version_reason" "default"
+	echo "${DEFAULT_PYTHON_VERSION}" >runtime.txt
 fi
 
 # Create the directory for .profile.d, if it doesn't exist.
@@ -201,11 +201,11 @@ mkdir -p /app/.heroku/src
 # This is (hopefully obviously) because apps end up running from `/app` in production.
 # Realpath is used to support use-cases where one of the locations is a symlink to the other.
 if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
-    # python expects to reside in /app, so set up symlinks
-    # we will not remove these later so subsequent buildpacks can still invoke it
-    ln -nsf "$BUILD_DIR/.heroku/python" /app/.heroku/python
-    ln -nsf "$BUILD_DIR/.heroku/vendor" /app/.heroku/vendor
-    # Note: .heroku/src is copied in later.
+	# python expects to reside in /app, so set up symlinks
+	# we will not remove these later so subsequent buildpacks can still invoke it
+	ln -nsf "$BUILD_DIR/.heroku/python" /app/.heroku/python
+	ln -nsf "$BUILD_DIR/.heroku/vendor" /app/.heroku/vendor
+	# Note: .heroku/src is copied in later.
 fi
 
 # Download / Install Python, from pre-build binaries available on Amazon S3.
@@ -221,10 +221,10 @@ source "${BUILDPACK_DIR}/bin/steps/pipenv"
 # This allows for people to ship a setup.py application to Heroku
 
 if [[ ! -f requirements.txt ]] && [[ ! -f Pipfile ]]; then
-  meta_set "setup_py_only" "true"
-  echo "-e ." > requirements.txt
+	meta_set "setup_py_only" "true"
+	echo "-e ." >requirements.txt
 else
-  meta_set "setup_py_only" "false"
+	meta_set "setup_py_only" "false"
 fi
 
 # SQLite3 support.
@@ -251,10 +251,9 @@ meta_time "nltk_downloader_duration" "${nltk_downloader_start_time}"
 # In CI, $BUILD_DIR is /app.
 # Realpath is used to support use-cases where one of the locations is a symlink to the other.
 if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
-  rm -rf "$BUILD_DIR/.heroku/src"
-  deep-cp /app/.heroku/src "$BUILD_DIR/.heroku/src"
+	rm -rf "$BUILD_DIR/.heroku/src"
+	deep-cp /app/.heroku/src "$BUILD_DIR/.heroku/src"
 fi
-
 
 # Django collectstatic support.
 # The buildpack automatically runs collectstatic for Django applications.
@@ -264,7 +263,6 @@ fi
 collectstatic_start_time=$(nowms)
 sub_env "${BUILDPACK_DIR}/bin/steps/collectstatic"
 meta_time "django_collectstatic_duration" "${collectstatic_start_time}"
-
 
 # Programmatically create .profile.d script for application runtime environment variables.
 
@@ -286,7 +284,7 @@ set_default_env PYTHONPATH "\$HOME"
 
 # Python expects to be in /app, if at runtime, it is not, set
 # up symlinks… this can occur when the subdir buildpack is used.
-cat <<EOT >> "$PROFILE_PATH"
+cat <<EOT >>"$PROFILE_PATH"
 if [[ \$HOME != "/app" ]]; then
     mkdir -p /app/.heroku
     ln -nsf "\$HOME/.heroku/python" /app/.heroku/python
@@ -298,7 +296,7 @@ EOT
 # (such as `/tmp/build_<hash>`) back to `/app`. This is not done during the build itself, since later
 # buildpacks still need the build time paths.
 if [[ "${BUILD_DIR}" != "/app" ]]; then
-  cat <<EOT >> "$PROFILE_PATH"
+	cat <<EOT >>"$PROFILE_PATH"
 find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
 EOT
 fi
@@ -320,9 +318,9 @@ rm -rf "$CACHE_DIR/.heroku/src"
 mkdir -p "$CACHE_DIR/.heroku"
 cp -R .heroku/python "$CACHE_DIR/.heroku/"
 cp -R .heroku/python-version "$CACHE_DIR/.heroku/"
-cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &> /dev/null || true
+cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &>/dev/null || true
 if [[ -d .heroku/src ]]; then
-  cp -R .heroku/src "$CACHE_DIR/.heroku/" &> /dev/null || true
+	cp -R .heroku/src "$CACHE_DIR/.heroku/" &>/dev/null || true
 fi
 
 meta_time "total_duration" "${compile_start_time}"
