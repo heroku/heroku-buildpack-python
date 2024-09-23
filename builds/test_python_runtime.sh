@@ -4,6 +4,11 @@ set -euo pipefail
 
 ARCHIVE_FILEPATH="${1:?"Error: The filepath of the Python runtime archive must be specified as the first argument."}"
 
+function abort() {
+	echo "Error: ${1}" >&2
+	exit 1
+}
+
 # We intentionally extract the Python runtime into a different directory to the one into which it
 # was originally installed before being packaged, to check that relocation works (since buildpacks
 # depend on it). Since the Python binary was built in shared mode, `LD_LIBRARY_PATH` must be set
@@ -22,8 +27,7 @@ tar --zstd --extract --verbose --file "${ARCHIVE_FILEPATH}" --directory "${INSTA
 # Check that all dynamically linked libraries exist in the run image (since it has fewer packages than the build image).
 LDD_OUTPUT=$(find "${INSTALL_DIR}" -type f,l \( -name 'python3' -o -name '*.so*' \) -exec ldd '{}' +)
 if grep 'not found' <<<"${LDD_OUTPUT}" | sort --unique; then
-	echo "The above dynamically linked libraries were not found!"
-	exit 1
+	abort "The above dynamically linked libraries were not found!"
 fi
 
 # Check that optional and/or system library dependent stdlib modules were built.
@@ -46,6 +50,5 @@ if ! "${INSTALL_DIR}/bin/python3" -c "import $(
 	IFS=,
 	echo "${optional_stdlib_modules[*]}"
 )"; then
-	echo "The above optional stdlib module failed to import! Check the compile logs to see if it was skipped due to missing libraries/headers."
-	exit 1
+	abort "The above optional stdlib module failed to import! Check the compile logs to see if it was skipped due to missing libraries/headers."
 fi

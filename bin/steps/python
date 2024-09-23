@@ -9,18 +9,20 @@ PYTHON_VERSION="${PYTHON_VERSION%%+([[:space:]])}"
 function eol_python_version_error() {
 	local major_version="${1}"
 	local eol_date="${2}"
-	puts-warn
-	puts-warn "Python ${major_version} reached upstream end-of-life on ${eol_date}, and is"
-	puts-warn "therefore no longer receiving security updates:"
-	puts-warn "https://devguide.python.org/versions/#supported-versions"
-	puts-warn
-	puts-warn "As such, it is no longer supported by this buildpack."
-	puts-warn
-	puts-warn "Please upgrade to a newer Python version."
-	puts-warn
-	puts-warn "For a list of the supported Python versions, see:"
-	puts-warn "https://devcenter.heroku.com/articles/python-support#supported-runtimes"
-	puts-warn
+	display_error <<-EOF
+		Error: Python ${major_version} is no longer supported.
+
+		Python ${major_version} reached upstream end-of-life on ${eol_date}, and is
+		therefore no longer receiving security updates:
+		https://devguide.python.org/versions/#supported-versions
+
+		As such, it is no longer supported by this buildpack.
+
+		Please upgrade to a newer Python version.
+
+		For a list of the supported Python versions, see:
+		https://devcenter.heroku.com/articles/python-support#supported-runtimes
+	EOF
 	meta_set "failure_reason" "python-version-eol"
 	exit 1
 }
@@ -44,12 +46,12 @@ ARCH=$(dpkg --print-architecture)
 PYTHON_URL="${S3_BASE_URL}/${PYTHON_VERSION}-ubuntu-${UBUNTU_VERSION}-${ARCH}.tar.zst"
 
 if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
-	puts-warn
-	puts-warn "Requested runtime '${PYTHON_VERSION}' is not available for this stack (${STACK})."
-	puts-warn
-	puts-warn "For a list of the supported Python versions, see:"
-	puts-warn "https://devcenter.heroku.com/articles/python-support#supported-runtimes"
-	puts-warn
+	display_error <<-EOF
+		Error: Requested runtime '${PYTHON_VERSION}' is not available for this stack (${STACK}).
+
+		For a list of the supported Python versions, see:
+		https://devcenter.heroku.com/articles/python-support#supported-runtimes
+	EOF
 	meta_set "failure_reason" "python-version-not-found"
 	exit 1
 fi
@@ -153,7 +155,7 @@ else
 	if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}" | tar --zstd --extract --directory .heroku/python; then
 		# The Python version was confirmed to exist previously, so any failure here is due to
 		# a networking issue or archive/buildpack bug rather than the runtime not existing.
-		puts-warn "Failed to download/install ${PYTHON_VERSION}"
+		display_error "Error: Failed to download/install ${PYTHON_VERSION}."
 		meta_set "failure_reason" "python-download"
 		exit 1
 	fi
@@ -186,7 +188,7 @@ BUNDLED_PIP_WHEEL_LIST=(.heroku/python/lib/python*/ensurepip/_bundled/pip-*.whl)
 BUNDLED_PIP_WHEEL="${BUNDLED_PIP_WHEEL_LIST[0]}"
 
 if [[ -z "${BUNDLED_PIP_WHEEL}" ]]; then
-	puts-warn "Failed to locate the bundled pip wheel"
+	display_error "Error: Failed to locate the bundled pip wheel."
 	meta_set "failure_reason" "bundled-pip-not-found"
 	exit 1
 fi

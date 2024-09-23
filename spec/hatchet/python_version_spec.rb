@@ -25,12 +25,12 @@ RSpec.shared_examples 'aborts the build with a runtime not available message' do
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
         remote: -----> Using Python version specified in runtime.txt
-        remote:  !     
-        remote:  !     Requested runtime '#{requested_runtime}' is not available for this stack (#{app.stack}).
+        remote: 
+        remote:  !     Error: Requested runtime '#{requested_runtime}' is not available for this stack (#{app.stack}).
         remote:  !     
         remote:  !     For a list of the supported Python versions, see:
         remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
-        remote:  !     
+        remote: 
         remote:  !     Push rejected, failed to compile Python app.
       OUTPUT
     end
@@ -91,6 +91,8 @@ RSpec.describe 'Python version support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python version specified in runtime.txt
+          remote: 
+          remote:  !     Error: Python 3.6 is no longer supported.
           remote:  !     
           remote:  !     Python 3.6 reached upstream end-of-life on December 23rd, 2021, and is
           remote:  !     therefore no longer receiving security updates:
@@ -102,7 +104,7 @@ RSpec.describe 'Python version support' do
           remote:  !     
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
-          remote:  !     
+          remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
@@ -117,6 +119,8 @@ RSpec.describe 'Python version support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python version specified in runtime.txt
+          remote: 
+          remote:  !     Error: Python 3.7 is no longer supported.
           remote:  !     
           remote:  !     Python 3.7 reached upstream end-of-life on June 27th, 2023, and is
           remote:  !     therefore no longer receiving security updates:
@@ -128,7 +132,7 @@ RSpec.describe 'Python version support' do
           remote:  !     
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
-          remote:  !     
+          remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end

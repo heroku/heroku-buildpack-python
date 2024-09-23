@@ -51,9 +51,12 @@ RSpec.configure do |config|
 end
 
 def clean_output(output)
-  # Remove trailing whitespace characters added by Git:
-  # https://github.com/heroku/hatchet/issues/162
-  output.gsub(/ {8}(?=\R)/, '')
+  output
+    # Remove trailing whitespace characters added by Git:
+    # https://github.com/heroku/hatchet/issues/162
+    .gsub(/ {8}(?=\R)/, '')
+    # Remove ANSI colour codes used in buildpack output (e.g. error messages).
+    .gsub(/\e\[[0-9;]+m/, '')
 end
 
 def update_buildpacks(app, buildpacks)

@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Buildpack error messages are now more consistently formatted and use colour. ([#1639](https://github.com/heroku/heroku-buildpack-python/pull/1639))
 
 ## [v256] - 2024-09-07
 
