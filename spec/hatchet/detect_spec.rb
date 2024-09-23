@@ -39,6 +39,7 @@ RSpec.describe 'Buildpack detection' do
           remote:  !     https://devcenter.heroku.com/articles/getting-started-with-python
           remote:  !     https://devcenter.heroku.com/articles/python-support
           remote: 
+          remote: 
           remote:        More info: https://devcenter.heroku.com/articles/buildpacks#detection-failure
         OUTPUT
       end

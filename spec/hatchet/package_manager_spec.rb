@@ -10,7 +10,7 @@ RSpec.describe 'Package manager support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote:  !     
+          remote: 
           remote:  !     Error: Couldn't find any supported Python package manager files.
           remote:  !     
           remote:  !     A Python app on Heroku must have either a 'requirements.txt' or
@@ -34,7 +34,7 @@ RSpec.describe 'Package manager support' do
           remote:  !     For help with using Python on Heroku, see:
           remote:  !     https://devcenter.heroku.com/articles/getting-started-with-python
           remote:  !     https://devcenter.heroku.com/articles/python-support
-          remote:  !     
+          remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end

@@ -24,12 +24,12 @@ RSpec.shared_examples 'aborts the build without showing an update warning' do |r
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
         remote: -----> Using Python version specified in runtime.txt
-        remote:  !     
-        remote:  !     Requested runtime 'python-#{requested_version}' is not available for this stack (#{app.stack}).
+        remote: 
+        remote:  !     Error: Requested runtime 'python-#{requested_version}' is not available for this stack (#{app.stack}).
         remote:  !     
         remote:  !     For a list of the supported Python versions, see:
         remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
-        remote:  !     
+        remote: 
         remote:  !     Push rejected, failed to compile Python app.
       OUTPUT
     end
