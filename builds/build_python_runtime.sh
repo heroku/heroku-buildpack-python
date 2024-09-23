@@ -14,7 +14,7 @@ INSTALL_DIR="/tmp/python"
 SRC_DIR="/tmp/src"
 UPLOAD_DIR="/tmp/upload"
 
-function error() {
+function abort() {
   echo "Error: ${1}" >&2
   exit 1
 }
@@ -45,12 +45,12 @@ case "${STACK}" in
     )
     ;;
   *)
-    error "Error: Unsupported stack '${STACK}'!"
+    abort "Unsupported stack '${STACK}'!"
     ;;
 esac
 
 if [[ ! " ${SUPPORTED_PYTHON_VERSIONS[*]} " == *" ${PYTHON_MAJOR_VERSION} "* ]]; then
-  error "Error: Python ${PYTHON_MAJOR_VERSION} is not supported on ${STACK}!"
+  abort "Python ${PYTHON_MAJOR_VERSION} is not supported on ${STACK}!"
 fi
 
 # The release keys can be found on https://www.python.org/downloads/ -> "OpenPGP Public Keys".
@@ -68,7 +68,7 @@ case "${PYTHON_MAJOR_VERSION}" in
     GPG_KEY_FINGERPRINT='E3FF2839C048B25C084DEBE9B26995E310250568'
     ;;
   *)
-    error "Error: Unsupported Python version '${PYTHON_MAJOR_VERSION}'!"
+    abort "Unsupported Python version '${PYTHON_MAJOR_VERSION}'!"
     ;;
 esac
 
@@ -184,7 +184,7 @@ if [[ "${PYTHON_MAJOR_VERSION}" == 3.[8-9] ]]; then
   #   - `lib/python3.9/config-3.9-x86_64-linux-gnu/libpython3.9.a`
   find "${INSTALL_DIR}" -type f -name '*.a' -print -exec strip --strip-unneeded '{}' +
 elif ! find "${INSTALL_DIR}" -type f -name '*.a' -print -exec false '{}' +; then
-  error "Error: Unexpected static libraries found!"
+  abort "Unexpected static libraries found!"
 fi
 
 # Remove unneeded test directories, similar to the official Docker Python images:
