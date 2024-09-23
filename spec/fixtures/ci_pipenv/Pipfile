@@ -7,3 +7,4 @@ name = "pypi"
 typing-extensions = "*"
 
 [dev-packages]
+pytest = "*"

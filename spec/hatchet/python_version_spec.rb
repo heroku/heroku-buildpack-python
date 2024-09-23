@@ -31,6 +31,7 @@ RSpec.shared_examples 'aborts the build with a runtime not available message' do
         remote:  !     For a list of the supported Python versions, see:
         remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
         remote:  !     
+        remote:  !     Push rejected, failed to compile Python app.
       OUTPUT
     end
   end
@@ -102,6 +103,7 @@ RSpec.describe 'Python version support' do
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
           remote:  !     
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end
@@ -127,6 +129,7 @@ RSpec.describe 'Python version support' do
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
           remote:  !     
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end
