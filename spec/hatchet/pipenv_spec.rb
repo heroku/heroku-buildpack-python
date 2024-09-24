@@ -10,9 +10,10 @@ RSpec.shared_examples 'builds using Pipenv with the requested Python version' do
         remote: -----> Using Python version specified in Pipfile.lock
         remote: -----> Installing python-#{python_version}
         remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-        remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-        remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+        remote: -----> Installing Pipenv #{PIPENV_VERSION}
         remote: -----> Installing SQLite3
+        remote: -----> Installing dependencies with Pipenv
+        remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
       REGEX
     end
   end
@@ -49,7 +50,9 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
+          remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies with Pipenv
           remote:        The flag --skip-lock has been reintroduced \\(but is not recommended\\).  Without 
           remote:        the lock resolver it is difficult to manage multiple package indexes, and hash 
           remote:        checking is not provided.  However it can help manage installs with current 
@@ -57,7 +60,6 @@ RSpec.describe 'Pipenv support' do
           remote:        Pipfile.lock not found, creating...
           .+
           remote:        Installing dependencies from Pipfile...
-          remote: -----> Installing SQLite3
         REGEX
       end
     end
@@ -78,9 +80,10 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies with Pipenv
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
@@ -195,9 +198,10 @@ RSpec.describe 'Pipenv support' do
             remote:  !     
             remote: -----> Installing python-#{LATEST_PYTHON_3_8}
             remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-            remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-            remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+            remote: -----> Installing Pipenv #{PIPENV_VERSION}
             remote: -----> Installing SQLite3
+            remote: -----> Installing dependencies with Pipenv
+            remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           REGEX
         end
       end
@@ -260,9 +264,10 @@ RSpec.describe 'Pipenv support' do
           remote:  !     
           remote: -----> Installing python-3.12.2
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies with Pipenv
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         REGEX
       end
     end
@@ -319,9 +324,10 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python version specified in runtime.txt
           remote: -----> Installing python-#{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies with Pipenv
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         REGEX
       end
     end
@@ -340,9 +346,10 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies with Pipenv
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Discovering process types
         REGEX
       end
@@ -366,9 +373,10 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies with Pipenv
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Discovering process types
         REGEX
       end
@@ -385,9 +393,10 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python version specified in Pipfile.lock
           remote: -----> Installing python-#{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies with Pipenv
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         REGEX
       end
     end
@@ -404,7 +413,9 @@ RSpec.describe 'Pipenv support' do
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies with Pipenv #{PIPENV_VERSION}
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
+          remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies with Pipenv
           remote:        Your Pipfile.lock \\(.+\\) is out of date.  Expected: \\(.+\\).
           remote:        .+
           remote:        ERROR:: Aborting deploy

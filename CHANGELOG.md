@@ -2,7 +2,12 @@
 
 ## [Unreleased]
 
-- Buildpack error messages are now more consistently formatted and use colour. ([#1639](https://github.com/heroku/heroku-buildpack-python/pull/1639))
+- Moved the SQLite3 install step prior to installing dependencies when using Pipenv. This now matches the behaviour when using pip and allows dependencies to actually use the headers. ([#1640](https://github.com/heroku/heroku-buildpack-python/pull/1640))
+- Stopped exposing the `SKIP_PIP_INSTALL` env var to `bin/post_compile` and other subprocesses when using Pipenv. ([#1640](https://github.com/heroku/heroku-buildpack-python/pull/1640))
+- Stopped creating `.heroku/python/requirements-{declared,installed}.txt` files when using pip. ([#1640](https://github.com/heroku/heroku-buildpack-python/pull/1640))
+- Stopped creating a placeholder `requirements.txt` file when an app only has a `setup.py` file and no other package manager files. Instead pip is now invoked directly using `--editable .`. ([#1640](https://github.com/heroku/heroku-buildpack-python/pull/1640))
+- Improved buildpack metrics for package manager detection and duration of install steps. ([#1640](https://github.com/heroku/heroku-buildpack-python/pull/1640))
+- Updated buildpack-generated error messages to use colour and be more consistently formatted. ([#1639](https://github.com/heroku/heroku-buildpack-python/pull/1639))
 
 ## [v256] - 2024-09-07
 

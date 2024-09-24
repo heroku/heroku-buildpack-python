@@ -220,7 +220,7 @@ RSpec.describe 'Pip support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote:        Obtaining file:///tmp/build_.* \\(from -r requirements.txt \\(line 1\\)\\)
+          remote:        Obtaining file:///tmp/build_.*
           remote:          Preparing metadata \\(setup.py\\): started
           remote:          Preparing metadata \\(setup.py\\): finished with status 'done'
           remote:        .+

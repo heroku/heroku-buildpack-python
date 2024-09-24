@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: Switch this file to using namespaced functions like `output::<fn_name>`.
+
 ANSI_RED='\033[1;31m'
 ANSI_RESET='\033[0m'
 

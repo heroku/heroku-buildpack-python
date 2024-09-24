@@ -96,10 +96,11 @@ RSpec.describe 'Heroku CI' do
                  To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           -----> Installing python-#{DEFAULT_PYTHON_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          -----> Installing test dependencies
-                 Installing dependencies from Pipfile.lock \\(.+\\)...
-                 Installing dependencies from Pipfile.lock \\(.+\\)...
+          -----> Installing Pipenv #{PIPENV_VERSION}
           -----> Installing SQLite3
+          -----> Installing test dependencies with Pipenv
+                 Installing dependencies from Pipfile.lock \\(.+\\)...
+                 Installing dependencies from Pipfile.lock \\(.+\\)...
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running post-compile hook
           CI=true
@@ -115,7 +116,6 @@ RSpec.describe 'Heroku CI' do
           PIP_NO_PYTHON_VERSION_WARNING=1
           PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:
           PYTHONUNBUFFERED=1
-          SKIP_PIP_INSTALL=1
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
@@ -152,10 +152,11 @@ RSpec.describe 'Heroku CI' do
                  To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           -----> Using cached install of python-#{DEFAULT_PYTHON_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          -----> Installing test dependencies
-                 Installing dependencies from Pipfile.lock \\(.+\\)...
-                 Installing dependencies from Pipfile.lock \\(.+\\)...
+          -----> Installing Pipenv #{PIPENV_VERSION}
           -----> Installing SQLite3
+          -----> Installing test dependencies with Pipenv
+                 Installing dependencies from Pipfile.lock \\(.+\\)...
+                 Installing dependencies from Pipfile.lock \\(.+\\)...
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running post-compile hook
         REGEX

@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+# TODO: Move this to lib/ as part of the refactoring for .python-version support.
+
 # Detect Python-version with Pipenv.
 
-if [[ -f $BUILD_DIR/Pipfile ]]; then
+if [[ "${PACKAGE_MANAGER}" == "pipenv" ]]; then
 
 	if [[ ! -f $BUILD_DIR/runtime.txt ]]; then
 		if [[ ! -f $BUILD_DIR/Pipfile.lock ]]; then

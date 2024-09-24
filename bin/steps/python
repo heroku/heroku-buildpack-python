@@ -166,34 +166,3 @@ else
 
 	hash -r
 fi
-
-PIP_VERSION=$(get_requirement_version 'pip')
-SETUPTOOLS_VERSION=$(get_requirement_version 'setuptools')
-WHEEL_VERSION=$(get_requirement_version 'wheel')
-
-puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
-
-meta_set "pip_version" "${PIP_VERSION}"
-meta_set "setuptools_version" "${SETUPTOOLS_VERSION}"
-meta_set "wheel_version" "${WHEEL_VERSION}"
-
-# Python bundles Pip within its standard library, which we can use to install our chosen
-# pip version from PyPI, saving us from having to download the usual pip bootstrap script.
-# We have to use a glob since the bundled wheel filename contains the pip version, which
-# differs between Python versions. We also have to handle the case where there are multiple
-# matching pip wheels, since in some versions of Python (eg 3.9.0) multiple versions of pip
-# were accidentally bundled upstream. Note: This implementation relies upon `nullglob` being
-# set, which is the case thanks to the `bin/utils` that was run earlier.
-BUNDLED_PIP_WHEEL_LIST=(.heroku/python/lib/python*/ensurepip/_bundled/pip-*.whl)
-BUNDLED_PIP_WHEEL="${BUNDLED_PIP_WHEEL_LIST[0]}"
-
-if [[ -z "${BUNDLED_PIP_WHEEL}" ]]; then
-	display_error "Error: Failed to locate the bundled pip wheel."
-	meta_set "failure_reason" "bundled-pip-not-found"
-	exit 1
-fi
-
-/app/.heroku/python/bin/python "${BUNDLED_PIP_WHEEL}/pip" install --quiet --disable-pip-version-check --no-cache-dir \
-	"pip==${PIP_VERSION}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}"
-
-hash -r
