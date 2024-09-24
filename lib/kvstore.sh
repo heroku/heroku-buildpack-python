@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: Switch this file to using namespaced functions like `kvstore::<fn_name>`.
+
 # Taken from: https://github.com/heroku/heroku-buildpack-nodejs/blob/main/lib/kvstore.sh
 
 kv_create() {

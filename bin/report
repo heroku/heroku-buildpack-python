@@ -67,6 +67,7 @@ STRING_FIELDS=(
 	failure_reason
 	nltk_downloader
 	package_manager
+	package_manager_multiple_found
 	pip_version
 	pipenv_version
 	python_version_major
@@ -81,6 +82,7 @@ ALL_OTHER_FIELDS=(
 	dependencies_install_duration
 	django_collectstatic_duration
 	nltk_downloader_duration
+	package_manager_install_duration
 	pipenv_has_lockfile
 	post_compile_hook
 	post_compile_hook_duration

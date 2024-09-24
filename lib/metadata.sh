@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: Switch this file to using namespaced functions like `metadata::<fn_name>`.
+
 # Based on: https://github.com/heroku/heroku-buildpack-nodejs/blob/main/lib/metadata.sh
 
 source "${BUILDPACK_DIR}/lib/kvstore.sh"
