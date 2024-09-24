@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v257] - 2024-09-24
+
 - Moved the SQLite3 install step prior to installing dependencies when using Pipenv. This now matches the behaviour when using pip and allows dependencies to actually use the headers. ([#1640](https://github.com/heroku/heroku-buildpack-python/pull/1640))
 - Stopped exposing the `SKIP_PIP_INSTALL` env var to `bin/post_compile` and other subprocesses when using Pipenv. ([#1640](https://github.com/heroku/heroku-buildpack-python/pull/1640))
 - Stopped creating `.heroku/python/requirements-{declared,installed}.txt` files when using pip. ([#1640](https://github.com/heroku/heroku-buildpack-python/pull/1640))
@@ -1037,7 +1040,8 @@ Default Python is now latest 2.7.10. Updated Pip and Distribute.
 - Setuptools updated to v16.0
 - Pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v256...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v257...main
+[v257]: https://github.com/heroku/heroku-buildpack-python/compare/v256...v257
 [v256]: https://github.com/heroku/heroku-buildpack-python/compare/v255...v256
 [v255]: https://github.com/heroku/heroku-buildpack-python/compare/v254...v255
 [v254]: https://github.com/heroku/heroku-buildpack-python/compare/v253...v254
