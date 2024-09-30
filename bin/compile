@@ -77,11 +77,11 @@ export PYTHONUNBUFFERED=1
 # Ensure Python uses a Unicode locale, to prevent the issues described in:
 # https://github.com/docker-library/python/pull/570
 export LANG="en_US.UTF-8"
-export C_INCLUDE_PATH="/app/.heroku/python/include:${C_INCLUDE_PATH}"
-export CPLUS_INCLUDE_PATH="/app/.heroku/python/include:${CPLUS_INCLUDE_PATH}"
-export LIBRARY_PATH="/app/.heroku/python/lib:${LIBRARY_PATH}"
-export LD_LIBRARY_PATH="/app/.heroku/python/lib:${LD_LIBRARY_PATH}"
-export PKG_CONFIG_PATH="/app/.heroku/python/lib/pkg-config:${PKG_CONFIG_PATH}"
+export C_INCLUDE_PATH="/app/.heroku/python/include${C_INCLUDE_PATH:+:${C_INCLUDE_PATH}}"
+export CPLUS_INCLUDE_PATH="/app/.heroku/python/include${CPLUS_INCLUDE_PATH:+:${CPLUS_INCLUDE_PATH}}"
+export LIBRARY_PATH="/app/.heroku/python/lib${LIBRARY_PATH:+:${LIBRARY_PATH}}"
+export LD_LIBRARY_PATH="/app/.heroku/python/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+export PKG_CONFIG_PATH="/app/.heroku/python/lib/pkg-config${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}}"
 
 # Global pip options (https://pip.pypa.io/en/stable/user_guide/#environment-variables).
 # Disable pip's warnings about EOL Python since we show our own.
@@ -248,8 +248,8 @@ set_env PYTHONUNBUFFERED true
 # Tell Python where it lives.
 set_env PYTHONHOME "\${HOME}/.heroku/python"
 # Set variables for C libraries.
-set_env LIBRARY_PATH "\${HOME}/.heroku/python/lib:\${LIBRARY_PATH}"
-set_env LD_LIBRARY_PATH "\${HOME}/.heroku/python/lib:\${LD_LIBRARY_PATH}"
+set_env LIBRARY_PATH "\${HOME}/.heroku/python/lib\${LIBRARY_PATH:+:\${LIBRARY_PATH}}"
+set_env LD_LIBRARY_PATH "\${HOME}/.heroku/python/lib\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}"
 # Locale.
 set_default_env LANG en_US.UTF-8
 # The Python hash seed is set to random.
