@@ -2,7 +2,7 @@
 
 # This script is run in a subshell via sub_env so doesn't inherit the options/vars/utils from `bin/compile`.
 # TODO: Stop running this script in a subshell.
-set -eo pipefail
+set -euo pipefail
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
 source "${BUILDPACK_DIR}/bin/utils"
 

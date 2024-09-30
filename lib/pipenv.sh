@@ -32,7 +32,7 @@ function pipenv::install_dependencies() {
 
 	# Install the test dependencies, for CI.
 	# TODO: This is currently inconsistent with the non-test path, since it assumes (but doesn't check for) a lockfile.
-	if [[ -n "${INSTALL_TEST}" ]]; then
+	if [[ "${INSTALL_TEST:-0}" == "1" ]]; then
 		puts-step "Installing test dependencies with Pipenv"
 		/app/.heroku/python/bin/pipenv install --dev --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | cleanup | indent
 

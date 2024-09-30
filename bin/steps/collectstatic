@@ -12,7 +12,7 @@
 
 # This script is run in a subshell via sub_env so doesn't inherit the options/vars/utils from `bin/compile`.
 # TODO: Stop running this script in a subshell.
-set -eo pipefail
+set -euo pipefail
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
 source "${BUILDPACK_DIR}/bin/utils"
 
@@ -92,7 +92,7 @@ echo
 echo "       https://devcenter.heroku.com/articles/django-assets"
 
 # Additionally, dump out the environment, if debug mode is on.
-if [[ -n "$DEBUG_COLLECTSTATIC" ]]; then
+if [[ "${DEBUG_COLLECTSTATIC:-0}" == "1" ]]; then
 	echo
 	echo "****** Collectstatic environment variables:"
 	echo

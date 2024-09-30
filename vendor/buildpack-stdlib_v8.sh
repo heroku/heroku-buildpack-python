@@ -65,7 +65,7 @@ sub_env() {
 	(
 		# TODO: Fix https://github.com/heroku/buildpack-stdlib/issues/37
 		# shellcheck disable=SC2153
-		export_env "$ENV_DIR" "$WHITELIST" "$BLACKLIST"
+		export_env "$ENV_DIR" "${WHITELIST:-}" "${BLACKLIST:-}"
 
 		"$@"
 	)
