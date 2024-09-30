@@ -192,7 +192,7 @@ case "${PACKAGE_MANAGER}" in
 		pipenv::install_pipenv
 		;;
 	*)
-		abort_internal_error "Unhandled package manager"
+		utils::abort_internal_error "Unhandled package manager"
 		;;
 esac
 meta_time "package_manager_install_duration" "${package_manager_install_start_time}"
@@ -215,7 +215,7 @@ case "${PACKAGE_MANAGER}" in
 		pipenv::install_dependencies
 		;;
 	*)
-		abort_internal_error "Unhandled package manager"
+		utils::abort_internal_error "Unhandled package manager"
 		;;
 esac
 meta_time "dependencies_install_duration" "${dependencies_install_start_time}"
