@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Removed remnants of the unused `.heroku/vendor/` directory. ([#1644](https://github.com/heroku/heroku-buildpack-python/pull/1644))
 
 ## [v257] - 2024-09-24
 

@@ -71,20 +71,17 @@ EXPORT_PATH="${BUILDPACK_DIR}/export"
 GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
 
-export PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin:$PATH
+export PATH="/app/.heroku/python/bin:${PATH}"
 # Tell Python to not buffer it's stdin/stdout.
 export PYTHONUNBUFFERED=1
-# Set the locale to a well-known and expected standard.
-export LANG=en_US.UTF-8
-# `~/.heroku/vendor` is an place where the buildpack may stick pre-build binaries for known
-# C dependencies. This section configures Python (GCC, more specifically)
-# and pip to automatically include these paths when building binaries.
-# TODO: Stop adding .heroku/vendor here now that the buildpack no longer vendors anything.
-export C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$C_INCLUDE_PATH
-export CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:$CPLUS_INCLUDE_PATH
-export LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LIBRARY_PATH
-export LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:$LD_LIBRARY_PATH
-export PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:$PKG_CONFIG_PATH
+# Ensure Python uses a Unicode locale, to prevent the issues described in:
+# https://github.com/docker-library/python/pull/570
+export LANG="en_US.UTF-8"
+export C_INCLUDE_PATH="/app/.heroku/python/include:${C_INCLUDE_PATH}"
+export CPLUS_INCLUDE_PATH="/app/.heroku/python/include:${CPLUS_INCLUDE_PATH}"
+export LIBRARY_PATH="/app/.heroku/python/lib:${LIBRARY_PATH}"
+export LD_LIBRARY_PATH="/app/.heroku/python/lib:${LD_LIBRARY_PATH}"
+export PKG_CONFIG_PATH="/app/.heroku/python/lib/pkg-config:${PKG_CONFIG_PATH}"
 
 # Global pip options (https://pip.pypa.io/en/stable/user_guide/#environment-variables).
 # Disable pip's warnings about EOL Python since we show our own.
@@ -174,7 +171,6 @@ if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
 	# python expects to reside in /app, so set up symlinks
 	# we will not remove these later so subsequent buildpacks can still invoke it
 	ln -nsf "$BUILD_DIR/.heroku/python" /app/.heroku/python
-	ln -nsf "$BUILD_DIR/.heroku/vendor" /app/.heroku/vendor
 	# Note: .heroku/src is copied in later.
 fi
 
@@ -246,20 +242,20 @@ meta_time "django_collectstatic_duration" "${collectstatic_start_time}"
 # Programmatically create .profile.d script for application runtime environment variables.
 
 # Set the PATH to include Python / pip / pipenv / etc.
-set_env PATH "\$HOME/.heroku/python/bin:\$PATH"
+set_env PATH "\${HOME}/.heroku/python/bin:\${PATH}"
 # Tell Python to run in unbuffered mode.
 set_env PYTHONUNBUFFERED true
 # Tell Python where it lives.
-set_env PYTHONHOME "\$HOME/.heroku/python"
+set_env PYTHONHOME "\${HOME}/.heroku/python"
 # Set variables for C libraries.
-set_env LIBRARY_PATH "\$HOME/.heroku/vendor/lib:\$HOME/.heroku/python/lib:\$LIBRARY_PATH"
-set_env LD_LIBRARY_PATH "\$HOME/.heroku/vendor/lib:\$HOME/.heroku/python/lib:\$LD_LIBRARY_PATH"
+set_env LIBRARY_PATH "\${HOME}/.heroku/python/lib:\${LIBRARY_PATH}"
+set_env LD_LIBRARY_PATH "\${HOME}/.heroku/python/lib:\${LD_LIBRARY_PATH}"
 # Locale.
 set_default_env LANG en_US.UTF-8
 # The Python hash seed is set to random.
 set_default_env PYTHONHASHSEED random
 # Tell Python to look for Python modules in the /app dir. Don't change this.
-set_default_env PYTHONPATH "\$HOME"
+set_default_env PYTHONPATH "\${HOME}"
 
 # Python expects to be in /app, if at runtime, it is not, set
 # up symlinks… this can occur when the subdir buildpack is used.
@@ -267,7 +263,6 @@ cat <<EOT >>"$PROFILE_PATH"
 if [[ \$HOME != "/app" ]]; then
     mkdir -p /app/.heroku
     ln -nsf "\$HOME/.heroku/python" /app/.heroku/python
-    ln -nsf "\$HOME/.heroku/vendor" /app/.heroku/vendor
 fi
 EOT
 
@@ -291,7 +286,6 @@ source "${BUILDPACK_DIR}/bin/steps/hooks/post_compile"
 rm -rf "$CACHE_DIR/.heroku/python"
 rm -rf "$CACHE_DIR/.heroku/python-version"
 rm -rf "$CACHE_DIR/.heroku/python-stack"
-rm -rf "$CACHE_DIR/.heroku/vendor"
 rm -rf "$CACHE_DIR/.heroku/src"
 
 mkdir -p "$CACHE_DIR/.heroku"
