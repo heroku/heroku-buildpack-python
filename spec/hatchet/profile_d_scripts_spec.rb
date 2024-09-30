@@ -19,8 +19,8 @@ RSpec.describe '.profile.d/ scripts' do
           GUNICORN_CMD_ARGS=--access-logfile -
           HOME=/app
           LANG=en_US.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib:
-          LIBRARY_PATH=/app/.heroku/python/lib:
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin
           PWD=/app
           PYTHONHASHSEED=random

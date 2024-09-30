@@ -26,22 +26,22 @@ RSpec.describe 'Heroku CI' do
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running post-compile hook
           CI=true
-          CPLUS_INCLUDE_PATH=/app/.heroku/python/include:
-          C_INCLUDE_PATH=/app/.heroku/python/include:
+          CPLUS_INCLUDE_PATH=/app/.heroku/python/include
+          C_INCLUDE_PATH=/app/.heroku/python/include
           DISABLE_COLLECTSTATIC=1
           INSTALL_TEST=1
           LANG=en_US.UTF-8
           LC_ALL=C.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib:
-          LIBRARY_PATH=/app/.heroku/python/lib:
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
           PIP_NO_PYTHON_VERSION_WARNING=1
-          PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config:
+          PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
           PYTHONUNBUFFERED=1
           -----> Inline app detected
           LANG=en_US.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib:
-          LIBRARY_PATH=/app/.heroku/python/lib:
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
           PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
@@ -54,8 +54,8 @@ RSpec.describe 'Heroku CI' do
           FORWARDED_ALLOW_IPS=\\*
           GUNICORN_CMD_ARGS=--access-logfile -
           LANG=en_US.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib:
-          LIBRARY_PATH=/app/.heroku/python/lib:
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
           PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
@@ -104,22 +104,22 @@ RSpec.describe 'Heroku CI' do
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running post-compile hook
           CI=true
-          CPLUS_INCLUDE_PATH=/app/.heroku/python/include:
-          C_INCLUDE_PATH=/app/.heroku/python/include:
+          CPLUS_INCLUDE_PATH=/app/.heroku/python/include
+          C_INCLUDE_PATH=/app/.heroku/python/include
           DISABLE_COLLECTSTATIC=1
           INSTALL_TEST=1
           LANG=en_US.UTF-8
           LC_ALL=C.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib:
-          LIBRARY_PATH=/app/.heroku/python/lib:
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
           PIP_NO_PYTHON_VERSION_WARNING=1
-          PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config:
+          PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
           PYTHONUNBUFFERED=1
           -----> Inline app detected
           LANG=en_US.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib:
-          LIBRARY_PATH=/app/.heroku/python/lib:
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
           PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
@@ -132,8 +132,8 @@ RSpec.describe 'Heroku CI' do
           FORWARDED_ALLOW_IPS=\\*
           GUNICORN_CMD_ARGS=--access-logfile -
           LANG=en_US.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib:
-          LIBRARY_PATH=/app/.heroku/python/lib:
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
           PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
