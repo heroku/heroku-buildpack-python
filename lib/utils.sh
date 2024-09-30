@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Python bundles Pip within its standard library, which we can use to install our chosen
+# Python bundles pip within its standard library, which we can use to install our chosen
 # pip version from PyPI, saving us from having to download the usual pip bootstrap script.
 function utils::bundled_pip_module_path() {
 	local build_dir="${1}"
