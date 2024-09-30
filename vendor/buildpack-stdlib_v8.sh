@@ -3,62 +3,6 @@
 # Based on:
 # https://raw.githubusercontent.com/heroku/buildpack-stdlib/v8/stdlib.sh
 
-# Standard Output
-# ---------------
-
-# Buildpack Steps.
-puts_step() {
-	if [[ "$*" == "-" ]]; then
-		read -r output
-	else
-		output=$*
-	fi
-	echo -e "\\e[1m\\e[36m=== $output\\e[0m"
-	unset output
-}
-
-# Buildpack Error.
-puts_error() {
-	if [[ "$*" == "-" ]]; then
-		read -r output
-	else
-		output=$*
-	fi
-	echo -e "\\e[1m\\e[31m=!= $output\\e[0m"
-}
-
-# Buildpack Warning.
-puts_warn() {
-	if [[ "$*" == "-" ]]; then
-		read -r output
-	else
-		output=$*
-	fi
-	echo -e "\\e[1m\\e[33m=!= $output\\e[0m"
-}
-
-# Is verbose set?
-is_verbose() {
-	if [[ -n $BUILDPACK_VERBOSE ]]; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-# Buildpack Verbose.
-puts_verbose() {
-	if is_verbose; then
-		if [[ "$*" == "-" ]]; then
-			read -r output
-		else
-			output=$*
-		fi
-		echo "$output"
-		unset output
-	fi
-}
-
 # Buildpack Utilities
 # -------------------
 
