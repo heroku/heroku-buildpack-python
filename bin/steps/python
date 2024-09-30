@@ -121,7 +121,7 @@ if [[ -f .heroku/python-version ]]; then
 	fi
 fi
 
-# If using Pip, check if we should reinstall python dependencies given that requirements.txt
+# If using pip, check if we should reinstall python dependencies given that requirements.txt
 # is non-deterministic (not all packages pinned, doesn't handle uninstalls etc). We don't need
 # to do this when using Pipenv, since it has a lockfile and syncs the packages for us.
 if [[ -f "${BUILD_DIR}/requirements.txt" ]]; then

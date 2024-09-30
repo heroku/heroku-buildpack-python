@@ -11,7 +11,7 @@ RSpec.shared_examples 'installs successfully using pip' do
   end
 end
 
-RSpec.describe 'Pip support' do
+RSpec.describe 'pip support' do
   # TODO: Run this on Heroku-22 too, once it has also migrated to the new build infrastructure.
   # (Currently the test fails on the old infrastructure due to subtle differences in system PATH elements.)
   context 'when requirements.txt is unchanged since the last build', stacks: %w[heroku-20 heroku-24] do
