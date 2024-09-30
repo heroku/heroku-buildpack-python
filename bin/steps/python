@@ -144,7 +144,7 @@ if [[ -f "${BUILD_DIR}/requirements.txt" ]]; then
 	fi
 fi
 
-if [[ -n "${SKIP_INSTALL}" ]]; then
+if [[ "${SKIP_INSTALL:-0}" == "1" ]]; then
 	puts-step "Using cached install of ${PYTHON_VERSION}"
 else
 	puts-step "Installing ${PYTHON_VERSION}"

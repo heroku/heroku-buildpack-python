@@ -5,7 +5,7 @@
 
 sqlite3_install() {
 	HEROKU_PYTHON_DIR="$1"
-	HEADERS_ONLY="$3"
+	HEADERS_ONLY="${3:-}"
 
 	mkdir -p "$HEROKU_PYTHON_DIR"
 

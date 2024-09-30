@@ -52,7 +52,7 @@ function pip::install_dependencies() {
 	fi
 
 	# Install test dependencies, for Heroku CI.
-	if [[ -n "${INSTALL_TEST}" ]]; then
+	if [[ "${INSTALL_TEST:-0}" == "1" ]]; then
 		if [[ -f requirements-test.txt ]]; then
 			puts-step "Installing test dependencies..."
 			/app/.heroku/python/bin/pip install -r requirements-test.txt --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent

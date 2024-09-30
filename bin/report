@@ -26,14 +26,10 @@ BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
 
 # The build system doesn't source the `export` script before running this script, so we have to do
 # so manually (if it exists) so that buildpack Python/pip can be found (if the build succeeded).
-# We have to disable Bash error on undefined variables for now, since not all env vars used in the
-# export script will be set by default (eg `LIBRARY_PATH`).
 EXPORT_FILE="${BUILDPACK_DIR}/export"
 if [[ -f "${EXPORT_FILE}" ]]; then
-	set +u
 	# shellcheck source=/dev/null
 	source "${EXPORT_FILE}"
-	set -u
 fi
 
 source "${BUILDPACK_DIR}/lib/metadata.sh"
