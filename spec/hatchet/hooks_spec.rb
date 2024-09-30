@@ -18,16 +18,16 @@ RSpec.describe 'Compile hooks' do
           remote: ~ pre_compile ran with env vars:
           remote: BUILD_DIR=/tmp/build_<hash>
           remote: CACHE_DIR=/tmp/codon/tmp/cache
-          remote: C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:
-          remote: CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:
+          remote: C_INCLUDE_PATH=/app/.heroku/python/include:
+          remote: CPLUS_INCLUDE_PATH=/app/.heroku/python/include:
           remote: ENV_DIR=/tmp/...
           remote: HOME=/app
           remote: LANG=en_US.UTF-8
-          remote: LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
-          remote: LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
-          remote: PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: LD_LIBRARY_PATH=/app/.heroku/python/lib:
+          remote: LIBRARY_PATH=/app/.heroku/python/lib:
+          remote: PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote: PIP_NO_PYTHON_VERSION_WARNING=1
-          remote: PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:
+          remote: PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config:
           remote: PWD=/tmp/build_<hash>
           remote: PYTHONUNBUFFERED=1
           remote: SOME_APP_CONFIG_VAR=1
@@ -42,16 +42,16 @@ RSpec.describe 'Compile hooks' do
           remote: ~ post_compile ran with env vars:
           remote: BUILD_DIR=/tmp/build_<hash>
           remote: CACHE_DIR=/tmp/codon/tmp/cache
-          remote: C_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:
-          remote: CPLUS_INCLUDE_PATH=/app/.heroku/vendor/include:/app/.heroku/python/include:
+          remote: C_INCLUDE_PATH=/app/.heroku/python/include:
+          remote: CPLUS_INCLUDE_PATH=/app/.heroku/python/include:
           remote: ENV_DIR=/tmp/...
           remote: HOME=/app
           remote: LANG=en_US.UTF-8
-          remote: LD_LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
-          remote: LIBRARY_PATH=/app/.heroku/vendor/lib:/app/.heroku/python/lib:
-          remote: PATH=/app/.heroku/python/bin:/app/.heroku/vendor/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: LD_LIBRARY_PATH=/app/.heroku/python/lib:
+          remote: LIBRARY_PATH=/app/.heroku/python/lib:
+          remote: PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote: PIP_NO_PYTHON_VERSION_WARNING=1
-          remote: PKG_CONFIG_PATH=/app/.heroku/vendor/lib/pkg-config:/app/.heroku/python/lib/pkg-config:
+          remote: PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config:
           remote: PWD=/tmp/build_<hash>
           remote: PYTHONUNBUFFERED=1
           remote: SOME_APP_CONFIG_VAR=1
