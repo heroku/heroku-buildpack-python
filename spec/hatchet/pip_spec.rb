@@ -142,7 +142,7 @@ RSpec.describe 'pip support' do
 
     it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Running post-compile hook
           remote: easy-install.pth:/app/.heroku/src/gunicorn
           remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
@@ -181,7 +181,7 @@ RSpec.describe 'pip support' do
         # Test that the cached .pth files work correctly.
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Running post-compile hook
           remote: easy-install.pth:/app/.heroku/src/gunicorn
           remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py

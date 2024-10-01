@@ -5,14 +5,34 @@
 
 function pipenv::install_pipenv() {
 	# TODO: Either make this `local` or move elsewhere as part of the cache invalidation refactoring.
-	PIPENV_VERSION=$(get_requirement_version 'pipenv')
+	PIPENV_VERSION=$(utils::get_requirement_version 'pipenv')
 	meta_set "pipenv_version" "${PIPENV_VERSION}"
 
 	puts-step "Installing Pipenv ${PIPENV_VERSION}"
 
 	# TODO: Install Pipenv into a venv so it isn't leaked into the app environment.
 	# TODO: Explore viability of making Pipenv only be available during the build, to reduce slug size.
-	/app/.heroku/python/bin/pip install --quiet --disable-pip-version-check --no-cache-dir "pipenv==${PIPENV_VERSION}"
+	if ! {
+		pip \
+			install \
+			--disable-pip-version-check \
+			--no-cache-dir \
+			--no-input \
+			--quiet \
+			"pipenv==${PIPENV_VERSION}"
+	}; then
+		display_error <<-EOF
+			Error: Unable to install Pipenv.
+
+			Try building again to see if the error resolves itself.
+
+			If that does not help, check the status of PyPI (the Python
+			package repository service), here:
+			https://status.python.org
+		EOF
+		meta_set "failure_reason" "install-pipenv"
+		return 1
+	fi
 }
 
 # Previous versions of the buildpack used to cache the checksum of the lockfile to allow
