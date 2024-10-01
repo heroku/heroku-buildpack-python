@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v258] - 2024-10-01
+
 - Added support for Python 3.12.7. ([#1650](https://github.com/heroku/heroku-buildpack-python/pull/1650))
 - Changed the default Python version for new apps from 3.12.6 to 3.12.7. ([#1650](https://github.com/heroku/heroku-buildpack-python/pull/1650))
 - Fixed Django collectstatic debug output being shown if `DEBUG_COLLECTSTATIC` was set to `0` or the empty string. ([#1646](https://github.com/heroku/heroku-buildpack-python/pull/1646))
@@ -1045,7 +1048,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v257...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v258...main
+[v258]: https://github.com/heroku/heroku-buildpack-python/compare/v257...v258
 [v257]: https://github.com/heroku/heroku-buildpack-python/compare/v256...v257
 [v256]: https://github.com/heroku/heroku-buildpack-python/compare/v255...v256
 [v255]: https://github.com/heroku/heroku-buildpack-python/compare/v254...v255
