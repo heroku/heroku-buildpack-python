@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# This file is run by the inline buildpack.
+
+set -euo pipefail
+
+echo "Inline"

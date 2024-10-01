@@ -5,7 +5,11 @@
 
 set -euo pipefail
 
-printenv | sort | grep -vE '^(_|BUILDPACK_LOG_FILE|DYNO|HOME|PWD|REQUEST_ID|SHLVL|SOURCE_VERSION|STACK)='
+BUILD_DIR="${1}"
+
+cd "${BUILD_DIR}"
+
+printenv | sort | grep -vE '^(_|BUILDPACK_LOG_FILE|DYNO|HOME|OLDPWD|PWD|REQUEST_ID|SHLVL|SOURCE_VERSION|STACK)='
 echo
 
 python -c 'import pprint, sys; pprint.pp(sys.path)'
