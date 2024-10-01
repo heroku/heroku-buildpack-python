@@ -22,10 +22,12 @@ source "${BUILDPACK_DIR}/bin/utils"
 source "${BUILDPACK_DIR}/lib/metadata.sh"
 source "${BUILDPACK_DIR}/lib/output.sh"
 source "${BUILDPACK_DIR}/lib/package_manager.sh"
+# TODO
+source "${BUILDPACK_DIR}/lib/utils.sh"
 source "${BUILDPACK_DIR}/lib/pip.sh"
 source "${BUILDPACK_DIR}/lib/pipenv.sh"
 source "${BUILDPACK_DIR}/lib/python_version.sh"
-source "${BUILDPACK_DIR}/lib/utils.sh"
+source "${BUILDPACK_DIR}/lib/poetry.sh"
 
 compile_start_time=$(nowms)
 
@@ -73,6 +75,7 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 EXPORT_PATH="${BUILDPACK_DIR}/export"
 GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
+python_home='/app/.heroku/python'
 
 export PATH="/app/.heroku/python/bin:${PATH}"
 # Tell Python to not buffer it's stdin/stdout.
@@ -201,15 +204,17 @@ meta_time "python_install_duration" "${install_python_start_time}"
 
 # Install the package manager and related tools.
 package_manager_install_start_time=$(nowms)
-bundled_pip_module_path="$(utils::bundled_pip_module_path "${BUILD_DIR}")"
 case "${package_manager}" in
 	pip)
-		pip::install_pip_setuptools_wheel "${bundled_pip_module_path}" "${python_major_version}"
+		pip::install_pip_setuptools_wheel "${python_home}" "${python_major_version}"
 		;;
 	pipenv)
 		# TODO: Stop installing pip when using Pipenv.
-		pip::install_pip_setuptools_wheel "${bundled_pip_module_path}" "${python_major_version}"
+		pip::install_pip_setuptools_wheel "${python_home}" "${python_major_version}"
 		pipenv::install_pipenv
+		;;
+	poetry)
+		poetry::install_poetry "${python_home}" "${CACHE_DIR}" "${EXPORT_PATH}"
 		;;
 	*)
 		utils::abort_internal_error "Unhandled package manager: ${package_manager}"
@@ -220,8 +225,8 @@ meta_time "package_manager_install_duration" "${package_manager_install_start_ti
 # SQLite3 support.
 # Installs the sqlite3 dev headers and sqlite3 binary but not the
 # libsqlite3-0 library since that exists in the base image.
-# We skip this step on Python 3.13, as a first step towards removing this feature.
-if [[ "${python_major_version}" == +(3.8|3.9|3.10|3.11|3.12) ]]; then
+# We skip this step on Python 3.13 or when using Poetry, as a first step towards removing this feature.
+if [[ "${python_major_version}" == +(3.8|3.9|3.10|3.11|3.12) && "${package_manager}" != "poetry" ]]; then
 	install_sqlite_start_time=$(nowms)
 	source "${BUILDPACK_DIR}/bin/steps/sqlite3"
 	buildpack_sqlite3_install
@@ -236,6 +241,9 @@ case "${package_manager}" in
 		;;
 	pipenv)
 		pipenv::install_dependencies
+		;;
+	poetry)
+		poetry::install_dependencies
 		;;
 	*)
 		utils::abort_internal_error "Unhandled package manager: ${package_manager}"
