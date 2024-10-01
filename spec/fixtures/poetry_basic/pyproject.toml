@@ -1,0 +1,10 @@
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+typing-extensions = "*"
+
+# This group shouldn't be installed due to us passing `--only main`.
+[tool.poetry.group.test.dependencies]
+pytest = "*"
