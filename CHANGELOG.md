@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Added support for Python 3.12.7. ([#1650](https://github.com/heroku/heroku-buildpack-python/pull/1650))
+- Changed the default Python version for new apps from 3.12.6 to 3.12.7. ([#1650](https://github.com/heroku/heroku-buildpack-python/pull/1650))
 - Fixed Django collectstatic debug output being shown if `DEBUG_COLLECTSTATIC` was set to `0` or the empty string. ([#1646](https://github.com/heroku/heroku-buildpack-python/pull/1646))
 - Stopped adding a trailing `:` to `C_INCLUDE_PATH`, `CPLUS_INCLUDE_PATH`, `LIBRARY_PATH`, `LD_LIBRARY_PATH` and `PKG_CONFIG_PATH`. ([#1645](https://github.com/heroku/heroku-buildpack-python/pull/1645))
 - Removed remnants of the unused `.heroku/vendor/` directory. ([#1644](https://github.com/heroku/heroku-buildpack-python/pull/1644))
