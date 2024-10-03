@@ -3,6 +3,7 @@
 # See: https://devcenter.heroku.com/articles/buildpack-api
 
 set -euo pipefail
+shopt -s inherit_errexit
 
 BUILD_DIR="${1}"
 

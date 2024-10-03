@@ -2,6 +2,7 @@
 # shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 set -euo pipefail
+shopt -s inherit_errexit
 
 BP_NAME=${1:-"heroku/python"}
 
