@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
+# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
+
+set -euo pipefail
 
 PYTHON_VERSION=$(cat runtime.txt)
 # Remove leading and trailing whitespace. Note: This implementation relies upon
@@ -113,6 +117,7 @@ if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
 fi
 
 if [[ -f .heroku/python-version ]]; then
+	# shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
 	if [[ ! "$(cat .heroku/python-version)" == "$PYTHON_VERSION" ]]; then
 		puts-step "Python version has changed from $(cat .heroku/python-version) to ${PYTHON_VERSION}, clearing cache"
 		rm -rf .heroku/python

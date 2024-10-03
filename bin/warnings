@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 gdal-missing() {
-	if grep -qi 'Could not find gdal-config' "$WARNINGS_LOG"; then
+	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
+	if grep -qi 'Could not find gdal-config' "${WARNINGS_LOG}"; then
 		echo
 		puts-warn "Hello! Package installation failed since the GDAL library was not found."
 		puts-warn "For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:"

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This is technically redundant, since all consumers of this lib will have enabled these,
+# however, it helps Shellcheck realise the options under which these functions will run.
+set -euo pipefail
+
 # TODO: Switch this file to using namespaced functions like `kvstore::<fn_name>`.
 
 # Taken from: https://github.com/heroku/heroku-buildpack-nodejs/blob/main/lib/kvstore.sh
@@ -71,6 +75,7 @@ kv_list() {
 
 	kv_keys "${f}" | tr ' ' '\n' | while read -r key; do
 		if [[ -n "${key}" ]]; then
+			# shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
 			echo "${key}=$(kv_get_escaped "${f}" "${key}")"
 		fi
 	done

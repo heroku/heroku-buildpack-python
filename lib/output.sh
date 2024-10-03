@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This is technically redundant, since all consumers of this lib will have enabled these,
+# however, it helps Shellcheck realise the options under which these functions will run.
+set -euo pipefail
+
 # TODO: Switch this file to using namespaced functions like `output::<fn_name>`.
 
 ANSI_RED='\033[1;31m'

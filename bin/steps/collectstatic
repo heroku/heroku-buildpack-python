@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 # Django Collectstatic runner. If you have Django installed, collectstatic will
 # automatically be executed as part of the build process. If collectstatic
@@ -18,8 +19,7 @@ source "${BUILDPACK_DIR}/bin/utils"
 
 # Required for `meta_set`.
 source "${BUILDPACK_DIR}/lib/metadata.sh"
-# shellcheck disable=SC2153
-meta_init "${CACHE_DIR}" "python"
+meta_init "${CACHE_DIR:?}" "python"
 
 if [[ -f .heroku/collectstatic_disabled ]]; then
 	puts-step "Skipping Django collectstatic since the file '.heroku/collectstatic_disabled' exists."
@@ -35,6 +35,7 @@ if [[ "${DISABLE_COLLECTSTATIC:-0}" != "0" ]]; then
 fi
 
 # Ensure that Django is actually installed.
+# shellcheck disable=SC2310 # TODO: This function is invoked in an 'if' condition so set -e will be disabled.
 if ! is_module_available 'django'; then
 	exit 0
 fi

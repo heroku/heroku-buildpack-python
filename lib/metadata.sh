@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
+# This is technically redundant, since all consumers of this lib will have enabled these,
+# however, it helps Shellcheck realise the options under which these functions will run.
+set -euo pipefail
+
 # TODO: Switch this file to using namespaced functions like `metadata::<fn_name>`.
 
 # Based on: https://github.com/heroku/heroku-buildpack-nodejs/blob/main/lib/metadata.sh
 
-source "${BUILDPACK_DIR}/lib/kvstore.sh"
+source "${BUILDPACK_DIR:?}/lib/kvstore.sh"
 
 # Variables shared by this whole module
 BUILD_DATA_FILE=""
@@ -69,6 +73,6 @@ log_meta_data() {
 	# print all values on one line in logfmt format
 	# https://brandur.org/logfmt
 	# the echo call ensures that all values are printed on a single line
-	# shellcheck disable=SC2005 disable=SC2046
+	# shellcheck disable=SC2005,SC2046,SC2312
 	echo $(kv_list "${BUILD_DATA_FILE}")
 }

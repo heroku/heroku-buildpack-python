@@ -19,7 +19,7 @@ function abort() {
 	exit 1
 }
 
-case "${STACK}" in
+case "${STACK:?}" in
 	heroku-24)
 		SUPPORTED_PYTHON_VERSIONS=(
 			"3.10"
@@ -170,7 +170,8 @@ else
 	LDFLAGS="$(dpkg-buildflags --get LDFLAGS) -Wl,--strip-all"
 fi
 
-make -j "$(nproc)" "EXTRA_CFLAGS=${EXTRA_CFLAGS}" "LDFLAGS=${LDFLAGS}"
+CPU_COUNT="$(nproc)"
+make -j "${CPU_COUNT}" "EXTRA_CFLAGS=${EXTRA_CFLAGS}" "LDFLAGS=${LDFLAGS}"
 make install
 
 if [[ "${PYTHON_MAJOR_VERSION}" == 3.[8-9] ]]; then

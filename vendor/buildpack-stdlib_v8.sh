@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
+# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
+
+set -euo pipefail
 
 # Based on:
 # https://raw.githubusercontent.com/heroku/buildpack-stdlib/v8/stdlib.sh
@@ -64,7 +68,6 @@ export_env() {
 sub_env() {
 	(
 		# TODO: Fix https://github.com/heroku/buildpack-stdlib/issues/37
-		# shellcheck disable=SC2153
 		export_env "$ENV_DIR" "${WHITELIST:-}" "${BLACKLIST:-}"
 
 		"$@"

@@ -91,10 +91,12 @@ ALL_OTHER_FIELDS=(
 )
 
 for field in "${STRING_FIELDS[@]}"; do
+	# shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
 	kv_pair_string "${field}" "$(meta_get "${field}")"
 done
 
 for field in "${ALL_OTHER_FIELDS[@]}"; do
+	# shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
 	kv_pair "${field}" "$(meta_get "${field}")"
 done
 
