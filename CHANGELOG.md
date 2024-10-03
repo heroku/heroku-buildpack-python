@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Improved the robustness of buildpack error handling by enabling `inherit_errexit`. ([#1655](https://github.com/heroku/heroku-buildpack-python/pull/1655))
 
 ## [v258] - 2024-10-01
 

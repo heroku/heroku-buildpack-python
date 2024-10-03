@@ -3,6 +3,7 @@
 # See: https://devcenter.heroku.com/articles/testpack-api
 
 set -euo pipefail
+shopt -s inherit_errexit
 
 # The absolute path to the root of the buildpack.
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)

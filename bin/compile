@@ -4,6 +4,7 @@
 # shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 set -euo pipefail
+shopt -s inherit_errexit
 
 # Note: This can't be enabled via app config vars, since at this point they haven't been loaded from ENV_DIR.
 if [[ "${BUILDPACK_XTRACE:-0}" == "1" ]]; then

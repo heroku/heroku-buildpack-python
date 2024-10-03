@@ -18,6 +18,7 @@
 # when developing run `make compile` in this repo locally, which runs `bin/report` too.
 
 set -euo pipefail
+shopt -s inherit_errexit
 
 CACHE_DIR="${2}"
 
