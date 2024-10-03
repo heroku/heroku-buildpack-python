@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 set -euo pipefail
 

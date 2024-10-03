@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This is technically redundant, since all consumers of this lib will have enabled these,
+# however, it helps Shellcheck realise the options under which these functions will run.
+set -euo pipefail
+
 # export CLINT_FORCE_COLOR=1
 # export PIPENV_FORCE_COLOR=1
 
@@ -25,6 +29,7 @@ function pipenv::install_dependencies() {
 	# TODO: Expose all config vars (after suitable checks are added for unsafe env vars).
 	#
 	# PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
 	if [[ -r "${ENV_DIR}/PIP_EXTRA_INDEX_URL" ]]; then
 		PIP_EXTRA_INDEX_URL="$(cat "${ENV_DIR}/PIP_EXTRA_INDEX_URL")"
 		export PIP_EXTRA_INDEX_URL

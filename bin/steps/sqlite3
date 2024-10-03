@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 # TODO: Remove this entirely since the Python stdlib now includes modern sqlite support,
 # and the APT buildpack should be used if an app needs the sqlite CLI/headers.
@@ -68,6 +69,8 @@ buildpack_sqlite3_install() {
 	# the conditional disables `set -e` inside the called function:
 	# https://stackoverflow.com/q/19789102
 	# ...plus whoever wrote this forgot the `exit 1` in the `else` anyway.
+	# shellcheck disable=SC2310 # TODO: This function is invoked in an 'if' condition so set -e will be disabled.
+	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
 	if sqlite3_install "$BUILD_DIR/.heroku/python"; then
 		# mcount "success.python.sqlite3"
 		:
@@ -76,5 +79,6 @@ buildpack_sqlite3_install() {
 		# mcount "failure.python.sqlite3"
 	fi
 
+	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
 	mkdir -p "$CACHE_DIR/.heroku/"
 }

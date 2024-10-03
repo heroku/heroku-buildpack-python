@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Usage: bin/compile <build-dir> <cache-dir> <env-dir>
 # See: https://devcenter.heroku.com/articles/buildpack-api
+# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 set -euo pipefail
 
@@ -131,6 +132,7 @@ fi
 if [[ -f "$CACHE_DIR/.heroku/python-stack" ]]; then
 	CACHED_PYTHON_STACK=$(cat "$CACHE_DIR/.heroku/python-stack")
 else
+	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
 	CACHED_PYTHON_STACK=$STACK
 fi
 
@@ -170,6 +172,7 @@ mkdir -p /app/.heroku/src
 # symlinks to emulate that we are operating in `/app` during the build process.
 # This is (hopefully obviously) because apps end up running from `/app` in production.
 # Realpath is used to support use-cases where one of the locations is a symlink to the other.
+# shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
 if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
 	# python expects to reside in /app, so set up symlinks
 	# we will not remove these later so subsequent buildpacks can still invoke it
@@ -231,6 +234,7 @@ meta_time "nltk_downloader_duration" "${nltk_downloader_start_time}"
 # Support for editable installations.
 # In CI, $BUILD_DIR is /app.
 # Realpath is used to support use-cases where one of the locations is a symlink to the other.
+# shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
 if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
 	rm -rf "$BUILD_DIR/.heroku/src"
 	deep-cp /app/.heroku/src "$BUILD_DIR/.heroku/src"

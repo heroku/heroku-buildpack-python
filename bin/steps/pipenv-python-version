@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
+# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 # TODO: Move this to lib/ as part of the refactoring for .python-version support.
 

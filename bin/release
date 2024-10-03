@@ -17,6 +17,7 @@ source "${BUILDPACK_DIR}/export"
 
 source "${BUILDPACK_DIR}/bin/utils"
 
+# shellcheck disable=SC2310 # TODO: This function is invoked in an '&&' condition so set -e will be disabled.
 if [[ -f "${BUILD_DIR}/manage.py" ]] && is_module_available 'django' && is_module_available 'psycopg2'; then
 	cat <<-'EOF'
 		---

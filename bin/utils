@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 # Be careful about moving these to bin/compile, since this utils script is sourced
 # directly by other scripts run via subshells, and not only from bin/compile.
 shopt -s extglob
 shopt -s nullglob
 
-source "${BUILDPACK_DIR}/vendor/buildpack-stdlib_v8.sh"
+source "${BUILDPACK_DIR:?}/vendor/buildpack-stdlib_v8.sh"
 
-if [[ "$(uname)" == "Darwin" ]]; then
-	sed() { command sed -l "$@"; }
-else
-	sed() { command sed -u "$@"; }
-fi
+sed() { command sed -u "$@"; }
 
 # Syntax sugar.
 indent() {

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This is technically redundant, since all consumers of this lib will have enabled these,
+# however, it helps Shellcheck realise the options under which these functions will run.
+set -euo pipefail
+
 function pip::install_pip_setuptools_wheel() {
 	# We use the pip wheel bundled within Python's standard library to install our chosen
 	# pip version, since it's faster than `ensurepip` followed by an upgrade in place.
@@ -27,6 +31,7 @@ function pip::install_dependencies() {
 	# to allow for the env var interpolation feature of requirements files to work.
 	#
 	# PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
 	if [[ -r "${ENV_DIR}/PIP_EXTRA_INDEX_URL" ]]; then
 		PIP_EXTRA_INDEX_URL="$(cat "${ENV_DIR}/PIP_EXTRA_INDEX_URL")"
 		export PIP_EXTRA_INDEX_URL
@@ -40,7 +45,8 @@ function pip::install_dependencies() {
 	fi
 
 	set +e
-	/app/.heroku/python/bin/pip install "${args[@]}" --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir --progress-bar off 2>&1 | tee "$WARNINGS_LOG" | cleanup | indent
+	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
+	/app/.heroku/python/bin/pip install "${args[@]}" --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir --progress-bar off 2>&1 | tee "${WARNINGS_LOG}" | cleanup | indent
 	local PIP_STATUS="${PIPESTATUS[0]}"
 	set -e
 

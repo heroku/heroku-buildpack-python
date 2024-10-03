@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This is technically redundant, since all consumers of this lib will have enabled these,
+# however, it helps Shellcheck realise the options under which these functions will run.
+set -euo pipefail
+
 # Python bundles pip within its standard library, which we can use to install our chosen
 # pip version from PyPI, saving us from having to download the usual pip bootstrap script.
 function utils::bundled_pip_module_path() {
