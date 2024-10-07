@@ -24,6 +24,7 @@ source "${BUILDPACK_DIR}/lib/output.sh"
 source "${BUILDPACK_DIR}/lib/package_manager.sh"
 source "${BUILDPACK_DIR}/lib/pip.sh"
 source "${BUILDPACK_DIR}/lib/pipenv.sh"
+source "${BUILDPACK_DIR}/lib/python_version.sh"
 source "${BUILDPACK_DIR}/lib/utils.sh"
 
 compile_start_time=$(nowms)
@@ -45,9 +46,6 @@ export BUILD_DIR CACHE_DIR ENV_DIR
 # environment variable mechanism (the ENV_DIR).
 S3_BASE_URL="${BUILDPACK_S3_BASE_URL:-"https://heroku-buildpack-python.s3.us-east-1.amazonaws.com"}"
 # This has to be exported since it's used by the geo-libs step which is run in a subshell.
-
-# Default Python Versions
-source "${BUILDPACK_DIR}/bin/default_pythons"
 
 # Common Problem Warnings:
 # This section creates a temporary file in which to stick the output of `pip install`.
@@ -123,10 +121,14 @@ fi
 # Runs a `bin/pre_compile` script if found in the app source, allowing build customisation.
 source "${BUILDPACK_DIR}/bin/steps/hooks/pre_compile"
 
-# Sticky runtimes. If there was a previous build, and it used a given version of Python,
-# continue to use that version of Python in perpetuity.
+# TODO: Clear the cache if this isn't a valid version, as part of the cache refactor.
+# (Currently the version is instead validated in `read_requested_python_version()`)
 if [[ -f "$CACHE_DIR/.heroku/python-version" ]]; then
-	CACHED_PYTHON_VERSION=$(cat "$CACHE_DIR/.heroku/python-version")
+	cached_python_version="$(cat "${CACHE_DIR}/.heroku/python-version")"
+	# `python-X.Y.Z` -> `X.Y`
+	cached_python_version="${cached_python_version#python-}"
+else
+	cached_python_version=
 fi
 
 # We didn't always record the stack version.
@@ -140,28 +142,36 @@ fi
 package_manager="$(package_manager::determine_package_manager "${BUILD_DIR}")"
 meta_set "package_manager" "${package_manager}"
 
-# Pipenv Python version support.
-# Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).
-# Convert it to a runtime.txt file.
-source "${BUILDPACK_DIR}/bin/steps/pipenv-python-version"
-
-if [[ -f runtime.txt ]]; then
-	# PYTHON_VERSION_SOURCE may have already been set by the pipenv-python-version step.
-	# TODO: Refactor this and stop pipenv-python-version using runtime.txt as an API.
-	PYTHON_VERSION_SOURCE=${PYTHON_VERSION_SOURCE:-"runtime.txt"}
-	puts-step "Using Python version specified in ${PYTHON_VERSION_SOURCE}"
-	meta_set "python_version_reason" "specified"
-elif [[ -n "${CACHED_PYTHON_VERSION:-}" ]]; then
-	puts-step "No Python version was specified. Using the same version as the last build: ${CACHED_PYTHON_VERSION}"
-	echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
-	meta_set "python_version_reason" "cached"
-	echo "${CACHED_PYTHON_VERSION}" >runtime.txt
-else
-	puts-step "No Python version was specified. Using the buildpack default: ${DEFAULT_PYTHON_VERSION}"
-	echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
-	meta_set "python_version_reason" "default"
-	echo "${DEFAULT_PYTHON_VERSION}" >runtime.txt
+# TODO: Move this warning to lib/package_manager.sh once `output::warning()` exists
+# (puts-warn outputs to stdout, which would break `determine_package_manager()` as is).
+# TODO: Adjust this warning to mention support for missing Pipfile.lock will be removed soon.
+if [[ "${package_manager}" == "pipenv" && ! -f "${BUILD_DIR}/Pipfile.lock" ]]; then
+	puts-warn "No 'Pipfile.lock' found! We recommend you commit this into your repository."
 fi
+
+# We use the Bash 4.3+ `nameref` feature to pass back multiple values from this function
+# without having to hardcode globals. See: https://stackoverflow.com/a/38997681
+python_version::read_requested_python_version "${BUILD_DIR}" "${package_manager}" "${cached_python_version}" requested_python_version python_version_origin
+meta_set "python_version_reason" "${python_version_origin}"
+
+case "${python_version_origin}" in
+	default)
+		puts-step "No Python version was specified. Using the buildpack default: Python ${requested_python_version}"
+		echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
+		;;
+	cached)
+		puts-step "No Python version was specified. Using the same version as the last build: Python ${requested_python_version}"
+		echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
+		;;
+	*)
+		puts-step "Using Python ${requested_python_version} specified in ${python_version_origin}"
+		;;
+esac
+
+python_full_version="$(python_version::resolve_python_version "${requested_python_version}" "${python_version_origin}")"
+python_major_version="${python_full_version%.*}"
+meta_set "python_version" "${python_full_version}"
+meta_set "python_version_major" "${python_major_version}"
 
 # The directory for the .profile.d scripts.
 mkdir -p "$(dirname "$PROFILE_PATH")"

@@ -22,15 +22,15 @@ RSpec.describe 'Stack changes' do
         # TODO: The requirements output shouldn't say "installing from cache", since it's not.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> No Python version was specified. Using the same version as the last build: python-3.12.3
+          remote: -----> No Python version was specified. Using the same version as the last build: Python 3.12.3
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote:  !     
-          remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_12}
+          remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_12}
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
           remote:  !     
           remote: -----> Stack has changed from heroku-22 to heroku-24, clearing cache
           remote: -----> No change in requirements detected, installing from cache
-          remote: -----> Installing python-3.12.3
+          remote: -----> Installing Python 3.12.3
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
@@ -51,11 +51,11 @@ RSpec.describe 'Stack changes' do
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> No Python version was specified. Using the same version as the last build: python-#{DEFAULT_PYTHON_VERSION}
+          remote: -----> No Python version was specified. Using the same version as the last build: Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Stack has changed from heroku-24 to heroku-22, clearing cache
           remote: -----> No change in requirements detected, installing from cache
-          remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
+          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip

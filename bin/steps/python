@@ -4,54 +4,21 @@
 
 set -euo pipefail
 
-PYTHON_VERSION=$(cat runtime.txt)
-# Remove leading and trailing whitespace. Note: This implementation relies upon
-# `extglob` being set, which is the case thanks to `bin/utils` being run earlier.
-PYTHON_VERSION="${PYTHON_VERSION##+([[:space:]])}"
-PYTHON_VERSION="${PYTHON_VERSION%%+([[:space:]])}"
-
-function eol_python_version_error() {
-	local major_version="${1}"
-	local eol_date="${2}"
-	display_error <<-EOF
-		Error: Python ${major_version} is no longer supported.
-
-		Python ${major_version} reached upstream end-of-life on ${eol_date}, and is
-		therefore no longer receiving security updates:
-		https://devguide.python.org/versions/#supported-versions
-
-		As such, it is no longer supported by this buildpack.
-
-		Please upgrade to a newer Python version.
-
-		For a list of the supported Python versions, see:
-		https://devcenter.heroku.com/articles/python-support#supported-runtimes
-	EOF
-	meta_set "failure_reason" "python-version-eol"
-	exit 1
-}
-
-# We check for EOL prior to checking if the archive exists on S3, to ensure the more specific EOL error
-# message is still shown for newer stacks where the EOL Python versions might not have been built.
-case "${PYTHON_VERSION}" in
-	python-3.7.+([0-9]))
-		eol_python_version_error "3.7" "June 27th, 2023"
-		;;
-	python-3.6.+([0-9]))
-		eol_python_version_error "3.6" "December 23rd, 2021"
-		;;
-	*) ;;
-esac
-
 # The Python runtime archive filename is of form: 'python-X.Y.Z-ubuntu-22.04-amd64.tar.zst'
 # The Ubuntu version is calculated from `STACK` since it's faster than calling `lsb_release`.
 UBUNTU_VERSION="${STACK/heroku-/}.04"
 ARCH=$(dpkg --print-architecture)
-PYTHON_URL="${S3_BASE_URL}/${PYTHON_VERSION}-ubuntu-${UBUNTU_VERSION}-${ARCH}.tar.zst"
+PYTHON_URL="${S3_BASE_URL}/python-${python_full_version}-ubuntu-${UBUNTU_VERSION}-${ARCH}.tar.zst"
 
+# The Python version validation earlier will have filtered out most unsupported versions.
+# However, the version might still not be found if either:
+# 1. It's a Python major version we've deprecated and so is only available on older stacks (i.e: Python 3.8).
+# 2. If an exact Python version was requested and the patch version doesn't exist (e.g. 3.12.999).
+# 3. The user has pinned to an older buildpack version and the S3 bucket location or layout has changed since.
+# TODO: Update this message to be more specific once Python 3.8 support is dropped.
 if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
 	display_error <<-EOF
-		Error: Requested runtime '${PYTHON_VERSION}' is not available for this stack (${STACK}).
+		Error: Python ${python_full_version} is not available for this stack (${STACK}).
 
 		For a list of the supported Python versions, see:
 		https://devcenter.heroku.com/articles/python-support#supported-runtimes
@@ -60,20 +27,17 @@ if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefuse
 	exit 1
 fi
 
-# TODO: Refactor Python version usage to use the non-prefixed form everywhere.
-python_version_without_prefix="${PYTHON_VERSION#python-}"
-meta_set "python_version" "${python_version_without_prefix}"
-meta_set "python_version_major" "${python_version_without_prefix%.*}"
-
 function warn_if_patch_update_available() {
-	local requested_version="${1}"
-	local latest_patch_version="${2}"
+	local requested_full_version="${1}"
+	local requested_major_version="${2}"
+	local latest_patch_version
+	latest_patch_version="$(python_version::resolve_python_version "${requested_major_version}" "${python_version_origin}")"
 	# Extract the patch version component of the version strings (ie: the '5' in '3.10.5').
-	local requested_patch_number="${requested_version##*.}"
+	local requested_patch_number="${requested_full_version##*.}"
 	local latest_patch_number="${latest_patch_version##*.}"
 	if ((requested_patch_number < latest_patch_number)); then
 		puts-warn
-		puts-warn "A Python security update is available! Upgrade as soon as possible to: ${latest_patch_version}"
+		puts-warn "A Python security update is available! Upgrade as soon as possible to: Python ${latest_patch_version}"
 		puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
 		puts-warn
 		meta_set "python_version_outdated" "true"
@@ -84,45 +48,31 @@ function warn_if_patch_update_available() {
 
 # We wait until now to display outdated Python version warnings, since we only want to show them
 # if there weren't any errors with the version to avoid adding noise to the error messages.
-case "${PYTHON_VERSION}" in
-	python-3.12.*)
-		warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_312}"
-		;;
-	python-3.11.*)
-		warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_311}"
-		;;
-	python-3.10.*)
-		warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_310}"
-		;;
-	python-3.9.*)
-		warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_39}"
-		;;
-	python-3.8.*)
-		puts-warn
-		puts-warn "Python 3.8 will reach its upstream end-of-life in October 2024, at which"
-		puts-warn "point it will no longer receive security updates:"
-		puts-warn "https://devguide.python.org/versions/#supported-versions"
-		puts-warn
-		puts-warn "Support for Python 3.8 will be removed from this buildpack on December 4th, 2024."
-		puts-warn
-		puts-warn "Upgrade to a newer Python version as soon as possible to keep your app secure."
-		puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
-		puts-warn
-		warn_if_patch_update_available "${PYTHON_VERSION}" "${LATEST_38}"
-		;;
-	# TODO: Make this case an error, since it should be unreachable.
-	*) ;;
-esac
+# TODO: Move this into lib/ as part of the warnings refactor.
+if [[ "${python_major_version}" == "3.8" ]]; then
+	puts-warn
+	puts-warn "Python 3.8 will reach its upstream end-of-life in October 2024, at which"
+	puts-warn "point it will no longer receive security updates:"
+	puts-warn "https://devguide.python.org/versions/#supported-versions"
+	puts-warn
+	puts-warn "Support for Python 3.8 will be removed from this buildpack on December 4th, 2024."
+	puts-warn
+	puts-warn "Upgrade to a newer Python version as soon as possible to keep your app secure."
+	puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
+	puts-warn
+fi
+
+warn_if_patch_update_available "${python_full_version}" "${python_major_version}"
 
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
 	puts-step "Stack has changed from $CACHED_PYTHON_STACK to $STACK, clearing cache"
 	rm -rf .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor .heroku/python .heroku/python-sqlite3-version
 fi
 
+# TODO: Clean this up as part of the cache refactor.
 if [[ -f .heroku/python-version ]]; then
-	# shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
-	if [[ ! "$(cat .heroku/python-version)" == "$PYTHON_VERSION" ]]; then
-		puts-step "Python version has changed from $(cat .heroku/python-version) to ${PYTHON_VERSION}, clearing cache"
+	if [[ "${cached_python_version}" != "${python_full_version}" ]]; then
+		puts-step "Python version has changed from ${cached_python_version} to ${python_full_version}, clearing cache"
 		rm -rf .heroku/python
 	else
 		SKIP_INSTALL=1
@@ -153,9 +103,9 @@ if [[ -f "${BUILD_DIR}/requirements.txt" ]]; then
 fi
 
 if [[ "${SKIP_INSTALL:-0}" == "1" ]]; then
-	puts-step "Using cached install of ${PYTHON_VERSION}"
+	puts-step "Using cached install of Python ${python_full_version}"
 else
-	puts-step "Installing ${PYTHON_VERSION}"
+	puts-step "Installing Python ${python_full_version}"
 
 	# Prepare destination directory.
 	mkdir -p .heroku/python
@@ -163,13 +113,13 @@ else
 	if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}" | tar --zstd --extract --directory .heroku/python; then
 		# The Python version was confirmed to exist previously, so any failure here is due to
 		# a networking issue or archive/buildpack bug rather than the runtime not existing.
-		display_error "Error: Failed to download/install ${PYTHON_VERSION}."
+		display_error "Error: Failed to download/install Python ${python_full_version}."
 		meta_set "failure_reason" "python-download"
 		exit 1
 	fi
 
 	# Record for future reference.
-	echo "$PYTHON_VERSION" >.heroku/python-version
+	echo "python-${python_full_version}" >.heroku/python-version
 	echo "$STACK" >.heroku/python-stack
 
 	hash -r

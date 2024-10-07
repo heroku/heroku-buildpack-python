@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- Improved build log output about the detected Python version. ([#1658](https://github.com/heroku/heroku-buildpack-python/pull/1658))
+- Improved error messages shown when the requested Python version is not a valid version string or is for an unknown/non-existent major Python version. ([#1658](https://github.com/heroku/heroku-buildpack-python/pull/1658))
+- Improved error messages shown when `Pipfile.lock` is not valid JSON. ([#1658](https://github.com/heroku/heroku-buildpack-python/pull/1658))
+- Fixed invalid Python versions being silently ignored when they were specified via the `python_version` field in `Pipfile.lock`. ([#1658](https://github.com/heroku/heroku-buildpack-python/pull/1658))
 - Added support for Python 3.9 on Heroku-24. ([#1656](https://github.com/heroku/heroku-buildpack-python/pull/1656))
 - Added buildpack metrics for use of outdated Python patch versions and occurrences of internal errors. ([#1657](https://github.com/heroku/heroku-buildpack-python/pull/1657))
 - Improved the robustness of buildpack error handling by enabling `inherit_errexit`. ([#1655](https://github.com/heroku/heroku-buildpack-python/pull/1655))
