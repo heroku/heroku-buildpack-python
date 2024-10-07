@@ -6,7 +6,7 @@
 
 # Detect Python-version with Pipenv.
 
-if [[ "${PACKAGE_MANAGER}" == "pipenv" ]]; then
+if [[ "${package_manager}" == "pipenv" ]]; then
 
 	if [[ ! -f $BUILD_DIR/runtime.txt ]]; then
 		if [[ ! -f $BUILD_DIR/Pipfile.lock ]]; then

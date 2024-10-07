@@ -86,6 +86,7 @@ ALL_OTHER_FIELDS=(
 	pre_compile_hook
 	pre_compile_hook_duration
 	python_install_duration
+	python_version_outdated
 	setup_py_only
 	sqlite_install_duration
 	total_duration

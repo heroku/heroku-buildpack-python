@@ -29,5 +29,6 @@ function utils::bundled_pip_module_path() {
 function utils::abort_internal_error() {
 	local message="${1}"
 	display_error "Internal error: ${message} (line $(caller || true))."
+	meta_set "failure_reason" "internal-error"
 	exit 1
 }
