@@ -76,6 +76,9 @@ function warn_if_patch_update_available() {
 		puts-warn "A Python security update is available! Upgrade as soon as possible to: ${latest_patch_version}"
 		puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
 		puts-warn
+		meta_set "python_version_outdated" "true"
+	else
+		meta_set "python_version_outdated" "false"
 	fi
 }
 

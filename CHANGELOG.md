@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Added support for Python 3.9 on Heroku-24. ([#1656](https://github.com/heroku/heroku-buildpack-python/pull/1656))
+- Added buildpack metrics for use of outdated Python patch versions and occurrences of internal errors. ([#1657](https://github.com/heroku/heroku-buildpack-python/pull/1657))
 - Improved the robustness of buildpack error handling by enabling `inherit_errexit`. ([#1655](https://github.com/heroku/heroku-buildpack-python/pull/1655))
 
 ## [v258] - 2024-10-01

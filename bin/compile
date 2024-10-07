@@ -137,8 +137,8 @@ else
 	CACHED_PYTHON_STACK=$STACK
 fi
 
-PACKAGE_MANAGER=$(package_manager::determine_package_manager "${BUILD_DIR}")
-meta_set "package_manager" "${PACKAGE_MANAGER}"
+package_manager="$(package_manager::determine_package_manager "${BUILD_DIR}")"
+meta_set "package_manager" "${package_manager}"
 
 # Pipenv Python version support.
 # Detect the version of Python requested from a Pipfile (e.g. python_version or python_full_version).
@@ -189,7 +189,7 @@ meta_time "python_install_duration" "${install_python_start_time}"
 # Install the package manager and related tools.
 package_manager_install_start_time=$(nowms)
 bundled_pip_module_path="$(utils::bundled_pip_module_path "${BUILD_DIR}")"
-case "${PACKAGE_MANAGER}" in
+case "${package_manager}" in
 	pip)
 		pip::install_pip_setuptools_wheel "${bundled_pip_module_path}"
 		;;
@@ -199,7 +199,7 @@ case "${PACKAGE_MANAGER}" in
 		pipenv::install_pipenv
 		;;
 	*)
-		utils::abort_internal_error "Unhandled package manager"
+		utils::abort_internal_error "Unhandled package manager: ${package_manager}"
 		;;
 esac
 meta_time "package_manager_install_duration" "${package_manager_install_start_time}"
@@ -214,7 +214,7 @@ meta_time "sqlite_install_duration" "${install_sqlite_start_time}"
 
 # Install app dependencies.
 dependencies_install_start_time=$(nowms)
-case "${PACKAGE_MANAGER}" in
+case "${package_manager}" in
 	pip)
 		pip::install_dependencies
 		;;
@@ -222,7 +222,7 @@ case "${PACKAGE_MANAGER}" in
 		pipenv::install_dependencies
 		;;
 	*)
-		utils::abort_internal_error "Unhandled package manager"
+		utils::abort_internal_error "Unhandled package manager: ${package_manager}"
 		;;
 esac
 meta_time "dependencies_install_duration" "${dependencies_install_start_time}"
