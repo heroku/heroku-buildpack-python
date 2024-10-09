@@ -9,6 +9,7 @@ LATEST_PYTHON_3_9="3.9.20"
 LATEST_PYTHON_3_10="3.10.15"
 LATEST_PYTHON_3_11="3.11.10"
 LATEST_PYTHON_3_12="3.12.7"
+LATEST_PYTHON_3_13="3.13.0"
 
 DEFAULT_PYTHON_FULL_VERSION="${LATEST_PYTHON_3_12}"
 DEFAULT_PYTHON_MAJOR_VERSION="${DEFAULT_PYTHON_FULL_VERSION%.*}"
@@ -233,7 +234,7 @@ function python_version::resolve_python_version() {
 		return 1
 	fi
 
-	if (((major == 3 && minor > 12) || major >= 4)); then
+	if (((major == 3 && minor > 13) || major >= 4)); then
 		if [[ "${python_version_origin}" == "cached" ]]; then
 			display_error <<-EOF
 				Error: The cached Python version is not recognised.
@@ -281,6 +282,7 @@ function python_version::resolve_python_version() {
 		3.10) echo "${LATEST_PYTHON_3_10}" ;;
 		3.11) echo "${LATEST_PYTHON_3_11}" ;;
 		3.12) echo "${LATEST_PYTHON_3_12}" ;;
+		3.13) echo "${LATEST_PYTHON_3_13}" ;;
 		*) utils::abort_internal_error "Unhandled Python major version: ${requested_python_version}" ;;
 	esac
 }

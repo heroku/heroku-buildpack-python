@@ -201,11 +201,11 @@ package_manager_install_start_time=$(nowms)
 bundled_pip_module_path="$(utils::bundled_pip_module_path "${BUILD_DIR}")"
 case "${package_manager}" in
 	pip)
-		pip::install_pip_setuptools_wheel "${bundled_pip_module_path}"
+		pip::install_pip_setuptools_wheel "${bundled_pip_module_path}" "${python_major_version}"
 		;;
 	pipenv)
 		# TODO: Stop installing pip when using Pipenv.
-		pip::install_pip_setuptools_wheel "${bundled_pip_module_path}"
+		pip::install_pip_setuptools_wheel "${bundled_pip_module_path}" "${python_major_version}"
 		pipenv::install_pipenv
 		;;
 	*)
@@ -217,10 +217,13 @@ meta_time "package_manager_install_duration" "${package_manager_install_start_ti
 # SQLite3 support.
 # Installs the sqlite3 dev headers and sqlite3 binary but not the
 # libsqlite3-0 library since that exists in the base image.
-install_sqlite_start_time=$(nowms)
-source "${BUILDPACK_DIR}/bin/steps/sqlite3"
-buildpack_sqlite3_install
-meta_time "sqlite_install_duration" "${install_sqlite_start_time}"
+# We skip this step on Python 3.13, as a first step towards removing this feature.
+if [[ "${python_major_version}" == +(3.8|3.9|3.10|3.11|3.12) ]]; then
+	install_sqlite_start_time=$(nowms)
+	source "${BUILDPACK_DIR}/bin/steps/sqlite3"
+	buildpack_sqlite3_install
+	meta_time "sqlite_install_duration" "${install_sqlite_start_time}"
+fi
 
 # Install app dependencies.
 dependencies_install_start_time=$(nowms)

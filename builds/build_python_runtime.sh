@@ -27,6 +27,7 @@ case "${STACK:?}" in
 			"3.10"
 			"3.11"
 			"3.12"
+			"3.13"
 		)
 		;;
 	heroku-20)
@@ -36,6 +37,7 @@ case "${STACK:?}" in
 			"3.10"
 			"3.11"
 			"3.12"
+			"3.13"
 		)
 		;;
 	*)
@@ -49,6 +51,10 @@ fi
 
 # The release keys can be found on https://www.python.org/downloads/ -> "OpenPGP Public Keys".
 case "${PYTHON_MAJOR_VERSION}" in
+	3.13)
+		# https://github.com/Yhg1s.gpg
+		GPG_KEY_FINGERPRINT='7169605F62C751356D054A26A821E680E5FA6305'
+		;;
 	3.12)
 		# https://github.com/Yhg1s.gpg
 		GPG_KEY_FINGERPRINT='7169605F62C751356D054A26A821E680E5FA6305'
@@ -108,7 +114,7 @@ CONFIGURE_OPTS=(
 	"--with-system-expat"
 )
 
-if [[ "${PYTHON_MAJOR_VERSION}" != 3.[8-9] ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" != +(3.8|3.9) ]]; then
 	CONFIGURE_OPTS+=(
 		# Shared builds are beneficial for a number of reasons:
 		# - Reduces the size of the build, since it avoids the duplication between
@@ -133,7 +139,7 @@ if [[ "${PYTHON_MAJOR_VERSION}" != 3.[8-9] ]]; then
 	)
 fi
 
-if [[ "${PYTHON_MAJOR_VERSION}" == "3.11" || "${PYTHON_MAJOR_VERSION}" == "3.12" ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" != +(3.8|3.9|3.10) ]]; then
 	CONFIGURE_OPTS+=(
 		# Skip building the test modules, since we remove them after the build anyway.
 		# This feature was added in Python 3.10+, however it wasn't until Python 3.11
@@ -156,7 +162,7 @@ fi
 # - https://github.com/docker-library/python/issues/810
 # We only use `dpkg-buildflags` for Python versions where we build in shared mode (Python 3.9+),
 # since some of the options it enables interferes with the stripping of static libraries.
-if [[ "${PYTHON_MAJOR_VERSION}" == 3.[8-9] ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" == +(3.8|3.9) ]]; then
 	EXTRA_CFLAGS=''
 	LDFLAGS='-Wl,--strip-all'
 else
@@ -168,7 +174,7 @@ CPU_COUNT="$(nproc)"
 make -j "${CPU_COUNT}" "EXTRA_CFLAGS=${EXTRA_CFLAGS}" "LDFLAGS=${LDFLAGS}"
 make install
 
-if [[ "${PYTHON_MAJOR_VERSION}" == 3.[8-9] ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" == +(3.8|3.9) ]]; then
 	# On older versions of Python we're still building the static library, which has to be
 	# manually stripped since the linker stripping enabled in LDFLAGS doesn't cover them.
 	# We're using `--strip-unneeded` since `--strip-all` would remove the `.symtab` section
@@ -212,6 +218,16 @@ find "${INSTALL_DIR}" -depth -type f -name "*.pyc" -delete
 # `.pyc` generation run by `make install`:
 # https://github.com/python/cpython/blob/v3.11.3/Makefile.pre.in#L2087-L2113
 LD_LIBRARY_PATH="${SRC_DIR}" "${SRC_DIR}/python" -m compileall -f --invalidation-mode unchecked-hash --workers 0 "${INSTALL_DIR}"
+
+# Delete entrypoint scripts (and their symlinks) that don't work with relocated Python since they
+# hardcode the Python install directory in their shebangs (e.g. `#!/tmp/python/bin/python3.NN`).
+# These scripts are rarely used in production, and can still be accessed via their Python module
+# (e.g. `python -m pydoc`) if needed.
+rm "${INSTALL_DIR}"/bin/{idle,pydoc}*
+# The 2to3 module and entrypoint was removed from the stdlib in Python 3.13.
+if [[ "${PYTHON_MAJOR_VERSION}" == +(3.8|3.9|3.10|3.11|3.12) ]]; then
+	rm "${INSTALL_DIR}"/bin/2to3*
+fi
 
 # Support using Python 3 via the version-less `python` command, for parity with virtualenvs,
 # the Python Docker images and to also ensure buildpack Python shadows any installed system

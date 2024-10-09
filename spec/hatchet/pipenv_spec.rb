@@ -208,6 +208,24 @@ RSpec.describe 'Pipenv support' do
     include_examples 'builds using Pipenv with the requested Python version', '3.12', LATEST_PYTHON_3_12
   end
 
+  context 'with a Pipfile.lock containing python_version 3.13' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_3.13') }
+
+    it 'builds with latest Python 3.13' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.13 specified in Pipfile.lock
+          remote: -----> Installing Python #{LATEST_PYTHON_3_13}
+          remote: -----> Installing pip #{PIP_VERSION}
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
+          remote: -----> Installing dependencies with Pipenv
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+        REGEX
+      end
+    end
+  end
+
   # As well as testing `python_full_version`, this also tests:
   # 1. That `python_full_version` takes precedence over `python_version`.
   # 2. That Pipenv works on the oldest Python version supported by all stacks.

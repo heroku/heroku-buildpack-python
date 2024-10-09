@@ -8,19 +8,41 @@ function pip::install_pip_setuptools_wheel() {
 	# We use the pip wheel bundled within Python's standard library to install our chosen
 	# pip version, since it's faster than `ensurepip` followed by an upgrade in place.
 	local bundled_pip_module_path="${1}"
+	local python_major_version="${2}"
 
 	# TODO: Either make these `local` or move elsewhere as part of the cache invalidation refactoring.
 	PIP_VERSION=$(get_requirement_version 'pip')
-	SETUPTOOLS_VERSION=$(get_requirement_version 'setuptools')
-	WHEEL_VERSION=$(get_requirement_version 'wheel')
 	meta_set "pip_version" "${PIP_VERSION}"
-	meta_set "setuptools_version" "${SETUPTOOLS_VERSION}"
-	meta_set "wheel_version" "${WHEEL_VERSION}"
 
-	puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
+	local packages_to_install=(
+		"pip==${PIP_VERSION}"
+	)
+	local packages_display_text="pip ${PIP_VERSION}"
+
+	# We only install setuptools and wheel on Python 3.12 and older, since:
+	# - If either is not installed, pip will automatically install them into an isolated build
+	#   environment if needed when installing packages from an sdist. This means that for
+	#   all packages that correctly declare their metadata, it's no longer necessary to have
+	#   them installed.
+	# - Most of the Python ecosystem has stopped installing them for Python 3.12+ already.
+	# See the Python CNB's removal for more details: https://github.com/heroku/buildpacks-python/pull/243
+	if [[ "${python_major_version}" == +(3.8|3.9|3.10|3.11|3.12) ]]; then
+		SETUPTOOLS_VERSION=$(get_requirement_version 'setuptools')
+		WHEEL_VERSION=$(get_requirement_version 'wheel')
+		meta_set "setuptools_version" "${SETUPTOOLS_VERSION}"
+		meta_set "wheel_version" "${WHEEL_VERSION}"
+
+		packages_to_install+=(
+			"setuptools==${SETUPTOOLS_VERSION}"
+			"wheel==${WHEEL_VERSION}"
+		)
+		packages_display_text+=", setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
+	fi
+
+	puts-step "Installing ${packages_display_text}"
 
 	/app/.heroku/python/bin/python "${bundled_pip_module_path}" install --quiet --disable-pip-version-check --no-cache-dir \
-		"pip==${PIP_VERSION}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}"
+		"${packages_to_install[@]}"
 }
 
 function pip::install_dependencies() {
