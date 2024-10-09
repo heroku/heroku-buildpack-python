@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v259] - 2024-10-09
+
 - Improved build log output about the detected Python version. ([#1658](https://github.com/heroku/heroku-buildpack-python/pull/1658))
 - Improved error messages shown when the requested Python version is not a valid version string or is for an unknown/non-existent major Python version. ([#1658](https://github.com/heroku/heroku-buildpack-python/pull/1658))
 - Improved error messages shown when `Pipfile.lock` is not valid JSON. ([#1658](https://github.com/heroku/heroku-buildpack-python/pull/1658))
@@ -1055,7 +1058,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v258...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v259...main
+[v259]: https://github.com/heroku/heroku-buildpack-python/compare/v258...v259
 [v258]: https://github.com/heroku/heroku-buildpack-python/compare/v257...v258
 [v257]: https://github.com/heroku/heroku-buildpack-python/compare/v256...v257
 [v256]: https://github.com/heroku/heroku-buildpack-python/compare/v255...v256
