@@ -2,37 +2,19 @@
 
 require_relative '../spec_helper'
 
-RSpec.shared_examples 'builds with the requested Python version' do |python_version|
-  it "builds with Python #{python_version}" do
+RSpec.shared_examples 'builds with the requested Python version' do |requested_version|
+  it "builds with Python #{requested_version}" do
     app.deploy do |app|
       expect(clean_output(app.output)).to include(<<~OUTPUT)
         remote: -----> Python app detected
-        remote: -----> Using Python version specified in runtime.txt
-        remote: -----> Installing python-#{python_version}
+        remote: -----> Using Python #{requested_version} specified in runtime.txt
+        remote: -----> Installing Python #{requested_version}
         remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
         remote: -----> Installing SQLite3
         remote: -----> Installing requirements with pip
         remote:        Collecting urllib3 (from -r requirements.txt (line 1))
       OUTPUT
-      expect(app.run('python -V')).to include("Python #{python_version}")
-    end
-  end
-end
-
-RSpec.shared_examples 'aborts the build with a runtime not available message' do |requested_runtime|
-  it 'aborts the build with a runtime not available message' do
-    app.deploy do |app|
-      expect(clean_output(app.output)).to include(<<~OUTPUT)
-        remote: -----> Python app detected
-        remote: -----> Using Python version specified in runtime.txt
-        remote: 
-        remote:  !     Error: Requested runtime '#{requested_runtime}' is not available for this stack (#{app.stack}).
-        remote:  !     
-        remote:  !     For a list of the supported Python versions, see:
-        remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
-        remote: 
-        remote:  !     Push rejected, failed to compile Python app.
-      OUTPUT
+      expect(app.run('python -V')).to include("Python #{requested_version}")
     end
   end
 end
@@ -47,9 +29,9 @@ RSpec.describe 'Python version support' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote: -----> No Python version was specified. Using the buildpack default: python-#{DEFAULT_PYTHON_VERSION}
+            remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
-            remote: -----> Installing python-#{DEFAULT_PYTHON_VERSION}
+            remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           OUTPUT
         end
       end
@@ -68,14 +50,14 @@ RSpec.describe 'Python version support' do
           app.push!
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote: -----> No Python version was specified. Using the same version as the last build: python-3.12.3
+            remote: -----> No Python version was specified. Using the same version as the last build: Python 3.12.3
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
-            remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_12}
+            remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_12}
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
             remote: -----> No change in requirements detected, installing from cache
-            remote: -----> Using cached install of python-3.12.3
+            remote: -----> Using cached install of Python 3.12.3
           OUTPUT
           expect(app.run('python -V')).to include('Python 3.12.3')
         end
@@ -83,24 +65,25 @@ RSpec.describe 'Python version support' do
     end
   end
 
-  context 'when runtime.txt contains python-3.6.15' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.6', allow_failure: true) }
+  context 'when runtime.txt contains python-2.7.18' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_2.7', allow_failure: true) }
 
     it 'aborts the build with an EOL message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python version specified in runtime.txt
+          remote: -----> Using Python 2.7.18 specified in runtime.txt
           remote: 
-          remote:  !     Error: Python 3.6 is no longer supported.
+          remote:  !     Error: The requested Python version has reached end-of-life.
           remote:  !     
-          remote:  !     Python 3.6 reached upstream end-of-life on December 23rd, 2021, and is
+          remote:  !     Python 2.7 has reached its upstream end-of-life, and is
           remote:  !     therefore no longer receiving security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
           remote:  !     As such, it is no longer supported by this buildpack.
           remote:  !     
-          remote:  !     Please upgrade to a newer Python version.
+          remote:  !     Please upgrade to a newer Python version by updating the
+          remote:  !     version configured via the 'runtime.txt' file.
           remote:  !     
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
@@ -118,17 +101,18 @@ RSpec.describe 'Python version support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python version specified in runtime.txt
+          remote: -----> Using Python 3.7.17 specified in runtime.txt
           remote: 
-          remote:  !     Error: Python 3.7 is no longer supported.
+          remote:  !     Error: The requested Python version has reached end-of-life.
           remote:  !     
-          remote:  !     Python 3.7 reached upstream end-of-life on June 27th, 2023, and is
+          remote:  !     Python 3.7 has reached its upstream end-of-life, and is
           remote:  !     therefore no longer receiving security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
           remote:  !     As such, it is no longer supported by this buildpack.
           remote:  !     
-          remote:  !     Please upgrade to a newer Python version.
+          remote:  !     Please upgrade to a newer Python version by updating the
+          remote:  !     version configured via the 'runtime.txt' file.
           remote:  !     
           remote:  !     For a list of the supported Python versions, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
@@ -148,7 +132,7 @@ RSpec.describe 'Python version support' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote: -----> Using Python version specified in runtime.txt
+            remote: -----> Using Python #{LATEST_PYTHON_3_8} specified in runtime.txt
             remote:  !     
             remote:  !     Python 3.8 will reach its upstream end-of-life in October 2024, at which
             remote:  !     point it will no longer receive security updates:
@@ -159,7 +143,7 @@ RSpec.describe 'Python version support' do
             remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
-            remote: -----> Installing python-#{LATEST_PYTHON_3_8}
+            remote: -----> Installing Python #{LATEST_PYTHON_3_8}
             remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
             remote: -----> Installing SQLite3
             remote: -----> Installing requirements with pip
@@ -174,7 +158,21 @@ RSpec.describe 'Python version support' do
       let(:allow_failure) { true }
 
       # We only support Python 3.8 on Heroku-20 and older.
-      include_examples 'aborts the build with a runtime not available message', "python-#{LATEST_PYTHON_3_8}"
+      it 'aborts the build with a version not available message' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to include(<<~OUTPUT)
+            remote: -----> Python app detected
+            remote: -----> Using Python #{LATEST_PYTHON_3_8} specified in runtime.txt
+            remote: 
+            remote:  !     Error: Python #{LATEST_PYTHON_3_8} is not available for this stack (#{app.stack}).
+            remote:  !     
+            remote:  !     For a list of the supported Python versions, see:
+            remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+            remote: 
+            remote:  !     Push rejected, failed to compile Python app.
+          OUTPUT
+        end
+      end
     end
   end
 
@@ -202,10 +200,88 @@ RSpec.describe 'Python version support' do
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_12
   end
 
-  context 'when runtime.txt contains an invalid python version string' do
+  context 'when runtime.txt contains an invalid Python version string' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_invalid', allow_failure: true) }
 
-    include_examples 'aborts the build with a runtime not available message', 'python-3.12.0invalid'
+    it 'aborts the build with an invalid runtime.txt message' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: 
+          remote:  !     Error: Invalid Python version in runtime.txt.
+          remote:  !     
+          remote:  !     The Python version specified in 'runtime.txt' is not in
+          remote:  !     the correct format.
+          remote:  !     
+          remote:  !     The following file contents were found:
+          remote:  !     python-3.12.0invalid
+          remote:  !     
+          remote:  !     However, the version string must begin with a 'python-' prefix,
+          remote:  !     followed by the version specified as '<major>.<minor>.<patch>'.
+          remote:  !     Comments are not supported.
+          remote:  !     
+          remote:  !     For example, to request Python 3.12.7, use:
+          remote:  !     python-3.12.7
+          remote:  !     
+          remote:  !     Please update 'runtime.txt' to use a valid version string, or
+          remote:  !     else remove the file to instead use the default version
+          remote:  !     (currently Python 3.12.7).
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
+  end
+
+  context 'when runtime.txt contains an non-existent Python major version' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_non_existent_major', allow_failure: true) }
+
+    it 'aborts the build with an invalid runtime.txt message' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.999.0 specified in runtime.txt
+          remote: 
+          remote:  !     Error: The requested Python version is not recognised.
+          remote:  !     
+          remote:  !     The requested Python version 3.999 is not recognised.
+          remote:  !     
+          remote:  !     Check that this Python version has been officially released,
+          remote:  !     and that the Python buildpack has added support for it:
+          remote:  !     https://devguide.python.org/versions/#supported-versions
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+          remote:  !     
+          remote:  !     If it has, make sure that you are using the latest version
+          remote:  !     of this buildpack:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#checking-the-python-buildpack-version
+          remote:  !     
+          remote:  !     Otherwise, switch to a supported version (such as Python 3.12)
+          remote:  !     by updating the version configured via the 'runtime.txt' file.
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
+  end
+
+  context 'when runtime.txt contains a non-existent Python patch version' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_non_existent_patch', allow_failure: true) }
+
+    it 'aborts the build with a version not available message' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.12.999 specified in runtime.txt
+          remote: 
+          remote:  !     Error: Python 3.12.999 is not available for this stack (#{app.stack}).
+          remote:  !     
+          remote:  !     For a list of the supported Python versions, see:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
   end
 
   context 'when runtime.txt contains stray whitespace' do
@@ -215,7 +291,7 @@ RSpec.describe 'Python version support' do
   end
 
   context 'when the requested Python version has changed since the last build' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.11') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9') }
 
     it 'builds with the new Python version after removing the old install' do
       app.deploy do |app|
@@ -225,10 +301,10 @@ RSpec.describe 'Python version support' do
         # TODO: The output shouldn't say "installing from cache", since it's not.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python version specified in runtime.txt
-          remote: -----> Python version has changed from python-#{LATEST_PYTHON_3_11} to python-#{LATEST_PYTHON_3_12}, clearing cache
+          remote: -----> Using Python #{LATEST_PYTHON_3_12} specified in runtime.txt
+          remote: -----> Python version has changed from #{LATEST_PYTHON_3_9} to #{LATEST_PYTHON_3_12}, clearing cache
           remote: -----> No change in requirements detected, installing from cache
-          remote: -----> Installing python-#{LATEST_PYTHON_3_12}
+          remote: -----> Installing Python #{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip

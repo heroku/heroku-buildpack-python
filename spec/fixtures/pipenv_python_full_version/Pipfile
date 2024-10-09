@@ -9,4 +9,7 @@ urllib3 = "*"
 [dev-packages]
 
 [requires]
-python_full_version = "3.12.2"
+# Uses the oldest Python version supported by all stacks, to validate Pipenv works with it.
+python_full_version = "3.9.0"
+# Tests that `python_full_version` takes precedence.
+python_version = "3.12"

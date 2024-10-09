@@ -2,54 +2,20 @@
 
 require_relative '../spec_helper'
 
-RSpec.shared_examples 'warns there is a Python update available' do |requested_version, latest_version|
-  it 'warns there is a Python update available' do
-    app.deploy do |app|
-      expect(clean_output(app.output)).to include(<<~OUTPUT)
-        remote: -----> Python app detected
-        remote: -----> Using Python version specified in runtime.txt
-        remote:  !     
-        remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{latest_version}
-        remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-        remote:  !     
-        remote: -----> Installing python-#{requested_version}
-      OUTPUT
-    end
-  end
-end
-
-RSpec.shared_examples 'aborts the build without showing an update warning' do |requested_version|
-  it 'aborts the build without showing an update warning' do
-    app.deploy do |app|
-      expect(clean_output(app.output)).to include(<<~OUTPUT)
-        remote: -----> Python app detected
-        remote: -----> Using Python version specified in runtime.txt
-        remote: 
-        remote:  !     Error: Requested runtime 'python-#{requested_version}' is not available for this stack (#{app.stack}).
-        remote:  !     
-        remote:  !     For a list of the supported Python versions, see:
-        remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
-        remote: 
-        remote:  !     Push rejected, failed to compile Python app.
-      OUTPUT
-    end
-  end
-end
-
 # NOTE: We use the oldest patch releases (ie the '.0' releases) since we also want to test against
 # the oldest Python versions available to users. This is particularly important given that older
 # patch releases will bundle older pip, and the buildpack uses that pip during bootstrapping.
 RSpec.describe 'Python update warnings' do
-  context 'with a runtime.txt containing python-3.8.0' do
+  context 'with a runtime.txt containing an outdated patch version that is also a deprecated major version' do
     let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.8_outdated', allow_failure:) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_outdated_and_deprecated', allow_failure:) }
 
     context 'when using Heroku-20', stacks: %w[heroku-20] do
       it 'warns about both the deprecated major version and the patch update' do
         app.deploy do |app|
-          expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote: -----> Using Python version specified in runtime.txt
+            remote: -----> Using Python 3.8.0 specified in runtime.txt
             remote:  !     
             remote:  !     Python 3.8 will reach its upstream end-of-life in October 2024, at which
             remote:  !     point it will no longer receive security updates:
@@ -61,11 +27,11 @@ RSpec.describe 'Python update warnings' do
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
             remote:  !     
-            remote:  !     A Python security update is available! Upgrade as soon as possible to: python-#{LATEST_PYTHON_3_8}
+            remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_8}
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote:  !     
-            remote: -----> Installing python-3.8.0
-          REGEX
+            remote: -----> Installing Python 3.8.0
+          OUTPUT
         end
       end
     end
@@ -74,31 +40,39 @@ RSpec.describe 'Python update warnings' do
       let(:allow_failure) { true }
 
       # We only support Python 3.8 on Heroku-20 and older.
-      include_examples 'aborts the build without showing an update warning', '3.8.0'
+      it 'aborts the build without showing an update warning' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to include(<<~OUTPUT)
+            remote: -----> Python app detected
+            remote: -----> Using Python 3.8.0 specified in runtime.txt
+            remote: 
+            remote:  !     Error: Python 3.8.0 is not available for this stack (#{app.stack}).
+            remote:  !     
+            remote:  !     For a list of the supported Python versions, see:
+            remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+            remote: 
+            remote:  !     Push rejected, failed to compile Python app.
+          OUTPUT
+        end
+      end
     end
   end
 
-  context 'with a runtime.txt containing python-3.9.0' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9_outdated') }
+  context 'with a runtime.txt containing an outdated patch version' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_outdated') }
 
-    include_examples 'warns there is a Python update available', '3.9.0', LATEST_PYTHON_3_9
-  end
-
-  context 'with a runtime.txt containing python-3.10.0' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.10_outdated') }
-
-    include_examples 'warns there is a Python update available', '3.10.0', LATEST_PYTHON_3_10
-  end
-
-  context 'with a runtime.txt containing python-3.11.0' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.11_outdated') }
-
-    include_examples 'warns there is a Python update available', '3.11.0', LATEST_PYTHON_3_11
-  end
-
-  context 'with a runtime.txt containing python-3.12.0' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.12_outdated') }
-
-    include_examples 'warns there is a Python update available', '3.12.0', LATEST_PYTHON_3_12
+    it 'warns there is a Python update available' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.9.0 specified in runtime.txt
+          remote:  !     
+          remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
+          remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+          remote:  !     
+          remote: -----> Installing Python 3.9.0
+        OUTPUT
+      end
+    end
   end
 end

@@ -9,4 +9,4 @@ urllib3 = "*"
 [dev-packages]
 
 [requires]
-python_full_version = "X.Y.Z"
+python_full_version = "3.9.*"
