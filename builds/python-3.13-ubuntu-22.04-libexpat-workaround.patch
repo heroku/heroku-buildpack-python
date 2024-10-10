@@ -1,0 +1,24 @@
+diff --git a/Lib/test/test_xml_etree.py b/Lib/test/test_xml_etree.py
+index ebec9d8f18a..385735c1e18 100644
+--- a/Lib/test/test_xml_etree.py
++++ b/Lib/test/test_xml_etree.py
+@@ -1504,9 +1504,11 @@ def test_simple_xml(self, chunk_size=None, flush=False):
+         self.assert_event_tags(parser, [('end', 'root')])
+         self.assertIsNone(parser.close())
+ 
++    @unittest.skip('Work around: https://github.com/python/cpython/issues/125067')
+     def test_simple_xml_chunk_1(self):
+         self.test_simple_xml(chunk_size=1, flush=True)
+ 
++    @unittest.skip('Work around: https://github.com/python/cpython/issues/125067')
+     def test_simple_xml_chunk_5(self):
+         self.test_simple_xml(chunk_size=5, flush=True)
+ 
+@@ -1731,6 +1733,7 @@ def test_flush_reparse_deferral_enabled(self):
+ 
+         self.assert_event_tags(parser, [('end', 'doc')])
+ 
++    @unittest.skip('Work around: https://github.com/python/cpython/issues/125067')
+     def test_flush_reparse_deferral_disabled(self):
+         parser = ET.XMLPullParser(events=('start', 'end'))
+ 

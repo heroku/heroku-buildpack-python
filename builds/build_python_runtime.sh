@@ -90,6 +90,14 @@ gpg --batch --verify python.tgz.asc python.tgz
 tar --extract --file python.tgz --strip-components=1 --directory "${SRC_DIR}"
 cd "${SRC_DIR}"
 
+# Work around PGO profile test failures with Python 3.13 on Ubuntu 22.04, due to the tests
+# checking the raw libexpat version which doesn't account for Ubuntu backports:
+# https://github.com/heroku/heroku-buildpack-python/pull/1661#issuecomment-2405259352
+# https://github.com/python/cpython/issues/125067
+if [[ "${PYTHON_MAJOR_VERSION}" == "3.13" && "${STACK}" == "heroku-22" ]]; then
+	patch -p1 </tmp/python-3.13-ubuntu-22.04-libexpat-workaround.patch
+fi
+
 # Aim to keep this roughly consistent with the options used in the Python Docker images,
 # for maximum compatibility / most battle-tested build configuration:
 # https://github.com/docker-library/python
