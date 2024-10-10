@@ -15,4 +15,4 @@ RUN apt-get update --error-on=any \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
-COPY build_python_runtime.sh .
+COPY build_python_runtime.sh python-3.13-ubuntu-22.04-libexpat-workaround.patch .

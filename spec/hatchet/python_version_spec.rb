@@ -5,15 +5,26 @@ require_relative '../spec_helper'
 RSpec.shared_examples 'builds with the requested Python version' do |requested_version|
   it "builds with Python #{requested_version}" do
     app.deploy do |app|
-      expect(clean_output(app.output)).to include(<<~OUTPUT)
-        remote: -----> Python app detected
-        remote: -----> Using Python #{requested_version} specified in runtime.txt
-        remote: -----> Installing Python #{requested_version}
-        remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-        remote: -----> Installing SQLite3
-        remote: -----> Installing requirements with pip
-        remote:        Collecting urllib3 (from -r requirements.txt (line 1))
-      OUTPUT
+      if requested_version.start_with?('3.13.')
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python #{requested_version} specified in runtime.txt
+          remote: -----> Installing Python #{requested_version}
+          remote: -----> Installing pip #{PIP_VERSION}
+          remote: -----> Installing requirements with pip
+          remote:        Collecting urllib3 (from -r requirements.txt (line 1))
+        OUTPUT
+      else
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python #{requested_version} specified in runtime.txt
+          remote: -----> Installing Python #{requested_version}
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing SQLite3
+          remote: -----> Installing requirements with pip
+          remote:        Collecting urllib3 (from -r requirements.txt (line 1))
+        OUTPUT
+      end
       expect(app.run('python -V')).to include("Python #{requested_version}")
     end
   end
@@ -198,6 +209,12 @@ RSpec.describe 'Python version support' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.12') }
 
     include_examples 'builds with the requested Python version', LATEST_PYTHON_3_12
+  end
+
+  context 'when runtime.txt contains python-3.13.0' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.13') }
+
+    include_examples 'builds with the requested Python version', LATEST_PYTHON_3_13
   end
 
   context 'when runtime.txt contains an invalid Python version string' do

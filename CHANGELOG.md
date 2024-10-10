@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Added support for Python 3.13. ([#1661](https://github.com/heroku/heroku-buildpack-python/pull/1661))
+- Removed the `idle3` and `pydoc3` scripts since they do not work with relocated Python and so have been broken for some time. Invoke them via their modules instead (e.g. `python -m pydoc`). ([#1661](https://github.com/heroku/heroku-buildpack-python/pull/1661))
 
 ## [v259] - 2024-10-09
 
