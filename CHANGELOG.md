@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v260] - 2024-10-10
+
 - Added support for Python 3.13. ([#1661](https://github.com/heroku/heroku-buildpack-python/pull/1661))
 - Removed the `idle3` and `pydoc3` scripts since they do not work with relocated Python and so have been broken for some time. Invoke them via their modules instead (e.g. `python -m pydoc`). ([#1661](https://github.com/heroku/heroku-buildpack-python/pull/1661))
 
@@ -1060,7 +1063,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v259...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v260...main
+[v260]: https://github.com/heroku/heroku-buildpack-python/compare/v259...v260
 [v259]: https://github.com/heroku/heroku-buildpack-python/compare/v258...v259
 [v258]: https://github.com/heroku/heroku-buildpack-python/compare/v257...v258
 [v257]: https://github.com/heroku/heroku-buildpack-python/compare/v256...v257
