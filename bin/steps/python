@@ -18,7 +18,7 @@ PYTHON_URL="${S3_BASE_URL}/python-${python_full_version}-ubuntu-${UBUNTU_VERSION
 # TODO: Update this message to be more specific once Python 3.8 support is dropped.
 if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
 	display_error <<-EOF
-		Error: Python ${python_full_version} is not available for this stack (${STACK}).
+		Error: Python ${python_full_version} isn't available for this stack (${STACK}).
 
 		For a list of the supported Python versions, see:
 		https://devcenter.heroku.com/articles/python-support#supported-runtimes
@@ -35,6 +35,8 @@ function warn_if_patch_update_available() {
 	# Extract the patch version component of the version strings (ie: the '5' in '3.10.5').
 	local requested_patch_number="${requested_full_version##*.}"
 	local latest_patch_number="${latest_patch_version##*.}"
+	# TODO: Update this message to suggest using the .python-version major version syntax to stay up to date,
+	# once runtime.txt is deprecated and sticky-versioning only pins to the major version.
 	if ((requested_patch_number < latest_patch_number)); then
 		puts-warn
 		puts-warn "A Python security update is available! Upgrade as soon as possible to: Python ${latest_patch_version}"

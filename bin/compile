@@ -154,6 +154,9 @@ fi
 python_version::read_requested_python_version "${BUILD_DIR}" "${package_manager}" "${cached_python_version}" requested_python_version python_version_origin
 meta_set "python_version_reason" "${python_version_origin}"
 
+# TODO: More strongly recommend specifying a Python version (eg switch the messaging to
+# be a warning instead, after version resolution, and mention .python-version inline)
+# TODO: Add runtime.txt deprecation warning.
 case "${python_version_origin}" in
 	default)
 		puts-step "No Python version was specified. Using the buildpack default: Python ${requested_python_version}"

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Added support for configuring the Python version using a `.python-version` file. Both the `3.N` and `3.N.N` version forms are supported (the former is recommended). The existing `runtime.txt` file will take precedence if both files are found, however, we recommend switching to `.python-version` since it is more commonly supported in the Python ecosystem. ([#1664](https://github.com/heroku/heroku-buildpack-python/pull/1664))
+- Added support for specifying only the Python major version in `runtime.txt` instead of requiring the full Python version (for example `python-3.N` instead of `python-3.N.N`). ([#1664](https://github.com/heroku/heroku-buildpack-python/pull/1664))
 
 ## [v260] - 2024-10-10
 

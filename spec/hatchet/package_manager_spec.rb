@@ -4,7 +4,7 @@ require_relative '../spec_helper'
 
 RSpec.describe 'Package manager support' do
   context 'when there are no supported package manager files' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_only', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pyproject_toml_only', allow_failure: true) }
 
     it 'fails the build with an informative error message' do
       app.deploy do |app|
@@ -19,7 +19,7 @@ RSpec.describe 'Package manager support' do
           remote:  !     
           remote:  !     Currently the root directory of your app contains:
           remote:  !     
-          remote:  !     runtime.txt
+          remote:  !     pyproject.toml
           remote:  !     subdir/
           remote:  !     
           remote:  !     If your app already has a package manager file, check that it:
