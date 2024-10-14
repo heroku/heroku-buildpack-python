@@ -46,7 +46,7 @@ RSpec.describe 'Python update warnings' do
             remote: -----> Python app detected
             remote: -----> Using Python 3.8.0 specified in runtime.txt
             remote: 
-            remote:  !     Error: Python 3.8.0 is not available for this stack (#{app.stack}).
+            remote:  !     Error: Python 3.8.0 isn't available for this stack (#{app.stack}).
             remote:  !     
             remote:  !     For a list of the supported Python versions, see:
             remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
@@ -58,14 +58,14 @@ RSpec.describe 'Python update warnings' do
     end
   end
 
-  context 'with a runtime.txt containing an outdated patch version' do
+  context 'with a .python-version file containing an outdated patch version' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_outdated') }
 
     it 'warns there is a Python update available' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python 3.9.0 specified in runtime.txt
+          remote: -----> Using Python 3.9.0 specified in .python-version
           remote:  !     
           remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes

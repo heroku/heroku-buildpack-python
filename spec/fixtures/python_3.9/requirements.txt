@@ -1,1 +1,2 @@
-urllib3
+# This package has been picked since it has no dependencies and is small/fast to install.
+typing-extensions==4.12.2

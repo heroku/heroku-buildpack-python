@@ -12,8 +12,7 @@ RSpec.describe 'Heroku CI' do
       app.run_ci do |test_run|
         expect(test_run.output).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           -----> Python app detected
-          -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
-                 To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           -----> Installing SQLite3
@@ -70,8 +69,7 @@ RSpec.describe 'Heroku CI' do
 
         expect(test_run.output).to include(<<~OUTPUT)
           -----> Python app detected
-          -----> No Python version was specified. Using the same version as the last build: Python #{DEFAULT_PYTHON_FULL_VERSION}
-                 To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> No change in requirements detected, installing from cache
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
@@ -92,8 +90,7 @@ RSpec.describe 'Heroku CI' do
       app.run_ci do |test_run|
         expect(test_run.output).to match(Regexp.new(<<~REGEX))
           -----> Python app detected
-          -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
-                 To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           -----> Installing Pipenv #{PIPENV_VERSION}
@@ -148,8 +145,7 @@ RSpec.describe 'Heroku CI' do
 
         expect(test_run.output).to match(Regexp.new(<<~REGEX))
           -----> Python app detected
-          -----> No Python version was specified. Using the same version as the last build: Python #{DEFAULT_PYTHON_FULL_VERSION}
-                 To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           -----> Installing Pipenv #{PIPENV_VERSION}

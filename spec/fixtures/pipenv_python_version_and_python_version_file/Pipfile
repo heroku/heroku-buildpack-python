@@ -9,4 +9,5 @@ typing-extensions = "*"
 [dev-packages]
 
 [requires]
-python_full_version = "3.9.*"
+# The version in .python-version should take precedence over this.
+python_version = "3.11"

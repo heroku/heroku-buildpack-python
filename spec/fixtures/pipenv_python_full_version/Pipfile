@@ -4,12 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-urllib3 = "*"
+typing-extensions = "*"
 
 [dev-packages]
 
 [requires]
 # Uses the oldest Python version supported by all stacks, to validate Pipenv works with it.
 python_full_version = "3.9.0"
-# Tests that `python_full_version` takes precedence.
+
+# `python_full_version` should take precedence over this.
 python_version = "3.12"

@@ -73,4 +73,4 @@ jobs:
       - name: Run buildpack using default app fixture
         run: make run
       - name: Run buildpack using an app fixture that's expected to fail
-        run: make run FIXTURE=spec/fixtures/python_version_invalid/
+        run: make run FIXTURE=spec/fixtures/python_version_file_invalid_version/
