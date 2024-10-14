@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v261] - 2024-10-14
+
 - Added support for configuring the Python version using a `.python-version` file. Both the `3.N` and `3.N.N` version forms are supported (the former is recommended). The existing `runtime.txt` file will take precedence if both files are found, however, we recommend switching to `.python-version` since it is more commonly supported in the Python ecosystem. ([#1664](https://github.com/heroku/heroku-buildpack-python/pull/1664))
 - Added support for specifying only the Python major version in `runtime.txt` instead of requiring the full Python version (for example `python-3.N` instead of `python-3.N.N`). ([#1664](https://github.com/heroku/heroku-buildpack-python/pull/1664))
 
@@ -1065,7 +1068,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v260...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v261...main
+[v261]: https://github.com/heroku/heroku-buildpack-python/compare/v260...v261
 [v260]: https://github.com/heroku/heroku-buildpack-python/compare/v259...v260
 [v259]: https://github.com/heroku/heroku-buildpack-python/compare/v258...v259
 [v258]: https://github.com/heroku/heroku-buildpack-python/compare/v257...v258
