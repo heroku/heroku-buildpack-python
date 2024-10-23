@@ -6,6 +6,7 @@
 set -euo pipefail
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
 source "${BUILDPACK_DIR}/bin/utils"
+source "${BUILDPACK_DIR}/lib/output.sh"
 
 # Required for `meta_set`.
 source "${BUILDPACK_DIR}/lib/metadata.sh"
@@ -18,7 +19,7 @@ EXPORT_PATH="${BUILDPACK_DIR}/export"
 # Check that nltk was installed by pip, otherwise obviously not needed
 # shellcheck disable=SC2310 # TODO: This function is invoked in an 'if' condition so set -e will be disabled.
 if is_module_available 'nltk'; then
-	puts-step "Downloading NLTK corpora..."
+	output::step "Downloading NLTK corpora..."
 
 	nltk_packages_definition="$BUILD_DIR/nltk.txt"
 
@@ -26,14 +27,14 @@ if is_module_available 'nltk'; then
 		meta_set "nltk_downloader" "enabled"
 
 		readarray -t nltk_packages <"$nltk_packages_definition"
-		puts-step "Downloading NLTK packages: ${nltk_packages[*]}"
+		output::step "Downloading NLTK packages: ${nltk_packages[*]}"
 
-		python -m nltk.downloader -d "$BUILD_DIR/.heroku/python/nltk_data" "${nltk_packages[@]}" | indent
+		python -m nltk.downloader -d "$BUILD_DIR/.heroku/python/nltk_data" "${nltk_packages[@]}" | output::indent
 		set_env NLTK_DATA "/app/.heroku/python/nltk_data"
 
 	else
 		meta_set "nltk_downloader" "skipped-no-nltk-file"
-		puts-warn "'nltk.txt' not found, not downloading any corpora"
-		puts-warn "Learn more: https://devcenter.heroku.com/articles/python-nltk"
+		echo "       'nltk.txt' not found, not downloading any corpora"
+		echo "       Learn more: https://devcenter.heroku.com/articles/python-nltk"
 	fi
 fi

@@ -16,6 +16,8 @@ RSpec.describe 'Python update warnings' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python 3.8.0 specified in runtime.txt
+            remote: 
+            remote:  !     Warning: Support for Python 3.8 is ending soon!
             remote:  !     
             remote:  !     Python 3.8 will reach its upstream end-of-life in October 2024, at which
             remote:  !     point it will no longer receive security updates:
@@ -25,11 +27,13 @@ RSpec.describe 'Python update warnings' do
             remote:  !     
             remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+            remote: 
+            remote: 
+            remote:  !     Warning: A Python security update is available!
             remote:  !     
-            remote:  !     
-            remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_8}
+            remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_8}
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-            remote:  !     
+            remote: 
             remote: -----> Installing Python 3.8.0
           OUTPUT
         end
@@ -66,10 +70,12 @@ RSpec.describe 'Python update warnings' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python 3.9.0 specified in .python-version
+          remote: 
+          remote:  !     Warning: A Python security update is available!
           remote:  !     
-          remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
+          remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-          remote:  !     
+          remote: 
           remote: -----> Installing Python 3.9.0
         OUTPUT
       end

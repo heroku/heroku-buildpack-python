@@ -63,7 +63,7 @@ sqlite3_install() {
 }
 
 buildpack_sqlite3_install() {
-	puts-step "Installing SQLite3"
+	output::step "Installing SQLite3"
 
 	# TODO: This never actual prints failure or even aborts the build, since
 	# the conditional disables `set -e` inside the called function:

@@ -39,14 +39,14 @@ function pip::install_pip_setuptools_wheel() {
 		packages_display_text+=", setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 	fi
 
-	puts-step "Installing ${packages_display_text}"
+	output::step "Installing ${packages_display_text}"
 
 	/app/.heroku/python/bin/python "${bundled_pip_module_path}" install --quiet --disable-pip-version-check --no-cache-dir \
 		"${packages_to_install[@]}"
 }
 
 function pip::install_dependencies() {
-	puts-step "Installing requirements with pip"
+	output::step "Installing requirements with pip"
 
 	# Make select pip config vars set on the Heroku app available to pip.
 	# TODO: Expose all config vars (after suitable checks are added for unsafe env vars)
@@ -68,7 +68,7 @@ function pip::install_dependencies() {
 
 	set +e
 	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
-	/app/.heroku/python/bin/pip install "${args[@]}" --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir --progress-bar off 2>&1 | tee "${WARNINGS_LOG}" | cleanup | indent
+	/app/.heroku/python/bin/pip install "${args[@]}" --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir --progress-bar off 2>&1 | tee "${WARNINGS_LOG}" | cleanup | output::indent
 	local PIP_STATUS="${PIPESTATUS[0]}"
 	set -e
 
@@ -82,8 +82,8 @@ function pip::install_dependencies() {
 	# Install test dependencies, for Heroku CI.
 	if [[ "${INSTALL_TEST:-0}" == "1" ]]; then
 		if [[ -f requirements-test.txt ]]; then
-			puts-step "Installing test dependencies..."
-			/app/.heroku/python/bin/pip install -r requirements-test.txt --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | indent
+			output::step "Installing test dependencies..."
+			/app/.heroku/python/bin/pip install -r requirements-test.txt --exists-action=w --src='/app/.heroku/src' --disable-pip-version-check --no-cache-dir 2>&1 | cleanup | output::indent
 		fi
 	fi
 }

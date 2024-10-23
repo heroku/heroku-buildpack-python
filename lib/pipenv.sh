@@ -12,7 +12,7 @@ function pipenv::install_pipenv() {
 	PIPENV_VERSION=$(get_requirement_version 'pipenv')
 	meta_set "pipenv_version" "${PIPENV_VERSION}"
 
-	puts-step "Installing Pipenv ${PIPENV_VERSION}"
+	output::step "Installing Pipenv ${PIPENV_VERSION}"
 
 	# TODO: Install Pipenv into a venv so it isn't leaked into the app environment.
 	# TODO: Explore viability of making Pipenv only be available during the build, to reduce slug size.
@@ -38,16 +38,16 @@ function pipenv::install_dependencies() {
 	# Install the test dependencies, for CI.
 	# TODO: This is currently inconsistent with the non-test path, since it assumes (but doesn't check for) a lockfile.
 	if [[ "${INSTALL_TEST:-0}" == "1" ]]; then
-		puts-step "Installing test dependencies with Pipenv"
-		/app/.heroku/python/bin/pipenv install --dev --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | cleanup | indent
+		output::step "Installing test dependencies with Pipenv"
+		/app/.heroku/python/bin/pipenv install --dev --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | cleanup | output::indent
 
 	# Install the dependencies.
 	elif [[ ! -f Pipfile.lock ]]; then
-		puts-step "Installing dependencies with Pipenv"
-		/app/.heroku/python/bin/pipenv install --system --skip-lock --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
+		output::step "Installing dependencies with Pipenv"
+		/app/.heroku/python/bin/pipenv install --system --skip-lock --extra-pip-args='--src=/app/.heroku/src' 2>&1 | output::indent
 
 	else
-		puts-step "Installing dependencies with Pipenv"
-		/app/.heroku/python/bin/pipenv install --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | indent
+		output::step "Installing dependencies with Pipenv"
+		/app/.heroku/python/bin/pipenv install --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | output::indent
 	fi
 }

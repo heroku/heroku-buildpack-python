@@ -13,6 +13,12 @@ function package_manager::determine_package_manager() {
 		meta_set "pipenv_has_lockfile" "true"
 	elif [[ -f "${build_dir}/Pipfile" ]]; then
 		# TODO: Start requiring a Pipfile.lock and make this branch a "missing lockfile" error instead.
+		# TODO: Adjust this warning to mention support for missing Pipfile.lock will be removed soon.
+		output::warning <<-'EOF'
+			Warning: No 'Pipfile.lock' found!
+
+			We recommend you commit this into your repository.
+		EOF
 		package_managers_found+=(pipenv)
 		meta_set "pipenv_has_lockfile" "false"
 	fi
@@ -36,7 +42,7 @@ function package_manager::determine_package_manager() {
 			return 0
 			;;
 		0)
-			display_error <<-EOF
+			output::error <<-EOF
 				Error: Couldn't find any supported Python package manager files.
 
 				A Python app on Heroku must have either a 'requirements.txt' or

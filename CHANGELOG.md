@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated buildpack-generated warning messages to use colour and be more consistently formatted. ([#1666](https://github.com/heroku/heroku-buildpack-python/pull/1666))
 
 ## [v261] - 2024-10-14
 

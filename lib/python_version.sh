@@ -96,7 +96,7 @@ function python_version::parse_runtime_txt() {
 		local version="${BASH_REMATCH[1]}"
 		echo "${version}"
 	else
-		display_error <<-EOF
+		output::error <<-EOF
 			Error: Invalid Python version in runtime.txt.
 
 			The Python version specified in 'runtime.txt' isn't in
@@ -140,7 +140,7 @@ function python_version::parse_python_version_file() {
 				echo "${version}"
 				return 0
 			else
-				display_error <<-EOF
+				output::error <<-EOF
 					Error: Invalid Python version in .python-version.
 
 					The Python version specified in '.python-version' isn't in
@@ -165,7 +165,7 @@ function python_version::parse_python_version_file() {
 			fi
 			;;
 		0)
-			display_error <<-EOF
+			output::error <<-EOF
 				Error: Invalid Python version in .python-version.
 
 				No Python version was found in the '.python-version' file.
@@ -180,7 +180,7 @@ function python_version::parse_python_version_file() {
 			return 1
 			;;
 		*)
-			display_error <<-EOF
+			output::error <<-EOF
 				Error: Invalid Python version in .python-version.
 
 				Multiple Python versions were found in the '.python-version'
@@ -218,7 +218,7 @@ function python_version::read_pipenv_python_version() {
 	fi
 
 	if ! version=$(jq --raw-output '._meta.requires.python_full_version // ._meta.requires.python_version' "${pipfile_lock_path}" 2>&1); then
-		display_error <<-EOF
+		output::error <<-EOF
 			Error: Can't parse Pipfile.lock.
 
 			A Pipfile.lock file was found, however, it couldn't be parsed:
@@ -243,7 +243,7 @@ function python_version::read_pipenv_python_version() {
 	if [[ "${version}" =~ ^${PYTHON_VERSION_REGEX}$ ]]; then
 		echo "${version}"
 	else
-		display_error <<-EOF
+		output::error <<-EOF
 			Error: Invalid Python version in Pipfile / Pipfile.lock.
 
 			The Python version specified in Pipfile / Pipfile.lock by the
@@ -283,7 +283,7 @@ function python_version::resolve_python_version() {
 
 	if ((major < 3 || (major == 3 && minor < 8))); then
 		if [[ "${python_version_origin}" == "cached" ]]; then
-			display_error <<-EOF
+			output::error <<-EOF
 				Error: The cached Python version has reached end-of-life.
 
 				Your app doesn't specify a Python version, and so normally
@@ -303,7 +303,7 @@ function python_version::resolve_python_version() {
 				https://devcenter.heroku.com/articles/python-support#supported-runtimes
 			EOF
 		else
-			display_error <<-EOF
+			output::error <<-EOF
 				Error: The requested Python version has reached end-of-life.
 
 				Python ${major}.${minor} has reached its upstream end-of-life, and is
@@ -325,7 +325,7 @@ function python_version::resolve_python_version() {
 
 	if (((major == 3 && minor > 13) || major >= 4)); then
 		if [[ "${python_version_origin}" == "cached" ]]; then
-			display_error <<-EOF
+			output::error <<-EOF
 				Error: The cached Python version isn't recognised.
 
 				Your app doesn't specify a Python version, and so normally
@@ -340,7 +340,7 @@ function python_version::resolve_python_version() {
 				Please switch back to a newer version of this buildpack.
 			EOF
 		else
-			display_error <<-EOF
+			output::error <<-EOF
 				Error: The requested Python version isn't recognised.
 
 				The requested Python version ${major}.${minor} isn't recognised.
