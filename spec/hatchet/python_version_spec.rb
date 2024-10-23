@@ -63,10 +63,12 @@ RSpec.describe 'Python version support' do
             remote: -----> Python app detected
             remote: -----> No Python version was specified. Using the same version as the last build: Python 3.12.3
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+            remote: 
+            remote:  !     Warning: A Python security update is available!
             remote:  !     
-            remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_12}
+            remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_12}
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-            remote:  !     
+            remote: 
             remote: -----> No change in requirements detected, installing from cache
             remote: -----> Using cached install of Python 3.12.3
           OUTPUT
@@ -86,6 +88,8 @@ RSpec.describe 'Python version support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python 3.8 specified in .python-version
+            remote: 
+            remote:  !     Warning: Support for Python 3.8 is ending soon!
             remote:  !     
             remote:  !     Python 3.8 will reach its upstream end-of-life in October 2024, at which
             remote:  !     point it will no longer receive security updates:
@@ -95,7 +99,7 @@ RSpec.describe 'Python version support' do
             remote:  !     
             remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-            remote:  !     
+            remote: 
             remote: -----> Installing Python #{LATEST_PYTHON_3_8}
             remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
             remote: -----> Installing SQLite3

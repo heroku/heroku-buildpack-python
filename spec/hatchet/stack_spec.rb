@@ -24,10 +24,12 @@ RSpec.describe 'Stack changes' do
           remote: -----> Python app detected
           remote: -----> No Python version was specified. Using the same version as the last build: Python 3.12.3
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          remote: 
+          remote:  !     Warning: A Python security update is available!
           remote:  !     
-          remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_12}
+          remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_12}
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-          remote:  !     
+          remote: 
           remote: -----> Stack has changed from heroku-22 to heroku-24, clearing cache
           remote: -----> No change in requirements detected, installing from cache
           remote: -----> Installing Python 3.12.3

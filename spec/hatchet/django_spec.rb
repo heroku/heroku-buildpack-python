@@ -82,7 +82,11 @@ RSpec.describe 'Django support' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Skipping Django collectstatic since the file '.heroku/collectstatic_disabled' exists.
-            remote:  !     This approach is deprecated, please set the env var DISABLE_COLLECTSTATIC=1 instead.
+            remote: 
+            remote:  !     Warning: The .heroku/collectstatic_disabled file is deprecated.
+            remote:  !     
+            remote:  !     Please remove the file and set the env var DISABLE_COLLECTSTATIC=1 instead.
+            remote: 
           OUTPUT
           expect(app.output).not_to include('manage.py collectstatic')
         end
@@ -100,15 +104,21 @@ RSpec.describe 'Django support' do
             remote:        .+
             remote:        ModuleNotFoundError: No module named 'gettingstarted'
             remote: 
-            remote:  !     Error while running '\\$ python manage.py collectstatic --noinput'.
-            remote:        See traceback above for details.
             remote: 
-            remote:        You may need to update application code to resolve this error.
-            remote:        Or, you can disable collectstatic for this application:
+            remote:  !     Error: Unable to generate Django static files.
+            remote:  !     
+            remote:  !     The 'python manage.py collectstatic --noinput' Django
+            remote:  !     management command to generate static files failed.
+            remote:  !     
+            remote:  !     See the traceback above for details.
+            remote:  !     
+            remote:  !     You may need to update application code to resolve this error.
+            remote:  !     Or, you can disable collectstatic for this application:
+            remote:  !     
+            remote:  !        \\$ heroku config:set DISABLE_COLLECTSTATIC=1
+            remote:  !     
+            remote:  !     https://devcenter.heroku.com/articles/django-assets
             remote: 
-            remote:           \\$ heroku config:set DISABLE_COLLECTSTATIC=1
-            remote: 
-            remote:        https://devcenter.heroku.com/articles/django-assets
             remote:  !     Push rejected, failed to compile Python app.
           REGEX
         end

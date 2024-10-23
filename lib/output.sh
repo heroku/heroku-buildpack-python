@@ -4,21 +4,62 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-# TODO: Switch this file to using namespaced functions like `output::<fn_name>`.
-
 ANSI_RED='\033[1;31m'
+ANSI_YELLOW='\033[1;33m'
 ANSI_RESET='\033[0m'
 
-# shellcheck disable=SC2120 # Prevent warnings about unused arguments due to the split args vs stdin API.
-function display_error() {
-	# Send all output to stderr
-	exec 1>&2
-	# If arguments are given, redirect them to stdin. This allows the function
-	# to be invoked with either a string argument or stdin (e.g. via <<-EOF).
-	(($#)) && exec <<<"${@}"
-	echo
+# Output a single line step message to stdout.
+#
+# Usage:
+# ```
+# output::step "Installing Python ..."
+# ```
+function output::step() {
+	echo "-----> ${1}"
+}
+
+# Indent passed stdout. Typically used to indent command output within a step.
+#
+# Usage:
+# ```
+# pip install ... | output::indent
+# ```
+function output::indent() {
+	sed --unbuffered "s/^/       /"
+}
+
+# Output a styled multi-line warning message to stderr.
+#
+# Usage:
+# ```
+# output::warning <<-EOF
+# 	Warning: The warning summary.
+#
+# 	Detailed description.
+# EOF
+# ```
+function output::warning() {
+	echo >&2
 	while IFS= read -r line; do
-		echo -e "${ANSI_RED} !     ${line}${ANSI_RESET}"
+		echo -e "${ANSI_YELLOW} !     ${line}${ANSI_RESET}" >&2
 	done
-	echo
+	echo >&2
+}
+
+# Output a styled multi-line error message to stderr.
+#
+# Usage:
+# ```
+# output::error <<-EOF
+# 	Error: The error summary.
+#
+# 	Detailed description.
+# EOF
+# ```
+function output::error() {
+	echo >&2
+	while IFS= read -r line; do
+		echo -e "${ANSI_RED} !     ${line}${ANSI_RESET}" >&2
+	done
+	echo >&2
 }

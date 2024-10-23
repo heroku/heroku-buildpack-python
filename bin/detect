@@ -45,7 +45,7 @@ done
 # Note: This error message intentionally doesn't list all of the filetypes above,
 # since during compile the build will still require a package manager file, so it
 # makes sense to describe the stricter requirements upfront.
-display_error <<EOF
+output::error <<EOF
 Error: Your app is configured to use the Python buildpack,
 but we couldn't find any supported Python project files.
 

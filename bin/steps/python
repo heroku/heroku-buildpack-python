@@ -17,7 +17,7 @@ PYTHON_URL="${S3_BASE_URL}/python-${python_full_version}-ubuntu-${UBUNTU_VERSION
 # 3. The user has pinned to an older buildpack version and the S3 bucket location or layout has changed since.
 # TODO: Update this message to be more specific once Python 3.8 support is dropped.
 if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
-	display_error <<-EOF
+	output::error <<-EOF
 		Error: Python ${python_full_version} isn't available for this stack (${STACK}).
 
 		For a list of the supported Python versions, see:
@@ -38,10 +38,12 @@ function warn_if_patch_update_available() {
 	# TODO: Update this message to suggest using the .python-version major version syntax to stay up to date,
 	# once runtime.txt is deprecated and sticky-versioning only pins to the major version.
 	if ((requested_patch_number < latest_patch_number)); then
-		puts-warn
-		puts-warn "A Python security update is available! Upgrade as soon as possible to: Python ${latest_patch_version}"
-		puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
-		puts-warn
+		output::warning <<-EOF
+			Warning: A Python security update is available!
+
+			Upgrade as soon as possible to: Python ${latest_patch_version}
+			See: https://devcenter.heroku.com/articles/python-runtimes
+		EOF
 		meta_set "python_version_outdated" "true"
 	else
 		meta_set "python_version_outdated" "false"
@@ -52,29 +54,31 @@ function warn_if_patch_update_available() {
 # if there weren't any errors with the version to avoid adding noise to the error messages.
 # TODO: Move this into lib/ as part of the warnings refactor.
 if [[ "${python_major_version}" == "3.8" ]]; then
-	puts-warn
-	puts-warn "Python 3.8 will reach its upstream end-of-life in October 2024, at which"
-	puts-warn "point it will no longer receive security updates:"
-	puts-warn "https://devguide.python.org/versions/#supported-versions"
-	puts-warn
-	puts-warn "Support for Python 3.8 will be removed from this buildpack on December 4th, 2024."
-	puts-warn
-	puts-warn "Upgrade to a newer Python version as soon as possible to keep your app secure."
-	puts-warn "See: https://devcenter.heroku.com/articles/python-runtimes"
-	puts-warn
+	output::warning <<-'EOF'
+		Warning: Support for Python 3.8 is ending soon!
+
+		Python 3.8 will reach its upstream end-of-life in October 2024, at which
+		point it will no longer receive security updates:
+		https://devguide.python.org/versions/#supported-versions
+
+		Support for Python 3.8 will be removed from this buildpack on December 4th, 2024.
+
+		Upgrade to a newer Python version as soon as possible to keep your app secure.
+		See: https://devcenter.heroku.com/articles/python-runtimes
+	EOF
 fi
 
 warn_if_patch_update_available "${python_full_version}" "${python_major_version}"
 
 if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
-	puts-step "Stack has changed from $CACHED_PYTHON_STACK to $STACK, clearing cache"
+	output::step "Stack has changed from $CACHED_PYTHON_STACK to $STACK, clearing cache"
 	rm -rf .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor .heroku/python .heroku/python-sqlite3-version
 fi
 
 # TODO: Clean this up as part of the cache refactor.
 if [[ -f .heroku/python-version ]]; then
 	if [[ "${cached_python_version}" != "${python_full_version}" ]]; then
-		puts-step "Python version has changed from ${cached_python_version} to ${python_full_version}, clearing cache"
+		output::step "Python version has changed from ${cached_python_version} to ${python_full_version}, clearing cache"
 		rm -rf .heroku/python
 	else
 		SKIP_INSTALL=1
@@ -92,22 +96,22 @@ if [[ -f "${BUILD_DIR}/requirements.txt" ]]; then
 	else
 		# IF there IS a cached directory, check for differences with the new one
 		if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" &>/dev/null; then
-			puts-step "Requirements file has been changed, clearing cached dependencies"
+			output::step "Requirements file has been changed, clearing cached dependencies"
 			# if there are any differences, clear the Python cache
 			# Installing Python over again does not take noticably more time
 			cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
 			rm -rf .heroku/python
 			unset SKIP_INSTALL
 		else
-			puts-step "No change in requirements detected, installing from cache"
+			output::step "No change in requirements detected, installing from cache"
 		fi
 	fi
 fi
 
 if [[ "${SKIP_INSTALL:-0}" == "1" ]]; then
-	puts-step "Using cached install of Python ${python_full_version}"
+	output::step "Using cached install of Python ${python_full_version}"
 else
-	puts-step "Installing Python ${python_full_version}"
+	output::step "Installing Python ${python_full_version}"
 
 	# Prepare destination directory.
 	mkdir -p .heroku/python
@@ -115,7 +119,12 @@ else
 	if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}" | tar --zstd --extract --directory .heroku/python; then
 		# The Python version was confirmed to exist previously, so any failure here is due to
 		# a networking issue or archive/buildpack bug rather than the runtime not existing.
-		display_error "Error: Failed to download/install Python ${python_full_version}."
+		output::error <<-EOF
+			Error: Failed to download/install Python ${python_full_version}.
+
+			In some cases, this happens due to an unstable network connection.
+			Please try again and to see if the error resolves itself.
+		EOF
 		meta_set "failure_reason" "python-download"
 		exit 1
 	fi

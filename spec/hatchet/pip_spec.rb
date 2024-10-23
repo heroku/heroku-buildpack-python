@@ -261,9 +261,13 @@ RSpec.describe 'pip support' do
     it 'outputs instructions for how to resolve the build failure' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote:  !     Hello! Package installation failed since the GDAL library was not found.
+          remote:        note: This error originates from a subprocess, and is likely not a problem with pip.
+          remote: 
+          remote:  !     Error: Package installation failed since the GDAL library was not found.
+          remote:  !     
           remote:  !     For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:
           remote:  !     https://github.com/heroku/heroku-geo-buildpack
+          remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end

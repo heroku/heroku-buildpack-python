@@ -83,10 +83,12 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python 3.9.0 specified in Pipfile.lock
+          remote: 
+          remote:  !     Warning: A Python security update is available!
           remote:  !     
-          remote:  !     A Python security update is available! Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
+          remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-          remote:  !     
+          remote: 
           remote: -----> Installing Python 3.9.0
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
@@ -143,7 +145,11 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
-          remote:  !     No 'Pipfile.lock' found! We recommend you commit this into your repository.
+          remote: 
+          remote:  !     Warning: No 'Pipfile.lock' found!
+          remote:  !     
+          remote:  !     We recommend you commit this into your repository.
+          remote: 
           remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
