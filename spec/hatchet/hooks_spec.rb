@@ -3,9 +3,7 @@
 require_relative '../spec_helper'
 
 RSpec.describe 'Compile hooks' do
-  # TODO: Run this on Heroku-22 too, once it has also migrated to the new build infrastructure.
-  # (Currently the test fails on the old infrastructure due to subtle differences in system PATH elements.)
-  context 'when an app has bin/pre_compile and bin/post_compile scripts', stacks: %w[heroku-20 heroku-24] do
+  context 'when an app has bin/pre_compile and bin/post_compile scripts' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/hooks', config: { 'SOME_APP_CONFIG_VAR' => '1' }) }
 
     it 'runs the hooks with the correct environment' do

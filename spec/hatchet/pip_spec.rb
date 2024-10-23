@@ -12,9 +12,7 @@ RSpec.shared_examples 'installs successfully using pip' do
 end
 
 RSpec.describe 'pip support' do
-  # TODO: Run this on Heroku-22 too, once it has also migrated to the new build infrastructure.
-  # (Currently the test fails on the old infrastructure due to subtle differences in system PATH elements.)
-  context 'when requirements.txt is unchanged since the last build', stacks: %w[heroku-20 heroku-24] do
+  context 'when requirements.txt is unchanged since the last build' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_basic', buildpacks:) }
 
