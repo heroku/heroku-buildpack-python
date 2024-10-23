@@ -19,6 +19,7 @@ ENV_DIR="${3}"
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
 
 source "${BUILDPACK_DIR}/bin/utils"
+source "${BUILDPACK_DIR}/lib/hooks.sh"
 source "${BUILDPACK_DIR}/lib/metadata.sh"
 source "${BUILDPACK_DIR}/lib/output.sh"
 source "${BUILDPACK_DIR}/lib/package_manager.sh"
@@ -119,7 +120,7 @@ if [[ -d "$CACHE_DIR/.heroku/src" ]]; then
 fi
 
 # Runs a `bin/pre_compile` script if found in the app source, allowing build customisation.
-source "${BUILDPACK_DIR}/bin/steps/hooks/pre_compile"
+hooks::run_hook "pre_compile"
 
 # TODO: Clear the cache if this isn't a valid version, as part of the cache refactor.
 # (Currently the version is instead validated in `read_requested_python_version()`)
@@ -297,7 +298,7 @@ cp "${BUILDPACK_DIR}/vendor/WEB_CONCURRENCY.sh" "$WEB_CONCURRENCY_PROFILE_PATH"
 cp "${BUILDPACK_DIR}/vendor/python.gunicorn.sh" "$GUNICORN_PROFILE_PATH"
 
 # Runs a `bin/post_compile` script if found in the app source, allowing build customisation.
-source "${BUILDPACK_DIR}/bin/steps/hooks/post_compile"
+hooks::run_hook "post_compile"
 
 # Store new artifacts in the cache.
 rm -rf "$CACHE_DIR/.heroku/python"

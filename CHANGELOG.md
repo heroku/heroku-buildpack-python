@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Updated buildpack-generated warning messages to use colour and be more consistently formatted. ([#1666](https://github.com/heroku/heroku-buildpack-python/pull/1666))
+- Improved build log output and error messages for the `bin/pre_compile` and `bin/post_compile` customisation hooks. ([#1667](https://github.com/heroku/heroku-buildpack-python/pull/1667))
 
 ## [v261] - 2024-10-14
 
