@@ -362,16 +362,16 @@ RSpec.describe 'Pipenv support' do
     it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Running post-compile hook
-          remote: easy-install.pth:/app/.heroku/src/gunicorn
-          remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: gunicorn.egg-link:/app/.heroku/src/gunicorn
-          remote: local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
-          remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: -----> Running bin/post_compile hook
+          remote:        easy-install.pth:/app/.heroku/src/gunicorn
+          remote:        easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
+          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote:        gunicorn.egg-link:/app/.heroku/src/gunicorn
+          remote:        local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
+          remote:        
+          remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
+          remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
           remote: easy-install.pth:/app/.heroku/src/gunicorn
           remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
@@ -401,16 +401,16 @@ RSpec.describe 'Pipenv support' do
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Running post-compile hook
-          remote: easy-install.pth:/app/.heroku/src/gunicorn
-          remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: gunicorn.egg-link:/app/.heroku/src/gunicorn
-          remote: local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
-          remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: -----> Running bin/post_compile hook
+          remote:        easy-install.pth:/app/.heroku/src/gunicorn
+          remote:        easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
+          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote:        gunicorn.egg-link:/app/.heroku/src/gunicorn
+          remote:        local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
+          remote:        
+          remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
+          remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
           remote: easy-install.pth:/app/.heroku/src/gunicorn
           remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py

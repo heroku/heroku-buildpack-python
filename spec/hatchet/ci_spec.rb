@@ -23,20 +23,20 @@ RSpec.describe 'Heroku CI' do
                  .*
                  Successfully installed .* pytest-8.3.3
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
-          -----> Running post-compile hook
-          CI=true
-          CPLUS_INCLUDE_PATH=/app/.heroku/python/include
-          C_INCLUDE_PATH=/app/.heroku/python/include
-          DISABLE_COLLECTSTATIC=1
-          INSTALL_TEST=1
-          LANG=en_US.UTF-8
-          LC_ALL=C.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib
-          LIBRARY_PATH=/app/.heroku/python/lib
-          PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
-          PIP_NO_PYTHON_VERSION_WARNING=1
-          PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
-          PYTHONUNBUFFERED=1
+          -----> Running bin/post_compile hook
+                 CI=true
+                 CPLUS_INCLUDE_PATH=/app/.heroku/python/include
+                 C_INCLUDE_PATH=/app/.heroku/python/include
+                 DISABLE_COLLECTSTATIC=1
+                 INSTALL_TEST=1
+                 LANG=en_US.UTF-8
+                 LC_ALL=C.UTF-8
+                 LD_LIBRARY_PATH=/app/.heroku/python/lib
+                 LIBRARY_PATH=/app/.heroku/python/lib
+                 PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+                 PIP_NO_PYTHON_VERSION_WARNING=1
+                 PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
+                 PYTHONUNBUFFERED=1
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -77,7 +77,7 @@ RSpec.describe 'Heroku CI' do
           -----> Installing requirements with pip
           -----> Installing test dependencies...
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
-          -----> Running post-compile hook
+          -----> Running bin/post_compile hook
         OUTPUT
       end
     end
@@ -99,20 +99,20 @@ RSpec.describe 'Heroku CI' do
                  Installing dependencies from Pipfile.lock \\(.+\\)...
                  Installing dependencies from Pipfile.lock \\(.+\\)...
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
-          -----> Running post-compile hook
-          CI=true
-          CPLUS_INCLUDE_PATH=/app/.heroku/python/include
-          C_INCLUDE_PATH=/app/.heroku/python/include
-          DISABLE_COLLECTSTATIC=1
-          INSTALL_TEST=1
-          LANG=en_US.UTF-8
-          LC_ALL=C.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib
-          LIBRARY_PATH=/app/.heroku/python/lib
-          PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
-          PIP_NO_PYTHON_VERSION_WARNING=1
-          PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
-          PYTHONUNBUFFERED=1
+          -----> Running bin/post_compile hook
+                 CI=true
+                 CPLUS_INCLUDE_PATH=/app/.heroku/python/include
+                 C_INCLUDE_PATH=/app/.heroku/python/include
+                 DISABLE_COLLECTSTATIC=1
+                 INSTALL_TEST=1
+                 LANG=en_US.UTF-8
+                 LC_ALL=C.UTF-8
+                 LD_LIBRARY_PATH=/app/.heroku/python/lib
+                 LIBRARY_PATH=/app/.heroku/python/lib
+                 PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+                 PIP_NO_PYTHON_VERSION_WARNING=1
+                 PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
+                 PYTHONUNBUFFERED=1
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -154,7 +154,7 @@ RSpec.describe 'Heroku CI' do
                  Installing dependencies from Pipfile.lock \\(.+\\)...
                  Installing dependencies from Pipfile.lock \\(.+\\)...
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
-          -----> Running post-compile hook
+          -----> Running bin/post_compile hook
         REGEX
       end
     end
