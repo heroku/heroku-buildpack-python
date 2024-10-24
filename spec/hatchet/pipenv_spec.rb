@@ -7,10 +7,7 @@ RSpec.describe 'Pipenv support' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
 
-    # TODO: Run this on Heroku-22 too, once it has also migrated to the new build infrastructure.
-    # (Currently the test fails on the old infrastructure due to subtle differences in system PATH elements.)
-    it 'builds with the specified python_version and re-uses packages from the cache',
-       stacks: %w[heroku-20 heroku-24] do
+    it 'builds with the specified python_version and re-uses packages from the cache' do
       app.deploy do |app|
         # TODO: We should not be leaking the Pipenv installation into the app environment.
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
