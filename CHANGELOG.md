@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v262] - 2024-10-25
+
 - Updated buildpack-generated warning messages to use colour and be more consistently formatted. ([#1666](https://github.com/heroku/heroku-buildpack-python/pull/1666))
 - Improved build log output and error messages for the `bin/pre_compile` and `bin/post_compile` customisation hooks. ([#1667](https://github.com/heroku/heroku-buildpack-python/pull/1667))
 
@@ -1070,7 +1073,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v261...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v262...main
+[v262]: https://github.com/heroku/heroku-buildpack-python/compare/v261...v262
 [v261]: https://github.com/heroku/heroku-buildpack-python/compare/v260...v261
 [v260]: https://github.com/heroku/heroku-buildpack-python/compare/v259...v260
 [v259]: https://github.com/heroku/heroku-buildpack-python/compare/v258...v259
