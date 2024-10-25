@@ -18,7 +18,9 @@ function utils::bundled_pip_module_path() {
 	local bundled_pip_wheel="${bundled_pip_wheel_list[0]}"
 
 	if [[ -z "${bundled_pip_wheel}" ]]; then
-		output::error "Error: Failed to locate the bundled pip wheel."
+		output::error <<-'EOF'
+			Error: Failed to locate the bundled pip wheel.
+		EOF
 		meta_set "failure_reason" "bundled-pip-not-found"
 		return 1
 	fi
@@ -28,7 +30,9 @@ function utils::bundled_pip_module_path() {
 
 function utils::abort_internal_error() {
 	local message="${1}"
-	output::error "Internal error: ${message} (line $(caller || true))."
+	output::error <<-EOF
+		Internal error: ${message} (line $(caller || true)).
+	EOF
 	meta_set "failure_reason" "internal-error"
 	exit 1
 }
