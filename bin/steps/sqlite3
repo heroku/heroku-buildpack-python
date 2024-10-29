@@ -78,7 +78,4 @@ buildpack_sqlite3_install() {
 		echo "Sqlite3 failed to install."
 		# mcount "failure.python.sqlite3"
 	fi
-
-	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
-	mkdir -p "$CACHE_DIR/.heroku/"
 }

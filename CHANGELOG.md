@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- Fixed cache handling so that it now also discards the cache when the package manager (or its version) changes. ([#1679](https://github.com/heroku/heroku-buildpack-python/pull/1679))
+- Improved the build log output shown when restoring or discarding the cache. For example, if the cache was invalidated all reasons are now shown. ([#1679](https://github.com/heroku/heroku-buildpack-python/pull/1679))
+- Stopped performing unnecessary cache file copies when the cache is due to be invalidated. This required moving the cache restoration step to after the `bin/pre_compile` hook runs. ([#1679](https://github.com/heroku/heroku-buildpack-python/pull/1679))
+- Fixed cache restoration in the case where an app's `requirements.txt` was formerly a symlink. ([#1679](https://github.com/heroku/heroku-buildpack-python/pull/1679))
+- Added buildpack metrics for the status of the cache and duration of cache restoration/saving. ([#1679](https://github.com/heroku/heroku-buildpack-python/pull/1679))
 
 ## [v262] - 2024-10-25
 

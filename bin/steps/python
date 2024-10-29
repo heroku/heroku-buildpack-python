@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
-# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 set -euo pipefail
 
@@ -25,6 +24,28 @@ if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefuse
 	EOF
 	meta_set "failure_reason" "python-version-not-found"
 	exit 1
+fi
+
+if [[ -f "${BUILD_DIR}/.heroku/python/bin/python" ]]; then
+	output::step "Using cached install of Python ${python_full_version}"
+else
+	output::step "Installing Python ${python_full_version}"
+	mkdir -p "${BUILD_DIR}/.heroku/python"
+
+	if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}" | tar --zstd --extract --directory "${BUILD_DIR}/.heroku/python"; then
+		# The Python version was confirmed to exist previously, so any failure here is due to
+		# a networking issue or archive/buildpack bug rather than the runtime not existing.
+		output::error <<-EOF
+			Error: Failed to download/install Python ${python_full_version}.
+
+			In some cases, this happens due to an unstable network connection.
+			Please try again and to see if the error resolves itself.
+		EOF
+		meta_set "failure_reason" "python-download"
+		exit 1
+	fi
+
+	hash -r
 fi
 
 function warn_if_patch_update_available() {
@@ -69,69 +90,3 @@ if [[ "${python_major_version}" == "3.8" ]]; then
 fi
 
 warn_if_patch_update_available "${python_full_version}" "${python_major_version}"
-
-if [[ "$STACK" != "$CACHED_PYTHON_STACK" ]]; then
-	output::step "Stack has changed from $CACHED_PYTHON_STACK to $STACK, clearing cache"
-	rm -rf .heroku/python-stack .heroku/python-version .heroku/python .heroku/vendor .heroku/python .heroku/python-sqlite3-version
-fi
-
-# TODO: Clean this up as part of the cache refactor.
-if [[ -f .heroku/python-version ]]; then
-	if [[ "${cached_python_version}" != "${python_full_version}" ]]; then
-		output::step "Python version has changed from ${cached_python_version} to ${python_full_version}, clearing cache"
-		rm -rf .heroku/python
-	else
-		SKIP_INSTALL=1
-	fi
-fi
-
-# If using pip, check if we should reinstall python dependencies given that requirements.txt
-# is non-deterministic (not all packages pinned, doesn't handle uninstalls etc). We don't need
-# to do this when using Pipenv, since it has a lockfile and syncs the packages for us.
-if [[ -f "${BUILD_DIR}/requirements.txt" ]]; then
-	if [[ ! -f "$CACHE_DIR/.heroku/requirements.txt" ]]; then
-		# This is a the first build of an app (or the build cache was cleared). Since there
-		# are no cached packages, we only need to store the requirements file for next time.
-		cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
-	else
-		# IF there IS a cached directory, check for differences with the new one
-		if ! diff "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt" &>/dev/null; then
-			output::step "Requirements file has been changed, clearing cached dependencies"
-			# if there are any differences, clear the Python cache
-			# Installing Python over again does not take noticably more time
-			cp -R "$BUILD_DIR/requirements.txt" "$CACHE_DIR/.heroku/requirements.txt"
-			rm -rf .heroku/python
-			unset SKIP_INSTALL
-		else
-			output::step "No change in requirements detected, installing from cache"
-		fi
-	fi
-fi
-
-if [[ "${SKIP_INSTALL:-0}" == "1" ]]; then
-	output::step "Using cached install of Python ${python_full_version}"
-else
-	output::step "Installing Python ${python_full_version}"
-
-	# Prepare destination directory.
-	mkdir -p .heroku/python
-
-	if ! curl --silent --show-error --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}" | tar --zstd --extract --directory .heroku/python; then
-		# The Python version was confirmed to exist previously, so any failure here is due to
-		# a networking issue or archive/buildpack bug rather than the runtime not existing.
-		output::error <<-EOF
-			Error: Failed to download/install Python ${python_full_version}.
-
-			In some cases, this happens due to an unstable network connection.
-			Please try again and to see if the error resolves itself.
-		EOF
-		meta_set "failure_reason" "python-download"
-		exit 1
-	fi
-
-	# Record for future reference.
-	echo "python-${python_full_version}" >.heroku/python-version
-	echo "$STACK" >.heroku/python-stack
-
-	hash -r
-fi

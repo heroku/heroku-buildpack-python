@@ -4,14 +4,16 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
+PIP_VERSION=$(get_requirement_version 'pip')
+SETUPTOOLS_VERSION=$(get_requirement_version 'setuptools')
+WHEEL_VERSION=$(get_requirement_version 'wheel')
+
 function pip::install_pip_setuptools_wheel() {
 	# We use the pip wheel bundled within Python's standard library to install our chosen
 	# pip version, since it's faster than `ensurepip` followed by an upgrade in place.
 	local bundled_pip_module_path="${1}"
 	local python_major_version="${2}"
 
-	# TODO: Either make these `local` or move elsewhere as part of the cache invalidation refactoring.
-	PIP_VERSION=$(get_requirement_version 'pip')
 	meta_set "pip_version" "${PIP_VERSION}"
 
 	local packages_to_install=(
@@ -27,11 +29,8 @@ function pip::install_pip_setuptools_wheel() {
 	# - Most of the Python ecosystem has stopped installing them for Python 3.12+ already.
 	# See the Python CNB's removal for more details: https://github.com/heroku/buildpacks-python/pull/243
 	if [[ "${python_major_version}" == +(3.8|3.9|3.10|3.11|3.12) ]]; then
-		SETUPTOOLS_VERSION=$(get_requirement_version 'setuptools')
-		WHEEL_VERSION=$(get_requirement_version 'wheel')
 		meta_set "setuptools_version" "${SETUPTOOLS_VERSION}"
 		meta_set "wheel_version" "${WHEEL_VERSION}"
-
 		packages_to_install+=(
 			"setuptools==${SETUPTOOLS_VERSION}"
 			"wheel==${WHEEL_VERSION}"
@@ -39,6 +38,9 @@ function pip::install_pip_setuptools_wheel() {
 		packages_display_text+=", setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 	fi
 
+	# Note: We still perform this install step even if the cache was reused, since we have no guarantee
+	# that the cached package versions are correct (different versions could have been specified in the
+	# app's requirements.txt in the last build). The install will be a no-op if the versions match.
 	output::step "Installing ${packages_display_text}"
 
 	/app/.heroku/python/bin/python "${bundled_pip_module_path}" install --quiet --disable-pip-version-check --no-cache-dir \

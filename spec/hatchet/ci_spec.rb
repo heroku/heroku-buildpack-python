@@ -70,7 +70,7 @@ RSpec.describe 'Heroku CI' do
         expect(test_run.output).to include(<<~OUTPUT)
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          -----> No change in requirements detected, installing from cache
+          -----> Restoring cache
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           -----> Installing SQLite3
@@ -146,6 +146,7 @@ RSpec.describe 'Heroku CI' do
         expect(test_run.output).to match(Regexp.new(<<~REGEX))
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
+          -----> Restoring cache
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           -----> Installing Pipenv #{PIPENV_VERSION}

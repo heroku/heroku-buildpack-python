@@ -56,6 +56,7 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
+          remote: -----> Restoring cache
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
@@ -80,13 +81,13 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python 3.9.0 specified in Pipfile.lock
+          remote: -----> Installing Python 3.9.0
           remote: 
           remote:  !     Warning: A Python security update is available!
           remote:  !     
           remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
           remote: 
-          remote: -----> Installing Python 3.9.0
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
@@ -283,10 +284,36 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
+  context 'when the Pipenv version has changed since the last build' do
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v253'] }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
+
+    it 'clears the cache before installing' do
+      app.deploy do |app|
+        update_buildpacks(app, [:default])
+        app.commit!
+        app.push!
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Python app detected
+          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
+          remote: -----> Discarding cache since:
+          remote:        - The Python version has changed from 3.12.4 to #{DEFAULT_PYTHON_FULL_VERSION}
+          remote:        - The Pipenv version has changed from 2023.12.1 to #{PIPENV_VERSION}
+          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
+          remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies with Pipenv
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Discovering process types
+        REGEX
+      end
+    end
+  end
+
   context 'when the package manager has changed from pip to Pipenv since the last build' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_basic') }
 
-    # TODO: Fix this case so the cache is actually cleared.
     it 'clears the cache before installing with Pipenv' do
       app.deploy do |app|
         FileUtils.rm('.python-version')
@@ -298,7 +325,9 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
-          remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote: -----> Discarding cache since:
+          remote:        - The package manager has changed from pip to pipenv
+          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
