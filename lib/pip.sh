@@ -4,15 +4,18 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-PIP_VERSION=$(get_requirement_version 'pip')
-SETUPTOOLS_VERSION=$(get_requirement_version 'setuptools')
-WHEEL_VERSION=$(get_requirement_version 'wheel')
+PIP_VERSION=$(utils::get_requirement_version 'pip')
+SETUPTOOLS_VERSION=$(utils::get_requirement_version 'setuptools')
+WHEEL_VERSION=$(utils::get_requirement_version 'wheel')
 
 function pip::install_pip_setuptools_wheel() {
+	local python_home="${1}"
+	local python_major_version="${2}"
+
 	# We use the pip wheel bundled within Python's standard library to install our chosen
 	# pip version, since it's faster than `ensurepip` followed by an upgrade in place.
-	local bundled_pip_module_path="${1}"
-	local python_major_version="${2}"
+	local bundled_pip_module_path
+	bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}")"
 
 	meta_set "pip_version" "${PIP_VERSION}"
 

@@ -19,6 +19,7 @@ ENV_DIR="${3}"
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
 
 source "${BUILDPACK_DIR}/bin/utils"
+source "${BUILDPACK_DIR}/lib/utils.sh"
 source "${BUILDPACK_DIR}/lib/cache.sh"
 source "${BUILDPACK_DIR}/lib/hooks.sh"
 source "${BUILDPACK_DIR}/lib/metadata.sh"
@@ -27,7 +28,6 @@ source "${BUILDPACK_DIR}/lib/package_manager.sh"
 source "${BUILDPACK_DIR}/lib/pip.sh"
 source "${BUILDPACK_DIR}/lib/pipenv.sh"
 source "${BUILDPACK_DIR}/lib/python_version.sh"
-source "${BUILDPACK_DIR}/lib/utils.sh"
 
 compile_start_time=$(nowms)
 
@@ -75,6 +75,7 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
 EXPORT_PATH="${BUILDPACK_DIR}/export"
 GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
+python_home='/app/.heroku/python'
 
 export PATH="/app/.heroku/python/bin:${PATH}"
 # Tell Python to not buffer it's stdin/stdout.
@@ -156,14 +157,13 @@ meta_time "python_install_duration" "${install_python_start_time}"
 
 # Install the package manager and related tools.
 package_manager_install_start_time=$(nowms)
-bundled_pip_module_path="$(utils::bundled_pip_module_path "${BUILD_DIR}")"
 case "${package_manager}" in
 	pip)
-		pip::install_pip_setuptools_wheel "${bundled_pip_module_path}" "${python_major_version}"
+		pip::install_pip_setuptools_wheel "${python_home}" "${python_major_version}"
 		;;
 	pipenv)
 		# TODO: Stop installing pip when using Pipenv.
-		pip::install_pip_setuptools_wheel "${bundled_pip_module_path}" "${python_major_version}"
+		pip::install_pip_setuptools_wheel "${python_home}" "${python_major_version}"
 		pipenv::install_pipenv
 		;;
 	*)

@@ -36,7 +36,9 @@ function package_manager::determine_package_manager() {
 		meta_set "setup_py_only" "false"
 	fi
 
-	case "${#package_managers_found[@]}" in
+	local num_package_managers_found=${#package_managers_found[@]}
+
+	case "${num_package_managers_found}" in
 		1)
 			echo "${package_managers_found[0]}"
 			return 0

@@ -4,7 +4,7 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-PIPENV_VERSION=$(get_requirement_version 'pipenv')
+PIPENV_VERSION=$(utils::get_requirement_version 'pipenv')
 
 # TODO: Either enable or remove these.
 # export CLINT_FORCE_COLOR=1
