@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v263] - 2024-10-31
+
 - Fixed cache handling so that it now also discards the cache when the package manager (or its version) changes. ([#1679](https://github.com/heroku/heroku-buildpack-python/pull/1679))
 - Improved the build log output shown when restoring or discarding the cache. For example, if the cache was invalidated all reasons are now shown. ([#1679](https://github.com/heroku/heroku-buildpack-python/pull/1679))
 - Stopped performing unnecessary cache file copies when the cache is due to be invalidated. This required moving the cache restoration step to after the `bin/pre_compile` hook runs. ([#1679](https://github.com/heroku/heroku-buildpack-python/pull/1679))
@@ -1078,7 +1081,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v262...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v263...main
+[v263]: https://github.com/heroku/heroku-buildpack-python/compare/v262...v263
 [v262]: https://github.com/heroku/heroku-buildpack-python/compare/v261...v262
 [v261]: https://github.com/heroku/heroku-buildpack-python/compare/v260...v261
 [v260]: https://github.com/heroku/heroku-buildpack-python/compare/v259...v260
