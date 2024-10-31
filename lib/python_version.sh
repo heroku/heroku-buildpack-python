@@ -74,8 +74,7 @@ function python_version::read_requested_python_version() {
 		fi
 	fi
 
-	# Protect against invalid versions somehow having been written into the cache.
-	# TODO: Move this validation into the cache handling as part of the cache refactor?
+	# Protect against unsupported (eg PyPy) or invalid versions being found in the cache metadata.
 	if [[ "${cached_python_version}" =~ ^${PYTHON_VERSION_REGEX}$ ]]; then
 		version="${cached_python_version}"
 		origin="cached"

@@ -16,6 +16,7 @@ RSpec.describe 'Python update warnings' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python 3.8.0 specified in runtime.txt
+            remote: -----> Installing Python 3.8.0
             remote: 
             remote:  !     Warning: Support for Python 3.8 is ending soon!
             remote:  !     
@@ -34,7 +35,7 @@ RSpec.describe 'Python update warnings' do
             remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_8}
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote: 
-            remote: -----> Installing Python 3.8.0
+            remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           OUTPUT
         end
       end
@@ -70,13 +71,14 @@ RSpec.describe 'Python update warnings' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python 3.9.0 specified in .python-version
+          remote: -----> Installing Python 3.9.0
           remote: 
           remote:  !     Warning: A Python security update is available!
           remote:  !     
           remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
           remote: 
-          remote: -----> Installing Python 3.9.0
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
         OUTPUT
       end
     end

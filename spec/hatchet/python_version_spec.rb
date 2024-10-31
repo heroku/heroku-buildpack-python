@@ -63,14 +63,16 @@ RSpec.describe 'Python version support' do
             remote: -----> Python app detected
             remote: -----> No Python version was specified. Using the same version as the last build: Python 3.12.3
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+            remote: -----> Discarding cache since:
+            remote:        - The pip version has changed
+            remote: -----> Installing Python 3.12.3
             remote: 
             remote:  !     Warning: A Python security update is available!
             remote:  !     
             remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_12}
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote: 
-            remote: -----> No change in requirements detected, installing from cache
-            remote: -----> Using cached install of Python 3.12.3
+            remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           OUTPUT
           expect(app.run('python -V')).to include('Python 3.12.3')
         end
@@ -88,6 +90,7 @@ RSpec.describe 'Python version support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Using Python 3.8 specified in .python-version
+            remote: -----> Installing Python #{LATEST_PYTHON_3_8}
             remote: 
             remote:  !     Warning: Support for Python 3.8 is ending soon!
             remote:  !     
@@ -100,7 +103,6 @@ RSpec.describe 'Python version support' do
             remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
             remote: 
-            remote: -----> Installing Python #{LATEST_PYTHON_3_8}
             remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
             remote: -----> Installing SQLite3
             remote: -----> Installing requirements with pip
@@ -415,12 +417,11 @@ RSpec.describe 'Python version support' do
         File.write('.python-version', '3.13')
         app.commit!
         app.push!
-        # TODO: The output shouldn't say "installing from cache", since it's not.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python 3.13 specified in .python-version
-          remote: -----> Python version has changed from #{LATEST_PYTHON_3_9} to #{LATEST_PYTHON_3_13}, clearing cache
-          remote: -----> No change in requirements detected, installing from cache
+          remote: -----> Discarding cache since:
+          remote:        - The Python version has changed from #{LATEST_PYTHON_3_9} to #{LATEST_PYTHON_3_13}
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing requirements with pip

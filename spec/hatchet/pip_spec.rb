@@ -25,7 +25,7 @@ RSpec.describe 'pip support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
           remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
           remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
           remote:        Installing collected packages: typing-extensions
@@ -61,7 +61,7 @@ RSpec.describe 'pip support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> No change in requirements detected, installing from cache
+          remote: -----> Restoring cache
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
@@ -77,20 +77,23 @@ RSpec.describe 'pip support' do
 
     it 'clears the cache before installing the packages again' do
       app.deploy do |app|
-        File.write('requirements.txt', 'six', mode: 'a')
+        # The test fixture's requirements.txt is a symlink to a requirements file in a subdirectory in
+        # order to test that symlinked requirements files work in general and with cache invalidation.
+        File.write('requirements/prod.txt', 'six', mode: 'a')
         app.commit!
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> Requirements file has been changed, clearing cached dependencies
+          remote: -----> Discarding cache since:
+          remote:        - The contents of requirements.txt changed
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
           remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
-          remote:        Collecting six (from -r requirements.txt (line 3))
+          remote:        Collecting six (from -r requirements.txt (line 6))
           remote:          Downloading six-1.16.0-py2.py3-none-any.whl.metadata (1.8 kB)
           remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
           remote:        Downloading six-1.16.0-py2.py3-none-any.whl (11 kB)
@@ -104,7 +107,6 @@ RSpec.describe 'pip support' do
   context 'when the package manager has changed from Pipenv to pip since the last build' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic') }
 
-    # TODO: Fix this case so the cache is actually cleared.
     it 'clears the cache before installing with pip' do
       app.deploy do |app|
         FileUtils.rm(['Pipfile', 'Pipfile.lock'])
@@ -112,15 +114,21 @@ RSpec.describe 'pip support' do
         FileUtils.cp(FIXTURE_DIR.join('requirements_basic/requirements.txt'), '.')
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote: -----> Discarding cache since:
+          remote:        - The package manager has changed from pipenv to pip
+          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing requirements with pip
-          remote: -----> Discovering process types
-        REGEX
+          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
+          remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
+          remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
+          remote:        Installing collected packages: typing-extensions
+          remote:        Successfully installed typing-extensions-4.12.2
+        OUTPUT
       end
     end
   end

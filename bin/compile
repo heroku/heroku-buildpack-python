@@ -19,6 +19,7 @@ ENV_DIR="${3}"
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
 
 source "${BUILDPACK_DIR}/bin/utils"
+source "${BUILDPACK_DIR}/lib/cache.sh"
 source "${BUILDPACK_DIR}/lib/hooks.sh"
 source "${BUILDPACK_DIR}/lib/metadata.sh"
 source "${BUILDPACK_DIR}/lib/output.sh"
@@ -93,55 +94,13 @@ export PIP_NO_PYTHON_VERSION_WARNING=1
 
 cd "$BUILD_DIR"
 
-# The Cache
-# ---------
-
-# The workflow for the Python Buildpack's cache is as follows:
-#
-# - `~/.heroku/{known-paths}` are copied from the cache into the slug.
-# - The build is executed, modifying `~/.heroku/{known-paths}`.
-# - Once the build is complete, `~/.heroku/{known-paths}` is copied back into the cache.
-
-mkdir -p "$CACHE_DIR/.heroku"
-
-# Restore old artifacts from the cache.
-mkdir -p .heroku
-# The Python installation.
-cp -R "$CACHE_DIR/.heroku/python" .heroku/ &>/dev/null || true
-# A plain text file which contains the current stack being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-stack" .heroku/ &>/dev/null || true
-# A plain text file which contains the current python version being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-version" .heroku/ &>/dev/null || true
-# A plain text file which contains the current sqlite3 version being used (used for cache busting).
-cp -R "$CACHE_DIR/.heroku/python-sqlite3-version" .heroku/ &>/dev/null || true
-# "editable" installations of code repositories, via pip or pipenv.
-if [[ -d "$CACHE_DIR/.heroku/src" ]]; then
-	cp -R "$CACHE_DIR/.heroku/src" .heroku/ &>/dev/null || true
-fi
-
 # Runs a `bin/pre_compile` script if found in the app source, allowing build customisation.
 hooks::run_hook "pre_compile"
 
-# TODO: Clear the cache if this isn't a valid version, as part of the cache refactor.
-# (Currently the version is instead validated in `read_requested_python_version()`)
-if [[ -f "$CACHE_DIR/.heroku/python-version" ]]; then
-	cached_python_version="$(cat "${CACHE_DIR}/.heroku/python-version")"
-	# `python-X.Y.Z` -> `X.Y`
-	cached_python_version="${cached_python_version#python-}"
-else
-	cached_python_version=
-fi
-
-# We didn't always record the stack version.
-if [[ -f "$CACHE_DIR/.heroku/python-stack" ]]; then
-	CACHED_PYTHON_STACK=$(cat "$CACHE_DIR/.heroku/python-stack")
-else
-	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
-	CACHED_PYTHON_STACK=$STACK
-fi
-
 package_manager="$(package_manager::determine_package_manager "${BUILD_DIR}")"
 meta_set "package_manager" "${package_manager}"
+
+cached_python_version="$(cache::cached_python_version "${CACHE_DIR}")"
 
 # We use the Bash 4.3+ `nameref` feature to pass back multiple values from this function
 # without having to hardcode globals. See: https://stackoverflow.com/a/38997681
@@ -169,6 +128,8 @@ python_full_version="$(python_version::resolve_python_version "${requested_pytho
 python_major_version="${python_full_version%.*}"
 meta_set "python_version" "${python_full_version}"
 meta_set "python_version_major" "${python_major_version}"
+
+cache::restore "${BUILD_DIR}" "${CACHE_DIR}" "${STACK:?}" "${cached_python_version}" "${python_full_version}" "${package_manager}"
 
 # The directory for the .profile.d scripts.
 mkdir -p "$(dirname "$PROFILE_PATH")"
@@ -300,18 +261,6 @@ cp "${BUILDPACK_DIR}/vendor/python.gunicorn.sh" "$GUNICORN_PROFILE_PATH"
 # Runs a `bin/post_compile` script if found in the app source, allowing build customisation.
 hooks::run_hook "post_compile"
 
-# Store new artifacts in the cache.
-rm -rf "$CACHE_DIR/.heroku/python"
-rm -rf "$CACHE_DIR/.heroku/python-version"
-rm -rf "$CACHE_DIR/.heroku/python-stack"
-rm -rf "$CACHE_DIR/.heroku/src"
-
-mkdir -p "$CACHE_DIR/.heroku"
-cp -R .heroku/python "$CACHE_DIR/.heroku/"
-cp -R .heroku/python-version "$CACHE_DIR/.heroku/"
-cp -R .heroku/python-stack "$CACHE_DIR/.heroku/" &>/dev/null || true
-if [[ -d .heroku/src ]]; then
-	cp -R .heroku/src "$CACHE_DIR/.heroku/" &>/dev/null || true
-fi
+cache::save "${BUILD_DIR}" "${CACHE_DIR}" "${STACK}" "${python_full_version}" "${package_manager}"
 
 meta_time "total_duration" "${compile_start_time}"

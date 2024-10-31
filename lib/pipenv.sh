@@ -4,17 +4,19 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
+PIPENV_VERSION=$(get_requirement_version 'pipenv')
+
+# TODO: Either enable or remove these.
 # export CLINT_FORCE_COLOR=1
 # export PIPENV_FORCE_COLOR=1
 
 function pipenv::install_pipenv() {
-	# TODO: Either make this `local` or move elsewhere as part of the cache invalidation refactoring.
-	PIPENV_VERSION=$(get_requirement_version 'pipenv')
 	meta_set "pipenv_version" "${PIPENV_VERSION}"
 
 	output::step "Installing Pipenv ${PIPENV_VERSION}"
 
 	# TODO: Install Pipenv into a venv so it isn't leaked into the app environment.
+	# TODO: Skip installing Pipenv if its version hasn't changed (once it's installed into a venv).
 	# TODO: Explore viability of making Pipenv only be available during the build, to reduce slug size.
 	/app/.heroku/python/bin/pip install --quiet --disable-pip-version-check --no-cache-dir "pipenv==${PIPENV_VERSION}"
 }

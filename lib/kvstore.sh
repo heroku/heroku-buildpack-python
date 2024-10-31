@@ -20,6 +20,7 @@ kv_clear() {
 }
 
 kv_set() {
+	# TODO: Stop ignoring an incorrect number of passed arguments.
 	if [[ $# -eq 3 ]]; then
 		local f="${1}"
 		if [[ -f "${f}" ]]; then
@@ -28,11 +29,15 @@ kv_set() {
 	fi
 }
 
+# Returns a key from the key-value store file, or else the empty string
+# if the file doesn't exist or the key wasn't found.
 kv_get() {
+	# TODO: Stop ignoring an incorrect number of passed arguments.
 	if [[ $# -eq 2 ]]; then
 		local f="${1}"
 		if [[ -f "${f}" ]]; then
-			grep "^${2}=" "${f}" | sed -e "s/^${2}=//" | tail -n 1
+			# shellcheck disable=SC2310 # This function is invoked in an || condition so set -e will be disabled.
+			grep "^${2}=" "${f}" | sed -e "s/^${2}=//" | tail -n 1 || true
 		fi
 	fi
 }

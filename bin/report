@@ -60,6 +60,7 @@ kv_pair_string() {
 }
 
 STRING_FIELDS=(
+	cache_status
 	django_collectstatic
 	failure_reason
 	nltk_downloader
@@ -76,6 +77,8 @@ STRING_FIELDS=(
 
 # We don't want to quote numeric or boolean fields.
 ALL_OTHER_FIELDS=(
+	cache_restore_duration
+	cache_save_duration
 	dependencies_install_duration
 	django_collectstatic_duration
 	nltk_downloader_duration
