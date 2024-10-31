@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# This file is run by the inline buildpack, and tests that the environment is
+# configured as expected for buildpacks that run after the Python buildpack.
+
+set -euo pipefail
+
+BUILD_DIR="${1}"
+
+cd "${BUILD_DIR}"
+
+exec bin/print-env-vars.sh

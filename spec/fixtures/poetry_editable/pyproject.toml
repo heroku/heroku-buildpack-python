@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "poetry-editable"
+version = "0.0.1"
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+python = "^3.12"
+gunicorn = { git = "https://github.com/benoitc/gunicorn.git", tag = "20.1.0", develop = true }
+local-package-pyproject-toml = { path = "packages/local_package_pyproject_toml", develop = true }
+local-package-setup-py = { path = "packages/local_package_setup_py", develop = true }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

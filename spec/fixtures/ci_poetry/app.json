@@ -1,0 +1,9 @@
+{
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "./bin/print-env-vars.sh && pytest --version"
+      }
+    }
+  }
+}

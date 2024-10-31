@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added support for the package manager Poetry. Apps must have a `pyproject.toml` + `poetry.lock` and no other package manager files (otherwise pip/Pipenv will take precedence for backwards compatibility). ([#1682](https://github.com/heroku/heroku-buildpack-python/pull/1682))
 
 ## [v263] - 2024-10-31
 

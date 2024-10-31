@@ -27,6 +27,15 @@ function package_manager::determine_package_manager() {
 		package_managers_found+=(pip)
 	fi
 
+	# This must be after the requirements.txt check, so that the requirements.txt exported by
+	# `python-poetry-buildpack` takes precedence over poetry.lock, for consistency with the
+	# behaviour prior to this buildpack supporting Poetry natively. In the future the presence
+	# of multiple package manager files will be turned into an error, at which point the
+	# ordering here won't matter.
+	if [[ -f "${build_dir}/poetry.lock" ]]; then
+		package_managers_found+=(poetry)
+	fi
+
 	# TODO: Deprecate/sunset this fallback, since using setup.py declared dependencies is
 	# not a best practice, and we can only guess as to which package manager to use.
 	if ((${#package_managers_found[@]} == 0)) && [[ -f "${build_dir}/setup.py" ]]; then
@@ -47,9 +56,9 @@ function package_manager::determine_package_manager() {
 			output::error <<-EOF
 				Error: Couldn't find any supported Python package manager files.
 
-				A Python app on Heroku must have either a 'requirements.txt' or
-				'Pipfile' package manager file in the root directory of its
-				source code.
+				A Python app on Heroku must have either a 'requirements.txt',
+				'Pipfile' or 'poetry.lock' package manager file in the root
+				directory of its source code.
 
 				Currently the root directory of your app contains:
 
@@ -76,8 +85,7 @@ function package_manager::determine_package_manager() {
 			# TODO: Turn this case into an error since it results in support tickets from users
 			# who don't realise they have multiple package manager files and think their changes
 			# aren't taking effect. (We'll need to wait until after Poetry support has landed,
-			# and people have had a chance to migrate from the third-party Poetry buildpack,
-			# since using it results in both a requirements.txt and a poetry.lock.)
+			# and people have had a chance to migrate from the Poetry buildpack mentioned above.)
 			echo "${package_managers_found[0]}"
 			meta_set "package_manager_multiple_found" "$(
 				IFS=,
