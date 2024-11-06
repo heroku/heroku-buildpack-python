@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v265] - 2024-11-06
+
 - Fixed Poetry installation when using outdated patch versions of Python 3.8, 3.9 and 3.10, whose bundled pip doesn't support the `--python` option. ([#1687](https://github.com/heroku/heroku-buildpack-python/pull/1687))
 
 ## [v264] - 2024-11-06
@@ -1086,7 +1089,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v264...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v265...main
+[v265]: https://github.com/heroku/heroku-buildpack-python/compare/v264...v265
 [v264]: https://github.com/heroku/heroku-buildpack-python/compare/v263...v264
 [v263]: https://github.com/heroku/heroku-buildpack-python/compare/v262...v263
 [v262]: https://github.com/heroku/heroku-buildpack-python/compare/v261...v262
