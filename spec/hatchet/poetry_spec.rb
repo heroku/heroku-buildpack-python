@@ -185,6 +185,35 @@ RSpec.describe 'Poetry support' do
     end
   end
 
+  # This checks that the Poetry bootstrap works even with older bundled pip, and that
+  # our chosen Poetry version also supports our oldest supported Python version.
+  context 'when using the oldest supported Python version' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_oldest_python') }
+
+    it 'installs successfully' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.9.0 specified in .python-version
+          remote: -----> Installing Python 3.9.0
+          remote: 
+          remote:  !     Warning: A Python security update is available!
+          remote:  !     
+          remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
+          remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+          remote: 
+          remote: -----> Installing Poetry #{POETRY_VERSION}
+          remote: -----> Installing dependencies using 'poetry install --sync --only main'
+          remote:        Installing dependencies from lock file
+          remote:        
+          remote:        Package operations: 1 install, 0 updates, 0 removals
+          remote:        
+          remote:          - Installing typing-extensions (4.12.2)
+        OUTPUT
+      end
+    end
+  end
+
   context 'when poetry.lock is out of sync with pyproject.toml' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_lockfile_out_of_sync', allow_failure: true) }
 

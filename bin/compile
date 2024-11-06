@@ -168,7 +168,7 @@ case "${package_manager}" in
 		pipenv::install_pipenv
 		;;
 	poetry)
-		poetry::install_poetry "${python_home}" "${CACHE_DIR}" "${EXPORT_PATH}"
+		poetry::install_poetry "${CACHE_DIR}" "${EXPORT_PATH}"
 		;;
 	*)
 		utils::abort_internal_error "Unhandled package manager: ${package_manager}"

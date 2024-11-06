@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Fixed Poetry installation when using outdated patch versions of Python 3.8, 3.9 and 3.10, whose bundled pip doesn't support the `--python` option. ([#1687](https://github.com/heroku/heroku-buildpack-python/pull/1687))
 
 ## [v264] - 2024-11-06
 
