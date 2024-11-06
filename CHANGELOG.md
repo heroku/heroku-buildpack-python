@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v264] - 2024-11-06
+
 - Added support for the package manager Poetry. Apps must have a `pyproject.toml` + `poetry.lock` and no other package manager files (otherwise pip/Pipenv will take precedence for backwards compatibility). ([#1682](https://github.com/heroku/heroku-buildpack-python/pull/1682))
 
 ## [v263] - 2024-10-31
@@ -1082,7 +1085,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v263...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v264...main
+[v264]: https://github.com/heroku/heroku-buildpack-python/compare/v263...v264
 [v263]: https://github.com/heroku/heroku-buildpack-python/compare/v262...v263
 [v262]: https://github.com/heroku/heroku-buildpack-python/compare/v261...v262
 [v261]: https://github.com/heroku/heroku-buildpack-python/compare/v260...v261
