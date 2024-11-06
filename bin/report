@@ -68,6 +68,7 @@ STRING_FIELDS=(
 	package_manager_multiple_found
 	pip_version
 	pipenv_version
+	poetry_version
 	python_version_major
 	python_version_reason
 	python_version

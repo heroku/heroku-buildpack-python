@@ -14,7 +14,7 @@ See the [Getting Started on Heroku with Python](https://devcenter.heroku.com/art
 
 ## Application Requirements
 
-A `requirements.txt` or `Pipfile` file must be present in the root (top-level) directory of your app's source code.
+A `requirements.txt`, `Pipfile` or `poetry.lock` file must be present in the root (top-level) directory of your app's source code.
 
 ## Configuration
 

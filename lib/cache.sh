@@ -104,6 +104,14 @@ function cache::restore() {
 					cache_invalidation_reasons+=("The Pipenv version has changed from ${cached_pipenv_version} to ${PIPENV_VERSION}")
 				fi
 				;;
+			poetry)
+				local cached_poetry_version
+				cached_poetry_version="$(meta_prev_get "poetry_version")"
+				# Poetry support was added after the metadata store, so we'll always have the version here.
+				if [[ "${cached_poetry_version}" != "${POETRY_VERSION:?}" ]]; then
+					cache_invalidation_reasons+=("The Poetry version has changed from ${cached_poetry_version:-"unknown"} to ${POETRY_VERSION}")
+				fi
+				;;
 			*)
 				utils::abort_internal_error "Unhandled package manager: ${package_manager}"
 				;;
@@ -119,6 +127,7 @@ function cache::restore() {
 
 		rm -rf \
 			"${cache_dir}/.heroku/python" \
+			"${cache_dir}/.heroku/python-poetry" \
 			"${cache_dir}/.heroku/python-stack" \
 			"${cache_dir}/.heroku/python-version" \
 			"${cache_dir}/.heroku/src" \

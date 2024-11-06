@@ -49,9 +49,9 @@ output::error <<EOF
 Error: Your app is configured to use the Python buildpack,
 but we couldn't find any supported Python project files.
 
-A Python app on Heroku must have either a 'requirements.txt' or
-'Pipfile' package manager file in the root directory of its
-source code.
+A Python app on Heroku must have either a 'requirements.txt',
+'Pipfile' or 'poetry.lock' package manager file in the root
+directory of its source code.
 
 Currently the root directory of your app contains:
 

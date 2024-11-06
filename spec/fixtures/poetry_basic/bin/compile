@@ -15,8 +15,9 @@ echo
 python -c 'import pprint, sys; pprint.pp(sys.path)'
 echo
 
-# TODO: Remove --disable-pip-version-check in favour of exporting PIP_DISABLE_PIP_VERSION_CHECK
-pip list --disable-pip-version-check
+# The show command also lists dependencies that are in optional groups in pyproject.toml
+# but that aren't actually installed, for which the only option is to filter out by hand.
+poetry show | grep -v ' (!) '
 echo
 
 python -c 'import typing_extensions; print(typing_extensions)'

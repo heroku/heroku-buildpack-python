@@ -5,7 +5,7 @@
 # automatically be executed as part of the build process. If collectstatic
 # fails, your build fails.
 
-# This functionality will only activate if Django is in requirements.txt.
+# This functionality will only activate if Django is installed.
 
 # Runtime arguments:
 #   - $DISABLE_COLLECTSTATIC: disables this functionality.
