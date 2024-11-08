@@ -7,9 +7,11 @@ set -euo pipefail
 function package_manager::determine_package_manager() {
 	local build_dir="${1}"
 	local package_managers_found=()
+	local package_managers_found_display_text=()
 
 	if [[ -f "${build_dir}/Pipfile.lock" ]]; then
 		package_managers_found+=(pipenv)
+		package_managers_found_display_text+=("Pipfile.lock (Pipenv)")
 		meta_set "pipenv_has_lockfile" "true"
 	elif [[ -f "${build_dir}/Pipfile" ]]; then
 		# TODO: Start requiring a Pipfile.lock and make this branch a "missing lockfile" error instead.
@@ -20,11 +22,13 @@ function package_manager::determine_package_manager() {
 			We recommend you commit this into your repository.
 		EOF
 		package_managers_found+=(pipenv)
+		package_managers_found_display_text+=("Pipfile (Pipenv)")
 		meta_set "pipenv_has_lockfile" "false"
 	fi
 
 	if [[ -f "${build_dir}/requirements.txt" ]]; then
 		package_managers_found+=(pip)
+		package_managers_found_display_text+=("requirements.txt (pip)")
 	fi
 
 	# This must be after the requirements.txt check, so that the requirements.txt exported by
@@ -34,12 +38,14 @@ function package_manager::determine_package_manager() {
 	# ordering here won't matter.
 	if [[ -f "${build_dir}/poetry.lock" ]]; then
 		package_managers_found+=(poetry)
+		package_managers_found_display_text+=("poetry.lock (Poetry)")
 	fi
 
 	# TODO: Deprecate/sunset this fallback, since using setup.py declared dependencies is
 	# not a best practice, and we can only guess as to which package manager to use.
 	if ((${#package_managers_found[@]} == 0)) && [[ -f "${build_dir}/setup.py" ]]; then
 		package_managers_found+=(pip)
+		package_managers_found_display_text+=("setup.py (pip)")
 		meta_set "setup_py_only" "true"
 	else
 		meta_set "setup_py_only" "false"
@@ -87,6 +93,32 @@ function package_manager::determine_package_manager() {
 			# aren't taking effect. (We'll need to wait until after Poetry support has landed,
 			# and people have had a chance to migrate from the Poetry buildpack mentioned above.)
 			echo "${package_managers_found[0]}"
+
+			output::warning <<-EOF
+				Warning: Multiple Python package manager files were found.
+
+				Exactly one package manager file should be present in your app's
+				source code, however, several were found:
+
+				$(printf -- "%s\n" "${package_managers_found_display_text[@]}")
+
+				For now, we will build your app using the first package manager
+				listed above, however, in the future this warning will become
+				an error.
+
+				Decide which package manager you want to use with your app, and
+				then delete the file(s) and any config from the others.
+			EOF
+
+			if [[ "${package_managers_found[*]}" == *"poetry"* ]]; then
+				output::notice <<-EOF
+					Note: We recently added support for the package manager Poetry.
+					If you are using a third-party Poetry buildpack you must remove
+					it, otherwise the requirements.txt file it generates will cause
+					the warning above.
+				EOF
+			fi
+
 			meta_set "package_manager_multiple_found" "$(
 				IFS=,
 				echo "${package_managers_found[*]}"
