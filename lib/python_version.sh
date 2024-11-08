@@ -204,7 +204,7 @@ function python_version::parse_python_version_file() {
 # Read the Python version from a Pipfile.lock, which can exist in one of two optional fields,
 # `python_full_version` (as N.N.N) and `python_version` (as N.N). If both fields are
 # defined, we will use the value set in `python_full_version`. See:
-# https://pipenv.pypa.io/en/latest/specifiers.html#specifying-versions-of-python
+# https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
 function python_version::read_pipenv_python_version() {
 	local build_dir="${1}"
 	local pipfile_lock_path="${build_dir}/Pipfile.lock"
@@ -259,7 +259,7 @@ function python_version::read_pipenv_python_version() {
 			then run 'pipenv lock' to regenerate the lockfile.
 
 			For more information, see:
-			https://pipenv.pypa.io/en/latest/specifiers.html#specifying-versions-of-python
+			https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
 		EOF
 		meta_set "failure_reason" "pipfile-lock::invalid-version"
 		exit 1

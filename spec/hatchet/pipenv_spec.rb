@@ -215,7 +215,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     then run 'pipenv lock' to regenerate the lockfile.
           remote:  !     
           remote:  !     For more information, see:
-          remote:  !     https://pipenv.pypa.io/en/latest/specifiers.html#specifying-versions-of-python
+          remote:  !     https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
@@ -247,7 +247,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     then run 'pipenv lock' to regenerate the lockfile.
           remote:  !     
           remote:  !     For more information, see:
-          remote:  !     https://pipenv.pypa.io/en/latest/specifiers.html#specifying-versions-of-python
+          remote:  !     https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
