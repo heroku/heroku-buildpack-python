@@ -5,7 +5,7 @@ require_relative '../spec_helper'
 RSpec.shared_examples 'installs successfully using pip' do
   it 'installs successfully using pip' do
     app.deploy do |app|
-      expect(app.output).to include('Installing requirements with pip')
+      expect(app.output).to include("Installing dependencies using 'pip install -r requirements.txt'")
       expect(app.output).to include('Successfully installed')
     end
   end
@@ -24,7 +24,7 @@ RSpec.describe 'pip support' do
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing requirements with pip
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
           remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
           remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
@@ -65,7 +65,7 @@ RSpec.describe 'pip support' do
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing requirements with pip
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote: -----> Inline app detected
         OUTPUT
       end
@@ -90,7 +90,7 @@ RSpec.describe 'pip support' do
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing requirements with pip
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
           remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
           remote:        Collecting six (from -r requirements.txt (line 6))
@@ -122,7 +122,7 @@ RSpec.describe 'pip support' do
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing requirements with pip
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
           remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
           remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
@@ -221,7 +221,7 @@ RSpec.describe 'pip support' do
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing requirements with pip
+          remote: -----> Installing dependencies using 'pip install --editable .'
           remote:        Obtaining file:///tmp/build_.*
           remote:          Preparing metadata \\(setup.py\\): started
           remote:          Preparing metadata \\(setup.py\\): finished with status 'done'
@@ -239,7 +239,7 @@ RSpec.describe 'pip support' do
     it 'installs packages only from requirements.txt' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> Installing requirements with pip
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting urllib3 (from -r requirements.txt (line 1))
         OUTPUT
         expect(app.output).not_to include('Running setup.py develop')
@@ -253,8 +253,13 @@ RSpec.describe 'pip support' do
     it 'aborts the build and displays the pip error' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> Installing requirements with pip
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        ERROR: Invalid requirement: 'an-invalid-requirement!' (from line 1 of requirements.txt)
+          remote: 
+          remote:  !     Error: Unable to install dependencies using pip.
+          remote:  !     
+          remote:  !     See the log output above for more information.
+          remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
@@ -273,6 +278,11 @@ RSpec.describe 'pip support' do
           remote:  !     
           remote:  !     For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:
           remote:  !     https://github.com/heroku/heroku-geo-buildpack
+          remote: 
+          remote: 
+          remote:  !     Error: Unable to install dependencies using pip.
+          remote:  !     
+          remote:  !     See the log output above for more information.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT

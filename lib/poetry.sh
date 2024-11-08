@@ -45,7 +45,18 @@ function poetry::install_poetry() {
 		# are still using outdated patch releases of those Python versions, whose bundled pip
 		# can be older (for example Python 3.9.0 ships with pip v20.2.1). Once Python 3.10 EOLs
 		# we can switch back to the previous approach since Python 3.11.0 ships with pip v22.3.
-		python -m venv "${poetry_venv_dir}"
+		if ! python -m venv "${poetry_venv_dir}"; then
+			output::error <<-EOF
+				Internal Error: Unable to create virtual environment for Poetry.
+
+				The 'python -m venv' command to create a virtual environment did
+				not exit successfully.
+
+				See the log output above for more information.
+			EOF
+			meta_set "failure_reason" "create-venv::poetry"
+			exit 1
+		fi
 
 		if ! {
 			"${poetry_venv_dir}/bin/pip" \
@@ -65,8 +76,8 @@ function poetry::install_poetry() {
 				package repository service), here:
 				https://status.python.org
 			EOF
-			meta_set "failure_reason" "install-poetry"
-			return 1
+			meta_set "failure_reason" "install-package-manager::poetry"
+			exit 1
 		fi
 
 		mkdir -p "${poetry_bin_dir}"
@@ -112,11 +123,15 @@ function poetry::install_dependencies() {
 	#              codes for redrawing lines, which renders badly in persisted build logs.
 	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 	if ! {
-		"${poetry_install_command[@]}" --compile --no-ansi --no-interaction \
+		"${poetry_install_command[@]}" \
+			--compile \
+			--no-ansi \
+			--no-interaction \
 			|& tee "${WARNINGS_LOG:?}" \
-			|& grep --invert-match 'Skipping virtualenv creation' \
+			|& sed --unbuffered --expression '/Skipping virtualenv creation/d' \
 			|& output::indent
 	}; then
+		# TODO: Overhaul warnings and combine them with error handling.
 		show-warnings
 
 		output::error <<-EOF
@@ -125,6 +140,6 @@ function poetry::install_dependencies() {
 			See the log output above for more information.
 		EOF
 		meta_set "failure_reason" "install-dependencies::poetry"
-		return 1
+		exit 1
 	fi
 }

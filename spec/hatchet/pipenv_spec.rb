@@ -17,7 +17,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
@@ -61,7 +61,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Inline app detected
         REGEX
@@ -91,7 +91,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         REGEX
       end
@@ -109,7 +109,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         REGEX
       end
@@ -129,7 +129,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         REGEX
       end
@@ -154,7 +154,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --skip-lock'
           remote:        The flag --skip-lock has been reintroduced \\(but is not recommended\\).  Without 
           remote:        the lock resolver it is difficult to manage multiple package indexes, and hash 
           remote:        checking is not provided.  However it can help manage installs with current 
@@ -303,7 +303,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Discovering process types
         REGEX
@@ -331,7 +331,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Discovering process types
         REGEX
@@ -351,13 +351,15 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         REGEX
       end
     end
   end
 
+  # This tests not only our handling of failing dependency installation, but also that we're running
+  # Pipenv in such a way that it errors if the lockfile is out of sync, rather than simply updating it.
   context 'when the Pipfile.lock is out of sync with Pipfile' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_lockfile_out_of_sync', allow_failure: true) }
 
@@ -371,10 +373,15 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing dependencies with Pipenv
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Your Pipfile.lock \\(.+\\) is out of date.  Expected: \\(.+\\).
           remote:        .+
           remote:        ERROR:: Aborting deploy
+          remote: 
+          remote:  !     Error: Unable to install dependencies using Pipenv.
+          remote:  !     
+          remote:  !     See the log output above for more information.
+          remote: 
           remote:  !     Push rejected, failed to compile Python app.
         REGEX
       end

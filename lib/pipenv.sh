@@ -18,14 +18,34 @@ function pipenv::install_pipenv() {
 	# TODO: Install Pipenv into a venv so it isn't leaked into the app environment.
 	# TODO: Skip installing Pipenv if its version hasn't changed (once it's installed into a venv).
 	# TODO: Explore viability of making Pipenv only be available during the build, to reduce slug size.
-	/app/.heroku/python/bin/pip install --quiet --disable-pip-version-check --no-cache-dir "pipenv==${PIPENV_VERSION}"
+	if ! {
+		pip \
+			install \
+			--disable-pip-version-check \
+			--no-cache-dir \
+			--no-input \
+			--quiet \
+			"pipenv==${PIPENV_VERSION}"
+	}; then
+		output::error <<-EOF
+			Error: Unable to install Pipenv.
+
+			Try building again to see if the error resolves itself.
+
+			If that does not help, check the status of PyPI (the Python
+			package repository service), here:
+			https://status.python.org
+		EOF
+		meta_set "failure_reason" "install-package-manager::pipenv"
+		exit 1
+	fi
 }
 
 # Previous versions of the buildpack used to cache the checksum of the lockfile to allow
 # for skipping pipenv install if the lockfile was unchanged. However, this is not always safe
 # to do (the lockfile can refer to dependencies that can change independently of the lockfile,
 # for example, when using a local non-editable file dependency), so we no longer ever skip
-# install, and instead defer to pipenv to determine whether install is actually a no-op.
+# install, and instead defer to Pipenv to determine whether install is actually a no-op.
 function pipenv::install_dependencies() {
 	# Make select pip config vars set on the Heroku app available to the pip used by Pipenv.
 	# TODO: Expose all config vars (after suitable checks are added for unsafe env vars).
@@ -37,19 +57,44 @@ function pipenv::install_dependencies() {
 		export PIP_EXTRA_INDEX_URL
 	fi
 
-	# Install the test dependencies, for CI.
-	# TODO: This is currently inconsistent with the non-test path, since it assumes (but doesn't check for) a lockfile.
-	if [[ "${INSTALL_TEST:-0}" == "1" ]]; then
-		output::step "Installing test dependencies with Pipenv"
-		/app/.heroku/python/bin/pipenv install --dev --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | cleanup | output::indent
+	# Note: We can't use `pipenv sync` since it doesn't validate that the lockfile is up to date.
+	local pipenv_install_command=(
+		pipenv
+		install
+	)
 
-	# Install the dependencies.
-	elif [[ ! -f Pipfile.lock ]]; then
-		output::step "Installing dependencies with Pipenv"
-		/app/.heroku/python/bin/pipenv install --system --skip-lock --extra-pip-args='--src=/app/.heroku/src' 2>&1 | output::indent
-
+	# TODO: Make Pipfile.lock mandatory during package manager selection.
+	if [[ ! -f Pipfile.lock ]]; then
+		pipenv_install_command+=(--skip-lock)
 	else
-		output::step "Installing dependencies with Pipenv"
-		/app/.heroku/python/bin/pipenv install --system --deploy --extra-pip-args='--src=/app/.heroku/src' 2>&1 | output::indent
+		pipenv_install_command+=(--deploy)
+	fi
+
+	# Install test dependencies too when the buildpack is invoked via `bin/test-compile` on Heroku CI.
+	if [[ -v INSTALL_TEST ]]; then
+		pipenv_install_command+=(--dev)
+	fi
+
+	# We only display the most relevant command args here, to improve the signal to noise ratio.
+	output::step "Installing dependencies using '${pipenv_install_command[*]}'"
+
+	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
+	if ! {
+		"${pipenv_install_command[@]}" \
+			--extra-pip-args='--src=/app/.heroku/src' \
+			--system \
+			|& tee "${WARNINGS_LOG:?}" \
+			|& output::indent
+	}; then
+		# TODO: Overhaul warnings and combine them with error handling.
+		show-warnings
+
+		output::error <<-EOF
+			Error: Unable to install dependencies using Pipenv.
+
+			See the log output above for more information.
+		EOF
+		meta_set "failure_reason" "install-dependencies::pipenv"
+		exit 1
 	fi
 }

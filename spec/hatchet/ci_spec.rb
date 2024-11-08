@@ -16,12 +16,9 @@ RSpec.describe 'Heroku CI' do
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           -----> Installing SQLite3
-          -----> Installing requirements with pip
-                 .*
-                 Successfully installed typing-extensions-4.12.2
-          -----> Installing test dependencies...
-                 .*
-                 Successfully installed .* pytest-8.3.3
+          -----> Installing dependencies using 'pip install -r requirements.txt -r requirements-test.txt'
+                 .+
+                 Successfully installed .+ pytest-8.3.3 typing-extensions-4.12.2
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
                  CI=true
@@ -73,8 +70,7 @@ RSpec.describe 'Heroku CI' do
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           -----> Installing SQLite3
-          -----> Installing requirements with pip
-          -----> Installing test dependencies...
+          -----> Installing dependencies using 'pip install -r requirements.txt -r requirements-test.txt'
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
         OUTPUT
@@ -94,7 +90,7 @@ RSpec.describe 'Heroku CI' do
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           -----> Installing Pipenv #{PIPENV_VERSION}
           -----> Installing SQLite3
-          -----> Installing test dependencies with Pipenv
+          -----> Installing dependencies using 'pipenv install --deploy --dev'
                  Installing dependencies from Pipfile.lock \\(.+\\)...
                  Installing dependencies from Pipfile.lock \\(.+\\)...
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
@@ -149,7 +145,7 @@ RSpec.describe 'Heroku CI' do
           -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           -----> Installing Pipenv #{PIPENV_VERSION}
           -----> Installing SQLite3
-          -----> Installing test dependencies with Pipenv
+          -----> Installing dependencies using 'pipenv install --deploy --dev'
                  Installing dependencies from Pipfile.lock \\(.+\\)...
                  Installing dependencies from Pipfile.lock \\(.+\\)...
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
