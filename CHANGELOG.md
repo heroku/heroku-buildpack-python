@@ -4,8 +4,9 @@
 
 - Added a warning when the files for multiple package managers are found. In the future this warning will become an error. ([#1692](https://github.com/heroku/heroku-buildpack-python/pull/1692))
 - Updated the build log message shown when installing dependencies to include the package manager command being run. ([#1689](https://github.com/heroku/heroku-buildpack-python/pull/1689))
-- Improved the error messages and buildpack metrics for package manager related failures. ([#1689](https://github.com/heroku/heroku-buildpack-python/pull/1689))
 - Changed test dependency installation on Heroku CI to now install `requirements.txt` and `requirements-test.txt` in a single `pip install` invocation rather than separately. This allows pip's resolver to resolve any version conflicts between the two files. ([#1689](https://github.com/heroku/heroku-buildpack-python/pull/1689))
+- Improved the error messages and buildpack metrics for package manager related failures. ([#1689](https://github.com/heroku/heroku-buildpack-python/pull/1689))
+- Improved the build log output, error messages and buildpack failure metrics for the NLTK downloader feature. ([#1690](https://github.com/heroku/heroku-buildpack-python/pull/1690))
 
 ## [v265] - 2024-11-06
 
