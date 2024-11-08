@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v266] - 2024-11-08
+
 - Added a warning when the files for multiple package managers are found. In the future this warning will become an error. ([#1692](https://github.com/heroku/heroku-buildpack-python/pull/1692))
 - Updated the build log message shown when installing dependencies to include the package manager command being run. ([#1689](https://github.com/heroku/heroku-buildpack-python/pull/1689))
 - Changed test dependency installation on Heroku CI to now install `requirements.txt` and `requirements-test.txt` in a single `pip install` invocation rather than separately. This allows pip's resolver to resolve any version conflicts between the two files. ([#1689](https://github.com/heroku/heroku-buildpack-python/pull/1689))
@@ -1094,7 +1097,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v265...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v266...main
+[v266]: https://github.com/heroku/heroku-buildpack-python/compare/v265...v266
 [v265]: https://github.com/heroku/heroku-buildpack-python/compare/v264...v265
 [v264]: https://github.com/heroku/heroku-buildpack-python/compare/v263...v264
 [v263]: https://github.com/heroku/heroku-buildpack-python/compare/v262...v263
