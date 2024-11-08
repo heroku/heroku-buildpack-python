@@ -346,6 +346,22 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
+          remote: 
+          remote:  !     Warning: Multiple Python package manager files were found.
+          remote:  !     
+          remote:  !     Exactly one package manager file should be present in your app's
+          remote:  !     source code, however, several were found:
+          remote:  !     
+          remote:  !     Pipfile.lock \\(Pipenv\\)
+          remote:  !     requirements.txt \\(pip\\)
+          remote:  !     
+          remote:  !     For now, we will build your app using the first package manager
+          remote:  !     listed above, however, in the future this warning will become
+          remote:  !     an error.
+          remote:  !     
+          remote:  !     Decide which package manager you want to use with your app, and
+          remote:  !     then delete the file\\(s\\) and any config from the others.
+          remote: 
           remote: -----> Using Python 3.12 specified in Pipfile.lock
           remote: -----> Installing Python #{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
