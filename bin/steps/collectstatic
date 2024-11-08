@@ -64,7 +64,7 @@ export PYTHONPATH
 COLLECTSTATIC_LOG=$(mktemp)
 
 set +e
-python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | tee "$COLLECTSTATIC_LOG" | sed '/^Post-processed/d;/^Copying/d;/^$/d' | output::indent
+python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | tee "$COLLECTSTATIC_LOG" | sed --unbuffered '/^Post-processed/d;/^Copying/d;/^$/d' | output::indent
 COLLECTSTATIC_STATUS="${PIPESTATUS[0]}"
 set -e
 

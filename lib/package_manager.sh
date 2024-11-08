@@ -77,8 +77,8 @@ function package_manager::determine_package_manager() {
 				https://devcenter.heroku.com/articles/getting-started-with-python
 				https://devcenter.heroku.com/articles/python-support
 			EOF
-			meta_set "failure_reason" "package-manager-not-found"
-			return 1
+			meta_set "failure_reason" "package-manager::none-found"
+			exit 1
 			;;
 		*)
 			# If multiple package managers are found, use the first found above.

@@ -35,7 +35,7 @@ RSpec.describe 'Compile hooks' do
         OUTPUT
 
         expect(output).to include(<<~OUTPUT)
-          remote: -----> Installing requirements with pip
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote: -----> Running bin/post_compile hook
           remote:        ~ post_compile ran with env vars:
           remote:        BUILD_DIR=/tmp/build_<hash>

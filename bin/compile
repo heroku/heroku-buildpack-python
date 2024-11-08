@@ -78,6 +78,10 @@ GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
 WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
 python_home='/app/.heroku/python'
 
+# NB: Python must be added to PATH using the symlinked `/app` location and not its actual location
+# in BUILD_DIR, so that Python reports its location (via `sys.prefix`, `sys.executable` and others)
+# using `/app` paths which will still work at run-time after relocation. Amongst other things, this
+# ensures that the shebang lines in the entrypoint scripts of installed packages are correct.
 export PATH="/app/.heroku/python/bin:${PATH}"
 # Tell Python to not buffer it's stdin/stdout.
 export PYTHONUNBUFFERED=1

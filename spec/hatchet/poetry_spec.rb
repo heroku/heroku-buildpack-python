@@ -214,6 +214,8 @@ RSpec.describe 'Poetry support' do
     end
   end
 
+  # This tests not only our handling of failing dependency installation, but also that we're running
+  # Poetry in such a way that it errors if the lockfile is out of sync, rather than simply updating it.
   context 'when poetry.lock is out of sync with pyproject.toml' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_lockfile_out_of_sync', allow_failure: true) }
 
@@ -247,7 +249,7 @@ RSpec.describe 'Poetry support' do
           remote: -----> Installing Python #{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
-          remote: -----> Installing requirements with pip
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
         OUTPUT
       end
     end

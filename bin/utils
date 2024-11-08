@@ -8,13 +8,6 @@ shopt -s nullglob
 
 source "${BUILDPACK_DIR:?}/vendor/buildpack-stdlib_v8.sh"
 
-sed() { command sed -u "$@"; }
-
-# Clean up pip output
-cleanup() {
-	sed -e 's/\.\.\.\+/.../g' | sed -e '/already satisfied/Id' | sed -e '/No files were found to uninstall/Id' | sed -e '/Overwriting/Id' | sed -e '/python executable/Id' | sed -e '/no previously-included files/Id'
-}
-
 # Does some serious copying.
 deep-cp() {
 	declare source="$1" target="$2"

@@ -31,10 +31,10 @@ function utils::bundled_pip_module_path() {
 
 	if [[ -z "${bundled_pip_wheel}" ]]; then
 		output::error <<-'EOF'
-			Error: Failed to locate the bundled pip wheel.
+			Internal Error: Unable to locate the ensurepip pip wheel file.
 		EOF
 		meta_set "failure_reason" "bundled-pip-not-found"
-		return 1
+		exit 1
 	fi
 
 	echo "${bundled_pip_wheel}/pip"

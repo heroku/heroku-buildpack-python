@@ -115,7 +115,7 @@ function python_version::parse_runtime_txt() {
 			python-${DEFAULT_PYTHON_MAJOR_VERSION}
 		EOF
 		meta_set "failure_reason" "runtime-txt::invalid-version"
-		return 1
+		exit 1
 	fi
 }
 
@@ -160,7 +160,7 @@ function python_version::parse_python_version_file() {
 					${DEFAULT_PYTHON_MAJOR_VERSION}
 				EOF
 				meta_set "failure_reason" "python-version-file::invalid-version"
-				return 1
+				exit 1
 			fi
 			;;
 		0)
@@ -176,7 +176,7 @@ function python_version::parse_python_version_file() {
 				begin with a '#', otherwise it will be treated as a comment.
 			EOF
 			meta_set "failure_reason" "python-version-file::no-version"
-			return 1
+			exit 1
 			;;
 		*)
 			output::error <<-EOF
@@ -196,7 +196,7 @@ function python_version::parse_python_version_file() {
 				those lines with '#'.
 			EOF
 			meta_set "failure_reason" "python-version-file::multiple-versions"
-			return 1
+			exit 1
 			;;
 	esac
 }
@@ -228,7 +228,7 @@ function python_version::read_pipenv_python_version() {
 			Run 'pipenv lock' to regenerate/fix the lockfile.
 		EOF
 		meta_set "failure_reason" "pipfile-lock::invalid-json"
-		return 1
+		exit 1
 	fi
 
 	# Neither of the optional fields were found.
@@ -262,7 +262,7 @@ function python_version::read_pipenv_python_version() {
 			https://pipenv.pypa.io/en/latest/specifiers.html#specifying-versions-of-python
 		EOF
 		meta_set "failure_reason" "pipfile-lock::invalid-version"
-		return 1
+		exit 1
 	fi
 }
 
@@ -319,7 +319,7 @@ function python_version::resolve_python_version() {
 			EOF
 		fi
 		meta_set "failure_reason" "python-version::eol"
-		return 1
+		exit 1
 	fi
 
 	if (((major == 3 && minor > 13) || major >= 4)); then
@@ -358,7 +358,7 @@ function python_version::resolve_python_version() {
 			EOF
 		fi
 		meta_set "failure_reason" "python-version::unknown-major"
-		return 1
+		exit 1
 	fi
 
 	# If an exact Python version was requested, there's nothing to resolve.
