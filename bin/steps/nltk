@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 # This script is run in a subshell via sub_env so doesn't inherit the options/vars/utils from `bin/compile`.
 # TODO: Stop running this script in a subshell.
@@ -21,17 +20,30 @@ EXPORT_PATH="${BUILDPACK_DIR}/export"
 if is_module_available 'nltk'; then
 	output::step "Downloading NLTK corpora..."
 
-	nltk_packages_definition="$BUILD_DIR/nltk.txt"
+	nltk_packages_definition="${BUILD_DIR}/nltk.txt"
 
-	if [[ -f "$nltk_packages_definition" ]]; then
+	if [[ -f "${nltk_packages_definition}" ]]; then
 		meta_set "nltk_downloader" "enabled"
 
-		readarray -t nltk_packages <"$nltk_packages_definition"
+		readarray -t nltk_packages <"${nltk_packages_definition}"
 		output::step "Downloading NLTK packages: ${nltk_packages[*]}"
 
-		python -m nltk.downloader -d "$BUILD_DIR/.heroku/python/nltk_data" "${nltk_packages[@]}" | output::indent
-		set_env NLTK_DATA "/app/.heroku/python/nltk_data"
+		nltk_data_dir="/app/.heroku/python/nltk_data"
 
+		if ! python -m nltk.downloader -d "${nltk_data_dir}" "${nltk_packages[@]}" |& output::indent; then
+			output::error <<-EOF
+				Error: Unable to download NLTK data.
+
+				The 'python -m nltk.downloader' command to download NLTK
+				data did not exit successfully.
+
+				See the log output above for more information.
+			EOF
+			meta_set "failure_reason" "nltk-downloader"
+			exit 1
+		fi
+
+		set_env NLTK_DATA "${nltk_data_dir}"
 	else
 		meta_set "nltk_downloader" "skipped-no-nltk-file"
 		echo "       'nltk.txt' not found, not downloading any corpora"
