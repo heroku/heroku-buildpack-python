@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Deprecated using Pipenv without a lockfile (`Pipfile.lock`). ([#1695](https://github.com/heroku/heroku-buildpack-python/pull/1695))
 
 ## [v266] - 2024-11-08
 

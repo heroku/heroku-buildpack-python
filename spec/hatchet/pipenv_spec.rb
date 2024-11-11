@@ -146,7 +146,16 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote:  !     Warning: No 'Pipfile.lock' found!
           remote:  !     
-          remote:  !     We recommend you commit this into your repository.
+          remote:  !     A 'Pipfile' file was found, however, the associated 'Pipfile.lock'
+          remote:  !     Pipenv lockfile was not. This means your app dependency versions
+          remote:  !     are not pinned, which means the package versions used on Heroku
+          remote:  !     might not match those installed in other environments.
+          remote:  !     
+          remote:  !     For now, we will install your dependencies without a lockfile,
+          remote:  !     however, in the future this warning will become an error.
+          remote:  !     
+          remote:  !     Run 'pipenv lock' locally to generate the lockfile, and make sure
+          remote:  !     that 'Pipfile.lock' is not listed in '.gitignore' or '.slugignore'.
           remote: 
           remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
