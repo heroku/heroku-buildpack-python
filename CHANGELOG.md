@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v267] - 2024-11-12
+
 - Deprecated using Pipenv without a lockfile (`Pipfile.lock`). ([#1695](https://github.com/heroku/heroku-buildpack-python/pull/1695))
 - Fixed Poetry venv creation when using an outdated Python version whose `ensurepip` module doesn't enable isolated mode, and the app's build directory contents shadows a package imported by pip (such as `brotli`). ([#1698](https://github.com/heroku/heroku-buildpack-python/pull/1698))
 
@@ -1099,7 +1102,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v266...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v267...main
+[v267]: https://github.com/heroku/heroku-buildpack-python/compare/v266...v267
 [v266]: https://github.com/heroku/heroku-buildpack-python/compare/v265...v266
 [v265]: https://github.com/heroku/heroku-buildpack-python/compare/v264...v265
 [v264]: https://github.com/heroku/heroku-buildpack-python/compare/v263...v264
