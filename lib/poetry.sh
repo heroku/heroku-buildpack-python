@@ -37,6 +37,7 @@ function poetry::install_poetry() {
 
 		# The Poetry directory will already exist in the relocated cache case mentioned above.
 		rm -rf "${poetry_root}"
+		mkdir -p "${poetry_root}"
 
 		# We can't use the pip wheel bundled within Python's standard library to install Poetry
 		# (which would allow us to use `--without-pip` here to skip the pip install), since it
@@ -45,7 +46,10 @@ function poetry::install_poetry() {
 		# are still using outdated patch releases of those Python versions, whose bundled pip
 		# can be older (for example Python 3.9.0 ships with pip v20.2.1). Once Python 3.10 EOLs
 		# we can switch back to the previous approach since Python 3.11.0 ships with pip v22.3.
-		if ! python -m venv "${poetry_venv_dir}"; then
+		# Changing the working directory away from the build dir is required to work around an
+		# `ensurepip` bug in older Python versions, where it doesn't run Python in isolated mode:
+		# https://github.com/heroku/heroku-buildpack-python/issues/1697
+		if ! (cd "${poetry_root}" && python -m venv "${poetry_venv_dir}"); then
 			output::error <<-EOF
 				Internal Error: Unable to create virtual environment for Poetry.
 

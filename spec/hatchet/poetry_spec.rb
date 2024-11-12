@@ -185,8 +185,10 @@ RSpec.describe 'Poetry support' do
     end
   end
 
-  # This checks that the Poetry bootstrap works even with older bundled pip, and that
-  # our chosen Poetry version also supports our oldest supported Python version.
+  # This checks that the Poetry bootstrap works even with older bundled pip, and that our
+  # chosen Poetry version also supports our oldest supported Python version. The fixture
+  # also includes a `brotli` directory to test the workaround for an `ensurepip` bug in
+  # older Python versions: https://github.com/heroku/heroku-buildpack-python/issues/1697
   context 'when using the oldest supported Python version' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_oldest_python') }
 
