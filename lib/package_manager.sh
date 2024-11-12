@@ -15,11 +15,19 @@ function package_manager::determine_package_manager() {
 		meta_set "pipenv_has_lockfile" "true"
 	elif [[ -f "${build_dir}/Pipfile" ]]; then
 		# TODO: Start requiring a Pipfile.lock and make this branch a "missing lockfile" error instead.
-		# TODO: Adjust this warning to mention support for missing Pipfile.lock will be removed soon.
 		output::warning <<-'EOF'
 			Warning: No 'Pipfile.lock' found!
 
-			We recommend you commit this into your repository.
+			A 'Pipfile' file was found, however, the associated 'Pipfile.lock'
+			Pipenv lockfile was not. This means your app dependency versions
+			are not pinned, which means the package versions used on Heroku
+			might not match those installed in other environments.
+
+			For now, we will install your dependencies without a lockfile,
+			however, in the future this warning will become an error.
+
+			Run 'pipenv lock' locally to generate the lockfile, and make sure
+			that 'Pipfile.lock' is not listed in '.gitignore' or '.slugignore'.
 		EOF
 		package_managers_found+=(pipenv)
 		package_managers_found_display_text+=("Pipfile (Pipenv)")
