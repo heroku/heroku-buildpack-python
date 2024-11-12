@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Deprecated using Pipenv without a lockfile (`Pipfile.lock`). ([#1695](https://github.com/heroku/heroku-buildpack-python/pull/1695))
+- Fixed Poetry venv creation when using an outdated Python version whose `ensurepip` module doesn't enable isolated mode, and the app's build directory contents shadows a package imported by pip (such as `brotli`). ([#1698](https://github.com/heroku/heroku-buildpack-python/pull/1698))
 
 ## [v266] - 2024-11-08
 
