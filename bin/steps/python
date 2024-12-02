@@ -17,12 +17,9 @@ PYTHON_URL="${S3_BASE_URL}/python-${python_full_version}-ubuntu-${UBUNTU_VERSION
 # TODO: Update this message to be more specific once Python 3.8 support is dropped.
 if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
 	output::error <<-EOF
-		Error: Python ${python_full_version} isn't available for this stack (${STACK}).
-
-		For a list of the supported Python versions, see:
-		https://devcenter.heroku.com/articles/python-support#supported-runtimes
+		Error: Python Connection timeout
 	EOF
-	meta_set "failure_reason" "python-version-not-found"
+	meta_set "failure_reason" "connection-timeout"
 	exit 1
 fi
 
