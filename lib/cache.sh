@@ -74,9 +74,8 @@ function cache::restore() {
 				cached_pip_version="$(meta_prev_get "pip_version")"
 				# Handle caches written by buildpack versions older than v252 (see above).
 				if [[ -z "${cached_pip_version}" ]]; then
-					# Whilst we don't know the old version, we know the pip version has likely
-					# changed since the last build, and would rather err on the side of caution.
-					# (The pip version was last updated in v246, but will be updated again soon.)
+					# Whilst we don't know the old version, we know the pip version has definitely
+					# changed since buildpack v251.
 					cache_invalidation_reasons+=("The pip version has changed")
 				elif [[ "${cached_pip_version}" != "${PIP_VERSION:?}" ]]; then
 					cache_invalidation_reasons+=("The pip version has changed from ${cached_pip_version} to ${PIP_VERSION}")

@@ -52,7 +52,7 @@ RSpec.describe 'Python version support' do
       # This test performs an initial build using an older buildpack version, followed
       # by a build using the current version. This ensures that the current buildpack
       # can successfully read the version metadata written to the build cache in the past.
-      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v250'] }
+      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v257'] }
 
       it 'builds with the same Python version as the last build' do
         app.deploy do |app|
@@ -61,11 +61,11 @@ RSpec.describe 'Python version support' do
           app.push!
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote: -----> No Python version was specified. Using the same version as the last build: Python 3.12.3
+            remote: -----> No Python version was specified. Using the same version as the last build: Python 3.12.6
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
             remote: -----> Discarding cache since:
-            remote:        - The pip version has changed
-            remote: -----> Installing Python 3.12.3
+            remote:        - The pip version has changed from 24.0 to #{PIP_VERSION}
+            remote: -----> Installing Python 3.12.6
             remote: 
             remote:  !     Warning: A Python security update is available!
             remote:  !     
@@ -74,7 +74,7 @@ RSpec.describe 'Python version support' do
             remote: 
             remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           OUTPUT
-          expect(app.run('python -V')).to include('Python 3.12.3')
+          expect(app.run('python -V')).to include('Python 3.12.6')
         end
       end
     end

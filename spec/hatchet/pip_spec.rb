@@ -227,6 +227,7 @@ RSpec.describe 'pip support' do
           remote:          Preparing metadata \\(setup.py\\): finished with status 'done'
           remote:        .+
           remote:        Installing collected packages: six, test
+          remote:          DEPRECATION: Legacy editable install of test==0.0.0 from file:///tmp/build_.* \\(setup.py develop\\) is deprecated. pip 25.0 will enforce this behaviour change. A possible replacement is to add a pyproject.toml or enable --use-pep517, and use setuptools >= 64. If the resulting installation is not behaving as expected, try using --config-settings editable_mode=compat. Please consult the setuptools documentation for more information. Discussion can be found at https://github.com/pypa/pip/issues/11457
           remote:          Running setup.py develop for test
         REGEX
       end
@@ -254,7 +255,9 @@ RSpec.describe 'pip support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        ERROR: Invalid requirement: 'an-invalid-requirement!' (from line 1 of requirements.txt)
+          remote:        ERROR: Invalid requirement: 'an-invalid-requirement!': Expected end or semicolon (after name and no valid version specifier)
+          remote:            an-invalid-requirement!
+          remote:                                  ^ (from line 1 of requirements.txt)
           remote: 
           remote:  !     Error: Unable to install dependencies using pip.
           remote:  !     
