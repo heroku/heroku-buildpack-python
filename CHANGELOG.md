@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Updated pip from 24.0 to 24.3.1. ([#1685](https://github.com/heroku/heroku-buildpack-python/pull/1685))
+- Updated wheel from 0.44.0 to 0.45.1. ([#1707](https://github.com/heroku/heroku-buildpack-python/pull/1707))
 
 ## [v267] - 2024-11-12
 
