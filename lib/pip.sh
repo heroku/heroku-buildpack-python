@@ -84,6 +84,7 @@ function pip::install_dependencies() {
 	local pip_install_command=(
 		pip
 		install
+		--debug
 	)
 
 	# TODO: Deprecate/sunset this missing requirements file fallback.
