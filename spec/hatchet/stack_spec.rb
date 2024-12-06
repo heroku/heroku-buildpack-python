@@ -53,8 +53,7 @@ RSpec.describe 'Stack changes' do
           remote: -----> Discarding cache since:
           remote:        - The stack has changed from heroku-24 to heroku-22
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
         OUTPUT

@@ -33,15 +33,15 @@ RSpec.describe 'Poetry support' do
           remote: 
           remote: ['',
           remote:  '/app',
-          remote:  '/app/.heroku/python/lib/python312.zip',
-          remote:  '/app/.heroku/python/lib/python3.12',
-          remote:  '/app/.heroku/python/lib/python3.12/lib-dynload',
-          remote:  '/app/.heroku/python/lib/python3.12/site-packages']
+          remote:  '/app/.heroku/python/lib/python313.zip',
+          remote:  '/app/.heroku/python/lib/python3.13',
+          remote:  '/app/.heroku/python/lib/python3.13/lib-dynload',
+          remote:  '/app/.heroku/python/lib/python3.13/site-packages']
           remote: 
           remote: Skipping virtualenv creation, as specified in config file.
           remote: typing-extensions 4.12.2 Backported and Experimental Type Hints for Python ...
           remote: 
-          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.12/site-packages/typing_extensions.py'>
+          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
         OUTPUT
         app.commit!
         app.push!
@@ -64,18 +64,19 @@ RSpec.describe 'Poetry support' do
   # TODO: Make this also test the Poetry version changing, the next (first) time we update Poetry,
   # by using an older buildpack version for the initial build.
   context 'when the requested Python version has changed since the last build' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_basic') }
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v268'] }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_basic', buildpacks:) }
 
     it 'clears the cache before installing' do
       app.deploy do |app|
-        File.write('.python-version', '3.13')
+        update_buildpacks(app, [:default])
         app.commit!
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python 3.13 specified in .python-version
           remote: -----> Discarding cache since:
-          remote:        - The Python version has changed from #{LATEST_PYTHON_3_12} to #{LATEST_PYTHON_3_13}
+          remote:        - The Python version has changed from 3.13.0 to #{LATEST_PYTHON_3_13}
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing Poetry #{POETRY_VERSION}
           remote: -----> Installing dependencies using 'poetry install --sync --only main'
@@ -270,9 +271,8 @@ RSpec.describe 'Poetry support' do
           remote:  !     the warning above.
           remote: 
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> Installing Python #{LATEST_PYTHON_3_12}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
+          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
         OUTPUT
       end

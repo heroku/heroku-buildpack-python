@@ -14,9 +14,8 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Inline app detected
@@ -31,10 +30,10 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote: \\['',
           remote:  '/app',
-          remote:  '/app/.heroku/python/lib/python312.zip',
-          remote:  '/app/.heroku/python/lib/python3.12',
-          remote:  '/app/.heroku/python/lib/python3.12/lib-dynload',
-          remote:  '/app/.heroku/python/lib/python3.12/site-packages'\\]
+          remote:  '/app/.heroku/python/lib/python313.zip',
+          remote:  '/app/.heroku/python/lib/python3.13',
+          remote:  '/app/.heroku/python/lib/python3.13/lib-dynload',
+          remote:  '/app/.heroku/python/lib/python3.13/site-packages'\\]
           remote: 
           remote: Package           Version
           remote: ----------------- ---------
@@ -44,12 +43,11 @@ RSpec.describe 'Pipenv support' do
           remote: pip               #{PIP_VERSION}
           remote: pipenv            #{PIPENV_VERSION}
           remote: platformdirs      .+
-          remote: setuptools        #{SETUPTOOLS_VERSION}
+          remote: setuptools        .+
           remote: typing_extensions 4.12.2
           remote: virtualenv        .+
-          remote: wheel             #{WHEEL_VERSION}
           remote: 
-          remote: \\<module 'typing_extensions' from '/app/.heroku/python/lib/python3.12/site-packages/typing_extensions.py'\\>
+          remote: \\<module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'\\>
         REGEX
         app.commit!
         app.push!
@@ -58,9 +56,8 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
           remote: -----> Restoring cache
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Inline app detected
@@ -126,9 +123,8 @@ RSpec.describe 'Pipenv support' do
           remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         REGEX
@@ -160,9 +156,8 @@ RSpec.describe 'Pipenv support' do
           remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --skip-lock'
           remote:        The flag --skip-lock has been reintroduced \\(but is not recommended\\).  Without 
           remote:        the lock resolver it is difficult to manage multiple package indexes, and hash 
@@ -309,9 +304,8 @@ RSpec.describe 'Pipenv support' do
           remote:        - The Python version has changed from 3.12.4 to #{DEFAULT_PYTHON_FULL_VERSION}
           remote:        - The Pipenv version has changed from 2023.12.1 to #{PIPENV_VERSION}
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Discovering process types
@@ -337,9 +331,8 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Discarding cache since:
           remote:        - The package manager has changed from pip to pipenv
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Discovering process types
@@ -371,11 +364,10 @@ RSpec.describe 'Pipenv support' do
           remote:  !     Decide which package manager you want to use with your app, and
           remote:  !     then delete the file\\(s\\) and any config from the others.
           remote: 
-          remote: -----> Using Python 3.12 specified in Pipfile.lock
-          remote: -----> Installing Python #{LATEST_PYTHON_3_12}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
+          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
         REGEX
@@ -395,9 +387,8 @@ RSpec.describe 'Pipenv support' do
           remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Your Pipfile.lock \\(.+\\) is out of date.  Expected: \\(.+\\).
           remote:        .+

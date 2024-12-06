@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       python_version:
-        description: "Python version (eg: 3.12.0)"
+        description: "Python version (eg: 3.13.0)"
         type: string
         required: true
       stack:

@@ -206,7 +206,7 @@ RSpec.describe 'Python version support' do
           remote:  !     No Python version was found in the '.python-version' file.
           remote:  !     
           remote:  !     Update the file so that it contains a valid Python version
-          remote:  !     such as '3.12'.
+          remote:  !     such as '#{DEFAULT_PYTHON_MAJOR_VERSION}'.
           remote:  !     
           remote:  !     If the file already contains a version, check the line doesn't
           remote:  !     begin with a '#', otherwise it will be treated as a comment.

@@ -14,11 +14,10 @@ RSpec.describe 'Heroku CI' do
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          -----> Installing SQLite3
+          -----> Installing pip #{PIP_VERSION}
           -----> Installing dependencies using 'pip install -r requirements.txt -r requirements-test.txt'
                  .+
-                 Successfully installed .+ pytest-8.3.3 typing-extensions-4.12.2
+                 Successfully installed .+ pytest-.+ typing-extensions-.+
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
                  CI=true
@@ -58,7 +57,7 @@ RSpec.describe 'Heroku CI' do
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
           WEB_CONCURRENCY=5
-          pytest 8.3.3
+          pytest .+
           -----> test command `./bin/print-env-vars.sh && pytest --version` completed successfully
         REGEX
 
@@ -68,8 +67,7 @@ RSpec.describe 'Heroku CI' do
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Restoring cache
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
-          -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          -----> Installing SQLite3
+          -----> Installing pip #{PIP_VERSION}
           -----> Installing dependencies using 'pip install -r requirements.txt -r requirements-test.txt'
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
@@ -87,9 +85,8 @@ RSpec.describe 'Heroku CI' do
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          -----> Installing pip #{PIP_VERSION}
           -----> Installing Pipenv #{PIPENV_VERSION}
-          -----> Installing SQLite3
           -----> Installing dependencies using 'pipenv install --deploy --dev'
                  Installing dependencies from Pipfile.lock \\(.+\\)...
                  Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -132,7 +129,7 @@ RSpec.describe 'Heroku CI' do
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
           WEB_CONCURRENCY=5
-          pytest 8.3.3
+          pytest .+
           -----> test command `./bin/print-env-vars.sh && pytest --version` completed successfully
         REGEX
 
@@ -142,9 +139,8 @@ RSpec.describe 'Heroku CI' do
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Restoring cache
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
-          -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          -----> Installing pip #{PIP_VERSION}
           -----> Installing Pipenv #{PIPENV_VERSION}
-          -----> Installing SQLite3
           -----> Installing dependencies using 'pipenv install --deploy --dev'
                  Installing dependencies from Pipfile.lock \\(.+\\)...
                  Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -216,7 +212,7 @@ RSpec.describe 'Heroku CI' do
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
           WEB_CONCURRENCY=5
-          pytest 8.3.3
+          pytest .+
           -----> test command `./bin/print-env-vars.sh && pytest --version` completed successfully
         REGEX
 

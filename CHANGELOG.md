@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Changed the default Python version for new apps from 3.12 to 3.13. ([#1715](https://github.com/heroku/heroku-buildpack-python/pull/1715))
 - Changed Python version pinning behaviour for apps that do not specify a Python version. Repeat builds are now pinned to the major Python version only (`3.X`) instead of the full Python version (`3.X.Y`), so that they always use the latest patch version. ([#1714](https://github.com/heroku/heroku-buildpack-python/pull/1714))
 
 ## [v269] - 2024-12-04

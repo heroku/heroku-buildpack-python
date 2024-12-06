@@ -2,7 +2,7 @@
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.13"
 typing-extensions = "*"
 
 # This group shouldn't be installed due to us passing `--only main`.
