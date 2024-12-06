@@ -22,8 +22,7 @@ RSpec.describe 'pip support' do
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
           remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
@@ -42,19 +41,17 @@ RSpec.describe 'pip support' do
           remote: 
           remote: ['',
           remote:  '/app',
-          remote:  '/app/.heroku/python/lib/python312.zip',
-          remote:  '/app/.heroku/python/lib/python3.12',
-          remote:  '/app/.heroku/python/lib/python3.12/lib-dynload',
-          remote:  '/app/.heroku/python/lib/python3.12/site-packages']
+          remote:  '/app/.heroku/python/lib/python313.zip',
+          remote:  '/app/.heroku/python/lib/python3.13',
+          remote:  '/app/.heroku/python/lib/python3.13/lib-dynload',
+          remote:  '/app/.heroku/python/lib/python3.13/site-packages']
           remote: 
           remote: Package           Version
           remote: ----------------- -------
           remote: pip               #{PIP_VERSION}
-          remote: setuptools        #{SETUPTOOLS_VERSION}
           remote: typing_extensions 4.12.2
-          remote: wheel             #{WHEEL_VERSION}
           remote: 
-          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.12/site-packages/typing_extensions.py'>
+          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
         OUTPUT
         app.commit!
         app.push!
@@ -63,8 +60,7 @@ RSpec.describe 'pip support' do
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Restoring cache
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote: -----> Inline app detected
         OUTPUT
@@ -88,8 +84,7 @@ RSpec.describe 'pip support' do
           remote: -----> Discarding cache since:
           remote:        - The contents of requirements.txt changed
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
           remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
@@ -120,8 +115,7 @@ RSpec.describe 'pip support' do
           remote: -----> Discarding cache since:
           remote:        - The package manager has changed from pipenv to pip
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
           remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
@@ -133,12 +127,15 @@ RSpec.describe 'pip support' do
     end
   end
 
+  # TODO: Switch this to using Python 3.13 as part of the sqlite removal.
   context 'when requirements.txt contains popular compiled packages' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_compiled') }
 
     include_examples 'installs successfully using pip'
   end
 
+  # This test intentionally uses Python 3.12, so that we test rewriting using older globally installed
+  # setuptools. The Poetry equivalent of this test covers the PEP-517/518 setuptools case.
   context 'when requirements.txt contains editable requirements (both VCS and local package)' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_editable', buildpacks:) }
@@ -219,16 +216,12 @@ RSpec.describe 'pip support' do
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
+          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install --editable .'
           remote:        Obtaining file:///tmp/build_.*
-          remote:          Preparing metadata \\(setup.py\\): started
-          remote:          Preparing metadata \\(setup.py\\): finished with status 'done'
           remote:        .+
           remote:        Installing collected packages: six, test
-          remote:          DEPRECATION: Legacy editable install of test==0.0.0 from file:///tmp/build_.* \\(setup.py develop\\) is deprecated. pip 25.0 will enforce this behaviour change. A possible replacement is to add a pyproject.toml or enable --use-pep517, and use setuptools >= 64. If the resulting installation is not behaving as expected, try using --config-settings editable_mode=compat. Please consult the setuptools documentation for more information. Discussion can be found at https://github.com/pypa/pip/issues/11457
-          remote:          Running setup.py develop for test
+          remote:        Successfully installed six-.+ test-0.0.0
         REGEX
       end
     end

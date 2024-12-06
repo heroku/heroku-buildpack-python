@@ -1,0 +1,3 @@
+# Note: This test intentionally uses Python 3.12, so that we test *.egg-link
+# path rewriting using older globally installed setuptools.
+3.12
