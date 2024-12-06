@@ -6,7 +6,7 @@ set -euo pipefail
 
 # Read the full Python version of the Python install in the cache, or the empty string
 # if the cache is empty or doesn't contain a Python version metadata file.
-function cache::cached_python_version() {
+function cache::cached_python_full_version() {
 	local cache_dir="${1}"
 
 	if [[ -f "${cache_dir}/.heroku/python-version" ]]; then
@@ -29,7 +29,7 @@ function cache::restore() {
 	local build_dir="${1}"
 	local cache_dir="${2}"
 	local stack="${3}"
-	local cached_python_version="${4}"
+	local cached_python_full_version="${4}"
 	local python_full_version="${5}"
 	local package_manager="${6}"
 
@@ -48,8 +48,8 @@ function cache::restore() {
 		cache_invalidation_reasons+=("The stack has changed from ${cached_stack:-"unknown"} to ${stack}")
 	fi
 
-	if [[ "${cached_python_version}" != "${python_full_version}" ]]; then
-		cache_invalidation_reasons+=("The Python version has changed from ${cached_python_version:-"unknown"} to ${python_full_version}")
+	if [[ "${cached_python_full_version}" != "${python_full_version}" ]]; then
+		cache_invalidation_reasons+=("The Python version has changed from ${cached_python_full_version:-"unknown"} to ${python_full_version}")
 	fi
 
 	# The metadata store only exists in caches created in v252+ of the buildpack (released 2024-06-17),

@@ -21,18 +21,13 @@ RSpec.describe 'Stack changes' do
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> No Python version was specified. Using the same version as the last build: Python 3.12.3
+          remote: -----> No Python version was specified. Using the same major version as the last build: Python 3.12
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Discarding cache since:
           remote:        - The stack has changed from heroku-22 to heroku-24
+          remote:        - The Python version has changed from 3.12.3 to #{LATEST_PYTHON_3_12}
           remote:        - The pip version has changed
-          remote: -----> Installing Python 3.12.3
-          remote: 
-          remote:  !     Warning: A Python security update is available!
-          remote:  !     
-          remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_12}
-          remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-          remote: 
+          remote: -----> Installing Python #{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
@@ -53,7 +48,7 @@ RSpec.describe 'Stack changes' do
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> No Python version was specified. Using the same version as the last build: Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote: -----> No Python version was specified. Using the same major version as the last build: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
           remote: -----> Discarding cache since:
           remote:        - The stack has changed from heroku-24 to heroku-22

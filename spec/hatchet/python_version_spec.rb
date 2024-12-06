@@ -61,20 +61,15 @@ RSpec.describe 'Python version support' do
           app.push!
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote: -----> No Python version was specified. Using the same version as the last build: Python 3.12.6
+            remote: -----> No Python version was specified. Using the same major version as the last build: Python 3.12
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
             remote: -----> Discarding cache since:
+            remote:        - The Python version has changed from 3.12.6 to #{LATEST_PYTHON_3_12}
             remote:        - The pip version has changed from 24.0 to #{PIP_VERSION}
-            remote: -----> Installing Python 3.12.6
-            remote: 
-            remote:  !     Warning: A Python security update is available!
-            remote:  !     
-            remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_12}
-            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-            remote: 
+            remote: -----> Installing Python #{LATEST_PYTHON_3_12}
             remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           OUTPUT
-          expect(app.run('python -V')).to include('Python 3.12.6')
+          expect(app.run('python -V')).to include("Python #{LATEST_PYTHON_3_12}")
         end
       end
     end

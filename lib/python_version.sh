@@ -18,6 +18,8 @@ DEFAULT_PYTHON_MAJOR_VERSION="${DEFAULT_PYTHON_FULL_VERSION%.*}"
 INT_REGEX="(0|[1-9][0-9]*)"
 # Versions of form N.N or N.N.N.
 PYTHON_VERSION_REGEX="${INT_REGEX}\.${INT_REGEX}(\.${INT_REGEX})?"
+# Versions of form N.N.N only.
+PYTHON_FULL_VERSION_REGEX="${INT_REGEX}\.${INT_REGEX}\.${INT_REGEX}"
 
 # Determine what Python version has been requested for the project.
 #
@@ -33,16 +35,13 @@ PYTHON_VERSION_REGEX="${INT_REGEX}\.${INT_REGEX}(\.${INT_REGEX})?"
 #
 # If a version wasn't specified by the app, then new apps/those with an empty cache will use
 # a buildpack default version for the first build, and then subsequent cached builds will use
-# the same Python full version in perpetuity (aka sticky versions). Sticky versioning leads to
+# the same Python major version in perpetuity (aka sticky versions). Sticky versioning leads to
 # confusing UX so is something we want to deprecate/sunset in the future (and have already done
 # so in the Python CNB).
-# TODO: Change the sticky versioning implementation so it's only sticky to the major version
-# rather than the full version, so apps that don't specify a Python version at least get
-# security patch updates.
 function python_version::read_requested_python_version() {
 	local build_dir="${1}"
 	local package_manager="${2}"
-	local cached_python_version="${3}"
+	local cached_python_full_version="${3}"
 	# We use the Bash 4.3+ `nameref` feature to pass back multiple values from this function
 	# without having to hardcode globals. See: https://stackoverflow.com/a/38997681
 	declare -n version="${4}"
@@ -75,8 +74,9 @@ function python_version::read_requested_python_version() {
 	fi
 
 	# Protect against unsupported (eg PyPy) or invalid versions being found in the cache metadata.
-	if [[ "${cached_python_version}" =~ ^${PYTHON_VERSION_REGEX}$ ]]; then
-		version="${cached_python_version}"
+	if [[ "${cached_python_full_version}" =~ ^${PYTHON_FULL_VERSION_REGEX}$ ]]; then
+		local cached_python_major_version="${cached_python_full_version%.*}"
+		version="${cached_python_major_version}"
 		origin="cached"
 	else
 		version="${DEFAULT_PYTHON_MAJOR_VERSION}"
