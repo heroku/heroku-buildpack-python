@@ -79,7 +79,7 @@ RSpec.describe 'pip support' do
       app.deploy do |app|
         # The test fixture's requirements.txt is a symlink to a requirements file in a subdirectory in
         # order to test that symlinked requirements files work in general and with cache invalidation.
-        File.write('requirements/prod.txt', 'six', mode: 'a')
+        File.write('requirements/prod.txt', 'six==1.17.0', mode: 'a')
         app.commit!
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
@@ -93,12 +93,12 @@ RSpec.describe 'pip support' do
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
           remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
-          remote:        Collecting six (from -r requirements.txt (line 6))
-          remote:          Downloading six-1.16.0-py2.py3-none-any.whl.metadata (1.8 kB)
+          remote:        Collecting six==1.17.0 (from -r requirements.txt (line 6))
+          remote:          Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
           remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
-          remote:        Downloading six-1.16.0-py2.py3-none-any.whl (11 kB)
+          remote:        Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
           remote:        Installing collected packages: typing-extensions, six
-          remote:        Successfully installed six-1.16.0 typing-extensions-4.12.2
+          remote:        Successfully installed six-1.17.0 typing-extensions-4.12.2
         OUTPUT
       end
     end
