@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v270] - 2024-12-10
+
 - Changed the default Python version for new apps from 3.12 to 3.13. ([#1715](https://github.com/heroku/heroku-buildpack-python/pull/1715))
 - Changed Python version pinning behaviour for apps that do not specify a Python version. Repeat builds are now pinned to the major Python version only (`3.X`) instead of the full Python version (`3.X.Y`), so that they always use the latest patch version. ([#1714](https://github.com/heroku/heroku-buildpack-python/pull/1714))
 - Updated Poetry from 1.8.4 to 1.8.5. ([#1716](https://github.com/heroku/heroku-buildpack-python/pull/1716))
@@ -1118,7 +1121,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v269...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v270...main
+[v270]: https://github.com/heroku/heroku-buildpack-python/compare/v269...v270
 [v269]: https://github.com/heroku/heroku-buildpack-python/compare/v268...v269
 [v268]: https://github.com/heroku/heroku-buildpack-python/compare/v267...v268
 [v267]: https://github.com/heroku/heroku-buildpack-python/compare/v266...v267
