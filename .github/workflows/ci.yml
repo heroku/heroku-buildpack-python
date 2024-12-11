@@ -47,7 +47,7 @@ jobs:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_API_USER: ${{ secrets.HEROKU_API_USER }}
       HEROKU_DISABLE_AUTOUPDATE: 1
-      PARALLEL_SPLIT_TEST_PROCESSES: 70
+      PARALLEL_SPLIT_TEST_PROCESSES: 75
       RSPEC_RETRY_RETRY_COUNT: 2
     steps:
       - name: Checkout

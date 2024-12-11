@@ -285,4 +285,33 @@ RSpec.describe 'pip support' do
       end
     end
   end
+
+  context 'when requirements.txt contains an old version of Celery with invalid metadata' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_legacy_celery', allow_failure: true) }
+
+    it 'outputs instructions for how to resolve the build failure' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote:        ERROR: No matching distribution found for celery==5.2.0
+          remote: 
+          remote:  !     Error: One of your dependencies contains broken metadata.
+          remote:  !     
+          remote:  !     Newer versions of pip reject packages that use invalid versions
+          remote:  !     in their metadata (such as Celery older than v5.2.1).
+          remote:  !     
+          remote:  !     Try upgrading to a newer version of the affected package.
+          remote:  !     
+          remote:  !     For more help, see:
+          remote:  !     https://devcenter.heroku.com/changelog-items/3073
+          remote: 
+          remote: 
+          remote:  !     Error: Unable to install dependencies using pip.
+          remote:  !     
+          remote:  !     See the log output above for more information.
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
+  end
 end
