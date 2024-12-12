@@ -78,11 +78,11 @@ if [[ "${python_major_version}" == "3.8" ]]; then
 	output::warning <<-'EOF'
 		Warning: Support for Python 3.8 is ending soon!
 
-		Python 3.8 will reach its upstream end-of-life in October 2024, at which
-		point it will no longer receive security updates:
+		Python 3.8 reached its upstream end-of-life on 7th October 2024, and so
+		no longer receives security updates:
 		https://devguide.python.org/versions/#supported-versions
 
-		Support for Python 3.8 will be removed from this buildpack on December 4th, 2024.
+		Support for Python 3.8 will be removed from this buildpack on 7th January 2025.
 
 		Upgrade to a newer Python version as soon as possible to keep your app secure.
 		See: https://devcenter.heroku.com/articles/python-runtimes

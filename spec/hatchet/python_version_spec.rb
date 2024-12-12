@@ -89,11 +89,11 @@ RSpec.describe 'Python version support' do
             remote: 
             remote:  !     Warning: Support for Python 3.8 is ending soon!
             remote:  !     
-            remote:  !     Python 3.8 will reach its upstream end-of-life in October 2024, at which
-            remote:  !     point it will no longer receive security updates:
+            remote:  !     Python 3.8 reached its upstream end-of-life on 7th October 2024, and so
+            remote:  !     no longer receives security updates:
             remote:  !     https://devguide.python.org/versions/#supported-versions
             remote:  !     
-            remote:  !     Support for Python 3.8 will be removed from this buildpack on December 4th, 2024.
+            remote:  !     Support for Python 3.8 will be removed from this buildpack on 7th January 2025.
             remote:  !     
             remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
             remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
