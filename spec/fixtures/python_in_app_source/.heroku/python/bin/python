@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# This file emulates a Python install having been committed to the app's Git repo.
+# For example, by downloading a slug, extracting it, and committing the results.
+
+set -euo pipefail
+
+exit 0
