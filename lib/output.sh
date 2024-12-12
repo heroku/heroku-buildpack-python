@@ -40,6 +40,7 @@ function output::indent() {
 # EOF
 # ```
 function output::notice() {
+	local line
 	echo >&2
 	while IFS= read -r line; do
 		echo -e "${ANSI_BLUE} !     ${line}${ANSI_RESET}" >&2
@@ -58,6 +59,7 @@ function output::notice() {
 # EOF
 # ```
 function output::warning() {
+	local line
 	echo >&2
 	while IFS= read -r line; do
 		echo -e "${ANSI_YELLOW} !     ${line}${ANSI_RESET}" >&2
@@ -76,6 +78,7 @@ function output::warning() {
 # EOF
 # ```
 function output::error() {
+	local line
 	echo >&2
 	while IFS= read -r line; do
 		echo -e "${ANSI_RED} !     ${line}${ANSI_RESET}" >&2
