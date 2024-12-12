@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v271] - 2024-12-12
+
 - Updated the Python 3.8 EOL warning message with the new sunset date. ([#1721](https://github.com/heroku/heroku-buildpack-python/pull/1721))
 - Improved the error message shown when pip install fails due to pip rejecting a package with invalid version metadata. ([#1718](https://github.com/heroku/heroku-buildpack-python/pull/1718))
 - Improved the error message shown when the copy of pip bundled in the `ensurepip` module cannot be found. ([#1720](https://github.com/heroku/heroku-buildpack-python/pull/1720))
@@ -1124,7 +1127,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v270...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v271...main
+[v271]: https://github.com/heroku/heroku-buildpack-python/compare/v270...v271
 [v270]: https://github.com/heroku/heroku-buildpack-python/compare/v269...v270
 [v269]: https://github.com/heroku/heroku-buildpack-python/compare/v268...v269
 [v268]: https://github.com/heroku/heroku-buildpack-python/compare/v267...v268
