@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-gdal-missing() {
+show-warnings() {
 	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
 	if grep -qi 'Could not find gdal-config' "${WARNINGS_LOG}"; then
 		output::error <<-'EOF'
@@ -10,8 +10,19 @@ gdal-missing() {
 			https://github.com/heroku/heroku-geo-buildpack
 		EOF
 	fi
-}
 
-show-warnings() {
-	gdal-missing
+	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
+	if grep -qi 'Please use pip<24.1 if you need to use this version' "${WARNINGS_LOG}"; then
+		output::error <<-'EOF'
+			Error: One of your dependencies contains broken metadata.
+
+			Newer versions of pip reject packages that use invalid versions
+			in their metadata (such as Celery older than v5.2.1).
+
+			Try upgrading to a newer version of the affected package.
+
+			For more help, see:
+			https://devcenter.heroku.com/changelog-items/3073
+		EOF
+	fi
 }
