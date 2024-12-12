@@ -20,24 +20,31 @@ function utils::get_requirement_version() {
 # pip version from PyPI, saving us from having to download the usual pip bootstrap script.
 function utils::bundled_pip_module_path() {
 	local python_home="${1}"
+	local python_major_version="${2}"
 
-	# We have to use a glob since the bundled wheel filename contains the pip version, which
-	# differs between Python versions. We also have to handle the case where there are multiple
-	# matching pip wheels, since in some versions of Python (eg 3.9.0) multiple versions of pip
-	# were accidentally bundled upstream. Note: This implementation relies upon `nullglob` being
-	# set, which is the case thanks to the `bin/utils` that was run earlier.
-	local bundled_pip_wheel_list=("${python_home}"/lib/python*/ensurepip/_bundled/pip-*.whl)
-	local bundled_pip_wheel="${bundled_pip_wheel_list[0]}"
+	local bundled_wheels_dir="${python_home}/lib/python${python_major_version}/ensurepip/_bundled"
 
-	if [[ -z "${bundled_pip_wheel}" ]]; then
-		output::error <<-'EOF'
-			Internal Error: Unable to locate the ensurepip pip wheel file.
+	# We have to use a glob since the bundled wheel filename contains the pip version, which differs
+	# between Python versions. We use compgen to avoid having to set nullglob, since there may be no
+	# matches in the case of a broken Python install. We also have to handle the case where there are
+	# multiple matching pip wheels, since in some versions of Python (eg 3.9.0) multiple versions of
+	# pip were accidentally bundled upstream (we use tail since we want the newest pip version).
+	if bundled_pip_wheel="$(compgen -G "${bundled_wheels_dir}/pip-*.whl" | tail --lines=1)"; then
+		# The pip module exists inside the pip wheel (which is a zip file), however, Python can load
+		# it directly by appending the module name to the zip filename, as though it were a path.
+		echo "${bundled_pip_wheel}/pip"
+	else
+		output::error <<-EOF
+			Internal Error: Unable to locate the bundled copy of pip.
+
+			The Python buildpack could not locate the copy of pip bundled
+			inside Python's 'ensurepip' module:
+
+			$(find "${bundled_wheels_dir}/" 2>&1 || find "${python_home}/" -type d 2>&1 || true)
 		EOF
 		meta_set "failure_reason" "bundled-pip-not-found"
 		exit 1
 	fi
-
-	echo "${bundled_pip_wheel}/pip"
 }
 
 function utils::abort_internal_error() {

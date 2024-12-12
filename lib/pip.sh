@@ -15,7 +15,7 @@ function pip::install_pip_setuptools_wheel() {
 	# We use the pip wheel bundled within Python's standard library to install our chosen
 	# pip version, since it's faster than `ensurepip` followed by an upgrade in place.
 	local bundled_pip_module_path
-	bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}")"
+	bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}" "${python_major_version}")"
 
 	meta_set "pip_version" "${PIP_VERSION}"
 
