@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated the Python 3.8 EOL warning message with the new sunset date. ([#1721](https://github.com/heroku/heroku-buildpack-python/pull/1721))
 - Improved the error message shown when pip install fails due to pip rejecting a package with invalid version metadata. ([#1718](https://github.com/heroku/heroku-buildpack-python/pull/1718))
 - Improved the error message shown when the copy of pip bundled in the `ensurepip` module cannot be found. ([#1720](https://github.com/heroku/heroku-buildpack-python/pull/1720))
 
