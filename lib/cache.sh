@@ -138,7 +138,7 @@ function cache::restore() {
 		mkdir -p "${build_dir}/.heroku"
 
 		# NB: For now this has to handle files already existing in build_dir since some apps accidentally
-		# run the Python buildpack twice. TODO: Add an explicit check/error for duplicate buildpacks.
+		# run the Python buildpack twice. TODO: Refactor this once duplicate buildpacks become an error.
 		# TODO: Investigate why errors are ignored and ideally stop doing so.
 		# TODO: Compare the performance of moving the directory vs copying files.
 		cp -R "${cache_dir}/.heroku/python" "${build_dir}/.heroku/" &>/dev/null || true

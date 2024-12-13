@@ -82,6 +82,8 @@ ALL_OTHER_FIELDS=(
 	cache_save_duration
 	dependencies_install_duration
 	django_collectstatic_duration
+	duplicate_python_buildpack
+	existing_python_dir
 	nltk_downloader_duration
 	package_manager_install_duration
 	pipenv_has_lockfile
