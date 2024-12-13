@@ -31,6 +31,11 @@ RSpec.describe 'Package manager support' do
           remote:  !     Otherwise, add a package manager file to your app. If your app has
           remote:  !     no dependencies, then create an empty 'requirements.txt' file.
           remote:  !     
+          remote:  !     If you would like to see support for the package manager uv,
+          remote:  !     please vote and comment on these GitHub issues:
+          remote:  !     https://github.com/heroku/heroku-buildpack-python/issues/1616
+          remote:  !     https://github.com/heroku/roadmap/issues/323
+          remote:  !     
           remote:  !     For help with using Python on Heroku, see:
           remote:  !     https://devcenter.heroku.com/articles/getting-started-with-python
           remote:  !     https://devcenter.heroku.com/articles/python-support
