@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Fixed Dev Center links to reflect recent article URL changes. ([#1723](https://github.com/heroku/heroku-buildpack-python/pull/1723))
+- Added metrics for the existence of a uv lockfile. ([#1725](https://github.com/heroku/heroku-buildpack-python/pull/1725))
 
 ## [v271] - 2024-12-12
 
