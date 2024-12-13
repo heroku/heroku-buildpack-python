@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v272] - 2024-12-13
+
 - Added a warning if the Python buildpack has been run multiple times in the same build. In January 2025 this warning will be made an error. ([#1724](https://github.com/heroku/heroku-buildpack-python/pull/1724))
 - Added a warning if an existing `.heroku/python/` directory is found in the app source. In January 2025 this warning will be made an error. ([#1724](https://github.com/heroku/heroku-buildpack-python/pull/1724))
 - Improved the error message shown if the buildpack is used on an unsupported stack. ([#1724](https://github.com/heroku/heroku-buildpack-python/pull/1724))
@@ -1132,7 +1135,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v271...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v272...main
+[v272]: https://github.com/heroku/heroku-buildpack-python/compare/v271...v272
 [v271]: https://github.com/heroku/heroku-buildpack-python/compare/v270...v271
 [v270]: https://github.com/heroku/heroku-buildpack-python/compare/v269...v270
 [v269]: https://github.com/heroku/heroku-buildpack-python/compare/v268...v269
