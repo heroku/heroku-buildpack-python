@@ -121,7 +121,7 @@ RSpec.describe 'Python version support' do
             remote:  !     Error: Python #{LATEST_PYTHON_3_8} isn't available for this stack (#{app.stack}).
             remote:  !     
             remote:  !     For a list of the supported Python versions, see:
-            remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+            remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
             remote: 
             remote:  !     Push rejected, failed to compile Python app.
           OUTPUT
@@ -266,7 +266,7 @@ RSpec.describe 'Python version support' do
           remote:  !     version configured via the '.python-version' file.
           remote:  !     
           remote:  !     For a list of the supported Python versions, see:
-          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
@@ -290,11 +290,12 @@ RSpec.describe 'Python version support' do
           remote:  !     Check that this Python version has been officially released,
           remote:  !     and that the Python buildpack has added support for it:
           remote:  !     https://devguide.python.org/versions/#supported-versions
-          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote:  !     
           remote:  !     If it has, make sure that you are using the latest version
-          remote:  !     of this buildpack:
-          remote:  !     https://devcenter.heroku.com/articles/python-support#checking-the-python-buildpack-version
+          remote:  !     of this buildpack, and have not pinned to an older release:
+          remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
+          remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
           remote:  !     
           remote:  !     Otherwise, switch to a supported version (such as Python #{DEFAULT_PYTHON_MAJOR_VERSION})
           remote:  !     by updating the version configured via the '.python-version' file.
@@ -317,7 +318,7 @@ RSpec.describe 'Python version support' do
           remote:  !     Error: Python 3.12.999 isn't available for this stack (#{app.stack}).
           remote:  !     
           remote:  !     For a list of the supported Python versions, see:
-          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
@@ -378,7 +379,7 @@ RSpec.describe 'Python version support' do
           remote:  !     version configured via the 'runtime.txt' file.
           remote:  !     
           remote:  !     For a list of the supported Python versions, see:
-          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT

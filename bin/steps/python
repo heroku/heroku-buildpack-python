@@ -20,7 +20,7 @@ if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefuse
 		Error: Python ${python_full_version} isn't available for this stack (${STACK}).
 
 		For a list of the supported Python versions, see:
-		https://devcenter.heroku.com/articles/python-support#supported-runtimes
+		https://devcenter.heroku.com/articles/python-support#supported-python-versions
 	EOF
 	meta_set "failure_reason" "python-version-not-found"
 	exit 1

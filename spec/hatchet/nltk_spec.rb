@@ -33,7 +33,6 @@ RSpec.describe 'NLTK corpora support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Downloading NLTK corpora...
           remote:        'nltk.txt' not found, not downloading any corpora
-          remote:        Learn more: https://devcenter.heroku.com/articles/python-nltk
         REGEX
       end
     end

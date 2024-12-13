@@ -280,7 +280,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     version configured via the 'Pipfile.lock' file.
           remote:  !     
           remote:  !     For a list of the supported Python versions, see:
-          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT

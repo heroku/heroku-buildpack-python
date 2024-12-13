@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Fixed Dev Center links to reflect recent article URL changes. ([#1723](https://github.com/heroku/heroku-buildpack-python/pull/1723))
 
 ## [v271] - 2024-12-12
 

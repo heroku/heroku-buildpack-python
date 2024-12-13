@@ -54,7 +54,7 @@ RSpec.describe 'Python update warnings' do
             remote:  !     Error: Python 3.8.0 isn't available for this stack (#{app.stack}).
             remote:  !     
             remote:  !     For a list of the supported Python versions, see:
-            remote:  !     https://devcenter.heroku.com/articles/python-support#supported-runtimes
+            remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
             remote: 
             remote:  !     Push rejected, failed to compile Python app.
           OUTPUT
