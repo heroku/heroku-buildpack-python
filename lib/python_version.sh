@@ -299,7 +299,7 @@ function python_version::resolve_python_version() {
 				${DEFAULT_PYTHON_MAJOR_VERSION}
 
 				For a list of the supported Python versions, see:
-				https://devcenter.heroku.com/articles/python-support#supported-runtimes
+				https://devcenter.heroku.com/articles/python-support#supported-python-versions
 			EOF
 		else
 			output::error <<-EOF
@@ -315,7 +315,7 @@ function python_version::resolve_python_version() {
 				version configured via the '${python_version_origin}' file.
 
 				For a list of the supported Python versions, see:
-				https://devcenter.heroku.com/articles/python-support#supported-runtimes
+				https://devcenter.heroku.com/articles/python-support#supported-python-versions
 			EOF
 		fi
 		meta_set "failure_reason" "python-version::eol"
@@ -347,11 +347,12 @@ function python_version::resolve_python_version() {
 				Check that this Python version has been officially released,
 				and that the Python buildpack has added support for it:
 				https://devguide.python.org/versions/#supported-versions
-				https://devcenter.heroku.com/articles/python-support#supported-runtimes
+				https://devcenter.heroku.com/articles/python-support#supported-python-versions
 
 				If it has, make sure that you are using the latest version
-				of this buildpack:
-				https://devcenter.heroku.com/articles/python-support#checking-the-python-buildpack-version
+				of this buildpack, and have not pinned to an older release:
+				https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
+				https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
 
 				Otherwise, switch to a supported version (such as Python ${DEFAULT_PYTHON_MAJOR_VERSION})
 				by updating the version configured via the '${python_version_origin}' file.

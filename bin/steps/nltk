@@ -47,6 +47,5 @@ if is_module_available 'nltk'; then
 	else
 		meta_set "nltk_downloader" "skipped-no-nltk-file"
 		echo "       'nltk.txt' not found, not downloading any corpora"
-		echo "       Learn more: https://devcenter.heroku.com/articles/python-nltk"
 	fi
 fi
