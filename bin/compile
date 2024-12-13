@@ -21,6 +21,7 @@ BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
 source "${BUILDPACK_DIR}/bin/utils"
 source "${BUILDPACK_DIR}/lib/utils.sh"
 source "${BUILDPACK_DIR}/lib/cache.sh"
+source "${BUILDPACK_DIR}/lib/checks.sh"
 source "${BUILDPACK_DIR}/lib/hooks.sh"
 source "${BUILDPACK_DIR}/lib/metadata.sh"
 source "${BUILDPACK_DIR}/lib/output.sh"
@@ -32,9 +33,14 @@ source "${BUILDPACK_DIR}/lib/poetry.sh"
 
 compile_start_time=$(nowms)
 
-# Initialise metadata store.
+# Initialise the buildpack metadata store.
+# This is used to track state across builds (for cache invalidation and messaging when build
+# configuration changes) and also so that `bin/report` can generate the build report.
 meta_init "${CACHE_DIR}" "python"
 meta_setup
+
+checks::ensure_supported_stack "${STACK:?Required env var STACK is not set}"
+checks::warn_if_duplicate_python_buildpack "${BUILD_DIR}"
 
 # Prepend proper path for old-school virtualenv hackery.
 # This may not be necessary.
@@ -103,6 +109,10 @@ cd "$BUILD_DIR"
 # Runs a `bin/pre_compile` script if found in the app source, allowing build customisation.
 hooks::run_hook "pre_compile"
 
+# This check must be after the pre_compile hook, so that we can check not only the original
+# app source, but also that the hook hasn't written to '.heroku/python/' either.
+checks::warn_if_existing_python_dir_present "${BUILD_DIR}"
+
 package_manager="$(package_manager::determine_package_manager "${BUILD_DIR}")"
 meta_set "package_manager" "${package_manager}"
 
@@ -135,7 +145,7 @@ python_major_version="${python_full_version%.*}"
 meta_set "python_version" "${python_full_version}"
 meta_set "python_version_major" "${python_major_version}"
 
-cache::restore "${BUILD_DIR}" "${CACHE_DIR}" "${STACK:?}" "${cached_python_full_version}" "${python_full_version}" "${package_manager}"
+cache::restore "${BUILD_DIR}" "${CACHE_DIR}" "${STACK}" "${cached_python_full_version}" "${python_full_version}" "${package_manager}"
 
 # The directory for the .profile.d scripts.
 mkdir -p "$(dirname "$PROFILE_PATH")"
