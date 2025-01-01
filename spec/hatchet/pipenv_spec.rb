@@ -36,7 +36,7 @@ RSpec.describe 'Pipenv support' do
           remote:  '/app/.heroku/python/lib/python3.13/site-packages'\\]
           remote: 
           remote: Package           Version
-          remote: ----------------- ---------
+          remote: ----------------- -+
           remote: certifi           .+
           remote: distlib           .+
           remote: filelock          .+
