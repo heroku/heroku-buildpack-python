@@ -23,6 +23,7 @@ RSpec.describe 'Buildpack detection' do
           remote:  !     
           remote:  !     Currently the root directory of your app contains:
           remote:  !     
+          remote:  !     .example-dotfile
           remote:  !     README.md
           remote:  !     subdir/
           remote:  !     

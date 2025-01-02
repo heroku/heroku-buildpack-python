@@ -19,6 +19,7 @@ RSpec.describe 'Package manager support' do
           remote:  !     
           remote:  !     Currently the root directory of your app contains:
           remote:  !     
+          remote:  !     .example-dotfile
           remote:  !     pyproject.toml
           remote:  !     subdir/
           remote:  !     

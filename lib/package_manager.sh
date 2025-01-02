@@ -80,7 +80,7 @@ function package_manager::determine_package_manager() {
 
 				Currently the root directory of your app contains:
 
-				$(ls -1 --indicator-style=slash "${build_dir}" || true)
+				$(ls -1A --indicator-style=slash "${build_dir}" || true)
 
 				If your app already has a package manager file, check that it:
 

@@ -55,7 +55,7 @@ directory of its source code.
 
 Currently the root directory of your app contains:
 
-$(ls -1 --indicator-style=slash "${BUILD_DIR}" || true)
+$(ls -1A --indicator-style=slash "${BUILD_DIR}" || true)
 
 If your app already has a package manager file, check that it:
 
