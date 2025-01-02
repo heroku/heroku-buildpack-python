@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Improved the file listing in the error messages shown when buildpack detection fails or when no Python package manager files are found. ([#1728](https://github.com/heroku/heroku-buildpack-python/pull/1728))
 
 ## [v272] - 2024-12-13
 
