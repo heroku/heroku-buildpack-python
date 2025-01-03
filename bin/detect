@@ -20,6 +20,7 @@ source "${BUILDPACK_DIR}/lib/output.sh"
 # allowing us to show a helpful error message during the build phase.
 KNOWN_PYTHON_PROJECT_FILES=(
 	.python-version
+	__init__.py
 	app.py
 	main.py
 	manage.py
@@ -30,13 +31,27 @@ KNOWN_PYTHON_PROJECT_FILES=(
 	pyproject.toml
 	requirements.txt
 	runtime.txt
+	server.py
 	setup.cfg
 	setup.py
 	uv.lock
+	# Commonly seen misspellings of requirements.txt. (Which occur since pip doesn't
+	# create/manage requirements files itself, so the filenames are manually typed.)
+	requirement.txt
+	Requirements.txt
+	requirements.text
+	requirements.txt.txt
+	requirments.txt
+	# Whilst virtual environments shouldn't be committed to Git (and so shouldn't
+	# normally be present during the build), they are often present for beginner
+	# Python apps that are missing all of the other Python related files above.
+	.venv/
+	venv/
 )
 
-for filename in "${KNOWN_PYTHON_PROJECT_FILES[@]}"; do
-	if [[ -f "${BUILD_DIR}/${filename}" ]]; then
+for filepath in "${KNOWN_PYTHON_PROJECT_FILES[@]}"; do
+	# Using -e since we need to check for both files and directories.
+	if [[ -e "${BUILD_DIR}/${filepath}" ]]; then
 		echo "Python"
 		exit 0
 	fi
