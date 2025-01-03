@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added more Python project related file and directory names to the list recognised by buildpack detection. ([#1729](https://github.com/heroku/heroku-buildpack-python/pull/1729))
 - Improved the file listing in the error messages shown when buildpack detection fails or when no Python package manager files are found. ([#1728](https://github.com/heroku/heroku-buildpack-python/pull/1728))
 
 ## [v272] - 2024-12-13
