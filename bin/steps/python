@@ -14,7 +14,7 @@ PYTHON_URL="${S3_BASE_URL}/python-${python_full_version}-ubuntu-${UBUNTU_VERSION
 # 1. It's a Python major version we've deprecated and so is only available on older stacks (i.e: Python 3.8).
 # 2. If an exact Python version was requested and the patch version doesn't exist (e.g. 3.12.999).
 # 3. The user has pinned to an older buildpack version and the S3 bucket location or layout has changed since.
-# TODO: Update this message to be more specific once Python 3.8 support is dropped.
+# TODO: Update this message to be more specific now that Python 3.8 support has been removed, and so (1) can no longer occur.
 if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefused --connect-timeout 10 "${PYTHON_URL}"; then
 	output::error <<-EOF
 		Error: Python ${python_full_version} isn't available for this stack (${STACK}).
@@ -74,18 +74,22 @@ function warn_if_patch_update_available() {
 # We wait until now to display outdated Python version warnings, since we only want to show them
 # if there weren't any errors with the version to avoid adding noise to the error messages.
 # TODO: Move this into lib/ as part of the warnings refactor.
-if [[ "${python_major_version}" == "3.8" ]]; then
-	output::warning <<-'EOF'
-		Warning: Support for Python 3.8 is ending soon!
+if [[ "${python_major_version}" == "3.9" ]]; then
+	output::warning <<-EOF
+		Warning: Support for Python 3.9 is ending soon!
 
-		Python 3.8 reached its upstream end-of-life on 7th October 2024, and so
-		no longer receives security updates:
+		Python 3.9 will reach its upstream end-of-life in October 2025,
+		at which point it will no longer receive security updates:
 		https://devguide.python.org/versions/#supported-versions
 
-		Support for Python 3.8 will be removed from this buildpack on 7th January 2025.
+		As such, support for Python 3.9 will be removed from this
+		buildpack on 7th January 2026.
 
-		Upgrade to a newer Python version as soon as possible to keep your app secure.
-		See: https://devcenter.heroku.com/articles/python-runtimes
+		Upgrade to a newer Python version as soon as possible, by
+		changing the version in your ${python_version_origin} file.
+
+		For more information, see:
+		https://devcenter.heroku.com/articles/python-support#supported-python-versions
 	EOF
 fi
 

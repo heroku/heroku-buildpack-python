@@ -4,12 +4,14 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-LATEST_PYTHON_3_8="3.8.20"
 LATEST_PYTHON_3_9="3.9.21"
 LATEST_PYTHON_3_10="3.10.16"
 LATEST_PYTHON_3_11="3.11.11"
 LATEST_PYTHON_3_12="3.12.8"
 LATEST_PYTHON_3_13="3.13.1"
+
+OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION=9
+NEWEST_SUPPORTED_PYTHON_3_MINOR_VERSION=13
 
 DEFAULT_PYTHON_FULL_VERSION="${LATEST_PYTHON_3_13}"
 DEFAULT_PYTHON_MAJOR_VERSION="${DEFAULT_PYTHON_FULL_VERSION%.*}"
@@ -280,7 +282,7 @@ function python_version::resolve_python_version() {
 	local major="${BASH_REMATCH[1]}"
 	local minor="${BASH_REMATCH[2]}"
 
-	if ((major < 3 || (major == 3 && minor < 8))); then
+	if ((major < 3 || (major == 3 && minor < OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION))); then
 		if [[ "${python_version_origin}" == "cached" ]]; then
 			output::error <<-EOF
 				Error: The cached Python version has reached end-of-life.
@@ -292,14 +294,13 @@ function python_version::resolve_python_version() {
 				and is therefore no longer receiving security updates:
 				https://devguide.python.org/versions/#supported-versions
 
-				As such, it is no longer supported by this buildpack.
-
-				Please upgrade to a newer Python version by creating a
-				'.python-version' file that contains a Python version like:
-				${DEFAULT_PYTHON_MAJOR_VERSION}
-
-				For a list of the supported Python versions, see:
+				As such, it's no longer supported by this buildpack:
 				https://devcenter.heroku.com/articles/python-support#supported-python-versions
+
+				Please upgrade to at least Python 3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION} by creating a
+				.python-version file in the root directory of your app,
+				that contains a Python version like:
+				3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION}
 			EOF
 		else
 			output::error <<-EOF
@@ -309,20 +310,18 @@ function python_version::resolve_python_version() {
 				therefore no longer receiving security updates:
 				https://devguide.python.org/versions/#supported-versions
 
-				As such, it is no longer supported by this buildpack.
-
-				Please upgrade to a newer Python version by updating the
-				version configured via the '${python_version_origin}' file.
-
-				For a list of the supported Python versions, see:
+				As such, it's no longer supported by this buildpack:
 				https://devcenter.heroku.com/articles/python-support#supported-python-versions
+
+				Please upgrade to at least Python 3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION} by changing the
+				version in your ${python_version_origin} file.
 			EOF
 		fi
 		meta_set "failure_reason" "python-version::eol"
 		exit 1
 	fi
 
-	if (((major == 3 && minor > 13) || major >= 4)); then
+	if (((major == 3 && minor > NEWEST_SUPPORTED_PYTHON_3_MINOR_VERSION) || major >= 4)); then
 		if [[ "${python_version_origin}" == "cached" ]]; then
 			output::error <<-EOF
 				Error: The cached Python version isn't recognised.
@@ -336,7 +335,14 @@ function python_version::resolve_python_version() {
 				This can occur if you have downgraded the version of the
 				buildpack to an older version.
 
-				Please switch back to a newer version of this buildpack.
+				Please switch back to a newer version of this buildpack:
+				https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
+				https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
+
+				Alternatively, request an older Python version by creating
+				a .python-version file in the root directory of your app,
+				that contains a Python version like:
+				3.${NEWEST_SUPPORTED_PYTHON_3_MINOR_VERSION}
 			EOF
 		else
 			output::error <<-EOF
@@ -350,12 +356,12 @@ function python_version::resolve_python_version() {
 				https://devcenter.heroku.com/articles/python-support#supported-python-versions
 
 				If it has, make sure that you are using the latest version
-				of this buildpack, and have not pinned to an older release:
+				of this buildpack, and haven't pinned to an older release:
 				https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
 				https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
 
-				Otherwise, switch to a supported version (such as Python ${DEFAULT_PYTHON_MAJOR_VERSION})
-				by updating the version configured via the '${python_version_origin}' file.
+				Otherwise, switch to a supported version (such as Python 3.${NEWEST_SUPPORTED_PYTHON_3_MINOR_VERSION})
+				by changing the version in your ${python_version_origin} file.
 			EOF
 		fi
 		meta_set "failure_reason" "python-version::unknown-major"
@@ -366,7 +372,6 @@ function python_version::resolve_python_version() {
 	# Otherwise map major version specifiers to the latest patch release.
 	case "${requested_python_version}" in
 		*.*.*) echo "${requested_python_version}" ;;
-		3.8) echo "${LATEST_PYTHON_3_8}" ;;
 		3.9) echo "${LATEST_PYTHON_3_9}" ;;
 		3.10) echo "${LATEST_PYTHON_3_10}" ;;
 		3.11) echo "${LATEST_PYTHON_3_11}" ;;

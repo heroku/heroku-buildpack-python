@@ -58,8 +58,7 @@ jobs:
         run: aws s3 sync ./upload "s3://${S3_BUCKET}"
 
   heroku-22:
-    # On Heroku-22 we only support Python 3.9+.
-    if: inputs.stack == 'heroku-22' || (inputs.stack == 'auto' && !startsWith(inputs.python_version,'3.8.'))
+    if: inputs.stack == 'heroku-22' || inputs.stack == 'auto'
     runs-on: pub-hk-ubuntu-24.04-xlarge
     env:
       STACK_VERSION: "22"
@@ -80,8 +79,7 @@ jobs:
         run: aws s3 sync ./upload "s3://${S3_BUCKET}"
 
   heroku-24:
-    # On Heroku-24 we only support Python 3.9+.
-    if: inputs.stack == 'heroku-24' || (inputs.stack == 'auto' && !startsWith(inputs.python_version,'3.8.'))
+    if: inputs.stack == 'heroku-24' || inputs.stack == 'auto'
     strategy:
       fail-fast: false
       matrix:

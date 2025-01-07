@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Added a deprecation warning for Python 3.9. ([#1732](https://github.com/heroku/heroku-buildpack-python/pull/1732))
+- Removed support for Python 3.8. ([#1732](https://github.com/heroku/heroku-buildpack-python/pull/1732))
+- Improved the error messages shown for EOL or unrecognised major Python versions. ([#1732](https://github.com/heroku/heroku-buildpack-python/pull/1732))
 
 ## [v273] - 2025-01-03
 

@@ -75,65 +75,39 @@ RSpec.describe 'Python version support' do
     end
   end
 
-  context 'when .python-version contains Python 3.8' do
-    let(:allow_failure) { false }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.8', allow_failure:) }
-
-    context 'when using Heroku-20', stacks: %w[heroku-20] do
-      it 'builds with latest Python 3.8 but shows a deprecation warning' do
-        app.deploy do |app|
-          expect(clean_output(app.output)).to include(<<~OUTPUT)
-            remote: -----> Python app detected
-            remote: -----> Using Python 3.8 specified in .python-version
-            remote: -----> Installing Python #{LATEST_PYTHON_3_8}
-            remote: 
-            remote:  !     Warning: Support for Python 3.8 is ending soon!
-            remote:  !     
-            remote:  !     Python 3.8 reached its upstream end-of-life on 7th October 2024, and so
-            remote:  !     no longer receives security updates:
-            remote:  !     https://devguide.python.org/versions/#supported-versions
-            remote:  !     
-            remote:  !     Support for Python 3.8 will be removed from this buildpack on 7th January 2025.
-            remote:  !     
-            remote:  !     Upgrade to a newer Python version as soon as possible to keep your app secure.
-            remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
-            remote: 
-            remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-            remote: -----> Installing SQLite3
-            remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-            remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
-          OUTPUT
-          expect(app.run('python -V')).to include("Python #{LATEST_PYTHON_3_8}")
-        end
-      end
-    end
-
-    context 'when using Heroku-22 or newer', stacks: %w[heroku-22 heroku-24] do
-      let(:allow_failure) { true }
-
-      # We only support Python 3.8 on Heroku-20 and older.
-      it 'aborts the build with a version not available message' do
-        app.deploy do |app|
-          expect(clean_output(app.output)).to include(<<~OUTPUT)
-            remote: -----> Python app detected
-            remote: -----> Using Python 3.8 specified in .python-version
-            remote: 
-            remote:  !     Error: Python #{LATEST_PYTHON_3_8} isn't available for this stack (#{app.stack}).
-            remote:  !     
-            remote:  !     For a list of the supported Python versions, see:
-            remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
-            remote: 
-            remote:  !     Push rejected, failed to compile Python app.
-          OUTPUT
-        end
-      end
-    end
-  end
-
   context 'when .python-version contains Python 3.9' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9') }
 
-    include_examples 'builds with the requested Python version', '3.9', LATEST_PYTHON_3_9
+    it 'builds with Python 3.9 but shows a deprecation warning' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.9 specified in .python-version
+          remote: -----> Installing Python #{LATEST_PYTHON_3_9}
+          remote: 
+          remote:  !     Warning: Support for Python 3.9 is ending soon!
+          remote:  !     
+          remote:  !     Python 3.9 will reach its upstream end-of-life in October 2025,
+          remote:  !     at which point it will no longer receive security updates:
+          remote:  !     https://devguide.python.org/versions/#supported-versions
+          remote:  !     
+          remote:  !     As such, support for Python 3.9 will be removed from this
+          remote:  !     buildpack on 7th January 2026.
+          remote:  !     
+          remote:  !     Upgrade to a newer Python version as soon as possible, by
+          remote:  !     changing the version in your .python-version file.
+          remote:  !     
+          remote:  !     For more information, see:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote: 
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
+          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+        OUTPUT
+        expect(app.run('python -V')).to include("Python #{LATEST_PYTHON_3_9}")
+      end
+    end
   end
 
   context 'when .python-version contains Python 3.10' do
@@ -252,21 +226,19 @@ RSpec.describe 'Python version support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python 3.7 specified in .python-version
+          remote: -----> Using Python 3.8 specified in .python-version
           remote: 
           remote:  !     Error: The requested Python version has reached end-of-life.
           remote:  !     
-          remote:  !     Python 3.7 has reached its upstream end-of-life, and is
+          remote:  !     Python 3.8 has reached its upstream end-of-life, and is
           remote:  !     therefore no longer receiving security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
-          remote:  !     As such, it is no longer supported by this buildpack.
-          remote:  !     
-          remote:  !     Please upgrade to a newer Python version by updating the
-          remote:  !     version configured via the '.python-version' file.
-          remote:  !     
-          remote:  !     For a list of the supported Python versions, see:
+          remote:  !     As such, it's no longer supported by this buildpack:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote:  !     
+          remote:  !     Please upgrade to at least Python 3.9 by changing the
+          remote:  !     version in your .python-version file.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
@@ -293,12 +265,12 @@ RSpec.describe 'Python version support' do
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote:  !     
           remote:  !     If it has, make sure that you are using the latest version
-          remote:  !     of this buildpack, and have not pinned to an older release:
+          remote:  !     of this buildpack, and haven't pinned to an older release:
           remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
           remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
           remote:  !     
           remote:  !     Otherwise, switch to a supported version (such as Python #{DEFAULT_PYTHON_MAJOR_VERSION})
-          remote:  !     by updating the version configured via the '.python-version' file.
+          remote:  !     by changing the version in your .python-version file.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
@@ -373,13 +345,11 @@ RSpec.describe 'Python version support' do
           remote:  !     therefore no longer receiving security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
-          remote:  !     As such, it is no longer supported by this buildpack.
-          remote:  !     
-          remote:  !     Please upgrade to a newer Python version by updating the
-          remote:  !     version configured via the 'runtime.txt' file.
-          remote:  !     
-          remote:  !     For a list of the supported Python versions, see:
+          remote:  !     As such, it's no longer supported by this buildpack:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote:  !     
+          remote:  !     Please upgrade to at least Python 3.9 by changing the
+          remote:  !     version in your runtime.txt file.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
