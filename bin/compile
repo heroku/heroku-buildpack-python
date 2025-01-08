@@ -194,7 +194,7 @@ meta_time "package_manager_install_duration" "${package_manager_install_start_ti
 # Installs the sqlite3 dev headers and sqlite3 binary but not the
 # libsqlite3-0 library since that exists in the base image.
 # We skip this step on Python 3.13 or when using Poetry, as a first step towards removing this feature.
-if [[ "${python_major_version}" == +(3.8|3.9|3.10|3.11|3.12) && "${package_manager}" != "poetry" ]]; then
+if [[ "${python_major_version}" == +(3.9|3.10|3.11|3.12) && "${package_manager}" != "poetry" ]]; then
 	install_sqlite_start_time=$(nowms)
 	source "${BUILDPACK_DIR}/bin/steps/sqlite3"
 	buildpack_sqlite3_install

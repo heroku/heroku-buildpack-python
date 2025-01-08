@@ -31,7 +31,7 @@ function pip::install_pip_setuptools_wheel() {
 	#   them installed.
 	# - Most of the Python ecosystem has stopped installing them for Python 3.12+ already.
 	# See the Python CNB's removal for more details: https://github.com/heroku/buildpacks-python/pull/243
-	if [[ "${python_major_version}" == +(3.8|3.9|3.10|3.11|3.12) ]]; then
+	if [[ "${python_major_version}" == +(3.9|3.10|3.11|3.12) ]]; then
 		meta_set "setuptools_version" "${SETUPTOOLS_VERSION}"
 		meta_set "wheel_version" "${WHEEL_VERSION}"
 		packages_to_install+=(

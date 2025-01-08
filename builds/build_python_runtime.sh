@@ -21,18 +21,8 @@ function abort() {
 }
 
 case "${STACK:?}" in
-	heroku-22 | heroku-24)
+	heroku-20 | heroku-22 | heroku-24)
 		SUPPORTED_PYTHON_VERSIONS=(
-			"3.9"
-			"3.10"
-			"3.11"
-			"3.12"
-			"3.13"
-		)
-		;;
-	heroku-20)
-		SUPPORTED_PYTHON_VERSIONS=(
-			"3.8"
 			"3.9"
 			"3.10"
 			"3.11"
@@ -63,7 +53,7 @@ case "${PYTHON_MAJOR_VERSION}" in
 		# https://keybase.io/pablogsal/
 		GPG_KEY_FINGERPRINT='A035C8C19219BA821ECEA86B64E628F8D684696D'
 		;;
-	3.8 | 3.9)
+	3.9)
 		# https://keybase.io/ambv/
 		GPG_KEY_FINGERPRINT='E3FF2839C048B25C084DEBE9B26995E310250568'
 		;;
@@ -122,7 +112,7 @@ CONFIGURE_OPTS=(
 	"--with-system-expat"
 )
 
-if [[ "${PYTHON_MAJOR_VERSION}" != +(3.8|3.9) ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" != +(3.9) ]]; then
 	CONFIGURE_OPTS+=(
 		# Shared builds are beneficial for a number of reasons:
 		# - Reduces the size of the build, since it avoids the duplication between
@@ -147,7 +137,7 @@ if [[ "${PYTHON_MAJOR_VERSION}" != +(3.8|3.9) ]]; then
 	)
 fi
 
-if [[ "${PYTHON_MAJOR_VERSION}" != +(3.8|3.9|3.10) ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" != +(3.9|3.10) ]]; then
 	CONFIGURE_OPTS+=(
 		# Skip building the test modules, since we remove them after the build anyway.
 		# This feature was added in Python 3.10+, however it wasn't until Python 3.11
@@ -170,7 +160,7 @@ fi
 # - https://github.com/docker-library/python/issues/810
 # We only use `dpkg-buildflags` for Python versions where we build in shared mode (Python 3.9+),
 # since some of the options it enables interferes with the stripping of static libraries.
-if [[ "${PYTHON_MAJOR_VERSION}" == +(3.8|3.9) ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" == +(3.9) ]]; then
 	EXTRA_CFLAGS=''
 	LDFLAGS='-Wl,--strip-all'
 else
@@ -182,7 +172,7 @@ CPU_COUNT="$(nproc)"
 make -j "${CPU_COUNT}" "EXTRA_CFLAGS=${EXTRA_CFLAGS}" "LDFLAGS=${LDFLAGS}"
 make install
 
-if [[ "${PYTHON_MAJOR_VERSION}" == +(3.8|3.9) ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" == +(3.9) ]]; then
 	# On older versions of Python we're still building the static library, which has to be
 	# manually stripped since the linker stripping enabled in LDFLAGS doesn't cover them.
 	# We're using `--strip-unneeded` since `--strip-all` would remove the `.symtab` section
@@ -233,7 +223,7 @@ LD_LIBRARY_PATH="${SRC_DIR}" "${SRC_DIR}/python" -m compileall -f --invalidation
 # (e.g. `python -m pydoc`) if needed.
 rm "${INSTALL_DIR}"/bin/{idle,pydoc}*
 # The 2to3 module and entrypoint was removed from the stdlib in Python 3.13.
-if [[ "${PYTHON_MAJOR_VERSION}" == +(3.8|3.9|3.10|3.11|3.12) ]]; then
+if [[ "${PYTHON_MAJOR_VERSION}" == +(3.9|3.10|3.11|3.12) ]]; then
 	rm "${INSTALL_DIR}"/bin/2to3*
 fi
 

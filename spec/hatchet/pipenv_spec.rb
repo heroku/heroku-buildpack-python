@@ -80,6 +80,22 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python 3.9.0 specified in Pipfile.lock
           remote: -----> Installing Python 3.9.0
           remote: 
+          remote:  !     Warning: Support for Python 3.9 is ending soon!
+          remote:  !     
+          remote:  !     Python 3.9 will reach its upstream end-of-life in October 2025,
+          remote:  !     at which point it will no longer receive security updates:
+          remote:  !     https://devguide.python.org/versions/#supported-versions
+          remote:  !     
+          remote:  !     As such, support for Python 3.9 will be removed from this
+          remote:  !     buildpack on 7th January 2026.
+          remote:  !     
+          remote:  !     Upgrade to a newer Python version as soon as possible, by
+          remote:  !     changing the version in your Pipfile.lock file.
+          remote:  !     
+          remote:  !     For more information, see:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote: 
+          remote: 
           remote:  !     Warning: A Python security update is available!
           remote:  !     
           remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
@@ -266,21 +282,19 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~OUTPUT))
           remote: -----> Python app detected
-          remote: -----> Using Python 3.7 specified in Pipfile.lock
+          remote: -----> Using Python 3.8 specified in Pipfile.lock
           remote: 
           remote:  !     Error: The requested Python version has reached end-of-life.
           remote:  !     
-          remote:  !     Python 3.7 has reached its upstream end-of-life, and is
+          remote:  !     Python 3.8 has reached its upstream end-of-life, and is
           remote:  !     therefore no longer receiving security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
-          remote:  !     As such, it is no longer supported by this buildpack.
-          remote:  !     
-          remote:  !     Please upgrade to a newer Python version by updating the
-          remote:  !     version configured via the 'Pipfile.lock' file.
-          remote:  !     
-          remote:  !     For a list of the supported Python versions, see:
+          remote:  !     As such, it's no longer supported by this buildpack:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote:  !     
+          remote:  !     Please upgrade to at least Python 3.9 by changing the
+          remote:  !     version in your Pipfile.lock file.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT

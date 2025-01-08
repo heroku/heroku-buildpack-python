@@ -199,6 +199,22 @@ RSpec.describe 'Poetry support' do
           remote: -----> Using Python 3.9.0 specified in .python-version
           remote: -----> Installing Python 3.9.0
           remote: 
+          remote:  !     Warning: Support for Python 3.9 is ending soon!
+          remote:  !     
+          remote:  !     Python 3.9 will reach its upstream end-of-life in October 2025,
+          remote:  !     at which point it will no longer receive security updates:
+          remote:  !     https://devguide.python.org/versions/#supported-versions
+          remote:  !     
+          remote:  !     As such, support for Python 3.9 will be removed from this
+          remote:  !     buildpack on 7th January 2026.
+          remote:  !     
+          remote:  !     Upgrade to a newer Python version as soon as possible, by
+          remote:  !     changing the version in your .python-version file.
+          remote:  !     
+          remote:  !     For more information, see:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote: 
+          remote: 
           remote:  !     Warning: A Python security update is available!
           remote:  !     
           remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
