@@ -14,7 +14,7 @@ RSpec.describe 'Poetry support' do
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing Poetry #{POETRY_VERSION}
-          remote: -----> Installing dependencies using 'poetry install --sync --only main'
+          remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
           remote:        Package operations: 1 install, 0 updates, 0 removals
@@ -51,7 +51,7 @@ RSpec.describe 'Poetry support' do
           remote: -----> Restoring cache
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Using cached Poetry #{POETRY_VERSION}
-          remote: -----> Installing dependencies using 'poetry install --sync --only main'
+          remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
           remote:        No dependencies to install or update
@@ -78,7 +78,7 @@ RSpec.describe 'Poetry support' do
           remote:        - The Poetry version has changed from 1.8.4 to #{POETRY_VERSION}
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing Poetry #{POETRY_VERSION}
-          remote: -----> Installing dependencies using 'poetry install --sync --only main'
+          remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
           remote:        Package operations: 1 install, 0 updates, 0 removals
@@ -107,7 +107,7 @@ RSpec.describe 'Poetry support' do
           remote:        - The package manager has changed from pip to poetry
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing Poetry #{POETRY_VERSION}
-          remote: -----> Installing dependencies using 'poetry install --sync --only main'
+          remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
           remote:        Package operations: 1 install, 0 updates, 0 removals
@@ -221,7 +221,7 @@ RSpec.describe 'Poetry support' do
           remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
           remote: 
           remote: -----> Installing Poetry #{POETRY_VERSION}
-          remote: -----> Installing dependencies using 'poetry install --sync --only main'
+          remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
           remote:        Package operations: 1 install, 0 updates, 0 removals
@@ -240,7 +240,7 @@ RSpec.describe 'Poetry support' do
     it 'fails the build' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> Installing dependencies using 'poetry install --sync --only main'
+          remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
           remote:        pyproject.toml changed significantly since poetry.lock was last generated. Run `poetry lock [--no-update]` to fix the lock file.

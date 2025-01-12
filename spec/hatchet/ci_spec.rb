@@ -161,7 +161,7 @@ RSpec.describe 'Heroku CI' do
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing Poetry #{POETRY_VERSION}
-          -----> Installing dependencies using 'poetry install --sync'
+          -----> Installing dependencies using 'poetry sync'
                  Installing dependencies from lock file
                  
                  Package operations: 5 installs, 0 updates, 0 removals
@@ -223,7 +223,7 @@ RSpec.describe 'Heroku CI' do
           -----> Restoring cache
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing Poetry #{POETRY_VERSION}
-          -----> Installing dependencies using 'poetry install --sync'
+          -----> Installing dependencies using 'poetry sync'
                  Installing dependencies from lock file
                  
                  No dependencies to install or update
