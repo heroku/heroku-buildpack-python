@@ -243,7 +243,7 @@ RSpec.describe 'Poetry support' do
           remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
-          remote:        pyproject.toml changed significantly since poetry.lock was last generated. Run `poetry lock [--no-update]` to fix the lock file.
+          remote:        pyproject.toml changed significantly since poetry.lock was last generated. Run `poetry lock` to fix the lock file.
           remote: 
           remote:  !     Error: Unable to install dependencies using Poetry.
           remote:  !     
