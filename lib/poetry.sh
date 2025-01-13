@@ -99,8 +99,8 @@ function poetry::install_poetry() {
 
 # Note: We cache site-packages since:
 # - It results in faster builds than only caching Poetry's download/wheel cache.
-# - It's safe to do so, since `poetry install --sync` fully manages the environment
-#   (including e.g. uninstalling packages when they are removed from the lockfile).
+# - It's safe to do so, since `poetry sync` fully manages the environment (including
+#   e.g. uninstalling packages when they are removed from the lockfile).
 #
 # With site-packages cached there is no need to persist Poetry's download/wheel cache in the build
 # cache, so we let Poetry write it to the home directory where it will be discarded at the end of
@@ -109,8 +109,7 @@ function poetry::install_poetry() {
 function poetry::install_dependencies() {
 	local poetry_install_command=(
 		poetry
-		install
-		--sync
+		sync
 	)
 
 	# On Heroku CI, all default Poetry dependency groups are installed (i.e. all groups minus those
