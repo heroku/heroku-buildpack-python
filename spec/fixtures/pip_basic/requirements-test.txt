@@ -1,0 +1,2 @@
+# This shouldn't be installed, since requirements-test.txt should only be used on Heroku CI.
+pytest

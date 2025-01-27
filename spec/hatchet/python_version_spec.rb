@@ -50,8 +50,12 @@ RSpec.describe 'Python version support' do
 
     context 'with an app last built using an older default Python version' do
       # This test performs an initial build using an older buildpack version, followed
-      # by a build using the current version. This ensures that the current buildpack
-      # can successfully read the version metadata written to the build cache in the past.
+      # by a build using the current version. This ensures that:
+      # - The current buildpack can successfully read the version metadata
+      #   written to the build cache by older buildpack versions.
+      # - If no Python version is specified, the same major version as the
+      #   last build is used (sticky versioning).
+      # - Changes in the pip version are handled correctly.
       let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v257'] }
 
       it 'builds with the same Python version as the last build' do

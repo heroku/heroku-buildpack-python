@@ -1,0 +1,2 @@
+# A quick to install package that relies on the Python headers from the base image.
+git+https://github.com/pypa/wheel.git@0.44.0#egg=extension.dist&subdirectory=tests/testdata/extension.dist

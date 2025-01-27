@@ -2,19 +2,10 @@
 
 require_relative '../spec_helper'
 
-RSpec.shared_examples 'installs successfully using pip' do
-  it 'installs successfully using pip' do
-    app.deploy do |app|
-      expect(app.output).to include("Installing dependencies using 'pip install -r requirements.txt'")
-      expect(app.output).to include('Successfully installed')
-    end
-  end
-end
-
 RSpec.describe 'pip support' do
   context 'when requirements.txt is unchanged since the last build' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_basic', buildpacks:) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_basic', buildpacks:) }
 
     it 're-uses packages from the cache' do
       app.deploy do |app|
@@ -69,7 +60,7 @@ RSpec.describe 'pip support' do
   end
 
   context 'when requirements.txt has changed since the last build' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_basic') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_basic') }
 
     it 'clears the cache before installing the packages again' do
       app.deploy do |app|
@@ -99,46 +90,11 @@ RSpec.describe 'pip support' do
     end
   end
 
-  context 'when the package manager has changed from Pipenv to pip since the last build' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic') }
-
-    it 'clears the cache before installing with pip' do
-      app.deploy do |app|
-        FileUtils.rm(['Pipfile', 'Pipfile.lock'])
-        FileUtils.cp(FIXTURE_DIR.join('requirements_basic/.python-version'), '.')
-        FileUtils.cp(FIXTURE_DIR.join('requirements_basic/requirements.txt'), '.')
-        app.commit!
-        app.push!
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> Python app detected
-          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> Discarding cache since:
-          remote:        - The package manager has changed from pipenv to pip
-          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
-          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
-          remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
-          remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
-          remote:        Installing collected packages: typing-extensions
-          remote:        Successfully installed typing-extensions-4.12.2
-        OUTPUT
-      end
-    end
-  end
-
-  # TODO: Switch this to using Python 3.13 as part of the sqlite removal.
-  context 'when requirements.txt contains popular compiled packages' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_compiled') }
-
-    include_examples 'installs successfully using pip'
-  end
-
   # This test intentionally uses Python 3.12, so that we test rewriting using older globally installed
   # setuptools. The Poetry equivalent of this test covers the PEP-517/518 setuptools case.
   context 'when requirements.txt contains editable requirements (both VCS and local package)' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_editable', buildpacks:) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_editable', buildpacks:) }
 
     it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
@@ -207,42 +163,18 @@ RSpec.describe 'pip support' do
     end
   end
 
-  context 'when there is only a setup.py' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/setup_py_only') }
+  context 'when requirements.txt contains a package that needs compiling against the Python headers' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_compiled') }
 
-    it 'installs packages from setup.py' do
+    it 'installs successfully using pip' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
-          remote: -----> Python app detected
-          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
-          remote: -----> Installing dependencies using 'pip install --editable .'
-          remote:        Obtaining file:///tmp/build_.*
-          remote:        .+
-          remote:        Installing collected packages: six, test
-          remote:        Successfully installed six-.+ test-0.0.0
-        REGEX
-      end
-    end
-  end
-
-  context 'when there is both a requirements.txt and setup.py' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_txt_and_setup_py') }
-
-    it 'installs packages only from requirements.txt' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting urllib3 (from -r requirements.txt (line 1))
-        OUTPUT
-        expect(app.output).not_to include('Running setup.py develop')
+        expect(app.output).to include('Building wheel for extension.dist')
       end
     end
   end
 
   context 'when requirements.txt contains an invalid requirement' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_invalid', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_invalid_requirement', allow_failure: true) }
 
     it 'aborts the build and displays the pip error' do
       app.deploy do |app|
@@ -263,7 +195,7 @@ RSpec.describe 'pip support' do
   end
 
   context 'when requirements.txt contains GDAL but the GDAL C++ library is missing' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_gdal', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_gdal', allow_failure: true) }
 
     it 'outputs instructions for how to resolve the build failure' do
       app.deploy do |app|
@@ -287,7 +219,7 @@ RSpec.describe 'pip support' do
   end
 
   context 'when requirements.txt contains an old version of Celery with invalid metadata' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_legacy_celery', allow_failure: true) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_legacy_celery', allow_failure: true) }
 
     it 'outputs instructions for how to resolve the build failure' do
       app.deploy do |app|
@@ -311,6 +243,17 @@ RSpec.describe 'pip support' do
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
+      end
+    end
+  end
+
+  # TODO: Switch this to using Python 3.13 as part of the sqlite removal.
+  context 'when requirements.txt contains pysqlite3' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_pysqlite3') }
+
+    it 'installs successfully using pip' do
+      app.deploy do |app|
+        expect(app.output).to include('Building wheel for pysqlite3')
       end
     end
   end

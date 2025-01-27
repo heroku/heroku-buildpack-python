@@ -6,7 +6,7 @@ RSpec.describe 'Heroku CI' do
   let(:buildpacks) { [:default, 'heroku-community/inline'] }
 
   context 'when using pip' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/ci_requirements', buildpacks:) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/ci_pip', buildpacks:) }
 
     it 'installs both normal and test dependencies and uses cache on subsequent runs' do
       app.run_ci do |test_run|
