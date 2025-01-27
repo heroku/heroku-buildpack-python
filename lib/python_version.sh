@@ -75,6 +75,8 @@ function python_version::read_requested_python_version() {
 		fi
 	fi
 
+	# TODO: Decide whether to make specifying a Python version mandatory when using uv.
+
 	# Protect against unsupported (eg PyPy) or invalid versions being found in the cache metadata.
 	if [[ "${cached_python_full_version}" =~ ^${PYTHON_FULL_VERSION_REGEX}$ ]]; then
 		local cached_python_major_version="${cached_python_full_version%.*}"
