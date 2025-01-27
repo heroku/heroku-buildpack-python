@@ -302,7 +302,7 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  context 'when the Pipenv version has changed since the last build' do
+  context 'when the Pipenv and Python versions have changed since the last build' do
     let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v253'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
 
@@ -323,96 +323,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Discovering process types
-        REGEX
-      end
-    end
-  end
-
-  context 'when the package manager has changed from pip to Pipenv since the last build' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_basic') }
-
-    it 'clears the cache before installing with Pipenv' do
-      app.deploy do |app|
-        FileUtils.rm('.python-version')
-        FileUtils.rm('requirements.txt')
-        FileUtils.cp(FIXTURE_DIR.join('pipenv_basic/Pipfile'), '.')
-        FileUtils.cp(FIXTURE_DIR.join('pipenv_basic/Pipfile.lock'), '.')
-        app.commit!
-        app.push!
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Python app detected
-          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
-          remote: -----> Discarding cache since:
-          remote:        - The package manager has changed from pip to pipenv
-          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
-          remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
-          remote: -----> Discovering process types
-        REGEX
-      end
-    end
-  end
-
-  context 'when there is both a Pipfile.lock and a requirements.txt' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_and_requirements_txt') }
-
-    it 'builds with Pipenv rather than pip' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Python app detected
-          remote: 
-          remote:  !     Warning: Multiple Python package manager files were found.
-          remote:  !     
-          remote:  !     Exactly one package manager file should be present in your app's
-          remote:  !     source code, however, several were found:
-          remote:  !     
-          remote:  !     Pipfile.lock \\(Pipenv\\)
-          remote:  !     requirements.txt \\(pip\\)
-          remote:  !     
-          remote:  !     For now, we will build your app using the first package manager
-          remote:  !     listed above, however, in the future this warning will become
-          remote:  !     an error.
-          remote:  !     
-          remote:  !     Decide which package manager you want to use with your app, and
-          remote:  !     then delete the file\\(s\\) and any config from the others.
-          remote: 
-          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
-          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
-          remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
-        REGEX
-      end
-    end
-  end
-
-  # This tests not only our handling of failing dependency installation, but also that we're running
-  # Pipenv in such a way that it errors if the lockfile is out of sync, rather than simply updating it.
-  context 'when the Pipfile.lock is out of sync with Pipfile' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_lockfile_out_of_sync', allow_failure: true) }
-
-    it 'fails the build' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
-          remote: -----> Python app detected
-          remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
-          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
-          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
-          remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Your Pipfile.lock \\(.+\\) is out of date.  Expected: \\(.+\\).
-          remote:        .+
-          remote:        ERROR:: Aborting deploy
-          remote: 
-          remote:  !     Error: Unable to install dependencies using Pipenv.
-          remote:  !     
-          remote:  !     See the log output above for more information.
-          remote: 
-          remote:  !     Push rejected, failed to compile Python app.
         REGEX
       end
     end
@@ -484,6 +394,35 @@ RSpec.describe 'Pipenv support' do
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+        REGEX
+      end
+    end
+  end
+
+  # This tests not only our handling of failing dependency installation, but also that we're running
+  # Pipenv in such a way that it errors if the lockfile is out of sync, rather than simply updating it.
+  context 'when the Pipfile.lock is out of sync with Pipfile' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_lockfile_out_of_sync', allow_failure: true) }
+
+    it 'fails the build' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
+          remote: -----> Python app detected
+          remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
+          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION}
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
+          remote:        Your Pipfile.lock \\(.+\\) is out of date.  Expected: \\(.+\\).
+          remote:        .+
+          remote:        ERROR:: Aborting deploy
+          remote: 
+          remote:  !     Error: Unable to install dependencies using Pipenv.
+          remote:  !     
+          remote:  !     See the log output above for more information.
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
         REGEX
       end
     end

@@ -32,7 +32,7 @@ RSpec.describe 'Django support' do
     end
 
     context 'when Django is installed but manage.py does not exist' do
-      let(:app) { Hatchet::Runner.new('spec/fixtures/requirements_django_latest') }
+      let(:app) { Hatchet::Runner.new('spec/fixtures/django_latest') }
 
       it 'skips collectstatic' do
         app.deploy do |app|
@@ -44,7 +44,7 @@ RSpec.describe 'Django support' do
 
     context 'when DISABLE_COLLECTSTATIC=1' do
       let(:app) do
-        Hatchet::Runner.new('spec/fixtures/requirements_django_latest', config: { 'DISABLE_COLLECTSTATIC' => '1' })
+        Hatchet::Runner.new('spec/fixtures/django_latest', config: { 'DISABLE_COLLECTSTATIC' => '1' })
       end
 
       it 'skips collectstatic' do
