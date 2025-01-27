@@ -15,7 +15,7 @@
 # Failures in this script don't cause the overall build to fail (and won't appear in user
 # facing build logs) to avoid breaking builds unnecessarily / causing confusion. To debug
 # issues check the internal build system logs for `buildpack.report.failed` events, or
-# when developing run `make compile` in this repo locally, which runs `bin/report` too.
+# when developing run `make run` in this repo locally, which runs `bin/report` too.
 
 set -euo pipefail
 shopt -s inherit_errexit
