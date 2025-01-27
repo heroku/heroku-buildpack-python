@@ -14,8 +14,8 @@ RSpec.describe 'Package manager support' do
           remote:  !     Error: Couldn't find any supported Python package manager files.
           remote:  !     
           remote:  !     A Python app on Heroku must have either a 'requirements.txt',
-          remote:  !     'Pipfile' or 'poetry.lock' package manager file in the root
-          remote:  !     directory of its source code.
+          remote:  !     'Pipfile', 'poetry.lock' or 'uv.lock' package manager file in
+          remote:  !     the root directory of its source code.
           remote:  !     
           remote:  !     Currently the root directory of your app contains:
           remote:  !     
@@ -31,11 +31,6 @@ RSpec.describe 'Package manager support' do
           remote:  !     
           remote:  !     Otherwise, add a package manager file to your app. If your app has
           remote:  !     no dependencies, then create an empty 'requirements.txt' file.
-          remote:  !     
-          remote:  !     If you would like to see support for the package manager uv,
-          remote:  !     please vote and comment on these GitHub issues:
-          remote:  !     https://github.com/heroku/heroku-buildpack-python/issues/1616
-          remote:  !     https://github.com/heroku/roadmap/issues/323
           remote:  !     
           remote:  !     For help with using Python on Heroku, see:
           remote:  !     https://devcenter.heroku.com/articles/getting-started-with-python
@@ -85,6 +80,7 @@ RSpec.describe 'Package manager support' do
           remote:  !     Pipfile.lock \\(Pipenv\\)
           remote:  !     requirements.txt \\(pip\\)
           remote:  !     poetry.lock \\(Poetry\\)
+          remote:  !     uv.lock \\(uv\\)
           remote:  !     
           remote:  !     For now, we will build your app using the first package manager
           remote:  !     listed above, however, in the future this warning will become
@@ -96,6 +92,12 @@ RSpec.describe 'Package manager support' do
           remote: 
           remote:  !     Note: We recently added support for the package manager Poetry.
           remote:  !     If you are using a third-party Poetry buildpack you must remove
+          remote:  !     it, otherwise the requirements.txt file it generates will cause
+          remote:  !     the warning above.
+          remote: 
+          remote: 
+          remote:  !     Note: We recently added support for the package manager uv.
+          remote:  !     If you are using a third-party uv buildpack you must remove
           remote:  !     it, otherwise the requirements.txt file it generates will cause
           remote:  !     the warning above.
           remote: 
@@ -116,25 +118,25 @@ RSpec.describe 'Package manager support' do
     it 'clears the cache before installing with the new package manager' do
       app.deploy do |app|
         FileUtils.rm('requirements.txt')
-        FileUtils.cp(FIXTURE_DIR.join('poetry_basic/pyproject.toml'), '.')
-        FileUtils.cp(FIXTURE_DIR.join('poetry_basic/poetry.lock'), '.')
+        FileUtils.cp(FIXTURE_DIR.join('uv_basic/pyproject.toml'), '.')
+        FileUtils.cp(FIXTURE_DIR.join('uv_basic/uv.lock'), '.')
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Discarding cache since:
-          remote:        - The package manager has changed from pip to poetry
+          remote:        - The package manager has changed from pip to uv
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing Poetry #{POETRY_VERSION}
-          remote: -----> Installing dependencies using 'poetry sync --only main'
-          remote:        Installing dependencies from lock file
-          remote:        
-          remote:        Package operations: 1 install, 0 updates, 0 removals
-          remote:        
-          remote:          - Installing typing-extensions (4.12.2)
+          remote: -----> Installing uv #{UV_VERSION}
+          remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
+          remote:        Resolved 7 packages in .+s
+          remote:        Prepared 1 package in .+s
+          remote:        Installed 1 package in .+s
+          remote:        Bytecode compiled 1 file in .+s
+          remote:         \\+ typing-extensions==4.12.2
           remote: -----> Discovering process types
-        OUTPUT
+        REGEX
       end
     end
   end
