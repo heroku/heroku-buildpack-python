@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# This file is run by the inline buildpack, and tests that the environment is
+# configured as expected for buildpacks that run after the Python buildpack.
+
+set -euo pipefail
+
+BUILD_DIR="${1}"
+
+cd "${BUILD_DIR}"
+
+printenv | sort | grep -vE '^(_|BUILDPACK_LOG_FILE|DYNO|HOME|OLDPWD|PWD|REQUEST_ID|SHLVL|SOURCE_VERSION|STACK)='
+echo
+
+python -c 'import pprint, sys; pprint.pp(sys.path)'
+echo
+
+uv pip list
+echo
+
+python -c 'import typing_extensions; print(typing_extensions)'
