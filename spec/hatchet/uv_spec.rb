@@ -105,7 +105,7 @@ RSpec.describe 'uv support' do
 
     it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
-        # TODO: Include the install output here, to test no hardlink warning + output when cache restored etc.
+        # TODO: Include the install output here, to test no hardlink warning + output when cache restored etc
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Running bin/post_compile hook
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
