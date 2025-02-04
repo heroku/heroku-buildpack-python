@@ -3,8 +3,8 @@ name: CI
 on:
   push:
     # Avoid duplicate builds on PRs.
-    # branches:
-    #   - main
+    branches:
+      - main
   pull_request:
 
 permissions:
