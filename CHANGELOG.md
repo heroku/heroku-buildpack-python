@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- The Python 3.13 version alias now resolves to Python 3.13.2. ([#1744](https://github.com/heroku/heroku-buildpack-python/pull/1744))
+- The Python 3.12 version alias now resolves to Python 3.12.9. ([#1744](https://github.com/heroku/heroku-buildpack-python/pull/1744))
 - Deprecated support for the `runtime.txt` file. ([#1743](https://github.com/heroku/heroku-buildpack-python/pull/1743))
 - Improved the error messages shown when `.python-version`, `runtime.txt` or `Pipfile.lock` contain an invalid Python version. ([#1743](https://github.com/heroku/heroku-buildpack-python/pull/1743))
 
