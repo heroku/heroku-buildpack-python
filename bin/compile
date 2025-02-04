@@ -125,7 +125,6 @@ meta_set "python_version_reason" "${python_version_origin}"
 
 # TODO: More strongly recommend specifying a Python version (eg switch the messaging to
 # be a warning instead, after version resolution, and mention .python-version inline)
-# TODO: Add runtime.txt deprecation warning.
 case "${python_version_origin}" in
 	default)
 		output::step "No Python version was specified. Using the buildpack default: Python ${requested_python_version}"
@@ -144,6 +143,31 @@ python_full_version="$(python_version::resolve_python_version "${requested_pytho
 python_major_version="${python_full_version%.*}"
 meta_set "python_version" "${python_full_version}"
 meta_set "python_version_major" "${python_major_version}"
+
+if [[ "${python_version_origin}" == "runtime.txt" ]]; then
+	output::warning <<-EOF
+		Warning: The runtime.txt file is deprecated.
+
+		The runtime.txt file is deprecated since it has been replaced
+		by the more widely supported .python-version file.
+
+		Please delete your runtime.txt file and create a new file named:
+		.python-version
+
+		Make sure to include the '.' at the start of the filename.
+
+		In the new file, specify your app's Python version without
+		quotes or a 'python-' prefix. For example:
+		${python_major_version}
+
+		We strongly recommend that you use the major version form
+		instead of pinning to an exact version, since it will allow
+		your app to receive Python security updates.
+
+		In the future support for runtime.txt will be removed and
+		this warning will be made an error.
+	EOF
+fi
 
 cache::restore "${BUILD_DIR}" "${CACHE_DIR}" "${STACK}" "${cached_python_full_version}" "${python_full_version}" "${package_manager}"
 

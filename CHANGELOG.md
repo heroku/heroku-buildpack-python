@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Deprecated support for the `runtime.txt` file. ([#1743](https://github.com/heroku/heroku-buildpack-python/pull/1743))
+- Improved the error messages shown when `.python-version`, `runtime.txt` or `Pipfile.lock` contain an invalid Python version. ([#1743](https://github.com/heroku/heroku-buildpack-python/pull/1743))
 
 ## [v275] - 2025-01-13
 

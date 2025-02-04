@@ -219,20 +219,24 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: 
-          remote:  !     Error: Invalid Python version in Pipfile / Pipfile.lock.
+          remote:  !     Error: Invalid Python version in Pipfile.lock.
           remote:  !     
-          remote:  !     The Python version specified in Pipfile / Pipfile.lock by the
-          remote:  !     'python_version' or 'python_full_version' field isn't valid.
+          remote:  !     The Python version specified in your Pipfile.lock file by the
+          remote:  !     'python_version' or 'python_full_version' fields isn't valid.
           remote:  !     
           remote:  !     The following version was found:
           remote:  !     ^3.12
           remote:  !     
-          remote:  !     However, the version must be specified as either:
-          remote:  !     1. '<major>.<minor>' (recommended, for automatic patch updates)
-          remote:  !     2. '<major>.<minor>.<patch>' (to pin to an exact patch version)
+          remote:  !     However, the Python version must be specified as either:
+          remote:  !     1. The major version only: 3.X  (recommended)
+          remote:  !     2. An exact patch version: 3.X.Y
           remote:  !     
-          remote:  !     Please update your 'Pipfile' to use a valid Python version and
-          remote:  !     then run 'pipenv lock' to regenerate the lockfile.
+          remote:  !     Please update your Pipfile to use a valid Python version and
+          remote:  !     then run 'pipenv lock' to regenerate Pipfile.lock.
+          remote:  !     
+          remote:  !     We strongly recommend that you use the major version form
+          remote:  !     instead of pinning to an exact version, since it will allow
+          remote:  !     your app to receive Python security updates.
           remote:  !     
           remote:  !     For more information, see:
           remote:  !     https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
@@ -251,20 +255,24 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: 
-          remote:  !     Error: Invalid Python version in Pipfile / Pipfile.lock.
+          remote:  !     Error: Invalid Python version in Pipfile.lock.
           remote:  !     
-          remote:  !     The Python version specified in Pipfile / Pipfile.lock by the
-          remote:  !     'python_version' or 'python_full_version' field isn't valid.
+          remote:  !     The Python version specified in your Pipfile.lock file by the
+          remote:  !     'python_version' or 'python_full_version' fields isn't valid.
           remote:  !     
           remote:  !     The following version was found:
           remote:  !     3.9.*
           remote:  !     
-          remote:  !     However, the version must be specified as either:
-          remote:  !     1. '<major>.<minor>' (recommended, for automatic patch updates)
-          remote:  !     2. '<major>.<minor>.<patch>' (to pin to an exact patch version)
+          remote:  !     However, the Python version must be specified as either:
+          remote:  !     1. The major version only: 3.X  (recommended)
+          remote:  !     2. An exact patch version: 3.X.Y
           remote:  !     
-          remote:  !     Please update your 'Pipfile' to use a valid Python version and
-          remote:  !     then run 'pipenv lock' to regenerate the lockfile.
+          remote:  !     Please update your Pipfile to use a valid Python version and
+          remote:  !     then run 'pipenv lock' to regenerate Pipfile.lock.
+          remote:  !     
+          remote:  !     We strongly recommend that you use the major version form
+          remote:  !     instead of pinning to an exact version, since it will allow
+          remote:  !     your app to receive Python security updates.
           remote:  !     
           remote:  !     For more information, see:
           remote:  !     https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python

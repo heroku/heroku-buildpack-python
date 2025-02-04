@@ -30,10 +30,10 @@ PYTHON_FULL_VERSION_REGEX="${INT_REGEX}\.${INT_REGEX}\.${INT_REGEX}"
 # resolved to an exact Python version.
 #
 # If an app specifies the Python version via multiple means, then the order of precedence is:
-# 1. runtime.txt
-# 2. .python-version
-# 3. Pipfile.lock (`python_full_version` field)
-# 4. Pipfile.lock (`python_version` field)
+# 1. `runtime.txt` file (deprecated)
+# 2. `.python-version` file (recommended)
+# 3. The `python_full_version` field in the `Pipfile.lock` file
+# 4. The `python_version` field in the `Pipfile.lock` file
 #
 # If a version wasn't specified by the app, then new apps/those with an empty cache will use
 # a buildpack default version for the first build, and then subsequent cached builds will use
@@ -100,21 +100,29 @@ function python_version::parse_runtime_txt() {
 		output::error <<-EOF
 			Error: Invalid Python version in runtime.txt.
 
-			The Python version specified in 'runtime.txt' isn't in
-			the correct format.
+			The Python version specified in your runtime.txt file isn't
+			in the correct format.
 
-			The following file contents were found:
+			The following file contents were found, which aren't valid:
 			${contents}
 
-			However, the version must be specified as either:
-			1. 'python-<major>.<minor>' (recommended, for automatic patch updates)
-			2. 'python-<major>.<minor>.<patch>' (to pin to an exact patch version)
+			However, the runtime.txt file is deprecated since it has
+			been replaced by the .python-version file. As such, we
+			recommend that you switch to using a .python-version file
+			instead of fixing your runtime.txt file.
 
-			Remember to include the 'python-' prefix. Comments aren't supported.
+			Please delete your runtime.txt file and create a new file named:
+			.python-version
 
-			For example, to request the latest version of Python ${DEFAULT_PYTHON_MAJOR_VERSION},
-			update the 'runtime.txt' file so it contains:
-			python-${DEFAULT_PYTHON_MAJOR_VERSION}
+			Make sure to include the '.' at the start of the filename.
+
+			In the new file, specify your app's Python version without
+			quotes or a 'python-' prefix. For example:
+			${DEFAULT_PYTHON_MAJOR_VERSION}
+
+			We strongly recommend that you use the major version form
+			instead of pinning to an exact version, since it will allow
+			your app to receive Python security updates.
 		EOF
 		meta_set "failure_reason" "runtime-txt::invalid-version"
 		exit 1
@@ -144,22 +152,26 @@ function python_version::parse_python_version_file() {
 				output::error <<-EOF
 					Error: Invalid Python version in .python-version.
 
-					The Python version specified in '.python-version' isn't in
-					the correct format.
+					The Python version specified in your .python-version file
+					isn't in the correct format.
 
 					The following version was found:
 					${line}
 
-					However, the version must be specified as either:
-					1. '<major>.<minor>' (recommended, for automatic patch updates)
-					2. '<major>.<minor>.<patch>' (to pin to an exact patch version)
+					However, the Python version must be specified as either:
+					1. The major version only: 3.X  (recommended)
+					2. An exact patch version: 3.X.Y
 
 					Don't include quotes or a 'python-' prefix. To include
 					comments, add them on their own line, prefixed with '#'.
 
 					For example, to request the latest version of Python ${DEFAULT_PYTHON_MAJOR_VERSION},
-					update the '.python-version' file so it contains:
+					update your .python-version file so it contains:
 					${DEFAULT_PYTHON_MAJOR_VERSION}
+
+					We strongly recommend that you use the major version form
+					instead of pinning to an exact version, since it will allow
+					your app to receive Python security updates.
 				EOF
 				meta_set "failure_reason" "python-version-file::invalid-version"
 				exit 1
@@ -169,10 +181,13 @@ function python_version::parse_python_version_file() {
 			output::error <<-EOF
 				Error: Invalid Python version in .python-version.
 
-				No Python version was found in the '.python-version' file.
+				No Python version was found in your .python-version file.
 
-				Update the file so that it contains a valid Python version
-				such as '${DEFAULT_PYTHON_MAJOR_VERSION}'.
+				Update the file so that it contains a valid Python version.
+
+				For example, to request the latest version of Python ${DEFAULT_PYTHON_MAJOR_VERSION},
+				update your .python-version file so it contains:
+				${DEFAULT_PYTHON_MAJOR_VERSION}
 
 				If the file already contains a version, check the line doesn't
 				begin with a '#', otherwise it will be treated as a comment.
@@ -184,8 +199,7 @@ function python_version::parse_python_version_file() {
 			output::error <<-EOF
 				Error: Invalid Python version in .python-version.
 
-				Multiple Python versions were found in the '.python-version'
-				file:
+				Multiple versions were found in your .python-version file:
 
 				$(
 					IFS=$'\n'
@@ -194,8 +208,8 @@ function python_version::parse_python_version_file() {
 
 				Update the file so it contains only one Python version.
 
-				If the additional versions are actually comments, prefix
-				those lines with '#'.
+				If you have added comments to the file, make sure that those
+				lines begin with a '#', so that they are ignored.
 			EOF
 			meta_set "failure_reason" "python-version-file::multiple-versions"
 			exit 1
@@ -245,20 +259,24 @@ function python_version::read_pipenv_python_version() {
 		echo "${version}"
 	else
 		output::error <<-EOF
-			Error: Invalid Python version in Pipfile / Pipfile.lock.
+			Error: Invalid Python version in Pipfile.lock.
 
-			The Python version specified in Pipfile / Pipfile.lock by the
-			'python_version' or 'python_full_version' field isn't valid.
+			The Python version specified in your Pipfile.lock file by the
+			'python_version' or 'python_full_version' fields isn't valid.
 
 			The following version was found:
 			${version}
 
-			However, the version must be specified as either:
-			1. '<major>.<minor>' (recommended, for automatic patch updates)
-			2. '<major>.<minor>.<patch>' (to pin to an exact patch version)
+			However, the Python version must be specified as either:
+			1. The major version only: 3.X  (recommended)
+			2. An exact patch version: 3.X.Y
 
-			Please update your 'Pipfile' to use a valid Python version and
-			then run 'pipenv lock' to regenerate the lockfile.
+			Please update your Pipfile to use a valid Python version and
+			then run 'pipenv lock' to regenerate Pipfile.lock.
+
+			We strongly recommend that you use the major version form
+			instead of pinning to an exact version, since it will allow
+			your app to receive Python security updates.
 
 			For more information, see:
 			https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
@@ -297,10 +315,15 @@ function python_version::resolve_python_version() {
 				As such, it's no longer supported by this buildpack:
 				https://devcenter.heroku.com/articles/python-support#supported-python-versions
 
-				Please upgrade to at least Python 3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION} by creating a
-				.python-version file in the root directory of your app,
-				that contains a Python version like:
-				3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION}
+				Please upgrade to at least Python 3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION} by configuring an
+				explicit Python version for your app.
+
+				Create a .python-version file in the root directory of your
+				app, that contains a Python version like:
+				3.${NEWEST_SUPPORTED_PYTHON_3_MINOR_VERSION}
+
+				When creating this file make sure to include the '.' at the
+				start of the filename.
 			EOF
 		else
 			output::error <<-EOF
