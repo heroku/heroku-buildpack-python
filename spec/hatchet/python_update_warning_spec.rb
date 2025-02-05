@@ -14,6 +14,28 @@ RSpec.describe 'Python update warnings' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python 3.9.0 specified in runtime.txt
+          remote: 
+          remote:  !     Warning: The runtime.txt file is deprecated.
+          remote:  !     
+          remote:  !     The runtime.txt file is deprecated since it has been replaced
+          remote:  !     by the more widely supported .python-version file.
+          remote:  !     
+          remote:  !     Please delete your runtime.txt file and create a new file named:
+          remote:  !     .python-version
+          remote:  !     
+          remote:  !     Make sure to include the '.' at the start of the filename.
+          remote:  !     
+          remote:  !     In the new file, specify your app's Python version without
+          remote:  !     quotes or a 'python-' prefix. For example:
+          remote:  !     3.9
+          remote:  !     
+          remote:  !     We strongly recommend that you use the major version form
+          remote:  !     instead of pinning to an exact version, since it will allow
+          remote:  !     your app to receive Python security updates.
+          remote:  !     
+          remote:  !     In the future support for runtime.txt will be removed and
+          remote:  !     this warning will be made an error.
+          remote: 
           remote: -----> Installing Python 3.9.0
           remote: 
           remote:  !     Warning: Support for Python 3.9 is ending soon!

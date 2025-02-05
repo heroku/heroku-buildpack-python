@@ -148,22 +148,26 @@ RSpec.describe 'Python version support' do
           remote: 
           remote:  !     Error: Invalid Python version in .python-version.
           remote:  !     
-          remote:  !     The Python version specified in '.python-version' isn't in
-          remote:  !     the correct format.
+          remote:  !     The Python version specified in your .python-version file
+          remote:  !     isn't in the correct format.
           remote:  !     
           remote:  !     The following version was found:
           remote:  !       3.12.0invalid  
           remote:  !     
-          remote:  !     However, the version must be specified as either:
-          remote:  !     1. '<major>.<minor>' (recommended, for automatic patch updates)
-          remote:  !     2. '<major>.<minor>.<patch>' (to pin to an exact patch version)
+          remote:  !     However, the Python version must be specified as either:
+          remote:  !     1. The major version only: 3.X  (recommended)
+          remote:  !     2. An exact patch version: 3.X.Y
           remote:  !     
           remote:  !     Don't include quotes or a 'python-' prefix. To include
           remote:  !     comments, add them on their own line, prefixed with '#'.
           remote:  !     
           remote:  !     For example, to request the latest version of Python #{DEFAULT_PYTHON_MAJOR_VERSION},
-          remote:  !     update the '.python-version' file so it contains:
+          remote:  !     update your .python-version file so it contains:
           remote:  !     #{DEFAULT_PYTHON_MAJOR_VERSION}
+          remote:  !     
+          remote:  !     We strongly recommend that you use the major version form
+          remote:  !     instead of pinning to an exact version, since it will allow
+          remote:  !     your app to receive Python security updates.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
@@ -181,10 +185,13 @@ RSpec.describe 'Python version support' do
           remote: 
           remote:  !     Error: Invalid Python version in .python-version.
           remote:  !     
-          remote:  !     No Python version was found in the '.python-version' file.
+          remote:  !     No Python version was found in your .python-version file.
           remote:  !     
-          remote:  !     Update the file so that it contains a valid Python version
-          remote:  !     such as '#{DEFAULT_PYTHON_MAJOR_VERSION}'.
+          remote:  !     Update the file so that it contains a valid Python version.
+          remote:  !     
+          remote:  !     For example, to request the latest version of Python #{DEFAULT_PYTHON_MAJOR_VERSION},
+          remote:  !     update your .python-version file so it contains:
+          remote:  !     #{DEFAULT_PYTHON_MAJOR_VERSION}
           remote:  !     
           remote:  !     If the file already contains a version, check the line doesn't
           remote:  !     begin with a '#', otherwise it will be treated as a comment.
@@ -205,8 +212,7 @@ RSpec.describe 'Python version support' do
           remote: 
           remote:  !     Error: Invalid Python version in .python-version.
           remote:  !     
-          remote:  !     Multiple Python versions were found in the '.python-version'
-          remote:  !     file:
+          remote:  !     Multiple versions were found in your .python-version file:
           remote:  !     
           remote:  !     // invalid comment
           remote:  !     3.12
@@ -214,8 +220,8 @@ RSpec.describe 'Python version support' do
           remote:  !     
           remote:  !     Update the file so it contains only one Python version.
           remote:  !     
-          remote:  !     If the additional versions are actually comments, prefix
-          remote:  !     those lines with '#'.
+          remote:  !     If you have added comments to the file, make sure that those
+          remote:  !     lines begin with a '#', so that they are ignored.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
@@ -312,21 +318,29 @@ RSpec.describe 'Python version support' do
           remote: 
           remote:  !     Error: Invalid Python version in runtime.txt.
           remote:  !     
-          remote:  !     The Python version specified in 'runtime.txt' isn't in
-          remote:  !     the correct format.
+          remote:  !     The Python version specified in your runtime.txt file isn't
+          remote:  !     in the correct format.
           remote:  !     
-          remote:  !     The following file contents were found:
+          remote:  !     The following file contents were found, which aren't valid:
           remote:  !     python-3.12.0invalid
           remote:  !     
-          remote:  !     However, the version must be specified as either:
-          remote:  !     1. 'python-<major>.<minor>' (recommended, for automatic patch updates)
-          remote:  !     2. 'python-<major>.<minor>.<patch>' (to pin to an exact patch version)
+          remote:  !     However, the runtime.txt file is deprecated since it has
+          remote:  !     been replaced by the .python-version file. As such, we
+          remote:  !     recommend that you switch to using a .python-version file
+          remote:  !     instead of fixing your runtime.txt file.
           remote:  !     
-          remote:  !     Remember to include the 'python-' prefix. Comments aren't supported.
+          remote:  !     Please delete your runtime.txt file and create a new file named:
+          remote:  !     .python-version
           remote:  !     
-          remote:  !     For example, to request the latest version of Python #{DEFAULT_PYTHON_MAJOR_VERSION},
-          remote:  !     update the 'runtime.txt' file so it contains:
-          remote:  !     python-#{DEFAULT_PYTHON_MAJOR_VERSION}
+          remote:  !     Make sure to include the '.' at the start of the filename.
+          remote:  !     
+          remote:  !     In the new file, specify your app's Python version without
+          remote:  !     quotes or a 'python-' prefix. For example:
+          remote:  !     #{DEFAULT_PYTHON_MAJOR_VERSION}
+          remote:  !     
+          remote:  !     We strongly recommend that you use the major version form
+          remote:  !     instead of pinning to an exact version, since it will allow
+          remote:  !     your app to receive Python security updates.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
@@ -371,6 +385,28 @@ RSpec.describe 'Python version support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python 3.13 specified in runtime.txt
+          remote: 
+          remote:  !     Warning: The runtime.txt file is deprecated.
+          remote:  !     
+          remote:  !     The runtime.txt file is deprecated since it has been replaced
+          remote:  !     by the more widely supported .python-version file.
+          remote:  !     
+          remote:  !     Please delete your runtime.txt file and create a new file named:
+          remote:  !     .python-version
+          remote:  !     
+          remote:  !     Make sure to include the '.' at the start of the filename.
+          remote:  !     
+          remote:  !     In the new file, specify your app's Python version without
+          remote:  !     quotes or a 'python-' prefix. For example:
+          remote:  !     3.13
+          remote:  !     
+          remote:  !     We strongly recommend that you use the major version form
+          remote:  !     instead of pinning to an exact version, since it will allow
+          remote:  !     your app to receive Python security updates.
+          remote:  !     
+          remote:  !     In the future support for runtime.txt will be removed and
+          remote:  !     this warning will be made an error.
+          remote: 
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
