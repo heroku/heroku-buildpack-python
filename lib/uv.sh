@@ -105,13 +105,12 @@ function uv::install_dependencies() {
 		uv
 		sync
 		--locked
-		--cache-dir /tmp/uv-cache
 	)
 
 	# --cache-dir /tmp/uv-cache
 	# --no-cache
 
-	export UV_LINK_MODE="copy"
+	export UV_LINK_MODE="clone"
 
 	echo "Link mode is: ${UV_LINK_MODE:-unset}"
 	echo "Command: ${uv_install_command[*]}"
