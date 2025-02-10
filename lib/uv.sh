@@ -105,8 +105,11 @@ function uv::install_dependencies() {
 		uv
 		sync
 		--locked
-		--no-cache
+		--cache-dir /tmp/uv-cache
 	)
+
+	# --cache-dir /tmp/uv-cache
+	# --no-cache
 
 	export UV_LINK_MODE="hardlink"
 
@@ -144,9 +147,6 @@ function uv::install_dependencies() {
 		meta_set "failure_reason" "install-dependencies::uv"
 		exit 1
 	fi
-
-	# --cache-dir /tmp/uv-cache
-	# --no-cache
 
 	exit 1
 }
