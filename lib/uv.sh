@@ -75,7 +75,7 @@ function uv::install_uv() {
 	# TODO: Open upstream issue about improving default behaviour here.
 	# (It's not currently possible to say "hardlink or reflink", only one or
 	# the other, which doesn't work well given Kodon vs Heroku CI filesystems.)
-	export UV_LINK_MODE="copy"
+	# export UV_LINK_MODE="copy"
 
 	# Set the same env vars in the environment used by later buildpacks.
 	cat >>"${export_file}" <<-EOF
@@ -105,7 +105,13 @@ function uv::install_dependencies() {
 		uv
 		sync
 		--locked
+		--no-cache
 	)
+
+	export UV_LINK_MODE="hardlink"
+
+	echo "Link mode is: ${UV_LINK_MODE:-unset}"
+	echo "Command: ${uv_install_command[*]}"
 
 	# Unless we're building on Heroku CI, we omit the default dependency groups (such as `dev`):
 	# https://docs.astral.sh/uv/concepts/projects/dependencies/#dependency-groups
@@ -120,7 +126,7 @@ function uv::install_dependencies() {
 	# `--compile-bytecode`: Improves app boot times (pip does this by default).
 	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 	if ! {
-		"${uv_install_command[@]}" \
+		time "${uv_install_command[@]}" \
 			--color always \
 			--compile-bytecode \
 			--no-progress \
@@ -138,4 +144,9 @@ function uv::install_dependencies() {
 		meta_set "failure_reason" "install-dependencies::uv"
 		exit 1
 	fi
+
+	# --cache-dir /tmp/uv-cache
+	# --no-cache
+
+	exit 1
 }
