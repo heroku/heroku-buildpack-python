@@ -105,7 +105,7 @@ function uv::install_dependencies() {
 		uv
 		sync
 		--locked
-		--cache-dir /tmp/uv-cache
+		--no-cache
 	)
 
 	# --cache-dir /tmp/uv-cache
