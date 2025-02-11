@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Improved buildpack metrics for builds that fail. ([#1746](https://github.com/heroku/heroku-buildpack-python/pull/1746))
 
 ## [v276] - 2025-02-05
 

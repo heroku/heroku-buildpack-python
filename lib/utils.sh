@@ -48,10 +48,12 @@ function utils::bundled_pip_module_path() {
 }
 
 function utils::abort_internal_error() {
-	local message="${1}"
+	local message
+	message="${1} (line $(caller || true))"
 	output::error <<-EOF
-		Internal error: ${message} (line $(caller || true)).
+		Internal error: ${message}.
 	EOF
 	meta_set "failure_reason" "internal-error"
+	meta_set "failure_detail" "${message}"
 	exit 1
 }

@@ -104,7 +104,7 @@ function python_version::parse_runtime_txt() {
 			in the correct format.
 
 			The following file contents were found, which aren't valid:
-			${contents}
+			${contents:0:100}
 
 			However, the runtime.txt file is deprecated since it has
 			been replaced by the .python-version file. As such, we
@@ -125,6 +125,7 @@ function python_version::parse_runtime_txt() {
 			your app to receive Python security updates.
 		EOF
 		meta_set "failure_reason" "runtime-txt::invalid-version"
+		meta_set "failure_detail" "${contents:0:50}"
 		exit 1
 	fi
 }
@@ -174,6 +175,7 @@ function python_version::parse_python_version_file() {
 					your app to receive Python security updates.
 				EOF
 				meta_set "failure_reason" "python-version-file::invalid-version"
+				meta_set "failure_detail" "${line:0:50}"
 				exit 1
 			fi
 			;;
@@ -193,9 +195,11 @@ function python_version::parse_python_version_file() {
 				begin with a '#', otherwise it will be treated as a comment.
 			EOF
 			meta_set "failure_reason" "python-version-file::no-version"
+			meta_set "failure_detail" "${contents:0:50}"
 			exit 1
 			;;
 		*)
+			local first_five_version_lines=("${version_lines[@]:0:5}")
 			output::error <<-EOF
 				Error: Invalid Python version in .python-version.
 
@@ -203,7 +207,7 @@ function python_version::parse_python_version_file() {
 
 				$(
 					IFS=$'\n'
-					echo "${version_lines[*]}"
+					echo "${first_five_version_lines[*]}"
 				)
 
 				Update the file so it contains only one Python version.
@@ -212,6 +216,10 @@ function python_version::parse_python_version_file() {
 				lines begin with a '#', so that they are ignored.
 			EOF
 			meta_set "failure_reason" "python-version-file::multiple-versions"
+			meta_set "failure_detail" "$(
+				IFS=,
+				echo "${first_five_version_lines[*]}"
+			)"
 			exit 1
 			;;
 	esac
@@ -233,17 +241,19 @@ function python_version::read_pipenv_python_version() {
 	fi
 
 	if ! version=$(jq --raw-output '._meta.requires.python_full_version // ._meta.requires.python_version' "${pipfile_lock_path}" 2>&1); then
+		local jq_error_message="${version}"
 		output::error <<-EOF
 			Error: Can't parse Pipfile.lock.
 
 			A Pipfile.lock file was found, however, it couldn't be parsed:
-			${version}
+			${jq_error_message}
 
 			This is likely due to it not being valid JSON.
 
 			Run 'pipenv lock' to regenerate/fix the lockfile.
 		EOF
 		meta_set "failure_reason" "pipfile-lock::invalid-json"
+		meta_set "failure_detail" "${jq_error_message:0:100}"
 		exit 1
 	fi
 
@@ -282,6 +292,7 @@ function python_version::read_pipenv_python_version() {
 			https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
 		EOF
 		meta_set "failure_reason" "pipfile-lock::invalid-version"
+		meta_set "failure_detail" "${version:0:50}"
 		exit 1
 	fi
 }
@@ -341,6 +352,7 @@ function python_version::resolve_python_version() {
 			EOF
 		fi
 		meta_set "failure_reason" "python-version::eol"
+		meta_set "failure_detail" "${major}.${minor}"
 		exit 1
 	fi
 
@@ -388,6 +400,7 @@ function python_version::resolve_python_version() {
 			EOF
 		fi
 		meta_set "failure_reason" "python-version::unknown-major"
+		meta_set "failure_detail" "${major}.${minor}"
 		exit 1
 	fi
 

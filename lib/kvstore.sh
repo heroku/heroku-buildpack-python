@@ -23,8 +23,20 @@ kv_set() {
 	# TODO: Stop ignoring an incorrect number of passed arguments.
 	if [[ $# -eq 3 ]]; then
 		local f="${1}"
+		local key="${2}"
+
+		# Truncate the value to an arbitrary 100 characters since it will sometimes contain user-provided
+		# inputs which may be unbounded in size. Ideally individual call sites will perform more aggressive
+		# truncation themselves based on the expected value size, however this is here as a fallback.
+		# (Honeycomb supports string fields up to 64KB in size, however, it's not worth filling up the
+		# metadata store or bloating the payload passed back to Vacuole/submitted to Honeycomb given the
+		# extra content in those cases is not normally useful.)
+		local value="${3:0:100}"
+		# Replace newlines since the data store file format requires that keys don't span multiple lines.
+		value="${value//$'\n'/ }"
+
 		if [[ -f "${f}" ]]; then
-			echo "${2}=${3}" >>"${f}"
+			echo "${key}=${value}" >>"${f}"
 		fi
 	fi
 }
