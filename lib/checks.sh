@@ -20,6 +20,7 @@ function checks::ensure_supported_stack() {
 				Upgrade to a newer stack to continue using this buildpack.
 			EOF
 			meta_set "failure_reason" "stack::eol"
+			meta_set "failure_detail" "${stack}"
 			exit 1
 			;;
 		*)
@@ -34,6 +35,7 @@ function checks::ensure_supported_stack() {
 				https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
 			EOF
 			meta_set "failure_reason" "stack::unknown"
+			meta_set "failure_detail" "${stack}"
 			exit 1
 			;;
 	esac

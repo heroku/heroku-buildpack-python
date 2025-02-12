@@ -62,6 +62,7 @@ kv_pair_string() {
 STRING_FIELDS=(
 	cache_status
 	django_collectstatic
+	failure_detail
 	failure_reason
 	nltk_downloader
 	package_manager

@@ -23,6 +23,7 @@ if ! curl --output /dev/null --silent --head --fail --retry 3 --retry-connrefuse
 		https://devcenter.heroku.com/articles/python-support#supported-python-versions
 	EOF
 	meta_set "failure_reason" "python-version-not-found"
+	meta_set "failure_detail" "${python_full_version}"
 	exit 1
 fi
 
@@ -42,6 +43,7 @@ else
 			Please try again and to see if the error resolves itself.
 		EOF
 		meta_set "failure_reason" "python-download"
+		# TODO: Set failure_detail here once refactored.
 		exit 1
 	fi
 
