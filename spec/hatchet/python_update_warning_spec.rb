@@ -18,7 +18,8 @@ RSpec.describe 'Python update warnings' do
           remote:  !     Warning: The runtime.txt file is deprecated.
           remote:  !     
           remote:  !     The runtime.txt file is deprecated since it has been replaced
-          remote:  !     by the more widely supported .python-version file.
+          remote:  !     by the more widely supported .python-version file:
+          remote:  !     https://devcenter.heroku.com/changelog-items/3141
           remote:  !     
           remote:  !     Please delete your runtime.txt file and create a new file named:
           remote:  !     .python-version

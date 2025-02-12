@@ -149,7 +149,8 @@ if [[ "${python_version_origin}" == "runtime.txt" ]]; then
 		Warning: The runtime.txt file is deprecated.
 
 		The runtime.txt file is deprecated since it has been replaced
-		by the more widely supported .python-version file.
+		by the more widely supported .python-version file:
+		https://devcenter.heroku.com/changelog-items/3141
 
 		Please delete your runtime.txt file and create a new file named:
 		.python-version
