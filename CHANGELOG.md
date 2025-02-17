@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v277] - 2025-02-17
+
 - Improved the warning message shown when the requested Python version is not the latest patch version. ([#1749](https://github.com/heroku/heroku-buildpack-python/pull/1749))
 - Improved the error message shown when the requested Python patch version isn't available. ([#1749](https://github.com/heroku/heroku-buildpack-python/pull/1749))
 - Improved the error message shown if there was a networking or server related error downloading Python. ([#1749](https://github.com/heroku/heroku-buildpack-python/pull/1749))
@@ -1164,7 +1167,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v276...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v277...main
+[v277]: https://github.com/heroku/heroku-buildpack-python/compare/v276...v277
 [v276]: https://github.com/heroku/heroku-buildpack-python/compare/v275...v276
 [v275]: https://github.com/heroku/heroku-buildpack-python/compare/v274...v275
 [v274]: https://github.com/heroku/heroku-buildpack-python/compare/v273...v274
