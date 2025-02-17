@@ -37,7 +37,6 @@ RSpec.describe 'Python update warnings' do
           remote:  !     In the future support for runtime.txt will be removed and
           remote:  !     this warning will be made an error.
           remote: 
-          remote: -----> Installing Python 3.9.0
           remote: 
           remote:  !     Warning: Support for Python 3.9 is ending soon!
           remote:  !     
@@ -55,11 +54,23 @@ RSpec.describe 'Python update warnings' do
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote: 
           remote: 
-          remote:  !     Warning: A Python security update is available!
+          remote:  !     Warning: A Python patch update is available!
           remote:  !     
-          remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_9}
-          remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+          remote:  !     Your app is using Python 3.9.0, however, there is a newer
+          remote:  !     patch release of Python 3.9 available: #{LATEST_PYTHON_3_9}
+          remote:  !     
+          remote:  !     It is important to always use the latest patch version of
+          remote:  !     Python to keep your app secure.
+          remote:  !     
+          remote:  !     Update your runtime.txt file to use the new version.
+          remote:  !     
+          remote:  !     We strongly recommend that you do not pin your app to an
+          remote:  !     exact Python version such as 3.9.0, and instead only specify
+          remote:  !     the major Python version of 3.9 in your runtime.txt file.
+          remote:  !     This will allow your app to receive the latest available Python
+          remote:  !     patch version automatically and prevent this warning.
           remote: 
+          remote: -----> Installing Python 3.9.0
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
         OUTPUT
       end
@@ -74,13 +85,24 @@ RSpec.describe 'Python update warnings' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python 3.10.0 specified in .python-version
-          remote: -----> Installing Python 3.10.0
           remote: 
-          remote:  !     Warning: A Python security update is available!
+          remote:  !     Warning: A Python patch update is available!
           remote:  !     
-          remote:  !     Upgrade as soon as possible to: Python #{LATEST_PYTHON_3_10}
-          remote:  !     See: https://devcenter.heroku.com/articles/python-runtimes
+          remote:  !     Your app is using Python 3.10.0, however, there is a newer
+          remote:  !     patch release of Python 3.10 available: #{LATEST_PYTHON_3_10}
+          remote:  !     
+          remote:  !     It is important to always use the latest patch version of
+          remote:  !     Python to keep your app secure.
+          remote:  !     
+          remote:  !     Update your .python-version file to use the new version.
+          remote:  !     
+          remote:  !     We strongly recommend that you do not pin your app to an
+          remote:  !     exact Python version such as 3.10.0, and instead only specify
+          remote:  !     the major Python version of 3.10 in your .python-version file.
+          remote:  !     This will allow your app to receive the latest available Python
+          remote:  !     patch version automatically and prevent this warning.
           remote: 
+          remote: -----> Installing Python 3.10.0
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
         OUTPUT
       end

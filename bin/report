@@ -72,6 +72,7 @@ STRING_FIELDS=(
 	poetry_version
 	python_version_major
 	python_version_reason
+	python_version_requested
 	python_version
 	setuptools_version
 	wheel_version
@@ -81,6 +82,7 @@ STRING_FIELDS=(
 ALL_OTHER_FIELDS=(
 	cache_restore_duration
 	cache_save_duration
+	custom_s3_base_url
 	dependencies_install_duration
 	django_collectstatic_duration
 	duplicate_python_buildpack
@@ -94,6 +96,7 @@ ALL_OTHER_FIELDS=(
 	pre_compile_hook_duration
 	python_install_duration
 	python_version_outdated
+	python_version_pinned
 	setup_py_only
 	sqlite_install_duration
 	total_duration

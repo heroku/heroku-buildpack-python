@@ -87,7 +87,6 @@ RSpec.describe 'Python version support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python 3.9 specified in .python-version
-          remote: -----> Installing Python #{LATEST_PYTHON_3_9}
           remote: 
           remote:  !     Warning: Support for Python 3.9 is ending soon!
           remote:  !     
@@ -104,6 +103,7 @@ RSpec.describe 'Python version support' do
           remote:  !     For more information, see:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote: 
+          remote: -----> Installing Python #{LATEST_PYTHON_3_9}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
@@ -293,17 +293,38 @@ RSpec.describe 'Python version support' do
 
     it 'aborts the build with a version not available message' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python 3.12.999 specified in .python-version
+          remote: -----> Installing Python 3.12.999
+          remote:        curl: \\(22\\) The requested URL returned error: 404.*
+          remote:        zstd: /\\*stdin\\*\\\\: unexpected end of file 
+          remote:        tar: Child returned status 1
+          remote:        tar: Error is not recoverable: exiting now
           remote: 
-          remote:  !     Error: Python 3.12.999 isn't available for this stack (#{app.stack}).
+          remote:  !     Error: The requested Python version isn't available.
           remote:  !     
-          remote:  !     For a list of the supported Python versions, see:
-          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote:  !     Your app's .python-version file specifies a Python version
+          remote:  !     of 3.12.999, however, we couldn't find that version on S3.
+          remote:  !     
+          remote:  !     Check that this Python version has been released upstream,
+          remote:  !     and that the Python buildpack has added support for it:
+          remote:  !     https://www.python.org/downloads/
+          remote:  !     https://github.com/heroku/heroku-buildpack-python/blob/main/CHANGELOG.md
+          remote:  !     
+          remote:  !     If it has, make sure that you are using the latest version
+          remote:  !     of this buildpack, and haven't pinned to an older release:
+          remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
+          remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
+          remote:  !     
+          remote:  !     We also strongly recommend that you do not pin your app to an
+          remote:  !     exact Python version such as 3.12.999, and instead only specify
+          remote:  !     the major Python version of 3.12 in your .python-version file.
+          remote:  !     This will allow your app to receive the latest available Python
+          remote:  !     patch version automatically, and prevent this type of error.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
-        OUTPUT
+        REGEX
       end
     end
   end
