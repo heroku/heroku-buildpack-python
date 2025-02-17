@@ -416,3 +416,62 @@ function python_version::resolve_python_version() {
 		*) utils::abort_internal_error "Unhandled Python major version: ${requested_python_version}" ;;
 	esac
 }
+
+function python_version::warn_if_deprecated_major_version() {
+	local requested_major_version="${1}"
+	local version_origin="${2}"
+
+	if [[ "${requested_major_version}" == "3.9" ]]; then
+		output::warning <<-EOF
+			Warning: Support for Python 3.9 is ending soon!
+
+			Python 3.9 will reach its upstream end-of-life in October 2025,
+			at which point it will no longer receive security updates:
+			https://devguide.python.org/versions/#supported-versions
+
+			As such, support for Python 3.9 will be removed from this
+			buildpack on 7th January 2026.
+
+			Upgrade to a newer Python version as soon as possible, by
+			changing the version in your ${version_origin} file.
+
+			For more information, see:
+			https://devcenter.heroku.com/articles/python-support#supported-python-versions
+		EOF
+	fi
+}
+
+function python_version::warn_if_patch_update_available() {
+	local python_full_version="${1}"
+	local python_major_version="${2}"
+	local python_version_origin="${3}"
+
+	local latest_known_patch_version
+	latest_known_patch_version="$(python_version::resolve_python_version "${python_major_version}" "${python_version_origin}")"
+	# Extract the patch version component of the version strings (ie: the '2' in '3.13.2').
+	local requested_patch_number="${python_full_version##*.}"
+	local latest_patch_number="${latest_known_patch_version##*.}"
+
+	if ((requested_patch_number < latest_patch_number)); then
+		output::warning <<-EOF
+			Warning: A Python patch update is available!
+
+			Your app is using Python ${python_full_version}, however, there is a newer
+			patch release of Python ${python_major_version} available: ${latest_known_patch_version}
+
+			It is important to always use the latest patch version of
+			Python to keep your app secure.
+
+			Update your ${python_version_origin} file to use the new version.
+
+			We strongly recommend that you do not pin your app to an
+			exact Python version such as ${python_full_version}, and instead only specify
+			the major Python version of ${python_major_version} in your ${python_version_origin} file.
+			This will allow your app to receive the latest available Python
+			patch version automatically and prevent this warning.
+		EOF
+		meta_set "python_version_outdated" "true"
+	else
+		meta_set "python_version_outdated" "false"
+	fi
+}
