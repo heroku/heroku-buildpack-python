@@ -10,6 +10,7 @@
 - Improved the error message shown if there was a networking or server related error downloading Python. ([#1749](https://github.com/heroku/heroku-buildpack-python/pull/1749))
 - Adjusted the curl options used when downloading Python to set a maximum download time of 120s to prevent hanging builds in the case of network issues. ([#1749](https://github.com/heroku/heroku-buildpack-python/pull/1749))
 - Refactored the Python download step to avoid an unnecessary version check `HEAD` request to S3 prior to downloading Python or reusing a cached install. ([#1749](https://github.com/heroku/heroku-buildpack-python/pull/1749))
+- Updated the `runtime.txt` deprecation warning to include a link to the deprecation changelog post. ([#1747](https://github.com/heroku/heroku-buildpack-python/pull/1747))
 - Improved buildpack metrics for Python version selection. ([#1749](https://github.com/heroku/heroku-buildpack-python/pull/1749))
 - Improved buildpack metrics for builds that fail. ([#1746](https://github.com/heroku/heroku-buildpack-python/pull/1746) and [#1749](https://github.com/heroku/heroku-buildpack-python/pull/1749))
 
