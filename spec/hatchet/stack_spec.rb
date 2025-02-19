@@ -4,12 +4,12 @@ require_relative '../spec_helper'
 
 RSpec.describe 'Stack changes' do
   context 'when the stack is upgraded from Heroku-22 to Heroku-24', stacks: %w[heroku-22] do
-    # This test performs an initial build using an older buildpack version, followed
-    # by a build using the current version. This ensures that the current buildpack
-    # can successfully read the stack metadata written to the build cache in the past.
-    # The buildpack version chosen is one which had an older default Python version, so
-    # we can also prove that clearing the cache didn't lose the Python version metadata.
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v250'] }
+    # This test performs an initial build using an older buildpack version, followed by a build
+    # using the current version. This ensures that the current buildpack can successfully read
+    # the stack metadata written to the build cache in the past. The buildpack version chosen is
+    # the oldest to support Heroku-24, and which had an older default Python version so we can
+    # also prove that clearing the cache didn't lose the sticky Python version metadata.
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#archive/v250'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', buildpacks:) }
 
     it 'clears the cache before installing again whilst preserving the sticky Python version' do
