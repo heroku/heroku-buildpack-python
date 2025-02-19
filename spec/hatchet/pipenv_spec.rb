@@ -356,21 +356,21 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Running bin/post_compile hook
-          remote:        easy-install.pth:/app/.heroku/src/gunicorn
-          remote:        easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
-          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        gunicorn.egg-link:/app/.heroku/src/gunicorn
-          remote:        local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
+          remote:        easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
+          remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote:        gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
+          remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
           remote:        
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
-          remote: easy-install.pth:/app/.heroku/src/gunicorn
-          remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: gunicorn.egg-link:/app/.heroku/src/gunicorn
-          remote: local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
+          remote: easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
+          remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote: gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
+          remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
           remote: 
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
@@ -379,10 +379,10 @@ RSpec.describe 'Pipenv support' do
 
         # Test rewritten paths work at runtime.
         expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
-          easy-install.pth:/app/.heroku/src/gunicorn
+          easy-install.pth:/app/.heroku/python/src/gunicorn
           easy-install.pth:/app/packages/local_package_setup_py
           __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          gunicorn.egg-link:/app/.heroku/src/gunicorn
+          gunicorn.egg-link:/app/.heroku/python/src/gunicorn
           local-package-setup-py.egg-link:/app/packages/local_package_setup_py
 
           Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
@@ -395,21 +395,21 @@ RSpec.describe 'Pipenv support' do
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Running bin/post_compile hook
-          remote:        easy-install.pth:/app/.heroku/src/gunicorn
-          remote:        easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
-          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        gunicorn.egg-link:/app/.heroku/src/gunicorn
-          remote:        local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
+          remote:        easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
+          remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote:        gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
+          remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
           remote:        
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
-          remote: easy-install.pth:/app/.heroku/src/gunicorn
-          remote: easy-install.pth:/tmp/build_.*/packages/local_package_setup_py
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.*/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: gunicorn.egg-link:/app/.heroku/src/gunicorn
-          remote: local-package-setup-py.egg-link:/tmp/build_.*/packages/local_package_setup_py
+          remote: easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
+          remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
+          remote: gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
+          remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
           remote: 
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!

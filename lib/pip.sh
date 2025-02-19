@@ -110,7 +110,7 @@ function pip::install_dependencies() {
 			--no-cache-dir \
 			--no-input \
 			--progress-bar off \
-			--src='/app/.heroku/src' \
+			--src='/app/.heroku/python/src' \
 			|& tee "${WARNINGS_LOG:?}" \
 			|& sed --unbuffered --expression '/Requirement already satisfied/d' \
 			|& output::indent

@@ -81,7 +81,7 @@ function pipenv::install_dependencies() {
 	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 	if ! {
 		"${pipenv_install_command[@]}" \
-			--extra-pip-args='--src=/app/.heroku/src' \
+			--extra-pip-args='--src=/app/.heroku/python/src' \
 			--system \
 			|& tee "${WARNINGS_LOG:?}" \
 			|& output::indent

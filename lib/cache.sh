@@ -129,7 +129,6 @@ function cache::restore() {
 			"${cache_dir}/.heroku/python-poetry" \
 			"${cache_dir}/.heroku/python-stack" \
 			"${cache_dir}/.heroku/python-version" \
-			"${cache_dir}/.heroku/src" \
 			"${cache_dir}/.heroku/requirements.txt"
 
 		meta_set "cache_status" "discarded"
@@ -143,17 +142,13 @@ function cache::restore() {
 		# TODO: Compare the performance of moving the directory vs copying files.
 		cp -R "${cache_dir}/.heroku/python" "${build_dir}/.heroku/" &>/dev/null || true
 
-		# Editable VCS code repositories, used by pip/pipenv.
-		if [[ -d "${cache_dir}/.heroku/src" ]]; then
-			cp -R "${cache_dir}/.heroku/src" "${build_dir}/.heroku/" &>/dev/null || true
-		fi
-
 		meta_set "cache_status" "reused"
 	fi
 
 	# Remove any legacy cache contents written by older buildpack versions.
 	rm -rf \
 		"${cache_dir}/.heroku/python-sqlite3-version" \
+		"${cache_dir}/.heroku/src" \
 		"${cache_dir}/.heroku/vendor"
 
 	meta_time "cache_restore_duration" "${cache_restore_start_time}"
@@ -174,13 +169,6 @@ function cache::save() {
 
 	rm -rf "${cache_dir}/.heroku/python"
 	cp -R "${build_dir}/.heroku/python" "${cache_dir}/.heroku/"
-
-	# Editable VCS code repositories, used by pip/pipenv.
-	rm -rf "${cache_dir}/.heroku/src"
-	if [[ -d "${build_dir}/.heroku/src" ]]; then
-		# TODO: Investigate why errors are ignored and ideally stop doing so.
-		cp -R "${build_dir}/.heroku/src" "${cache_dir}/.heroku/" &>/dev/null || true
-	fi
 
 	# Metadata used by subsequent builds to determine whether the cache can be reused.
 	# These are written/consumed via separate files and not the metadata store for compatibility
