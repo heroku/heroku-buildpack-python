@@ -178,8 +178,6 @@ cache::restore "${BUILD_DIR}" "${CACHE_DIR}" "${STACK}" "${cached_python_full_ve
 
 # The directory for the .profile.d scripts.
 mkdir -p "$(dirname "$PROFILE_PATH")"
-# The directory for editable VCS dependencies.
-mkdir -p /app/.heroku/src
 
 # On Heroku CI, builds happen in `/app`. Otherwise, on the Heroku platform,
 # they occur in a temp directory. Because Python is not portable, we must create
@@ -191,7 +189,6 @@ if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
 	# python expects to reside in /app, so set up symlinks
 	# we will not remove these later so subsequent buildpacks can still invoke it
 	ln -nsf "$BUILD_DIR/.heroku/python" /app/.heroku/python
-	# Note: .heroku/src is copied in later.
 fi
 
 python::install "${BUILD_DIR}" "${STACK}" "${python_full_version}" "${python_major_version}" "${python_version_origin}"
@@ -249,15 +246,6 @@ meta_time "dependencies_install_duration" "${dependencies_install_start_time}"
 nltk_downloader_start_time=$(nowms)
 sub_env "${BUILDPACK_DIR}/bin/steps/nltk"
 meta_time "nltk_downloader_duration" "${nltk_downloader_start_time}"
-
-# Support for editable installations.
-# In CI, $BUILD_DIR is /app.
-# Realpath is used to support use-cases where one of the locations is a symlink to the other.
-# shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
-if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
-	rm -rf "$BUILD_DIR/.heroku/src"
-	deep-cp /app/.heroku/src "$BUILD_DIR/.heroku/src"
-fi
 
 # Django collectstatic support.
 # The buildpack automatically runs collectstatic for Django applications.
