@@ -322,7 +322,8 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'when the Pipenv and Python versions have changed since the last build' do
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v253'] }
+    # TODO: Bump this buildpack version the next time we update the Pipenv version.
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#archive/v253'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
 
     it 'clears the cache before installing' do

@@ -56,7 +56,7 @@ RSpec.describe 'Python version support' do
       # - If no Python version is specified, the same major version as the
       #   last build is used (sticky versioning).
       # - Changes in the pip version are handled correctly.
-      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v257'] }
+      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v267'] }
 
       it 'builds with the same Python version as the last build' do
         app.deploy do |app|
@@ -68,7 +68,7 @@ RSpec.describe 'Python version support' do
             remote: -----> No Python version was specified. Using the same major version as the last build: Python 3.12
             remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
             remote: -----> Discarding cache since:
-            remote:        - The Python version has changed from 3.12.6 to #{LATEST_PYTHON_3_12}
+            remote:        - The Python version has changed from 3.12.7 to #{LATEST_PYTHON_3_12}
             remote:        - The pip version has changed from 24.0 to #{PIP_VERSION}
             remote: -----> Installing Python #{LATEST_PYTHON_3_12}
             remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
