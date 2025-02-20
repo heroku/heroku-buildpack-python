@@ -47,7 +47,7 @@ RSpec.describe 'Pipenv support' do
           remote: typing_extensions 4.12.2
           remote: virtualenv        .+
           remote: 
-          remote: \\<module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'\\>
+          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
         REGEX
         app.commit!
         app.push!
@@ -348,6 +348,8 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
+  # This test has to use Python 3.12 until we work around the Pipenv editable VCS dependency
+  # cache invalidation bug when using pyproject.toml / PEP517 based installs.
   context 'when Pipfile contains editable requirements' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_editable', buildpacks:) }
@@ -355,12 +357,15 @@ RSpec.describe 'Pipenv support' do
     it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Running bin/post_compile hook
           remote:        easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
           remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote:        gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
           remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote:        _pipenv_editable.pth:/tmp/build_.+
           remote:        
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
@@ -371,6 +376,7 @@ RSpec.describe 'Pipenv support' do
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
           remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote: _pipenv_editable.pth:/tmp/build_.+
           remote: 
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
@@ -384,6 +390,7 @@ RSpec.describe 'Pipenv support' do
           __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           gunicorn.egg-link:/app/.heroku/python/src/gunicorn
           local-package-setup-py.egg-link:/app/packages/local_package_setup_py
+          _pipenv_editable.pth:/app
 
           Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           Running entrypoint for the setup.py-based local package: Hello setup.py!
@@ -394,12 +401,15 @@ RSpec.describe 'Pipenv support' do
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Running bin/post_compile hook
           remote:        easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
           remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote:        gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
           remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote:        _pipenv_editable.pth:/tmp/build_.+
           remote:        
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
@@ -410,6 +420,7 @@ RSpec.describe 'Pipenv support' do
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
           remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote: _pipenv_editable.pth:/tmp/build_.+
           remote: 
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!

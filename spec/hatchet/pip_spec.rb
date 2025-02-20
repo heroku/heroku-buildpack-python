@@ -91,7 +91,8 @@ RSpec.describe 'pip support' do
   end
 
   # This test intentionally uses Python 3.12, so that we test rewriting using older globally installed
-  # setuptools. The Poetry equivalent of this test covers the PEP-517/518 setuptools case.
+  # setuptools (which causes .egg-link files to be created too). The Pipenv and Poetry equivalents of
+  # this test covers the PEP-517/518 setuptools case.
   context 'when requirements.txt contains editable requirements (both VCS and local package)' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pip_editable', buildpacks:) }
@@ -159,6 +160,8 @@ RSpec.describe 'pip support' do
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
         REGEX
+        # Test that the VCS repo checkout was cached correctly.
+        expect(app.output).to include('Updating /app/.heroku/python/src/gunicorn clone (to revision 20.1.0)')
       end
     end
   end

@@ -10,7 +10,7 @@ RSpec.describe 'Heroku CI' do
 
     it 'installs both normal and test dependencies and uses cache on subsequent runs' do
       app.run_ci do |test_run|
-        expect(test_run.output).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
+        expect(clean_output(test_run.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
@@ -62,7 +62,7 @@ RSpec.describe 'Heroku CI' do
         REGEX
 
         test_run.run_again
-        expect(test_run.output).to include(<<~OUTPUT)
+        expect(clean_output(test_run.output)).to include(<<~OUTPUT)
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Restoring cache
@@ -81,7 +81,7 @@ RSpec.describe 'Heroku CI' do
 
     it 'installs both normal and test dependencies and uses cache on subsequent runs' do
       app.run_ci do |test_run|
-        expect(test_run.output).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(test_run.output)).to match(Regexp.new(<<~REGEX))
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
@@ -134,7 +134,7 @@ RSpec.describe 'Heroku CI' do
         REGEX
 
         test_run.run_again
-        expect(test_run.output).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(test_run.output)).to match(Regexp.new(<<~REGEX))
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Restoring cache
@@ -156,7 +156,7 @@ RSpec.describe 'Heroku CI' do
 
     it 'installs both normal and test dependencies and uses cache on subsequent runs' do
       app.run_ci do |test_run|
-        expect(test_run.output).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(test_run.output)).to match(Regexp.new(<<~REGEX))
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
@@ -217,7 +217,7 @@ RSpec.describe 'Heroku CI' do
         REGEX
 
         test_run.run_again
-        expect(test_run.output).to include(<<~OUTPUT)
+        expect(clean_output(test_run.output)).to include(<<~OUTPUT)
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Restoring cache
