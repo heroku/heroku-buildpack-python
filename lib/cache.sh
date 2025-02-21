@@ -102,6 +102,10 @@ function cache::restore() {
 				elif [[ "${cached_pipenv_version}" != "${PIPENV_VERSION:?}" ]]; then
 					cache_invalidation_reasons+=("The Pipenv version has changed from ${cached_pipenv_version} to ${PIPENV_VERSION}")
 				fi
+				# TODO: Remove this next time the Pipenv version is bumped (since it will trigger cache invalidation of its own)
+				if [[ -d "${cache_dir}/.heroku/src" ]]; then
+					cache_invalidation_reasons+=("The editable VCS repository location has changed (and Pipenv doesn't handle this correctly)")
+				fi
 				;;
 			poetry)
 				local cached_poetry_version

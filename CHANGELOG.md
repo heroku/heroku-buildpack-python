@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added build-time rewriting of editable VCS dependency paths (in addition to the existing run-time rewriting), to work around an upstream Pipenv bug with editable VCS dependencies not being reinstalled correctly for cached builds. ([#1756](https://github.com/heroku/heroku-buildpack-python/pull/1756))
 - Changed the location of repositories for editable VCS dependencies when using pip and Pipenv, to improve build performance and match the behaviour when using Poetry. ([#1753](https://github.com/heroku/heroku-buildpack-python/pull/1753))
 
 ## [v277] - 2025-02-17
