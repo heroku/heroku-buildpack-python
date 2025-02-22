@@ -109,7 +109,7 @@ RSpec.describe 'Poetry support' do
           remote:        
           remote:        Installing the current project: poetry-editable \\(0.0.1\\)
           remote: -----> Running bin/post_compile hook
-          remote:        __editable___gunicorn_23_0_0_finder.py:/tmp/build_.+/.heroku/python/src/gunicorn/gunicorn'}
+          remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote:        poetry_editable.pth:/tmp/build_.+
@@ -118,7 +118,7 @@ RSpec.describe 'Poetry support' do
           remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Inline app detected
-          remote: __editable___gunicorn_23_0_0_finder.py:/tmp/build_.+/.heroku/python/src/gunicorn/gunicorn'}
+          remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote: poetry_editable.pth:/tmp/build_.+
@@ -155,7 +155,7 @@ RSpec.describe 'Poetry support' do
           remote:        
           remote:        Installing the current project: poetry-editable \\(0.0.1\\)
           remote: -----> Running bin/post_compile hook
-          remote:        __editable___gunicorn_23_0_0_finder.py:/tmp/build_.+/.heroku/python/src/gunicorn/gunicorn'}
+          remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote:        poetry_editable.pth:/tmp/build_.+
@@ -164,7 +164,7 @@ RSpec.describe 'Poetry support' do
           remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Inline app detected
-          remote: __editable___gunicorn_23_0_0_finder.py:/tmp/build_.+/.heroku/python/src/gunicorn/gunicorn'}
+          remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote: poetry_editable.pth:/tmp/build_.+

@@ -1,3 +1,0 @@
-# Note: This test has to use Python 3.12 until we work around the
-# Pipenv editable VCS dependency cache invalidation bug.
-3.12

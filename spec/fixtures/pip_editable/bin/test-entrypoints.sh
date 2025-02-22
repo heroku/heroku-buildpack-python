@@ -4,7 +4,7 @@ set -euo pipefail
 
 cd .heroku/python/lib/python*/site-packages/
 
-# List any path like strings in .egg-link, .pth, and finder files in site-packages.
+# List any path like strings in the .egg-link, .pth, and finder files in site-packages.
 grep --extended-regexp --only-matching -- '/\S+' *.egg-link *.pth __editable___*_finder.py | sort
 echo
 

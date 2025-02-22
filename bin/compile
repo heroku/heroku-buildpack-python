@@ -280,13 +280,43 @@ if [[ \$HOME != "/app" ]]; then
 fi
 EOT
 
-# At runtime, rewrite paths in editable package .egg-link, .pth and finder files from the build time paths
-# (such as `/tmp/build_<hash>`) back to `/app`. This is not done during the build itself, since later
-# buildpacks still need the build time paths.
+# When dependencies are installed in editable mode, the package manager/build backend creates `.pth`
+# (and related) files in site-packages, which contain absolute path references to the actual location
+# of the packages. By default the Heroku build runs from a directory like `/tmp/build_<hash>`, which
+# changes every build and also differs from the app location at runtime (`/app`). This means any build
+# directory paths referenced in .pth and related files will no longer exist at runtime or during cached
+# rebuilds, unless we rewrite the paths.
+#
+# Ideally, we would be able to rewrite all paths to use the `/app/.heroku/python/` symlink trick we use
+# when invoking Python, since then the same path would work across the current build, runtime and cached
+# rebuilds. However, this trick only works for paths under that directory (since it's not possible to
+# symlink `/app` or other directories we don't own), and when apps use path-based editable dependencies
+# the paths will be outside of that (such as a subdirectory of the app source, or even the root of the
+# build directory). We also can't just rewrite all paths now ready for runtime, since other buildpacks
+# might run after this one that make use of the editable dependencies. As such, we have to perform path
+# rewriting for path-based editable dependencies at app boot instead.
+#
+# For VCS editable dependencies, we can use the symlink trick and so configure the repo checkout location
+# as `/app/.heroku/python/src/`, which in theory should mean the `.pth` files use that path. However,
+# some build backends (such as setuptools' PEP660 implementation) call realpath on it causing the
+# `/tmp/build_*` location to be written instead, meaning VCS src paths need to be rewritten regardless.
+#
+# In addition to ensuring dependencies work for subsequent buildpacks and at runtime, they must also
+# work for cached rebuilds. Most package managers will reinstall editable dependencies regardless on
+# next install, which means we can avoid having to rewrite paths on cache restore from the old build
+# directory to the new location (`/tmp/build_<different-hash>`). However, Pipenv has a bug when using
+# PEP660 style editable VCS dependencies where it won't reinstall if it's missing (or in our case, the
+# path has changed), which means we must make sure that VCS src paths stored in the cache do use the
+# symlink path. See: https://github.com/pypa/pipenv/issues/6348
+#
+# As such, we have to perform two rewrites:
+# 1. At build time, of just the VCS editable paths (which we can safely change to /app paths early).
+# 2. At runtime, to rewrite the remaining path-based editable dependency paths.
 if [[ "${BUILD_DIR}" != "/app" ]]; then
-	cat <<EOT >>"$PROFILE_PATH"
-find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
-EOT
+	find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e "s#${BUILD_DIR}/.heroku/python#/app/.heroku/python#" {} \+
+	cat <<-EOT >>"${PROFILE_PATH}"
+		find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
+	EOT
 fi
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.

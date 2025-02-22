@@ -337,6 +337,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Discarding cache since:
           remote:        - The Python version has changed from 3.12.4 to #{DEFAULT_PYTHON_FULL_VERSION}
           remote:        - The Pipenv version has changed from 2023.12.1 to #{PIPENV_VERSION}
+          remote:        - The editable VCS repository location has changed \\(and Pipenv doesn't handle this correctly\\)
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
@@ -348,53 +349,45 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  # This test has to use Python 3.12 until we work around the Pipenv editable VCS dependency
-  # cache invalidation bug when using pyproject.toml / PEP517 based installs.
   context 'when Pipfile contains editable requirements' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_editable', buildpacks:) }
 
-    it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
+    it 'rewrites .pth and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Running bin/post_compile hook
-          remote:        easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
-          remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
-          remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote:        _pipenv_editable.pth:/tmp/build_.+
           remote:        
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Inline app detected
-          remote: easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
-          remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
-          remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote: _pipenv_editable.pth:/tmp/build_.+
           remote: 
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
         REGEX
 
         # Test rewritten paths work at runtime.
         expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
-          easy-install.pth:/app/.heroku/python/src/gunicorn
-          easy-install.pth:/app/packages/local_package_setup_py
+          __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          gunicorn.egg-link:/app/.heroku/python/src/gunicorn
-          local-package-setup-py.egg-link:/app/packages/local_package_setup_py
+          __editable___local_package_setup_py_0_0_1_finder.py:/app/packages/local_package_setup_py/local_package_setup_py'}
           _pipenv_editable.pth:/app
 
           Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           Running entrypoint for the setup.py-based local package: Hello setup.py!
-          Running entrypoint for the VCS package: gunicorn (version 20.1.0)
+          Running entrypoint for the VCS package: gunicorn (version 23.0.0)
         OUTPUT
 
         # Test that the cached .pth files work correctly.
@@ -404,27 +397,23 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Running bin/post_compile hook
-          remote:        easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
-          remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
-          remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote:        _pipenv_editable.pth:/tmp/build_.+
           remote:        
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Inline app detected
-          remote: easy-install.pth:/tmp/build_.+/.heroku/python/src/gunicorn
-          remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: gunicorn.egg-link:/tmp/build_.+/.heroku/python/src/gunicorn
-          remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote: _pipenv_editable.pth:/tmp/build_.+
           remote: 
           remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
         REGEX
       end
     end
