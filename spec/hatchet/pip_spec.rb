@@ -53,6 +53,7 @@ RSpec.describe 'pip support' do
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
+          remote:        Requirement already satisfied: typing-extensions==4.12.2 (from -r requirements.txt (line 5)) (4.12.2)
           remote: -----> Inline app detected
         OUTPUT
       end
