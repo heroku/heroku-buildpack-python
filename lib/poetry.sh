@@ -46,7 +46,8 @@ function poetry::install_poetry() {
 		# it bundles its own copy for use as a fallback. As such we don't need to install pip
 		# into the Poetry venv (and in fact, Poetry wouldn't use this install anyway, since
 		# it only finds an external pip if it exists in the target venv).
-		if ! python -m venv --without-pip "${poetry_venv_dir}"; then
+		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
+		if ! python -m venv --without-pip "${poetry_venv_dir}" |& output::indent; then
 			output::error <<-EOF
 				Internal Error: Unable to create virtual environment for Poetry.
 
@@ -65,6 +66,7 @@ function poetry::install_poetry() {
 		# We must call the venv Python directly here, rather than relying on pip's `--python`
 		# option, since `--python` was only added in pip v22.3, so isn't supported by the older
 		# pip versions bundled with Python 3.9/3.10.
+		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 		if ! {
 			"${poetry_venv_dir}/bin/python" "${bundled_pip_module_path}" \
 				install \
@@ -72,15 +74,18 @@ function poetry::install_poetry() {
 				--no-cache-dir \
 				--no-input \
 				--quiet \
-				"poetry==${POETRY_VERSION}"
+				"poetry==${POETRY_VERSION}" \
+				|& output::indent
 		}; then
 			output::error <<-EOF
 				Error: Unable to install Poetry.
 
+				In some cases, this happens due to a temporary issue with
+				the network connection or Python Package Index (PyPI).
+
 				Try building again to see if the error resolves itself.
 
-				If that does not help, check the status of PyPI (the Python
-				package repository service), here:
+				If that does not help, check the status of PyPI here:
 				https://status.python.org
 			EOF
 			meta_set "failure_reason" "install-package-manager::poetry"

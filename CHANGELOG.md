@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Improved the error messages shown if installing pip/Poetry/Pipenv fails. ([#1764](https://github.com/heroku/heroku-buildpack-python/pull/1764))
 - Stopped installing pip into Poetry's virtual environment. ([#1761](https://github.com/heroku/heroku-buildpack-python/pull/1761))
 
 ## [v278] - 2025-02-24
