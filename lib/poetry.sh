@@ -7,8 +7,10 @@ set -euo pipefail
 POETRY_VERSION=$(utils::get_requirement_version 'poetry')
 
 function poetry::install_poetry() {
-	local cache_dir="${1}"
-	local export_file="${2}"
+	local python_home="${1}"
+	local python_major_version="${2}"
+	local cache_dir="${3}"
+	local export_file="${4}"
 
 	# We store Poetry in the build cache, since we only need it during the build.
 	local poetry_root="${cache_dir}/.heroku/python-poetry"
@@ -39,17 +41,12 @@ function poetry::install_poetry() {
 		rm -rf "${poetry_root}"
 		mkdir -p "${poetry_root}"
 
-		# We can't use the pip wheel bundled within Python's standard library to install Poetry
-		# (which would allow us to use `--without-pip` here to skip the pip install), since it
-		# requires using the `--python` option, which was only added in pip v22.3. And whilst
-		# all major Python versions we support now bundled a newer pip than that, some apps
-		# are still using outdated patch releases of those Python versions, whose bundled pip
-		# can be older (for example Python 3.9.0 ships with pip v20.2.1). Once Python 3.10 EOLs
-		# we can switch back to the previous approach since Python 3.11.0 ships with pip v22.3.
-		# Changing the working directory away from the build dir is required to work around an
-		# `ensurepip` bug in older Python versions, where it doesn't run Python in isolated mode:
-		# https://github.com/heroku/heroku-buildpack-python/issues/1697
-		if ! (cd "${poetry_root}" && python -m venv "${poetry_venv_dir}"); then
+		# We use the pip wheel bundled within Python's standard library to install Poetry.
+		# Whilst Poetry does still require pip for some tasks (such as package uninstalls),
+		# it bundles its own copy for use as a fallback. As such we don't need to install pip
+		# into the Poetry venv (and in fact, Poetry wouldn't use this install anyway, since
+		# it only finds an external pip if it exists in the target venv).
+		if ! python -m venv --without-pip "${poetry_venv_dir}"; then
 			output::error <<-EOF
 				Internal Error: Unable to create virtual environment for Poetry.
 
@@ -62,8 +59,14 @@ function poetry::install_poetry() {
 			exit 1
 		fi
 
+		local bundled_pip_module_path
+		bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}" "${python_major_version}")"
+
+		# We must call the venv Python directly here, rather than relying on pip's `--python`
+		# option, since `--python` was only added in pip v22.3, so isn't supported by the older
+		# pip versions bundled with Python 3.9/3.10.
 		if ! {
-			"${poetry_venv_dir}/bin/pip" \
+			"${poetry_venv_dir}/bin/python" "${bundled_pip_module_path}" \
 				install \
 				--disable-pip-version-check \
 				--no-cache-dir \
