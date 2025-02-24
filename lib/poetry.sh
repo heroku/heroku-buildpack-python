@@ -94,14 +94,20 @@ function poetry::install_poetry() {
 	fi
 
 	export PATH="${poetry_bin_dir}:${PATH}"
-	echo "export PATH=\"${poetry_bin_dir}:\${PATH}\"" >>"${export_file}"
 	# Force Poetry to manage the system Python site-packages instead of using venvs.
 	export POETRY_VIRTUALENVS_CREATE="false"
-	echo 'export POETRY_VIRTUALENVS_CREATE="false"' >>"${export_file}"
+
+	# Set the same env vars in the environment used by later buildpacks.
+	cat >>"${export_file}" <<-EOF
+		export PATH="${poetry_bin_dir}:\${PATH}"
+		export POETRY_VIRTUALENVS_CREATE="false"
+	EOF
 }
 
 # Note: We cache site-packages since:
 # - It results in faster builds than only caching Poetry's download/wheel cache.
+# - It improves the UX of the build log, since Poetry will display which packages were
+#   added/removed since the last successful build.
 # - It's safe to do so, since `poetry sync` fully manages the environment (including
 #   e.g. uninstalling packages when they are removed from the lockfile).
 #
