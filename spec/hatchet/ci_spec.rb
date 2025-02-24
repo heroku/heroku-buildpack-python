@@ -62,16 +62,19 @@ RSpec.describe 'Heroku CI' do
         REGEX
 
         test_run.run_again
-        expect(clean_output(test_run.output)).to include(<<~OUTPUT)
+        expect(clean_output(test_run.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Restoring cache
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing pip #{PIP_VERSION}
           -----> Installing dependencies using 'pip install -r requirements.txt -r requirements-test.txt'
+                 Requirement already satisfied: typing-extensions==.+
+                 Requirement already satisfied: pytest==.+
+                 .+
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
-        OUTPUT
+        REGEX
       end
     end
   end

@@ -106,6 +106,8 @@ function pip::install_dependencies() {
 	# We only display the most relevant command args here, to improve the signal to noise ratio.
 	output::step "Installing dependencies using '${pip_install_command[*]}'"
 
+	# The sed usage is to reduce the verbosity of output lines like:
+	# "Requirement already satisfied: typing-extensions==4.12.2 in /app/.heroku/python/lib/python3.13/site-packages (from -r requirements.txt (line 5)) (4.12.2)"
 	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 	if ! {
 		"${pip_install_command[@]}" \
@@ -116,7 +118,7 @@ function pip::install_dependencies() {
 			--progress-bar off \
 			--src='/app/.heroku/python/src' \
 			|& tee "${WARNINGS_LOG:?}" \
-			|& sed --unbuffered --expression '/Requirement already satisfied/d' \
+			|& sed --unbuffered --expression 's# in /app/.heroku/python/lib/python.*/site-packages##' \
 			|& output::indent
 	}; then
 		# TODO: Overhaul warnings and combine them with error handling.
