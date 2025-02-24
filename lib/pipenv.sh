@@ -18,6 +18,8 @@ function pipenv::install_pipenv() {
 	# TODO: Install Pipenv into a venv so it isn't leaked into the app environment.
 	# TODO: Skip installing Pipenv if its version hasn't changed (once it's installed into a venv).
 	# TODO: Explore viability of making Pipenv only be available during the build, to reduce slug size.
+
+	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 	if ! {
 		pip \
 			install \
@@ -25,15 +27,18 @@ function pipenv::install_pipenv() {
 			--no-cache-dir \
 			--no-input \
 			--quiet \
-			"pipenv==${PIPENV_VERSION}"
+			"pipenv==${PIPENV_VERSION}" \
+			|& output::indent
 	}; then
 		output::error <<-EOF
 			Error: Unable to install Pipenv.
 
+			In some cases, this happens due to a temporary issue with
+			the network connection or Python Package Index (PyPI).
+
 			Try building again to see if the error resolves itself.
 
-			If that does not help, check the status of PyPI (the Python
-			package repository service), here:
+			If that does not help, check the status of PyPI here:
 			https://status.python.org
 		EOF
 		meta_set "failure_reason" "install-package-manager::pipenv"
