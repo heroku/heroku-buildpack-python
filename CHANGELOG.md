@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v278] - 2025-02-24
+
 - Added build-time rewriting of editable VCS dependency paths (in addition to the existing run-time rewriting), to work around an upstream Pipenv bug with editable VCS dependencies not being reinstalled correctly for cached builds. ([#1756](https://github.com/heroku/heroku-buildpack-python/pull/1756))
 - Changed the location of repositories for editable VCS dependencies when using pip and Pipenv, to improve build performance and match the behaviour when using Poetry. ([#1753](https://github.com/heroku/heroku-buildpack-python/pull/1753))
 
@@ -1170,7 +1173,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v277...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v278...main
+[v278]: https://github.com/heroku/heroku-buildpack-python/compare/v277...v278
 [v277]: https://github.com/heroku/heroku-buildpack-python/compare/v276...v277
 [v276]: https://github.com/heroku/heroku-buildpack-python/compare/v275...v276
 [v275]: https://github.com/heroku/heroku-buildpack-python/compare/v274...v275
