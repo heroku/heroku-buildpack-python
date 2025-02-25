@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated Poetry from 2.0.1 to 2.1.1. ([#1758](https://github.com/heroku/heroku-buildpack-python/pull/1758))
 - Stopped filtering out pip's `Requirement already satisfied:` log lines when installing dependencies. ([#1765](https://github.com/heroku/heroku-buildpack-python/pull/1765))
 - Improved the error messages shown if installing pip/Poetry/Pipenv fails. ([#1764](https://github.com/heroku/heroku-buildpack-python/pull/1764))
 - Stopped installing pip into Poetry's virtual environment. ([#1761](https://github.com/heroku/heroku-buildpack-python/pull/1761))
