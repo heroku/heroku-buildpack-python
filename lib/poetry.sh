@@ -101,11 +101,15 @@ function poetry::install_poetry() {
 	export PATH="${poetry_bin_dir}:${PATH}"
 	# Force Poetry to manage the system Python site-packages instead of using venvs.
 	export POETRY_VIRTUALENVS_CREATE="false"
+	# Force Poetry to use our Python rather than scanning PATH (which might pick system Python).
+	# Though this currently doesn't work as documented: https://github.com/python-poetry/poetry/issues/10226
+	export POETRY_VIRTUALENVS_USE_POETRY_PYTHON="true"
 
 	# Set the same env vars in the environment used by later buildpacks.
 	cat >>"${export_file}" <<-EOF
 		export PATH="${poetry_bin_dir}:\${PATH}"
 		export POETRY_VIRTUALENVS_CREATE="false"
+		export POETRY_VIRTUALENVS_USE_POETRY_PYTHON="true"
 	EOF
 }
 
