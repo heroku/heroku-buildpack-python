@@ -26,6 +26,7 @@ RSpec.describe 'Poetry support' do
           remote: LIBRARY_PATH=/app/.heroku/python/lib
           remote: PATH=/app/.heroku/python/bin:/tmp/codon/tmp/cache/.heroku/python-poetry/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote: POETRY_VIRTUALENVS_CREATE=false
+          remote: POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
           remote: PYTHONHASHSEED=random
           remote: PYTHONHOME=/app/.heroku/python
           remote: PYTHONPATH=/app
