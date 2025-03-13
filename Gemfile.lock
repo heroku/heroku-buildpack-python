@@ -3,7 +3,7 @@ GEM
   specs:
     ast (2.4.2)
     base64 (0.2.0)
-    diff-lcs (1.5.1)
+    diff-lcs (1.6.0)
     erubis (2.7.0)
     excon (1.2.5)
       logger
@@ -79,7 +79,6 @@ PLATFORMS
 
 DEPENDENCIES
   heroku_hatchet
-  logger
   parallel_split_test
   rspec-core
   rspec-expectations
@@ -88,7 +87,7 @@ DEPENDENCIES
   rubocop-rspec
 
 RUBY VERSION
-   ruby 3.4.1p0
+   ruby 3.4.2p28
 
 BUNDLED WITH
-   2.6.2
+   2.6.3
