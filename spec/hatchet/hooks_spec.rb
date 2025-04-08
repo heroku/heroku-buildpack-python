@@ -24,7 +24,6 @@ RSpec.describe 'Compile hooks' do
           remote:        LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote:        LIBRARY_PATH=/app/.heroku/python/lib
           remote:        PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-          remote:        PIP_NO_PYTHON_VERSION_WARNING=1
           remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
           remote:        PWD=/tmp/build_<hash>
           remote:        PYTHONUNBUFFERED=1
@@ -48,7 +47,6 @@ RSpec.describe 'Compile hooks' do
           remote:        LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote:        LIBRARY_PATH=/app/.heroku/python/lib
           remote:        PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-          remote:        PIP_NO_PYTHON_VERSION_WARNING=1
           remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
           remote:        PWD=/tmp/build_<hash>
           remote:        PYTHONUNBUFFERED=1
