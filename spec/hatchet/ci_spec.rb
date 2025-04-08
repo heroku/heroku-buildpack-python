@@ -30,7 +30,6 @@ RSpec.describe 'Heroku CI' do
                  LD_LIBRARY_PATH=/app/.heroku/python/lib
                  LIBRARY_PATH=/app/.heroku/python/lib
                  PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
-                 PIP_NO_PYTHON_VERSION_WARNING=1
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
           -----> Inline app detected
@@ -105,7 +104,6 @@ RSpec.describe 'Heroku CI' do
                  LD_LIBRARY_PATH=/app/.heroku/python/lib
                  LIBRARY_PATH=/app/.heroku/python/lib
                  PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
-                 PIP_NO_PYTHON_VERSION_WARNING=1
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
           -----> Inline app detected
@@ -186,7 +184,6 @@ RSpec.describe 'Heroku CI' do
                  LD_LIBRARY_PATH=/app/.heroku/python/lib
                  LIBRARY_PATH=/app/.heroku/python/lib
                  PATH=/tmp/cache.+/.heroku/python-poetry/bin:/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
-                 PIP_NO_PYTHON_VERSION_WARNING=1
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  POETRY_VIRTUALENVS_CREATE=false
                  POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
