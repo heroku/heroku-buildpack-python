@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v281] - 2025-04-08
+
 - The Python 3.13 version alias now resolves to Python 3.13.3. ([#1775](https://github.com/heroku/heroku-buildpack-python/pull/1775))
 - The Python 3.12 version alias now resolves to Python 3.12.10. ([#1775](https://github.com/heroku/heroku-buildpack-python/pull/1775))
 - The Python 3.11 version alias now resolves to Python 3.11.12. ([#1775](https://github.com/heroku/heroku-buildpack-python/pull/1775))
@@ -1190,7 +1193,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v280...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v281...main
+[v281]: https://github.com/heroku/heroku-buildpack-python/compare/v280...v281
 [v280]: https://github.com/heroku/heroku-buildpack-python/compare/v279...v280
 [v279]: https://github.com/heroku/heroku-buildpack-python/compare/v278...v279
 [v278]: https://github.com/heroku/heroku-buildpack-python/compare/v277...v278
