@@ -77,7 +77,7 @@ function python::install() {
 			#    decompression/extraction as separate steps), so can't write to stdout.
 			# 2. We want to display the original stderr to the user, so can't write to stderr.
 			# 3. Curl's `--write-out` feature only supports outputting to a file (as opposed to
-			#    stdout/stderr) as of curl v8.3.0, which is newer than the curl on Heroku-20/22.
+			#    stdout/stderr) as of curl v8.3.0, which is newer than the curl on Heroku-22.
 			# This has an integration test run against all stacks, which will mean we will know
 			# if future versions of curl change the error message string.
 			#

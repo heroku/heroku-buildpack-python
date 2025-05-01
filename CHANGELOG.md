@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Removed support for Heroku-20. ([#1778](https://github.com/heroku/heroku-buildpack-python/pull/1778))
 
 ## [v281] - 2025-04-08
 

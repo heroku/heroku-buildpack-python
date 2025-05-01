@@ -13,7 +13,6 @@ on:
         type: choice
         options:
           - auto
-          - heroku-20
           - heroku-22
           - heroku-24
         default: auto
@@ -36,27 +35,6 @@ env:
 # Unfortunately these jobs cannot be easily written as a matrix since `matrix.exclude` does not
 # support expression syntax, and the `matrix` context is not available inside the job `if` key.
 jobs:
-  heroku-20:
-    if: inputs.stack == 'heroku-20' || inputs.stack == 'auto'
-    runs-on: pub-hk-ubuntu-24.04-xlarge
-    env:
-      STACK_VERSION: "20"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build Docker image
-        run: docker build --platform="linux/amd64" --pull --tag buildenv --build-arg=STACK_VERSION builds/
-      - name: Compile and package Python runtime
-        run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
-      - name: Test Python runtime
-        run: |
-          RUN_IMAGE='heroku/heroku:${{ env.STACK_VERSION }}'
-          ARCHIVE_FILENAME='python-${{ inputs.python_version }}-ubuntu-${{ env.STACK_VERSION }}.04-amd64.tar.zst'
-          docker run --rm --volume="${PWD}/upload:/upload:ro" --volume="${PWD}/builds:/builds:ro" "${RUN_IMAGE}" /builds/test_python_runtime.sh "/upload/${ARCHIVE_FILENAME}"
-      - name: Upload Python runtime archive to S3
-        if: (!inputs.dry_run)
-        run: aws s3 sync ./upload "s3://${S3_BUCKET}"
-
   heroku-22:
     if: inputs.stack == 'heroku-22' || inputs.stack == 'auto'
     runs-on: pub-hk-ubuntu-24.04-xlarge
