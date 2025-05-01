@@ -4,7 +4,7 @@ function checks::ensure_supported_stack() {
 	local stack="${1}"
 
 	case "${stack}" in
-		heroku-20 | heroku-22 | heroku-24)
+		heroku-22 | heroku-24)
 			return 0
 			;;
 		cedar* | heroku-16 | heroku-18)
@@ -15,7 +15,7 @@ function checks::ensure_supported_stack() {
 
 				This buildpack no longer supports the '${stack}' stack since it has
 				reached its end-of-life:
-				https://devcenter.heroku.com/articles/stack#stack-support-details-for-apps-using-classic-buildpacks
+				https://devcenter.heroku.com/articles/stack#stack-support-details
 
 				Upgrade to a newer stack to continue using this buildpack.
 			EOF
