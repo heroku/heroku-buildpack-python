@@ -217,7 +217,7 @@ RSpec.describe 'Poetry support' do
           remote:  !     
           remote:  !     Update your .python-version file to use the new version.
           remote:  !     
-          remote:  !     We strongly recommend that you do not pin your app to an
+          remote:  !     We strongly recommend that you don't pin your app to an
           remote:  !     exact Python version such as 3.9.0, and instead only specify
           remote:  !     the major Python version of 3.9 in your .python-version file.
           remote:  !     This will allow your app to receive the latest available Python

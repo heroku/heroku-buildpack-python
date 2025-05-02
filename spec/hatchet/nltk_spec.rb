@@ -68,7 +68,7 @@ RSpec.describe 'NLTK corpora support' do
           remote:  !     Error: Unable to download NLTK data.
           remote:  !     
           remote:  !     The 'python -m nltk.downloader' command to download NLTK
-          remote:  !     data did not exit successfully.
+          remote:  !     data didn't exit successfully.
           remote:  !     
           remote:  !     See the log output above for more information.
           remote: 

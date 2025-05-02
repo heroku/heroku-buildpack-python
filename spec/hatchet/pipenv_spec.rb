@@ -105,7 +105,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     
           remote:  !     Update your Pipfile.lock file to use the new version.
           remote:  !     
-          remote:  !     We strongly recommend that you do not pin your app to an
+          remote:  !     We strongly recommend that you don't pin your app to an
           remote:  !     exact Python version such as 3.9.0, and instead only specify
           remote:  !     the major Python version of 3.9 in your Pipfile.lock file.
           remote:  !     This will allow your app to receive the latest available Python
@@ -171,14 +171,14 @@ RSpec.describe 'Pipenv support' do
           remote:  !     
           remote:  !     A 'Pipfile' file was found, however, the associated 'Pipfile.lock'
           remote:  !     Pipenv lockfile was not. This means your app dependency versions
-          remote:  !     are not pinned, which means the package versions used on Heroku
+          remote:  !     aren't pinned, which means the package versions used on Heroku
           remote:  !     might not match those installed in other environments.
           remote:  !     
           remote:  !     For now, we will install your dependencies without a lockfile,
           remote:  !     however, in the future this warning will become an error.
           remote:  !     
           remote:  !     Run 'pipenv lock' locally to generate the lockfile, and make sure
-          remote:  !     that 'Pipfile.lock' is not listed in '.gitignore' or '.slugignore'.
+          remote:  !     that 'Pipfile.lock' isn't listed in '.gitignore' or '.slugignore'.
           remote: 
           remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
           remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
@@ -239,15 +239,18 @@ RSpec.describe 'Pipenv support' do
           remote:  !     ^3.12
           remote:  !     
           remote:  !     However, the Python version must be specified as either:
-          remote:  !     1. The major version only: 3.X  (recommended)
-          remote:  !     2. An exact patch version: 3.X.Y
+          remote:  !     1. The major version only, for example: #{DEFAULT_PYTHON_MAJOR_VERSION} (recommended)
+          remote:  !     2. An exact patch version, for example: #{DEFAULT_PYTHON_MAJOR_VERSION}.999
+          remote:  !     
+          remote:  !     Wildcards aren't supported.
           remote:  !     
           remote:  !     Please update your Pipfile to use a valid Python version and
           remote:  !     then run 'pipenv lock' to regenerate Pipfile.lock.
           remote:  !     
-          remote:  !     We strongly recommend that you use the major version form
-          remote:  !     instead of pinning to an exact version, since it will allow
-          remote:  !     your app to receive Python security updates.
+          remote:  !     We strongly recommend that you don't specify the Python patch
+          remote:  !     version number, since it will pin your app to an exact Python
+          remote:  !     version and so stop your app from receiving security updates
+          remote:  !     each time it builds.
           remote:  !     
           remote:  !     For more information, see:
           remote:  !     https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
@@ -275,15 +278,18 @@ RSpec.describe 'Pipenv support' do
           remote:  !     3.9.*
           remote:  !     
           remote:  !     However, the Python version must be specified as either:
-          remote:  !     1. The major version only: 3.X  (recommended)
-          remote:  !     2. An exact patch version: 3.X.Y
+          remote:  !     1. The major version only, for example: #{DEFAULT_PYTHON_MAJOR_VERSION} (recommended)
+          remote:  !     2. An exact patch version, for example: #{DEFAULT_PYTHON_MAJOR_VERSION}.999
+          remote:  !     
+          remote:  !     Wildcards aren't supported.
           remote:  !     
           remote:  !     Please update your Pipfile to use a valid Python version and
           remote:  !     then run 'pipenv lock' to regenerate Pipfile.lock.
           remote:  !     
-          remote:  !     We strongly recommend that you use the major version form
-          remote:  !     instead of pinning to an exact version, since it will allow
-          remote:  !     your app to receive Python security updates.
+          remote:  !     We strongly recommend that you don't specify the Python patch
+          remote:  !     version number, since it will pin your app to an exact Python
+          remote:  !     version and so stop your app from receiving security updates
+          remote:  !     each time it builds.
           remote:  !     
           remote:  !     For more information, see:
           remote:  !     https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
@@ -314,6 +320,9 @@ RSpec.describe 'Pipenv support' do
           remote:  !     
           remote:  !     Please upgrade to at least Python 3.9 by changing the
           remote:  !     version in your Pipfile.lock file.
+          remote:  !     
+          remote:  !     If possible, we recommend upgrading all the way to Python #{DEFAULT_PYTHON_MAJOR_VERSION},
+          remote:  !     since it contains many performance and usability improvements.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT

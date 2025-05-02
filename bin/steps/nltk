@@ -35,7 +35,7 @@ if is_module_available 'nltk'; then
 				Error: Unable to download NLTK data.
 
 				The 'python -m nltk.downloader' command to download NLTK
-				data did not exit successfully.
+				data didn't exit successfully.
 
 				See the log output above for more information.
 			EOF

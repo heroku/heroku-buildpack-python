@@ -25,12 +25,12 @@ function checks::ensure_supported_stack() {
 			;;
 		*)
 			output::error <<-EOF
-				Error: The '${stack}' stack is not recognised.
+				Error: The '${stack}' stack isn't recognised.
 
-				This buildpack does not recognise or support the '${stack}' stack.
+				This buildpack doesn't recognise or support the '${stack}' stack.
 
 				If '${stack}' is a valid stack, make sure that you are using the latest
-				version of this buildpack and have not pinned to an older release:
+				version of this buildpack and haven't pinned to an older release:
 				https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
 				https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
 			EOF
@@ -57,7 +57,7 @@ function checks::warn_if_duplicate_python_buildpack() {
 			from a buildpack run earlier in the build.
 
 			This normally means there are duplicate Python buildpacks set
-			on your app, which is not supported, can cause errors and
+			on your app, which isn't supported, can cause errors and
 			slow down builds.
 
 			Check the buildpacks set on your app and remove any duplicate
@@ -99,13 +99,13 @@ function checks::warn_if_existing_python_dir_present() {
 			$(find .heroku/python/ -maxdepth 2 || true)
 
 			Writing to internal locations used by the Python buildpack
-			is not supported and can cause unexpected errors.
+			isn't supported and can cause unexpected errors.
 
 			If you have committed a '.heroku/python/' directory to your
 			Git repo, you must delete it or use a different location.
 
 			Otherwise, check that an earlier buildpack or 'bin/pre_compile'
-			hook has not created this directory.
+			hook hasn't created this directory.
 
 			If you have a use-case that requires writing to this location,
 			please comment on:

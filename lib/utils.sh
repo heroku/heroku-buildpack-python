@@ -35,10 +35,10 @@ function utils::bundled_pip_module_path() {
 		echo "${bundled_pip_wheel}/pip"
 	else
 		output::error <<-EOF
-			Internal Error: Unable to locate the bundled copy of pip.
+			Internal Error: Unable to locate the Python stdlib's bundled pip.
 
-			The Python buildpack could not locate the copy of pip bundled
-			inside Python's 'ensurepip' module:
+			Couldn't find the pip wheel file bundled inside the Python
+			stdlib's 'ensurepip' module:
 
 			$(find "${bundled_wheels_dir}/" 2>&1 || find "${python_home}/" -type d 2>&1 || true)
 		EOF

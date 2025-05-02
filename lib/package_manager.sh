@@ -20,14 +20,14 @@ function package_manager::determine_package_manager() {
 
 			A 'Pipfile' file was found, however, the associated 'Pipfile.lock'
 			Pipenv lockfile was not. This means your app dependency versions
-			are not pinned, which means the package versions used on Heroku
+			aren't pinned, which means the package versions used on Heroku
 			might not match those installed in other environments.
 
 			For now, we will install your dependencies without a lockfile,
 			however, in the future this warning will become an error.
 
 			Run 'pipenv lock' locally to generate the lockfile, and make sure
-			that 'Pipfile.lock' is not listed in '.gitignore' or '.slugignore'.
+			that 'Pipfile.lock' isn't listed in '.gitignore' or '.slugignore'.
 		EOF
 		package_managers_found+=(pipenv)
 		package_managers_found_display_text+=("Pipfile (Pipenv)")

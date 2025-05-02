@@ -24,15 +24,20 @@ RSpec.describe 'Python update warnings' do
           remote:  !     Please delete your runtime.txt file and create a new file named:
           remote:  !     .python-version
           remote:  !     
-          remote:  !     Make sure to include the '.' at the start of the filename.
+          remote:  !     Make sure to include the '.' character at the start of the
+          remote:  !     filename. Don't add a file extension such as '.txt'.
           remote:  !     
-          remote:  !     In the new file, specify your app's Python version without
-          remote:  !     quotes or a 'python-' prefix. For example:
+          remote:  !     In the new file, specify your app's major Python version number
+          remote:  !     only. Don't include quotes or a 'python-' prefix.
+          remote:  !     
+          remote:  !     For example, to request the latest version of Python 3.9,
+          remote:  !     update your .python-version file so it contains exactly:
           remote:  !     3.9
           remote:  !     
-          remote:  !     We strongly recommend that you use the major version form
-          remote:  !     instead of pinning to an exact version, since it will allow
-          remote:  !     your app to receive Python security updates.
+          remote:  !     We strongly recommend that you don't specify the Python patch
+          remote:  !     version number, since it will pin your app to an exact Python
+          remote:  !     version and so stop your app from receiving security updates
+          remote:  !     each time it builds.
           remote:  !     
           remote:  !     In the future support for runtime.txt will be removed and
           remote:  !     this warning will be made an error.
@@ -64,7 +69,7 @@ RSpec.describe 'Python update warnings' do
           remote:  !     
           remote:  !     Update your runtime.txt file to use the new version.
           remote:  !     
-          remote:  !     We strongly recommend that you do not pin your app to an
+          remote:  !     We strongly recommend that you don't pin your app to an
           remote:  !     exact Python version such as 3.9.0, and instead only specify
           remote:  !     the major Python version of 3.9 in your runtime.txt file.
           remote:  !     This will allow your app to receive the latest available Python
@@ -96,7 +101,7 @@ RSpec.describe 'Python update warnings' do
           remote:  !     
           remote:  !     Update your .python-version file to use the new version.
           remote:  !     
-          remote:  !     We strongly recommend that you do not pin your app to an
+          remote:  !     We strongly recommend that you don't pin your app to an
           remote:  !     exact Python version such as 3.10.0, and instead only specify
           remote:  !     the major Python version of 3.10 in your .python-version file.
           remote:  !     This will allow your app to receive the latest available Python
