@@ -100,7 +100,7 @@ function python::install() {
 					https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
 					https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
 
-					We also strongly recommend that you do not pin your app to an
+					We also strongly recommend that you don't pin your app to an
 					exact Python version such as ${python_full_version}, and instead only specify
 					the major Python version of ${python_major_version} in your ${python_version_origin} file.
 					This will allow your app to receive the latest available Python

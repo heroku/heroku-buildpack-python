@@ -4,7 +4,8 @@
 # So are empty lines, and leading/trailing whitespace.
 
   
-  3.12.0invalid  
+  # The version number has a trailing control character.
+  3.12.0  
   
 
 # 2.7.18

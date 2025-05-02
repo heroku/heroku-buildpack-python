@@ -18,7 +18,7 @@ RSpec.describe 'Buildpack validation checks' do
           remote:  !     from a buildpack run earlier in the build.
           remote:  !     
           remote:  !     This normally means there are duplicate Python buildpacks set
-          remote:  !     on your app, which is not supported, can cause errors and
+          remote:  !     on your app, which isn't supported, can cause errors and
           remote:  !     slow down builds.
           remote:  !     
           remote:  !     Check the buildpacks set on your app and remove any duplicate
@@ -59,13 +59,13 @@ RSpec.describe 'Buildpack validation checks' do
           remote:  !     .heroku/python/bin/python
           remote:  !     
           remote:  !     Writing to internal locations used by the Python buildpack
-          remote:  !     is not supported and can cause unexpected errors.
+          remote:  !     isn't supported and can cause unexpected errors.
           remote:  !     
           remote:  !     If you have committed a '.heroku/python/' directory to your
           remote:  !     Git repo, you must delete it or use a different location.
           remote:  !     
           remote:  !     Otherwise, check that an earlier buildpack or 'bin/pre_compile'
-          remote:  !     hook has not created this directory.
+          remote:  !     hook hasn't created this directory.
           remote:  !     
           remote:  !     If you have a use-case that requires writing to this location,
           remote:  !     please comment on:
@@ -76,10 +76,10 @@ RSpec.describe 'Buildpack validation checks' do
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: 
-          remote:  !     Internal Error: Unable to locate the bundled copy of pip.
+          remote:  !     Internal Error: Unable to locate the Python stdlib's bundled pip.
           remote:  !     
-          remote:  !     The Python buildpack could not locate the copy of pip bundled
-          remote:  !     inside Python's 'ensurepip' module:
+          remote:  !     Couldn't find the pip wheel file bundled inside the Python
+          remote:  !     stdlib's 'ensurepip' module:
           remote:  !     
           remote:  !     find: ‘/app/.heroku/python/lib/python3.13/ensurepip/_bundled/’: No such file or directory
           remote:  !     /app/.heroku/python/

@@ -38,7 +38,7 @@ function pipenv::install_pipenv() {
 
 			Try building again to see if the error resolves itself.
 
-			If that does not help, check the status of PyPI here:
+			If that doesn't help, check the status of PyPI here:
 			https://status.python.org
 		EOF
 		meta_set "failure_reason" "install-package-manager::pipenv"
