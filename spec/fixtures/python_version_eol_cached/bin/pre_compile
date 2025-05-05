@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Emulate the cache from a previous build that used a now-EOL Python version, since we can't
+# actually perform a build using Python 3.8, since it was only supported until Heroku-20.
+# TODO: Switch to doing a real build once Python 3.9 EOLs.
+mkdir -p "${CACHE_DIR:?}/.heroku"
+echo "python-3.8.20" >"${CACHE_DIR}/.heroku/python-version"
