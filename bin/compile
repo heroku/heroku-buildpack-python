@@ -141,37 +141,11 @@ else
 	meta_set "python_version_pinned" "false"
 fi
 
-if [[ "${python_version_origin}" == "runtime.txt" ]]; then
-	output::warning <<-EOF
-		Warning: The runtime.txt file is deprecated.
-
-		The runtime.txt file is deprecated since it has been replaced
-		by the more widely supported .python-version file:
-		https://devcenter.heroku.com/changelog-items/3141
-
-		Please delete your runtime.txt file and create a new file named:
-		.python-version
-
-		Make sure to include the '.' character at the start of the
-		filename. Don't add a file extension such as '.txt'.
-
-		In the new file, specify your app's major Python version number
-		only. Don't include quotes or a 'python-' prefix.
-
-		For example, to request the latest version of Python ${python_major_version},
-		update your .python-version file so it contains exactly:
-		${python_major_version}
-
-		We strongly recommend that you don't specify the Python patch
-		version number, since it will pin your app to an exact Python
-		version and so stop your app from receiving security updates
-		each time it builds.
-
-		In the future support for runtime.txt will be removed and
-		this warning will be made an error.
-	EOF
-fi
-
+# We wait until after Python version resolution to show these warnings, to avoid causing confusion
+# as to what was a warning vs an error. In addition, several of the error messages contain similar
+# content to the warnings (such as encouraging use of .python-version and major version syntax),
+# which would mean duplicate content if we showed both.
+python_version::warn_if_python_version_file_missing "${python_version_origin}" "${python_major_version}"
 python_version::warn_if_deprecated_major_version "${python_major_version}" "${python_version_origin}"
 python_version::warn_if_patch_update_available "${python_full_version}" "${python_major_version}" "${python_version_origin}"
 
