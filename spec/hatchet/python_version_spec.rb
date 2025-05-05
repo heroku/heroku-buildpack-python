@@ -77,6 +77,96 @@ RSpec.describe 'Python version support' do
         end
       end
     end
+
+    context 'with an app last built using an EOL Python version' do
+      # This fixture emulates the cache from a previous build that used a now-EOL Python version,
+      # since we can't actually perform a build using Python 3.8, since it was only supported
+      # until Heroku-20. TODO: Switch to doing a real EOL cached rebuild once Python 3.9 EOLs.
+      let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_eol_cached', allow_failure: true) }
+
+      it 'aborts the build with an EOL message' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to include(<<~OUTPUT)
+            remote: -----> Python app detected
+            remote: -----> Running bin/pre_compile hook
+            remote: -----> No Python version was specified. Using the same major version as the last build: Python 3.8
+            remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+            remote: 
+            remote:  !     Error: The cached Python version has reached end-of-life.
+            remote:  !     
+            remote:  !     Your app doesn't specify a Python version, and so normally
+            remote:  !     would use the version cached from the last build (3.8).
+            remote:  !     
+            remote:  !     However, Python 3.8 has reached its upstream end-of-life,
+            remote:  !     and is therefore no longer receiving security updates:
+            remote:  !     https://devguide.python.org/versions/#supported-versions
+            remote:  !     
+            remote:  !     As such, it's no longer supported by this buildpack:
+            remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+            remote:  !     
+            remote:  !     Please upgrade to at least Python 3.9 by configuring an
+            remote:  !     explicit Python version for your app.
+            remote:  !     
+            remote:  !     Create a new file in the root directory of your app named:
+            remote:  !     .python-version
+            remote:  !     
+            remote:  !     Make sure to include the '.' character at the start of the
+            remote:  !     filename. Don't add a file extension such as '.txt'.
+            remote:  !     
+            remote:  !     In the new file, specify the new major Python version number
+            remote:  !     only. Don't include quotes or a 'python-' prefix.
+            remote:  !     
+            remote:  !     For example, to request the latest version of Python 3.9,
+            remote:  !     update your .python-version file so it contains exactly:
+            remote:  !     3.9
+            remote:  !     
+            remote:  !     If possible, we recommend upgrading all the way to Python #{DEFAULT_PYTHON_MAJOR_VERSION},
+            remote:  !     since it contains many performance and usability improvements.
+            remote: 
+            remote:  !     Push rejected, failed to compile Python app.
+          OUTPUT
+        end
+      end
+    end
+
+    context 'with an app last built using an unrecognised Python version' do
+      # This fixture emulates the cache from a previous build which used a newer default
+      # Python version than the version supported by this buildpack version.
+      let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_non_existent_major_cached', allow_failure: true) }
+
+      it 'aborts the build with an EOL message' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to include(<<~OUTPUT)
+            remote: -----> Python app detected
+            remote: -----> Running bin/pre_compile hook
+            remote: -----> No Python version was specified. Using the same major version as the last build: Python 3.99
+            remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+            remote: 
+            remote:  !     Error: The cached Python version isn't recognised.
+            remote:  !     
+            remote:  !     Your app doesn't specify a Python version, and so normally
+            remote:  !     would use the version cached from the last build (3.99).
+            remote:  !     
+            remote:  !     However, Python 3.99 isn't recognised by this version
+            remote:  !     of the buildpack.
+            remote:  !     
+            remote:  !     This can occur if you have downgraded the version of the
+            remote:  !     buildpack to an older version.
+            remote:  !     
+            remote:  !     Please switch back to a newer version of this buildpack:
+            remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
+            remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
+            remote:  !     
+            remote:  !     Alternatively, request an older Python version by creating
+            remote:  !     a .python-version file in the root directory of your app,
+            remote:  !     that contains a Python version like:
+            remote:  !     3.13
+            remote: 
+            remote:  !     Push rejected, failed to compile Python app.
+          OUTPUT
+        end
+      end
+    end
   end
 
   context 'when .python-version contains Python 3.9' do

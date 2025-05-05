@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Emulate the cache from a previous build which used a newer default Python version
+# than the version supported by this buildpack version.
+mkdir -p "${CACHE_DIR:?}/.heroku"
+echo "python-3.99.0" >"${CACHE_DIR}/.heroku/python-version"
