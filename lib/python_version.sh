@@ -432,7 +432,23 @@ function python_version::warn_if_python_version_file_missing() {
 
 	case "${python_version_origin}" in
 		default | cached)
-			# TODO: Add a warning for this case.
+			output::warning <<-EOF
+				Warning: No Python version was specified.
+
+				Your app doesn't specify a Python version and so the buildpack
+				picked a default version for you.
+
+				Relying on this default version isn't recommended, since it
+				can change over time and may not be consistent with your local
+				development environment, CI or other instances of your app.
+
+				Please configure an explicit Python version for your app.
+
+				${instructions}
+
+				In the future we will require the use of a .python-version
+				file and this warning will be made an error.
+			EOF
 			;;
 		runtime.txt)
 			output::warning <<-EOF
