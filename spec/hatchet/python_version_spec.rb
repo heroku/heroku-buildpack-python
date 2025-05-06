@@ -71,6 +71,14 @@ RSpec.describe 'Python version support' do
             remote:  !     version and so stop your app from receiving security updates
             remote:  !     each time it builds.
             remote:  !     
+            remote:  !     If your app already has a .python-version file, check that it:
+            remote:  !     
+            remote:  !     1. Is in the top level directory (not a subdirectory).
+            remote:  !     2. Is named exactly '.python-version' in all lowercase.
+            remote:  !     3. Isn't listed in '.gitignore' or '.slugignore'.
+            remote:  !     4. Has been added to the Git repository using 'git add --all'
+            remote:  !        and then committed using 'git commit'.
+            remote:  !     
             remote:  !     In the future we will require the use of a .python-version
             remote:  !     file and this warning will be made an error.
             remote: 
@@ -127,6 +135,14 @@ RSpec.describe 'Python version support' do
             remote:  !     version number, since it will pin your app to an exact Python
             remote:  !     version and so stop your app from receiving security updates
             remote:  !     each time it builds.
+            remote:  !     
+            remote:  !     If your app already has a .python-version file, check that it:
+            remote:  !     
+            remote:  !     1. Is in the top level directory (not a subdirectory).
+            remote:  !     2. Is named exactly '.python-version' in all lowercase.
+            remote:  !     3. Isn't listed in '.gitignore' or '.slugignore'.
+            remote:  !     4. Has been added to the Git repository using 'git add --all'
+            remote:  !        and then committed using 'git commit'.
             remote:  !     
             remote:  !     In the future we will require the use of a .python-version
             remote:  !     file and this warning will be made an error.

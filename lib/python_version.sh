@@ -446,6 +446,14 @@ function python_version::warn_if_python_version_file_missing() {
 
 				${instructions}
 
+				If your app already has a .python-version file, check that it:
+
+				1. Is in the top level directory (not a subdirectory).
+				2. Is named exactly '.python-version' in all lowercase.
+				3. Isn't listed in '.gitignore' or '.slugignore'.
+				4. Has been added to the Git repository using 'git add --all'
+				   and then committed using 'git commit'.
+
 				In the future we will require the use of a .python-version
 				file and this warning will be made an error.
 			EOF
