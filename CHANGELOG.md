@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v284] - 2025-05-06
+
 - Fix parsing of `runtime.txt` and `.python-version` files that contain CRLF characters. ([#1789](https://github.com/heroku/heroku-buildpack-python/pull/1789))
 
 ## [v283] - 2025-05-06
@@ -1207,7 +1210,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v283...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v284...main
+[v284]: https://github.com/heroku/heroku-buildpack-python/compare/v283...v284
 [v283]: https://github.com/heroku/heroku-buildpack-python/compare/v282...v283
 [v282]: https://github.com/heroku/heroku-buildpack-python/compare/v281...v282
 [v281]: https://github.com/heroku/heroku-buildpack-python/compare/v280...v281
