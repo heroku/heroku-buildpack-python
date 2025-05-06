@@ -322,7 +322,7 @@ RSpec.describe 'Python version support' do
           remote:  !     isn't in the correct format.
           remote:  !     
           remote:  !     The following version was found:
-          remote:  !       3.12.0^[  
+          remote:  !       �3.�12.0�  
           remote:  !     
           remote:  !     However, the Python version must be specified as either:
           remote:  !     1. The major version only, for example: #{DEFAULT_PYTHON_MAJOR_VERSION} (recommended)
@@ -522,7 +522,7 @@ RSpec.describe 'Python version support' do
           remote:  !     in the correct format.
           remote:  !     
           remote:  !     The following file contents were found, which aren't valid:
-          remote:  !     python-3.12.0^[
+          remote:  !     python-3.12.0�
           remote:  !     
           remote:  !     However, the runtime.txt file is deprecated since it has been
           remote:  !     replaced by the more widely supported .python-version file:

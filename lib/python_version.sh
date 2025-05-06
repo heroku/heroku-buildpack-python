@@ -52,7 +52,7 @@ function python_version::read_requested_python_version() {
 
 	local runtime_txt_path="${build_dir}/runtime.txt"
 	if [[ -f "${runtime_txt_path}" ]]; then
-		contents="$(cat --show-nonprinting "${runtime_txt_path}")"
+		contents="$(utils::read_file_with_special_chars_substituted "${runtime_txt_path}")"
 		version="$(python_version::parse_runtime_txt "${contents}")"
 		origin="runtime.txt"
 		return 0
@@ -60,7 +60,7 @@ function python_version::read_requested_python_version() {
 
 	local python_version_file_path="${build_dir}/.python-version"
 	if [[ -f "${python_version_file_path}" ]]; then
-		contents="$(cat --show-nonprinting "${python_version_file_path}")"
+		contents="$(utils::read_file_with_special_chars_substituted "${python_version_file_path}")"
 		version="$(python_version::parse_python_version_file "${contents}")"
 		origin=".python-version"
 		return 0
