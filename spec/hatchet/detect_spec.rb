@@ -32,6 +32,8 @@ RSpec.describe 'Buildpack detection' do
           remote:  !     1. Is in the top level directory (not a subdirectory).
           remote:  !     2. Has the correct spelling (the filenames are case-sensitive).
           remote:  !     3. Isn't listed in '.gitignore' or '.slugignore'.
+          remote:  !     4. Has been added to the Git repository using 'git add --all'
+          remote:  !        and then committed using 'git commit'.
           remote:  !     
           remote:  !     Otherwise, add a package manager file to your app. If your app has
           remote:  !     no dependencies, then create an empty 'requirements.txt' file.

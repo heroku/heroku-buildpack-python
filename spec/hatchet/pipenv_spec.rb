@@ -148,7 +148,47 @@ RSpec.describe 'Pipenv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
-          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          remote: 
+          remote:  !     Warning: No Python version was specified.
+          remote:  !     
+          remote:  !     Your app doesn't specify a Python version and so the buildpack
+          remote:  !     picked a default version for you.
+          remote:  !     
+          remote:  !     Relying on this default version isn't recommended, since it
+          remote:  !     can change over time and may not be consistent with your local
+          remote:  !     development environment, CI or other instances of your app.
+          remote:  !     
+          remote:  !     Please configure an explicit Python version for your app.
+          remote:  !     
+          remote:  !     Create a new file in the root directory of your app named:
+          remote:  !     .python-version
+          remote:  !     
+          remote:  !     Make sure to include the '.' character at the start of the
+          remote:  !     filename. Don't add a file extension such as '.txt'.
+          remote:  !     
+          remote:  !     In the new file, specify your app's major Python version number
+          remote:  !     only. Don't include quotes or a 'python-' prefix.
+          remote:  !     
+          remote:  !     For example, to request the latest version of Python #{DEFAULT_PYTHON_MAJOR_VERSION},
+          remote:  !     update your .python-version file so it contains exactly:
+          remote:  !     #{DEFAULT_PYTHON_MAJOR_VERSION}
+          remote:  !     
+          remote:  !     We strongly recommend that you don't specify the Python patch
+          remote:  !     version number, since it will pin your app to an exact Python
+          remote:  !     version and so stop your app from receiving security updates
+          remote:  !     each time it builds.
+          remote:  !     
+          remote:  !     If your app already has a .python-version file, check that it:
+          remote:  !     
+          remote:  !     1. Is in the top level directory \\(not a subdirectory\\).
+          remote:  !     2. Is named exactly '.python-version' in all lowercase.
+          remote:  !     3. Isn't listed in '.gitignore' or '.slugignore'.
+          remote:  !     4. Has been added to the Git repository using 'git add --all'
+          remote:  !        and then committed using 'git commit'.
+          remote:  !     
+          remote:  !     In the future we will require the use of a .python-version
+          remote:  !     file and this warning will be made an error.
+          remote: 
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
@@ -181,7 +221,47 @@ RSpec.describe 'Pipenv support' do
           remote:  !     that 'Pipfile.lock' isn't listed in '.gitignore' or '.slugignore'.
           remote: 
           remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
-          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          remote: 
+          remote:  !     Warning: No Python version was specified.
+          remote:  !     
+          remote:  !     Your app doesn't specify a Python version and so the buildpack
+          remote:  !     picked a default version for you.
+          remote:  !     
+          remote:  !     Relying on this default version isn't recommended, since it
+          remote:  !     can change over time and may not be consistent with your local
+          remote:  !     development environment, CI or other instances of your app.
+          remote:  !     
+          remote:  !     Please configure an explicit Python version for your app.
+          remote:  !     
+          remote:  !     Create a new file in the root directory of your app named:
+          remote:  !     .python-version
+          remote:  !     
+          remote:  !     Make sure to include the '.' character at the start of the
+          remote:  !     filename. Don't add a file extension such as '.txt'.
+          remote:  !     
+          remote:  !     In the new file, specify your app's major Python version number
+          remote:  !     only. Don't include quotes or a 'python-' prefix.
+          remote:  !     
+          remote:  !     For example, to request the latest version of Python #{DEFAULT_PYTHON_MAJOR_VERSION},
+          remote:  !     update your .python-version file so it contains exactly:
+          remote:  !     #{DEFAULT_PYTHON_MAJOR_VERSION}
+          remote:  !     
+          remote:  !     We strongly recommend that you don't specify the Python patch
+          remote:  !     version number, since it will pin your app to an exact Python
+          remote:  !     version and so stop your app from receiving security updates
+          remote:  !     each time it builds.
+          remote:  !     
+          remote:  !     If your app already has a .python-version file, check that it:
+          remote:  !     
+          remote:  !     1. Is in the top level directory \\(not a subdirectory\\).
+          remote:  !     2. Is named exactly '.python-version' in all lowercase.
+          remote:  !     3. Isn't listed in '.gitignore' or '.slugignore'.
+          remote:  !     4. Has been added to the Git repository using 'git add --all'
+          remote:  !        and then committed using 'git commit'.
+          remote:  !     
+          remote:  !     In the future we will require the use of a .python-version
+          remote:  !     file and this warning will be made an error.
+          remote: 
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
@@ -437,8 +517,7 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
-          remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
-          remote:        To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes
+          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}

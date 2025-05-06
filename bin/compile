@@ -116,16 +116,12 @@ meta_set "python_version_origin" "${python_version_origin}"
 # TODO: Remove this once the old Honeycomb events that don't have `python_version_origin` have aged out.
 meta_set "python_version_reason" "${python_version_origin}"
 
-# TODO: More strongly recommend specifying a Python version (eg switch the messaging to
-# be a warning instead, after version resolution, and mention .python-version inline)
 case "${python_version_origin}" in
 	default)
 		output::step "No Python version was specified. Using the buildpack default: Python ${requested_python_version}"
-		echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
 		;;
 	cached)
 		output::step "No Python version was specified. Using the same major version as the last build: Python ${requested_python_version}"
-		echo "       To use a different version, see: https://devcenter.heroku.com/articles/python-runtimes"
 		;;
 	*)
 		output::step "Using Python ${requested_python_version} specified in ${python_version_origin}"

@@ -2,10 +2,12 @@
 
 ## [Unreleased]
 
+- Added a warning when an app doesn't specify a Python version and instead relies upon the default/cached version. ([#1787](https://github.com/heroku/heroku-buildpack-python/pull/1787))
 - Improved the instructions for migrating from `runtime.txt` to `.python-version`. ([#1783](https://github.com/heroku/heroku-buildpack-python/pull/1783))
-- Improved the error message instructions shown when `.python-version`, `runtime.txt` or `Pipfile.lock` contain an invalid Python version. ([#1783](https://github.com/heroku/heroku-buildpack-python/pull/1783) and [#1786](https://github.com/heroku/heroku-buildpack-python/pull/1786))
-- Improved the rendering of the error message shown if `.python-version` or `runtime.txt` contain stray invisible characters (such as ASCII control codes). ([#1783](https://github.com/heroku/heroku-buildpack-python/pull/1783))
+- Improved the error messages shown when `.python-version`, `runtime.txt` or `Pipfile.lock` contain an invalid Python version. ([#1783](https://github.com/heroku/heroku-buildpack-python/pull/1783) and [#1786](https://github.com/heroku/heroku-buildpack-python/pull/1786))
+- Improved the rendering of the error message shown when `.python-version` or `runtime.txt` contain stray invisible characters (such as ASCII control codes). ([#1783](https://github.com/heroku/heroku-buildpack-python/pull/1783))
 - Improved the upgrade instructions shown for EOL and unsupported Python versions. ([#1783](https://github.com/heroku/heroku-buildpack-python/pull/1783) and [#1786](https://github.com/heroku/heroku-buildpack-python/pull/1786))
+- Improved the error messages shown when no Python package manager files are found. ([#1787](https://github.com/heroku/heroku-buildpack-python/pull/1787))
 
 ## [v282] - 2025-05-02
 
