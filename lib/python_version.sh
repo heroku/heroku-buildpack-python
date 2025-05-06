@@ -97,6 +97,8 @@ function python_version::parse_runtime_txt() {
 		local version="${BASH_REMATCH[1]}"
 		echo "${version}"
 	else
+		local instructions
+		instructions="$(python_version::python_version_file_instructions "runtime.txt" "${DEFAULT_PYTHON_MAJOR_VERSION}")"
 		output::error <<-EOF
 			Error: Invalid Python version in runtime.txt.
 
@@ -107,27 +109,13 @@ function python_version::parse_runtime_txt() {
 			${contents:0:100}
 
 			However, the runtime.txt file is deprecated since it has been
-			replaced by the more widely supported .python-version file.
+			replaced by the more widely supported .python-version file:
+			https://devcenter.heroku.com/changelog-items/3141
+
 			As such, we recommend that you switch to using .python-version
 			instead of fixing your runtime.txt file.
 
-			Please delete your runtime.txt file and create a new file named:
-			.python-version
-
-			Make sure to include the '.' character at the start of the
-			filename. Don't add a file extension such as '.txt'.
-
-			In the new file, specify your app's major Python version number
-			only. Don't include quotes or a 'python-' prefix.
-
-			For example, to request the latest version of Python ${DEFAULT_PYTHON_MAJOR_VERSION},
-			update your .python-version file so it contains exactly:
-			${DEFAULT_PYTHON_MAJOR_VERSION}
-
-			We strongly recommend that you don't specify the Python patch
-			version number, since it will pin your app to an exact Python
-			version and so stop your app from receiving security updates
-			each time it builds.
+			${instructions}
 		EOF
 		meta_set "failure_reason" "runtime-txt::invalid-version"
 		meta_set "failure_detail" "${contents:0:50}"
@@ -327,6 +315,8 @@ function python_version::resolve_python_version() {
 
 	if ((major < 3 || (major == 3 && minor < OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION))); then
 		if [[ "${python_version_origin}" == "cached" ]]; then
+			local instructions
+			instructions="$(python_version::python_version_file_instructions "${python_version_origin}" "3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION}")"
 			output::error <<-EOF
 				Error: The cached Python version has reached end-of-life.
 
@@ -343,21 +333,7 @@ function python_version::resolve_python_version() {
 				Please upgrade to at least Python 3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION} by configuring an
 				explicit Python version for your app.
 
-				Create a new file in the root directory of your app named:
-				.python-version
-
-				Make sure to include the '.' character at the start of the
-				filename. Don't add a file extension such as '.txt'.
-
-				In the new file, specify the new major Python version number
-				only. Don't include quotes or a 'python-' prefix.
-
-				For example, to request the latest version of Python 3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION},
-				update your .python-version file so it contains exactly:
-				3.${OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION}
-
-				If possible, we recommend upgrading all the way to Python ${DEFAULT_PYTHON_MAJOR_VERSION},
-				since it contains many performance and usability improvements.
+				${instructions}
 			EOF
 		else
 			output::error <<-EOF
@@ -441,6 +417,79 @@ function python_version::resolve_python_version() {
 		3.13) echo "${LATEST_PYTHON_3_13}" ;;
 		*) utils::abort_internal_error "Unhandled Python major version: ${requested_python_version}" ;;
 	esac
+}
+
+function python_version::warn_if_python_version_file_missing() {
+	local python_version_origin="${1}"
+	local python_major_version="${2}"
+
+	if [[ "${python_version_origin}" == ".python-version" ]]; then
+		return 0
+	fi
+
+	local instructions
+	instructions="$(python_version::python_version_file_instructions "${python_version_origin}" "${python_major_version}")"
+
+	case "${python_version_origin}" in
+		default | cached)
+			# TODO: Add a warning for this case.
+			;;
+		runtime.txt)
+			output::warning <<-EOF
+				Warning: The runtime.txt file is deprecated.
+
+				The runtime.txt file is deprecated since it has been replaced
+				by the more widely supported .python-version file:
+				https://devcenter.heroku.com/changelog-items/3141
+
+				Please switch to using a .python-version file instead.
+
+				${instructions}
+
+				In the future support for runtime.txt will be removed and
+				this warning will be made an error.
+			EOF
+			;;
+		Pipfile.lock)
+			# Decide if we want to warn for this case.
+			;;
+		*) utils::abort_internal_error "Unhandled Python version origin: ${python_version_origin}" ;;
+	esac
+}
+
+function python_version::python_version_file_instructions() {
+	local python_version_origin="${1}"
+	local python_major_version="${2}"
+
+	if [[ "${python_version_origin}" == "runtime.txt" ]]; then
+		cat <<-EOF
+			Delete your runtime.txt file and create a new file in the
+			root directory of your app named:
+		EOF
+	else
+		cat <<-EOF
+			Create a new file in the root directory of your app named:
+		EOF
+	fi
+
+	cat <<-EOF
+		.python-version
+
+		Make sure to include the '.' character at the start of the
+		filename. Don't add a file extension such as '.txt'.
+
+		In the new file, specify your app's major Python version number
+		only. Don't include quotes or a 'python-' prefix.
+
+		For example, to request the latest version of Python ${python_major_version},
+		update your .python-version file so it contains exactly:
+		${python_major_version}
+
+		We strongly recommend that you don't specify the Python patch
+		version number, since it will pin your app to an exact Python
+		version and so stop your app from receiving security updates
+		each time it builds.
+	EOF
 }
 
 function python_version::warn_if_deprecated_major_version() {

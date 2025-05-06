@@ -21,7 +21,10 @@ RSpec.describe 'Python update warnings' do
           remote:  !     by the more widely supported .python-version file:
           remote:  !     https://devcenter.heroku.com/changelog-items/3141
           remote:  !     
-          remote:  !     Please delete your runtime.txt file and create a new file named:
+          remote:  !     Please switch to using a .python-version file instead.
+          remote:  !     
+          remote:  !     Delete your runtime.txt file and create a new file in the
+          remote:  !     root directory of your app named:
           remote:  !     .python-version
           remote:  !     
           remote:  !     Make sure to include the '.' character at the start of the

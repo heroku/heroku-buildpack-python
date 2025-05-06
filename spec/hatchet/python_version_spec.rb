@@ -113,15 +113,17 @@ RSpec.describe 'Python version support' do
             remote:  !     Make sure to include the '.' character at the start of the
             remote:  !     filename. Don't add a file extension such as '.txt'.
             remote:  !     
-            remote:  !     In the new file, specify the new major Python version number
+            remote:  !     In the new file, specify your app's major Python version number
             remote:  !     only. Don't include quotes or a 'python-' prefix.
             remote:  !     
             remote:  !     For example, to request the latest version of Python 3.9,
             remote:  !     update your .python-version file so it contains exactly:
             remote:  !     3.9
             remote:  !     
-            remote:  !     If possible, we recommend upgrading all the way to Python #{DEFAULT_PYTHON_MAJOR_VERSION},
-            remote:  !     since it contains many performance and usability improvements.
+            remote:  !     We strongly recommend that you don't specify the Python patch
+            remote:  !     version number, since it will pin your app to an exact Python
+            remote:  !     version and so stop your app from receiving security updates
+            remote:  !     each time it builds.
             remote: 
             remote:  !     Push rejected, failed to compile Python app.
           OUTPUT
@@ -378,7 +380,7 @@ RSpec.describe 'Python version support' do
           remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
           remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
           remote:  !     
-          remote:  !     Otherwise, switch to a supported version (such as Python #{DEFAULT_PYTHON_MAJOR_VERSION})
+          remote:  !     Otherwise, switch to a supported version (such as Python 3.13)
           remote:  !     by changing the version in your .python-version file.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
@@ -445,11 +447,14 @@ RSpec.describe 'Python version support' do
           remote:  !     python-3.12.0^[
           remote:  !     
           remote:  !     However, the runtime.txt file is deprecated since it has been
-          remote:  !     replaced by the more widely supported .python-version file.
+          remote:  !     replaced by the more widely supported .python-version file:
+          remote:  !     https://devcenter.heroku.com/changelog-items/3141
+          remote:  !     
           remote:  !     As such, we recommend that you switch to using .python-version
           remote:  !     instead of fixing your runtime.txt file.
           remote:  !     
-          remote:  !     Please delete your runtime.txt file and create a new file named:
+          remote:  !     Delete your runtime.txt file and create a new file in the
+          remote:  !     root directory of your app named:
           remote:  !     .python-version
           remote:  !     
           remote:  !     Make sure to include the '.' character at the start of the
@@ -520,7 +525,10 @@ RSpec.describe 'Python version support' do
           remote:  !     by the more widely supported .python-version file:
           remote:  !     https://devcenter.heroku.com/changelog-items/3141
           remote:  !     
-          remote:  !     Please delete your runtime.txt file and create a new file named:
+          remote:  !     Please switch to using a .python-version file instead.
+          remote:  !     
+          remote:  !     Delete your runtime.txt file and create a new file in the
+          remote:  !     root directory of your app named:
           remote:  !     .python-version
           remote:  !     
           remote:  !     Make sure to include the '.' character at the start of the
