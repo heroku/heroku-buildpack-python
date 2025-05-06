@@ -71,6 +71,7 @@ STRING_FIELDS=(
 	pipenv_version
 	poetry_version
 	python_version_major
+	python_version_origin
 	python_version_reason
 	python_version_requested
 	python_version
