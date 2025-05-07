@@ -115,6 +115,14 @@ function cache::restore() {
 					cache_invalidation_reasons+=("The Poetry version has changed from ${cached_poetry_version:-"unknown"} to ${POETRY_VERSION}")
 				fi
 				;;
+			uv)
+				local cached_uv_version
+				cached_uv_version="$(meta_prev_get "uv_version")"
+				# uv support was added after the metadata store, so we'll always have the version here.
+				if [[ "${cached_uv_version}" != "${UV_VERSION:?}" ]]; then
+					cache_invalidation_reasons+=("The uv version has changed from ${cached_uv_version:-"unknown"} to ${UV_VERSION}")
+				fi
+				;;
 			*)
 				utils::abort_internal_error "Unhandled package manager: ${package_manager}"
 				;;
@@ -132,6 +140,7 @@ function cache::restore() {
 			"${cache_dir}/.heroku/python" \
 			"${cache_dir}/.heroku/python-poetry" \
 			"${cache_dir}/.heroku/python-stack" \
+			"${cache_dir}/.heroku/python-uv" \
 			"${cache_dir}/.heroku/python-version" \
 			"${cache_dir}/.heroku/requirements.txt"
 

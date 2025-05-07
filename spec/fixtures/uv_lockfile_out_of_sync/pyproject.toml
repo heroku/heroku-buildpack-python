@@ -1,0 +1,9 @@
+[project]
+name = "uv-lockfile-out-of-sync"
+version = "0.0.0"
+requires-python = ">=3.13"
+
+# This dependency isn't in the lockfile.
+dependencies = [
+    "typing-extensions",
+]

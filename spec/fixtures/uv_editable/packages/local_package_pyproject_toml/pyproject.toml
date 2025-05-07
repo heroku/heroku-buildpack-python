@@ -1,0 +1,6 @@
+[project]
+name = "local_package_pyproject_toml"
+version = "0.0.1"
+
+[project.scripts]
+local_package_pyproject_toml = "local_package_pyproject_toml:hello"

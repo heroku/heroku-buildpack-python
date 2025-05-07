@@ -1,0 +1,9 @@
+[project]
+name = "uv-no-python-version-file"
+version = "0.0.0"
+# The Python version here intentionally:
+# - Doesn't match the buildpack's default Python version
+# - Matches the distro Python version in Ubuntu 24.04
+# ...so we can test both the error message and that uv doesn't fall back to system Python.
+requires-python = "==3.12.*"
+dependencies = []

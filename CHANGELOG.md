@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added support for the package manager uv. ([#1791](https://github.com/heroku/heroku-buildpack-python/pull/1791))
 
 ## [v285] - 2025-05-08
 
