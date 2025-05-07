@@ -1,0 +1,47 @@
+version = 1
+revision = 2
+requires-python = ">=3.13"
+
+[[package]]
+name = "gunicorn"
+version = "23.0.0"
+source = { git = "https://github.com/benoitc/gunicorn#a86ea1e4e6c271d1cd1823c7e14490123f9238fe" }
+dependencies = [
+    { name = "packaging" },
+]
+
+[[package]]
+name = "local-package-pyproject-toml"
+version = "0.0.1"
+source = { editable = "packages/local_package_pyproject_toml" }
+
+[[package]]
+name = "local-package-setup-py"
+version = "0.0.1"
+source = { editable = "packages/local_package_setup_py" }
+
+[[package]]
+name = "packaging"
+version = "25.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a1/d4/1fc4078c65507b51b96ca8f8c3ba19e6a61c8253c72794544580a7b6c24d/packaging-25.0.tar.gz", hash = "sha256:d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f", size = 165727, upload-time = "2025-04-19T11:48:59.673Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/20/12/38679034af332785aac8774540895e234f4d07f7545804097de4b666afd8/packaging-25.0-py3-none-any.whl", hash = "sha256:29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484", size = 66469, upload-time = "2025-04-19T11:48:57.875Z" },
+]
+
+[[package]]
+name = "uv-editable"
+version = "0.0.0"
+source = { editable = "." }
+dependencies = [
+    { name = "gunicorn" },
+    { name = "local-package-pyproject-toml" },
+    { name = "local-package-setup-py" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "gunicorn", git = "https://github.com/benoitc/gunicorn" },
+    { name = "local-package-pyproject-toml", editable = "packages/local_package_pyproject_toml" },
+    { name = "local-package-setup-py", editable = "packages/local_package_setup_py" },
+]

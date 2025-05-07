@@ -24,7 +24,9 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "monthly"
+      # We set this to a more frequent interval than the above since uv is still under rapid
+      # iteration, and we'll generally want to be on a recent (if not the latest) version.
+      interval: "weekly"
     ignore:
       # We're not updating to setuptools v71+ due to its new approach to vendored dependencies:
       # https://github.com/heroku/heroku-buildpack-python/pull/1630#issuecomment-2324236653

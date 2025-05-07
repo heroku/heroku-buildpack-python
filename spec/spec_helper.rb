@@ -31,6 +31,7 @@ SETUPTOOLS_VERSION = get_requirement_version('setuptools')
 WHEEL_VERSION = get_requirement_version('wheel')
 PIPENV_VERSION = get_requirement_version('pipenv')
 POETRY_VERSION = get_requirement_version('poetry')
+UV_VERSION = get_requirement_version('uv')
 
 # Work around the return value for `default_buildpack` changing after deploy:
 # https://github.com/heroku/hatchet/issues/180
