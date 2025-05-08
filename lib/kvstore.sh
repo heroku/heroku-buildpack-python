@@ -32,8 +32,10 @@ kv_set() {
 		# metadata store or bloating the payload passed back to Vacuole/submitted to Honeycomb given the
 		# extra content in those cases is not normally useful.)
 		local value="${3:0:100}"
-		# Replace newlines since the data store file format requires that keys don't span multiple lines.
-		value="${value//$'\n'/ }"
+		# Replace newlines and carriage returns since the data store file format requires that keys don't
+		# span multiple lines.
+		value="${value//$'\n'/\\n}"
+		value="${value//$'\r'/\\r}"
 
 		if [[ -f "${f}" ]]; then
 			echo "${key}=${value}" >>"${f}"
