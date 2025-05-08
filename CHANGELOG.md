@@ -2,10 +2,11 @@
 
 ## [Unreleased]
 
+- Improved internal buildpack metrics handling of attributes that contain newline characters. ([#1792](https://github.com/heroku/heroku-buildpack-python/pull/1792))
 
 ## [v284] - 2025-05-06
 
-- Fix parsing of `runtime.txt` and `.python-version` files that contain CRLF characters. ([#1789](https://github.com/heroku/heroku-buildpack-python/pull/1789))
+- Fixed parsing of `runtime.txt` and `.python-version` files that contain CRLF characters. ([#1789](https://github.com/heroku/heroku-buildpack-python/pull/1789))
 
 ## [v283] - 2025-05-06
 
