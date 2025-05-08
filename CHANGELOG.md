@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v285] - 2025-05-08
+
 - Improved internal buildpack metrics handling of attributes that contain newline characters. ([#1792](https://github.com/heroku/heroku-buildpack-python/pull/1792))
 
 ## [v284] - 2025-05-06
@@ -1211,7 +1214,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v284...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v285...main
+[v285]: https://github.com/heroku/heroku-buildpack-python/compare/v284...v285
 [v284]: https://github.com/heroku/heroku-buildpack-python/compare/v283...v284
 [v283]: https://github.com/heroku/heroku-buildpack-python/compare/v282...v283
 [v282]: https://github.com/heroku/heroku-buildpack-python/compare/v281...v282
