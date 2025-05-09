@@ -144,7 +144,7 @@ fi
 # as to what was a warning vs an error. In addition, several of the error messages contain similar
 # content to the warnings (such as encouraging use of .python-version and major version syntax),
 # which would mean duplicate content if we showed both.
-python_version::warn_if_python_version_file_missing "${python_version_origin}" "${python_major_version}"
+python_version::warn_or_error_if_python_version_file_missing "${python_version_origin}" "${python_major_version}"
 python_version::warn_if_deprecated_major_version "${python_major_version}" "${python_version_origin}"
 python_version::warn_if_patch_update_available "${python_full_version}" "${python_major_version}" "${python_version_origin}"
 

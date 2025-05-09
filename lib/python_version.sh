@@ -419,7 +419,7 @@ function python_version::resolve_python_version() {
 	esac
 }
 
-function python_version::warn_if_python_version_file_missing() {
+function python_version::warn_or_error_if_python_version_file_missing() {
 	local python_version_origin="${1}"
 	local python_major_version="${2}"
 

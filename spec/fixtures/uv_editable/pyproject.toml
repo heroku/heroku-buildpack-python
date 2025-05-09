@@ -8,9 +8,12 @@ dependencies = [
     "local-package-setup-py",
 ]
 
+[project.scripts]
+uv-editable = "uv_editable:main"
+
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build"]
+build-backend = "uv_build"
 
 [tool.uv.sources]
 # uv doesn't support editable mode with VCS dependencies:

@@ -32,9 +32,9 @@ function uv::install_uv() {
 		if ! {
 			# We set max-time for improved UX for hanging downloads compared to relying on the build system
 			# timeout. The uv archive is only ~15 MB so takes < 1s to download on Heroku's build system,
-			# however, we use much higher timeouts so that the buildpack works in non-Heroku environments
-			# that may be far from `us-east-1` or have a slower connection. We don't use `--speed-limit`
-			# since it gives worse error messages when used with retries and piping to tar.
+			# however, we use much higher timeouts so that the buildpack works in non-Heroku or local
+			# environments that may have a slower connection. We don't use `--speed-limit` since it gives
+			# worse error messages when used with retries and piping to tar.
 			curl \
 				--connect-timeout 10 \
 				--fail \
@@ -92,7 +92,7 @@ function uv::install_uv() {
 	# download cache into site-packages, and will emit a warning if it has to fall back to copying.
 	# By default uv stores its cache under `$HOME/.cache`, and for standard Heroku builds `$HOME` is
 	# `/app`, which is on a different filesystem mount to the build directory (which is under `/tmp`),
-	# meaning hardlinks can't be used. To avoid this we tell uv's to store its cache in `/tmp`.
+	# meaning hardlinks can't be used. To avoid this we tell uv to store its cache in `/tmp`.
 	# However, we have to do so conditionally, since for Heroku CI both the home directory and
 	# the build directory are `/app`, where hardlinks already work and changing the cache to `/tmp`
 	# would instead break them.

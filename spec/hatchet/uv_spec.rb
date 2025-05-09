@@ -119,18 +119,20 @@ RSpec.describe 'uv support' do
           remote: -----> Running bin/post_compile hook
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote:        _uv_editable.pth:/tmp/build_.+/src
+          remote:        uv_editable.pth:/tmp/build_.+/src
           remote:        
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote:        Running entrypoint for the current package: Hello from uv-editable!
+          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Inline app detected
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote: _uv_editable.pth:/tmp/build_.+/src
+          remote: uv_editable.pth:/tmp/build_.+/src
           remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote: Running entrypoint for the current package: Hello from uv-editable!
+          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
         REGEX
 
@@ -138,10 +140,11 @@ RSpec.describe 'uv support' do
         expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
           __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           __editable___local_package_setup_py_0_0_1_finder.py:/app/packages/local_package_setup_py/local_package_setup_py'}
-          _uv_editable.pth:/app/src
+          uv_editable.pth:/app/src
 
-          Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          Running entrypoint for the setup.py-based local package: Hello setup.py!
+          Running entrypoint for the current package: Hello from uv-editable!
+          Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          Running entrypoint for the setup.py-based local package: Hello from setup.py!
           Running entrypoint for the VCS package: gunicorn (version 23.0.0)
         OUTPUT
 
@@ -165,18 +168,20 @@ RSpec.describe 'uv support' do
           remote: -----> Running bin/post_compile hook
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote:        _uv_editable.pth:/tmp/build_.+/src
+          remote:        uv_editable.pth:/tmp/build_.+/src
           remote:        
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote:        Running entrypoint for the current package: Hello from uv-editable!
+          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Inline app detected
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote: _uv_editable.pth:/tmp/build_.+/src
+          remote: uv_editable.pth:/tmp/build_.+/src
           remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote: Running entrypoint for the current package: Hello from uv-editable!
+          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
         REGEX
       end
@@ -242,34 +247,74 @@ RSpec.describe 'uv support' do
   # (Since we must prevent uv from downloading its own Python or using system Python, and also
   # want a clearer error message than using `--python` or `UV_PYTHON` would give us).
   context 'when there is no .python-version file' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/uv_no_python_version_file', allow_failure: true) }
+    context 'when there is no cached Python version' do
+      let(:app) { Hatchet::Runner.new('spec/fixtures/uv_no_python_version_file', allow_failure: true) }
 
-    it 'fails the build' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
-          remote: 
-          remote:  !     Error: No Python version was specified.
-          remote:  !     
-          remote:  !     When using the package manager uv on Heroku, you must specify
-          remote:  !     your app's Python version with a .python-version file.
-          remote:  !     
-          remote:  !     To add a .python-version file:
-          remote:  !     
-          remote:  !     1. Make sure you are in the root directory of your app
-          remote:  !        and not a subdirectory.
-          remote:  !     2. Run 'uv python pin #{DEFAULT_PYTHON_MAJOR_VERSION}'
-          remote:  !        (adjust to match your app's major Python version).
-          remote:  !     3. Commit the changes to your Git repository using
-          remote:  !        'git add --all' and then 'git commit'.
-          remote:  !     
-          remote:  !     Note: We strongly recommend that you don't specify the Python
-          remote:  !     patch version number in your .python-version file, since it will
-          remote:  !     pin your app to an exact Python version and so stop your app from
-          remote:  !     receiving security updates each time it builds.
-          remote: 
-          remote:  !     Push rejected, failed to compile Python app.
-        OUTPUT
+      it 'fails the build with .python-version instructions' do
+        app.deploy do |app|
+          expect(clean_output(app.output)).to include(<<~OUTPUT)
+            remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
+            remote: 
+            remote:  !     Error: No Python version was specified.
+            remote:  !     
+            remote:  !     When using the package manager uv on Heroku, you must specify
+            remote:  !     your app's Python version with a .python-version file.
+            remote:  !     
+            remote:  !     To add a .python-version file:
+            remote:  !     
+            remote:  !     1. Make sure you are in the root directory of your app
+            remote:  !        and not a subdirectory.
+            remote:  !     2. Run 'uv python pin #{DEFAULT_PYTHON_MAJOR_VERSION}'
+            remote:  !        (adjust to match your app's major Python version).
+            remote:  !     3. Commit the changes to your Git repository using
+            remote:  !        'git add --all' and then 'git commit'.
+            remote:  !     
+            remote:  !     Note: We strongly recommend that you don't specify the Python
+            remote:  !     patch version number in your .python-version file, since it will
+            remote:  !     pin your app to an exact Python version and so stop your app from
+            remote:  !     receiving security updates each time it builds.
+            remote: 
+            remote:  !     Push rejected, failed to compile Python app.
+          OUTPUT
+        end
+      end
+    end
+
+    context 'when there is a cached Python version' do
+      let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', allow_failure: true) }
+
+      it 'fails the build with .python-version instructions' do
+        app.deploy do |app|
+          FileUtils.rm('requirements.txt')
+          FileUtils.cp(FIXTURE_DIR.join('uv_no_python_version_file/pyproject.toml'), '.')
+          FileUtils.cp(FIXTURE_DIR.join('uv_no_python_version_file/uv.lock'), '.')
+          app.commit!
+          app.push!
+          expect(clean_output(app.output)).to include(<<~OUTPUT)
+            remote: -----> No Python version was specified. Using the same major version as the last build: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
+            remote: 
+            remote:  !     Error: No Python version was specified.
+            remote:  !     
+            remote:  !     When using the package manager uv on Heroku, you must specify
+            remote:  !     your app's Python version with a .python-version file.
+            remote:  !     
+            remote:  !     To add a .python-version file:
+            remote:  !     
+            remote:  !     1. Make sure you are in the root directory of your app
+            remote:  !        and not a subdirectory.
+            remote:  !     2. Run 'uv python pin #{DEFAULT_PYTHON_MAJOR_VERSION}'
+            remote:  !        (adjust to match your app's major Python version).
+            remote:  !     3. Commit the changes to your Git repository using
+            remote:  !        'git add --all' and then 'git commit'.
+            remote:  !     
+            remote:  !     Note: We strongly recommend that you don't specify the Python
+            remote:  !     patch version number in your .python-version file, since it will
+            remote:  !     pin your app to an exact Python version and so stop your app from
+            remote:  !     receiving security updates each time it builds.
+            remote: 
+            remote:  !     Push rejected, failed to compile Python app.
+          OUTPUT
+        end
       end
     end
   end
@@ -281,7 +326,7 @@ RSpec.describe 'uv support' do
   context 'when there is a runtime.txt file' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/uv_runtime_txt', allow_failure: true) }
 
-    it 'fails the build' do
+    it 'fails the build with runtime.txt migration instructions' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Using Python 3.11 specified in runtime.txt
