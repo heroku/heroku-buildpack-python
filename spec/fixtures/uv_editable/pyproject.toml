@@ -1,0 +1,25 @@
+[project]
+name = "uv-editable"
+version = "0.0.0"
+requires-python = ">=3.13"
+dependencies = [
+    "gunicorn",
+    "local-package-pyproject-toml",
+    "local-package-setup-py",
+]
+
+[project.scripts]
+uv-editable = "uv_editable:main"
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+# uv doesn't support editable mode with VCS dependencies:
+# https://github.com/astral-sh/uv/issues/5442
+# If that ever changes, we should switch to `editable = true` for gunicorn too.
+# We still include the Git gunicorn dependency here to ensure we have VCS coverage.
+gunicorn = { git = "https://github.com/benoitc/gunicorn" }
+local-package-pyproject-toml = { path = "packages/local_package_pyproject_toml", editable = true }
+local-package-setup-py = { path = "packages/local_package_setup_py", editable = true }

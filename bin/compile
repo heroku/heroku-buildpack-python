@@ -31,6 +31,7 @@ source "${BUILDPACK_DIR}/lib/pipenv.sh"
 source "${BUILDPACK_DIR}/lib/poetry.sh"
 source "${BUILDPACK_DIR}/lib/python_version.sh"
 source "${BUILDPACK_DIR}/lib/python.sh"
+source "${BUILDPACK_DIR}/lib/uv.sh"
 
 compile_start_time=$(nowms)
 
@@ -143,7 +144,7 @@ fi
 # as to what was a warning vs an error. In addition, several of the error messages contain similar
 # content to the warnings (such as encouraging use of .python-version and major version syntax),
 # which would mean duplicate content if we showed both.
-python_version::warn_if_python_version_file_missing "${python_version_origin}" "${python_major_version}"
+python_version::warn_or_error_if_python_version_file_missing "${python_version_origin}" "${python_major_version}"
 python_version::warn_if_deprecated_major_version "${python_major_version}" "${python_version_origin}"
 python_version::warn_if_patch_update_available "${python_full_version}" "${python_major_version}" "${python_version_origin}"
 
@@ -180,6 +181,9 @@ case "${package_manager}" in
 	poetry)
 		poetry::install_poetry "${python_home}" "${python_major_version}" "${CACHE_DIR}" "${EXPORT_PATH}"
 		;;
+	uv)
+		uv::install_uv "${CACHE_DIR}" "${EXPORT_PATH}" "${python_home}"
+		;;
 	*)
 		utils::abort_internal_error "Unhandled package manager: ${package_manager}"
 		;;
@@ -189,8 +193,8 @@ meta_time "package_manager_install_duration" "${package_manager_install_start_ti
 # SQLite3 support.
 # Installs the sqlite3 dev headers and sqlite3 binary but not the
 # libsqlite3-0 library since that exists in the base image.
-# We skip this step on Python 3.13 or when using Poetry, as a first step towards removing this feature.
-if [[ "${python_major_version}" == +(3.9|3.10|3.11|3.12) && "${package_manager}" != "poetry" ]]; then
+# We skip this step on Python 3.13 or when using Poetry/uv, as a first step towards removing this feature.
+if [[ "${python_major_version}" == +(3.9|3.10|3.11|3.12) && "${package_manager}" != +(poetry|uv) ]]; then
 	install_sqlite_start_time=$(nowms)
 	source "${BUILDPACK_DIR}/bin/steps/sqlite3"
 	buildpack_sqlite3_install
@@ -208,6 +212,9 @@ case "${package_manager}" in
 		;;
 	poetry)
 		poetry::install_dependencies
+		;;
+	uv)
+		uv::install_dependencies
 		;;
 	*)
 		utils::abort_internal_error "Unhandled package manager: ${package_manager}"

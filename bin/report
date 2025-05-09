@@ -76,6 +76,7 @@ STRING_FIELDS=(
 	python_version_requested
 	python_version
 	setuptools_version
+	uv_version
 	wheel_version
 )
 
@@ -101,7 +102,6 @@ ALL_OTHER_FIELDS=(
 	setup_py_only
 	sqlite_install_duration
 	total_duration
-	uv_lockfile
 )
 
 for field in "${STRING_FIELDS[@]}"; do
