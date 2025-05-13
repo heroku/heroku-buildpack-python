@@ -419,7 +419,7 @@ function python_version::resolve_python_version() {
 	esac
 }
 
-function python_version::warn_if_python_version_file_missing() {
+function python_version::warn_or_error_if_python_version_file_missing() {
 	local python_version_origin="${1}"
 	local python_major_version="${2}"
 
@@ -432,6 +432,31 @@ function python_version::warn_if_python_version_file_missing() {
 
 	case "${python_version_origin}" in
 		default | cached)
+			if [[ "${package_manager}" == "uv" ]]; then
+				output::error <<-EOF
+					Error: No Python version was specified.
+
+					When using the package manager uv on Heroku, you must specify
+					your app's Python version with a .python-version file.
+
+					To add a .python-version file:
+
+					1. Make sure you are in the root directory of your app
+					   and not a subdirectory.
+					2. Run 'uv python pin ${python_major_version}'
+					   (adjust to match your app's major Python version).
+					3. Commit the changes to your Git repository using
+					   'git add --all' and then 'git commit'.
+
+					Note: We strongly recommend that you don't specify the Python
+					patch version number in your .python-version file, since it will
+					pin your app to an exact Python version and so stop your app from
+					receiving security updates each time it builds.
+				EOF
+				meta_set "failure_reason" "python-version-file::not-found"
+				exit 1
+			fi
+
 			output::warning <<-EOF
 				Warning: No Python version was specified.
 
@@ -459,6 +484,33 @@ function python_version::warn_if_python_version_file_missing() {
 			EOF
 			;;
 		runtime.txt)
+			if [[ "${package_manager}" == "uv" ]]; then
+				output::error <<-EOF
+					Error: The runtime.txt file isn't supported when using uv.
+
+					When using the package manager uv on Heroku, you must specify
+					your app's Python version with a .python-version file and not
+					a runtime.txt file.
+
+					To switch to a .python-version file:
+
+					1. Make sure you are in the root directory of your app
+					   and not a subdirectory.
+					2. Delete your runtime.txt file.
+					3. Run 'uv python pin ${python_major_version}'
+					   (adjust to match your app's major Python version).
+					4. Commit the changes to your Git repository using
+					   'git add --all' and then 'git commit'.
+
+					Note: We strongly recommend that you don't specify the Python
+					patch version number in your .python-version file, since it will
+					pin your app to an exact Python version and so stop your app from
+					receiving security updates each time it builds.
+				EOF
+				meta_set "failure_reason" "runtime-txt::not-supported"
+				exit 1
+			fi
+
 			output::warning <<-EOF
 				Warning: The runtime.txt file is deprecated.
 
