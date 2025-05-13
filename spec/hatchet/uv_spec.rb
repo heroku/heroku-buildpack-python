@@ -30,9 +30,9 @@ RSpec.describe 'uv support' do
           remote: PYTHONPATH=/app
           remote: PYTHONUNBUFFERED=true
           remote: UV_CACHE_DIR=/tmp/uv-cache
+          remote: UV_NO_MANAGED_PYTHON=1
           remote: UV_PROJECT_ENVIRONMENT=/app/.heroku/python
           remote: UV_PYTHON_DOWNLOADS=never
-          remote: UV_PYTHON_PREFERENCE=only-system
           remote: 
           remote: \\['',
           remote:  '/app',

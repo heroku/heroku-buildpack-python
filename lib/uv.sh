@@ -35,6 +35,7 @@ function uv::install_uv() {
 			# however, we use much higher timeouts so that the buildpack works in non-Heroku or local
 			# environments that may have a slower connection. We don't use `--speed-limit` since it gives
 			# worse error messages when used with retries and piping to tar.
+			# We have to use `--strip-components` since the archive contents are nested under a subdirectory.
 			curl \
 				--connect-timeout 10 \
 				--fail \
@@ -51,8 +52,7 @@ function uv::install_uv() {
 					--extract \
 					--gzip \
 					--no-anchored \
-					--strip-components 1 \
-					uv
+					--strip-components 1
 		}; then
 			output::error <<-EOF
 				Error: Unable to install uv.
@@ -77,15 +77,15 @@ function uv::install_uv() {
 	# Make uv manage the system site-packages of our Python install instead of creating a venv.
 	export UV_PROJECT_ENVIRONMENT="${python_home}"
 	# Prevent uv from downloading/using its own Python installation.
+	export UV_NO_MANAGED_PYTHON="1"
 	export UV_PYTHON_DOWNLOADS="never"
-	export UV_PYTHON_PREFERENCE="only-system"
 
 	# Set the same env vars in the environment used by later buildpacks.
 	cat >>"${export_file}" <<-EOF
 		export PATH="${uv_dir}:\${PATH}"
 		export UV_PROJECT_ENVIRONMENT="${python_home}"
+		export UV_NO_MANAGED_PYTHON="1"
 		export UV_PYTHON_DOWNLOADS="never"
-		export UV_PYTHON_PREFERENCE="only-system"
 	EOF
 
 	# As a performance optimisation, uv attempts to use hardlinks instead of copying files from its

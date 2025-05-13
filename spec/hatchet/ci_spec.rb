@@ -270,9 +270,9 @@ RSpec.describe 'Heroku CI' do
                  PATH=/tmp/cache.+/.heroku/python-uv:/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
+                 UV_NO_MANAGED_PYTHON=1
                  UV_PROJECT_ENVIRONMENT=/app/.heroku/python
                  UV_PYTHON_DOWNLOADS=never
-                 UV_PYTHON_PREFERENCE=only-system
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -282,9 +282,9 @@ RSpec.describe 'Heroku CI' do
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
+          UV_NO_MANAGED_PYTHON=1
           UV_PROJECT_ENVIRONMENT=/app/.heroku/python
           UV_PYTHON_DOWNLOADS=never
-          UV_PYTHON_PREFERENCE=only-system
           -----> No test-setup command provided. Skipping.
           -----> Running test command `./bin/print-env-vars.sh && pytest --version`...
           CI=true
