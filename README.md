@@ -16,6 +16,8 @@ See the [Getting Started on Heroku with Python](https://devcenter.heroku.com/art
 
 A `requirements.txt`, `Pipfile`, `poetry.lock`, or `uv.lock` file must be present in the root (top-level) directory of your app's source code.
 
+When using the package manager [uv](https://docs.astral.sh/uv/) a `.python-version` file is also required.
+
 ## Configuration
 
 ### Python Version

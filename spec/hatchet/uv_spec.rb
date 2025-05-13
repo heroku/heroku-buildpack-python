@@ -360,7 +360,7 @@ RSpec.describe 'uv support' do
 
   # This tests the error message when `requires-python` in pyproject.toml isn't compatible with
   # the version in .python-version. This might seem unnecessary since it's testing something uv
-  # natively supports, however, the quality of the error message here depends on what uv options
+  # validates itself, however, the quality of the error message here depends on what uv options
   # we use (for example, using `--python` or `UV_PYTHON` results in a worse error message).
   context 'when requires-python in pyproject.toml is incompatible with .python-version' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/uv_mismatched_python_version', allow_failure: true) }
