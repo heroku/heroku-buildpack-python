@@ -65,10 +65,8 @@ RSpec.describe 'uv support' do
     end
   end
 
-  # TODO: Enable this once a previous buildpack release exists that uses an older uv version.
-  context 'when the uv version has changed since the last build',
-          skip: 'requires prior buildpack release that uses older uv' do
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#vTODO'] }
+  context 'when the uv version has changed since the last build' do
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v286'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/uv_basic', buildpacks:) }
 
     it 'clears the cache before installing' do
@@ -80,7 +78,7 @@ RSpec.describe 'uv support' do
           remote: -----> Python app detected
           remote: -----> Using Python 3.13 specified in .python-version
           remote: -----> Discarding cache since:
-          remote:        - The uv version has changed from TODO to #{UV_VERSION}
+          remote:        - The uv version has changed from 0.7.3 to #{UV_VERSION}
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing uv #{UV_VERSION}
           remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
