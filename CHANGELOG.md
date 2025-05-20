@@ -2,8 +2,9 @@
 
 ## [Unreleased]
 
-- Updated uv from 0.7.3 to 0.7.6. ([#1800](https://github.com/heroku/heroku-buildpack-python/pull/1800) and [#1803](https://github.com/heroku/heroku-buildpack-python/pull/1803))
+- Updated pip from 25.0.1 to 25.1.1. ([#1795](https://github.com/heroku/heroku-buildpack-python/pull/1795))
 - Updated Poetry from 2.1.2 to 2.1.3. ([#1797](https://github.com/heroku/heroku-buildpack-python/pull/1797))
+- Updated uv from 0.7.3 to 0.7.6. ([#1800](https://github.com/heroku/heroku-buildpack-python/pull/1800) and [#1803](https://github.com/heroku/heroku-buildpack-python/pull/1803))
 
 ## [v286] - 2025-05-13
 
