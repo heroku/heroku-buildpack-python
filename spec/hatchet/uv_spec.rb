@@ -65,7 +65,7 @@ RSpec.describe 'uv support' do
     end
   end
 
-  context 'when the uv version has changed since the last build' do
+  context 'when the uv and Python versions have changed since the last build' do
     let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v286'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/uv_basic', buildpacks:) }
 
@@ -78,6 +78,7 @@ RSpec.describe 'uv support' do
           remote: -----> Python app detected
           remote: -----> Using Python 3.13 specified in .python-version
           remote: -----> Discarding cache since:
+          remote:        - The Python version has changed from 3.13.3 to #{LATEST_PYTHON_3_13}
           remote:        - The uv version has changed from 0.7.3 to #{UV_VERSION}
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing uv #{UV_VERSION}
