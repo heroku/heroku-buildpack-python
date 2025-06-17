@@ -157,7 +157,8 @@ RSpec.describe 'Heroku CI' do
 
     it 'installs both normal and test dependencies and uses cache on subsequent runs' do
       app.run_ci do |test_run|
-        expect(clean_output(test_run.output)).to match(Regexp.new(<<~REGEX))
+        # The Poetry install log output order is non-deterministic, hence the regex.
+        expect(clean_output(test_run.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
@@ -167,11 +168,9 @@ RSpec.describe 'Heroku CI' do
                  
                  Package operations: 5 installs, 0 updates, 0 removals
                  
-                   - Installing iniconfig .+
-                   - Installing packaging .+
-                   - Installing pluggy .+
-                   - Installing pytest .+
-                   - Installing typing-extensions .+
+                   .+
+                   - Installing (pytest|typing-extensions) .+
+                   - Installing (pytest|typing-extensions) .+
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
                  CI=true
