@@ -369,7 +369,8 @@ RSpec.describe 'uv support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
           remote:        Using CPython #{DEFAULT_PYTHON_FULL_VERSION} interpreter at: /app/.heroku/python/bin/python#{DEFAULT_PYTHON_MAJOR_VERSION}
-          remote:        error: The Python request from `.python-version` resolved to Python #{DEFAULT_PYTHON_FULL_VERSION}, which is incompatible with the project's Python requirement: `==3.12.*`. Use `uv python pin` to update the `.python-version` file to a compatible version.
+          remote:        error: The Python request from `.python-version` resolved to Python #{DEFAULT_PYTHON_FULL_VERSION}, which is incompatible with the project's Python requirement: `==3.12.*` (from `project.requires-python`)
+          remote:        Use `uv python pin` to update the `.python-version` file to a compatible version
           remote: 
           remote:  !     Error: Unable to install dependencies using uv.
           remote:  !     
