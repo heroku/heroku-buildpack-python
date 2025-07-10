@@ -5,14 +5,14 @@ require_relative '../spec_helper'
 RSpec.describe 'Buildpack validation checks' do
   context 'when there are duplicate Python buildpacks set on the app' do
     let(:buildpacks) { %i[default default] }
-    let(:app) { Hatchet::Runner.new("spec/fixtures/python_#{DEFAULT_PYTHON_MAJOR_VERSION}", buildpacks:) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', buildpacks:, allow_failure: true) }
 
     it 'fails detection' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: 
-          remote:  !     Warning: The Python buildpack has already been run this build.
+          remote:  !     Error: The Python buildpack has already been run this build.
           remote:  !     
           remote:  !     An existing Python installation was found in the build directory
           remote:  !     from a buildpack run earlier in the build.
@@ -26,15 +26,10 @@ RSpec.describe 'Buildpack validation checks' do
           remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
           remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#remove-classic-buildpacks
           remote:  !     
-          remote:  !     If you have a use-case that requires duplicate buildpacks,
-          remote:  !     please comment on:
-          remote:  !     https://github.com/heroku/heroku-buildpack-python/issues/1704
-          remote:  !     
-          remote:  !     In January 2025 this warning will be made an error.
+          remote:  !     Note: This error replaces the deprecation warning which was
+          remote:  !     displayed in build logs starting 13th December 2024.
           remote: 
-          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> Restoring cache
-          remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end
@@ -48,7 +43,7 @@ RSpec.describe 'Buildpack validation checks' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: 
-          remote:  !     Warning: Existing '.heroku/python/' directory found.
+          remote:  !     Error: Existing '.heroku/python/' directory found.
           remote:  !     
           remote:  !     Your app's source code contains an existing directory named
           remote:  !     '.heroku/python/', which is where the Python buildpack needs
@@ -67,23 +62,8 @@ RSpec.describe 'Buildpack validation checks' do
           remote:  !     Otherwise, check that an earlier buildpack or 'bin/pre_compile'
           remote:  !     hook hasn't created this directory.
           remote:  !     
-          remote:  !     If you have a use-case that requires writing to this location,
-          remote:  !     please comment on:
-          remote:  !     https://github.com/heroku/heroku-buildpack-python/issues/1704
-          remote:  !     
-          remote:  !     In January 2025 this warning will be made an error.
-          remote: 
-          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: 
-          remote:  !     Internal Error: Unable to locate the Python stdlib's bundled pip.
-          remote:  !     
-          remote:  !     Couldn't find the pip wheel file bundled inside the Python
-          remote:  !     stdlib's 'ensurepip' module:
-          remote:  !     
-          remote:  !     find: ‘/app/.heroku/python/lib/python3.13/ensurepip/_bundled/’: No such file or directory
-          remote:  !     /app/.heroku/python/
-          remote:  !     /app/.heroku/python/bin
+          remote:  !     Note: This error replaces the deprecation warning which was
+          remote:  !     displayed in build logs starting 13th December 2024.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT

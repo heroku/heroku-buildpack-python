@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 - Updated uv from 0.7.13 to 0.7.20. ([#1827](https://github.com/heroku/heroku-buildpack-python/pull/1827) and [#1829](https://github.com/heroku/heroku-buildpack-python/pull/1829))
+- The build now errors if the Python buildpack has been run multiple times in the same build. This replaces the warning displayed since December 2024. ([#1830](https://github.com/heroku/heroku-buildpack-python/pull/1830))
+- The build now errors if an existing `.heroku/python/` directory is found in the app source. This replaces the warning displayed since December 2024. ([#1830](https://github.com/heroku/heroku-buildpack-python/pull/1830))
 
 ## [v290] - 2025-06-17
 
@@ -112,8 +114,8 @@
 
 ## [v272] - 2024-12-13
 
-- Added a warning if the Python buildpack has been run multiple times in the same build. In January 2025 this warning will be made an error. ([#1724](https://github.com/heroku/heroku-buildpack-python/pull/1724))
-- Added a warning if an existing `.heroku/python/` directory is found in the app source. In January 2025 this warning will be made an error. ([#1724](https://github.com/heroku/heroku-buildpack-python/pull/1724))
+- Added a warning if the Python buildpack has been run multiple times in the same build. In the future this warning will be made an error. ([#1724](https://github.com/heroku/heroku-buildpack-python/pull/1724))
+- Added a warning if an existing `.heroku/python/` directory is found in the app source. In the future this warning will be made an error. ([#1724](https://github.com/heroku/heroku-buildpack-python/pull/1724))
 - Improved the error message shown if the buildpack is used on an unsupported stack. ([#1724](https://github.com/heroku/heroku-buildpack-python/pull/1724))
 - Fixed Dev Center links to reflect recent article URL changes. ([#1723](https://github.com/heroku/heroku-buildpack-python/pull/1723))
 - Added metrics for the existence of a uv lockfile. ([#1725](https://github.com/heroku/heroku-buildpack-python/pull/1725))
