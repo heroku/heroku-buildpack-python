@@ -1,2 +1,2 @@
 def hello():
-    print("Hello pyproject.toml!")
+    print("Hello from pyproject.toml!")

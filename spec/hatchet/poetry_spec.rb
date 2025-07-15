@@ -115,8 +115,9 @@ RSpec.describe 'Poetry support' do
           remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote:        poetry_editable.pth:/tmp/build_.+
           remote:        
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote:        Running entrypoint for the current package: Hello from poetry-editable!
+          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
@@ -124,8 +125,9 @@ RSpec.describe 'Poetry support' do
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote: poetry_editable.pth:/tmp/build_.+
           remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote: Running entrypoint for the current package: Hello from poetry-editable!
+          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
         REGEX
 
@@ -136,8 +138,9 @@ RSpec.describe 'Poetry support' do
           __editable___local_package_setup_py_0_0_1_finder.py:/app/packages/local_package_setup_py/local_package_setup_py'}
           poetry_editable.pth:/app
 
-          Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          Running entrypoint for the setup.py-based local package: Hello setup.py!
+          Running entrypoint for the current package: Hello from poetry-editable!
+          Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          Running entrypoint for the setup.py-based local package: Hello from setup.py!
           Running entrypoint for the VCS package: gunicorn (version 23.0.0)
         OUTPUT
 
@@ -161,8 +164,9 @@ RSpec.describe 'Poetry support' do
           remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote:        poetry_editable.pth:/tmp/build_.+
           remote:        
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote:        Running entrypoint for the current package: Hello from poetry-editable!
+          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
@@ -170,8 +174,9 @@ RSpec.describe 'Poetry support' do
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote: poetry_editable.pth:/tmp/build_.+
           remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote: Running entrypoint for the current package: Hello from poetry-editable!
+          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
         REGEX
       end
@@ -231,6 +236,22 @@ RSpec.describe 'Poetry support' do
           remote:        Package operations: 1 install, 0 updates, 0 removals
           remote:        
           remote:          - Installing typing-extensions (4.12.2)
+        OUTPUT
+      end
+    end
+  end
+
+  # This tests that Poetry doesn't download its own Python or fall back to system Python
+  # if the Python version in pyproject.toml doesn't match that in .python-version.
+  context 'when requires-python in pyproject.toml is incompatible with .python-version',
+          skip: 'this is currently broken upstream: https://github.com/python-poetry/poetry/issues/10226' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_mismatched_python_version', allow_failure: true) }
+
+    it 'fails the build' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Installing dependencies using 'poetry sync --only main'
+          remote:        <TODO whatever error message Poetry displays if they fix their bug>
         OUTPUT
       end
     end

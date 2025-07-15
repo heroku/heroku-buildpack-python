@@ -1,0 +1,13 @@
+[project]
+name = "poetry-mismatched-python-version"
+version = "0.0.0"
+# This Python version intentionally doesn't match that in .python-version.
+# The version here also matches the distro Python version in Ubuntu 24.04,
+# so we can also test Poetry doesn't fall back to system Python.
+requires-python = "3.12.*"
+dependencies = [
+    "typing-extensions"
+]
+
+[tool.poetry]
+package-mode = false

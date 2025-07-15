@@ -10,6 +10,9 @@ gunicorn = { git = "https://github.com/benoitc/gunicorn.git", develop = true }
 local-package-pyproject-toml = { path = "packages/local_package_pyproject_toml", develop = true }
 local-package-setup-py = { path = "packages/local_package_setup_py", develop = true }
 
+[tool.poetry.scripts]
+poetry-editable = 'poetry_editable:main'
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
