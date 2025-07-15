@@ -1,2 +1,2 @@
 def hello():
-    print("Hello setup.py!")
+    print("Hello from setup.py!")

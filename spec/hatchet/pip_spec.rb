@@ -108,8 +108,8 @@ RSpec.describe 'pip support' do
           remote:        gunicorn.egg-link:/app/.heroku/python/src/gunicorn
           remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
           remote:        
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
           remote: easy-install.pth:/app/.heroku/python/src/gunicorn
@@ -118,8 +118,8 @@ RSpec.describe 'pip support' do
           remote: gunicorn.egg-link:/app/.heroku/python/src/gunicorn
           remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
           remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
         REGEX
 
@@ -131,8 +131,8 @@ RSpec.describe 'pip support' do
           gunicorn.egg-link:/app/.heroku/python/src/gunicorn
           local-package-setup-py.egg-link:/app/packages/local_package_setup_py
 
-          Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          Running entrypoint for the setup.py-based local package: Hello setup.py!
+          Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          Running entrypoint for the setup.py-based local package: Hello from setup.py!
           Running entrypoint for the VCS package: gunicorn (version 20.1.0)
         OUTPUT
 
@@ -147,8 +147,8 @@ RSpec.describe 'pip support' do
           remote:        gunicorn.egg-link:/app/.heroku/python/src/gunicorn
           remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
           remote:        
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Inline app detected
           remote: easy-install.pth:/app/.heroku/python/src/gunicorn
@@ -157,8 +157,8 @@ RSpec.describe 'pip support' do
           remote: gunicorn.egg-link:/app/.heroku/python/src/gunicorn
           remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
           remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello setup.py!
+          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
+          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
         REGEX
         # Test that the VCS repo checkout was cached correctly.
