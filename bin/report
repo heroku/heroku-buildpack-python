@@ -87,8 +87,6 @@ ALL_OTHER_FIELDS=(
 	custom_s3_base_url
 	dependencies_install_duration
 	django_collectstatic_duration
-	duplicate_python_buildpack
-	existing_python_dir
 	nltk_downloader_duration
 	package_manager_install_duration
 	pipenv_has_lockfile
