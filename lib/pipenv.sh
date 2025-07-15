@@ -66,14 +66,8 @@ function pipenv::install_dependencies() {
 	local pipenv_install_command=(
 		pipenv
 		install
+		--deploy
 	)
-
-	# TODO: Make Pipfile.lock mandatory during package manager selection.
-	if [[ ! -f Pipfile.lock ]]; then
-		pipenv_install_command+=(--skip-lock)
-	else
-		pipenv_install_command+=(--deploy)
-	fi
 
 	# Install test dependencies too when the buildpack is invoked via `bin/test-compile` on Heroku CI.
 	if [[ -v INSTALL_TEST ]]; then

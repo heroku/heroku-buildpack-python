@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- The build now errors when using Pipenv without its lockfile (`Pipfile.lock`). This replaces the warning displayed since November 2024. ([#1833](https://github.com/heroku/heroku-buildpack-python/pull/1833))
 
 ## [v291] - 2025-07-10
 

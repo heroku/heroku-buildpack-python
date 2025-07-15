@@ -89,7 +89,6 @@ ALL_OTHER_FIELDS=(
 	django_collectstatic_duration
 	nltk_downloader_duration
 	package_manager_install_duration
-	pipenv_has_lockfile
 	post_compile_hook
 	post_compile_hook_duration
 	pre_compile_hook
