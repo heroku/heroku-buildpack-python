@@ -233,12 +233,6 @@ function python_version::read_pipenv_python_version() {
 	local pipfile_lock_path="${build_dir}/Pipfile.lock"
 	local version
 
-	# We currently permit using Pipenv without a `Pipfile.lock`, however, in the future we will
-	# require a lockfile, at which point this conditional can be removed.
-	if [[ ! -f "${pipfile_lock_path}" ]]; then
-		return 0
-	fi
-
 	if ! version=$(jq --raw-output '._meta.requires.python_full_version // ._meta.requires.python_version' "${pipfile_lock_path}" 2>&1); then
 		local jq_error_message="${version}"
 		output::error <<-EOF

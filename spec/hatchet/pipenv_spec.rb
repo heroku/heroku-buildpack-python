@@ -200,79 +200,33 @@ RSpec.describe 'Pipenv support' do
   end
 
   context 'without a Pipfile.lock' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_no_lockfile') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_no_lockfile', allow_failure: true) }
 
     it 'builds with the default Python version using just the Pipfile' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
           remote: 
-          remote:  !     Warning: No 'Pipfile.lock' found!
+          remote:  !     Error: No 'Pipfile.lock' found!
           remote:  !     
           remote:  !     A 'Pipfile' file was found, however, the associated 'Pipfile.lock'
           remote:  !     Pipenv lockfile was not. This means your app dependency versions
           remote:  !     aren't pinned, which means the package versions used on Heroku
           remote:  !     might not match those installed in other environments.
           remote:  !     
-          remote:  !     For now, we will install your dependencies without a lockfile,
-          remote:  !     however, in the future this warning will become an error.
+          remote:  !     Using Pipenv in this way is unsafe and no longer supported.
           remote:  !     
           remote:  !     Run 'pipenv lock' locally to generate the lockfile, and make sure
           remote:  !     that 'Pipfile.lock' isn't listed in '.gitignore' or '.slugignore'.
+          remote:  !     
+          remote:  !     Alternatively, if you wish to switch to another package manager,
+          remote:  !     delete your 'Pipfile' and then add either a 'requirements.txt',
+          remote:  !     'poetry.lock' or 'uv.lock' file.
+          remote:  !     
+          remote:  !     Note: This error replaces the warning which was displayed in
+          remote:  !     build logs starting 12th November 2024.
           remote: 
-          remote: -----> No Python version was specified. Using the buildpack default: Python #{DEFAULT_PYTHON_MAJOR_VERSION}
-          remote: 
-          remote:  !     Warning: No Python version was specified.
-          remote:  !     
-          remote:  !     Your app doesn't specify a Python version and so the buildpack
-          remote:  !     picked a default version for you.
-          remote:  !     
-          remote:  !     Relying on this default version isn't recommended, since it
-          remote:  !     can change over time and may not be consistent with your local
-          remote:  !     development environment, CI or other instances of your app.
-          remote:  !     
-          remote:  !     Please configure an explicit Python version for your app.
-          remote:  !     
-          remote:  !     Create a new file in the root directory of your app named:
-          remote:  !     .python-version
-          remote:  !     
-          remote:  !     Make sure to include the '.' character at the start of the
-          remote:  !     filename. Don't add a file extension such as '.txt'.
-          remote:  !     
-          remote:  !     In the new file, specify your app's major Python version number
-          remote:  !     only. Don't include quotes or a 'python-' prefix.
-          remote:  !     
-          remote:  !     For example, to request the latest version of Python #{DEFAULT_PYTHON_MAJOR_VERSION},
-          remote:  !     update your .python-version file so it contains exactly:
-          remote:  !     #{DEFAULT_PYTHON_MAJOR_VERSION}
-          remote:  !     
-          remote:  !     We strongly recommend that you don't specify the Python patch
-          remote:  !     version number, since it will pin your app to an exact Python
-          remote:  !     version and so stop your app from receiving security updates
-          remote:  !     each time it builds.
-          remote:  !     
-          remote:  !     If your app already has a .python-version file, check that it:
-          remote:  !     
-          remote:  !     1. Is in the top level directory \\(not a subdirectory\\).
-          remote:  !     2. Is named exactly '.python-version' in all lowercase.
-          remote:  !     3. Isn't listed in '.gitignore' or '.slugignore'.
-          remote:  !     4. Has been added to the Git repository using 'git add --all'
-          remote:  !        and then committed using 'git commit'.
-          remote:  !     
-          remote:  !     In the future we will require the use of a .python-version
-          remote:  !     file and this warning will be made an error.
-          remote: 
-          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
-          remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing dependencies using 'pipenv install --skip-lock'
-          remote:        The flag --skip-lock has been reintroduced \\(but is not recommended\\).  Without 
-          remote:        the lock resolver it is difficult to manage multiple package indexes, and hash 
-          remote:        checking is not provided.  However it can help manage installs with current 
-          remote:        deficiencies in locking across platforms.
-          remote:        Pipfile.lock not found, creating...
-          .+
-          remote:        Installing dependencies from Pipfile...
+          remote:  !     Push rejected, failed to compile Python app.
         REGEX
       end
     end

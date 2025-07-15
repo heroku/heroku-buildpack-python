@@ -18,8 +18,8 @@ RSpec.describe 'Buildpack detection' do
           remote:  !     but we couldn't find any supported Python project files.
           remote:  !     
           remote:  !     A Python app on Heroku must have either a 'requirements.txt',
-          remote:  !     'Pipfile' or 'poetry.lock' package manager file in the root
-          remote:  !     directory of its source code.
+          remote:  !     'Pipfile.lock', 'poetry.lock' or 'uv.lock' package manager file
+          remote:  !     in the root directory of its source code.
           remote:  !     
           remote:  !     Currently the root directory of your app contains:
           remote:  !     

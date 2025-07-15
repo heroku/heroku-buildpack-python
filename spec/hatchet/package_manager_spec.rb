@@ -14,8 +14,8 @@ RSpec.describe 'Package manager support' do
           remote:  !     Error: Couldn't find any supported Python package manager files.
           remote:  !     
           remote:  !     A Python app on Heroku must have either a 'requirements.txt',
-          remote:  !     'Pipfile', 'poetry.lock' or 'uv.lock' package manager file in
-          remote:  !     the root directory of its source code.
+          remote:  !     'Pipfile.lock', 'poetry.lock' or 'uv.lock' package manager file
+          remote:  !     in the root directory of its source code.
           remote:  !     
           remote:  !     Currently the root directory of your app contains:
           remote:  !     

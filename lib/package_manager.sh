@@ -12,26 +12,29 @@ function package_manager::determine_package_manager() {
 	if [[ -f "${build_dir}/Pipfile.lock" ]]; then
 		package_managers_found+=(pipenv)
 		package_managers_found_display_text+=("Pipfile.lock (Pipenv)")
-		meta_set "pipenv_has_lockfile" "true"
 	elif [[ -f "${build_dir}/Pipfile" ]]; then
-		# TODO: Start requiring a Pipfile.lock and make this branch a "missing lockfile" error instead.
-		output::warning <<-'EOF'
-			Warning: No 'Pipfile.lock' found!
+		output::error <<-'EOF'
+			Error: No 'Pipfile.lock' found!
 
 			A 'Pipfile' file was found, however, the associated 'Pipfile.lock'
 			Pipenv lockfile was not. This means your app dependency versions
 			aren't pinned, which means the package versions used on Heroku
 			might not match those installed in other environments.
 
-			For now, we will install your dependencies without a lockfile,
-			however, in the future this warning will become an error.
+			Using Pipenv in this way is unsafe and no longer supported.
 
 			Run 'pipenv lock' locally to generate the lockfile, and make sure
 			that 'Pipfile.lock' isn't listed in '.gitignore' or '.slugignore'.
+
+			Alternatively, if you wish to switch to another package manager,
+			delete your 'Pipfile' and then add either a 'requirements.txt',
+			'poetry.lock' or 'uv.lock' file.
+
+			Note: This error replaces the warning which was displayed in
+			build logs starting 12th November 2024.
 		EOF
-		package_managers_found+=(pipenv)
-		package_managers_found_display_text+=("Pipfile (Pipenv)")
-		meta_set "pipenv_has_lockfile" "false"
+		meta_set "failure_reason" "package-manager::pipenv-missing-lockfile"
+		exit 1
 	fi
 
 	if [[ -f "${build_dir}/requirements.txt" ]]; then
@@ -76,8 +79,8 @@ function package_manager::determine_package_manager() {
 				Error: Couldn't find any supported Python package manager files.
 
 				A Python app on Heroku must have either a 'requirements.txt',
-				'Pipfile', 'poetry.lock' or 'uv.lock' package manager file in
-				the root directory of its source code.
+				'Pipfile.lock', 'poetry.lock' or 'uv.lock' package manager file
+				in the root directory of its source code.
 
 				Currently the root directory of your app contains:
 
