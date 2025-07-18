@@ -37,6 +37,7 @@ RSpec.describe 'pip support' do
           remote:  '/app/.heroku/python/lib/python3.13/lib-dynload',
           remote:  '/app/.heroku/python/lib/python3.13/site-packages']
           remote: 
+          remote: pip #{PIP_VERSION} from /app/.heroku/python/lib/python3.13/site-packages/pip (python 3.13)
           remote: Package           Version
           remote: ----------------- -------
           remote: pip               #{PIP_VERSION}
@@ -56,6 +57,9 @@ RSpec.describe 'pip support' do
           remote:        Requirement already satisfied: typing-extensions==4.12.2 (from -r requirements.txt (line 5)) (4.12.2)
           remote: -----> Inline app detected
         OUTPUT
+        # Test that pip is available at run-time too (since for historical reasons it's been
+        # made available after the build, and users now rely on this).
+        expect(app.run('pip --version')).to include("pip #{PIP_VERSION}")
       end
     end
   end

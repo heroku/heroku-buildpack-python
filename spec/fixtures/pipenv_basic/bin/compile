@@ -15,8 +15,8 @@ echo
 python -c 'import pprint, sys; pprint.pp(sys.path)'
 echo
 
-# TODO: Investigate why 'pipenv graph' doesn't work here.
-# TODO: Remove --disable-pip-version-check in favour of exporting PIP_DISABLE_PIP_VERSION_CHECK
+pipenv --version
+# We have to resort to using pip to list installed packages, since `pipenv graph` doesn't support `--system`.
 pip list --disable-pip-version-check
 echo
 

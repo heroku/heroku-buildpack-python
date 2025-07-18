@@ -39,6 +39,7 @@ RSpec.describe 'Poetry support' do
           remote:  '/app/.heroku/python/lib/python3.13/lib-dynload',
           remote:  '/app/.heroku/python/lib/python3.13/site-packages']
           remote: 
+          remote: Poetry (version #{POETRY_VERSION})
           remote: Skipping virtualenv creation, as specified in config file.
           remote: typing-extensions 4.12.2 Backported and Experimental Type Hints for Python ...
           remote: 
