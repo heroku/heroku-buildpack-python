@@ -42,7 +42,7 @@ meta_init "${CACHE_DIR}" "python"
 meta_setup
 
 checks::ensure_supported_stack "${STACK:?Required env var STACK is not set}"
-checks::warn_if_duplicate_python_buildpack "${BUILD_DIR}"
+checks::duplicate_python_buildpack "${BUILD_DIR}"
 
 # Prepend proper path for old-school virtualenv hackery.
 # This may not be necessary.
@@ -102,7 +102,7 @@ hooks::run_hook "pre_compile"
 
 # This check must be after the pre_compile hook, so that we can check not only the original
 # app source, but also that the hook hasn't written to '.heroku/python/' either.
-checks::warn_if_existing_python_dir_present "${BUILD_DIR}"
+checks::existing_python_dir_present "${BUILD_DIR}"
 
 package_manager="$(package_manager::determine_package_manager "${BUILD_DIR}")"
 meta_set "package_manager" "${package_manager}"
