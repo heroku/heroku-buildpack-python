@@ -41,7 +41,7 @@ function checks::ensure_supported_stack() {
 	esac
 }
 
-function checks::warn_if_duplicate_python_buildpack() {
+function checks::duplicate_python_buildpack() {
 	local build_dir="${1}"
 
 	# The check for the `PYTHONHOME` env var prevents this warning triggering in the case
@@ -72,7 +72,7 @@ function checks::warn_if_duplicate_python_buildpack() {
 	fi
 }
 
-function checks::warn_if_existing_python_dir_present() {
+function checks::existing_python_dir_present() {
 	local build_dir="${1}"
 
 	# We use `-e` here to catch the case where `python` is a file rather than a directory.
