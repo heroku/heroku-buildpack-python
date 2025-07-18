@@ -35,6 +35,7 @@ RSpec.describe 'Pipenv support' do
           remote:  '/app/.heroku/python/lib/python3.13/lib-dynload',
           remote:  '/app/.heroku/python/lib/python3.13/site-packages'\\]
           remote: 
+          remote: pipenv, version #{PIPENV_VERSION}
           remote: Package           Version
           remote: ----------------- -+
           remote: certifi           .+
@@ -62,6 +63,9 @@ RSpec.describe 'Pipenv support' do
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Inline app detected
         REGEX
+        # Test that Pipenv is available at run-time too (since for historical reasons it's been
+        # made available after the build, and users now rely on this).
+        expect(app.run('pipenv --version')).to include("version #{PIPENV_VERSION}")
       end
     end
   end

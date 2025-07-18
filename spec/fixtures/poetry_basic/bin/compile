@@ -15,6 +15,7 @@ echo
 python -c 'import pprint, sys; pprint.pp(sys.path)'
 echo
 
+poetry --version
 # The show command also lists dependencies that are in optional groups in pyproject.toml
 # but that aren't actually installed, for which the only option is to filter out by hand.
 poetry show | grep -v ' (!) '
