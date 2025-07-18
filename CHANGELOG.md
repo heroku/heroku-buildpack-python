@@ -4,6 +4,17 @@
 
 - The build now errors when using Pipenv without its lockfile (`Pipfile.lock`). This replaces the warning displayed since November 2024. ([#1833](https://github.com/heroku/heroku-buildpack-python/pull/1833))
 
+
+
+- Updated Pipenv from 2024.0.1 to 2025.0.4. ([#TODO](https://github.com/heroku/heroku-buildpack-python/pull/TODO))
+- TODO. ([#TODO](https://github.com/heroku/heroku-buildpack-python/pull/TODO))
+
+pip no longer installed
+Pipenv now installed into its own venv
+Pipenv install skipped if the version hasn't changed
+pipenv args changed
+
+
 ## [v291] - 2025-07-10
 
 - Updated uv from 0.7.13 to 0.7.20. ([#1827](https://github.com/heroku/heroku-buildpack-python/pull/1827) and [#1829](https://github.com/heroku/heroku-buildpack-python/pull/1829))

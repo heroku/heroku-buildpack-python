@@ -106,6 +106,8 @@ function cache::restore() {
 				if [[ -d "${cache_dir}/.heroku/src" ]]; then
 					cache_invalidation_reasons+=("The editable VCS repository location has changed (and Pipenv doesn't handle this correctly)")
 				fi
+				# TODO: Check if Pipfile.lock has changed
+				# TODO: Check if old Pipenv install exists
 				;;
 			poetry)
 				local cached_poetry_version

@@ -9,12 +9,10 @@ RSpec.describe 'Pipenv support' do
 
     it 'builds with the specified python_version and re-uses packages from the cache' do
       app.deploy do |app|
-        # TODO: We should not be leaking the Pipenv installation into the app environment.
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -22,7 +20,8 @@ RSpec.describe 'Pipenv support' do
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote: LIBRARY_PATH=/app/.heroku/python/lib
-          remote: PATH=/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: PIPENV_SYSTEM=1
           remote: PYTHONHASHSEED=random
           remote: PYTHONHOME=/app/.heroku/python
           remote: PYTHONPATH=/app
@@ -38,15 +37,7 @@ RSpec.describe 'Pipenv support' do
           remote: pipenv, version #{PIPENV_VERSION}
           remote: Package           Version
           remote: ----------------- -+
-          remote: certifi           .+
-          remote: distlib           .+
-          remote: filelock          .+
-          remote: pip               #{PIP_VERSION}
-          remote: pipenv            #{PIPENV_VERSION}
-          remote: platformdirs      .+
-          remote: setuptools        .+
           remote: typing_extensions 4.12.2
-          remote: virtualenv        .+
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
         REGEX
@@ -57,8 +48,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
           remote: -----> Restoring cache
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
-          remote: -----> Installing Pipenv #{PIPENV_VERSION}
+          remote: -----> Using cached Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Inline app detected
@@ -116,7 +106,6 @@ RSpec.describe 'Pipenv support' do
           remote:  !     patch version automatically and prevent this warning.
           remote: 
           remote: -----> Installing Python 3.9.0
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
@@ -135,7 +124,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python 3.13 specified in .python-version
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -194,7 +182,6 @@ RSpec.describe 'Pipenv support' do
           remote:  !     file and this warning will be made an error.
           remote: 
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -386,7 +373,6 @@ RSpec.describe 'Pipenv support' do
           remote:        - The Pipenv version has changed from 2023.12.1 to #{PIPENV_VERSION}
           remote:        - The editable VCS repository location has changed \\(and Pipenv doesn't handle this correctly\\)
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -498,7 +484,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Your Pipfile.lock \\(.+\\) is out of date.  Expected: \\(.+\\).
