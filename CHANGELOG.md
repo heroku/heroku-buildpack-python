@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v292] - 2025-07-23
+
 - Updated Pipenv from 2024.0.1 to 2025.0.4. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
 - Fixed the way Pipenv is installed, so that it and its dependencies are installed into a separate virtual environment rather than same environment as the app. If your app inadvertently depended on Pipenv's internal dependencies, you will need to add those dependencies explicitly to your `Pipfile`. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
 - Stopped installing pip when Pipenv is the chosen package manager. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
@@ -1252,7 +1255,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v291...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v292...main
+[v292]: https://github.com/heroku/heroku-buildpack-python/compare/v291...v292
 [v291]: https://github.com/heroku/heroku-buildpack-python/compare/v290...v291
 [v290]: https://github.com/heroku/heroku-buildpack-python/compare/v289...v290
 [v289]: https://github.com/heroku/heroku-buildpack-python/compare/v288...v289
