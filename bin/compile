@@ -114,8 +114,6 @@ cached_python_full_version="$(cache::cached_python_full_version "${CACHE_DIR}")"
 python_version::read_requested_python_version "${BUILD_DIR}" "${package_manager}" "${cached_python_full_version}" requested_python_version python_version_origin
 meta_set "python_version_requested" "${requested_python_version}"
 meta_set "python_version_origin" "${python_version_origin}"
-# TODO: Remove this once the old Honeycomb events that don't have `python_version_origin` have aged out.
-meta_set "python_version_reason" "${python_version_origin}"
 
 case "${python_version_origin}" in
 	default)

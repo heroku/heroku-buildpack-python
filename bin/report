@@ -72,7 +72,6 @@ STRING_FIELDS=(
 	poetry_version
 	python_version_major
 	python_version_origin
-	python_version_reason
 	python_version_requested
 	python_version
 	setuptools_version
