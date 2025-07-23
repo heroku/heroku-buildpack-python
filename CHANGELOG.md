@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v293] - 2025-07-23
+
 - Work around a Pipenv bug when using `--system`, that causes packages to not be installed correctly if they are also a dependency of Pipenv (such as `certifi` ). ([#1842](https://github.com/heroku/heroku-buildpack-python/pull/1842))
 
 ## [v292] - 2025-07-23
@@ -1256,7 +1259,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v292...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v293...main
+[v293]: https://github.com/heroku/heroku-buildpack-python/compare/v292...v293
 [v292]: https://github.com/heroku/heroku-buildpack-python/compare/v291...v292
 [v291]: https://github.com/heroku/heroku-buildpack-python/compare/v290...v291
 [v290]: https://github.com/heroku/heroku-buildpack-python/compare/v289...v290
