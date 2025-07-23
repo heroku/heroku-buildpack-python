@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Work around a Pipenv bug when using `--system`, that causes packages to not be installed correctly if they are also a dependency of Pipenv (such as `certifi` ). ([#1842](https://github.com/heroku/heroku-buildpack-python/pull/1842))
 
 ## [v292] - 2025-07-23
 

@@ -22,10 +22,12 @@ RSpec.describe 'Pipenv support' do
           remote: LIBRARY_PATH=/app/.heroku/python/lib
           remote: PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote: PIPENV_SYSTEM=1
+          remote: PIPENV_VERBOSITY=-1
           remote: PYTHONHASHSEED=random
           remote: PYTHONHOME=/app/.heroku/python
           remote: PYTHONPATH=/app
           remote: PYTHONUNBUFFERED=true
+          remote: VIRTUAL_ENV=/app/.heroku/python
           remote: 
           remote: \\['',
           remote:  '/app',
@@ -37,6 +39,7 @@ RSpec.describe 'Pipenv support' do
           remote: pipenv, version #{PIPENV_VERSION}
           remote: Package           Version
           remote: ----------------- -+
+          remote: certifi           2025.7.14
           remote: typing_extensions 4.12.2
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
