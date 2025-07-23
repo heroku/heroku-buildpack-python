@@ -9,12 +9,10 @@ RSpec.describe 'Pipenv support' do
 
     it 'builds with the specified python_version and re-uses packages from the cache' do
       app.deploy do |app|
-        # TODO: We should not be leaking the Pipenv installation into the app environment.
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -22,7 +20,8 @@ RSpec.describe 'Pipenv support' do
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote: LIBRARY_PATH=/app/.heroku/python/lib
-          remote: PATH=/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: PIPENV_SYSTEM=1
           remote: PYTHONHASHSEED=random
           remote: PYTHONHOME=/app/.heroku/python
           remote: PYTHONPATH=/app
@@ -38,15 +37,7 @@ RSpec.describe 'Pipenv support' do
           remote: pipenv, version #{PIPENV_VERSION}
           remote: Package           Version
           remote: ----------------- -+
-          remote: certifi           .+
-          remote: distlib           .+
-          remote: filelock          .+
-          remote: pip               #{PIP_VERSION}
-          remote: pipenv            #{PIPENV_VERSION}
-          remote: platformdirs      .+
-          remote: setuptools        .+
           remote: typing_extensions 4.12.2
-          remote: virtualenv        .+
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
         REGEX
@@ -57,8 +48,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
           remote: -----> Restoring cache
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
-          remote: -----> Installing Pipenv #{PIPENV_VERSION}
+          remote: -----> Using cached Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Inline app detected
@@ -66,6 +56,28 @@ RSpec.describe 'Pipenv support' do
         # Test that Pipenv is available at run-time too (since for historical reasons it's been
         # made available after the build, and users now rely on this).
         expect(app.run('pipenv --version')).to include("version #{PIPENV_VERSION}")
+      end
+    end
+  end
+
+  context 'when Pipfile.lock has changed since the last build' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic') }
+
+    it 'clears the cache before installing the packages again' do
+      app.deploy do |app|
+        File.write('Pipfile.lock', "\n", mode: 'a')
+        app.commit!
+        app.push!
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+          remote: -----> Python app detected
+          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
+          remote: -----> Discarding cache since:
+          remote:        - The contents of Pipfile.lock changed
+          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
+          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+        REGEX
       end
     end
   end
@@ -116,7 +128,6 @@ RSpec.describe 'Pipenv support' do
           remote:  !     patch version automatically and prevent this warning.
           remote: 
           remote: -----> Installing Python 3.9.0
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
@@ -135,7 +146,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python 3.13 specified in .python-version
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -194,7 +204,6 @@ RSpec.describe 'Pipenv support' do
           remote:  !     file and this warning will be made an error.
           remote: 
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -368,9 +377,8 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  context 'when the Pipenv and Python versions have changed since the last build' do
-    # TODO: Bump this buildpack version the next time we update the Pipenv version.
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#archive/v253'] }
+  context 'when the Pipenv version has changed since the last build' do
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v291'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
 
     it 'clears the cache before installing' do
@@ -382,11 +390,8 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
           remote: -----> Discarding cache since:
-          remote:        - The Python version has changed from 3.12.4 to #{DEFAULT_PYTHON_FULL_VERSION}
-          remote:        - The Pipenv version has changed from 2023.12.1 to #{PIPENV_VERSION}
-          remote:        - The editable VCS repository location has changed \\(and Pipenv doesn't handle this correctly\\)
+          remote:        - The Pipenv version has changed from 2024.0.1 to #{PIPENV_VERSION}
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -498,10 +503,12 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Your Pipfile.lock \\(.+\\) is out of date.  Expected: \\(.+\\).
+          remote:        Your Pipfile.lock 
+          remote:        \\(.+\\) is out of 
+          remote:        date. Expected: 
+          remote:        \\(.+\\).
           remote:        .+
           remote:        ERROR:: Aborting deploy
           remote: 

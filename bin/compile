@@ -172,9 +172,7 @@ case "${package_manager}" in
 		pip::install_pip_setuptools_wheel "${python_home}" "${python_major_version}"
 		;;
 	pipenv)
-		# TODO: Stop installing pip when using Pipenv.
-		pip::install_pip_setuptools_wheel "${python_home}" "${python_major_version}"
-		pipenv::install_pipenv
+		pipenv::install_pipenv "${python_home}" "${python_major_version}" "${EXPORT_PATH}" "${PROFILE_PATH}"
 		;;
 	poetry)
 		poetry::install_poetry "${python_home}" "${python_major_version}" "${CACHE_DIR}" "${EXPORT_PATH}"
