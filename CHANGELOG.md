@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- Updated Pipenv from 2024.0.1 to 2025.0.4. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
+- Fixed the way Pipenv is installed, so that it and its dependencies are installed into a separate virtual environment rather than same environment as the app. If your app inadvertently depended on Pipenv's internal dependencies, you will need to add those dependencies explicitly to your `Pipfile`. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
+- Stopped installing pip when Pipenv is the chosen package manager. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
+- The build cache is now cleared when using Pipenv if the contents of `Pipfile.lock` has changed since the last build. This is required to work around Pipenv not uninstalling packages when they are removed from the lockfile. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
 - The build now errors when using Pipenv without its lockfile (`Pipfile.lock`). This replaces the warning displayed since November 2024. ([#1833](https://github.com/heroku/heroku-buildpack-python/pull/1833))
 
 ## [v291] - 2025-07-10

@@ -87,7 +87,6 @@ RSpec.describe 'Heroku CI' do
           -----> Python app detected
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          -----> Installing pip #{PIP_VERSION}
           -----> Installing Pipenv #{PIPENV_VERSION}
           -----> Installing dependencies using 'pipenv install --deploy --dev'
                  Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -103,14 +102,16 @@ RSpec.describe 'Heroku CI' do
                  LC_ALL=C.UTF-8
                  LD_LIBRARY_PATH=/app/.heroku/python/lib
                  LIBRARY_PATH=/app/.heroku/python/lib
-                 PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+                 PATH=/app/.heroku/python/pipenv/bin:/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+                 PIPENV_SYSTEM=1
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
-          PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+          PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+          PIPENV_SYSTEM=1
           PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
@@ -124,7 +125,8 @@ RSpec.describe 'Heroku CI' do
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
-          PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
+          PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
+          PIPENV_SYSTEM=1
           PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
@@ -140,8 +142,7 @@ RSpec.describe 'Heroku CI' do
           -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           -----> Restoring cache
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
-          -----> Installing pip #{PIP_VERSION}
-          -----> Installing Pipenv #{PIPENV_VERSION}
+          -----> Using cached Pipenv #{PIPENV_VERSION}
           -----> Installing dependencies using 'pipenv install --deploy --dev'
                  Installing dependencies from Pipfile.lock \\(.+\\)...
                  Installing dependencies from Pipfile.lock \\(.+\\)...

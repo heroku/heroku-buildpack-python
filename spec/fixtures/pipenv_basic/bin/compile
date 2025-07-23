@@ -17,7 +17,8 @@ echo
 
 pipenv --version
 # We have to resort to using pip to list installed packages, since `pipenv graph` doesn't support `--system`.
-pip list --disable-pip-version-check
+python -m ensurepip --default-pip >/dev/null
+pip list --disable-pip-version-check --exclude pip
 echo
 
 python -c 'import typing_extensions; print(typing_extensions)'

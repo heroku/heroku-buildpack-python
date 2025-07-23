@@ -115,7 +115,6 @@ RSpec.describe 'Package manager support' do
           remote: 
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...

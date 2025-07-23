@@ -87,6 +87,7 @@ function cache::restore() {
 				# later removed, pip will not uninstall the package. This check can be removed if we
 				# ever switch to only caching pip's HTTP/wheel cache rather than site-packages.
 				# TODO: Remove the `-f` check once the setup.py fallback feature is removed.
+				# TODO: Switch this to using sha256sum like the Pipenv implementation.
 				if [[ -f "${build_dir}/requirements.txt" ]] && ! cmp --silent "${cache_dir}/.heroku/requirements.txt" "${build_dir}/requirements.txt"; then
 					cache_invalidation_reasons+=("The contents of requirements.txt changed")
 				fi
@@ -102,9 +103,14 @@ function cache::restore() {
 				elif [[ "${cached_pipenv_version}" != "${PIPENV_VERSION:?}" ]]; then
 					cache_invalidation_reasons+=("The Pipenv version has changed from ${cached_pipenv_version} to ${PIPENV_VERSION}")
 				fi
-				# TODO: Remove this next time the Pipenv version is bumped (since it will trigger cache invalidation of its own)
-				if [[ -d "${cache_dir}/.heroku/src" ]]; then
-					cache_invalidation_reasons+=("The editable VCS repository location has changed (and Pipenv doesn't handle this correctly)")
+				# `pipenv {install,sync}` by design don't actually uninstall packages on their own (!!):
+				# and we can't use `pipenv clean` since it isn't compatible with `--system`.
+				# https://github.com/pypa/pipenv/issues/3365
+				# We have to explicitly check for the presence of the Pipfile.lock.sha256 file,
+				# since we only started writing it to the build cache as of buildpack v292+.
+				local pipfile_lock_checksum_file="${cache_dir}/.heroku/python/Pipfile.lock.sha256"
+				if [[ -f "${pipfile_lock_checksum_file}" ]] && ! sha256sum --check --strict --status "${pipfile_lock_checksum_file}"; then
+					cache_invalidation_reasons+=("The contents of Pipfile.lock changed")
 				fi
 				;;
 			poetry)
@@ -194,7 +200,12 @@ function cache::save() {
 	# TODO: Simplify this once multiple package manager files being found is turned into an
 	# error and the setup.py fallback feature is removed.
 	if [[ "${package_manager}" == "pip" && -f "${build_dir}/requirements.txt" ]]; then
+		# TODO: Switch this to using sha256sum like the Pipenv implementation.
 		cp "${build_dir}/requirements.txt" "${cache_dir}/.heroku/"
+	elif [[ "${package_manager}" == "pipenv" ]]; then
+		# This must use a relative path for the lockfile, since the output file will contain
+		# the path specified, and the build directory path changes every build.
+		sha256sum Pipfile.lock >"${cache_dir}/.heroku/python/Pipfile.lock.sha256"
 	fi
 
 	meta_time "cache_save_duration" "${cache_save_start_time}"
