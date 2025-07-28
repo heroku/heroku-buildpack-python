@@ -33,7 +33,7 @@ function cache::restore() {
 	local python_full_version="${5}"
 	local package_manager="${6}"
 
-	if [[ ! -e "${cache_dir}/.heroku/python" ]]; then
+	if [[ ! -d "${cache_dir}/.heroku/python" ]]; then
 		meta_set "cache_status" "empty"
 		return 0
 	fi
@@ -154,13 +154,10 @@ function cache::restore() {
 	else
 		output::step "Restoring cache"
 		mkdir -p "${build_dir}/.heroku"
-
-		# NB: For now this has to handle files already existing in build_dir since some apps accidentally
-		# run the Python buildpack twice. TODO: Refactor this once duplicate buildpacks become an error.
-		# TODO: Investigate why errors are ignored and ideally stop doing so.
-		# TODO: Compare the performance of moving the directory vs copying files.
-		cp -R "${cache_dir}/.heroku/python" "${build_dir}/.heroku/" &>/dev/null || true
-
+		# Moving the files directly in place is much faster than copying when both the cache and
+		# build directory are on the same filesystem mount. The Python directory is guaranteed
+		# to not already exist thanks to the earlier `checks::existing_python_dir_present()`.
+		mv "${cache_dir}/.heroku/python" "${build_dir}/.heroku/"
 		meta_set "cache_status" "reused"
 	fi
 
@@ -189,7 +186,12 @@ function cache::save() {
 	mkdir -p "${cache_dir}/.heroku"
 
 	rm -rf "${cache_dir}/.heroku/python"
-	cp -R "${build_dir}/.heroku/python" "${cache_dir}/.heroku/"
+	# In theory we should be able to use `--reflink=auto` here for improved performance, however,
+	# initial benchmarking showed it to be slower with the file system type / mounts used by the
+	# Heroku build system for some reason. (Copying was faster using `--link`, however, that fails
+	# when copying cross-mount such as for Heroku CI and build-in-app-dir, plus hardlinks could
+	# result in unintended cache mutation if later buildpacks add/remove packages etc.)
+	cp --recursive "${build_dir}/.heroku/python" "${cache_dir}/.heroku/"
 
 	# Metadata used by subsequent builds to determine whether the cache can be reused.
 	# These are written/consumed via separate files and not the metadata store for compatibility
