@@ -20,6 +20,7 @@ RSpec.describe 'uv support' do
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
           remote:         \\+ typing-extensions==4.13.2
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -60,6 +61,7 @@ RSpec.describe 'uv support' do
           remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
           remote:        Resolved 7 packages in .+s
           remote:        Bytecode compiled 1 file in .+s
+          remote: -----> Saving cache
           remote: -----> Inline app detected
         REGEX
       end
@@ -89,6 +91,7 @@ RSpec.describe 'uv support' do
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
           remote:         \\+ typing-extensions==4.13.2
+          remote: -----> Saving cache
           remote: -----> Discovering process types
         REGEX
       end
@@ -125,6 +128,7 @@ RSpec.describe 'uv support' do
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
@@ -174,6 +178,7 @@ RSpec.describe 'uv support' do
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
@@ -237,6 +242,7 @@ RSpec.describe 'uv support' do
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
           remote:         \\+ typing-extensions==4.13.2
+          remote: -----> Saving cache
         REGEX
       end
     end

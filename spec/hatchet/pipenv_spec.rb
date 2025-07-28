@@ -16,6 +16,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -54,6 +55,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using cached Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Saving cache
           remote: -----> Inline app detected
         REGEX
         # Test that Pipenv is available at run-time too (since for historical reasons it's been
@@ -80,6 +82,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Saving cache
         REGEX
       end
     end
@@ -135,6 +138,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Saving cache
         REGEX
       end
     end
@@ -152,6 +156,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Saving cache
         REGEX
       end
     end
@@ -210,6 +215,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Saving cache
         REGEX
       end
     end
@@ -398,6 +404,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Saving cache
           remote: -----> Discovering process types
         REGEX
       end
@@ -423,6 +430,7 @@ RSpec.describe 'Pipenv support' do
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
@@ -464,6 +472,7 @@ RSpec.describe 'Pipenv support' do
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}

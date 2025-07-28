@@ -20,6 +20,7 @@ RSpec.describe 'pip support' do
           remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
           remote:        Installing collected packages: typing-extensions
           remote:        Successfully installed typing-extensions-4.12.2
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -55,6 +56,7 @@ RSpec.describe 'pip support' do
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Requirement already satisfied: typing-extensions==4.12.2 (from -r requirements.txt (line 5)) (4.12.2)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
         OUTPUT
         # Test that pip is available at run-time too (since for historical reasons it's been
@@ -90,6 +92,7 @@ RSpec.describe 'pip support' do
           remote:        Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
           remote:        Installing collected packages: typing-extensions, six
           remote:        Successfully installed six-1.17.0 typing-extensions-4.12.2
+          remote: -----> Saving cache
         OUTPUT
       end
     end
@@ -115,6 +118,7 @@ RSpec.describe 'pip support' do
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: easy-install.pth:/app/.heroku/python/src/gunicorn
           remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
@@ -154,6 +158,7 @@ RSpec.describe 'pip support' do
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: easy-install.pth:/app/.heroku/python/src/gunicorn
           remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
