@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v294] - 2025-07-28
+
 - Improved performance of Python build cache restoration. ([#1845](https://github.com/heroku/heroku-buildpack-python/pull/1845))
 - Added a build log message for the build cache saving step. ([#1844](https://github.com/heroku/heroku-buildpack-python/pull/1844))
 
@@ -1261,7 +1264,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v293...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v294...main
+[v294]: https://github.com/heroku/heroku-buildpack-python/compare/v293...v294
 [v293]: https://github.com/heroku/heroku-buildpack-python/compare/v292...v293
 [v292]: https://github.com/heroku/heroku-buildpack-python/compare/v291...v292
 [v291]: https://github.com/heroku/heroku-buildpack-python/compare/v290...v291
