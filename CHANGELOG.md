@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added a build log message for the build cache saving step. ([#1844](https://github.com/heroku/heroku-buildpack-python/pull/1844))
 
 ## [v293] - 2025-07-23
 

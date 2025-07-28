@@ -20,6 +20,7 @@ RSpec.describe 'Poetry support' do
           remote:        Package operations: 1 install, 0 updates, 0 removals
           remote:        
           remote:          - Installing typing-extensions (4.12.2)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -57,6 +58,7 @@ RSpec.describe 'Poetry support' do
           remote:        Installing dependencies from lock file
           remote:        
           remote:        No dependencies to install or update
+          remote: -----> Saving cache
           remote: -----> Inline app detected
         OUTPUT
       end
@@ -86,6 +88,7 @@ RSpec.describe 'Poetry support' do
           remote:        Package operations: 1 install, 0 updates, 0 removals
           remote:        
           remote:          - Installing typing-extensions (4.12.2)
+          remote: -----> Saving cache
           remote: -----> Discovering process types
         OUTPUT
       end
@@ -120,6 +123,7 @@ RSpec.describe 'Poetry support' do
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
@@ -169,6 +173,7 @@ RSpec.describe 'Poetry support' do
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
@@ -237,6 +242,7 @@ RSpec.describe 'Poetry support' do
           remote:        Package operations: 1 install, 0 updates, 0 removals
           remote:        
           remote:          - Installing typing-extensions (4.12.2)
+          remote: -----> Saving cache
         OUTPUT
       end
     end

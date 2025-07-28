@@ -184,6 +184,8 @@ function cache::save() {
 	local cache_save_start_time
 	cache_save_start_time=$(nowms)
 
+	output::step "Saving cache"
+
 	mkdir -p "${cache_dir}/.heroku"
 
 	rm -rf "${cache_dir}/.heroku/python"

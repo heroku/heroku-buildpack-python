@@ -65,6 +65,7 @@ RSpec.describe 'Package manager support' do
           remote:        .+
           remote:        Installing collected packages: six, test
           remote:        Successfully installed six-.+ test-0.0.0
+          remote: -----> Saving cache
         REGEX
       end
     end
@@ -118,6 +119,7 @@ RSpec.describe 'Package manager support' do
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Saving cache
         REGEX
       end
     end
@@ -146,6 +148,7 @@ RSpec.describe 'Package manager support' do
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
           remote:         \\+ typing-extensions==4.13.2
+          remote: -----> Saving cache
           remote: -----> Discovering process types
         REGEX
       end

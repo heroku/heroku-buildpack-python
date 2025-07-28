@@ -32,6 +32,7 @@ RSpec.describe 'Heroku CI' do
                  PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
+          -----> Saving cache
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -108,6 +109,7 @@ RSpec.describe 'Heroku CI' do
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
                  VIRTUAL_ENV=/app/.heroku/python
+          -----> Saving cache
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -194,6 +196,7 @@ RSpec.describe 'Heroku CI' do
                  POETRY_VIRTUALENVS_CREATE=false
                  POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
                  PYTHONUNBUFFERED=1
+          -----> Saving cache
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -278,6 +281,7 @@ RSpec.describe 'Heroku CI' do
                  UV_NO_MANAGED_PYTHON=1
                  UV_PROJECT_ENVIRONMENT=/app/.heroku/python
                  UV_PYTHON_DOWNLOADS=never
+          -----> Saving cache
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
