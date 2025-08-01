@@ -176,6 +176,105 @@ RSpec.describe 'pip support' do
     end
   end
 
+  # This checks that the pip bootstrap works even with older bundled pip, and that our
+  # chosen Pip version also supports our oldest supported Python version.
+  context 'when using our oldest supported Python version' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_oldest_python') }
+
+    it 'installs successfully' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.9.0 specified in runtime.txt
+          remote: 
+          remote:  !     Warning: The runtime.txt file is deprecated.
+          remote:  !     
+          remote:  !     The runtime.txt file is deprecated since it has been replaced
+          remote:  !     by the more widely supported .python-version file:
+          remote:  !     https://devcenter.heroku.com/changelog-items/3141
+          remote:  !     
+          remote:  !     Please switch to using a .python-version file instead.
+          remote:  !     
+          remote:  !     Delete your runtime.txt file and create a new file in the
+          remote:  !     root directory of your app named:
+          remote:  !     .python-version
+          remote:  !     
+          remote:  !     Make sure to include the '.' character at the start of the
+          remote:  !     filename. Don't add a file extension such as '.txt'.
+          remote:  !     
+          remote:  !     In the new file, specify your app's major Python version number
+          remote:  !     only. Don't include quotes or a 'python-' prefix.
+          remote:  !     
+          remote:  !     For example, to request the latest version of Python 3.9,
+          remote:  !     update your .python-version file so it contains exactly:
+          remote:  !     3.9
+          remote:  !     
+          remote:  !     We strongly recommend that you don't specify the Python patch
+          remote:  !     version number, since it will pin your app to an exact Python
+          remote:  !     version and so stop your app from receiving security updates
+          remote:  !     each time it builds.
+          remote:  !     
+          remote:  !     In the future support for runtime.txt will be removed and
+          remote:  !     this warning will be made an error.
+          remote: 
+          remote: 
+          remote:  !     Warning: Support for Python 3.9 is ending soon!
+          remote:  !     
+          remote:  !     Python 3.9 will reach its upstream end-of-life in October 2025,
+          remote:  !     at which point it will no longer receive security updates:
+          remote:  !     https://devguide.python.org/versions/#supported-versions
+          remote:  !     
+          remote:  !     As such, support for Python 3.9 will be removed from this
+          remote:  !     buildpack on 7th January 2026.
+          remote:  !     
+          remote:  !     Upgrade to a newer Python version as soon as possible, by
+          remote:  !     changing the version in your runtime.txt file.
+          remote:  !     
+          remote:  !     For more information, see:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote: 
+          remote: 
+          remote:  !     Warning: A Python patch update is available!
+          remote:  !     
+          remote:  !     Your app is using Python 3.9.0, however, there is a newer
+          remote:  !     patch release of Python 3.9 available: #{LATEST_PYTHON_3_9}
+          remote:  !     
+          remote:  !     It is important to always use the latest patch version of
+          remote:  !     Python to keep your app secure.
+          remote:  !     
+          remote:  !     Update your runtime.txt file to use the new version.
+          remote:  !     
+          remote:  !     We strongly recommend that you don't pin your app to an
+          remote:  !     exact Python version such as 3.9.0, and instead only specify
+          remote:  !     the major Python version of 3.9 in your runtime.txt file.
+          remote:  !     This will allow your app to receive the latest available Python
+          remote:  !     patch version automatically and prevent this warning.
+          remote: 
+          remote: -----> Installing Python 3.9.0
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing SQLite3
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
+          remote:        Collecting typing-extensions==4.14.1 (from -r requirements.txt (line 2))
+          remote:          Downloading typing_extensions-4.14.1-py3-none-any.whl.metadata (3.0 kB)
+          remote:        Downloading typing_extensions-4.14.1-py3-none-any.whl (43 kB)
+          remote:        Installing collected packages: typing-extensions
+          remote:        Successfully installed typing-extensions-4.14.1
+          remote: -----> Saving cache
+        OUTPUT
+        app.commit!
+        app.push!
+        # Test that our regex for cleaning up the "Requirement already satisfied" lines also works
+        # with the relative paths output when pip is run with Python 3.10 and older. This and the
+        # regex variant can be removed once support for Python 3.10 and older is dropped.
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
+          remote:        Requirement already satisfied: typing-extensions==4.14.1 in ./.heroku/python/lib/python3.9/site-packages (from -r requirements.txt (line 2)) (4.14.1)
+          remote: -----> Saving cache
+        OUTPUT
+      end
+    end
+  end
+
   context 'when requirements.txt contains a package that needs compiling against the Python headers' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pip_compiled') }
 

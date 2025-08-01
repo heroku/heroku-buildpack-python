@@ -508,6 +508,38 @@ RSpec.describe 'Python version support' do
     end
   end
 
+  context 'when .python-version contains an outdated Python patch version' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_outdated') }
+
+    it 'warns there is a Python update available' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.13.2 specified in .python-version
+          remote: 
+          remote:  !     Warning: A Python patch update is available!
+          remote:  !     
+          remote:  !     Your app is using Python 3.13.2, however, there is a newer
+          remote:  !     patch release of Python 3.13 available: #{LATEST_PYTHON_3_13}
+          remote:  !     
+          remote:  !     It is important to always use the latest patch version of
+          remote:  !     Python to keep your app secure.
+          remote:  !     
+          remote:  !     Update your .python-version file to use the new version.
+          remote:  !     
+          remote:  !     We strongly recommend that you don't pin your app to an
+          remote:  !     exact Python version such as 3.13.2, and instead only specify
+          remote:  !     the major Python version of 3.13 in your .python-version file.
+          remote:  !     This will allow your app to receive the latest available Python
+          remote:  !     patch version automatically and prevent this warning.
+          remote: 
+          remote: -----> Installing Python 3.13.2
+          remote: -----> Installing pip #{PIP_VERSION}
+        OUTPUT
+      end
+    end
+  end
+
   context 'when runtime.txt contains an invalid Python version string' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/runtime_txt_invalid_version', allow_failure: true) }
 
