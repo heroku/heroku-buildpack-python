@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v295] - 2025-08-01
+
 - Updated uv from 0.7.20 to 0.8.4. ([#1847](https://github.com/heroku/heroku-buildpack-python/pull/1847))
 - Reduced the verbosity of pip's `Requirement already satisfied:` log lines when using Python 3.10 and older. ([#1851](https://github.com/heroku/heroku-buildpack-python/pull/1851))
 
@@ -1266,7 +1269,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v294...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v295...main
+[v295]: https://github.com/heroku/heroku-buildpack-python/compare/v294...v295
 [v294]: https://github.com/heroku/heroku-buildpack-python/compare/v293...v294
 [v293]: https://github.com/heroku/heroku-buildpack-python/compare/v292...v293
 [v292]: https://github.com/heroku/heroku-buildpack-python/compare/v291...v292
