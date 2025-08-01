@@ -268,7 +268,7 @@ RSpec.describe 'pip support' do
         # regex variant can be removed once support for Python 3.10 and older is dropped.
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Requirement already satisfied: typing-extensions==4.14.1 in ./.heroku/python/lib/python3.9/site-packages (from -r requirements.txt (line 2)) (4.14.1)
+          remote:        Requirement already satisfied: typing-extensions==4.14.1 (from -r requirements.txt (line 2)) (4.14.1)
           remote: -----> Saving cache
         OUTPUT
       end

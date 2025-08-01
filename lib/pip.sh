@@ -108,6 +108,9 @@ function pip::install_dependencies() {
 
 	# TODO: Remove --disable-pip-version-check in favour of exporting PIP_DISABLE_PIP_VERSION_CHECK.
 	# The sed usage is to reduce the verbosity of output lines like:
+	# ...when using Python 3.10 and older:
+	# "Requirement already satisfied: typing-extensions==4.12.2 in ./.heroku/python/lib/python3.10/site-packages (from -r requirements.txt (line 2)) (4.12.2)"
+	# ...when using Python 3.11+:
 	# "Requirement already satisfied: typing-extensions==4.12.2 in /app/.heroku/python/lib/python3.13/site-packages (from -r requirements.txt (line 5)) (4.12.2)"
 	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 	if ! {
@@ -119,7 +122,8 @@ function pip::install_dependencies() {
 			--progress-bar off \
 			--src='/app/.heroku/python/src' \
 			|& tee "${WARNINGS_LOG:?}" \
-			|& sed --unbuffered --expression 's# in /app/.heroku/python/lib/python.*/site-packages##' \
+			|& sed --unbuffered --regexp-extended \
+				--expression 's# in (/app|\.)/\.heroku/python/lib/python[0-9.]+/site-packages##' \
 			|& output::indent
 	}; then
 		# TODO: Overhaul warnings and combine them with error handling.

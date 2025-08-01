@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Updated uv from 0.7.20 to 0.8.4. ([#1847](https://github.com/heroku/heroku-buildpack-python/pull/1847))
+- Reduced the verbosity of pip's `Requirement already satisfied:` log lines when using Python 3.10 and older. ([#1851](https://github.com/heroku/heroku-buildpack-python/pull/1851))
 
 ## [v294] - 2025-07-28
 
