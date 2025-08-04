@@ -35,7 +35,7 @@ case "${STACK:?}" in
 		;;
 esac
 
-if [[ ! " ${SUPPORTED_PYTHON_VERSIONS[*]} " == *" ${PYTHON_MAJOR_VERSION} "* ]]; then
+if [[ " ${SUPPORTED_PYTHON_VERSIONS[*]} " != *" ${PYTHON_MAJOR_VERSION} "* ]]; then
 	abort "Python ${PYTHON_MAJOR_VERSION} is not supported on ${STACK}!"
 fi
 
