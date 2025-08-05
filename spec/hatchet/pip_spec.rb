@@ -252,7 +252,6 @@ RSpec.describe 'pip support' do
           remote: 
           remote: -----> Installing Python 3.9.0
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.14.1 (from -r requirements.txt (line 2))
           remote:          Downloading typing_extensions-4.14.1-py3-none-any.whl.metadata (3.0 kB)
@@ -314,7 +313,7 @@ RSpec.describe 'pip support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote:        note: This error originates from a subprocess, and is likely not a problem with pip.
           remote: 
-          remote:  !     Error: Package installation failed since the GDAL library was not found.
+          remote:  !     Error: Package installation failed since the GDAL library wasn't found.
           remote:  !     
           remote:  !     For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:
           remote:  !     https://github.com/heroku/heroku-geo-buildpack
@@ -359,13 +358,47 @@ RSpec.describe 'pip support' do
     end
   end
 
-  # TODO: Switch this to using Python 3.13 as part of the sqlite removal.
   context 'when requirements.txt contains pysqlite3' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_pysqlite3') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_pysqlite3', allow_failure: true) }
 
-    it 'installs successfully using pip' do
+    it 'outputs instructions for how to resolve the build failure' do
       app.deploy do |app|
-        expect(app.output).to include('Building wheel for pysqlite3')
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote:        ERROR: Failed to build installable wheels for some pyproject.toml based projects (pysqlite3)
+          remote: 
+          remote:  !     Error: Package installation failed since SQLite headers weren't found.
+          remote:  !     
+          remote:  !     The Python buildpack no longer installs the SQLite headers
+          remote:  !     package since most apps don't require it.
+          remote:  !     
+          remote:  !     If you're trying to install the `pysqlite3` package, we
+          remote:  !     recommend using the virtually identical `sqlite3` module in
+          remote:  !     Python's standard library instead:
+          remote:  !     https://docs.python.org/3/library/sqlite3.html
+          remote:  !     
+          remote:  !     To do this:
+          remote:  !     1. Remove the `pysqlite3` package from your dependencies.
+          remote:  !     2. Replace any `pysqlite3` imports in your app with `sqlite3`.
+          remote:  !     
+          remote:  !     Alternatively, if you can't use the `sqlite3` stdlib module,
+          remote:  !     switch from the `pysqlite3` package to `pysqlite3-binary`,
+          remote:  !     which is pre-compiled and doesn't need the SQLite headers to
+          remote:  !     be installed.
+          remote:  !     
+          remote:  !     If instead you need the SQLite headers for another reason
+          remote:  !     (or wish to continue to compile the `pysqlite3` package from
+          remote:  !     source), then install the `libsqlite3-dev` and `libsqlite3-0`
+          remote:  !     packages using the APT buildpack (make sure the APT buildpack
+          remote:  !     runs before the Python buildpack, not after):
+          remote:  !     https://github.com/heroku/heroku-buildpack-apt
+          remote: 
+          remote: 
+          remote:  !     Error: Unable to install dependencies using pip.
+          remote:  !     
+          remote:  !     See the log output above for more information.
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
       end
     end
   end

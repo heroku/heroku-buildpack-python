@@ -135,6 +135,10 @@ function cache::restore() {
 		esac
 	fi
 
+	if [[ -f "${cache_dir}/.heroku/python/include/sqlite3.h" ]]; then
+		cache_invalidation_reasons+=("The legacy SQLite3 headers and CLI binary need to be uninstalled")
+	fi
+
 	if [[ -n "${cache_invalidation_reasons[*]}" ]]; then
 		output::step "Discarding cache since:"
 		local reason

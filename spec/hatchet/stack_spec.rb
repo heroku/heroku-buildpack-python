@@ -67,9 +67,9 @@ RSpec.describe 'Stack changes' do
           remote:        - The stack has changed from heroku-22 to heroku-24
           remote:        - The Python version has changed from 3.12.3 to #{LATEST_PYTHON_3_12}
           remote:        - The pip version has changed
+          remote:        - The legacy SQLite3 headers and CLI binary need to be uninstalled
           remote: -----> Installing Python #{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
         OUTPUT

@@ -4,10 +4,40 @@ show-warnings() {
 	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
 	if grep -qi 'Could not find gdal-config' "${WARNINGS_LOG}"; then
 		output::error <<-'EOF'
-			Error: Package installation failed since the GDAL library was not found.
+			Error: Package installation failed since the GDAL library wasn't found.
 
 			For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:
 			https://github.com/heroku/heroku-geo-buildpack
+		EOF
+	fi
+
+	if grep -qi 'sqlite3.h: No such file or directory' "${WARNINGS_LOG}"; then
+		output::error <<-'EOF'
+			Error: Package installation failed since SQLite headers weren't found.
+
+			The Python buildpack no longer installs the SQLite headers
+			package since most apps don't require it.
+
+			If you're trying to install the `pysqlite3` package, we
+			recommend using the virtually identical `sqlite3` module in
+			Python's standard library instead:
+			https://docs.python.org/3/library/sqlite3.html
+
+			To do this:
+			1. Remove the `pysqlite3` package from your dependencies.
+			2. Replace any `pysqlite3` imports in your app with `sqlite3`.
+
+			Alternatively, if you can't use the `sqlite3` stdlib module,
+			switch from the `pysqlite3` package to `pysqlite3-binary`,
+			which is pre-compiled and doesn't need the SQLite headers to
+			be installed.
+
+			If instead you need the SQLite headers for another reason
+			(or wish to continue to compile the `pysqlite3` package from
+			source), then install the `libsqlite3-dev` and `libsqlite3-0`
+			packages using the APT buildpack (make sure the APT buildpack
+			runs before the Python buildpack, not after):
+			https://github.com/heroku/heroku-buildpack-apt
 		EOF
 	fi
 

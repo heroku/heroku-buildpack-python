@@ -16,6 +16,10 @@
 # facing build logs) to avoid breaking builds unnecessarily / causing confusion. To debug
 # issues check the internal build system logs for `buildpack.report.failed` events, or
 # when developing run `make run` in this repo locally, which runs `bin/report` too.
+#
+# Note: The build system doesn't source the `export` script before running this script,
+# so Python/the package manager won't be on PATH. If we ever need to run them during
+# `bin/report` in the future, we'll need to manually source the export script again.
 
 set -euo pipefail
 shopt -s inherit_errexit
@@ -24,14 +28,6 @@ CACHE_DIR="${2}"
 
 # The absolute path to the root of the buildpack.
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
-
-# The build system doesn't source the `export` script before running this script, so we have to do
-# so manually (if it exists) so that buildpack Python/pip can be found (if the build succeeded).
-EXPORT_FILE="${BUILDPACK_DIR}/export"
-if [[ -f "${EXPORT_FILE}" ]]; then
-	# shellcheck source=/dev/null
-	source "${EXPORT_FILE}"
-fi
 
 source "${BUILDPACK_DIR}/lib/metadata.sh"
 meta_init "${CACHE_DIR}" "python"
@@ -96,7 +92,6 @@ ALL_OTHER_FIELDS=(
 	python_version_outdated
 	python_version_pinned
 	setup_py_only
-	sqlite_install_duration
 	total_duration
 )
 
@@ -109,19 +104,3 @@ for field in "${ALL_OTHER_FIELDS[@]}"; do
 	# shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
 	kv_pair "${field}" "$(meta_get "${field}")"
 done
-
-# If the build failed, pip might not have been installed yet.
-if command -v pip >/dev/null; then
-	# Determine pysqlite3 usage since it's the only package that requires the sqlite3 headers.
-	if pip show pysqlite3 &>/dev/null; then
-		kv_pair pysqlite3_installed true
-	else
-		kv_pair pysqlite3_installed false
-	fi
-
-	if pip show pysqlite3-binary &>/dev/null; then
-		kv_pair pysqlite3_binary_installed true
-	else
-		kv_pair pysqlite3_binary_installed false
-	fi
-fi
