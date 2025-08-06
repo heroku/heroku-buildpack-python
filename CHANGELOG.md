@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- The Python 3.13 version alias now resolves to Python 3.13.6. ([#1861](https://github.com/heroku/heroku-buildpack-python/pull/1861))
 - Fixed the stack version check to correctly show the "stack not supported" error message for the EOL Heroku-20, instead of "stack not recognised". ([#1860](https://github.com/heroku/heroku-buildpack-python/pull/1860))
 
 ## [v297] - 2025-08-06
