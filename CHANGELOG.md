@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v297] - 2025-08-06
+
 - Updated pip from 25.1.1 to 25.2. ([#1848](https://github.com/heroku/heroku-buildpack-python/pull/1848))
 - Updated Poetry from 2.1.3 to 2.1.4. ([#1858](https://github.com/heroku/heroku-buildpack-python/pull/1858))
 - Updated uv from 0.8.4 to 0.8.5. ([#1857](https://github.com/heroku/heroku-buildpack-python/pull/1857))
@@ -1276,7 +1279,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v296...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v297...main
+[v297]: https://github.com/heroku/heroku-buildpack-python/compare/v296...v297
 [v296]: https://github.com/heroku/heroku-buildpack-python/compare/v295...v296
 [v295]: https://github.com/heroku/heroku-buildpack-python/compare/v294...v295
 [v294]: https://github.com/heroku/heroku-buildpack-python/compare/v293...v294
