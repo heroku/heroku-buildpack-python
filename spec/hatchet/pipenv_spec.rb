@@ -398,6 +398,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
           remote: -----> Discarding cache since:
+          remote:        - The Python version has changed from 3.13.5 to #{DEFAULT_PYTHON_FULL_VERSION}
           remote:        - The Pipenv version has changed from 2024.0.1 to #{PIPENV_VERSION}
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
