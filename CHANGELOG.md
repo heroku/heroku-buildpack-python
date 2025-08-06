@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Stopped installing SQLite headers and CLI. ([#1854](https://github.com/heroku/heroku-buildpack-python/pull/1854))
 
 ## [v295] - 2025-08-01
 

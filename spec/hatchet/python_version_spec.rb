@@ -20,7 +20,6 @@ RSpec.shared_examples 'builds with the requested Python version' do |requested_v
           remote: -----> Using Python #{requested_version} specified in .python-version
           remote: -----> Installing Python #{resolved_version}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
         OUTPUT
@@ -150,6 +149,7 @@ RSpec.describe 'Python version support' do
             remote: -----> Discarding cache since:
             remote:        - The Python version has changed from 3.12.7 to #{LATEST_PYTHON_3_12}
             remote:        - The pip version has changed from 24.0 to #{PIP_VERSION}
+            remote:        - The legacy SQLite3 headers and CLI binary need to be uninstalled
             remote: -----> Installing Python #{LATEST_PYTHON_3_12}
             remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           OUTPUT
@@ -275,7 +275,6 @@ RSpec.describe 'Python version support' do
           remote: 
           remote: -----> Installing Python #{LATEST_PYTHON_3_9}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
         OUTPUT

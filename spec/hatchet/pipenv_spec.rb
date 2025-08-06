@@ -135,7 +135,6 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote: -----> Installing Python 3.9.0
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing SQLite3
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Saving cache
