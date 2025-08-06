@@ -364,7 +364,8 @@ RSpec.describe 'pip support' do
     it 'outputs instructions for how to resolve the build failure' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote:        ERROR: Failed to build installable wheels for some pyproject.toml based projects (pysqlite3)
+          remote:        × Failed to build installable wheels for some pyproject.toml based projects
+          remote:        ╰─> pysqlite3
           remote: 
           remote:  !     Error: Package installation failed since SQLite headers weren't found.
           remote:  !     
