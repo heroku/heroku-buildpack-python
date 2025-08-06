@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v296] - 2025-08-06
+
 - Stopped installing SQLite headers and CLI. ([#1854](https://github.com/heroku/heroku-buildpack-python/pull/1854))
 
 ## [v295] - 2025-08-01
@@ -1270,7 +1273,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v295...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v296...main
+[v296]: https://github.com/heroku/heroku-buildpack-python/compare/v295...v296
 [v295]: https://github.com/heroku/heroku-buildpack-python/compare/v294...v295
 [v294]: https://github.com/heroku/heroku-buildpack-python/compare/v293...v294
 [v293]: https://github.com/heroku/heroku-buildpack-python/compare/v292...v293
