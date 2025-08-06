@@ -7,7 +7,7 @@ function checks::ensure_supported_stack() {
 		heroku-22 | heroku-24)
 			return 0
 			;;
-		cedar* | heroku-16 | heroku-18)
+		cedar* | heroku-16 | heroku-18 | heroku-20)
 			# This error will only ever be seen on non-Heroku environments, since the
 			# Heroku build system rejects builds using EOL stacks.
 			output::error <<-EOF
