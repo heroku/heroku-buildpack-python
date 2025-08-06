@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Updated pip from 25.1.1 to 25.2. ([#1848](https://github.com/heroku/heroku-buildpack-python/pull/1848))
+- Updated Poetry from 2.1.3 to 2.1.4. ([#1858](https://github.com/heroku/heroku-buildpack-python/pull/1858))
 
 ## [v296] - 2025-08-06
 
