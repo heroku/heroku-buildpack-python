@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Simplified the handling of caches written by older buildpack versions. ([#1870](https://github.com/heroku/heroku-buildpack-python/pull/1870))
 
 ## [v300] - 2025-08-15
 
