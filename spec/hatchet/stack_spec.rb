@@ -66,7 +66,7 @@ RSpec.describe 'Stack changes' do
           remote: -----> Discarding cache since:
           remote:        - The stack has changed from heroku-22 to heroku-24
           remote:        - The Python version has changed from 3.12.3 to #{LATEST_PYTHON_3_12}
-          remote:        - The pip version has changed
+          remote:        - The buildpack cache format has changed
           remote:        - The legacy SQLite3 headers and CLI binary need to be uninstalled
           remote: -----> Installing Python #{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
