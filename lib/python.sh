@@ -4,7 +4,7 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-DEFAULT_S3_BASE_URL="https://heroku-buildpack-python.s3.us-east-1.amazonaws.com"
+S3_BASE_URL="https://heroku-buildpack-python.s3.us-east-1.amazonaws.com"
 
 function python::install() {
 	local build_dir="${1}"
@@ -24,21 +24,12 @@ function python::install() {
 
 		mkdir -p "${install_dir}"
 
-		# Note: This can't be used via app config vars, since it doesn't reference the value from ENV_DIR.
-		# TODO: Remove this for parity with the Python CNB, if metrics show it to be unused on Heroku.
-		if [[ -v BUILDPACK_S3_BASE_URL ]]; then
-			local s3_base_url="${BUILDPACK_S3_BASE_URL}"
-			meta_set "custom_s3_base_url" "true"
-		else
-			local s3_base_url="${DEFAULT_S3_BASE_URL}"
-		fi
-
 		# Calculating the Ubuntu version from the stack name saves having to shell out to `lsb_release`.
 		local ubuntu_version="${stack/heroku-/}.04"
 		local arch
 		arch=$(dpkg --print-architecture)
 		# e.g.: https://heroku-buildpack-python.s3.us-east-1.amazonaws.com/python-3.13.0-ubuntu-24.04-amd64.tar.zst
-		local python_url="${s3_base_url}/python-${python_full_version}-ubuntu-${ubuntu_version}-${arch}.tar.zst"
+		local python_url="${S3_BASE_URL}/python-${python_full_version}-ubuntu-${ubuntu_version}-${arch}.tar.zst"
 
 		local error_log
 		error_log=$(mktemp)
