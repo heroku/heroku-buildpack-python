@@ -33,13 +33,15 @@ function cache::restore() {
 	local python_full_version="${5}"
 	local package_manager="${6}"
 
+	local cache_restore_start_time
+	cache_restore_start_time=$(nowms)
+
 	if [[ ! -d "${cache_dir}/.heroku/python" ]]; then
 		meta_set "cache_status" "empty"
+		meta_time "cache_restore_duration" "${cache_restore_start_time}"
 		return 0
 	fi
 
-	local cache_restore_start_time
-	cache_restore_start_time=$(nowms)
 	local cache_invalidation_reasons=()
 
 	local cached_stack
