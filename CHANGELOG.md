@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v301] - 2025-08-18
+
 - Simplified the handling of caches written by older buildpack versions. ([#1870](https://github.com/heroku/heroku-buildpack-python/pull/1870))
 
 ## [v300] - 2025-08-15
@@ -1293,7 +1296,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v300...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v301...main
+[v301]: https://github.com/heroku/heroku-buildpack-python/compare/v300...v301
 [v300]: https://github.com/heroku/heroku-buildpack-python/compare/v299...v300
 [v299]: https://github.com/heroku/heroku-buildpack-python/compare/v298...v299
 [v298]: https://github.com/heroku/heroku-buildpack-python/compare/v297...v298
