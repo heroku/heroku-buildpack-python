@@ -79,7 +79,6 @@ STRING_FIELDS=(
 ALL_OTHER_FIELDS=(
 	cache_restore_duration
 	cache_save_duration
-	custom_s3_base_url
 	dependencies_install_duration
 	django_collectstatic_duration
 	nltk_downloader_duration
