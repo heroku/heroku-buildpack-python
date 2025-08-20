@@ -16,11 +16,8 @@
 set -euo pipefail
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
 source "${BUILDPACK_DIR}/bin/utils"
-source "${BUILDPACK_DIR}/lib/output.sh"
-
-# Required for `meta_set`.
 source "${BUILDPACK_DIR}/lib/metadata.sh"
-meta_init "${CACHE_DIR:?}" "python"
+source "${BUILDPACK_DIR}/lib/output.sh"
 
 if [[ -f .heroku/collectstatic_disabled ]]; then
 	output::step "Skipping Django collectstatic since the file '.heroku/collectstatic_disabled' exists."
@@ -29,13 +26,13 @@ if [[ -f .heroku/collectstatic_disabled ]]; then
 
 		Please remove the file and set the env var DISABLE_COLLECTSTATIC=1 instead.
 	EOF
-	meta_set "django_collectstatic" "disabled-file"
+	metadata::set_string "django_collectstatic" "disabled-file"
 	exit 0
 fi
 
 if [[ "${DISABLE_COLLECTSTATIC:-0}" != "0" ]]; then
 	output::step "Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set."
-	meta_set "django_collectstatic" "disabled-env-var"
+	metadata::set_string "django_collectstatic" "disabled-env-var"
 	exit 0
 fi
 
@@ -51,11 +48,11 @@ MANAGE_FILE=${MANAGE_FILE:-fakepath}
 
 if [[ ! -f "${MANAGE_FILE}" ]]; then
 	output::step "Skipping Django collectstatic since no manage.py file found."
-	meta_set "django_collectstatic" "skipped-no-manage-py"
+	metadata::set_string "django_collectstatic" "skipped-no-manage-py"
 	exit 0
 fi
 
-meta_set "django_collectstatic" "enabled"
+metadata::set_string "django_collectstatic" "enabled"
 
 output::step "$ python $MANAGE_FILE collectstatic --noinput"
 
@@ -76,15 +73,15 @@ fi
 
 # Display a warning if collectstatic failed.
 if grep -q 'SyntaxError' "$COLLECTSTATIC_LOG"; then
-	meta_set "failure_reason" "collectstatic-syntax-error"
+	metadata::set_string "failure_reason" "collectstatic-syntax-error"
 elif grep -q 'ImproperlyConfigured' "$COLLECTSTATIC_LOG"; then
-	meta_set "failure_reason" "collectstatic-improper-configuration"
+	metadata::set_string "failure_reason" "collectstatic-improper-configuration"
 elif grep -q 'The CSS file' "$COLLECTSTATIC_LOG"; then
-	meta_set "failure_reason" "collectstatic-fancy-references"
+	metadata::set_string "failure_reason" "collectstatic-fancy-references"
 elif grep -q 'OSError' "$COLLECTSTATIC_LOG"; then
-	meta_set "failure_reason" "collectstatic-missing-file"
+	metadata::set_string "failure_reason" "collectstatic-missing-file"
 else
-	meta_set "failure_reason" "collectstatic-other"
+	metadata::set_string "failure_reason" "collectstatic-other"
 fi
 
 output::error <<-EOF

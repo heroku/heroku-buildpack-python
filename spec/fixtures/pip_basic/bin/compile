@@ -24,4 +24,4 @@ echo
 python -c 'import typing_extensions; print(typing_extensions)'
 echo
 
-sort "${CACHE_DIR}/build-data/python"
+jq --sort-keys '.' "${CACHE_DIR}/build-data/python.json"

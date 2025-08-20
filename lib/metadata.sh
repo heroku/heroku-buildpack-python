@@ -4,75 +4,140 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-# TODO: Switch this file to using namespaced functions like `metadata::<fn_name>`.
+METADATA_FILE="${CACHE_DIR:?}/build-data/python.json"
+PREVIOUS_METADATA_FILE="${CACHE_DIR:?}/build-data/python-prev.json"
 
-# Based on: https://github.com/heroku/heroku-buildpack-nodejs/blob/main/lib/metadata.sh
+# Legacy `key=value` format file used by older Python buildpack versions.
+LEGACY_BUILD_DATA_FILE="${CACHE_DIR:?}/build-data/python"
 
-source "${BUILDPACK_DIR:?}/lib/kvstore.sh"
-
-# Variables shared by this whole module
-BUILD_DATA_FILE=""
-PREVIOUS_BUILD_DATA_FILE=""
-
-# Must be called before you can use any other methods
-meta_init() {
-	local cache_dir="${1}"
-	local buildpack_name="${2}"
-	BUILD_DATA_FILE="${cache_dir}/build-data/${buildpack_name}"
-	PREVIOUS_BUILD_DATA_FILE="${cache_dir}/build-data/${buildpack_name}-prev"
-}
-
-# Moves the data from the last build into the correct place, and clears the store
-# This should be called after meta_init in bin/compile
-meta_setup() {
-	# if the file already exists because it's from the last build, save it
-	if [[ -f "${BUILD_DATA_FILE}" ]]; then
-		cp "${BUILD_DATA_FILE}" "${PREVIOUS_BUILD_DATA_FILE}"
+# Initializes the metadata store, preserving the file from the previous build if it exists.
+# Call this at the start of `bin/compile` before using any other functions from this file.
+function metadata::setup() {
+	if [[ -f "${METADATA_FILE}" ]]; then
+		# Rename the existing metrics file rather than overwriting it, so we can lookup values
+		# from the previous build (such as when determining whether to invalidate the cache).
+		mv "${METADATA_FILE}" "${PREVIOUS_METADATA_FILE}"
+	else
+		mkdir -p "$(dirname "${METADATA_FILE}")"
 	fi
 
-	kv_create "${BUILD_DATA_FILE}"
-	kv_clear "${BUILD_DATA_FILE}"
+	echo "{}" >"${METADATA_FILE}"
 }
 
-# Force removal of exiting data file state. This is mostly useful during testing and not
-# expected to be used during buildpack execution.
-meta_force_clear() {
-	[[ -f "${BUILD_DATA_FILE}" ]] && rm "${BUILD_DATA_FILE}"
-	[[ -f "${PREVIOUS_BUILD_DATA_FILE}" ]] && rm "${PREVIOUS_BUILD_DATA_FILE}"
-}
-
-meta_get() {
-	kv_get "${BUILD_DATA_FILE}" "${1}"
-}
-
-meta_set() {
-	kv_set "${BUILD_DATA_FILE}" "${1}" "${2}"
-}
-
-# Similar to mtime from buildpack-stdlib
-meta_time() {
+# Retrieve the value of an entry in the metadata store for the current build.
+# Returns the empty string if the key wasn't found in the store.
+#
+# Usage:
+# ```
+# metadata::get "python_version"
+# ```
+function metadata::get() {
 	local key="${1}"
-	local start="${2}"
-	local end="${3:-$(nowms)}"
-	local time
-	time="$(echo "${start}" "${end}" | awk '{ printf "%.3f", ($2 - $1)/1000 }')"
-	kv_set "${BUILD_DATA_FILE}" "${key}" "${time}"
+	jq --raw-output ".${key} // empty" "${METADATA_FILE}"
 }
 
-# Retrieve a value from a previous build if it exists
-# This is useful to give the user context about what changed if the
-# build has failed. Ex:
-#   - changed stacks
-#   - deployed with a new major version of Node
-#   - etc
-meta_prev_get() {
-	kv_get "${PREVIOUS_BUILD_DATA_FILE}" "${1}"
+# Retrieve the value of an entry in the metadata store from the previous successful build.
+# Returns the empty string if the key wasn't found in the store.
+#
+# Usage:
+# ```
+# metadata::get_previous "python_version"
+# ```
+function metadata::get_previous() {
+	local key="${1}"
+
+	# Older versions of this buildpack used a `key=value` format file instead of JSON,
+	# so we need to support this file format/location too, so older caches can be read.
+	# We check for this file first, so that we correctly handle the case where an app
+	# downgraded and then re-upgraded buildpack version, so has both files in the cache.
+	if [[ -f "${LEGACY_BUILD_DATA_FILE}" ]]; then
+		# The legacy file contains one entry per line, of form `key=value`. Entries were written in an
+		# append-only manner so there could be duplicate entries for each key, so we return only the
+		# last matching entry in the file. The empty string is returned if the key wasn't found.
+		tac "${LEGACY_BUILD_DATA_FILE}" | { grep --perl-regexp --only-matching --max-count=1 "^${key}=\K.*$" || true; }
+	elif [[ -f "${PREVIOUS_METADATA_FILE}" ]]; then
+		# The `// empty` ensures we return the empty string rather than `null` if the key doesn't exist.
+		jq --raw-output ".${key} // empty" "${PREVIOUS_METADATA_FILE}"
+	fi
 }
 
-log_meta_data() {
-	# print all values on one line in logfmt format
-	# https://brandur.org/logfmt
-	# the echo call ensures that all values are printed on a single line
-	# shellcheck disable=SC2005,SC2046,SC2312
-	echo $(kv_list "${BUILD_DATA_FILE}")
+# Sets a string metadata value. The value will be wrapped in double quotes and escaped for JSON.
+#
+# Usage:
+# ```
+# metadata::set_string "python_version" "1.2.3"
+# metadata::set_string "failure_reason" "install-dependencies::pip"
+# ```
+function metadata::set_string() {
+	local key="${1}"
+	local value="${2}"
+	metadata::_set "${key}" "${value}" "true"
+}
+
+# Sets a metadata value for the elapsed time in seconds between the provided start time and the
+# current time, represented as a float with milliseconds precision.
+#
+# Usage:
+# ```
+# local dependencies_install_start_time=$(metadata::current_unix_time_ms)
+# # ... some operation ...
+# metadata::set_duration "dependencies_install_duration" "${dependencies_install_start_time}"
+# ```
+function metadata::set_duration() {
+	local key="${1}"
+	local start_time="${2}"
+	local end_time duration
+	end_time="$(metadata::current_unix_time_ms)"
+	duration="$(awk -v start="${start_time}" -v end="${end_time}" 'BEGIN { printf "%.3f", (end - start)/1000 }')"
+	metadata::set_raw "${key}" "${duration}"
+}
+
+# Sets a metadata value as raw JSON data. The value parameter must be valid JSON value, that's also
+# a supported Honeycomb data type (string, integer, float, or boolean only; no arrays or objects).
+# For strings, use `metadata::set_string` instead since it will handle the escaping/quoting for you.
+# And for durations, use `metadata::set_duration`.
+#
+# Usage:
+# ```
+# metadata::set_raw "python_version_outdated" "true"
+# metadata::set_raw "foo_size_mb" "42.5"
+# ```
+function metadata::set_raw() {
+	local key="${1}"
+	local value="${2}"
+	metadata::_set "${key}" "${value}" "false"
+}
+
+function metadata::_set() {
+	local key="${1}"
+	# Truncate the value to an arbitrary 200 characters since it will sometimes contain user-provided
+	# inputs which may be unbounded in size. Ideally individual call sites will perform more aggressive
+	# truncation themselves based on the expected value size, however this is here as a fallback.
+	# (Honeycomb supports string fields up to 64KB in size, however, it's not worth filling up the
+	# metadata store or bloating the payload passed back to Vacuole/submitted to Honeycomb given the
+	# extra content in those cases is not normally useful.)
+	local value="${2:0:200}"
+	local needs_quoting="${3}"
+
+	if [[ "${needs_quoting}" == "true" ]]; then
+		# Values passed using `--arg` are treated as strings, and so have double quotes added and any JSON
+		# special characters (such as newlines, carriage returns, double quotes, backslashes) are escaped.
+		local jq_args=(--arg value "${value}")
+	else
+		# Values passed using `--argjson` are treated as raw JSON values, and so aren't escaped or quoted.
+		local jq_args=(--argjson value "${value}")
+	fi
+
+	local new_data_file_contents
+	new_data_file_contents=$(jq --arg key "${key}" "${jq_args[@]}" '. + { ($key): ($value) }' "${METADATA_FILE}")
+	echo "${new_data_file_contents}" >"${METADATA_FILE}"
+}
+
+# Returns the current time in milliseconds since the UNIX Epoch.
+function metadata::current_unix_time_ms() {
+	date +%s%3N
+}
+
+function metadata::print_bin_report_json() {
+	jq --sort-keys '.' "${METADATA_FILE}"
 }

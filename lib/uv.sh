@@ -14,7 +14,7 @@ function uv::install_uv() {
 	# We store uv in the build cache, since we only need it during the build.
 	local uv_dir="${cache_dir}/.heroku/python-uv"
 
-	meta_set "uv_version" "${UV_VERSION}"
+	metadata::set_string "uv_version" "${UV_VERSION}"
 
 	# The earlier buildpack cache invalidation step will have already handled the case where
 	# the uv version has changed, so here we only need to check whether the uv binary exists.
@@ -68,7 +68,7 @@ function uv::install_uv() {
 				If that doesn't help, check the status of GitHub here:
 				https://www.githubstatus.com
 			EOF
-			meta_set "failure_reason" "install-package-manager::uv"
+			metadata::set_string "failure_reason" "install-package-manager::uv"
 			exit 1
 		fi
 	fi
@@ -159,7 +159,7 @@ function uv::install_dependencies() {
 
 			See the log output above for more information.
 		EOF
-		meta_set "failure_reason" "install-dependencies::uv"
+		metadata::set_string "failure_reason" "install-dependencies::uv"
 		exit 1
 	fi
 }
