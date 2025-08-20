@@ -231,8 +231,6 @@ set_env LIBRARY_PATH "\${HOME}/.heroku/python/lib\${LIBRARY_PATH:+:\${LIBRARY_PA
 set_env LD_LIBRARY_PATH "\${HOME}/.heroku/python/lib\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}"
 # Locale.
 set_default_env LANG en_US.UTF-8
-# The Python hash seed is set to random.
-set_default_env PYTHONHASHSEED random
 # Tell Python to look for Python modules in the /app dir. Don't change this.
 set_default_env PYTHONPATH "\${HOME}"
 

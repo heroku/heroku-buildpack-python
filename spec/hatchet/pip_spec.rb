@@ -26,7 +26,6 @@ RSpec.describe 'pip support' do
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote: LIBRARY_PATH=/app/.heroku/python/lib
           remote: PATH=/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-          remote: PYTHONHASHSEED=random
           remote: PYTHONHOME=/app/.heroku/python
           remote: PYTHONPATH=/app
           remote: PYTHONUNBUFFERED=true

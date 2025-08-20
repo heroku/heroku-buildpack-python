@@ -24,7 +24,6 @@ RSpec.describe 'Pipenv support' do
           remote: PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote: PIPENV_SYSTEM=1
           remote: PIPENV_VERBOSITY=-1
-          remote: PYTHONHASHSEED=random
           remote: PYTHONHOME=/app/.heroku/python
           remote: PYTHONPATH=/app
           remote: PYTHONUNBUFFERED=true
