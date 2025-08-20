@@ -6,6 +6,7 @@
 set -euo pipefail
 
 BUILD_DIR="${1}"
+CACHE_DIR="${2}"
 
 cd "${BUILD_DIR}"
 
@@ -22,3 +23,6 @@ poetry show | grep -v ' (!) '
 echo
 
 python -c 'import typing_extensions; print(typing_extensions)'
+echo
+
+sort "${CACHE_DIR}/build-data/python"
