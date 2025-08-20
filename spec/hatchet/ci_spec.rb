@@ -38,7 +38,6 @@ RSpec.describe 'Heroku CI' do
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
-          PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
@@ -52,7 +51,6 @@ RSpec.describe 'Heroku CI' do
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
-          PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
@@ -117,7 +115,6 @@ RSpec.describe 'Heroku CI' do
           PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
           PIPENV_SYSTEM=1
           PIPENV_VERBOSITY=-1
-          PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
@@ -134,7 +131,6 @@ RSpec.describe 'Heroku CI' do
           PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
           PIPENV_SYSTEM=1
           PIPENV_VERBOSITY=-1
-          PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
@@ -204,7 +200,6 @@ RSpec.describe 'Heroku CI' do
           PATH=/app/.heroku/python/bin:/tmp/cache.+/.heroku/python-poetry/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
           POETRY_VIRTUALENVS_CREATE=false
           POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
-          PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
@@ -218,7 +213,6 @@ RSpec.describe 'Heroku CI' do
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
-          PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
@@ -287,7 +281,6 @@ RSpec.describe 'Heroku CI' do
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/tmp/cache.+/.heroku/python-uv:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
-          PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
@@ -304,7 +297,6 @@ RSpec.describe 'Heroku CI' do
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
-          PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true

@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Stopped setting the `PYTHONHASHSEED` env var. ([#1876](https://github.com/heroku/heroku-buildpack-python/pull/1876))
 - Removed support for `BUILDPACK_S3_BASE_URL`. ([#1875](https://github.com/heroku/heroku-buildpack-python/pull/1875))
 
 ## [v301] - 2025-08-18

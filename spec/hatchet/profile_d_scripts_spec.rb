@@ -23,7 +23,6 @@ RSpec.describe '.profile.d/ scripts' do
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin
           PWD=/app
-          PYTHONHASHSEED=random
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
@@ -42,7 +41,6 @@ RSpec.describe '.profile.d/ scripts' do
         'LD_LIBRARY_PATH=/this-should-be-preserved',
         'LIBRARY_PATH=/this-should-be-preserved',
         'PATH=/this-should-be-preserved:/usr/local/bin:/usr/bin:/bin',
-        'PYTHONHASHSEED=this-should-be-preserved',
         'PYTHONHOME=/this-should-be-overridden',
         'PYTHONPATH=/this-should-be-preserved',
         'PYTHONUNBUFFERED=this-should-be-overridden',
@@ -59,7 +57,6 @@ RSpec.describe '.profile.d/ scripts' do
           LIBRARY_PATH=/app/.heroku/python/lib:/this-should-be-preserved
           PATH=/app/.heroku/python/bin:/this-should-be-preserved:/usr/local/bin:/usr/bin:/bin
           PWD=/app
-          PYTHONHASHSEED=this-should-be-preserved
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/this-should-be-preserved
           PYTHONUNBUFFERED=true
