@@ -9,15 +9,15 @@ RSpec.describe 'pip support' do
 
     it 're-uses packages from the cache' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 5))
-          remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
-          remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
+          remote:        Collecting typing-extensions==4.12.2 \\(from -r requirements.txt \\(line 5\\)\\)
+          remote:          Downloading typing_extensions-4.12.2-py3-none-any.whl.metadata \\(3.0 kB\\)
+          remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl \\(37 kB\\)
           remote:        Installing collected packages: typing-extensions
           remote:        Successfully installed typing-extensions-4.12.2
           remote: -----> Saving cache
@@ -30,21 +30,43 @@ RSpec.describe 'pip support' do
           remote: PYTHONPATH=/app
           remote: PYTHONUNBUFFERED=true
           remote: 
-          remote: ['',
+          remote: \\['',
           remote:  '/app',
           remote:  '/app/.heroku/python/lib/python313.zip',
           remote:  '/app/.heroku/python/lib/python3.13',
           remote:  '/app/.heroku/python/lib/python3.13/lib-dynload',
-          remote:  '/app/.heroku/python/lib/python3.13/site-packages']
+          remote:  '/app/.heroku/python/lib/python3.13/site-packages'\\]
           remote: 
-          remote: pip #{PIP_VERSION} from /app/.heroku/python/lib/python3.13/site-packages/pip (python 3.13)
+          remote: pip #{PIP_VERSION} from /app/.heroku/python/lib/python3.13/site-packages/pip \\(python 3.13\\)
           remote: Package           Version
           remote: ----------------- -------
           remote: pip               #{PIP_VERSION}
           remote: typing_extensions 4.12.2
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
-        OUTPUT
+          remote: 
+          remote: 
+          remote: cache_restore_duration=[0-9.]+
+          remote: cache_save_duration=[0-9.]+
+          remote: cache_status=empty
+          remote: dependencies_install_duration=[0-9.]+
+          remote: django_collectstatic_duration=[0-9.]+
+          remote: nltk_downloader_duration=[0-9.]+
+          remote: package_manager_install_duration=[0-9.]+
+          remote: package_manager=pip
+          remote: pip_version=#{PIP_VERSION}
+          remote: post_compile_hook=false
+          remote: pre_compile_hook=false
+          remote: python_install_duration=[0-9.]+
+          remote: python_version=#{DEFAULT_PYTHON_FULL_VERSION}
+          remote: python_version_major=3.13
+          remote: python_version_origin=.python-version
+          remote: python_version_outdated=false
+          remote: python_version_pinned=false
+          remote: python_version_requested=3.13
+          remote: setup_py_only=false
+          remote: total_duration=[0-9.]+
+        REGEX
         app.commit!
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
