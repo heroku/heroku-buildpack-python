@@ -36,7 +36,7 @@ case "${STACK:?}" in
 esac
 
 if [[ " ${SUPPORTED_PYTHON_VERSIONS[*]} " != *" ${PYTHON_MAJOR_VERSION} "* ]]; then
-	abort "Python ${PYTHON_MAJOR_VERSION} is not supported on ${STACK}!"
+	abort "Python ${PYTHON_MAJOR_VERSION} isn't supported on ${STACK}!"
 fi
 
 # The release keys can be found on https://www.python.org/downloads/ -> "OpenPGP Public Keys".
