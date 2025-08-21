@@ -30,22 +30,22 @@ function uv::install_uv() {
 		local uv_url="https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/uv-${gnu_arch}-unknown-linux-gnu.tar.gz"
 
 		if ! {
-			# We set max-time for improved UX for hanging downloads compared to relying on the build system
-			# timeout. The uv archive is only ~15 MB so takes < 1s to download on Heroku's build system,
-			# however, we use much higher timeouts so that the buildpack works in non-Heroku or local
-			# environments that may have a slower connection. We don't use `--speed-limit` since it gives
-			# worse error messages when used with retries and piping to tar.
-			# We have to use `--strip-components` since the archive contents are nested under a subdirectory.
+			# We set max-time for improved UX/metrics for hanging downloads compared to relying on the build
+			# system timeout. We don't use `--speed-limit` since it gives worse error messages when used with
+			# retries and piping to tar. The Python archives are ~10 MB so only take ~1s to download on Heroku,
+			# so we set low timeouts to reduce delays before retries. However, we allow customising the timeouts
+			# to support non-Heroku environments that may be far from `us-east-1` or have a slower connection.
+			# We use `--no-progress-meter` rather than `--silent` so that retry status messages are printed.
+			# We have to use `--strip-components` since the uv binary is nested under a subdirectory.
 			curl \
-				--connect-timeout 10 \
+				--connect-timeout "${CURL_CONNECT_TIMEOUT:-3}" \
 				--fail \
 				--location \
-				--max-time 120 \
-				--retry-max-time 120 \
-				--retry 3 \
+				--max-time "${CURL_TIMEOUT:-60}" \
+				--no-progress-meter \
+				--retry-max-time "${CURL_TIMEOUT:-60}" \
+				--retry 5 \
 				--retry-connrefused \
-				--show-error \
-				--silent \
 				"${uv_url}" \
 				| tar \
 					--directory "${uv_dir}" \
