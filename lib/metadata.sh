@@ -12,9 +12,14 @@ LEGACY_BUILD_DATA_FILE="${CACHE_DIR:?}/build-data/python"
 
 # Initializes the metadata store, preserving the file from the previous build if it exists.
 # Call this at the start of `bin/compile` before using any other functions from this file.
+#
+# Usage:
+# ```
+# metadata::setup
+# ```
 function metadata::setup() {
 	if [[ -f "${METADATA_FILE}" ]]; then
-		# Rename the existing metrics file rather than overwriting it, so we can lookup values
+		# Rename the existing metadata file rather than overwriting it, so we can lookup values
 		# from the previous build (such as when determining whether to invalidate the cache).
 		mv "${METADATA_FILE}" "${PREVIOUS_METADATA_FILE}"
 	else
@@ -108,6 +113,14 @@ function metadata::set_raw() {
 	metadata::_set "${key}" "${value}" "false"
 }
 
+# Internal helper to write a key/value pair to the metadata store. The buildpack shouldn't call this directly.
+# Takes a key, value, and a boolean flag indicating whether the value needs to be quoted.
+#
+# Usage:
+# ```
+# metadata::_set "foo_string" "quote me" "true"
+# metadata::_set "bar_number" "99" "false"
+# ```
 function metadata::_set() {
 	local key="${1}"
 	# Truncate the value to an arbitrary 200 characters since it will sometimes contain user-provided
@@ -134,10 +147,23 @@ function metadata::_set() {
 }
 
 # Returns the current time in milliseconds since the UNIX Epoch.
+#
+# Usage:
+# ```
+# local dependencies_install_start_time=$(metadata::current_unix_time_ms)
+# # ... some operation ...
+# metadata::set_duration "dependencies_install_duration" "${dependencies_install_start_time}"
+# ```
 function metadata::current_unix_time_ms() {
 	date +%s%3N
 }
 
+# Prints the contents of the metadata store in sorted JSON format.
+#
+# Usage:
+# ```
+# metadata::print_bin_report_json
+# ```
 function metadata::print_bin_report_json() {
 	jq --sort-keys '.' "${METADATA_FILE}"
 }
