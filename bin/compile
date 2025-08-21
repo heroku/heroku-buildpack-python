@@ -20,10 +20,10 @@ BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
 
 source "${BUILDPACK_DIR}/bin/utils"
 source "${BUILDPACK_DIR}/lib/utils.sh"
+source "${BUILDPACK_DIR}/lib/build_data.sh"
 source "${BUILDPACK_DIR}/lib/cache.sh"
 source "${BUILDPACK_DIR}/lib/checks.sh"
 source "${BUILDPACK_DIR}/lib/hooks.sh"
-source "${BUILDPACK_DIR}/lib/build_data.sh"
 source "${BUILDPACK_DIR}/lib/output.sh"
 source "${BUILDPACK_DIR}/lib/package_manager.sh"
 source "${BUILDPACK_DIR}/lib/pip.sh"
