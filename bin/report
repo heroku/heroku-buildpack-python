@@ -23,6 +23,6 @@ CACHE_DIR="${2}"
 # The absolute path to the root of the buildpack.
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")" && pwd)
 
-source "${BUILDPACK_DIR}/lib/metadata.sh"
+source "${BUILDPACK_DIR}/lib/build_data.sh"
 
-metadata::print_bin_report_json
+build_data::print_bin_report_json

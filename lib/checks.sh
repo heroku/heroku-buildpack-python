@@ -19,8 +19,8 @@ function checks::ensure_supported_stack() {
 
 				Upgrade to a newer stack to continue using this buildpack.
 			EOF
-			metadata::set_string "failure_reason" "stack::eol"
-			metadata::set_string "failure_detail" "${stack}"
+			build_data::set_string "failure_reason" "stack::eol"
+			build_data::set_string "failure_detail" "${stack}"
 			exit 1
 			;;
 		*)
@@ -34,8 +34,8 @@ function checks::ensure_supported_stack() {
 				https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
 				https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
 			EOF
-			metadata::set_string "failure_reason" "stack::unknown"
-			metadata::set_string "failure_detail" "${stack}"
+			build_data::set_string "failure_reason" "stack::unknown"
+			build_data::set_string "failure_detail" "${stack}"
 			exit 1
 			;;
 	esac
@@ -67,7 +67,7 @@ function checks::duplicate_python_buildpack() {
 			Note: This error replaces the deprecation warning which was
 			displayed in build logs starting 13th December 2024.
 		EOF
-		metadata::set_string "failure_reason" "checks::duplicate-python-buildpack"
+		build_data::set_string "failure_reason" "checks::duplicate-python-buildpack"
 		exit 1
 	fi
 }
@@ -98,7 +98,7 @@ function checks::existing_python_dir_present() {
 			Note: This error replaces the deprecation warning which was
 			displayed in build logs starting 13th December 2024.
 		EOF
-		metadata::set_string "failure_reason" "checks::existing-python-dir"
+		build_data::set_string "failure_reason" "checks::existing-python-dir"
 		exit 1
 	fi
 }

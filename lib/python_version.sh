@@ -117,8 +117,8 @@ function python_version::parse_runtime_txt() {
 
 			${instructions}
 		EOF
-		metadata::set_string "failure_reason" "runtime-txt::invalid-version"
-		metadata::set_string "failure_detail" "${contents:0:50}"
+		build_data::set_string "failure_reason" "runtime-txt::invalid-version"
+		build_data::set_string "failure_detail" "${contents:0:50}"
 		exit 1
 	fi
 }
@@ -168,8 +168,8 @@ function python_version::parse_python_version_file() {
 					version and so stop your app from receiving security updates
 					each time it builds.
 				EOF
-				metadata::set_string "failure_reason" "python-version-file::invalid-version"
-				metadata::set_string "failure_detail" "${line:0:50}"
+				build_data::set_string "failure_reason" "python-version-file::invalid-version"
+				build_data::set_string "failure_detail" "${line:0:50}"
 				exit 1
 			fi
 			;;
@@ -189,8 +189,8 @@ function python_version::parse_python_version_file() {
 				If the file already contains a version, check the line doesn't
 				begin with a '#', otherwise it will be treated as a comment.
 			EOF
-			metadata::set_string "failure_reason" "python-version-file::no-version"
-			metadata::set_string "failure_detail" "${contents:0:50}"
+			build_data::set_string "failure_reason" "python-version-file::no-version"
+			build_data::set_string "failure_detail" "${contents:0:50}"
 			exit 1
 			;;
 		*)
@@ -214,8 +214,8 @@ function python_version::parse_python_version_file() {
 				If you have added comments to the file, make sure that those
 				lines begin with a '#', so that they are ignored.
 			EOF
-			metadata::set_string "failure_reason" "python-version-file::multiple-versions"
-			metadata::set_string "failure_detail" "$(
+			build_data::set_string "failure_reason" "python-version-file::multiple-versions"
+			build_data::set_string "failure_detail" "$(
 				IFS=,
 				echo "${first_five_version_lines[*]}"
 			)"
@@ -245,8 +245,8 @@ function python_version::read_pipenv_python_version() {
 
 			Run 'pipenv lock' to regenerate/fix the lockfile.
 		EOF
-		metadata::set_string "failure_reason" "pipfile-lock::invalid-json"
-		metadata::set_string "failure_detail" "${jq_error_message:0:100}"
+		build_data::set_string "failure_reason" "pipfile-lock::invalid-json"
+		build_data::set_string "failure_detail" "${jq_error_message:0:100}"
 		exit 1
 	fi
 
@@ -287,8 +287,8 @@ function python_version::read_pipenv_python_version() {
 			For more information, see:
 			https://pipenv.pypa.io/en/stable/specifiers.html#specifying-versions-of-python
 		EOF
-		metadata::set_string "failure_reason" "pipfile-lock::invalid-version"
-		metadata::set_string "failure_detail" "${version:0:50}"
+		build_data::set_string "failure_reason" "pipfile-lock::invalid-version"
+		build_data::set_string "failure_detail" "${version:0:50}"
 		exit 1
 	fi
 }
@@ -347,8 +347,8 @@ function python_version::resolve_python_version() {
 				since it contains many performance and usability improvements.
 			EOF
 		fi
-		metadata::set_string "failure_reason" "python-version::eol"
-		metadata::set_string "failure_detail" "${major}.${minor}"
+		build_data::set_string "failure_reason" "python-version::eol"
+		build_data::set_string "failure_detail" "${major}.${minor}"
 		exit 1
 	fi
 
@@ -395,8 +395,8 @@ function python_version::resolve_python_version() {
 				by changing the version in your ${python_version_origin} file.
 			EOF
 		fi
-		metadata::set_string "failure_reason" "python-version::unknown-major"
-		metadata::set_string "failure_detail" "${major}.${minor}"
+		build_data::set_string "failure_reason" "python-version::unknown-major"
+		build_data::set_string "failure_detail" "${major}.${minor}"
 		exit 1
 	fi
 
@@ -447,7 +447,7 @@ function python_version::warn_or_error_if_python_version_file_missing() {
 					pin your app to an exact Python version and so stop your app from
 					receiving security updates each time it builds.
 				EOF
-				metadata::set_string "failure_reason" "python-version-file::not-found"
+				build_data::set_string "failure_reason" "python-version-file::not-found"
 				exit 1
 			fi
 
@@ -501,7 +501,7 @@ function python_version::warn_or_error_if_python_version_file_missing() {
 					pin your app to an exact Python version and so stop your app from
 					receiving security updates each time it builds.
 				EOF
-				metadata::set_string "failure_reason" "runtime-txt::not-supported"
+				build_data::set_string "failure_reason" "runtime-txt::not-supported"
 				exit 1
 			fi
 
@@ -615,8 +615,8 @@ function python_version::warn_if_patch_update_available() {
 			This will allow your app to receive the latest available Python
 			patch version automatically and prevent this warning.
 		EOF
-		metadata::set_raw "python_version_outdated" "true"
+		build_data::set_raw "python_version_outdated" "true"
 	else
-		metadata::set_raw "python_version_outdated" "false"
+		build_data::set_raw "python_version_outdated" "false"
 	fi
 }

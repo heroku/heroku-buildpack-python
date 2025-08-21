@@ -12,9 +12,9 @@ function hooks::run_hook() {
 
 	if [[ -f "${script_path}" ]]; then
 		local hook_start_time
-		hook_start_time=$(metadata::current_unix_time_ms)
+		hook_start_time=$(build_data::current_unix_time_ms)
 		output::step "Running ${script_path} hook"
-		metadata::set_raw "${hook_name}_hook" "true"
+		build_data::set_raw "${hook_name}_hook" "true"
 		chmod +x "${script_path}"
 
 		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
@@ -30,12 +30,12 @@ function hooks::run_hook() {
 				Fix any errors output by your script above, or remove/rename
 				the script to prevent it from being run during the build.
 			EOF
-			metadata::set_string "failure_reason" "hooks::${hook_name}"
+			build_data::set_string "failure_reason" "hooks::${hook_name}"
 			exit 1
 		fi
 
-		metadata::set_duration "${hook_name}_hook_duration" "${hook_start_time}"
+		build_data::set_duration "${hook_name}_hook_duration" "${hook_start_time}"
 	else
-		metadata::set_raw "${hook_name}_hook" "false"
+		build_data::set_raw "${hook_name}_hook" "false"
 	fi
 }

@@ -16,7 +16,7 @@
 set -euo pipefail
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
 source "${BUILDPACK_DIR}/bin/utils"
-source "${BUILDPACK_DIR}/lib/metadata.sh"
+source "${BUILDPACK_DIR}/lib/build_data.sh"
 source "${BUILDPACK_DIR}/lib/output.sh"
 
 if [[ -f .heroku/collectstatic_disabled ]]; then
@@ -26,13 +26,13 @@ if [[ -f .heroku/collectstatic_disabled ]]; then
 
 		Please remove the file and set the env var DISABLE_COLLECTSTATIC=1 instead.
 	EOF
-	metadata::set_string "django_collectstatic" "disabled-file"
+	build_data::set_string "django_collectstatic" "disabled-file"
 	exit 0
 fi
 
 if [[ "${DISABLE_COLLECTSTATIC:-0}" != "0" ]]; then
 	output::step "Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set."
-	metadata::set_string "django_collectstatic" "disabled-env-var"
+	build_data::set_string "django_collectstatic" "disabled-env-var"
 	exit 0
 fi
 
@@ -48,11 +48,11 @@ MANAGE_FILE=${MANAGE_FILE:-fakepath}
 
 if [[ ! -f "${MANAGE_FILE}" ]]; then
 	output::step "Skipping Django collectstatic since no manage.py file found."
-	metadata::set_string "django_collectstatic" "skipped-no-manage-py"
+	build_data::set_string "django_collectstatic" "skipped-no-manage-py"
 	exit 0
 fi
 
-metadata::set_string "django_collectstatic" "enabled"
+build_data::set_string "django_collectstatic" "enabled"
 
 output::step "$ python $MANAGE_FILE collectstatic --noinput"
 
@@ -73,15 +73,15 @@ fi
 
 # Display a warning if collectstatic failed.
 if grep -q 'SyntaxError' "$COLLECTSTATIC_LOG"; then
-	metadata::set_string "failure_reason" "collectstatic-syntax-error"
+	build_data::set_string "failure_reason" "collectstatic-syntax-error"
 elif grep -q 'ImproperlyConfigured' "$COLLECTSTATIC_LOG"; then
-	metadata::set_string "failure_reason" "collectstatic-improper-configuration"
+	build_data::set_string "failure_reason" "collectstatic-improper-configuration"
 elif grep -q 'The CSS file' "$COLLECTSTATIC_LOG"; then
-	metadata::set_string "failure_reason" "collectstatic-fancy-references"
+	build_data::set_string "failure_reason" "collectstatic-fancy-references"
 elif grep -q 'OSError' "$COLLECTSTATIC_LOG"; then
-	metadata::set_string "failure_reason" "collectstatic-missing-file"
+	build_data::set_string "failure_reason" "collectstatic-missing-file"
 else
-	metadata::set_string "failure_reason" "collectstatic-other"
+	build_data::set_string "failure_reason" "collectstatic-other"
 fi
 
 output::error <<-EOF

@@ -14,7 +14,7 @@ function python::install() {
 	local python_version_origin="${5}"
 
 	local install_python_start_time
-	install_python_start_time=$(metadata::current_unix_time_ms)
+	install_python_start_time=$(build_data::current_unix_time_ms)
 	local install_dir="${build_dir}/.heroku/python"
 
 	if [[ -f "${install_dir}/bin/python" ]]; then
@@ -97,8 +97,8 @@ function python::install() {
 					This will allow your app to receive the latest available Python
 					patch version automatically, and prevent this type of error.
 				EOF
-				metadata::set_string "failure_reason" "python-version::unknown-patch"
-				metadata::set_string "failure_detail" "${python_full_version}"
+				build_data::set_string "failure_reason" "python-version::unknown-patch"
+				build_data::set_string "failure_detail" "${python_full_version}"
 			else
 				output::error <<-EOF
 					Error: Unable to download/install Python.
@@ -117,14 +117,14 @@ function python::install() {
 
 					Then try building again to see if the error resolves itself.
 				EOF
-				metadata::set_string "failure_reason" "install-python"
+				build_data::set_string "failure_reason" "install-python"
 				# e.g.: 'curl: (6) Could not resolve host: heroku-buildpack-python.s3.us-east-1.amazonaws.com'
-				metadata::set_string "failure_detail" "$(head --lines=1 "${error_log}" || true)"
+				build_data::set_string "failure_detail" "$(head --lines=1 "${error_log}" || true)"
 			fi
 
 			exit 1
 		fi
 	fi
 
-	metadata::set_duration "python_install_duration" "${install_python_start_time}"
+	build_data::set_duration "python_install_duration" "${install_python_start_time}"
 }

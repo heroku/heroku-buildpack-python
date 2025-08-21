@@ -23,7 +23,7 @@ source "${BUILDPACK_DIR}/lib/utils.sh"
 source "${BUILDPACK_DIR}/lib/cache.sh"
 source "${BUILDPACK_DIR}/lib/checks.sh"
 source "${BUILDPACK_DIR}/lib/hooks.sh"
-source "${BUILDPACK_DIR}/lib/metadata.sh"
+source "${BUILDPACK_DIR}/lib/build_data.sh"
 source "${BUILDPACK_DIR}/lib/output.sh"
 source "${BUILDPACK_DIR}/lib/package_manager.sh"
 source "${BUILDPACK_DIR}/lib/pip.sh"
@@ -33,12 +33,12 @@ source "${BUILDPACK_DIR}/lib/python_version.sh"
 source "${BUILDPACK_DIR}/lib/python.sh"
 source "${BUILDPACK_DIR}/lib/uv.sh"
 
-compile_start_time=$(metadata::current_unix_time_ms)
+compile_start_time=$(build_data::current_unix_time_ms)
 
-# Initialise the buildpack metadata store.
-# This is used to track state across builds (for cache invalidation and messaging when build
-# configuration changes) and also so that `bin/report` can generate the build report.
-metadata::setup
+# Initialise the build data store used to track state across builds (for cache invalidation
+# and messaging when build configuration changes) and also so that `bin/report` can generate
+# a build report that will be consumed by the build system for observability.
+build_data::setup
 
 checks::ensure_supported_stack "${STACK:?Required env var STACK is not set}"
 checks::duplicate_python_buildpack "${BUILD_DIR}"
@@ -104,15 +104,15 @@ hooks::run_hook "pre_compile"
 checks::existing_python_dir_present "${BUILD_DIR}"
 
 package_manager="$(package_manager::determine_package_manager "${BUILD_DIR}")"
-metadata::set_string "package_manager" "${package_manager}"
+build_data::set_string "package_manager" "${package_manager}"
 
 cached_python_full_version="$(cache::cached_python_full_version "${CACHE_DIR}")"
 
 # We use the Bash 4.3+ `nameref` feature to pass back multiple values from this function
 # without having to hardcode globals. See: https://stackoverflow.com/a/38997681
 python_version::read_requested_python_version "${BUILD_DIR}" "${package_manager}" "${cached_python_full_version}" requested_python_version python_version_origin
-metadata::set_string "python_version_requested" "${requested_python_version}"
-metadata::set_string "python_version_origin" "${python_version_origin}"
+build_data::set_string "python_version_requested" "${requested_python_version}"
+build_data::set_string "python_version_origin" "${python_version_origin}"
 
 case "${python_version_origin}" in
 	default)
@@ -128,13 +128,13 @@ esac
 
 python_full_version="$(python_version::resolve_python_version "${requested_python_version}" "${python_version_origin}")"
 python_major_version="${python_full_version%.*}"
-metadata::set_string "python_version" "${python_full_version}"
-metadata::set_string "python_version_major" "${python_major_version}"
+build_data::set_string "python_version" "${python_full_version}"
+build_data::set_string "python_version_major" "${python_major_version}"
 
 if [[ "${requested_python_version}" == "${python_full_version}" ]]; then
-	metadata::set_raw "python_version_pinned" "true"
+	build_data::set_raw "python_version_pinned" "true"
 else
-	metadata::set_raw "python_version_pinned" "false"
+	build_data::set_raw "python_version_pinned" "false"
 fi
 
 # We wait until after Python version resolution to show these warnings, to avoid causing confusion
@@ -165,7 +165,7 @@ fi
 python::install "${BUILD_DIR}" "${STACK}" "${python_full_version}" "${python_major_version}" "${python_version_origin}"
 
 # Install the package manager and related tools.
-package_manager_install_start_time=$(metadata::current_unix_time_ms)
+package_manager_install_start_time=$(build_data::current_unix_time_ms)
 case "${package_manager}" in
 	pip)
 		pip::install_pip_setuptools_wheel "${python_home}" "${python_major_version}"
@@ -183,10 +183,10 @@ case "${package_manager}" in
 		utils::abort_internal_error "Unhandled package manager: ${package_manager}"
 		;;
 esac
-metadata::set_duration "package_manager_install_duration" "${package_manager_install_start_time}"
+build_data::set_duration "package_manager_install_duration" "${package_manager_install_start_time}"
 
 # Install app dependencies.
-dependencies_install_start_time=$(metadata::current_unix_time_ms)
+dependencies_install_start_time=$(build_data::current_unix_time_ms)
 case "${package_manager}" in
 	pip)
 		pip::install_dependencies
@@ -204,18 +204,18 @@ case "${package_manager}" in
 		utils::abort_internal_error "Unhandled package manager: ${package_manager}"
 		;;
 esac
-metadata::set_duration "dependencies_install_duration" "${dependencies_install_start_time}"
+build_data::set_duration "dependencies_install_duration" "${dependencies_install_start_time}"
 
 # Support for NLTK corpora.
-nltk_downloader_start_time=$(metadata::current_unix_time_ms)
+nltk_downloader_start_time=$(build_data::current_unix_time_ms)
 sub_env "${BUILDPACK_DIR}/bin/steps/nltk"
-metadata::set_duration "nltk_downloader_duration" "${nltk_downloader_start_time}"
+build_data::set_duration "nltk_downloader_duration" "${nltk_downloader_start_time}"
 
 # Django collectstatic support.
 # The buildpack automatically runs collectstatic for Django applications.
-collectstatic_start_time=$(metadata::current_unix_time_ms)
+collectstatic_start_time=$(build_data::current_unix_time_ms)
 sub_env "${BUILDPACK_DIR}/bin/steps/collectstatic"
-metadata::set_duration "django_collectstatic_duration" "${collectstatic_start_time}"
+build_data::set_duration "django_collectstatic_duration" "${collectstatic_start_time}"
 
 # Programmatically create .profile.d script for application runtime environment variables.
 
@@ -290,4 +290,4 @@ hooks::run_hook "post_compile"
 
 cache::save "${BUILD_DIR}" "${CACHE_DIR}" "${STACK}" "${python_full_version}" "${package_manager}"
 
-metadata::set_duration "total_duration" "${compile_start_time}"
+build_data::set_duration "total_duration" "${compile_start_time}"

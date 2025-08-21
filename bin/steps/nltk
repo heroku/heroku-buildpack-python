@@ -5,7 +5,7 @@
 set -euo pipefail
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
 source "${BUILDPACK_DIR}/bin/utils"
-source "${BUILDPACK_DIR}/lib/metadata.sh"
+source "${BUILDPACK_DIR}/lib/build_data.sh"
 source "${BUILDPACK_DIR}/lib/output.sh"
 
 # These are required by `set_env`.
@@ -20,7 +20,7 @@ if is_module_available 'nltk'; then
 	nltk_packages_definition="${BUILD_DIR}/nltk.txt"
 
 	if [[ -f "${nltk_packages_definition}" ]]; then
-		metadata::set_string "nltk_downloader" "enabled"
+		build_data::set_string "nltk_downloader" "enabled"
 
 		readarray -t nltk_packages <"${nltk_packages_definition}"
 		output::step "Downloading NLTK packages: ${nltk_packages[*]}"
@@ -36,13 +36,13 @@ if is_module_available 'nltk'; then
 
 				See the log output above for more information.
 			EOF
-			metadata::set_string "failure_reason" "nltk-downloader"
+			build_data::set_string "failure_reason" "nltk-downloader"
 			exit 1
 		fi
 
 		set_env NLTK_DATA "${nltk_data_dir}"
 	else
-		metadata::set_string "nltk_downloader" "skipped-no-nltk-file"
+		build_data::set_string "nltk_downloader" "skipped-no-nltk-file"
 		echo "       'nltk.txt' not found, not downloading any corpora"
 	fi
 fi
