@@ -73,8 +73,3 @@ sub_env() {
 		"$@"
 	)
 }
-
-# Returns the current time, in milliseconds.
-nowms() {
-	date +%s%3N
-}

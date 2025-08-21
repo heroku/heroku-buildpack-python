@@ -34,11 +34,11 @@ function cache::restore() {
 	local package_manager="${6}"
 
 	local cache_restore_start_time
-	cache_restore_start_time=$(nowms)
+	cache_restore_start_time=$(build_data::current_unix_time_ms)
 
 	if [[ ! -d "${cache_dir}/.heroku/python" ]]; then
-		meta_set "cache_status" "empty"
-		meta_time "cache_restore_duration" "${cache_restore_start_time}"
+		build_data::set_string "cache_status" "empty"
+		build_data::set_duration "cache_restore_duration" "${cache_restore_start_time}"
 		return 0
 	fi
 
@@ -55,9 +55,9 @@ function cache::restore() {
 	fi
 
 	local cached_package_manager
-	cached_package_manager="$(meta_prev_get "package_manager")"
+	cached_package_manager="$(build_data::get_previous "package_manager")"
 	if [[ -z "${cached_package_manager}" ]]; then
-		# The metadata store only exists in caches created by v252+ of the buildpack (released 2024-06-17).
+		# The build data store only exists in caches created by v252+ of the buildpack (released 2024-06-17).
 		cache_invalidation_reasons+=("The buildpack cache format has changed")
 	elif [[ "${cached_package_manager}" != "${package_manager}" ]]; then
 		cache_invalidation_reasons+=("The package manager has changed from ${cached_package_manager:-"unknown"} to ${package_manager}")
@@ -65,7 +65,7 @@ function cache::restore() {
 		case "${package_manager}" in
 			pip)
 				local cached_pip_version
-				cached_pip_version="$(meta_prev_get "pip_version")"
+				cached_pip_version="$(build_data::get_previous "pip_version")"
 				if [[ "${cached_pip_version}" != "${PIP_VERSION:?}" ]]; then
 					cache_invalidation_reasons+=("The pip version has changed from ${cached_pip_version:-"unknown"} to ${PIP_VERSION}")
 				fi
@@ -82,7 +82,7 @@ function cache::restore() {
 				;;
 			pipenv)
 				local cached_pipenv_version
-				cached_pipenv_version="$(meta_prev_get "pipenv_version")"
+				cached_pipenv_version="$(build_data::get_previous "pipenv_version")"
 				if [[ "${cached_pipenv_version}" != "${PIPENV_VERSION:?}" ]]; then
 					cache_invalidation_reasons+=("The Pipenv version has changed from ${cached_pipenv_version:-"unknown"} to ${PIPENV_VERSION}")
 				fi
@@ -98,14 +98,14 @@ function cache::restore() {
 				;;
 			poetry)
 				local cached_poetry_version
-				cached_poetry_version="$(meta_prev_get "poetry_version")"
+				cached_poetry_version="$(build_data::get_previous "poetry_version")"
 				if [[ "${cached_poetry_version}" != "${POETRY_VERSION:?}" ]]; then
 					cache_invalidation_reasons+=("The Poetry version has changed from ${cached_poetry_version:-"unknown"} to ${POETRY_VERSION}")
 				fi
 				;;
 			uv)
 				local cached_uv_version
-				cached_uv_version="$(meta_prev_get "uv_version")"
+				cached_uv_version="$(build_data::get_previous "uv_version")"
 				if [[ "${cached_uv_version}" != "${UV_VERSION:?}" ]]; then
 					cache_invalidation_reasons+=("The uv version has changed from ${cached_uv_version:-"unknown"} to ${UV_VERSION}")
 				fi
@@ -135,7 +135,7 @@ function cache::restore() {
 			"${cache_dir}/.heroku/python-version" \
 			"${cache_dir}/.heroku/requirements.txt"
 
-		meta_set "cache_status" "discarded"
+		build_data::set_string "cache_status" "discarded"
 	else
 		output::step "Restoring cache"
 		mkdir -p "${build_dir}/.heroku"
@@ -143,16 +143,18 @@ function cache::restore() {
 		# build directory are on the same filesystem mount. The Python directory is guaranteed
 		# to not already exist thanks to the earlier `checks::existing_python_dir_present()`.
 		mv "${cache_dir}/.heroku/python" "${build_dir}/.heroku/"
-		meta_set "cache_status" "reused"
+		build_data::set_string "cache_status" "reused"
 	fi
 
 	# Remove any legacy cache contents written by older buildpack versions.
 	rm -rf \
+		"${cache_dir}/build-data/python" \
+		"${cache_dir}/build-data/python-prev" \
 		"${cache_dir}/.heroku/python-sqlite3-version" \
 		"${cache_dir}/.heroku/src" \
 		"${cache_dir}/.heroku/vendor"
 
-	meta_time "cache_restore_duration" "${cache_restore_start_time}"
+	build_data::set_duration "cache_restore_duration" "${cache_restore_start_time}"
 }
 
 # Copies Python and dependencies from the build directory to the cache, for use by subsequent builds.
@@ -164,7 +166,7 @@ function cache::save() {
 	local package_manager="${5}"
 
 	local cache_save_start_time
-	cache_save_start_time=$(nowms)
+	cache_save_start_time=$(build_data::current_unix_time_ms)
 
 	output::step "Saving cache"
 
@@ -179,8 +181,8 @@ function cache::save() {
 	cp --recursive "${build_dir}/.heroku/python" "${cache_dir}/.heroku/"
 
 	# Metadata used by subsequent builds to determine whether the cache can be reused.
-	# These are written/consumed via separate files and not the metadata store for compatibility
-	# with buildpack versions prior to the metadata store existing (which was only added in v252).
+	# These are written/consumed via separate files and not the build data store for compatibility
+	# with buildpack versions prior to the build data store existing (which was only added in v252).
 	echo "${stack}" >"${cache_dir}/.heroku/python-stack"
 	# For historical reasons the Python version was always stored with a `python-` prefix.
 	# We continue to use that format so that the file can be read by older buildpack versions.
@@ -197,5 +199,5 @@ function cache::save() {
 		sha256sum Pipfile.lock >"${cache_dir}/.heroku/python/Pipfile.lock.sha256"
 	fi
 
-	meta_time "cache_save_duration" "${cache_save_start_time}"
+	build_data::set_duration "cache_save_duration" "${cache_save_start_time}"
 }

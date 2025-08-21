@@ -44,27 +44,28 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
           remote: 
-          remote: 
-          remote: cache_restore_duration=[0-9.]+
-          remote: cache_save_duration=[0-9.]+
-          remote: cache_status=empty
-          remote: dependencies_install_duration=[0-9.]+
-          remote: django_collectstatic_duration=[0-9.]+
-          remote: nltk_downloader_duration=[0-9.]+
-          remote: package_manager_install_duration=[0-9.]+
-          remote: package_manager=pipenv
-          remote: pipenv_version=#{PIPENV_VERSION}
-          remote: post_compile_hook=false
-          remote: pre_compile_hook=false
-          remote: python_install_duration=[0-9.]+
-          remote: python_version=#{DEFAULT_PYTHON_FULL_VERSION}
-          remote: python_version_major=3.13
-          remote: python_version_origin=Pipfile.lock
-          remote: python_version_outdated=false
-          remote: python_version_pinned=false
-          remote: python_version_requested=3.13
-          remote: setup_py_only=false
-          remote: total_duration=[0-9.]+
+          remote: {
+          remote:   "cache_restore_duration": [0-9.]+,
+          remote:   "cache_save_duration": [0-9.]+,
+          remote:   "cache_status": "empty",
+          remote:   "dependencies_install_duration": [0-9.]+,
+          remote:   "django_collectstatic_duration": [0-9.]+,
+          remote:   "nltk_downloader_duration": [0-9.]+,
+          remote:   "package_manager": "pipenv",
+          remote:   "package_manager_install_duration": [0-9.]+,
+          remote:   "pipenv_version": "#{PIPENV_VERSION}",
+          remote:   "post_compile_hook": false,
+          remote:   "pre_compile_hook": false,
+          remote:   "python_install_duration": [0-9.]+,
+          remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
+          remote:   "python_version_major": "3.13",
+          remote:   "python_version_origin": "Pipfile.lock",
+          remote:   "python_version_outdated": false,
+          remote:   "python_version_pinned": false,
+          remote:   "python_version_requested": "3.13",
+          remote:   "setup_py_only": false,
+          remote:   "total_duration": [0-9.]+
+          remote: }
         REGEX
         app.commit!
         app.push!

@@ -51,7 +51,7 @@ function utils::bundled_pip_module_path() {
 
 			$(find "${bundled_wheels_dir}/" 2>&1 || find "${python_home}/" -type d 2>&1 || true)
 		EOF
-		meta_set "failure_reason" "bundled-pip-not-found"
+		build_data::set_string "failure_reason" "bundled-pip-not-found"
 		exit 1
 	fi
 }
@@ -62,7 +62,7 @@ function utils::abort_internal_error() {
 	output::error <<-EOF
 		Internal error: ${message}.
 	EOF
-	meta_set "failure_reason" "internal-error"
-	meta_set "failure_detail" "${message}"
+	build_data::set_string "failure_reason" "internal-error"
+	build_data::set_string "failure_detail" "${message}"
 	exit 1
 }

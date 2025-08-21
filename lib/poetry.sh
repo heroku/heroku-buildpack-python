@@ -21,7 +21,7 @@ function poetry::install_poetry() {
 	local poetry_bin_dir="${poetry_root}/bin"
 	local poetry_venv_dir="${poetry_root}/venv"
 
-	meta_set "poetry_version" "${POETRY_VERSION}"
+	build_data::set_string "poetry_version" "${POETRY_VERSION}"
 
 	# The earlier buildpack cache invalidation step will have already handled the case where the
 	# Poetry version has changed, so here we only need to check that a valid Poetry install exists.
@@ -56,7 +56,7 @@ function poetry::install_poetry() {
 
 				See the log output above for more information.
 			EOF
-			meta_set "failure_reason" "create-venv::poetry"
+			build_data::set_string "failure_reason" "create-venv::poetry"
 			exit 1
 		fi
 
@@ -88,7 +88,7 @@ function poetry::install_poetry() {
 				If that doesn't help, check the status of PyPI here:
 				https://status.python.org
 			EOF
-			meta_set "failure_reason" "install-package-manager::poetry"
+			build_data::set_string "failure_reason" "install-package-manager::poetry"
 			exit 1
 		fi
 
@@ -160,7 +160,7 @@ function poetry::install_dependencies() {
 
 			See the log output above for more information.
 		EOF
-		meta_set "failure_reason" "install-dependencies::poetry"
+		build_data::set_string "failure_reason" "install-dependencies::poetry"
 		exit 1
 	fi
 }

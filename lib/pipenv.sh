@@ -25,7 +25,7 @@ function pipenv::install_pipenv() {
 	local pipenv_bin_dir="${pipenv_root}/bin"
 	local pipenv_venv_dir="${pipenv_root}/venv"
 
-	meta_set "pipenv_version" "${PIPENV_VERSION}"
+	build_data::set_string "pipenv_version" "${PIPENV_VERSION}"
 
 	# The earlier buildpack cache invalidation step will have already handled the case where the
 	# Pipenv version has changed, so here we only need to check that a Pipenv install exists.
@@ -50,7 +50,7 @@ function pipenv::install_pipenv() {
 
 				See the log output above for more information.
 			EOF
-			meta_set "failure_reason" "create-venv::pipenv"
+			build_data::set_string "failure_reason" "create-venv::pipenv"
 			exit 1
 		fi
 
@@ -82,7 +82,7 @@ function pipenv::install_pipenv() {
 				If that doesn't help, check the status of PyPI here:
 				https://status.python.org
 			EOF
-			meta_set "failure_reason" "install-package-manager::pipenv"
+			build_data::set_string "failure_reason" "install-package-manager::pipenv"
 			exit 1
 		fi
 
@@ -170,7 +170,7 @@ function pipenv::install_dependencies() {
 
 			See the log output above for more information.
 		EOF
-		meta_set "failure_reason" "install-dependencies::pipenv"
+		build_data::set_string "failure_reason" "install-dependencies::pipenv"
 		exit 1
 	fi
 }

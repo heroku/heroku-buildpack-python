@@ -9,7 +9,7 @@ show-warnings() {
 			For GDAL, GEOS and PROJ support, use the Geo buildpack alongside the Python buildpack:
 			https://github.com/heroku/heroku-geo-buildpack
 		EOF
-		meta_set "failure_detail" "Could not find gdal-config"
+		build_data::set_string "failure_detail" "Could not find gdal-config"
 	elif grep -qi 'sqlite3.h: No such file or directory' "${WARNINGS_LOG}"; then
 		output::error <<-'EOF'
 			Error: Package installation failed since SQLite headers weren't found.
@@ -38,7 +38,7 @@ show-warnings() {
 			runs before the Python buildpack, not after):
 			https://github.com/heroku/heroku-buildpack-apt
 		EOF
-		meta_set "failure_detail" "sqlite3.h: No such file or directory"
+		build_data::set_string "failure_detail" "sqlite3.h: No such file or directory"
 	elif grep -qi 'Please use pip<24.1 if you need to use this version' "${WARNINGS_LOG}"; then
 		output::error <<-'EOF'
 			Error: One of your dependencies contains broken metadata.
@@ -51,6 +51,6 @@ show-warnings() {
 			For more help, see:
 			https://devcenter.heroku.com/changelog-items/3073
 		EOF
-		meta_set "failure_detail" "Please use pip<24.1 if you need to use this version"
+		build_data::set_string "failure_detail" "Please use pip<24.1 if you need to use this version"
 	fi
 }

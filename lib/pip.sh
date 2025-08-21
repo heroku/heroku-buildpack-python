@@ -17,7 +17,7 @@ function pip::install_pip_setuptools_wheel() {
 	local bundled_pip_module_path
 	bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}" "${python_major_version}")"
 
-	meta_set "pip_version" "${PIP_VERSION}"
+	build_data::set_string "pip_version" "${PIP_VERSION}"
 
 	local packages_to_install=(
 		"pip==${PIP_VERSION}"
@@ -32,8 +32,8 @@ function pip::install_pip_setuptools_wheel() {
 	# - Most of the Python ecosystem has stopped installing them for Python 3.12+ already.
 	# See the Python CNB's removal for more details: https://github.com/heroku/buildpacks-python/pull/243
 	if [[ "${python_major_version}" == +(3.9|3.10|3.11|3.12) ]]; then
-		meta_set "setuptools_version" "${SETUPTOOLS_VERSION}"
-		meta_set "wheel_version" "${WHEEL_VERSION}"
+		build_data::set_string "setuptools_version" "${SETUPTOOLS_VERSION}"
+		build_data::set_string "wheel_version" "${WHEEL_VERSION}"
 		packages_to_install+=(
 			"setuptools==${SETUPTOOLS_VERSION}"
 			"wheel==${WHEEL_VERSION}"
@@ -68,7 +68,7 @@ function pip::install_pip_setuptools_wheel() {
 			If that doesn't help, check the status of PyPI here:
 			https://status.python.org
 		EOF
-		meta_set "failure_reason" "install-package-manager::pip"
+		build_data::set_string "failure_reason" "install-package-manager::pip"
 		exit 1
 	fi
 }
@@ -134,7 +134,7 @@ function pip::install_dependencies() {
 
 			See the log output above for more information.
 		EOF
-		meta_set "failure_reason" "install-dependencies::pip"
+		build_data::set_string "failure_reason" "install-dependencies::pip"
 		exit 1
 	fi
 }
