@@ -29,43 +29,6 @@ function metadata::setup() {
 	echo "{}" >"${METADATA_FILE}"
 }
 
-# Retrieve the value of an entry in the metadata store for the current build.
-# Returns the empty string if the key wasn't found in the store.
-#
-# Usage:
-# ```
-# metadata::get "python_version"
-# ```
-function metadata::get() {
-	local key="${1}"
-	jq --raw-output ".${key} // empty" "${METADATA_FILE}"
-}
-
-# Retrieve the value of an entry in the metadata store from the previous successful build.
-# Returns the empty string if the key wasn't found in the store.
-#
-# Usage:
-# ```
-# metadata::get_previous "python_version"
-# ```
-function metadata::get_previous() {
-	local key="${1}"
-
-	# Older versions of this buildpack used a `key=value` format file instead of JSON,
-	# so we need to support this file format/location too, so older caches can be read.
-	# We check for this file first, so that we correctly handle the case where an app
-	# downgraded and then re-upgraded buildpack version, so has both files in the cache.
-	if [[ -f "${LEGACY_BUILD_DATA_FILE}" ]]; then
-		# The legacy file contains one entry per line, of form `key=value`. Entries were written in an
-		# append-only manner so there could be duplicate entries for each key, so we return only the
-		# last matching entry in the file. The empty string is returned if the key wasn't found.
-		tac "${LEGACY_BUILD_DATA_FILE}" | { grep --perl-regexp --only-matching --max-count=1 "^${key}=\K.*$" || true; }
-	elif [[ -f "${PREVIOUS_METADATA_FILE}" ]]; then
-		# The `// empty` ensures we return the empty string rather than `null` if the key doesn't exist.
-		jq --raw-output ".${key} // empty" "${PREVIOUS_METADATA_FILE}"
-	fi
-}
-
 # Sets a string metadata value. The value will be wrapped in double quotes and escaped for JSON.
 #
 # Usage:
@@ -144,6 +107,31 @@ function metadata::_set() {
 	local new_data_file_contents
 	new_data_file_contents=$(jq --arg key "${key}" "${jq_args[@]}" '. + { ($key): ($value) }' "${METADATA_FILE}")
 	echo "${new_data_file_contents}" >"${METADATA_FILE}"
+}
+
+# Retrieve the value of an entry in the metadata store from the previous successful build.
+# Returns the empty string if the key wasn't found in the store.
+#
+# Usage:
+# ```
+# metadata::get_previous "python_version"
+# ```
+function metadata::get_previous() {
+	local key="${1}"
+
+	# Older versions of this buildpack used a `key=value` format file instead of JSON,
+	# so we need to support this file format/location too, so older caches can be read.
+	# We check for this file first, so that we correctly handle the case where an app
+	# downgraded and then re-upgraded buildpack version, so has both files in the cache.
+	if [[ -f "${LEGACY_BUILD_DATA_FILE}" ]]; then
+		# The legacy file contains one entry per line, of form `key=value`. Entries were written in an
+		# append-only manner so there could be duplicate entries for each key, so we return only the
+		# last matching entry in the file. The empty string is returned if the key wasn't found.
+		tac "${LEGACY_BUILD_DATA_FILE}" | { grep --perl-regexp --only-matching --max-count=1 "^${key}=\K.*$" || true; }
+	elif [[ -f "${PREVIOUS_METADATA_FILE}" ]]; then
+		# The `// empty` ensures we return the empty string rather than `null` if the key doesn't exist.
+		jq --raw-output ".${key} // empty" "${PREVIOUS_METADATA_FILE}"
+	fi
 }
 
 # Returns the current time in milliseconds since the UNIX Epoch.
