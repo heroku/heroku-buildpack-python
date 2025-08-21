@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v302] - 2025-08-21
+
 - Stopped setting the `PYTHONHASHSEED` env var. ([#1876](https://github.com/heroku/heroku-buildpack-python/pull/1876))
 - Removed support for `BUILDPACK_S3_BASE_URL`. ([#1875](https://github.com/heroku/heroku-buildpack-python/pull/1875))
 - Refactored buildpack data store and `bin/report` to simplify the implementation and fix some string escaping bugs. ([#1878](https://github.com/heroku/heroku-buildpack-python/pull/1878))
@@ -1299,7 +1302,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v301...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v302...main
+[v302]: https://github.com/heroku/heroku-buildpack-python/compare/v301...v302
 [v301]: https://github.com/heroku/heroku-buildpack-python/compare/v300...v301
 [v300]: https://github.com/heroku/heroku-buildpack-python/compare/v299...v300
 [v299]: https://github.com/heroku/heroku-buildpack-python/compare/v298...v299
