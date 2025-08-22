@@ -34,7 +34,7 @@ function cache::restore() {
 	local package_manager="${6}"
 
 	local cache_restore_start_time
-	cache_restore_start_time=$(build_data::current_unix_time_ms)
+	cache_restore_start_time=$(build_data::current_unix_realtime)
 
 	if [[ ! -d "${cache_dir}/.heroku/python" ]]; then
 		build_data::set_string "cache_status" "empty"
@@ -166,7 +166,7 @@ function cache::save() {
 	local package_manager="${5}"
 
 	local cache_save_start_time
-	cache_save_start_time=$(build_data::current_unix_time_ms)
+	cache_save_start_time=$(build_data::current_unix_realtime)
 
 	output::step "Saving cache"
 
