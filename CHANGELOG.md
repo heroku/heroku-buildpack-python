@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated uv from 0.8.9 to 0.8.13. ([#1880](https://github.com/heroku/heroku-buildpack-python/pull/1880))
 
 ## [v302] - 2025-08-21
 
