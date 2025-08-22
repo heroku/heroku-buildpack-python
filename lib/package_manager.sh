@@ -17,7 +17,7 @@ function package_manager::determine_package_manager() {
 			Error: No 'Pipfile.lock' found!
 
 			A 'Pipfile' file was found, however, the associated 'Pipfile.lock'
-			Pipenv lockfile was not. This means your app dependency versions
+			Pipenv lockfile wasn't. This means your app dependency versions
 			aren't pinned, which means the package versions used on Heroku
 			might not match those installed in other environments.
 

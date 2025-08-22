@@ -253,7 +253,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     Error: No 'Pipfile.lock' found!
           remote:  !     
           remote:  !     A 'Pipfile' file was found, however, the associated 'Pipfile.lock'
-          remote:  !     Pipenv lockfile was not. This means your app dependency versions
+          remote:  !     Pipenv lockfile wasn't. This means your app dependency versions
           remote:  !     aren't pinned, which means the package versions used on Heroku
           remote:  !     might not match those installed in other environments.
           remote:  !     

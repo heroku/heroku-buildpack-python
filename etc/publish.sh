@@ -32,7 +32,7 @@ current_github_release_version=$(gh release view --json tagName --jq '.tagName' 
 current_registry_version="$(heroku buildpacks:versions "${buildpack_registry_name}" | awk 'FNR == 3 { print $1 }')"
 
 if [[ "${current_github_release_version}" != "${current_registry_version}" ]]; then
-	abort "The current GitHub release version (v${current_github_release_version}) does not match the registry version (v${current_registry_version}), likely due to a registry rollback. Fix this first!"
+	abort "The current GitHub release version (v${current_github_release_version}) doesn't match the registry version (v${current_registry_version}), likely due to a registry rollback. Fix this first!"
 fi
 
 new_version="$((current_github_release_version + 1))"
