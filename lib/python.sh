@@ -14,7 +14,7 @@ function python::install() {
 	local python_version_origin="${5}"
 
 	local install_python_start_time
-	install_python_start_time=$(build_data::current_unix_time_ms)
+	install_python_start_time=$(build_data::current_unix_realtime)
 	local install_dir="${build_dir}/.heroku/python"
 
 	if [[ -f "${install_dir}/bin/python" ]]; then

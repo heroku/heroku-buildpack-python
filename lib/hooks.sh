@@ -12,7 +12,7 @@ function hooks::run_hook() {
 
 	if [[ -f "${script_path}" ]]; then
 		local hook_start_time
-		hook_start_time=$(build_data::current_unix_time_ms)
+		hook_start_time=$(build_data::current_unix_realtime)
 		output::step "Running ${script_path} hook"
 		build_data::set_raw "${hook_name}_hook" "true"
 		chmod +x "${script_path}"

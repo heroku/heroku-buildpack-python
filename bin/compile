@@ -33,7 +33,7 @@ source "${BUILDPACK_DIR}/lib/python_version.sh"
 source "${BUILDPACK_DIR}/lib/python.sh"
 source "${BUILDPACK_DIR}/lib/uv.sh"
 
-compile_start_time=$(build_data::current_unix_time_ms)
+compile_start_time=$(build_data::current_unix_realtime)
 
 # Initialise the build data store used to track state across builds (for cache invalidation
 # and messaging when build configuration changes) and also so that `bin/report` can generate
@@ -165,7 +165,7 @@ fi
 python::install "${BUILD_DIR}" "${STACK}" "${python_full_version}" "${python_major_version}" "${python_version_origin}"
 
 # Install the package manager and related tools.
-package_manager_install_start_time=$(build_data::current_unix_time_ms)
+package_manager_install_start_time=$(build_data::current_unix_realtime)
 case "${package_manager}" in
 	pip)
 		pip::install_pip_setuptools_wheel "${python_home}" "${python_major_version}"
@@ -186,7 +186,7 @@ esac
 build_data::set_duration "package_manager_install_duration" "${package_manager_install_start_time}"
 
 # Install app dependencies.
-dependencies_install_start_time=$(build_data::current_unix_time_ms)
+dependencies_install_start_time=$(build_data::current_unix_realtime)
 case "${package_manager}" in
 	pip)
 		pip::install_dependencies
@@ -207,13 +207,13 @@ esac
 build_data::set_duration "dependencies_install_duration" "${dependencies_install_start_time}"
 
 # Support for NLTK corpora.
-nltk_downloader_start_time=$(build_data::current_unix_time_ms)
+nltk_downloader_start_time=$(build_data::current_unix_realtime)
 sub_env "${BUILDPACK_DIR}/bin/steps/nltk"
 build_data::set_duration "nltk_downloader_duration" "${nltk_downloader_start_time}"
 
 # Django collectstatic support.
 # The buildpack automatically runs collectstatic for Django applications.
-collectstatic_start_time=$(build_data::current_unix_time_ms)
+collectstatic_start_time=$(build_data::current_unix_realtime)
 sub_env "${BUILDPACK_DIR}/bin/steps/collectstatic"
 build_data::set_duration "django_collectstatic_duration" "${collectstatic_start_time}"
 
