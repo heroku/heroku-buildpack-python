@@ -56,7 +56,7 @@ function build_data::set_duration() {
 	local start_time="${2}"
 	local end_time duration
 	end_time="$(build_data::current_unix_realtime)"
-	duration="$(awk -v start="${start_time}" -v end="${end_time}" 'BEGIN { printf "%f", (end - start) }')"
+	duration="$(awk -v start="${start_time}" -v end="${end_time}" 'BEGIN { print (end - start) }')"
 	build_data::set_raw "${key}" "${duration}"
 }
 
@@ -142,11 +142,13 @@ function build_data::get_previous() {
 # # ... some operation ...
 # build_data::set_duration "dependencies_install_duration" "${dependencies_install_start_time}"
 # ```
-function build_data::current_unix_realtime() (
-	# we use a subshell with LC_ALL=C to ensure output format is not affected by system locale
-	LC_ALL=C
-	echo "${EPOCHREALTIME}"
-)
+function build_data::current_unix_realtime() {
+	# We use a subshell with `LC_ALL=C` to ensure the output format isn't affected by system locale.
+	(
+		LC_ALL=C
+		echo "${EPOCHREALTIME}"
+	)
+}
 
 # Prints the contents of the build data store in sorted JSON format.
 #
