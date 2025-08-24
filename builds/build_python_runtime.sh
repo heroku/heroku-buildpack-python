@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This script is used by buildpack maintainers to compile new Python versions as they are released,
+# ready for upload to S3. (It isn't run as part of normal buildpack execution during app builds.)
+# See `builds/README.md` for how to invoke this via GitHub Actions.
+
 set -euo pipefail
 shopt -s inherit_errexit
 
@@ -71,8 +75,8 @@ set -o xtrace
 
 mkdir -p "${SRC_DIR}" "${INSTALL_DIR}" "${UPLOAD_DIR}"
 
-curl --fail --retry 3 --retry-connrefused --connect-timeout 10 --max-time 60 -o python.tgz "${SOURCE_URL}"
-curl --fail --retry 3 --retry-connrefused --connect-timeout 10 --max-time 60 -o python.tgz.asc "${SIGNATURE_URL}"
+curl --fail --retry 5 --retry-connrefused --connect-timeout 3 --max-time 30 -o python.tgz "${SOURCE_URL}"
+curl --fail --retry 5 --retry-connrefused --connect-timeout 3 --max-time 30 -o python.tgz.asc "${SIGNATURE_URL}"
 
 gpg --batch --verbose --recv-keys "${GPG_KEY_FINGERPRINT}"
 gpg --batch --verify python.tgz.asc python.tgz
