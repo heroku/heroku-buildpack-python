@@ -134,7 +134,7 @@ function build_data::get_previous() {
 	fi
 }
 
-# Returns the current time since the UNIX Epoch, as a float with microseconds precision
+# Returns the current time since the UNIX Epoch, as a float with microseconds precision.
 #
 # Usage:
 # ```
