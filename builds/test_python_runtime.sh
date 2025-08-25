@@ -36,7 +36,7 @@ set +x
 UNEXPECTED_BIN_FILES="$(find "${INSTALL_DIR}/bin" -type 'f,l' -not -name 'python*')"
 if [[ -n "${UNEXPECTED_BIN_FILES}" ]]; then
 	echo "${UNEXPECTED_BIN_FILES}"
-	abort "The above files were found in the bin/ directory but were not expected!"
+	abort "The above files were found in the bin/ directory but weren't expected!"
 else
 	echo "No unexpected files found in the bin/ directory."
 fi
@@ -44,7 +44,7 @@ fi
 # Check that all dynamically linked libraries exist in the run image (since it has fewer packages than the build image).
 LDD_OUTPUT=$(find "${INSTALL_DIR}" -type f,l \( -name 'python3' -o -name '*.so*' \) -exec ldd '{}' +)
 if grep 'not found' <<<"${LDD_OUTPUT}" | sort --unique; then
-	abort "The above dynamically linked libraries were not found!"
+	abort "The above dynamically linked libraries weren't found!"
 else
 	echo "All dynamically linked libraries were found."
 fi
