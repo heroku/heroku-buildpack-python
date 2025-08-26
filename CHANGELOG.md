@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v303] - 2025-08-26
+
 - Updated uv from 0.8.9 to 0.8.13. ([#1880](https://github.com/heroku/heroku-buildpack-python/pull/1880))
 - Reduced default curl timeouts for faster retries of any transient connection issues on Heroku. ([#1884](https://github.com/heroku/heroku-buildpack-python/pull/1884))
 - Added support for overriding the default curl timeouts using `CURL_CONNECT_TIMEOUT` and `CURL_TIMEOUT`. These are intended for use in non-Heroku environments with slow connections, and so must be set via the build system rather than app config vars. ([#1884](https://github.com/heroku/heroku-buildpack-python/pull/1884))
@@ -1307,7 +1310,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v302...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v303...main
+[v303]: https://github.com/heroku/heroku-buildpack-python/compare/v302...v303
 [v302]: https://github.com/heroku/heroku-buildpack-python/compare/v301...v302
 [v301]: https://github.com/heroku/heroku-buildpack-python/compare/v300...v301
 [v300]: https://github.com/heroku/heroku-buildpack-python/compare/v299...v300
