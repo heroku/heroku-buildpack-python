@@ -37,21 +37,20 @@ function python::install() {
 		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 		if ! {
 			{
-				# We set max-time for improved UX/metrics for hanging downloads compared to relying
-				# on the build system timeout. The Python archives are only ~10 MB so take < 1s to
-				# download on Heroku's build system, however, we use much higher timeouts so that
-				# the buildpack works in non-Heroku environments that may be far from `us-east-1`
-				# or have a slower connection. We don't use `--speed-limit` since it gives worse
-				# error messages when used with retries and piping to tar.
+				# We set max-time for improved UX/metrics for hanging downloads compared to relying on the build
+				# system timeout. We don't use `--speed-limit` since it gives worse error messages when used with
+				# retries and piping to tar. The Python archives are ~10 MB so only take ~1s to download on Heroku,
+				# so we set low timeouts to reduce delays before retries. However, we allow customising the timeouts
+				# to support non-Heroku environments that may be far from `us-east-1` or have a slower connection.
+				# We use `--no-progress-meter` rather than `--silent` so that retry status messages are printed.
 				curl \
-					--connect-timeout 10 \
+					--connect-timeout "${CURL_CONNECT_TIMEOUT:-3}" \
 					--fail \
-					--max-time 120 \
-					--retry-max-time 120 \
-					--retry 3 \
+					--max-time "${CURL_TIMEOUT:-60}" \
+					--no-progress-meter \
+					--retry-max-time "${CURL_TIMEOUT:-60}" \
+					--retry 5 \
 					--retry-connrefused \
-					--show-error \
-					--silent \
 					"${python_url}" \
 					| tar \
 						--directory "${install_dir}" \

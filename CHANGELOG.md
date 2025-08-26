@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 - Updated uv from 0.8.9 to 0.8.13. ([#1880](https://github.com/heroku/heroku-buildpack-python/pull/1880))
+- Reduced default curl timeouts for faster retries of any transient connection issues on Heroku. ([#1884](https://github.com/heroku/heroku-buildpack-python/pull/1884))
+- Added support for overriding the default curl timeouts using `CURL_CONNECT_TIMEOUT` and `CURL_TIMEOUT`. These are intended for use in non-Heroku environments with slow connections, and so must be set via the build system rather than app config vars. ([#1884](https://github.com/heroku/heroku-buildpack-python/pull/1884))
+- Improved log output during curl retry attempts. ([#1884](https://github.com/heroku/heroku-buildpack-python/pull/1884))
 - Switched to Bash 5.0's `EPOCHREALTIME` for buildpack data store timing logic. ([#1881](https://github.com/heroku/heroku-buildpack-python/pull/1881))
 
 ## [v302] - 2025-08-21
