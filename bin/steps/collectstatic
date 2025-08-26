@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 # Django Collectstatic runner. If you have Django installed, collectstatic will
 # automatically be executed as part of the build process. If collectstatic
@@ -54,14 +53,14 @@ fi
 
 build_data::set_string "django_collectstatic" "enabled"
 
-output::step "$ python $MANAGE_FILE collectstatic --noinput"
+output::step "$ python ${MANAGE_FILE} collectstatic --noinput"
 
-PYTHONPATH=${PYTHONPATH:-.}
+PYTHONPATH="${PYTHONPATH:-.}"
 export PYTHONPATH
 COLLECTSTATIC_LOG=$(mktemp)
 
 set +e
-python "$MANAGE_FILE" collectstatic --noinput --traceback 2>&1 | tee "$COLLECTSTATIC_LOG" | sed --unbuffered '/^Post-processed/d;/^Copying/d;/^$/d' | output::indent
+python "${MANAGE_FILE}" collectstatic --noinput --traceback 2>&1 | tee "${COLLECTSTATIC_LOG}" | sed --unbuffered '/^Post-processed/d;/^Copying/d;/^$/d' | output::indent
 COLLECTSTATIC_STATUS="${PIPESTATUS[0]}"
 set -e
 
@@ -72,13 +71,13 @@ if [[ "${COLLECTSTATIC_STATUS}" == 0 ]]; then
 fi
 
 # Display a warning if collectstatic failed.
-if grep -q 'SyntaxError' "$COLLECTSTATIC_LOG"; then
+if grep -q 'SyntaxError' "${COLLECTSTATIC_LOG}"; then
 	build_data::set_string "failure_reason" "collectstatic-syntax-error"
-elif grep -q 'ImproperlyConfigured' "$COLLECTSTATIC_LOG"; then
+elif grep -q 'ImproperlyConfigured' "${COLLECTSTATIC_LOG}"; then
 	build_data::set_string "failure_reason" "collectstatic-improper-configuration"
-elif grep -q 'The CSS file' "$COLLECTSTATIC_LOG"; then
+elif grep -q 'The CSS file' "${COLLECTSTATIC_LOG}"; then
 	build_data::set_string "failure_reason" "collectstatic-fancy-references"
-elif grep -q 'OSError' "$COLLECTSTATIC_LOG"; then
+elif grep -q 'OSError' "${COLLECTSTATIC_LOG}"; then
 	build_data::set_string "failure_reason" "collectstatic-missing-file"
 else
 	build_data::set_string "failure_reason" "collectstatic-other"

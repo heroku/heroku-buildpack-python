@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Usage: bin/compile <build-dir> <cache-dir> <env-dir>
 # See: https://devcenter.heroku.com/articles/buildpack-api
-# shellcheck disable=SC2250 # TODO: Use braces around variable references even when not strictly required.
 
 set -euo pipefail
 shopt -s inherit_errexit
@@ -45,7 +44,7 @@ checks::duplicate_python_buildpack "${BUILD_DIR}"
 
 # Prepend proper path for old-school virtualenv hackery.
 # This may not be necessary.
-export PATH=:/usr/local/bin:$PATH
+export PATH=":/usr/local/bin:${PATH}"
 
 # Exported for use in subshells, such as the steps run via sub_env.
 export BUILD_DIR CACHE_DIR ENV_DIR
@@ -72,10 +71,10 @@ source "${BUILDPACK_DIR}/bin/warnings"
 # More on this topic later.
 mkdir -p /app/.heroku
 
-PROFILE_PATH="$BUILD_DIR/.profile.d/python.sh"
+PROFILE_PATH="${BUILD_DIR}/.profile.d/python.sh"
 EXPORT_PATH="${BUILDPACK_DIR}/export"
-GUNICORN_PROFILE_PATH="$BUILD_DIR/.profile.d/python.gunicorn.sh"
-WEB_CONCURRENCY_PROFILE_PATH="$BUILD_DIR/.profile.d/WEB_CONCURRENCY.sh"
+GUNICORN_PROFILE_PATH="${BUILD_DIR}/.profile.d/python.gunicorn.sh"
+WEB_CONCURRENCY_PROFILE_PATH="${BUILD_DIR}/.profile.d/WEB_CONCURRENCY.sh"
 python_home='/app/.heroku/python'
 
 # NB: Python must be added to PATH using the symlinked `/app` location and not its actual location
@@ -94,7 +93,7 @@ export LIBRARY_PATH="/app/.heroku/python/lib${LIBRARY_PATH:+:${LIBRARY_PATH}}"
 export LD_LIBRARY_PATH="/app/.heroku/python/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 export PKG_CONFIG_PATH="/app/.heroku/python/lib/pkg-config${PKG_CONFIG_PATH:+:${PKG_CONFIG_PATH}}"
 
-cd "$BUILD_DIR"
+cd "${BUILD_DIR}"
 
 # Runs a `bin/pre_compile` script if found in the app source, allowing build customisation.
 hooks::run_hook "pre_compile"
@@ -148,7 +147,7 @@ python_version::warn_if_patch_update_available "${python_full_version}" "${pytho
 cache::restore "${BUILD_DIR}" "${CACHE_DIR}" "${STACK}" "${cached_python_full_version}" "${python_full_version}" "${package_manager}"
 
 # The directory for the .profile.d scripts.
-mkdir -p "$(dirname "$PROFILE_PATH")"
+mkdir -p "$(dirname "${PROFILE_PATH}")"
 
 # On Heroku CI, builds happen in `/app`. Otherwise, on the Heroku platform,
 # they occur in a temp directory. Because Python is not portable, we must create
@@ -159,7 +158,7 @@ mkdir -p "$(dirname "$PROFILE_PATH")"
 if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
 	# python expects to reside in /app, so set up symlinks
 	# we will not remove these later so subsequent buildpacks can still invoke it
-	ln -nsf "$BUILD_DIR/.heroku/python" /app/.heroku/python
+	ln -nsf "${BUILD_DIR}/.heroku/python" /app/.heroku/python
 fi
 
 python::install "${BUILD_DIR}" "${STACK}" "${python_full_version}" "${python_major_version}" "${python_version_origin}"
@@ -235,7 +234,7 @@ set_default_env PYTHONPATH "\${HOME}"
 
 # Python expects to be in /app, if at runtime, it is not, set
 # up symlinks… this can occur when the subdir buildpack is used.
-cat <<EOT >>"$PROFILE_PATH"
+cat <<EOT >>"${PROFILE_PATH}"
 if [[ \$HOME != "/app" ]]; then
     mkdir -p /app/.heroku
     ln -nsf "\$HOME/.heroku/python" /app/.heroku/python
@@ -282,8 +281,8 @@ if [[ "${BUILD_DIR}" != "/app" ]]; then
 fi
 
 # Install sane-default script for $WEB_CONCURRENCY and $FORWARDED_ALLOW_IPS.
-cp "${BUILDPACK_DIR}/vendor/WEB_CONCURRENCY.sh" "$WEB_CONCURRENCY_PROFILE_PATH"
-cp "${BUILDPACK_DIR}/vendor/python.gunicorn.sh" "$GUNICORN_PROFILE_PATH"
+cp "${BUILDPACK_DIR}/vendor/WEB_CONCURRENCY.sh" "${WEB_CONCURRENCY_PROFILE_PATH}"
+cp "${BUILDPACK_DIR}/vendor/python.gunicorn.sh" "${GUNICORN_PROFILE_PATH}"
 
 # Runs a `bin/post_compile` script if found in the app source, allowing build customisation.
 hooks::run_hook "post_compile"
