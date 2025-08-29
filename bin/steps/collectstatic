@@ -104,6 +104,7 @@ if [[ "${DEBUG_COLLECTSTATIC:-0}" == "1" ]]; then
 	echo
 	echo "****** Collectstatic environment variables:"
 	echo
+	# TODO: Sort the displayed env vars to make the order deterministic.
 	env | output::indent
 fi
 
