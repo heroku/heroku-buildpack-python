@@ -23,9 +23,6 @@ indent_style = tab
 shell_variant = bash
 switch_case_indent = true
 
-[.hatchet/repos/**]
-ignore = true
-
 # The setup-ruby GitHub Action creates this directory when caching is enabled, and if
 # its not ignored will cause false positives when running shfmt in the CI lint job.
 [vendor/bundle/**]

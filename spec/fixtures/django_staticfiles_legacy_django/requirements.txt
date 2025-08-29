@@ -1,0 +1,3 @@
+# This is the oldest Django version that works on Python 3.9 (which is the
+# oldest Python that is available on all of our supported builders).
+Django==1.8.19
