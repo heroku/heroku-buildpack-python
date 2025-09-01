@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added a warning if an existing Python virtual environment is found in the build directory at `.venv/` or `venv/`. In the future this warning will be made an error. ([#1890](https://github.com/heroku/heroku-buildpack-python/pull/1890))
 
 ## [v304] - 2025-09-01
 

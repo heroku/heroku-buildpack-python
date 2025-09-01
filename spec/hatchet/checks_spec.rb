@@ -7,7 +7,7 @@ RSpec.describe 'Buildpack validation checks' do
     let(:buildpacks) { %i[default default] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_unspecified', buildpacks:, allow_failure: true) }
 
-    it 'fails detection' do
+    it 'fails the build with an informative error message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
@@ -38,7 +38,7 @@ RSpec.describe 'Buildpack validation checks' do
   context 'when the app source contains a broken Python install' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_in_app_source', allow_failure: true) }
 
-    it 'fails detection' do
+    it 'fails the build with an informative error message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
@@ -66,6 +66,45 @@ RSpec.describe 'Buildpack validation checks' do
           remote:  !     displayed in build logs starting 13th December 2024.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
+  end
+
+  context 'when the app source contains a venv directory' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/venv_in_app_source') }
+
+    it 'outputs a warning before continuing to build' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: 
+          remote:  !     Warning: Existing '.venv/' directory found.
+          remote:  !     
+          remote:  !     Your app's source code contains an existing directory named
+          remote:  !     '.venv/', which looks like a Python virtual environment:
+          remote:  !     
+          remote:  !     .venv/
+          remote:  !     .venv/bin
+          remote:  !     .venv/bin/python
+          remote:  !     .venv/pyvenv.cfg
+          remote:  !     
+          remote:  !     Including a virtual environment directory in your app source
+          remote:  !     isn't supported since the files within it are specific to a
+          remote:  !     single machine and so won't work when run somewhere else.
+          remote:  !     
+          remote:  !     If you've committed a '.venv/' directory to your Git repo, you
+          remote:  !     must delete it and add the directory to your .gitignore file:
+          remote:  !     https://docs.github.com/en/get-started/git-basics/ignoring-files
+          remote:  !     
+          remote:  !     If the directory was created by a 'bin/pre_compile' hook or an
+          remote:  !     earlier buildpack, you must update them to create the virtual
+          remote:  !     environment in a different location.
+          remote:  !     
+          remote:  !     In future versions of the buildpack, this warning will be turned
+          remote:  !     into an error.
+          remote: 
+          remote: -----> Using Python 3.13 specified in .python-version
         OUTPUT
       end
     end

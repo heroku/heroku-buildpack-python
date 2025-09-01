@@ -102,3 +102,36 @@ function checks::existing_python_dir_present() {
 		exit 1
 	fi
 }
+
+function checks::existing_venv_dir_present() {
+	local build_dir="${1}"
+
+	for venv_name in ".venv" "venv"; do
+		if [[ -f "${build_dir}/${venv_name}/pyvenv.cfg" ]]; then
+			output::warning <<-EOF
+				Warning: Existing '${venv_name}/' directory found.
+
+				Your app's source code contains an existing directory named
+				'${venv_name}/', which looks like a Python virtual environment:
+
+				$(find "${venv_name}/" -maxdepth 2 | sort || true)
+
+				Including a virtual environment directory in your app source
+				isn't supported since the files within it are specific to a
+				single machine and so won't work when run somewhere else.
+
+				If you've committed a '${venv_name}/' directory to your Git repo, you
+				must delete it and add the directory to your .gitignore file:
+				https://docs.github.com/en/get-started/git-basics/ignoring-files
+
+				If the directory was created by a 'bin/pre_compile' hook or an
+				earlier buildpack, you must update them to create the virtual
+				environment in a different location.
+
+				In future versions of the buildpack, this warning will be turned
+				into an error.
+			EOF
+			build_data::set_string "existing_venv_dir_present" "${venv_name}"
+		fi
+	done
+}
