@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v304] - 2025-09-01
+
 - Fixed Django collectstatic and NLTK downloader support for apps that use config vars that shadow internal buildpack variable names (such as `CACHE_DIR`). ([#1888](https://github.com/heroku/heroku-buildpack-python/pull/1888))
 
 ## [v303] - 2025-08-26
@@ -1311,7 +1314,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v303...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v304...main
+[v304]: https://github.com/heroku/heroku-buildpack-python/compare/v303...v304
 [v303]: https://github.com/heroku/heroku-buildpack-python/compare/v302...v303
 [v302]: https://github.com/heroku/heroku-buildpack-python/compare/v301...v302
 [v301]: https://github.com/heroku/heroku-buildpack-python/compare/v300...v301
