@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This script is run in a subshell via sub_env so doesn't inherit the options/vars/utils from `bin/compile`.
-# TODO: Stop running this script in a subshell.
+# TODO: Migrate this script to functions under `lib/` and stop running the entire script in a subshell.
 set -euo pipefail
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
 source "${BUILDPACK_DIR}/bin/utils"
@@ -27,7 +27,8 @@ if is_module_available 'nltk'; then
 
 		nltk_data_dir="/app/.heroku/python/nltk_data"
 
-		if ! python -m nltk.downloader -d "${nltk_data_dir}" "${nltk_packages[@]}" |& output::indent; then
+		# TODO: Does this even need user-provided env vars, or can we remove the sub_env usage here?
+		if ! sub_env python -m nltk.downloader -d "${nltk_data_dir}" "${nltk_packages[@]}" |& output::indent; then
 			output::error <<-EOF
 				Error: Unable to download NLTK data.
 
