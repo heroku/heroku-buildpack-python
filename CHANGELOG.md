@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Fixed Django collectstatic and NLTK downloader support for apps that use config vars that shadow internal buildpack variable names (such as `CACHE_DIR`). ([#1888](https://github.com/heroku/heroku-buildpack-python/pull/1888))
 
 ## [v303] - 2025-08-26
 

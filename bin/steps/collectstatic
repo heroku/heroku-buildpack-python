@@ -10,13 +10,20 @@
 #   - $DISABLE_COLLECTSTATIC: disables this functionality.
 #   - $DEBUG_COLLECTSTATIC: upon failure, print out environment variables.
 
-# This script is run in a subshell via sub_env so doesn't inherit the options/vars/utils from `bin/compile`.
-# TODO: Stop running this script in a subshell.
+# This script is run in a subshell so doesn't inherit the options/vars/utils from `bin/compile`.
+# TODO: Migrate this script to functions under `lib/` and stop running the entire script in a subshell,
+# and instead only the parts that need the user-provided config vars loaded.
 set -euo pipefail
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
 source "${BUILDPACK_DIR}/bin/utils"
 source "${BUILDPACK_DIR}/lib/build_data.sh"
 source "${BUILDPACK_DIR}/lib/output.sh"
+
+# This must be after the imports above, to prevent user-provided config vars from overwriting
+# env vars used by the buildpack such as `CACHE_DIR`:
+# https://github.com/heroku/heroku-buildpack-python/issues/972
+# TODO: Reduce the scope of this even further, as part of refactoring this file.
+export_env "${ENV_DIR}"
 
 if [[ -f .heroku/collectstatic_disabled ]]; then
 	output::step "Skipping Django collectstatic since the file '.heroku/collectstatic_disabled' exists."

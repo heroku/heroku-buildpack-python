@@ -10,8 +10,7 @@ require_relative '../spec_helper'
 BROKEN_CONFIG_VARS = {
   BUILD_DIR: '/invalid-path',
   C_INCLUDE_PATH: '/invalid-path',
-  # TODO: This currently fails xref: https://github.com/heroku/heroku-buildpack-python/issues/1886
-  # CACHE_DIR: '/invalid-path',
+  CACHE_DIR: '/invalid-path',
   CPLUS_INCLUDE_PATH: '/invalid-path',
   ENV_DIR: '/invalid-path',
   LD_LIBRARY_PATH: '/invalid-path',
@@ -78,7 +77,7 @@ RSpec.describe 'Django support' do
           remote: -----> \\$ python manage.py collectstatic --noinput
           remote:        \\{'BUILDPACK_LOG_FILE': '/dev/null',
           remote:         'BUILD_DIR': '/invalid-path',
-          remote:         'CACHE_DIR': '/tmp/codon/tmp/cache',
+          remote:         'CACHE_DIR': '/invalid-path',
           remote:         'CPLUS_INCLUDE_PATH': '/invalid-path',
           remote:         'C_INCLUDE_PATH': '/invalid-path',
           remote:         'DJANGO_SETTINGS_MODULE': 'testproject.settings',

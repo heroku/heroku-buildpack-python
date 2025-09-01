@@ -46,7 +46,7 @@ export_env() {
 	local env_dir="${1:-${ENV_DIR}}"
 	local whitelist="${2:-}"
 	local blacklist
-	blacklist="$(_env_blacklist "${3}")"
+	blacklist="$(_env_blacklist "${3:-}")"
 	if [[ -d "${env_dir}" ]]; then
 		# Environment variable names won't contain characters affected by:
 		# shellcheck disable=SC2045

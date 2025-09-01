@@ -207,13 +207,15 @@ build_data::set_duration "dependencies_install_duration" "${dependencies_install
 
 # Support for NLTK corpora.
 nltk_downloader_start_time=$(build_data::current_unix_realtime)
-sub_env "${BUILDPACK_DIR}/bin/steps/nltk"
+# TODO: Migrate this script to functions under `lib/` and stop running it in a subshell.
+"${BUILDPACK_DIR}/bin/steps/nltk"
 build_data::set_duration "nltk_downloader_duration" "${nltk_downloader_start_time}"
 
 # Django collectstatic support.
 # The buildpack automatically runs collectstatic for Django applications.
 collectstatic_start_time=$(build_data::current_unix_realtime)
-sub_env "${BUILDPACK_DIR}/bin/steps/collectstatic"
+# TODO: Migrate this script to functions under `lib/` and stop running it in a subshell.
+"${BUILDPACK_DIR}/bin/steps/collectstatic"
 build_data::set_duration "django_collectstatic_duration" "${collectstatic_start_time}"
 
 # Programmatically create .profile.d script for application runtime environment variables.
