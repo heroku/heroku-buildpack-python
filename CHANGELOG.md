@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v305] - 2025-09-02
+
 - Added a warning if an existing Python virtual environment is found in the build directory at `.venv/` or `venv/`. In the future this warning will be made an error. ([#1890](https://github.com/heroku/heroku-buildpack-python/pull/1890))
 
 ## [v304] - 2025-09-01
@@ -1315,7 +1318,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v304...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v305...main
+[v305]: https://github.com/heroku/heroku-buildpack-python/compare/v304...v305
 [v304]: https://github.com/heroku/heroku-buildpack-python/compare/v303...v304
 [v303]: https://github.com/heroku/heroku-buildpack-python/compare/v302...v303
 [v302]: https://github.com/heroku/heroku-buildpack-python/compare/v301...v302
