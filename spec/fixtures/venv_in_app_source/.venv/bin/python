@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# This file emulates a Python venv having been committed to the app's Git repo.
+
+set -euo pipefail
+
+exit 0
