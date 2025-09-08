@@ -8,6 +8,11 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+[*.rb]
+# Required since we use heredocs to assert against Hatchet output, and sometimes that output
+# contains trailing newlines. Our RuboCop config ensures these are only allowed in heredocs.
+trim_trailing_whitespace = false
+
 [*.sh]
 binary_next_line = true
 # We sadly have to use tabs in shell scripts otherwise we can't indent here documents:
