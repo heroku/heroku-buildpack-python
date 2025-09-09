@@ -32,15 +32,13 @@ RSpec.describe 'Django support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote:        Successfully installed Django-.+
           remote: -----> \\$ python backend/manage.py collectstatic --noinput
-          remote:        \\{'BUILDPACK_LOG_FILE': '/dev/null',
-          remote:         'BUILD_DIR': '/tmp/build_\\w+',
+          remote:        \\{'BUILD_DIR': '/tmp/build_\\w+',
           remote:         'CACHE_DIR': '/tmp/codon/tmp/cache',
           remote:         'CPLUS_INCLUDE_PATH': '/app/.heroku/python/include',
           remote:         'C_INCLUDE_PATH': '/app/.heroku/python/include',
           remote:         'DJANGO_SETTINGS_MODULE': 'testproject.settings',
           remote:         'ENV_DIR': '/tmp/.+',
           remote:         'EXPECTED_ENV_VAR': '1',
-          remote:         'HOME': '/app',
           remote:         'LANG': 'en_US.UTF-8',
           remote:         'LD_LIBRARY_PATH': '/app/.heroku/python/lib',
           remote:         'LIBRARY_PATH': '/app/.heroku/python/lib',
@@ -48,9 +46,7 @@ RSpec.describe 'Django support' do
           remote:         'PKG_CONFIG_PATH': '/app/.heroku/python/lib/pkg-config',
           remote:         'PWD': '/tmp/build_\\w+',
           remote:         'PYTHONPATH': '\\.',
-          remote:         'PYTHONUNBUFFERED': '1',
-          remote:         'SOURCE_VERSION': '.+',
-          remote:         'STACK': '#{app.stack}'\\}
+          remote:         'PYTHONUNBUFFERED': '1'\\}
           remote:        \\['/tmp/build_\\w+/backend',
           remote:         '/tmp/build_\\w+',
           remote:         '/app/.heroku/python/lib/python313.zip',
@@ -75,15 +71,13 @@ RSpec.describe 'Django support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote:        Successfully installed Django-.+
           remote: -----> \\$ python manage.py collectstatic --noinput
-          remote:        \\{'BUILDPACK_LOG_FILE': '/dev/null',
-          remote:         'BUILD_DIR': '/invalid-path',
+          remote:        \\{'BUILD_DIR': '/invalid-path',
           remote:         'CACHE_DIR': '/invalid-path',
           remote:         'CPLUS_INCLUDE_PATH': '/invalid-path',
           remote:         'C_INCLUDE_PATH': '/invalid-path',
           remote:         'DJANGO_SETTINGS_MODULE': 'testproject.settings',
           remote:         'ENV_DIR': '/invalid-path',
           remote:         'EXPECTED_ENV_VAR': '1',
-          remote:         'HOME': '/app',
           remote:         'LANG': 'en_US.UTF-8',
           remote:         'LD_LIBRARY_PATH': '/app/.heroku/python/lib',
           remote:         'LIBRARY_PATH': '/app/.heroku/python/lib',
@@ -91,9 +85,7 @@ RSpec.describe 'Django support' do
           remote:         'PKG_CONFIG_PATH': '/invalid-path',
           remote:         'PWD': '/tmp/build_\\w+',
           remote:         'PYTHONPATH': '/invalid-path',
-          remote:         'PYTHONUNBUFFERED': '1',
-          remote:         'SOURCE_VERSION': '.+',
-          remote:         'STACK': '#{app.stack}'\\}
+          remote:         'PYTHONUNBUFFERED': '1'\\}
           remote:        \\['/tmp/build_\\w+',
           remote:         '/invalid-path',
           remote:         '/app/.heroku/python/lib/python39.zip',

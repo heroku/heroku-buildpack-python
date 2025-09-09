@@ -20,10 +20,13 @@ RSpec.describe 'Heroku CI' do
                  Successfully installed .+ pytest-.+ typing-extensions-.+
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
+                 BUILD_DIR=/app
+                 CACHE_DIR=/tmp/cache.+
                  CI=true
                  CPLUS_INCLUDE_PATH=/app/.heroku/python/include
                  C_INCLUDE_PATH=/app/.heroku/python/include
                  DISABLE_COLLECTSTATIC=1
+                 ENV_DIR=/tmp/env.+
                  INSTALL_TEST=1
                  LANG=en_US.UTF-8
                  LC_ALL=C.UTF-8
@@ -92,10 +95,13 @@ RSpec.describe 'Heroku CI' do
                  Installing dependencies from Pipfile.lock \\(.+\\)...
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
+                 BUILD_DIR=/app
+                 CACHE_DIR=/tmp/cache.+
                  CI=true
                  CPLUS_INCLUDE_PATH=/app/.heroku/python/include
                  C_INCLUDE_PATH=/app/.heroku/python/include
                  DISABLE_COLLECTSTATIC=1
+                 ENV_DIR=/tmp/env.+
                  INSTALL_TEST=1
                  LANG=en_US.UTF-8
                  LC_ALL=C.UTF-8
@@ -178,16 +184,19 @@ RSpec.describe 'Heroku CI' do
                    - Installing (pytest|typing-extensions) .+
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
+                 BUILD_DIR=/app
+                 CACHE_DIR=/tmp/cache.+
                  CI=true
                  CPLUS_INCLUDE_PATH=/app/.heroku/python/include
                  C_INCLUDE_PATH=/app/.heroku/python/include
                  DISABLE_COLLECTSTATIC=1
+                 ENV_DIR=/tmp/env.+
                  INSTALL_TEST=1
                  LANG=en_US.UTF-8
                  LC_ALL=C.UTF-8
                  LD_LIBRARY_PATH=/app/.heroku/python/lib
                  LIBRARY_PATH=/app/.heroku/python/lib
-                 PATH=/tmp/cache.+/.heroku/python-poetry/bin:/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+                 PATH=/tmp/cache\\w+/.heroku/python-poetry/bin:/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  POETRY_VIRTUALENVS_CREATE=false
                  POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
@@ -197,7 +206,7 @@ RSpec.describe 'Heroku CI' do
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
-          PATH=/app/.heroku/python/bin:/tmp/cache.+/.heroku/python-poetry/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+          PATH=/app/.heroku/python/bin:/tmp/cache\\w+/.heroku/python-poetry/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
           POETRY_VIRTUALENVS_CREATE=false
           POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
           PYTHONHOME=/app/.heroku/python
@@ -260,16 +269,19 @@ RSpec.describe 'Heroku CI' do
                   \\+ (pytest|typing-extensions)==.+
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook
+                 BUILD_DIR=/app
+                 CACHE_DIR=/tmp/cache.+
                  CI=true
                  CPLUS_INCLUDE_PATH=/app/.heroku/python/include
                  C_INCLUDE_PATH=/app/.heroku/python/include
                  DISABLE_COLLECTSTATIC=1
+                 ENV_DIR=/tmp/env.+
                  INSTALL_TEST=1
                  LANG=en_US.UTF-8
                  LC_ALL=C.UTF-8
                  LD_LIBRARY_PATH=/app/.heroku/python/lib
                  LIBRARY_PATH=/app/.heroku/python/lib
-                 PATH=/tmp/cache.+/.heroku/python-uv:/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+                 PATH=/tmp/cache\\w+/.heroku/python-uv:/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
                  UV_NO_MANAGED_PYTHON=1
@@ -280,7 +292,7 @@ RSpec.describe 'Heroku CI' do
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
-          PATH=/app/.heroku/python/bin:/tmp/cache.+/.heroku/python-uv:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+          PATH=/app/.heroku/python/bin:/tmp/cache\\w+/.heroku/python-uv:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true

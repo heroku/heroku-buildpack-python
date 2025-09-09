@@ -5,38 +5,18 @@ require_relative '../spec_helper'
 RSpec.describe '.profile.d/ scripts' do
   it 'sets the required run-time env vars' do
     Hatchet::Runner.new('spec/fixtures/procfile', run_multi: true).deploy do |app|
-      # These are written as a single test to reduce end to end test time. This repo uses parallel_split_test,
-      # so we can't perform app setup in a `before(:all)` and have multiple tests run against the single app.
-
-      list_envs_cmd = 'env | sort | grep -vE "^(_|DYNO|PORT|PS1|SHLVL|TERM)="'
-
-      # Check all env vars are set correctly when there are no user-provided env vars.
-      # Also checks that the WEB_CONCURRENCY related log output is not shown for one-off dynos.
-      app.run_multi(list_envs_cmd) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
-          DYNO_RAM=512
-          FORWARDED_ALLOW_IPS=*
-          GUNICORN_CMD_ARGS=--access-logfile -
-          HOME=/app
-          LANG=en_US.UTF-8
-          LD_LIBRARY_PATH=/app/.heroku/python/lib
-          LIBRARY_PATH=/app/.heroku/python/lib
-          PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin
-          PWD=/app
-          PYTHONHOME=/app/.heroku/python
-          PYTHONPATH=/app
-          PYTHONUNBUFFERED=true
-          WEB_CONCURRENCY=2
-        OUTPUT
-      end
+      # These are written as a single test to reduce end to end test time. (This repo uses parallel_split_test,
+      # so we can't perform app setup in a `before(:all)` and have multiple tests run against the single app.)
+      # These tests supplement the run-time env var tests performed for each package manager, so intentionally
+      # don't duplicate those.
 
       # Check user-provided env var values are preserved/overridden as appropriate.
       # Also checks that the WEB_CONCURRENCY related log output is not shown for worker dynos.
+      list_envs_cmd = 'printenv | sort | grep -vE "^(_|DYNO|HOME|PORT|PS1|PWD|SHLVL|TERM)="'
       user_env_vars = [
         'DYNO_RAM=this-should-be-overridden',
         'FORWARDED_ALLOW_IPS=this-should-be-overridden',
         'GUNICORN_CMD_ARGS=this-should-be-preserved',
-        'HOME=this-should-be-overridden',
         'LANG=this-should-be-overridden',
         'LD_LIBRARY_PATH=/this-should-be-preserved',
         'LIBRARY_PATH=/this-should-be-preserved',
@@ -51,12 +31,10 @@ RSpec.describe '.profile.d/ scripts' do
           DYNO_RAM=512
           FORWARDED_ALLOW_IPS=*
           GUNICORN_CMD_ARGS=this-should-be-preserved
-          HOME=/app
           LANG=C.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib:/this-should-be-preserved
           LIBRARY_PATH=/app/.heroku/python/lib:/this-should-be-preserved
           PATH=/app/.heroku/python/bin:/this-should-be-preserved:/usr/local/bin:/usr/bin:/bin
-          PWD=/app
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/this-should-be-preserved
           PYTHONUNBUFFERED=true
@@ -64,7 +42,7 @@ RSpec.describe '.profile.d/ scripts' do
         OUTPUT
       end
 
-      list_concurrency_envs_cmd = 'env | sort | grep -E "^(DYNO_RAM|WEB_CONCURRENCY)="'
+      list_concurrency_envs_cmd = 'printenv | sort | grep -E "^(DYNO_RAM|WEB_CONCURRENCY)="'
 
       # Check WEB_CONCURRENCY support when using a Standard-1X dyno.
       # We set the process type to `web` so that we can test the web-dyno-only log output.

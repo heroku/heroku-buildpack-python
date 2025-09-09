@@ -7,7 +7,7 @@ RSpec.describe 'Pipenv support' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
 
-    it 'builds with the specified python_version and re-uses packages from the cache' do
+    it 'installs successfully using Pipenv and on rebuilds uses the cache' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
@@ -16,6 +16,21 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Running bin/post_compile hook
+          remote:        BUILD_DIR=/tmp/build_.+
+          remote:        CACHE_DIR=/tmp/codon/tmp/cache
+          remote:        C_INCLUDE_PATH=/app/.heroku/python/include
+          remote:        CPLUS_INCLUDE_PATH=/app/.heroku/python/include
+          remote:        ENV_DIR=/tmp/.+
+          remote:        LANG=en_US.UTF-8
+          remote:        LD_LIBRARY_PATH=/app/.heroku/python/lib
+          remote:        LIBRARY_PATH=/app/.heroku/python/lib
+          remote:        PATH=/app/.heroku/python/pipenv/bin:/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote:        PIPENV_SYSTEM=1
+          remote:        PIPENV_VERBOSITY=-1
+          remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
+          remote:        PYTHONUNBUFFERED=1
+          remote:        VIRTUAL_ENV=/app/.heroku/python
           remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
@@ -44,7 +59,7 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
           remote: 
-          remote: {
+          remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
           remote:   "cache_save_duration": [0-9.]+,
           remote:   "cache_status": "empty",
@@ -54,7 +69,8 @@ RSpec.describe 'Pipenv support' do
           remote:   "package_manager": "pipenv",
           remote:   "package_manager_install_duration": [0-9.]+,
           remote:   "pipenv_version": "#{PIPENV_VERSION}",
-          remote:   "post_compile_hook": false,
+          remote:   "post_compile_hook": true,
+          remote:   "post_compile_hook_duration": [0-9.]+,
           remote:   "pre_compile_hook": false,
           remote:   "python_install_duration": [0-9.]+,
           remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
@@ -65,11 +81,12 @@ RSpec.describe 'Pipenv support' do
           remote:   "python_version_requested": "3.13",
           remote:   "setup_py_only": false,
           remote:   "total_duration": [0-9.]+
-          remote: }
+          remote: \\}
         REGEX
+
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
           remote: -----> Restoring cache
@@ -77,12 +94,31 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using cached Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
+          remote: -----> Running bin/post_compile hook
+          remote:        .+
           remote: -----> Saving cache
           remote: -----> Inline app detected
         REGEX
-        # Test that Pipenv is available at run-time too (since for historical reasons it's been
-        # made available after the build, and users now rely on this).
-        expect(app.run('pipenv --version')).to include("version #{PIPENV_VERSION}")
+
+        # For historical reasons Pipenv is made available at run-time too, unlike some of the other package managers.
+        expect(clean_output(app.run('bin/print-env-vars.sh && pipenv --version'))).to eq(<<~OUTPUT)
+          DYNO_RAM=512
+          FORWARDED_ALLOW_IPS=*
+          GUNICORN_CMD_ARGS=--access-logfile -
+          LANG=en_US.UTF-8
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
+          PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/bin:/usr/bin:/bin
+          PIPENV_SYSTEM=1
+          PIPENV_VERBOSITY=-1
+          PYTHONHOME=/app/.heroku/python
+          PYTHONPATH=/app
+          PYTHONUNBUFFERED=true
+          VIRTUAL_ENV=/app/.heroku/python
+          WEB_CONCURRENCY=2
+          pipenv, version #{PIPENV_VERSION}
+        OUTPUT
+        expect($CHILD_STATUS.exitstatus).to eq(0)
       end
     end
   end
@@ -93,6 +129,7 @@ RSpec.describe 'Pipenv support' do
     it 'clears the cache before installing the packages again' do
       app.deploy do |app|
         File.write('Pipfile.lock', "\n", mode: 'a')
+        FileUtils.rm('bin/post_compile')
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
@@ -105,6 +142,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Saving cache
+          remote: -----> Discovering process types
         REGEX
       end
     end
@@ -414,6 +452,7 @@ RSpec.describe 'Pipenv support' do
     it 'clears the cache before installing' do
       app.deploy do |app|
         update_buildpacks(app, [:default])
+        FileUtils.rm('bin/post_compile')
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
@@ -510,21 +549,21 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
+  # This is disabled since it's currently broken upstream: https://github.com/pypa/pipenv/issues/6403
   # This tests that Pipenv doesn't fall back to system Python if the Python version in
   # pyproject.toml doesn't match that in Pipfile / Pipfile.lock.
-  context 'when requires-python in pyproject.toml is incompatible with .python-version',
-          skip: 'this is currently broken upstream: https://github.com/pypa/pipenv/issues/6403' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_mismatched_python_version', allow_failure: true) }
-
-    it 'fails the build' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        <TODO whatever error message Pipenv displays if they fix their bug>
-        OUTPUT
-      end
-    end
-  end
+  # context 'when requires-python in pyproject.toml is incompatible with .python-version' do
+  #   let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_mismatched_python_version', allow_failure: true) }
+  #
+  #   it 'fails the build' do
+  #     app.deploy do |app|
+  #       expect(clean_output(app.output)).to include(<<~OUTPUT)
+  #         remote: -----> Installing dependencies using 'pipenv install --deploy'
+  #         remote:        <TODO whatever error message Pipenv displays if they fix their bug>
+  #       OUTPUT
+  #     end
+  #   end
+  # end
 
   # This tests not only our handling of failing dependency installation, but also that we're running
   # Pipenv in such a way that it errors if the lockfile is out of sync, rather than simply updating it.

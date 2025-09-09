@@ -20,6 +20,20 @@ RSpec.describe 'Poetry support' do
           remote:        Package operations: 1 install, 0 updates, 0 removals
           remote:        
           remote:          - Installing typing-extensions \\(4.12.2\\)
+          remote: -----> Running bin/post_compile hook
+          remote:        BUILD_DIR=/tmp/build_.+
+          remote:        CACHE_DIR=/tmp/codon/tmp/cache
+          remote:        C_INCLUDE_PATH=/app/.heroku/python/include
+          remote:        CPLUS_INCLUDE_PATH=/app/.heroku/python/include
+          remote:        ENV_DIR=/tmp/.+
+          remote:        LANG=en_US.UTF-8
+          remote:        LD_LIBRARY_PATH=/app/.heroku/python/lib
+          remote:        LIBRARY_PATH=/app/.heroku/python/lib
+          remote:        PATH=/tmp/codon/tmp/cache/.heroku/python-poetry/bin:/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
+          remote:        POETRY_VIRTUALENVS_CREATE=false
+          remote:        POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
+          remote:        PYTHONUNBUFFERED=1
           remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
@@ -45,7 +59,7 @@ RSpec.describe 'Poetry support' do
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
           remote: 
-          remote: {
+          remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
           remote:   "cache_save_duration": [0-9.]+,
           remote:   "cache_status": "empty",
@@ -55,7 +69,8 @@ RSpec.describe 'Poetry support' do
           remote:   "package_manager": "poetry",
           remote:   "package_manager_install_duration": [0-9.]+,
           remote:   "poetry_version": "#{POETRY_VERSION}",
-          remote:   "post_compile_hook": false,
+          remote:   "post_compile_hook": true,
+          remote:   "post_compile_hook_duration": [0-9.]+,
           remote:   "pre_compile_hook": false,
           remote:   "python_install_duration": [0-9.]+,
           remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
@@ -66,11 +81,12 @@ RSpec.describe 'Poetry support' do
           remote:   "python_version_requested": "3.13",
           remote:   "setup_py_only": false,
           remote:   "total_duration": [0-9.]+
-          remote: }
+          remote: \\}
         REGEX
+
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Restoring cache
@@ -80,9 +96,27 @@ RSpec.describe 'Poetry support' do
           remote:        Installing dependencies from lock file
           remote:        
           remote:        No dependencies to install or update
+          remote: -----> Running bin/post_compile hook
+          remote:        .+
           remote: -----> Saving cache
           remote: -----> Inline app detected
+        REGEX
+
+        command = 'bin/print-env-vars.sh && if command -v poetry; then echo "Poetry unexpectedly found!" && exit 1; fi'
+        expect(app.run(command)).to eq(<<~OUTPUT)
+          DYNO_RAM=512
+          FORWARDED_ALLOW_IPS=*
+          GUNICORN_CMD_ARGS=--access-logfile -
+          LANG=en_US.UTF-8
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
+          PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin
+          PYTHONHOME=/app/.heroku/python
+          PYTHONPATH=/app
+          PYTHONUNBUFFERED=true
+          WEB_CONCURRENCY=2
         OUTPUT
+        expect($CHILD_STATUS.exitstatus).to eq(0)
       end
     end
   end
@@ -94,6 +128,7 @@ RSpec.describe 'Poetry support' do
     it 'clears the cache before installing' do
       app.deploy do |app|
         update_buildpacks(app, [:default])
+        FileUtils.rm('bin/post_compile')
         app.commit!
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
@@ -270,21 +305,21 @@ RSpec.describe 'Poetry support' do
     end
   end
 
+  # This is disabled since it's currently broken upstream: https://github.com/python-poetry/poetry/issues/10226
   # This tests that Poetry doesn't download its own Python or fall back to system Python
   # if the Python version in pyproject.toml doesn't match that in .python-version.
-  context 'when requires-python in pyproject.toml is incompatible with .python-version',
-          skip: 'this is currently broken upstream: https://github.com/python-poetry/poetry/issues/10226' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_mismatched_python_version', allow_failure: true) }
-
-    it 'fails the build' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> Installing dependencies using 'poetry sync --only main'
-          remote:        <TODO whatever error message Poetry displays if they fix their bug>
-        OUTPUT
-      end
-    end
-  end
+  # context 'when requires-python in pyproject.toml is incompatible with .python-version' do
+  #   let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_mismatched_python_version', allow_failure: true) }
+  #
+  #   it 'fails the build' do
+  #     app.deploy do |app|
+  #       expect(clean_output(app.output)).to include(<<~OUTPUT)
+  #         remote: -----> Installing dependencies using 'poetry sync --only main'
+  #         remote:        <TODO whatever error message Poetry displays if they fix their bug>
+  #       OUTPUT
+  #     end
+  #   end
+  # end
 
   # This tests not only our handling of failing dependency installation, but also that we're running
   # Poetry in such a way that it errors if the lockfile is out of sync, rather than simply updating it.

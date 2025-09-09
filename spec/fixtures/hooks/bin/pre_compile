@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-echo '~ pre_compile ran with env vars:'
-bin/print-env-vars.sh
-echo '~ pre_compile complete'
