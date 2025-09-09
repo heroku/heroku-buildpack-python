@@ -130,6 +130,7 @@ RSpec.describe 'Package manager support' do
 
     it 'clears the cache before installing with the new package manager' do
       app.deploy do |app|
+        FileUtils.rm('bin/post_compile')
         FileUtils.rm('requirements.txt')
         FileUtils.cp(FIXTURE_DIR.join('uv_basic/pyproject.toml'), '.')
         FileUtils.cp(FIXTURE_DIR.join('uv_basic/uv.lock'), '.')

@@ -3,6 +3,7 @@
 ENV['HATCHET_BUILDPACK_BASE'] ||= 'https://github.com/heroku/heroku-buildpack-python.git'
 ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-24'
 
+require 'English' # for $CHILD_STATUS
 require 'rspec/core'
 require 'rspec/retry'
 require 'hatchet'

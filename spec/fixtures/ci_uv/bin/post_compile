@@ -2,4 +2,5 @@
 
 set -euo pipefail
 
+# This intentionally uses a relative path to test that the CWD is correct.
 exec bin/print-env-vars.sh

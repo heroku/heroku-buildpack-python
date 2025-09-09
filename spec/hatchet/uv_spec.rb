@@ -20,6 +20,22 @@ RSpec.describe 'uv support' do
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
           remote:         \\+ typing-extensions==4.13.2
+          remote: -----> Running bin/post_compile hook
+          remote:        BUILD_DIR=/tmp/build_.+
+          remote:        CACHE_DIR=/tmp/codon/tmp/cache
+          remote:        C_INCLUDE_PATH=/app/.heroku/python/include
+          remote:        CPLUS_INCLUDE_PATH=/app/.heroku/python/include
+          remote:        ENV_DIR=/tmp/.+
+          remote:        LANG=en_US.UTF-8
+          remote:        LD_LIBRARY_PATH=/app/.heroku/python/lib
+          remote:        LIBRARY_PATH=/app/.heroku/python/lib
+          remote:        PATH=/tmp/codon/tmp/cache/.heroku/python-uv:/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
+          remote:        PYTHONUNBUFFERED=1
+          remote:        UV_CACHE_DIR=/tmp/uv-cache
+          remote:        UV_NO_MANAGED_PYTHON=1
+          remote:        UV_PROJECT_ENVIRONMENT=/app/.heroku/python
+          remote:        UV_PYTHON_DOWNLOADS=never
           remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
@@ -49,7 +65,7 @@ RSpec.describe 'uv support' do
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
           remote: 
-          remote: {
+          remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
           remote:   "cache_save_duration": [0-9.]+,
           remote:   "cache_status": "empty",
@@ -58,7 +74,8 @@ RSpec.describe 'uv support' do
           remote:   "nltk_downloader_duration": [0-9.]+,
           remote:   "package_manager": "uv",
           remote:   "package_manager_install_duration": [0-9.]+,
-          remote:   "post_compile_hook": false,
+          remote:   "post_compile_hook": true,
+          remote:   "post_compile_hook_duration": [0-9.]+,
           remote:   "pre_compile_hook": false,
           remote:   "python_install_duration": [0-9.]+,
           remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
@@ -70,11 +87,12 @@ RSpec.describe 'uv support' do
           remote:   "setup_py_only": false,
           remote:   "total_duration": [0-9.]+,
           remote:   "uv_version": "#{UV_VERSION}"
-          remote: }
+          remote: \\}
         REGEX
+
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Restoring cache
@@ -83,9 +101,27 @@ RSpec.describe 'uv support' do
           remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
           remote:        Resolved 7 packages in .+s
           remote:        Bytecode compiled 1 file in .+s
+          remote: -----> Running bin/post_compile hook
+          remote:        .+
           remote: -----> Saving cache
           remote: -----> Inline app detected
         REGEX
+
+        command = 'bin/print-env-vars.sh && if command -v uv; then echo "uv unexpectedly found!" && exit 1; fi'
+        expect(app.run(command)).to eq(<<~OUTPUT)
+          DYNO_RAM=512
+          FORWARDED_ALLOW_IPS=*
+          GUNICORN_CMD_ARGS=--access-logfile -
+          LANG=en_US.UTF-8
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
+          PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin
+          PYTHONHOME=/app/.heroku/python
+          PYTHONPATH=/app
+          PYTHONUNBUFFERED=true
+          WEB_CONCURRENCY=2
+        OUTPUT
+        expect($CHILD_STATUS.exitstatus).to eq(0)
       end
     end
   end
@@ -97,6 +133,7 @@ RSpec.describe 'uv support' do
     it 'clears the cache before installing' do
       app.deploy do |app|
         update_buildpacks(app, [:default])
+        FileUtils.rm('bin/post_compile')
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))

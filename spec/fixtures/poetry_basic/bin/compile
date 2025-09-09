@@ -10,7 +10,7 @@ CACHE_DIR="${2}"
 
 cd "${BUILD_DIR}"
 
-printenv | sort | grep -vE '^(_|BUILDPACK_LOG_FILE|DYNO|HOME|OLDPWD|PWD|REQUEST_ID|SHLVL|SOURCE_VERSION|STACK)='
+bin/print-env-vars.sh
 echo
 
 python -c 'import pprint, sys; pprint.pp(sys.path)'

@@ -16,11 +16,18 @@ STATIC_URL = "static/"
 # Older versions of Django require that `SECRET_KEY` is set when running collectstatic.
 SECRET_KEY = "example"
 
-pprint({
-    k: v
-    for k, v in os.environ.items()
-    if not k in {"_", "DYNO", "OLDPWD", "REQUEST_ID", "SHLVL"}
-})
+ENV_VARS_TO_OMIT = {
+    "_",
+    "BUILDPACK_LOG_FILE",
+    "DYNO",
+    "HOME",
+    "OLDPWD",
+    "REQUEST_ID",
+    "SHLVL",
+    "SOURCE_VERSION",
+    "STACK",
+}
+pprint({k: v for k, v in os.environ.items() if k not in ENV_VARS_TO_OMIT})
 print()
 pprint(sys.path)
 

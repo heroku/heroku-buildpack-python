@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo '~ pre_compile ran with env vars:'
+printenv | sort | grep -vE '^(_|BUILDPACK_LOG_FILE|DYNO|HOME|OLDPWD|PWD|REQUEST_ID|SHLVL|SOURCE_VERSION|STACK)='
+echo '~ pre_compile complete'

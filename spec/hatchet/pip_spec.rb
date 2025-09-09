@@ -7,7 +7,7 @@ RSpec.describe 'pip support' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pip_basic', buildpacks:) }
 
-    it 're-uses packages from the cache' do
+    it 'installs successfully using pip and on rebuilds uses the cache' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
@@ -20,6 +20,18 @@ RSpec.describe 'pip support' do
           remote:        Downloading typing_extensions-4.12.2-py3-none-any.whl \\(37 kB\\)
           remote:        Installing collected packages: typing-extensions
           remote:        Successfully installed typing-extensions-4.12.2
+          remote: -----> Running bin/post_compile hook
+          remote:        BUILD_DIR=/tmp/build_.+
+          remote:        CACHE_DIR=/tmp/codon/tmp/cache
+          remote:        C_INCLUDE_PATH=/app/.heroku/python/include
+          remote:        CPLUS_INCLUDE_PATH=/app/.heroku/python/include
+          remote:        ENV_DIR=/tmp/.+
+          remote:        LANG=en_US.UTF-8
+          remote:        LD_LIBRARY_PATH=/app/.heroku/python/lib
+          remote:        LIBRARY_PATH=/app/.heroku/python/lib
+          remote:        PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
+          remote:        PYTHONUNBUFFERED=1
           remote: -----> Saving cache
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
@@ -45,7 +57,7 @@ RSpec.describe 'pip support' do
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
           remote: 
-          remote: {
+          remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
           remote:   "cache_save_duration": [0-9.]+,
           remote:   "cache_status": "empty",
@@ -55,7 +67,8 @@ RSpec.describe 'pip support' do
           remote:   "package_manager": "pip",
           remote:   "package_manager_install_duration": [0-9.]+,
           remote:   "pip_version": "#{PIP_VERSION}",
-          remote:   "post_compile_hook": false,
+          remote:   "post_compile_hook": true,
+          remote:   "post_compile_hook_duration": [0-9.]+,
           remote:   "pre_compile_hook": false,
           remote:   "python_install_duration": [0-9.]+,
           remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
@@ -66,24 +79,41 @@ RSpec.describe 'pip support' do
           remote:   "python_version_requested": "3.13",
           remote:   "setup_py_only": false,
           remote:   "total_duration": [0-9.]+
-          remote: }
+          remote: \\}
         REGEX
+
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Restoring cache
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Requirement already satisfied: typing-extensions==4.12.2 (from -r requirements.txt (line 5)) (4.12.2)
+          remote:        Requirement already satisfied: typing-extensions==4.12.2 \\(from -r requirements.txt \\(line 5\\)\\) \\(4.12.2\\)
+          remote: -----> Running bin/post_compile hook
+          remote:        .+
           remote: -----> Saving cache
           remote: -----> Inline app detected
+        REGEX
+
+        # For historical reasons pip is made available at run-time too, unlike some of the other package managers.
+        expect(app.run('bin/print-env-vars.sh && pip --version')).to eq(<<~OUTPUT)
+          DYNO_RAM=512
+          FORWARDED_ALLOW_IPS=*
+          GUNICORN_CMD_ARGS=--access-logfile -
+          LANG=en_US.UTF-8
+          LD_LIBRARY_PATH=/app/.heroku/python/lib
+          LIBRARY_PATH=/app/.heroku/python/lib
+          PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin
+          PYTHONHOME=/app/.heroku/python
+          PYTHONPATH=/app
+          PYTHONUNBUFFERED=true
+          WEB_CONCURRENCY=2
+          pip #{PIP_VERSION} from /app/.heroku/python/lib/python3.13/site-packages/pip (python 3.13)
         OUTPUT
-        # Test that pip is available at run-time too (since for historical reasons it's been
-        # made available after the build, and users now rely on this).
-        expect(app.run('pip --version')).to include("pip #{PIP_VERSION}")
+        expect($CHILD_STATUS.exitstatus).to eq(0)
       end
     end
   end
@@ -96,6 +126,7 @@ RSpec.describe 'pip support' do
         # The test fixture's requirements.txt is a symlink to a requirements file in a subdirectory in
         # order to test that symlinked requirements files work in general and with cache invalidation.
         File.write('requirements/prod.txt', 'six==1.17.0', mode: 'a')
+        FileUtils.rm('bin/post_compile')
         app.commit!
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
