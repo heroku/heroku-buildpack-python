@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v306] - 2025-09-09
+
 - Updated uv from 0.8.13 to 0.8.15. ([#1894](https://github.com/heroku/heroku-buildpack-python/pull/1894))
 
 ## [v305] - 2025-09-02
@@ -1319,7 +1322,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v305...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v306...main
+[v306]: https://github.com/heroku/heroku-buildpack-python/compare/v305...v306
 [v305]: https://github.com/heroku/heroku-buildpack-python/compare/v304...v305
 [v304]: https://github.com/heroku/heroku-buildpack-python/compare/v303...v304
 [v303]: https://github.com/heroku/heroku-buildpack-python/compare/v302...v303
