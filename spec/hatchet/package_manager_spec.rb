@@ -49,7 +49,7 @@ RSpec.describe 'Package manager support' do
     end
   end
 
-  # TODO: Deprecate/sunset the setup.py file fallback.
+  # This case will be turned into an error in the future.
   context 'when there is only a setup.py' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/setup_py_only') }
 
@@ -57,6 +57,28 @@ RSpec.describe 'Package manager support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
+          remote: 
+          remote:  !     Warning: Implicit setup.py file support is deprecated.
+          remote:  !     
+          remote:  !     Your app currently only has a setup.py file and no Python
+          remote:  !     package manager files. This means that the buildpack has
+          remote:  !     to guess which package manager you want to use and also
+          remote:  !     whether to install your project in editable mode or not.
+          remote:  !     
+          remote:  !     For now, we will use pip to install your dependencies in
+          remote:  !     editable mode, however, this fallback is deprecated and
+          remote:  !     will be removed in the future.
+          remote:  !     
+          remote:  !     Please add an explicit package manager file to your app.
+          remote:  !     
+          remote:  !     To continue using pip in editable mode, create a new file
+          remote:  !     in the root directory of your app named 'requirements.txt'
+          remote:  !     containing the requirement '--editable .' \\(without quotes\\).
+          remote:  !     
+          remote:  !     Alternatively, if you wish to switch to another package
+          remote:  !     manager, we highly recommend uv:
+          remote:  !     https://docs.astral.sh/uv/
+          remote: 
           remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing pip #{PIP_VERSION}

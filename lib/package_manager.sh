@@ -57,14 +57,32 @@ function package_manager::determine_package_manager() {
 		package_managers_found_display_text+=("uv.lock (uv)")
 	fi
 
-	# TODO: Deprecate/sunset this fallback, since using setup.py declared dependencies is
-	# not a best practice, and we can only guess as to which package manager to use.
 	if ((${#package_managers_found[@]} == 0)) && [[ -f "${build_dir}/setup.py" ]]; then
 		package_managers_found+=(pip)
 		package_managers_found_display_text+=("setup.py (pip)")
+		output::warning <<-EOF
+			Warning: Implicit setup.py file support is deprecated.
+
+			Your app currently only has a setup.py file and no Python
+			package manager files. This means that the buildpack has
+			to guess which package manager you want to use and also
+			whether to install your project in editable mode or not.
+
+			For now, we will use pip to install your dependencies in
+			editable mode, however, this fallback is deprecated and
+			will be removed in the future.
+
+			Please add an explicit package manager file to your app.
+
+			To continue using pip in editable mode, create a new file
+			in the root directory of your app named 'requirements.txt'
+			containing the requirement '--editable .' (without quotes).
+
+			Alternatively, if you wish to switch to another package
+			manager, we highly recommend uv:
+			https://docs.astral.sh/uv/
+		EOF
 		build_data::set_raw "setup_py_only" "true"
-	else
-		build_data::set_raw "setup_py_only" "false"
 	fi
 
 	local num_package_managers_found=${#package_managers_found[@]}
