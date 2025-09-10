@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v307] - 2025-09-10
+
 - Deprecated support for falling back to installing dependencies from a `setup.py` file if no Python package manager files were found. ([#1897](https://github.com/heroku/heroku-buildpack-python/pull/1897))
 
 ## [v306] - 2025-09-09
@@ -1323,7 +1326,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v306...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v307...main
+[v307]: https://github.com/heroku/heroku-buildpack-python/compare/v306...v307
 [v306]: https://github.com/heroku/heroku-buildpack-python/compare/v305...v306
 [v305]: https://github.com/heroku/heroku-buildpack-python/compare/v304...v305
 [v304]: https://github.com/heroku/heroku-buildpack-python/compare/v303...v304
