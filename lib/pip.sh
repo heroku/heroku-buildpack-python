@@ -90,7 +90,7 @@ function pip::install_dependencies() {
 		install
 	)
 
-	# TODO: Deprecate/sunset this missing requirements file fallback.
+	# Support for the setup.py fallback is deprecated and will be removed in the future.
 	if [[ -f setup.py && ! -f requirements.txt ]]; then
 		pip_install_command+=(--editable .)
 	else

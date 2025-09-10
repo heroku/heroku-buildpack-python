@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Deprecated support for falling back to installing dependencies from a `setup.py` file if no Python package manager files were found. ([#1897](https://github.com/heroku/heroku-buildpack-python/pull/1897))
 
 ## [v306] - 2025-09-09
 

@@ -77,7 +77,6 @@ RSpec.describe 'pip support' do
           remote:   "python_version_outdated": false,
           remote:   "python_version_pinned": false,
           remote:   "python_version_requested": "3.13",
-          remote:   "setup_py_only": false,
           remote:   "total_duration": [0-9.]+
           remote: \\}
         REGEX
