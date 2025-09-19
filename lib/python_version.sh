@@ -50,6 +50,17 @@ function python_version::read_requested_python_version() {
 	declare -n origin="${5}"
 	local contents
 
+	# Record the names of files similar to .python-version in the root of the app, to determine
+	# how often that file is misspelled, as a temporary first step before deciding whether to add
+	# a new warning/error (and if so, which for which misspelled filenames it should check).
+	local python_version_files
+	python_version_files="$(
+		find . -maxdepth 1 -type f -iregex '\./\.?python.?version.*' -printf '%P\n' | sort | tr '\n' ',' || true
+	)"
+	if [[ -n "${python_version_files}" ]]; then
+		build_data::set_string "python_version_files" "${python_version_files}"
+	fi
+
 	local runtime_txt_path="${build_dir}/runtime.txt"
 	if [[ -f "${runtime_txt_path}" ]]; then
 		contents="$(utils::read_file_with_special_chars_substituted "${runtime_txt_path}")"

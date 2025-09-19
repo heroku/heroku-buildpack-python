@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added metrics for misspelled `.python-version` files. ([#1904](https://github.com/heroku/heroku-buildpack-python/pull/1904))
 
 ## [v308] - 2025-09-19
 
