@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v309] - 2025-09-19
+
 - Added metrics for misspelled `.python-version` files. ([#1904](https://github.com/heroku/heroku-buildpack-python/pull/1904))
 
 ## [v308] - 2025-09-19
@@ -1333,7 +1336,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v308...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v309...main
+[v309]: https://github.com/heroku/heroku-buildpack-python/compare/v308...v309
 [v308]: https://github.com/heroku/heroku-buildpack-python/compare/v307...v308
 [v307]: https://github.com/heroku/heroku-buildpack-python/compare/v306...v307
 [v306]: https://github.com/heroku/heroku-buildpack-python/compare/v305...v306
