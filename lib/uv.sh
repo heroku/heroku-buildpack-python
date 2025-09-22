@@ -29,30 +29,38 @@ function uv::install_uv() {
 		gnu_arch=$(arch)
 		local uv_url="https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/uv-${gnu_arch}-unknown-linux-gnu.tar.gz"
 
+		local error_log
+		error_log=$(mktemp)
+
+		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 		if ! {
-			# We set max-time for improved UX/metrics for hanging downloads compared to relying on the build
-			# system timeout. We don't use `--speed-limit` since it gives worse error messages when used with
-			# retries and piping to tar. The Python archives are ~10 MB so only take ~1s to download on Heroku,
-			# so we set low timeouts to reduce delays before retries. However, we allow customising the timeouts
-			# to support non-Heroku environments that may be far from `us-east-1` or have a slower connection.
-			# We use `--no-progress-meter` rather than `--silent` so that retry status messages are printed.
-			# We have to use `--strip-components` since the uv binary is nested under a subdirectory.
-			curl \
-				--connect-timeout "${CURL_CONNECT_TIMEOUT:-3}" \
-				--fail \
-				--location \
-				--max-time "${CURL_TIMEOUT:-60}" \
-				--no-progress-meter \
-				--retry-max-time "${CURL_TIMEOUT:-60}" \
-				--retry 5 \
-				--retry-connrefused \
-				"${uv_url}" \
-				| tar \
-					--directory "${uv_dir}" \
-					--extract \
-					--gzip \
-					--no-anchored \
-					--strip-components 1
+			{
+				# We set max-time for improved UX/metrics for hanging downloads compared to relying on the build
+				# system timeout. We don't use `--speed-limit` since it gives worse error messages when used with
+				# retries and piping to tar. The uv archives are ~20 MB so only take ~1s to download on Heroku,
+				# so we set low timeouts to reduce delays before retries. However, we allow customising the timeouts
+				# to support non-Heroku environments that may be far from `us-east-1` or have a slower connection.
+				# We use `--no-progress-meter` rather than `--silent` so that retry status messages are printed.
+				# We have to use `--strip-components` since the uv binary is nested under a subdirectory.
+				curl \
+					--connect-timeout "${CURL_CONNECT_TIMEOUT:-3}" \
+					--fail \
+					--location \
+					--max-time "${CURL_TIMEOUT:-60}" \
+					--no-progress-meter \
+					--retry-max-time "${CURL_TIMEOUT:-60}" \
+					--retry 5 \
+					--retry-connrefused \
+					"${uv_url}" \
+					| tar \
+						--directory "${uv_dir}" \
+						--extract \
+						--gzip \
+						--no-anchored \
+						--strip-components 1
+			} \
+				|& tee "${error_log}" \
+				|& output::indent
 		}; then
 			output::error <<-EOF
 				Error: Unable to install uv.
@@ -69,6 +77,8 @@ function uv::install_uv() {
 				https://www.githubstatus.com
 			EOF
 			build_data::set_string "failure_reason" "install-package-manager::uv"
+			# e.g.: 'curl: (56) Recv failure: Connection reset by peer'
+			build_data::set_string "failure_detail" "$(head --lines=1 "${error_log}" || true)"
 			exit 1
 		fi
 	fi
