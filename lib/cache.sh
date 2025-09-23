@@ -189,7 +189,10 @@ function cache::save() {
 		local additional_copy_args=()
 	fi
 
-	cp --recursive "${additional_copy_args[@]}" "${build_dir}/.heroku/python" "${cache_dir}/.heroku/"
+	# We must explicitly use `--no-dereference` since the default cp behaviour varies based on other
+	# options used (such as `--link`), and we don't want symlinks to be resolved since otherwise the
+	# copy will fail when copying packages that contain broken symlinks.
+	cp --recursive --no-dereference "${additional_copy_args[@]}" "${build_dir}/.heroku/python" "${cache_dir}/.heroku/"
 
 	# Metadata used by subsequent builds to determine whether the cache can be reused.
 	# These are written/consumed via separate files and not the build data store for compatibility
