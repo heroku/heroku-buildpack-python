@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated Poetry from 2.2.0 to 2.2.1. ([#1907](https://github.com/heroku/heroku-buildpack-python/pull/1907))
 - Updated uv from 0.8.18 to 0.8.20. ([#1910](https://github.com/heroku/heroku-buildpack-python/pull/1910))
 - Fixed errors saving the build cache when installed packages contain broken symlinks. ([#1909](https://github.com/heroku/heroku-buildpack-python/pull/1909))
 - Improved metrics for failed uv archive downloads. ([#1908](https://github.com/heroku/heroku-buildpack-python/pull/1908))
