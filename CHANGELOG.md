@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated uv from 0.8.18 to 0.8.20. ([#1910](https://github.com/heroku/heroku-buildpack-python/pull/1910))
 - Improved metrics for failed uv archive downloads. ([#1908](https://github.com/heroku/heroku-buildpack-python/pull/1908))
 
 ## [v309] - 2025-09-19
