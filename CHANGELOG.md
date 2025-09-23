@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Fixed errors saving the build cache when installed packages contain broken symlinks. ([#1909](https://github.com/heroku/heroku-buildpack-python/pull/1909))
 - Improved metrics for failed uv archive downloads. ([#1908](https://github.com/heroku/heroku-buildpack-python/pull/1908))
 
 ## [v309] - 2025-09-19
