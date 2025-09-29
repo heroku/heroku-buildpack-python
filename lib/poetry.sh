@@ -66,11 +66,14 @@ function poetry::install_poetry() {
 		# We must call the venv Python directly here, rather than relying on pip's `--python`
 		# option, since `--python` was only added in pip v22.3, so isn't supported by the older
 		# pip versions bundled with Python 3.9/3.10.
+		# `--isolated`: Prevents any custom pip configuration added by third party buildpacks (via env
+		#               vars or global config files) from breaking package manager bootstrapping.
 		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 		if ! {
 			"${poetry_venv_dir}/bin/python" "${bundled_pip_module_path}" \
 				install \
 				--disable-pip-version-check \
+				--isolated \
 				--no-cache-dir \
 				--no-input \
 				--quiet \

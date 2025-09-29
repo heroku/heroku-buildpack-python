@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Changed the `pip install` command used to install the pip, Pipenv and Poetry package managers to now use `--isolated` mode. ([#1915](https://github.com/heroku/heroku-buildpack-python/pull/1915))
 - Added more Python project related file and directory names to the list recognised by buildpack detection. ([#1914](https://github.com/heroku/heroku-buildpack-python/pull/1914))
 
 ## [v310] - 2025-09-23
