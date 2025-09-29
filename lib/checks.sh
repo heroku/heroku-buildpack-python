@@ -19,7 +19,7 @@ function checks::ensure_supported_stack() {
 
 				Upgrade to a newer stack to continue using this buildpack.
 			EOF
-			build_data::set_string "failure_reason" "stack::eol"
+			build_data::set_string "failure_reason" "checks::stack::eol"
 			build_data::set_string "failure_detail" "${stack}"
 			exit 1
 			;;
@@ -34,7 +34,7 @@ function checks::ensure_supported_stack() {
 				https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
 				https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
 			EOF
-			build_data::set_string "failure_reason" "stack::unknown"
+			build_data::set_string "failure_reason" "checks::stack::unknown"
 			build_data::set_string "failure_detail" "${stack}"
 			exit 1
 			;;
