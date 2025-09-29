@@ -56,7 +56,6 @@ function uv::install_uv() {
 						--directory "${uv_dir}" \
 						--extract \
 						--gzip \
-						--no-anchored \
 						--strip-components 1
 			} \
 				|& tee "${error_log}" \
