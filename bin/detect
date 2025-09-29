@@ -37,14 +37,17 @@ KNOWN_PYTHON_PROJECT_FILES=(
 	uv.lock
 	# Commonly seen misspellings of requirements.txt. (Which occur since pip doesn't
 	# create/manage requirements files itself, so the filenames are manually typed.)
+	requeriments.txt
 	requirement.txt
-	Requirements.txt
+	requirements
 	requirements.text
+	Requirements.txt
 	requirements.txt.txt
 	requirments.txt
-	# Whilst virtual environments shouldn't be committed to Git (and so shouldn't
-	# normally be present during the build), they are often present for beginner
+	# Whilst the pyc cache and virtual environments shouldn't be committed to Git (and so
+	# shouldn't normally be present during the build), they are often present for beginner
 	# Python apps that are missing all of the other Python related files above.
+	__pycache__/
 	.venv/
 	venv/
 )
