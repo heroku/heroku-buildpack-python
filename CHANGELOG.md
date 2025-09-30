@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v311] - 2025-09-30
+
 - Stopped rewriting Django collectstatic command log output. ([#1918](https://github.com/heroku/heroku-buildpack-python/pull/1918))
 - Changed the `pip install` command used to install the pip, Pipenv and Poetry package managers to now use `--isolated` mode. ([#1915](https://github.com/heroku/heroku-buildpack-python/pull/1915))
 - Added more Python project related file and directory names to the list recognised by buildpack detection. ([#1914](https://github.com/heroku/heroku-buildpack-python/pull/1914))
@@ -1346,7 +1349,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v310...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v311...main
+[v311]: https://github.com/heroku/heroku-buildpack-python/compare/v310...v311
 [v310]: https://github.com/heroku/heroku-buildpack-python/compare/v309...v310
 [v309]: https://github.com/heroku/heroku-buildpack-python/compare/v308...v309
 [v308]: https://github.com/heroku/heroku-buildpack-python/compare/v307...v308
