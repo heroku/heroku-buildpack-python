@@ -23,7 +23,7 @@ function output::step() {
 #
 # Usage:
 # ```
-# pip install ... | output::indent
+# pip install ... |& output::indent
 # ```
 function output::indent() {
 	sed --unbuffered "s/^/       /"
