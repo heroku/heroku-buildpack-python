@@ -47,12 +47,14 @@ RSpec.describe 'Django support' do
           remote:         'PWD': '/tmp/build_\\w+',
           remote:         'PYTHONPATH': '\\.',
           remote:         'PYTHONUNBUFFERED': '1'\\}
+          remote:        
           remote:        \\['/tmp/build_\\w+/backend',
           remote:         '/tmp/build_\\w+',
           remote:         '/app/.heroku/python/lib/python313.zip',
           remote:         '/app/.heroku/python/lib/python3.13',
           remote:         '/app/.heroku/python/lib/python3.13/lib-dynload',
           remote:         '/app/.heroku/python/lib/python3.13/site-packages'\\]
+          remote:        
           remote:        1 static file copied to '/tmp/build_\\w+/backend/staticfiles'.
           remote: 
           remote: -----> Saving cache
@@ -86,12 +88,15 @@ RSpec.describe 'Django support' do
           remote:         'PWD': '/tmp/build_\\w+',
           remote:         'PYTHONPATH': '/invalid-path',
           remote:         'PYTHONUNBUFFERED': '1'\\}
+          remote:        
           remote:        \\['/tmp/build_\\w+',
           remote:         '/invalid-path',
           remote:         '/app/.heroku/python/lib/python39.zip',
           remote:         '/app/.heroku/python/lib/python3.9',
           remote:         '/app/.heroku/python/lib/python3.9/lib-dynload',
           remote:         '/app/.heroku/python/lib/python3.9/site-packages'\\]
+          remote:        Copying '/tmp/build_\\w+/testapp/static/robots.txt'
+          remote:        
           remote:        1 static file copied to '/tmp/build_\\w+/staticfiles'.
           remote: 
           remote: -----> Saving cache
