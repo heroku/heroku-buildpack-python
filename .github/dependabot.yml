@@ -13,6 +13,14 @@ updates:
         update-types:
           - "minor"
           - "patch"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "skip changelog"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
