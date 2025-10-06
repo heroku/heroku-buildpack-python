@@ -43,23 +43,19 @@ if [[ " ${SUPPORTED_PYTHON_VERSIONS[*]} " != *" ${PYTHON_MAJOR_VERSION} "* ]]; t
 	abort "Python ${PYTHON_MAJOR_VERSION} isn't supported on ${STACK}!"
 fi
 
-# The release keys can be found on https://www.python.org/downloads/ -> "OpenPGP Public Keys".
+# Sigstore identities taken from: https://www.python.org/downloads/metadata/sigstore/
 case "${PYTHON_MAJOR_VERSION}" in
-	3.13)
-		# https://github.com/Yhg1s.gpg
-		GPG_KEY_FINGERPRINT='7169605F62C751356D054A26A821E680E5FA6305'
-		;;
-	3.12)
-		# https://github.com/Yhg1s.gpg
-		GPG_KEY_FINGERPRINT='7169605F62C751356D054A26A821E680E5FA6305'
+	3.12 | 3.13)
+		SIGSTORE_IDENTITY='thomas@python.org'
+		SIGSTORE_ISSUER='https://accounts.google.com'
 		;;
 	3.10 | 3.11)
-		# https://keybase.io/pablogsal/
-		GPG_KEY_FINGERPRINT='A035C8C19219BA821ECEA86B64E628F8D684696D'
+		SIGSTORE_IDENTITY='pablogsal@python.org'
+		SIGSTORE_ISSUER='https://accounts.google.com'
 		;;
 	3.9)
-		# https://keybase.io/ambv/
-		GPG_KEY_FINGERPRINT='E3FF2839C048B25C084DEBE9B26995E310250568'
+		SIGSTORE_IDENTITY='lukasz@langa.pl'
+		SIGSTORE_ISSUER='https://github.com/login/oauth'
 		;;
 	*)
 		abort "Unsupported Python version '${PYTHON_MAJOR_VERSION}'!"
@@ -69,17 +65,20 @@ esac
 echo "Building Python ${PYTHON_VERSION} for ${STACK} (${ARCH})..."
 
 SOURCE_URL="https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz"
-SIGNATURE_URL="${SOURCE_URL}.asc"
+SIGSTORE_BUNDLE_URL="${SOURCE_URL}.sigstore"
 
 set -o xtrace
 
 mkdir -p "${SRC_DIR}" "${INSTALL_DIR}" "${UPLOAD_DIR}"
 
 curl --fail --retry 5 --retry-connrefused --connect-timeout 3 --max-time 30 -o python.tgz "${SOURCE_URL}"
-curl --fail --retry 5 --retry-connrefused --connect-timeout 3 --max-time 30 -o python.tgz.asc "${SIGNATURE_URL}"
+curl --fail --retry 5 --retry-connrefused --connect-timeout 3 --max-time 30 -o python.tgz.sigstore "${SIGSTORE_BUNDLE_URL}"
 
-gpg --batch --verbose --recv-keys "${GPG_KEY_FINGERPRINT}"
-gpg --batch --verify python.tgz.asc python.tgz
+cosign verify-blob \
+	--bundle python.tgz.sigstore \
+	--certificate-identity "${SIGSTORE_IDENTITY}" \
+	--certificate-oidc-issuer "${SIGSTORE_ISSUER}" \
+	python.tgz
 
 tar --extract --file python.tgz --strip-components=1 --directory "${SRC_DIR}"
 cd "${SRC_DIR}"

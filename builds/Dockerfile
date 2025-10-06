@@ -1,4 +1,5 @@
 ARG STACK_VERSION="24"
+FROM ghcr.io/sigstore/cosign/cosign:v2.6.1@sha256:68839b7f13dac5a6744a5d8818e984dd39183374e37855c19e14d623d9bc9037 AS cosign
 FROM heroku/heroku:${STACK_VERSION}-build
 
 ARG STACK_VERSION
@@ -13,6 +14,7 @@ RUN apt-get update --error-on=any \
       libreadline-dev \
       libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
+COPY --from=cosign /ko-app/cosign /usr/local/bin/cosign
 
 WORKDIR /tmp
 COPY build_python_runtime.sh python-3.13-ubuntu-22.04-libexpat-workaround.patch .
