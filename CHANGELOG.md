@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Stopped using `--with-system-expat` when compiling new Python versions. ([#1925](https://github.com/heroku/heroku-buildpack-python/pull/1925))
 
 ## [v312] - 2025-10-05
 
