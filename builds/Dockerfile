@@ -17,4 +17,4 @@ RUN apt-get update --error-on=any \
 COPY --from=cosign /ko-app/cosign /usr/local/bin/cosign
 
 WORKDIR /tmp
-COPY build_python_runtime.sh python-3.13-ubuntu-22.04-libexpat-workaround.patch .
+COPY build_python_runtime.sh .
