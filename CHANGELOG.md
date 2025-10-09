@@ -4,6 +4,10 @@
 
 - Added support for Python 3.14. ([#1927](https://github.com/heroku/heroku-buildpack-python/pull/1927))
 - The Python 3.13 version alias now resolves to Python 3.13.8. ([#1928](https://github.com/heroku/heroku-buildpack-python/pull/1928))
+- The Python 3.12 version alias now resolves to Python 3.12.12. ([#1929](https://github.com/heroku/heroku-buildpack-python/pull/1929))
+- The Python 3.11 version alias now resolves to Python 3.11.14. ([#1929](https://github.com/heroku/heroku-buildpack-python/pull/1929))
+- The Python 3.10 version alias now resolves to Python 3.10.19. ([#1929](https://github.com/heroku/heroku-buildpack-python/pull/1929))
+- The Python 3.9 version alias now resolves to Python 3.9.24. ([#1929](https://github.com/heroku/heroku-buildpack-python/pull/1929))
 - Stopped using `--with-system-expat` when compiling new Python versions. ([#1925](https://github.com/heroku/heroku-buildpack-python/pull/1925))
 
 ## [v312] - 2025-10-05
