@@ -9,9 +9,10 @@ LATEST_PYTHON_3_10="3.10.18"
 LATEST_PYTHON_3_11="3.11.13"
 LATEST_PYTHON_3_12="3.12.11"
 LATEST_PYTHON_3_13="3.13.7"
+LATEST_PYTHON_3_14="3.14.0"
 
 OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION=9
-NEWEST_SUPPORTED_PYTHON_3_MINOR_VERSION=13
+NEWEST_SUPPORTED_PYTHON_3_MINOR_VERSION=14
 
 DEFAULT_PYTHON_FULL_VERSION="${LATEST_PYTHON_3_13}"
 DEFAULT_PYTHON_MAJOR_VERSION="${DEFAULT_PYTHON_FULL_VERSION%.*}"
@@ -420,6 +421,7 @@ function python_version::resolve_python_version() {
 		3.11) echo "${LATEST_PYTHON_3_11}" ;;
 		3.12) echo "${LATEST_PYTHON_3_12}" ;;
 		3.13) echo "${LATEST_PYTHON_3_13}" ;;
+		3.14) echo "${LATEST_PYTHON_3_14}" ;;
 		*) utils::abort_internal_error "Unhandled Python major version: ${requested_python_version}" ;;
 	esac
 }

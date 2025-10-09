@@ -32,6 +32,7 @@ case "${STACK:?}" in
 			"3.11"
 			"3.12"
 			"3.13"
+			"3.14"
 		)
 		;;
 	*)
@@ -45,6 +46,10 @@ fi
 
 # Sigstore identities taken from: https://www.python.org/downloads/metadata/sigstore/
 case "${PYTHON_MAJOR_VERSION}" in
+	3.14)
+		SIGSTORE_IDENTITY='hugo@python.org'
+		SIGSTORE_ISSUER='https://github.com/login/oauth'
+		;;
 	3.12 | 3.13)
 		SIGSTORE_IDENTITY='thomas@python.org'
 		SIGSTORE_ISSUER='https://accounts.google.com'

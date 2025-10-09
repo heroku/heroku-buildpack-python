@@ -47,6 +47,7 @@ The current default Python version is: 3.13
 
 The supported Python versions are:
 
+- Python 3.14
 - Python 3.13
 - Python 3.12
 - Python 3.11
