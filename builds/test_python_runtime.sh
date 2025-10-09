@@ -21,10 +21,12 @@ export LD_LIBRARY_PATH="${INSTALL_DIR}/lib/"
 
 tar --zstd --extract --verbose --file "${ARCHIVE_FILEPATH}" --directory "${INSTALL_DIR}"
 
-# Check Python is able to start and is usable via both the default `python3` command and the
-# `python` symlink we create during the build. We use the full filepath rather than adding the
+# Check Python is able to start and is usable via both the default `python3` + `python3.XX` commands
+# and the `python` symlink we create during the build. We use the full filepath rather than adding the
 # directory to PATH to ensure the test doesn't pass because of falling through to system Python.
 "${INSTALL_DIR}/bin/python3" --version
+major_python_version="$("${INSTALL_DIR}/bin/python3" -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")"
+"${INSTALL_DIR}/bin/python${major_python_version}" --version
 "${INSTALL_DIR}/bin/python" --version
 
 # Check the Python config script still exists/works after the deletion of scripts with broken shebang lines.
@@ -65,6 +67,14 @@ optional_stdlib_modules=(
 	xml.parsers.expat
 	zlib
 )
+
+# https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-zstandard
+if [[ "${major_python_version}" == "3.14" ]]; then
+	optional_stdlib_modules+=(
+		compression.zstd
+	)
+fi
+
 if "${INSTALL_DIR}/bin/python3" -c "import $(
 	IFS=,
 	echo "${optional_stdlib_modules[*]}"
