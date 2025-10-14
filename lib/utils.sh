@@ -66,3 +66,39 @@ function utils::abort_internal_error() {
 	build_data::set_string "failure_detail" "${message}"
 	exit 1
 }
+
+function utils::err_trap() {
+	# We use `errtrace` which means the ERR trap can fire multiple times, such as when an error
+	# occurs in a buildpack function called from within a command substitution.
+	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
+	if build_data::has "failure_reason"; then
+		return
+	fi
+
+	local failing_command="${BASH_COMMAND}"
+	local stack_trace
+	stack_trace=$(
+		local frame=0
+		while read -r line_number function_name source_file < <(caller "${frame}" || true); do
+			echo "${function_name} @ ${source_file}:${line_number}"
+			((++frame))
+		done
+	)
+
+	output::error <<-EOF
+		Internal Error: An unhandled buildpack error occurred.
+
+		An unhandled error occurred while executing the command:
+		${failing_command}
+
+		If this issue persists, please open a support ticket or file
+		an issue on the buildpack's GitHub repository:
+		https://help.heroku.com/
+		https://github.com/heroku/heroku-buildpack-python/issues
+
+		Stack trace:
+		${stack_trace}
+	EOF
+	build_data::set_string "failure_reason" "internal-error::unhandled"
+	build_data::set_string "failure_detail" "${failing_command}"
+}

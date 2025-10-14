@@ -2,7 +2,9 @@
 # Usage: bin/compile <build-dir> <cache-dir> <env-dir>
 # See: https://devcenter.heroku.com/articles/buildpack-api
 
-set -euo pipefail
+# We use `errtrace` and `inherit_errexit` to ensure the ERR trap and exit on error behaviour
+# propagates to buildpack functions run in subshells, such when using command substitutions.
+set -eu -o pipefail -o errtrace
 shopt -s inherit_errexit
 
 # Note: This can't be enabled via app config vars, since at this point they haven't been loaded from ENV_DIR.
@@ -38,6 +40,8 @@ compile_start_time=$(build_data::current_unix_realtime)
 # and messaging when build configuration changes) and also so that `bin/report` can generate
 # a build report that will be consumed by the build system for observability.
 build_data::setup
+
+trap 'utils::err_trap' ERR
 
 checks::ensure_supported_stack "${STACK:?"Required env var STACK isn't set"}"
 checks::duplicate_python_buildpack "${BUILD_DIR}"
