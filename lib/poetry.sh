@@ -56,7 +56,7 @@ function poetry::install_poetry() {
 
 				See the log output above for more information.
 			EOF
-			build_data::set_string "failure_reason" "create-venv::poetry"
+			build_data::set_string "failure_reason" "internal-error::create-venv::poetry"
 			exit 1
 		fi
 
