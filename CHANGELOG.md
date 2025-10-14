@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Improved error messages and metrics for unhandled buildpack errors. ([#1933](https://github.com/heroku/heroku-buildpack-python/pull/1933))
 
 ## [v313] - 2025-10-09
 

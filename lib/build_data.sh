@@ -109,6 +109,19 @@ function build_data::_set() {
 	echo "${new_data_file_contents}" >"${BUILD_DATA_FILE}"
 }
 
+# Check whether an entry exists in the build data store for the current build.
+# Returns zero if the key was found and non-zero otherwise.
+#
+# Usage:
+# ```
+# build_data::has "failure_reason"
+# ```
+function build_data::has() {
+	local key="${1}"
+
+	jq --exit-status "has(\"${key}\")" "${BUILD_DATA_FILE}" >/dev/null
+}
+
 # Retrieve the value of an entry in the build data store from the previous successful build.
 # Returns the empty string if the key wasn't found in the store.
 #
