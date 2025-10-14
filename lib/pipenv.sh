@@ -50,7 +50,7 @@ function pipenv::install_pipenv() {
 
 				See the log output above for more information.
 			EOF
-			build_data::set_string "failure_reason" "create-venv::pipenv"
+			build_data::set_string "failure_reason" "internal-error::create-venv::pipenv"
 			exit 1
 		fi
 
