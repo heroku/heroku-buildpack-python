@@ -46,19 +46,7 @@ function poetry::install_poetry() {
 		# it bundles its own copy for use as a fallback. As such we don't need to install pip
 		# into the Poetry venv (and in fact, Poetry wouldn't use this install anyway, since
 		# it only finds an external pip if it exists in the target venv).
-		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
-		if ! python -m venv --without-pip "${poetry_venv_dir}" |& output::indent; then
-			output::error <<-EOF
-				Internal Error: Unable to create virtual environment for Poetry.
-
-				The 'python -m venv' command to create a virtual environment did
-				not exit successfully.
-
-				See the log output above for more information.
-			EOF
-			build_data::set_string "failure_reason" "internal-error::create-venv::poetry"
-			exit 1
-		fi
+		python -m venv --without-pip "${poetry_venv_dir}"
 
 		local bundled_pip_module_path
 		bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}" "${python_major_version}")"

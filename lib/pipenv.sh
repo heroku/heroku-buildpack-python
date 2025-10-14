@@ -40,19 +40,7 @@ function pipenv::install_pipenv() {
 
 		# We use the pip wheel bundled within Python's standard library to install Pipenv,
 		# since Pipenv vendors its own pip, so doesn't need an install in the venv.
-		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
-		if ! python -m venv --without-pip "${pipenv_venv_dir}" |& output::indent; then
-			output::error <<-EOF
-				Internal Error: Unable to create virtual environment for Pipenv.
-
-				The 'python -m venv' command to create a virtual environment did
-				not exit successfully.
-
-				See the log output above for more information.
-			EOF
-			build_data::set_string "failure_reason" "internal-error::create-venv::pipenv"
-			exit 1
-		fi
+		python -m venv --without-pip "${pipenv_venv_dir}"
 
 		local bundled_pip_module_path
 		bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}" "${python_major_version}")"
