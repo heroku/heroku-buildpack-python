@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Removed redundant internal error handling for venv creation. ([#1937](https://github.com/heroku/heroku-buildpack-python/pull/1937))
 
 ## [v314] - 2025-10-15
 
