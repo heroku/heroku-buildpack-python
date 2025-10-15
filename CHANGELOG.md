@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- The Python 3.13 version alias now resolves to Python 3.13.9. ([#1934](https://github.com/heroku/heroku-buildpack-python/pull/1934))
 - Improved error messages and metrics for unhandled buildpack errors. ([#1933](https://github.com/heroku/heroku-buildpack-python/pull/1933))
 
 ## [v313] - 2025-10-09
