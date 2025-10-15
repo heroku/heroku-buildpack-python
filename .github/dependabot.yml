@@ -14,7 +14,7 @@ updates:
           - "minor"
           - "patch"
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/builds"
     schedule:
       interval: "monthly"
     labels:
