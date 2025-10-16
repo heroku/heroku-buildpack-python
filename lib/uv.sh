@@ -149,6 +149,9 @@ function uv::install_dependencies() {
 	# We only display the most relevant command args here, to improve the signal to noise ratio.
 	output::step "Installing dependencies using '${uv_install_command[*]}'"
 
+	local install_log
+	install_log=$(mktemp)
+
 	# TODO: Expose app config vars to the install command as part of doing so for all package managers.
 	# `--compile-bytecode`: Improves app boot times (pip does this by default).
 	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
@@ -157,11 +160,11 @@ function uv::install_dependencies() {
 			--color always \
 			--compile-bytecode \
 			--no-progress \
-			|& tee "${WARNINGS_LOG:?}" \
+			|& tee "${install_log}" \
 			|& output::indent
 	}; then
 		# TODO: Overhaul warnings and combine them with error handling (for all package managers).
-		show-warnings
+		show-warnings "${install_log}"
 
 		output::error <<-EOF
 			Error: Unable to install dependencies using uv.

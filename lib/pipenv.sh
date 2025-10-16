@@ -142,6 +142,9 @@ function pipenv::install_dependencies() {
 	# We only display the most relevant command args here, to improve the signal to noise ratio.
 	output::step "Installing dependencies using '${pipenv_install_command[*]}'"
 
+	local install_log
+	install_log=$(mktemp)
+
 	# TODO: Expose app config vars to the install command as part of doing so for all package managers.
 	# `PIPENV_NOSPIN`: Disable progress spinners.
 	# `PIP_SRC`: Override the editable VCS repo location from its default of inside the build directory
@@ -150,11 +153,11 @@ function pipenv::install_dependencies() {
 	if ! {
 		PIPENV_NOSPIN="1" PIP_SRC="/app/.heroku/python/src" \
 			"${pipenv_install_command[@]}" \
-			|& tee "${WARNINGS_LOG:?}" \
+			|& tee "${install_log}" \
 			|& output::indent
 	}; then
 		# TODO: Overhaul warnings and combine them with error handling.
-		show-warnings
+		show-warnings "${install_log}"
 
 		output::error <<-EOF
 			Error: Unable to install dependencies using Pipenv.
