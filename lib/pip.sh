@@ -109,6 +109,9 @@ function pip::install_dependencies() {
 	# We only display the most relevant command args here, to improve the signal to noise ratio.
 	output::step "Installing dependencies using '${pip_install_command[*]}'"
 
+	local install_log
+	install_log=$(mktemp)
+
 	# TODO: Remove --disable-pip-version-check in favour of exporting PIP_DISABLE_PIP_VERSION_CHECK.
 	# The sed usage is to reduce the verbosity of output lines like:
 	# ...when using Python 3.10 and older:
@@ -124,13 +127,13 @@ function pip::install_dependencies() {
 			--no-input \
 			--progress-bar off \
 			--src='/app/.heroku/python/src' \
-			|& tee "${WARNINGS_LOG:?}" \
+			|& tee "${install_log}" \
 			|& sed --unbuffered --regexp-extended \
 				--expression 's# in (/app|\.)/\.heroku/python/lib/python[0-9.]+/site-packages##' \
 			|& output::indent
 	}; then
 		# TODO: Overhaul warnings and combine them with error handling.
-		show-warnings
+		show-warnings "${install_log}"
 
 		output::error <<-EOF
 			Error: Unable to install dependencies using pip.

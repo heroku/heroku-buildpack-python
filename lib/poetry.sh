@@ -130,6 +130,9 @@ function poetry::install_dependencies() {
 	# We only display the most relevant command args here, to improve the signal to noise ratio.
 	output::step "Installing dependencies using '${poetry_install_command[*]}'"
 
+	local install_log
+	install_log=$(mktemp)
+
 	# `--compile`: Compiles Python bytecode, to improve app boot times (pip does this by default).
 	# `--no-ansi`: Whilst we'd prefer to enable colour if possible, Poetry also emits ANSI escape
 	#              codes for redrawing lines, which renders badly in persisted build logs.
@@ -139,12 +142,12 @@ function poetry::install_dependencies() {
 			--compile \
 			--no-ansi \
 			--no-interaction \
-			|& tee "${WARNINGS_LOG:?}" \
+			|& tee "${install_log}" \
 			|& sed --unbuffered --expression '/Skipping virtualenv creation/d' \
 			|& output::indent
 	}; then
 		# TODO: Overhaul warnings and combine them with error handling.
-		show-warnings
+		show-warnings "${install_log}"
 
 		output::error <<-EOF
 			Error: Unable to install dependencies using Poetry.

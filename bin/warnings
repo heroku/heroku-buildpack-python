@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 show-warnings() {
+	local install_log="${1}"
+
 	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
-	if grep -qi 'Could not find gdal-config' "${WARNINGS_LOG}"; then
+	if grep -qi 'Could not find gdal-config' "${install_log}"; then
 		output::error <<-'EOF'
 			Error: Package installation failed since the GDAL library wasn't found.
 
@@ -10,7 +12,7 @@ show-warnings() {
 			https://github.com/heroku/heroku-geo-buildpack
 		EOF
 		build_data::set_string "failure_detail" "Could not find gdal-config"
-	elif grep -qi 'sqlite3.h: No such file or directory' "${WARNINGS_LOG}"; then
+	elif grep -qi 'sqlite3.h: No such file or directory' "${install_log}"; then
 		output::error <<-'EOF'
 			Error: Package installation failed since SQLite headers weren't found.
 
@@ -39,7 +41,7 @@ show-warnings() {
 			https://github.com/heroku/heroku-buildpack-apt
 		EOF
 		build_data::set_string "failure_detail" "sqlite3.h: No such file or directory"
-	elif grep -qi 'Please use pip<24.1 if you need to use this version' "${WARNINGS_LOG}"; then
+	elif grep -qi 'Please use pip<24.1 if you need to use this version' "${install_log}"; then
 		output::error <<-'EOF'
 			Error: One of your dependencies contains broken metadata.
 
