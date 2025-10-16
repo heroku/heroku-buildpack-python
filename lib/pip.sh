@@ -8,14 +8,9 @@ PIP_VERSION=$(utils::get_requirement_version 'pip')
 SETUPTOOLS_VERSION=$(utils::get_requirement_version 'setuptools')
 WHEEL_VERSION=$(utils::get_requirement_version 'wheel')
 
-function pip::install_pip_setuptools_wheel() {
+function pip::install_pip() {
 	local python_home="${1}"
 	local python_major_version="${2}"
-
-	# We use the pip wheel bundled within Python's standard library to install our chosen
-	# pip version, since it's faster than `ensurepip` followed by an upgrade in place.
-	local bundled_pip_module_path
-	bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}" "${python_major_version}")"
 
 	build_data::set_string "pip_version" "${PIP_VERSION}"
 
@@ -45,6 +40,11 @@ function pip::install_pip_setuptools_wheel() {
 	# that the cached package versions are correct (different versions could have been specified in the
 	# app's requirements.txt in the last build). The install will be a no-op if the versions match.
 	output::step "Installing ${packages_display_text}"
+
+	# We use the pip wheel bundled within Python's standard library to install our chosen
+	# pip version, since it's faster than `ensurepip` followed by an upgrade in place.
+	local bundled_pip_module_path
+	bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}" "${python_major_version}")"
 
 	# `--isolated`: Prevents any custom pip configuration added by third party buildpacks (via env
 	#               vars or global config files) from breaking package manager bootstrapping.

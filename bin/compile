@@ -172,7 +172,7 @@ python::install "${BUILD_DIR}" "${STACK}" "${python_full_version}" "${python_maj
 package_manager_install_start_time=$(build_data::current_unix_realtime)
 case "${package_manager}" in
 	pip)
-		pip::install_pip_setuptools_wheel "${python_home}" "${python_major_version}"
+		pip::install_pip "${python_home}" "${python_major_version}"
 		;;
 	pipenv)
 		pipenv::install_pipenv "${python_home}" "${python_major_version}" "${EXPORT_PATH}" "${PROFILE_PATH}"
