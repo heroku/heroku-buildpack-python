@@ -56,6 +56,8 @@ function poetry::install_poetry() {
 		# pip versions bundled with Python 3.9/3.10.
 		# `--isolated`: Prevents any custom pip configuration added by third party buildpacks (via env
 		#               vars or global config files) from breaking package manager bootstrapping.
+		# We pin to an older dulwich version to work around https://github.com/jelmer/dulwich/issues/1948
+		# on Python 3.9.0/3.9.1. TODO: Remove this pin when we drop support for Python 3.9 in Jan 2026.
 		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 		if ! {
 			"${poetry_venv_dir}/bin/python" "${bundled_pip_module_path}" \
@@ -66,6 +68,7 @@ function poetry::install_poetry() {
 				--no-input \
 				--quiet \
 				"poetry==${POETRY_VERSION}" \
+				dulwich==0.24.5 \
 				|& output::indent
 		}; then
 			output::error <<-EOF
