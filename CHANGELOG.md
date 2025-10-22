@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v315] - 2025-10-22
+
 - Updated uv from 0.8.23 to 0.9.5. ([#1942](https://github.com/heroku/heroku-buildpack-python/pull/1942) and [#1945](https://github.com/heroku/heroku-buildpack-python/pull/1945))
 - Pinned `dulwich` version when using Poetry to work around an incompatibility with Python <3.9.2. ([#1943](https://github.com/heroku/heroku-buildpack-python/pull/1943))
 - Removed redundant internal error handling for venv creation. ([#1937](https://github.com/heroku/heroku-buildpack-python/pull/1937))
@@ -1371,7 +1374,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v314...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v315...main
+[v315]: https://github.com/heroku/heroku-buildpack-python/compare/v314...v315
 [v314]: https://github.com/heroku/heroku-buildpack-python/compare/v313...v314
 [v313]: https://github.com/heroku/heroku-buildpack-python/compare/v312...v313
 [v312]: https://github.com/heroku/heroku-buildpack-python/compare/v311...v312
