@@ -20,9 +20,11 @@ function utils::get_requirement_version() {
 # replacement character, so they are visible in error messages. Also removes any carriage
 # return characters, to prevent them interfering with the rendering of error messages that
 # include the raw file contents.
+# `LC_ALL=C` ensures that `[:space:]` only matches ASCII whitespace, since we want Unicode
+# whitespace (such as the invisible Unicode zero width space character) to be replaced too.
 function utils::read_file_with_special_chars_substituted() {
 	local file="${1}"
-	sed --regexp-extended --expression 's/[^[:print:][:space:]]/�/g' --expression 's/\r$//' "${file}"
+	LC_ALL=C sed --regexp-extended --expression 's/[^[:print:][:space:]]/�/g' --expression 's/\r$//' "${file}"
 }
 
 # Python bundles pip within its standard library, which we can use to install our chosen
