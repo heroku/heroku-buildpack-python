@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v316] - 2025-10-27
+
 - Improved the error message when a `.python-version` or `runtime.txt` file contains invisible Unicode whitespace characters. ([#1947](https://github.com/heroku/heroku-buildpack-python/pull/1947))
 - Added metrics for the file encoding of `.python-version` and `runtime.txt` files. ([#1948](https://github.com/heroku/heroku-buildpack-python/pull/1948))
 
@@ -1376,7 +1379,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v315...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v316...main
+[v316]: https://github.com/heroku/heroku-buildpack-python/compare/v315...v316
 [v315]: https://github.com/heroku/heroku-buildpack-python/compare/v314...v315
 [v314]: https://github.com/heroku/heroku-buildpack-python/compare/v313...v314
 [v313]: https://github.com/heroku/heroku-buildpack-python/compare/v312...v313
