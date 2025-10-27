@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Improved the error message when a `.python-version` or `runtime.txt` file contains invisible Unicode whitespace characters. ([#1947](https://github.com/heroku/heroku-buildpack-python/pull/1947))
+- Added metrics for the file encoding of `.python-version` and `runtime.txt` files. ([#1948](https://github.com/heroku/heroku-buildpack-python/pull/1948))
 
 ## [v315] - 2025-10-22
 

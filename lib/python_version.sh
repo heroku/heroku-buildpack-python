@@ -64,6 +64,8 @@ function python_version::read_requested_python_version() {
 
 	local runtime_txt_path="${build_dir}/runtime.txt"
 	if [[ -f "${runtime_txt_path}" ]]; then
+		# For example: "ASCII text" or "Unicode text, UTF-16, little-endian text, with CRLF line terminators"
+		build_data::set_string "runtime_txt_encoding" "$(file --brief "${runtime_txt_path}" || true)"
 		contents="$(utils::read_file_with_special_chars_substituted "${runtime_txt_path}")"
 		version="$(python_version::parse_runtime_txt "${contents}")"
 		origin="runtime.txt"
@@ -72,6 +74,7 @@ function python_version::read_requested_python_version() {
 
 	local python_version_file_path="${build_dir}/.python-version"
 	if [[ -f "${python_version_file_path}" ]]; then
+		build_data::set_string "python_version_file_encoding" "$(file --brief "${python_version_file_path}" || true)"
 		contents="$(utils::read_file_with_special_chars_substituted "${python_version_file_path}")"
 		version="$(python_version::parse_python_version_file "${contents}")"
 		origin=".python-version"
