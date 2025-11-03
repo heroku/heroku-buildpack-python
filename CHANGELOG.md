@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- The Python 3.9 version alias now resolves to Python 3.9.25. ([#1955](https://github.com/heroku/heroku-buildpack-python/pull/1955))
 - Updated uv from 0.9.5 to 0.9.7. ([#1952](https://github.com/heroku/heroku-buildpack-python/pull/1952))
 
 ## [v316] - 2025-10-27
