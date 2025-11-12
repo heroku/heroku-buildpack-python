@@ -49,7 +49,6 @@ function python_version::read_requested_python_version() {
 	# without having to hardcode globals. See: https://stackoverflow.com/a/38997681
 	declare -n version="${4}"
 	declare -n origin="${5}"
-	local contents
 
 	# Record the names of files similar to .python-version in the root of the app, to determine
 	# how often that file is misspelled, as a temporary first step before deciding whether to add
@@ -64,19 +63,14 @@ function python_version::read_requested_python_version() {
 
 	local runtime_txt_path="${build_dir}/runtime.txt"
 	if [[ -f "${runtime_txt_path}" ]]; then
-		# For example: "ASCII text" or "Unicode text, UTF-16, little-endian text, with CRLF line terminators"
-		build_data::set_string "runtime_txt_encoding" "$(file --brief "${runtime_txt_path}" || true)"
-		contents="$(utils::read_file_with_special_chars_substituted "${runtime_txt_path}")"
-		version="$(python_version::parse_runtime_txt "${contents}")"
+		version="$(python_version::parse_runtime_txt "${runtime_txt_path}")"
 		origin="runtime.txt"
 		return 0
 	fi
 
 	local python_version_file_path="${build_dir}/.python-version"
 	if [[ -f "${python_version_file_path}" ]]; then
-		build_data::set_string "python_version_file_encoding" "$(file --brief "${python_version_file_path}" || true)"
-		contents="$(utils::read_file_with_special_chars_substituted "${python_version_file_path}")"
-		version="$(python_version::parse_python_version_file "${contents}")"
+		version="$(python_version::parse_python_version_file "${python_version_file_path}")"
 		origin=".python-version"
 		return 0
 	fi
@@ -104,24 +98,25 @@ function python_version::read_requested_python_version() {
 
 # Parse the contents of a runtime.txt file and return the Python version substring (e.g. `3.12` or `3.12.0`).
 function python_version::parse_runtime_txt() {
-	local contents="${1}"
+	local runtime_txt_path="${1}"
+	local trimmed_contents
+	# The file contents with commented lines and leading/trailing whitespace removed.
+	trimmed_contents="$(python_version::read_trimmed_version_lines "${runtime_txt_path}")"
 
-	# The file must contain a string of form `python-N.N` or `python-N.N.N`.
-	# Leading/trailing whitespace is permitted.
-	if [[ "${contents}" =~ ^[[:space:]]*python-(${PYTHON_VERSION_REGEX})[[:space:]]*$ ]]; then
+	# The version must be of form `python-N.N` or `python-N.N.N`.
+	if [[ "${trimmed_contents}" =~ ^python-(${PYTHON_VERSION_REGEX})$ ]]; then
 		local version="${BASH_REMATCH[1]}"
 		echo "${version}"
 	else
 		local instructions
 		instructions="$(python_version::python_version_file_instructions "runtime.txt" "${DEFAULT_PYTHON_MAJOR_VERSION}")"
+		# We intentionally don't display the current contents of the file here, to prevent users
+		# from copying that into the .python-version file instead of our example valid version.
 		output::error <<-EOF
 			Error: Invalid Python version in runtime.txt.
 
 			The Python version specified in your runtime.txt file isn't
 			in the correct format.
-
-			The following file contents were found, which aren't valid:
-			${contents:0:100}
 
 			However, the runtime.txt file is deprecated since it has been
 			replaced by the more widely supported .python-version file:
@@ -133,31 +128,60 @@ function python_version::parse_runtime_txt() {
 			${instructions}
 		EOF
 		build_data::set_string "failure_reason" "runtime-txt::invalid-version"
-		build_data::set_string "failure_detail" "${contents:0:50}"
+		build_data::set_string "failure_detail" "${trimmed_contents:0:100}"
 		exit 1
 	fi
 }
 
 # Parse the contents of a .python-version file and return the Python version substring (e.g. `3.12` or `3.12.0`).
 function python_version::parse_python_version_file() {
-	local contents="${1}"
-	local version_lines=()
+	local python_version_file_path="${1}"
+	local versions=()
+	local version
 
-	while IFS= read -r line; do
-		# Ignore lines that only contain whitespace and/or comments.
-		if [[ ! "${line}" =~ ^[[:space:]]*(#.*)?$ ]]; then
-			version_lines+=("${line}")
+	# shellcheck disable=SC2312 # Shellcheck doesn't take the `wait $!` into account.
+	mapfile -t versions < <(python_version::read_trimmed_version_lines "${python_version_file_path}")
+	# Ensure that if `python_version::read_trimmed_version_lines` fails inside the process
+	# substitution that the non-zero exit status is propagated.
+	wait $!
+
+	# We validate all of the version lines up front, since in the case where there are multiple invalid
+	# versions, we want to show an "invalid version" error rather than the "multiple versions" error.
+	for version in "${versions[@]}"; do
+		if [[ "${version}" =~ ^${PYTHON_VERSION_REGEX}$ ]]; then
+			continue
 		fi
-	done <<<"${contents}"
 
-	case "${#version_lines[@]}" in
-		1)
-			local line="${version_lines[0]}"
-			if [[ "${line}" =~ ^[[:space:]]*(${PYTHON_VERSION_REGEX})[[:space:]]*$ ]]; then
-				local version="${BASH_REMATCH[1]}"
-				echo "${version}"
-				return 0
-			else
+		# If we didn't find a valid Python version string, we check the file encoding so that we
+		# can display a more helpful error message if it turns out that the version was valid but
+		# that the file was just saved in the wrong encoding.
+		#
+		# Example valid values:
+		# `ASCII text`
+		# `ASCII text, with CRLF line terminators`
+		# `ASCII text, with no line terminators`
+		# `Unicode text, UTF-8 text`
+		#
+		# Example invalid values:
+		# `Unicode text, UTF-8 (with BOM) text`
+		# `Unicode text, UTF-16, little-endian text, with CRLF line terminators`
+		# `data` (for example when NUL or CTRL characters found)
+		#
+		# Note: File can also return `very short file (no magic)` (eg a file that contains just a newline)
+		# and `empty`, but we won't see those here since we're iterating over trimmed lines.
+		local file_encoding
+		file_encoding="$(file --brief --dereference "${python_version_file_path}")"
+
+		case "${file_encoding}" in
+			*"ASCII text"* | *"UTF-8 text"*)
+				# Replace everything but printable ASCII, spaces and tabs with the Unicode replacement
+				# character, so any invisible unwanted characters (such as ASCII control codes or the
+				# Unicode zero width space character) are visible in the error message.
+				local escaped_version
+				escaped_version="$(
+					LC_ALL=C
+					echo "${version//[^[:print:][:blank:]]/�}"
+				)"
 				output::error <<-EOF
 					Error: Invalid Python version in .python-version.
 
@@ -165,7 +189,7 @@ function python_version::parse_python_version_file() {
 					isn't in the correct format.
 
 					The following version was found:
-					${line}
+					${escaped_version}
 
 					However, the Python version must be specified as either:
 					1. The major version only, for example: ${DEFAULT_PYTHON_MAJOR_VERSION} (recommended)
@@ -184,13 +208,43 @@ function python_version::parse_python_version_file() {
 					each time it builds.
 				EOF
 				build_data::set_string "failure_reason" "python-version-file::invalid-version"
-				build_data::set_string "failure_detail" "${line:0:50}"
+				build_data::set_string "failure_detail" "${version:0:100}"
 				exit 1
-			fi
+				;;
+			*)
+				output::error <<-EOF
+					Error: Unable to read .python-version.
+
+					Your .python-version file couldn't be read because it's using
+					an unsupported file encoding:
+					${file_encoding}
+
+					Configure your editor to save files as UTF-8, without a BOM,
+					then delete and recreate the file using the correct encoding.
+
+					If that doesn't work, make sure you don't have a .gitattributes
+					file that's overriding the file encoding.
+
+					Note: On Windows, if you pipe or redirect output to a file
+					it can result in the file being encoded in UTF-16 LE when
+					using certain terminals and Windows settings. We recommend
+					you create the file using a text editor instead.
+				EOF
+				build_data::set_string "failure_reason" "python-version-file::invalid-encoding"
+				build_data::set_string "failure_detail" "${file_encoding}"
+				exit 1
+				;;
+		esac
+	done
+
+	case "${#versions[@]}" in
+		1)
+			echo "${versions[0]}"
+			return 0
 			;;
 		0)
 			output::error <<-EOF
-				Error: Invalid Python version in .python-version.
+				Error: No Python version found in .python-version.
 
 				No Python version was found in your .python-version file.
 
@@ -205,19 +259,17 @@ function python_version::parse_python_version_file() {
 				begin with a '#', otherwise it will be treated as a comment.
 			EOF
 			build_data::set_string "failure_reason" "python-version-file::no-version"
-			build_data::set_string "failure_detail" "${contents:0:50}"
 			exit 1
 			;;
 		*)
-			local first_five_version_lines=("${version_lines[@]:0:5}")
 			output::error <<-EOF
-				Error: Invalid Python version in .python-version.
+				Error: Multiple Python versions found in .python-version.
 
 				Multiple versions were found in your .python-version file:
 
 				$(
 					IFS=$'\n'
-					echo "${first_five_version_lines[*]}"
+					echo "${versions[*]}"
 				)
 
 				Update the file so it contains only one Python version.
@@ -225,18 +277,27 @@ function python_version::parse_python_version_file() {
 				For example, to request the latest version of Python ${DEFAULT_PYTHON_MAJOR_VERSION},
 				update your .python-version file so it contains exactly:
 				${DEFAULT_PYTHON_MAJOR_VERSION}
-
-				If you have added comments to the file, make sure that those
-				lines begin with a '#', so that they are ignored.
 			EOF
 			build_data::set_string "failure_reason" "python-version-file::multiple-versions"
 			build_data::set_string "failure_detail" "$(
 				IFS=,
-				echo "${first_five_version_lines[*]}"
+				echo "${versions[*]}"
 			)"
 			exit 1
 			;;
 	esac
+}
+
+# Outputs all populated (non-empty and not commented with '#') lines from the passed file,
+# with leading/trailing whitespace (including Unicode whitespace) trimmed from each line.
+function python_version::read_trimmed_version_lines() {
+	local file="${1}"
+	LC_ALL=C.UTF-8 sed \
+		--regexp-extended \
+		--expression 's/^[[:space:]]+//' \
+		--expression 's/[[:space:]]+$//' \
+		--expression '/^(#|$)/d' \
+		"${file}"
 }
 
 # Read the Python version from a Pipfile.lock, which can exist in one of two optional fields,

@@ -319,7 +319,7 @@ RSpec.describe 'Python version support' do
   context 'when .python-version contains an invalid Python version string' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_file_invalid_version', allow_failure: true) }
 
-    it 'aborts the build with an invalid .python-version message' do
+    it 'aborts the build with an invalid Python version message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
@@ -330,7 +330,7 @@ RSpec.describe 'Python version support' do
           remote:  !     isn't in the correct format.
           remote:  !     
           remote:  !     The following version was found:
-          remote:  !       ���3.�12.�0�  
+          remote:  !     ���python -	��3.12.0�[0m
           remote:  !     
           remote:  !     However, the Python version must be specified as either:
           remote:  !     1. The major version only, for example: #{DEFAULT_PYTHON_MAJOR_VERSION} (recommended)
@@ -354,6 +354,37 @@ RSpec.describe 'Python version support' do
     end
   end
 
+  context 'when .python-version is saved using an unsupported file encoding' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_file_unsupported_encoding', allow_failure: true) }
+
+    it 'aborts the build with an invalid file encoding message' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: 
+          remote:  !     Error: Unable to read .python-version.
+          remote:  !     
+          remote:  !     Your .python-version file couldn't be read because it's using
+          remote:  !     an unsupported file encoding:
+          remote:  !     Unicode text, UTF-8 (with BOM) text, with CRLF line terminators
+          remote:  !     
+          remote:  !     Configure your editor to save files as UTF-8, without a BOM,
+          remote:  !     then delete and recreate the file using the correct encoding.
+          remote:  !     
+          remote:  !     If that doesn't work, make sure you don't have a .gitattributes
+          remote:  !     file that's overriding the file encoding.
+          remote:  !     
+          remote:  !     Note: On Windows, if you pipe or redirect output to a file
+          remote:  !     it can result in the file being encoded in UTF-16 LE when
+          remote:  !     using certain terminals and Windows settings. We recommend
+          remote:  !     you create the file using a text editor instead.
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
+  end
+
   context 'when .python-version does not contain a Python version' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_file_no_version', allow_failure: true) }
 
@@ -362,7 +393,7 @@ RSpec.describe 'Python version support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: 
-          remote:  !     Error: Invalid Python version in .python-version.
+          remote:  !     Error: No Python version found in .python-version.
           remote:  !     
           remote:  !     No Python version was found in your .python-version file.
           remote:  !     
@@ -390,11 +421,10 @@ RSpec.describe 'Python version support' do
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: 
-          remote:  !     Error: Invalid Python version in .python-version.
+          remote:  !     Error: Multiple Python versions found in .python-version.
           remote:  !     
           remote:  !     Multiple versions were found in your .python-version file:
           remote:  !     
-          remote:  !     // invalid comment
           remote:  !     3.12
           remote:  !     2.7
           remote:  !     
@@ -403,9 +433,6 @@ RSpec.describe 'Python version support' do
           remote:  !     For example, to request the latest version of Python #{DEFAULT_PYTHON_MAJOR_VERSION},
           remote:  !     update your .python-version file so it contains exactly:
           remote:  !     #{DEFAULT_PYTHON_MAJOR_VERSION}
-          remote:  !     
-          remote:  !     If you have added comments to the file, make sure that those
-          remote:  !     lines begin with a '#', so that they are ignored.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
@@ -560,9 +587,6 @@ RSpec.describe 'Python version support' do
           remote:  !     
           remote:  !     The Python version specified in your runtime.txt file isn't
           remote:  !     in the correct format.
-          remote:  !     
-          remote:  !     The following file contents were found, which aren't valid:
-          remote:  !     ���python-3.12.0�
           remote:  !     
           remote:  !     However, the runtime.txt file is deprecated since it has been
           remote:  !     replaced by the more widely supported .python-version file:

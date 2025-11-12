@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Improved the error message shown when a `.python-version` file uses an unsupported file encoding. ([#1958](https://github.com/heroku/heroku-buildpack-python/pull/1958))
+- Improved the error message shown when a `.python-version` or `runtime.txt` file contain an invalid Python version. ([#1958](https://github.com/heroku/heroku-buildpack-python/pull/1958))
+- Added support for commented lines in `runtime.txt`, for parity with `.python-version`. ([#1958](https://github.com/heroku/heroku-buildpack-python/pull/1958))
 
 ## [v317] - 2025-11-03
 
