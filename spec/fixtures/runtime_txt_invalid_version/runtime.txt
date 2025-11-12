@@ -1,1 +1,7 @@
-​python-3.12.0
+# Comments are supported
+    # Even when indented
+
+# This version should be ignored, since it's commented out
+# 2.7.18
+  
+  ​python-3.12.0  
