@@ -105,6 +105,7 @@ function checks::existing_python_dir_present() {
 
 function checks::existing_venv_dir_present() {
 	local build_dir="${1}"
+	local venv_name
 
 	for venv_name in ".venv" "venv"; do
 		if [[ -f "${build_dir}/${venv_name}/pyvenv.cfg" ]]; then
