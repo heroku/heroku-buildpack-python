@@ -152,28 +152,28 @@ function python_version::parse_python_version_file() {
 			continue
 		fi
 
-		# If we didn't find a valid Python version string, we check the file encoding so that we
+		# If we didn't find a valid Python version string, we check the text encoding so that we
 		# can display a more helpful error message if it turns out that the version was valid but
-		# that the file was just saved in the wrong encoding.
+		# that the file was just saved in the wrong encoding (such as UTF-8 with BOM or UTF-16).
 		#
-		# Example valid values:
+		# Example values `file` can return:
 		# `ASCII text`
 		# `ASCII text, with CRLF line terminators`
 		# `ASCII text, with no line terminators`
 		# `Unicode text, UTF-8 text`
-		#
-		# Example invalid values:
 		# `Unicode text, UTF-8 (with BOM) text`
 		# `Unicode text, UTF-16, little-endian text, with CRLF line terminators`
-		# `data` (for example when NUL or CTRL characters found)
+		# `data` (such as when the file contains a NUL or other control code characters)
+		# `very short file (no magic)` (such as when the file contains a single ESC character)
 		#
-		# Note: File can also return `very short file (no magic)` (eg a file that contains just a newline)
-		# and `empty`, but we won't see those here since we're iterating over trimmed lines.
+		# Note: File can also return `empty` but in that case we wouldn't be iterating over found lines.
 		local file_encoding
-		file_encoding="$(file --brief --dereference "${python_version_file_path}")"
+		# We exclude some file type tests to avoid false positives, since we only need the encoding.
+		file_encoding="$(file --brief --dereference --exclude json --exclude soft "${python_version_file_path}")"
 
 		case "${file_encoding}" in
-			*"ASCII text"* | *"UTF-8 text"*)
+			# Cases where the text encoding isn't the issue, and so the version itself must be invalid.
+			*"ASCII text"* | *"UTF-8 text"* | *"very short file"* | "data")
 				# Replace everything but printable ASCII, spaces and tabs with the Unicode replacement
 				# character, so any invisible unwanted characters (such as ASCII control codes or the
 				# Unicode zero width space character) are visible in the error message.
@@ -211,19 +211,20 @@ function python_version::parse_python_version_file() {
 				build_data::set_string "failure_detail" "${version:0:100}"
 				exit 1
 				;;
+			# Unsupported text encodings such as UTF-8 with BOM or UTF-16.
 			*)
 				output::error <<-EOF
 					Error: Unable to read .python-version.
 
 					Your .python-version file couldn't be read because it's using
-					an unsupported file encoding:
+					an unsupported text encoding:
 					${file_encoding}
 
 					Configure your editor to save files as UTF-8, without a BOM,
 					then delete and recreate the file using the correct encoding.
 
 					If that doesn't work, make sure you don't have a .gitattributes
-					file that's overriding the file encoding.
+					file that's overriding the text encoding.
 
 					Note: On Windows, if you pipe or redirect output to a file
 					it can result in the file being encoded in UTF-16 LE when
@@ -290,12 +291,14 @@ function python_version::parse_python_version_file() {
 
 # Outputs all populated (non-empty and not commented with '#') lines from the passed file,
 # with leading/trailing whitespace (including Unicode whitespace) trimmed from each line.
+# We replace any NUL characters with a placeholder since Bash variables can't store them.
 function python_version::read_trimmed_version_lines() {
 	local file="${1}"
 	LC_ALL=C.UTF-8 sed \
 		--regexp-extended \
 		--expression 's/^[[:space:]]+//' \
 		--expression 's/[[:space:]]+$//' \
+		--expression 's/\x0/␀/' \
 		--expression '/^(#|$)/d' \
 		"${file}"
 }
