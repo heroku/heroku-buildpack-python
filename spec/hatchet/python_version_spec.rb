@@ -365,14 +365,14 @@ RSpec.describe 'Python version support' do
           remote:  !     Error: Unable to read .python-version.
           remote:  !     
           remote:  !     Your .python-version file couldn't be read because it's using
-          remote:  !     an unsupported file encoding:
+          remote:  !     an unsupported text encoding:
           remote:  !     Unicode text, UTF-8 (with BOM) text, with CRLF line terminators
           remote:  !     
           remote:  !     Configure your editor to save files as UTF-8, without a BOM,
           remote:  !     then delete and recreate the file using the correct encoding.
           remote:  !     
           remote:  !     If that doesn't work, make sure you don't have a .gitattributes
-          remote:  !     file that's overriding the file encoding.
+          remote:  !     file that's overriding the text encoding.
           remote:  !     
           remote:  !     Note: On Windows, if you pipe or redirect output to a file
           remote:  !     it can result in the file being encoded in UTF-16 LE when
