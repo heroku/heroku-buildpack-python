@@ -5,6 +5,7 @@
 - Updated uv from 0.9.7 to 0.9.9. ([#1961](https://github.com/heroku/heroku-buildpack-python/pull/1961))
 - Improved the error message shown for `.python-version` files that contain unexpected ASCII control code characters. ([#1962](https://github.com/heroku/heroku-buildpack-python/pull/1962))
 - Fixed Bash command substitution warnings from being shown if `runtime.txt` contains null byte characters. ([#1962](https://github.com/heroku/heroku-buildpack-python/pull/1962))
+- Improved the error message shown if the buildpack's build data file is deleted by a pre/post-compile hook. ([#1963](https://github.com/heroku/heroku-buildpack-python/pull/1963))
 
 ## [v318] - 2025-11-12
 
