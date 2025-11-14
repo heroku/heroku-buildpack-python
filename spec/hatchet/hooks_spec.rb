@@ -78,4 +78,28 @@ RSpec.describe 'Compile hooks' do
       end
     end
   end
+
+  context 'when an app tries to delete the whole cache directory including the build data file' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/hooks_delete_cache_dir', allow_failure: true) }
+
+    it 'aborts the build with a suitable error message' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Running bin/post_compile hook
+          remote:        + rm -rf /tmp/codon/tmp/cache
+          remote: 
+          remote:  !     Error: Can't find the buildpack's build data file.
+          remote:  !     
+          remote:  !     The Python buildpack's internal build data file is missing:
+          remote:  !     /tmp/codon/tmp/cache/build-data/python.json
+          remote:  !     
+          remote:  !     This file is required for the buildpack to work correctly,
+          remote:  !     and so you must not delete it when removing files from the
+          remote:  !     build cache or /tmp directories.
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
+  end
 end

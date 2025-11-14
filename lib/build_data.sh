@@ -104,9 +104,25 @@ function build_data::_set() {
 		local jq_args=(--argjson value "${value}")
 	fi
 
-	local new_data_file_contents
-	new_data_file_contents="$(jq --arg key "${key}" "${jq_args[@]}" '. + { ($key): ($value) }' "${BUILD_DATA_FILE}")"
-	echo "${new_data_file_contents}" >"${BUILD_DATA_FILE}"
+	if [[ -f "${BUILD_DATA_FILE}" ]]; then
+		local new_data_file_contents
+		new_data_file_contents="$(jq --exit-status --arg key "${key}" "${jq_args[@]}" '. + { ($key): ($value) }' "${BUILD_DATA_FILE}")"
+		echo "${new_data_file_contents}" >"${BUILD_DATA_FILE}"
+	else
+		output::error <<-EOF
+			Error: Can't find the buildpack's build data file.
+
+			The Python buildpack's internal build data file is missing:
+			${BUILD_DATA_FILE}
+
+			This file is required for the buildpack to work correctly,
+			and so you must not delete it when removing files from the
+			build cache or /tmp directories.
+		EOF
+		build_data::setup
+		build_data::set_string "failure_reason" "build-data::data-file-deleted"
+		exit 1
+	fi
 }
 
 # Check whether an entry exists in the build data store for the current build.
@@ -143,6 +159,7 @@ function build_data::get_previous() {
 		tac "${LEGACY_BUILD_DATA_FILE}" | { grep --perl-regexp --only-matching --max-count=1 "^${key}=\K.*$" || true; }
 	elif [[ -f "${PREVIOUS_BUILD_DATA_FILE}" ]]; then
 		# The `// empty` ensures we return the empty string rather than `null` if the key doesn't exist.
+		# We don't use `--exit-status` since `false` is a valid value for us to retrieve.
 		jq --raw-output ".${key} // empty" "${PREVIOUS_BUILD_DATA_FILE}"
 	fi
 }
@@ -170,5 +187,5 @@ function build_data::current_unix_realtime() {
 # build_data::print_bin_report_json
 # ```
 function build_data::print_bin_report_json() {
-	jq --sort-keys '.' "${BUILD_DATA_FILE}"
+	jq --exit-status --sort-keys '.' "${BUILD_DATA_FILE}"
 }
