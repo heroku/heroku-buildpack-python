@@ -25,7 +25,7 @@ format:
 
 run:
 	@echo "Running buildpack using: STACK=$(STACK) FIXTURE=$(FIXTURE)"
-	@docker run --rm -v $(PWD):/src:ro --tmpfs /app -e "HOME=/app" -e "STACK=$(STACK)" "$(STACK_IMAGE_TAG)" \
+	@docker run --rm -v $(PWD):/src:ro --tmpfs /app:mode=1777 -e "HOME=/app" -e "STACK=$(STACK)" "$(STACK_IMAGE_TAG)" \
 		bash -euo pipefail -O dotglob -c '\
 			mkdir /tmp/buildpack /tmp/cache /tmp/env; \
 			cp -r /src/{bin,lib,requirements,vendor} /tmp/buildpack; \
