@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Fixed regex for null bytes character replacement to replace all occurrences, not just the first. ([#1966](https://github.com/heroku/heroku-buildpack-python/pull/1966))
 
 ## [v319] - 2025-11-14
 

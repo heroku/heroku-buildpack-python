@@ -298,7 +298,7 @@ function python_version::read_trimmed_version_lines() {
 		--regexp-extended \
 		--expression 's/^[[:space:]]+//' \
 		--expression 's/[[:space:]]+$//' \
-		--expression 's/\x0/␀/' \
+		--expression 's/\x0/␀/g' \
 		--expression '/^(#|$)/d' \
 		"${file}"
 }
