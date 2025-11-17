@@ -68,7 +68,6 @@ function poetry::install_poetry() {
 				--no-input \
 				--quiet \
 				"poetry==${POETRY_VERSION}" \
-				dulwich==0.24.5 \
 				|& output::indent
 		}; then
 			output::error <<-EOF
