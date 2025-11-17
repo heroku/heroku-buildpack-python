@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Fixed regex for null bytes character replacement to replace all occurrences, not just the first. ([#1966](https://github.com/heroku/heroku-buildpack-python/pull/1966))
+- Unpinned Poetry's `dulwich` version, since the upstream incompatibility with older Python has been fixed. ([#1967](https://github.com/heroku/heroku-buildpack-python/pull/1967))
 
 ## [v319] - 2025-11-14
 
