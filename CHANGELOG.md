@@ -4,7 +4,7 @@
 
 - Fixed regex for null bytes character replacement to replace all occurrences, not just the first. ([#1966](https://github.com/heroku/heroku-buildpack-python/pull/1966))
 - Unpinned Poetry's `dulwich` version, since the upstream incompatibility with older Python has been fixed. ([#1967](https://github.com/heroku/heroku-buildpack-python/pull/1967))
-- Ensured Python runtimes are built with Tk support by default by passing `--with-tcltk` to CPython's configure script, installing the Tcl/Tk build dependencies, and verifying `_tkinter` loads in the runtime tests. ([#XXXX](https://github.com/heroku/heroku-buildpack-python/pull/XXXX))
+- Ensured Python runtimes are built with Tk support by default by passing `--with-tcltk` to CPython's configure script, installing the Tcl/Tk build dependencies, verifying `_tkinter` loads in the runtime tests, and re-installing cached runtimes automatically if Tk support is missing during app builds. ([#XXXX](https://github.com/heroku/heroku-buildpack-python/pull/XXXX))
 
 ## [v319] - 2025-11-14
 
