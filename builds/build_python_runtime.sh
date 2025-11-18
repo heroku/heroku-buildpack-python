@@ -10,6 +10,9 @@ shopt -s inherit_errexit
 PYTHON_VERSION="${1:?"Error: The Python version to build must be specified as the first argument."}"
 PYTHON_MAJOR_VERSION="${PYTHON_VERSION%.*}"
 
+export PYTHON_CONFIGURE_OPTS="--with-tcltk ${PYTHON_CONFIGURE_OPTS:-}"
+export DISABLE_PYTHON_BINARY=1
+
 ARCH=$(dpkg --print-architecture)
 
 # Python is relocated to different locations by the classic buildpack and CNB (which works since we
