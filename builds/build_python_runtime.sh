@@ -10,7 +10,13 @@ shopt -s inherit_errexit
 PYTHON_VERSION="${1:?"Error: The Python version to build must be specified as the first argument."}"
 PYTHON_MAJOR_VERSION="${PYTHON_VERSION%.*}"
 
-export PYTHON_CONFIGURE_OPTS="--with-tcltk ${PYTHON_CONFIGURE_OPTS:-}"
+# Ensure Tk support is enabled when we build CPython. If the caller has already
+# requested Tk support we avoid duplicating the flag, but otherwise we prepend
+# it so that any user-supplied options take precedence.
+if [[ " ${PYTHON_CONFIGURE_OPTS:-} " != *" --with-tcltk "* ]]; then
+        PYTHON_CONFIGURE_OPTS="--with-tcltk ${PYTHON_CONFIGURE_OPTS:-}"
+fi
+export PYTHON_CONFIGURE_OPTS
 export DISABLE_PYTHON_BINARY=1
 
 ARCH=$(dpkg --print-architecture)

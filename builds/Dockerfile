@@ -13,6 +13,8 @@ RUN apt-get update --error-on=any \
       libdb-dev \
       libreadline-dev \
       libsqlite3-dev \
+      tcl-dev \
+      tk-dev \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=cosign /ko-app/cosign /usr/local/bin/cosign
 
