@@ -17,9 +17,21 @@ function python::install() {
 	install_python_start_time=$(build_data::current_unix_realtime)
 	local install_dir="${build_dir}/.heroku/python"
 
+	local reinstall_python=1
 	if [[ -f "${install_dir}/bin/python" ]]; then
-		output::step "Using cached install of Python ${python_full_version}"
-	else
+		if "${install_dir}/bin/python" - <<'PY'
+import _tkinter
+PY
+		then
+			output::step "Using cached install of Python ${python_full_version}"
+			reinstall_python=0
+		else
+			output::step "Cached Python install missing Tk support; reinstalling"
+			rm -rf "${install_dir}"
+		fi
+	fi
+
+	if [[ "${reinstall_python}" -eq 1 ]]; then
 		output::step "Installing Python ${python_full_version}"
 
 		mkdir -p "${install_dir}"

@@ -61,6 +61,7 @@ optional_stdlib_modules=(
 	dbm.ndbm
 	decimal
 	lzma
+	_tkinter
 	readline
 	sqlite3
 	ssl

@@ -10,7 +10,6 @@ shopt -s inherit_errexit
 PYTHON_VERSION="${1:?"Error: The Python version to build must be specified as the first argument."}"
 PYTHON_MAJOR_VERSION="${PYTHON_VERSION%.*}"
 
-export PYTHON_CONFIGURE_OPTS="--with-tcltk ${PYTHON_CONFIGURE_OPTS:-}"
 export DISABLE_PYTHON_BINARY=1
 
 ARCH=$(dpkg --print-architecture)
@@ -95,6 +94,8 @@ cd "${SRC_DIR}"
 # for maximum compatibility / most battle-tested build configuration:
 # https://github.com/docker-library/python
 CONFIGURE_OPTS=(
+	# Enable Tk support by default so the `_tkinter` stdlib extension is built.
+	"--with-tcltk"
 	# Explicitly set the target architecture rather than auto-detecting based on the host CPU.
 	# This only affects targets like i386 (for which we don't build), but we pass it anyway for
 	# completeness and parity with the Python Docker image builds.
@@ -145,6 +146,14 @@ if [[ "${PYTHON_MAJOR_VERSION}" != +(3.9|3.10) ]]; then
 		# https://github.com/python/cpython/pull/29315
 		"--disable-test-modules"
 	)
+fi
+
+# Allow additional configure flags to be supplied via PYTHON_CONFIGURE_OPTS while keeping
+# the defaults (such as --with-tcltk) earlier in the list so user-supplied values win.
+if [[ -n "${PYTHON_CONFIGURE_OPTS:-}" ]]; then
+	# shellcheck disable=SC2206 # We intentionally rely on word-splitting like configure scripts.
+	PYTHON_CONFIGURE_OPTS_ARRAY=( ${PYTHON_CONFIGURE_OPTS} )
+	CONFIGURE_OPTS+=("${PYTHON_CONFIGURE_OPTS_ARRAY[@]}")
 fi
 
 ./configure "${CONFIGURE_OPTS[@]}"
