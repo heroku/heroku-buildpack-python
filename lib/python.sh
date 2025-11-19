@@ -4,7 +4,7 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-S3_BASE_URL="https://heroku-buildpack-python.s3.us-east-1.amazonaws.com"
+S3_BASE_URL="https://mrelief-general-production.s3.us-west-2.amazonaws.com"
 
 function python::install() {
 	local build_dir="${1}"
