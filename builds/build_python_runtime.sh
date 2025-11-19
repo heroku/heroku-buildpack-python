@@ -21,6 +21,38 @@ INSTALL_DIR="/tmp/python"
 SRC_DIR="/tmp/src"
 UPLOAD_DIR="/tmp/upload"
 
+copy_tcl_tk_runtime_dependencies() {
+local multiarch_lib_dir
+multiarch_lib_dir="/usr/lib/$(dpkg-architecture --query DEB_HOST_MULTIARCH)"
+local destination_lib_dir="${INSTALL_DIR}/lib"
+mkdir -p "${destination_lib_dir}"
+
+# Copy the Tcl/Tk shared libraries and their associated runtime directories into the
+# Python runtime so that `_tkinter` remains usable when relocated onto the Heroku
+# runtime image (which doesn't provide these packages itself).
+local -a include_args=(
+"--include=libtcl*.so*"
+"--include=libtk*.so*"
+"--include=tcl*/**"
+"--include=tk*/**"
+"--include=tcl*Config.sh"
+"--include=tk*Config.sh"
+"--include=tclooConfig.sh"
+"--exclude=*"
+)
+rsync \
+--archive \
+--copy-links \
+"${include_args[@]}" \
+"${multiarch_lib_dir}/" \
+"${destination_lib_dir}/"
+
+if [[ -d /usr/share/tcltk ]]; then
+mkdir -p "${INSTALL_DIR}/share"
+rsync --archive --copy-links /usr/share/tcltk "${INSTALL_DIR}/share/"
+fi
+}
+
 function abort() {
 	echo "Error: ${1}" >&2
 	exit 1
@@ -180,6 +212,8 @@ fi
 CPU_COUNT="$(nproc)"
 make -j "${CPU_COUNT}" "EXTRA_CFLAGS=${EXTRA_CFLAGS}" "LDFLAGS=${LDFLAGS}"
 make install
+
+copy_tcl_tk_runtime_dependencies
 
 if [[ "${PYTHON_MAJOR_VERSION}" == +(3.9) ]]; then
 	# On older versions of Python we're still building the static library, which has to be

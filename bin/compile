@@ -233,6 +233,20 @@ set_default_env LANG en_US.UTF-8
 # Tell Python to look for Python modules in the /app dir. Don't change this.
 set_default_env PYTHONPATH "\${HOME}"
 
+python_lib_runtime_dir="${BUILD_DIR}/.heroku/python/lib"
+if [[ -d "${python_lib_runtime_dir}" ]]; then
+        tcl_library_dir="$(find "${python_lib_runtime_dir}" -maxdepth 1 -mindepth 1 -type d -name 'tcl[0-9]*' -printf '%f\n' | sort | head -n1 || true)"
+        if [[ -n "${tcl_library_dir}" ]]; then
+                set_env TCL_LIBRARY "\${HOME}/.heroku/python/lib/${tcl_library_dir}"
+                export TCL_LIBRARY="/app/.heroku/python/lib/${tcl_library_dir}"
+        fi
+        tk_library_dir="$(find "${python_lib_runtime_dir}" -maxdepth 1 -mindepth 1 -type d -name 'tk[0-9]*' -printf '%f\n' | sort | head -n1 || true)"
+        if [[ -n "${tk_library_dir}" ]]; then
+                set_env TK_LIBRARY "\${HOME}/.heroku/python/lib/${tk_library_dir}"
+                export TK_LIBRARY="/app/.heroku/python/lib/${tk_library_dir}"
+        fi
+fi
+
 # Python expects to be in /app, if at runtime, it is not, set
 # up symlinks… this can occur when the subdir buildpack is used.
 cat <<EOT >>"${PROFILE_PATH}"

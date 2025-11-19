@@ -38,6 +38,8 @@ RSpec.describe '.profile.d/ scripts' do
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/this-should-be-preserved
           PYTHONUNBUFFERED=true
+          TCL_LIBRARY=/app/.heroku/python/lib/tcl8.6
+          TK_LIBRARY=/app/.heroku/python/lib/tk8.6
           WEB_CONCURRENCY=this-should-be-preserved
         OUTPUT
       end
