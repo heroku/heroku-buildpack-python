@@ -77,10 +77,28 @@ if [[ "${major_python_version}" == "3.14" ]]; then
 fi
 
 if "${INSTALL_DIR}/bin/python3" -c "import $(
-	IFS=,
-	echo "${optional_stdlib_modules[*]}"
+        IFS=,
+        echo "${optional_stdlib_modules[*]}"
 )"; then
-	echo "Successful imported: ${optional_stdlib_modules[*]}"
+        echo "Successful imported: ${optional_stdlib_modules[*]}"
 else
-	abort "The above optional stdlib module failed to import! Check the compile logs to see if it was skipped due to missing libraries/headers."
+        abort "The above optional stdlib module failed to import! Check the compile logs to see if it was skipped due to missing libraries/headers."
+fi
+
+tcl_runtime_dir="$(find "${INSTALL_DIR}/lib" -maxdepth 1 -mindepth 1 -type d -name 'tcl[0-9]*' -printf '%f\n' | sort | head -n1 || true)"
+tk_runtime_dir="$(find "${INSTALL_DIR}/lib" -maxdepth 1 -mindepth 1 -type d -name 'tk[0-9]*' -printf '%f\n' | sort | head -n1 || true)"
+
+if [[ -z "${tcl_runtime_dir}" || -z "${tk_runtime_dir}" ]]; then
+        abort "Unable to locate the vendored Tcl/Tk runtime directories inside the Python build."
+fi
+
+if TCL_LIBRARY="${INSTALL_DIR}/lib/${tcl_runtime_dir}" TK_LIBRARY="${INSTALL_DIR}/lib/${tk_runtime_dir}" "${INSTALL_DIR}/bin/python3" - <<'PY'
+import tkinter
+interp = tkinter.Tcl()
+interp.eval('info patchlevel')
+PY
+then
+        echo "Successfully initialised tkinter using the vendored Tcl/Tk runtime."
+else
+        abort "Failed to initialise tkinter even though Tcl/Tk runtimes were vendored."
 fi
