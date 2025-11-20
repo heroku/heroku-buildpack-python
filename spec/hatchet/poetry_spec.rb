@@ -74,7 +74,6 @@ RSpec.describe 'Poetry support' do
           remote:   "pre_compile_hook": false,
           remote:   "python_install_duration": [0-9.]+,
           remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
-          remote:   "python_version_files": ".python-version,",
           remote:   "python_version_major": "3.13",
           remote:   "python_version_origin": ".python-version",
           remote:   "python_version_outdated": false,

@@ -316,6 +316,30 @@ RSpec.describe 'Python version support' do
     it_behaves_like 'builds with the requested Python version', '3.14', LATEST_PYTHON_3_14
   end
 
+  context 'when .python-version is misspelled' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_file_misspelled', allow_failure: true) }
+
+    it 'aborts the build with an invalid Python version message' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: 
+          remote:  !     Error: Your .python-version file is spelled incorrectly.
+          remote:  !     
+          remote:  !     Your app's .python-version file currently has the filename:
+          remote:  !     '.python-version '
+          remote:  !     
+          remote:  !     However, the correct spelling is (without quotes):
+          remote:  !     '.python-version'
+          remote:  !     
+          remote:  !     You must rename your file to the correct name.
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
+  end
+
   context 'when .python-version contains an invalid Python version string' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_file_invalid_version', allow_failure: true) }
 

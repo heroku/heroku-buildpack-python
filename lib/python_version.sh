@@ -24,6 +24,27 @@ PYTHON_VERSION_REGEX="${INT_REGEX}\.${INT_REGEX}(\.${INT_REGEX})?"
 # Versions of form N.N.N only.
 PYTHON_FULL_VERSION_REGEX="${INT_REGEX}\.${INT_REGEX}\.${INT_REGEX}"
 
+# Misspellings of the `.python-version` file seen in the wild.
+MISSPELLED_PYTHON_VERSION_FILE_NAMES=(
+	".python_version.txt"
+	".python_version"
+	".python-version "
+	".python-version."
+	".python-version.py"
+	".python-version.rtf"
+	".python-version.txt"
+	".python-version.TXT"
+	".Python-version"
+	".python.version"
+	".pythonversion"
+	"'.python-version'"
+	"python_version.txt"
+	"python_version"
+	"python-version."
+	"python-version.txt"
+	"python-version"
+)
+
 # Determine what Python version has been requested for the project.
 #
 # Returns a version request of form N.N or N.N.N, with basic validation checks that the version
@@ -50,17 +71,6 @@ function python_version::read_requested_python_version() {
 	declare -n version="${4}"
 	declare -n origin="${5}"
 
-	# Record the names of files similar to .python-version in the root of the app, to determine
-	# how often that file is misspelled, as a temporary first step before deciding whether to add
-	# a new warning/error (and if so, which for which misspelled filenames it should check).
-	local python_version_files
-	python_version_files="$(
-		find . -maxdepth 1 -type f -iregex '\./\.?python.?version.*' -printf '%P\n' | sort | tr '\n' ',' || true
-	)"
-	if [[ -n "${python_version_files}" ]]; then
-		build_data::set_string "python_version_files" "${python_version_files}"
-	fi
-
 	local runtime_txt_path="${build_dir}/runtime.txt"
 	if [[ -f "${runtime_txt_path}" ]]; then
 		version="$(python_version::parse_runtime_txt "${runtime_txt_path}")"
@@ -68,11 +78,43 @@ function python_version::read_requested_python_version() {
 		return 0
 	fi
 
+	local misspelled_python_version_file_name
+	for misspelled_python_version_file_name in "${MISSPELLED_PYTHON_VERSION_FILE_NAMES[@]}"; do
+		if [[ -f "${build_dir}/${misspelled_python_version_file_name}" ]]; then
+			# We use quotes around the current filename since one of the misspellings seen in the
+			# wild is where the filename contains trailing whitespace.
+			output::error <<-EOF
+				Error: Your .python-version file is spelled incorrectly.
+
+				Your app's .python-version file currently has the filename:
+				'${misspelled_python_version_file_name}'
+
+				However, the correct spelling is (without quotes):
+				'.python-version'
+
+				You must rename your file to the correct name.
+			EOF
+			build_data::set_string "failure_reason" "python-version-file::misspelled"
+			build_data::set_string "failure_detail" "${misspelled_python_version_file_name}"
+			exit 1
+		fi
+	done
+
 	local python_version_file_path="${build_dir}/.python-version"
 	if [[ -f "${python_version_file_path}" ]]; then
 		version="$(python_version::parse_python_version_file "${python_version_file_path}")"
 		origin=".python-version"
 		return 0
+	fi
+
+	# Record the names of files similar to `.python-version` in the root of the app, so we can track
+	# additional misspellings that might need to be added to `MISSPELLED_PYTHON_VERSION_FILE_NAMES`.
+	local python_version_files
+	python_version_files="$(
+		find . -maxdepth 1 -type f -iregex '\./.*python.?version.*' -printf '%P\n' | sort | tr '\n' ',' || true
+	)"
+	if [[ -n "${python_version_files}" ]]; then
+		build_data::set_string "python_version_files" "${python_version_files}"
 	fi
 
 	if [[ "${package_manager}" == "pipenv" ]]; then
