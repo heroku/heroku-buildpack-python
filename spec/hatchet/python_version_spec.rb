@@ -262,8 +262,8 @@ RSpec.describe 'Python version support' do
           remote: 
           remote:  !     Warning: Support for Python 3.9 is ending soon!
           remote:  !     
-          remote:  !     Python 3.9 will reach its upstream end-of-life in October 2025,
-          remote:  !     at which point it will no longer receive security updates:
+          remote:  !     Python 3.9 reached its upstream end-of-life on 31st October 2025,
+          remote:  !     and so no longer receives security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
           remote:  !     As such, support for Python 3.9 will be removed from this
@@ -289,7 +289,36 @@ RSpec.describe 'Python version support' do
   context 'when .python-version contains Python 3.10' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.10') }
 
-    it_behaves_like 'builds with the requested Python version', '3.10', LATEST_PYTHON_3_10
+    it 'builds with Python 3.10 but shows a deprecation warning' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.10 specified in .python-version
+          remote: 
+          remote:  !     Warning: Support for Python 3.10 is deprecated!
+          remote:  !     
+          remote:  !     Python 3.10 will reach its upstream end-of-life in October 2026,
+          remote:  !     at which point it will no longer receive security updates:
+          remote:  !     https://devguide.python.org/versions/#supported-versions
+          remote:  !     
+          remote:  !     As such, support for Python 3.10 will be removed from this
+          remote:  !     buildpack on 6th January 2027.
+          remote:  !     
+          remote:  !     Upgrade to a newer Python version as soon as possible, by
+          remote:  !     changing the version in your .python-version file.
+          remote:  !     
+          remote:  !     For more information, see:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote: 
+          remote: -----> Installing Python #{LATEST_PYTHON_3_10}
+          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
+          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+        OUTPUT
+        expect(app.run('python -V')).to eq("Python #{LATEST_PYTHON_3_10}\n")
+        expect($CHILD_STATUS.exitstatus).to eq(0)
+      end
+    end
   end
 
   context 'when .python-version contains Python 3.11' do

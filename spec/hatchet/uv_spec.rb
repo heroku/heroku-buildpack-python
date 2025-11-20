@@ -262,8 +262,8 @@ RSpec.describe 'uv support' do
           remote: 
           remote:  !     Warning: Support for Python 3.9 is ending soon!
           remote:  !     
-          remote:  !     Python 3.9 will reach its upstream end-of-life in October 2025,
-          remote:  !     at which point it will no longer receive security updates:
+          remote:  !     Python 3.9 reached its upstream end-of-life on 31st October 2025,
+          remote:  !     and so no longer receives security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
           remote:  !     As such, support for Python 3.9 will be removed from this
