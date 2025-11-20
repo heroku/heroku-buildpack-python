@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v320] - 2025-11-20
+
 - Added a check for misspelled `.python-version` files. ([#1970](https://github.com/heroku/heroku-buildpack-python/pull/1970))
 - Fixed regex for null bytes character replacement to replace all occurrences, not just the first. ([#1966](https://github.com/heroku/heroku-buildpack-python/pull/1966))
 - Unpinned Poetry's `dulwich` version, since the upstream incompatibility with older Python has been fixed. ([#1967](https://github.com/heroku/heroku-buildpack-python/pull/1967))
@@ -1400,7 +1403,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v319...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v320...main
+[v320]: https://github.com/heroku/heroku-buildpack-python/compare/v319...v320
 [v319]: https://github.com/heroku/heroku-buildpack-python/compare/v318...v319
 [v318]: https://github.com/heroku/heroku-buildpack-python/compare/v317...v318
 [v317]: https://github.com/heroku/heroku-buildpack-python/compare/v316...v317
