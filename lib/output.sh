@@ -4,10 +4,10 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-ANSI_BLUE='\033[1;34m'
-ANSI_RED='\033[1;31m'
-ANSI_YELLOW='\033[1;33m'
-ANSI_RESET='\033[0m'
+ANSI_BLUE=$'\e[1;34m'
+ANSI_RED=$'\e[1;31m'
+ANSI_YELLOW=$'\e[1;33m'
+ANSI_RESET=$'\e[0m'
 
 # Output a single line step message to stdout.
 #
@@ -40,11 +40,8 @@ function output::indent() {
 # EOF
 # ```
 function output::notice() {
-	local line
 	echo >&2
-	while IFS= read -r line; do
-		echo -e "${ANSI_BLUE} !     ${line}${ANSI_RESET}" >&2
-	done
+	sed --expression "s/^/${ANSI_BLUE} !     /" --expression "s/$/${ANSI_RESET}/" >&2
 	echo >&2
 }
 
@@ -59,11 +56,8 @@ function output::notice() {
 # EOF
 # ```
 function output::warning() {
-	local line
 	echo >&2
-	while IFS= read -r line; do
-		echo -e "${ANSI_YELLOW} !     ${line}${ANSI_RESET}" >&2
-	done
+	sed --expression "s/^/${ANSI_YELLOW} !     /" --expression "s/$/${ANSI_RESET}/" >&2
 	echo >&2
 }
 
@@ -78,10 +72,7 @@ function output::warning() {
 # EOF
 # ```
 function output::error() {
-	local line
 	echo >&2
-	while IFS= read -r line; do
-		echo -e "${ANSI_RED} !     ${line}${ANSI_RESET}" >&2
-	done
+	sed --expression "s/^/${ANSI_RED} !     /" --expression "s/$/${ANSI_RESET}/" >&2
 	echo >&2
 }
