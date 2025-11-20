@@ -41,7 +41,7 @@ function output::indent() {
 # ```
 function output::notice() {
 	echo >&2
-	sed -e "s/^/${ANSI_BLUE} !     /" -e "s/$/${ANSI_RESET}/" >&2
+	sed --expression "s/^/${ANSI_BLUE} !     /" --expression "s/$/${ANSI_RESET}/" >&2
 	echo >&2
 }
 
@@ -57,7 +57,7 @@ function output::notice() {
 # ```
 function output::warning() {
 	echo >&2
-	sed -e "s/^/${ANSI_YELLOW} !     /" -e "s/$/${ANSI_RESET}/" >&2
+	sed --expression "s/^/${ANSI_YELLOW} !     /" --expression "s/$/${ANSI_RESET}/" >&2
 	echo >&2
 }
 
@@ -73,6 +73,6 @@ function output::warning() {
 # ```
 function output::error() {
 	echo >&2
-	sed -e "s/^/${ANSI_RED} !     /" -e "s/$/${ANSI_RESET}/" >&2
+	sed --expression "s/^/${ANSI_RED} !     /" --expression "s/$/${ANSI_RESET}/" >&2
 	echo >&2
 }
