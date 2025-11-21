@@ -30,8 +30,10 @@ function package_manager::determine_package_manager() {
 			delete your 'Pipfile' and then add either a 'requirements.txt',
 			'poetry.lock' or 'uv.lock' file.
 
-			Note: This error replaces the warning which was displayed in
-			build logs starting 12th November 2024.
+			If you aren't sure which package manager to use, we recommend
+			trying uv, since it supports lockfiles, is extremely fast, and
+			is actively maintained by a full-time team:
+			https://docs.astral.sh/uv/
 		EOF
 		build_data::set_string "failure_reason" "package-manager::pipenv-missing-lockfile"
 		exit 1

@@ -37,6 +37,17 @@ RSpec.describe 'Heroku CI' do
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
           -----> Saving cache
+
+           !     Note: We recently added support for the package manager uv:
+           !     https://devcenter.heroku.com/changelog-items/3238
+           !     
+           !     It's now our recommended Python package manager, since it
+           !     supports lockfiles, is faster, gives more helpful error
+           !     messages, and is actively maintained by a full-time team.
+           !     
+           !     If you haven't tried it yet, we suggest you take a look!
+           !     https://docs.astral.sh/uv/
+
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -117,6 +128,17 @@ RSpec.describe 'Heroku CI' do
                  PYTHONUNBUFFERED=1
                  VIRTUAL_ENV=/app/.heroku/python
           -----> Saving cache
+
+           !     Note: We recently added support for the package manager uv:
+           !     https://devcenter.heroku.com/changelog-items/3238
+           !     
+           !     It's now our recommended Python package manager, since it
+           !     supports lockfiles, is faster, gives more helpful error
+           !     messages, and is actively maintained by a full-time team.
+           !     
+           !     If you haven't tried it yet, we suggest you take a look!
+           !     https://docs.astral.sh/uv/
+
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -205,6 +227,17 @@ RSpec.describe 'Heroku CI' do
                  POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
                  PYTHONUNBUFFERED=1
           -----> Saving cache
+
+           !     Note: We recently added support for the package manager uv:
+           !     https://devcenter.heroku.com/changelog-items/3238
+           !     
+           !     It's now our recommended Python package manager, since it
+           !     supports lockfiles, is faster, gives more helpful error
+           !     messages, and is actively maintained by a full-time team.
+           !     
+           !     If you haven't tried it yet, we suggest you take a look!
+           !     https://docs.astral.sh/uv/
+
           -----> Inline app detected
           LANG=en_US.UTF-8
           LD_LIBRARY_PATH=/app/.heroku/python/lib

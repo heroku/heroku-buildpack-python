@@ -290,4 +290,18 @@ hooks::run_hook "post_compile"
 
 cache::save "${BUILD_DIR}" "${CACHE_DIR}" "${STACK}" "${python_full_version}" "${package_manager}"
 
+if [[ "${package_manager}" != "uv" ]]; then
+	output::notice <<-EOF
+		Note: We recently added support for the package manager uv:
+		https://devcenter.heroku.com/changelog-items/3238
+
+		It's now our recommended Python package manager, since it
+		supports lockfiles, is faster, gives more helpful error
+		messages, and is actively maintained by a full-time team.
+
+		If you haven't tried it yet, we suggest you take a look!
+		https://docs.astral.sh/uv/
+	EOF
+fi
+
 build_data::set_duration "total_duration" "${compile_start_time}"
