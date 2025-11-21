@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Deprecated support for Python 3.10. ([#1972](https://github.com/heroku/heroku-buildpack-python/pull/1972))
 
 ## [v320] - 2025-11-20
 
