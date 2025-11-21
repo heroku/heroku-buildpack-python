@@ -35,6 +35,7 @@ RSpec.describe '.profile.d/ scripts' do
           LD_LIBRARY_PATH=/app/.heroku/python/lib:/this-should-be-preserved
           LIBRARY_PATH=/app/.heroku/python/lib:/this-should-be-preserved
           PATH=/app/.heroku/python/bin:/this-should-be-preserved:/usr/local/bin:/usr/bin:/bin
+          PIP_DISABLE_PIP_VERSION_CHECK=1
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/this-should-be-preserved
           PYTHONUNBUFFERED=true

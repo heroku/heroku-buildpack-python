@@ -11,6 +11,8 @@ WHEEL_VERSION=$(utils::get_requirement_version 'wheel')
 function pip::install_pip() {
 	local python_home="${1}"
 	local python_major_version="${2}"
+	local export_file="${3}"
+	local profile_d_file="${4}"
 
 	build_data::set_string "pip_version" "${PIP_VERSION}"
 
@@ -74,6 +76,20 @@ function pip::install_pip() {
 		build_data::set_string "failure_reason" "install-package-manager::pip"
 		exit 1
 	fi
+
+	# Saves us having to pass `--disable-pip-version-check` each time pip is used. Note: We can't use
+	# this for the pip install usage above, since `--isolated` disables reading of `PIP_` env vars.
+	export PIP_DISABLE_PIP_VERSION_CHECK="1"
+
+	# Set the same env vars in the environment used by later buildpacks.
+	cat >>"${export_file}" <<-EOF
+		export PIP_DISABLE_PIP_VERSION_CHECK="1"
+	EOF
+
+	# And the environment used at app run-time.
+	cat >>"${profile_d_file}" <<-EOF
+		export PIP_DISABLE_PIP_VERSION_CHECK="1"
+	EOF
 }
 
 function pip::install_dependencies() {
@@ -112,7 +128,6 @@ function pip::install_dependencies() {
 	local install_log
 	install_log=$(mktemp)
 
-	# TODO: Remove --disable-pip-version-check in favour of exporting PIP_DISABLE_PIP_VERSION_CHECK.
 	# The sed usage is to reduce the verbosity of output lines like:
 	# ...when using Python 3.10 and older:
 	# "Requirement already satisfied: typing-extensions==4.12.2 in ./.heroku/python/lib/python3.10/site-packages (from -r requirements.txt (line 2)) (4.12.2)"
@@ -121,7 +136,6 @@ function pip::install_dependencies() {
 	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 	if ! {
 		"${pip_install_command[@]}" \
-			--disable-pip-version-check \
 			--exists-action=w \
 			--no-cache-dir \
 			--no-input \

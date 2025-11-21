@@ -30,6 +30,7 @@ RSpec.describe 'pip support' do
           remote:        LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote:        LIBRARY_PATH=/app/.heroku/python/lib
           remote:        PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote:        PIP_DISABLE_PIP_VERSION_CHECK=1
           remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
           remote:        PYTHONUNBUFFERED=1
           remote: -----> Saving cache
@@ -38,6 +39,7 @@ RSpec.describe 'pip support' do
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote: LIBRARY_PATH=/app/.heroku/python/lib
           remote: PATH=/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote: PIP_DISABLE_PIP_VERSION_CHECK=1
           remote: PYTHONHOME=/app/.heroku/python
           remote: PYTHONPATH=/app
           remote: PYTHONUNBUFFERED=true
@@ -106,6 +108,7 @@ RSpec.describe 'pip support' do
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin
+          PIP_DISABLE_PIP_VERSION_CHECK=1
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true

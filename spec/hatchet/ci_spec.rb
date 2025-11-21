@@ -33,6 +33,7 @@ RSpec.describe 'Heroku CI' do
                  LD_LIBRARY_PATH=/app/.heroku/python/lib
                  LIBRARY_PATH=/app/.heroku/python/lib
                  PATH=/app/.heroku/python/bin::/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+                 PIP_DISABLE_PIP_VERSION_CHECK=1
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
           -----> Saving cache
@@ -41,6 +42,7 @@ RSpec.describe 'Heroku CI' do
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
+          PIP_DISABLE_PIP_VERSION_CHECK=1
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
@@ -54,6 +56,7 @@ RSpec.describe 'Heroku CI' do
           LD_LIBRARY_PATH=/app/.heroku/python/lib
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
+          PIP_DISABLE_PIP_VERSION_CHECK=1
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
