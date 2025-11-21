@@ -34,6 +34,17 @@ RSpec.describe 'pip support' do
           remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
           remote:        PYTHONUNBUFFERED=1
           remote: -----> Saving cache
+          remote: 
+          remote:  !     Note: We recently added support for the package manager uv:
+          remote:  !     https://devcenter.heroku.com/changelog-items/3238
+          remote:  !     
+          remote:  !     It's now our recommended Python package manager, since it
+          remote:  !     supports lockfiles, is faster, gives more helpful error
+          remote:  !     messages, and is actively maintained by a full-time team.
+          remote:  !     
+          remote:  !     If you haven't tried it yet, we suggest you take a look!
+          remote:  !     https://docs.astral.sh/uv/
+          remote: 
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -96,7 +107,6 @@ RSpec.describe 'pip support' do
           remote: -----> Running bin/post_compile hook
           remote:        .+
           remote: -----> Saving cache
-          remote: -----> Inline app detected
         REGEX
 
         # For historical reasons pip is made available at run-time too, unlike some of the other package managers.
@@ -162,7 +172,7 @@ RSpec.describe 'pip support' do
 
     it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running bin/post_compile hook
           remote:        easy-install.pth:/app/.heroku/python/src/gunicorn
           remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
@@ -174,6 +184,7 @@ RSpec.describe 'pip support' do
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Saving cache
+          .+
           remote: -----> Inline app detected
           remote: easy-install.pth:/app/.heroku/python/src/gunicorn
           remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
@@ -202,7 +213,7 @@ RSpec.describe 'pip support' do
         # Test that the cached .pth files work correctly.
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running bin/post_compile hook
           remote:        easy-install.pth:/app/.heroku/python/src/gunicorn
           remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
@@ -214,6 +225,7 @@ RSpec.describe 'pip support' do
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
           remote: -----> Saving cache
+          .+
           remote: -----> Inline app detected
           remote: easy-install.pth:/app/.heroku/python/src/gunicorn
           remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py

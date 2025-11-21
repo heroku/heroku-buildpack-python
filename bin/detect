@@ -86,6 +86,11 @@ If your app already has a package manager file, check that it:
 Otherwise, add a package manager file to your app. If your app has
 no dependencies, then create an empty 'requirements.txt' file.
 
+If you aren't sure which package manager to use, we recommend
+trying uv, since it supports lockfiles, is extremely fast, and
+is actively maintained by a full-time team:
+https://docs.astral.sh/uv/
+
 For help with using Python on Heroku, see:
 https://devcenter.heroku.com/articles/getting-started-with-python
 https://devcenter.heroku.com/articles/python-support

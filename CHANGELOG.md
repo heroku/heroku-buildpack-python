@@ -4,6 +4,7 @@
 
 - Deprecated support for Python 3.10. ([#1972](https://github.com/heroku/heroku-buildpack-python/pull/1972))
 - Updated uv from 0.9.9 to 0.9.11. ([#1973](https://github.com/heroku/heroku-buildpack-python/pull/1973))
+- Added more messaging to the build log recommending uv. ([#1975](https://github.com/heroku/heroku-buildpack-python/pull/1975))
 - Switched from using `--disable-pip-version-check` to the env var `PIP_DISABLE_PIP_VERSION_CHECK=1` when using pip. ([#1974](https://github.com/heroku/heroku-buildpack-python/pull/1974))
 
 ## [v320] - 2025-11-20

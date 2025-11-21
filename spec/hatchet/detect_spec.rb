@@ -38,6 +38,11 @@ RSpec.describe 'Buildpack detection' do
           remote:  !     Otherwise, add a package manager file to your app. If your app has
           remote:  !     no dependencies, then create an empty 'requirements.txt' file.
           remote:  !     
+          remote:  !     If you aren't sure which package manager to use, we recommend
+          remote:  !     trying uv, since it supports lockfiles, is extremely fast, and
+          remote:  !     is actively maintained by a full-time team:
+          remote:  !     https://docs.astral.sh/uv/
+          remote:  !     
           remote:  !     For help with using Python on Heroku, see:
           remote:  !     https://devcenter.heroku.com/articles/getting-started-with-python
           remote:  !     https://devcenter.heroku.com/articles/python-support

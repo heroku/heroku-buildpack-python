@@ -35,6 +35,17 @@ RSpec.describe 'Poetry support' do
           remote:        POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
           remote:        PYTHONUNBUFFERED=1
           remote: -----> Saving cache
+          remote: 
+          remote:  !     Note: We recently added support for the package manager uv:
+          remote:  !     https://devcenter.heroku.com/changelog-items/3238
+          remote:  !     
+          remote:  !     It's now our recommended Python package manager, since it
+          remote:  !     supports lockfiles, is faster, gives more helpful error
+          remote:  !     messages, and is actively maintained by a full-time team.
+          remote:  !     
+          remote:  !     If you haven't tried it yet, we suggest you take a look!
+          remote:  !     https://docs.astral.sh/uv/
+          remote: 
           remote: -----> Inline app detected
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
@@ -98,7 +109,6 @@ RSpec.describe 'Poetry support' do
           remote: -----> Running bin/post_compile hook
           remote:        .+
           remote: -----> Saving cache
-          remote: -----> Inline app detected
         REGEX
 
         command = 'bin/print-env-vars.sh && if command -v poetry; then echo "Poetry unexpectedly found!" && exit 1; fi'
@@ -145,7 +155,6 @@ RSpec.describe 'Poetry support' do
           remote:        
           remote:          - Installing typing-extensions (4.12.2)
           remote: -----> Saving cache
-          remote: -----> Discovering process types
         OUTPUT
       end
     end
@@ -157,7 +166,7 @@ RSpec.describe 'Poetry support' do
 
     it 'rewrites .pth and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
@@ -180,6 +189,7 @@ RSpec.describe 'Poetry support' do
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Saving cache
+          .+
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
@@ -208,7 +218,7 @@ RSpec.describe 'Poetry support' do
         # Test that the cached .pth files work correctly.
         app.commit!
         app.push!
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
@@ -230,6 +240,7 @@ RSpec.describe 'Poetry support' do
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
           remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Saving cache
+          .+
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
