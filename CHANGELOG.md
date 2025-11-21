@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v321] - 2025-11-21
+
 - Deprecated support for Python 3.10. ([#1972](https://github.com/heroku/heroku-buildpack-python/pull/1972))
 - Updated uv from 0.9.9 to 0.9.11. ([#1973](https://github.com/heroku/heroku-buildpack-python/pull/1973))
 - Added more messaging to the build log recommending uv. ([#1975](https://github.com/heroku/heroku-buildpack-python/pull/1975))
@@ -1407,7 +1410,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v320...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v321...main
+[v321]: https://github.com/heroku/heroku-buildpack-python/compare/v320...v321
 [v320]: https://github.com/heroku/heroku-buildpack-python/compare/v319...v320
 [v319]: https://github.com/heroku/heroku-buildpack-python/compare/v318...v319
 [v318]: https://github.com/heroku/heroku-buildpack-python/compare/v317...v318
