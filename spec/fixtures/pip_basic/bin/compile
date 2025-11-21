@@ -16,9 +16,8 @@ echo
 python -c 'import pprint, sys; pprint.pp(sys.path)'
 echo
 
-# TODO: Remove --disable-pip-version-check in favour of exporting PIP_DISABLE_PIP_VERSION_CHECK
-pip --version --disable-pip-version-check
-pip list --disable-pip-version-check
+pip --version
+pip list
 echo
 
 python -c 'import typing_extensions; print(typing_extensions)'
