@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install Ruby and dependencies
         uses: ruby/setup-ruby@v1
         with:
@@ -51,7 +51,7 @@ jobs:
       RSPEC_RETRY_RETRY_COUNT: 1
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install Ruby and dependencies
         uses: ruby/setup-ruby@v1
         with:
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       # These test both the local development `make run` workflow and that `bin/report` completes successfully
       # for both passing and failing builds (since `bin/report` can't easily be tested via Hatchet tests).
       - name: Run buildpack using default app fixture
