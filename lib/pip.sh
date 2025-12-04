@@ -130,9 +130,9 @@ function pip::install_dependencies() {
 
 	# The sed usage is to reduce the verbosity of output lines like:
 	# ...when using Python 3.10 and older:
-	# "Requirement already satisfied: typing-extensions==4.12.2 in ./.heroku/python/lib/python3.10/site-packages (from -r requirements.txt (line 2)) (4.12.2)"
+	# "Requirement already satisfied: typing-extensions==4.15.0 in ./.heroku/python/lib/python3.10/site-packages (from -r requirements.txt (line 2)) (4.15.0)"
 	# ...when using Python 3.11+:
-	# "Requirement already satisfied: typing-extensions==4.12.2 in /app/.heroku/python/lib/python3.13/site-packages (from -r requirements.txt (line 5)) (4.12.2)"
+	# "Requirement already satisfied: typing-extensions==4.15.0 in /app/.heroku/python/lib/python3.14/site-packages (from -r requirements.txt (line 5)) (4.15.0)"
 	# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 	if ! {
 		"${pip_install_command[@]}" \

@@ -12,7 +12,7 @@ RSpec.shared_examples 'builds with the requested Python version' do |requested_v
           remote: -----> Installing Python #{resolved_version}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
       else
         expect(clean_output(app.output)).to include(<<~OUTPUT)
@@ -21,7 +21,7 @@ RSpec.shared_examples 'builds with the requested Python version' do |requested_v
           remote: -----> Installing Python #{resolved_version}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
       end
       expect(app.run('python -V')).to eq("Python #{resolved_version}\n")
@@ -278,7 +278,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Installing Python #{LATEST_PYTHON_3_9}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
         expect(app.run('python -V')).to eq("Python #{LATEST_PYTHON_3_9}\n")
         expect($CHILD_STATUS.exitstatus).to eq(0)
@@ -313,7 +313,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Installing Python #{LATEST_PYTHON_3_10}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
         expect(app.run('python -V')).to eq("Python #{LATEST_PYTHON_3_10}\n")
         expect($CHILD_STATUS.exitstatus).to eq(0)
@@ -768,7 +768,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
       end
     end

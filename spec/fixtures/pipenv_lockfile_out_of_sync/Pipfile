@@ -4,9 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+# This dependency isn't in the lockfile.
 urllib3 = "*"
 
 [dev-packages]
-
-[requires]
-python_version = "3.13"

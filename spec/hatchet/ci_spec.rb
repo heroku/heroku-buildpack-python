@@ -202,7 +202,7 @@ RSpec.describe 'Heroku CI' do
           -----> Installing dependencies using 'poetry sync'
                  Installing dependencies from lock file
                  
-                 Package operations: 5 installs, 0 updates, 0 removals
+                 Package operations: 6 installs, 0 updates, 0 removals
                  
                    .+
                    - Installing (pytest|typing-extensions) .+
@@ -296,9 +296,9 @@ RSpec.describe 'Heroku CI' do
           -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Installing uv #{UV_VERSION}
           -----> Installing dependencies using 'uv sync --locked'
-                 Resolved 7 packages in .+s
-                 Prepared 5 packages in .+s
-                 Installed 5 packages in .+s
+                 Resolved 8 packages in .+s
+                 Prepared 6 packages in .+s
+                 Installed 6 packages in .+s
                  Bytecode compiled .+ files in .+s
                   .+
                   \\+ (pytest|typing-extensions)==.+
@@ -361,7 +361,7 @@ RSpec.describe 'Heroku CI' do
           -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           -----> Using cached uv #{UV_VERSION}
           -----> Installing dependencies using 'uv sync --locked'
-                 Resolved 7 packages in .+s
+                 Resolved 8 packages in .+s
                  Bytecode compiled .+ files in .+s
           -----> Skipping Django collectstatic since the env var DISABLE_COLLECTSTATIC is set.
           -----> Running bin/post_compile hook

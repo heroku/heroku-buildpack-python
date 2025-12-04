@@ -1,7 +1,7 @@
 [project]
 name = "pipenv-editable"
 version = "0.0.0"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 
 [project.scripts]
 pipenv-editable = "pipenv_editable:main"

@@ -1,11 +1,11 @@
 version = 1
-revision = 2
-requires-python = ">=3.13"
+revision = 3
+requires-python = ">=3.14"
 
 [[package]]
 name = "gunicorn"
 version = "23.0.0"
-source = { git = "https://github.com/benoitc/gunicorn#a86ea1e4e6c271d1cd1823c7e14490123f9238fe" }
+source = { git = "https://github.com/benoitc/gunicorn#56b5ad87f8d72a674145c273ed8f547513c2b409" }
 dependencies = [
     { name = "packaging" },
 ]
