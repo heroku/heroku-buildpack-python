@@ -57,18 +57,18 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote: \\['',
           remote:  '/app',
-          remote:  '/app/.heroku/python/lib/python313.zip',
-          remote:  '/app/.heroku/python/lib/python3.13',
-          remote:  '/app/.heroku/python/lib/python3.13/lib-dynload',
-          remote:  '/app/.heroku/python/lib/python3.13/site-packages'\\]
+          remote:  '/app/.heroku/python/lib/python314.zip',
+          remote:  '/app/.heroku/python/lib/python3.14',
+          remote:  '/app/.heroku/python/lib/python3.14/lib-dynload',
+          remote:  '/app/.heroku/python/lib/python3.14/site-packages'\\]
           remote: 
           remote: pipenv, version #{PIPENV_VERSION}
           remote: Package           Version
           remote: ----------------- -+
-          remote: certifi           2025.7.14
-          remote: typing_extensions 4.12.2
+          remote: certifi           2025.11.12
+          remote: typing_extensions 4.15.0
           remote: 
-          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.13/site-packages/typing_extensions.py'>
+          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.14/site-packages/typing_extensions.py'>
           remote: 
           remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
@@ -85,11 +85,11 @@ RSpec.describe 'Pipenv support' do
           remote:   "pre_compile_hook": false,
           remote:   "python_install_duration": [0-9.]+,
           remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
-          remote:   "python_version_major": "3.13",
+          remote:   "python_version_major": "3.14",
           remote:   "python_version_origin": "Pipfile.lock",
           remote:   "python_version_outdated": false,
           remote:   "python_version_pinned": false,
-          remote:   "python_version_requested": "3.13",
+          remote:   "python_version_requested": "3.14",
           remote:   "total_duration": [0-9.]+
           remote: \\}
         REGEX
@@ -455,8 +455,9 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  context 'when the Pipenv version has changed since the last build' do
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v291'] }
+  # TODO: Rename this test description back this when the Pipenv version next changes.
+  context 'when the Python version has changed since the last build' do
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v313'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
 
     it 'clears the cache before installing' do
@@ -467,11 +468,10 @@ RSpec.describe 'Pipenv support' do
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
-          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in Pipfile.lock
+          remote: -----> Using Python 3.14 specified in Pipfile.lock
           remote: -----> Discarding cache since:
-          remote:        - The Python version has changed from 3.13.5 to #{DEFAULT_PYTHON_FULL_VERSION}
-          remote:        - The Pipenv version has changed from 2024.0.1 to #{PIPENV_VERSION}
-          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
+          remote:        - The Python version has changed from 3.14.0 to #{LATEST_PYTHON_3_14}
+          remote: -----> Installing Python #{LATEST_PYTHON_3_14}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...

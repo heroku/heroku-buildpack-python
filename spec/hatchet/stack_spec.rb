@@ -71,14 +71,14 @@ RSpec.describe 'Stack changes' do
           remote: -----> Installing Python #{LATEST_PYTHON_3_12}
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
       end
     end
   end
 
   context 'when the stack is downgraded from Heroku-24 to Heroku-22', stacks: %w[heroku-24] do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.13') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.14') }
 
     it 'clears the cache before installing again' do
       app.deploy do |app|
@@ -88,13 +88,13 @@ RSpec.describe 'Stack changes' do
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python 3.13 specified in .python-version
+          remote: -----> Using Python 3.14 specified in .python-version
           remote: -----> Discarding cache since:
           remote:        - The stack has changed from heroku-24 to heroku-22
-          remote: -----> Installing Python #{LATEST_PYTHON_3_13}
+          remote: -----> Installing Python #{LATEST_PYTHON_3_14}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.12.2 (from -r requirements.txt (line 2))
+          remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
       end
     end

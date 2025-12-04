@@ -166,11 +166,11 @@ RSpec.describe 'Package manager support' do
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing uv #{UV_VERSION}
           remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
-          remote:        Resolved 7 packages in .+s
+          remote:        Resolved .+ packages in .+s
           remote:        Prepared 1 package in .+s
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
-          remote:         \\+ typing-extensions==4.13.2
+          remote:         \\+ typing-extensions==4.15.0
           remote: -----> Saving cache
           remote: -----> Discovering process types
         REGEX

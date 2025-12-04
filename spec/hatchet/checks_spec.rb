@@ -104,7 +104,7 @@ RSpec.describe 'Buildpack validation checks' do
           remote:  !     In future versions of the buildpack, this warning will be turned
           remote:  !     into an error.
           remote: 
-          remote: -----> Using Python 3.13 specified in .python-version
+          remote: -----> Using Python 3.14 specified in .python-version
         OUTPUT
       end
     end

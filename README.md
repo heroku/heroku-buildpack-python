@@ -25,9 +25,9 @@ When using the package manager [uv](https://docs.astral.sh/uv/) a `.python-versi
 
 We recommend that you specify a Python version for your app rather than relying on the buildpack's default Python version.
 
-For example, to request the latest patch release of Python 3.13, create a `.python-version` file in
+For example, to request the latest patch release of Python 3.14, create a `.python-version` file in
 the root directory of your app containing:
-`3.13`
+`3.14`
 
 We strongly recommend that you use the major version form instead of pinning to an exact version,
 since it will allow your app to receive Python security updates.
@@ -43,7 +43,7 @@ If none of those are found, the buildpack will use a default Python version for 
 build of an app, and then subsequent builds of that app will be pinned to that version
 unless the build cache is cleared or you request a different version.
 
-The current default Python version is: 3.13
+The current default Python version is: 3.14
 
 The supported Python versions are:
 
