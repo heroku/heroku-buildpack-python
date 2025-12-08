@@ -46,10 +46,6 @@ trap 'utils::err_trap' ERR
 checks::ensure_supported_stack "${STACK:?"Required env var STACK isn't set"}"
 checks::duplicate_python_buildpack "${BUILD_DIR}"
 
-# Prepend proper path for old-school virtualenv hackery.
-# This may not be necessary.
-export PATH=":/usr/local/bin:${PATH}"
-
 # Exported for use in subshells, such as the steps run via sub_env.
 export BUILD_DIR CACHE_DIR ENV_DIR
 

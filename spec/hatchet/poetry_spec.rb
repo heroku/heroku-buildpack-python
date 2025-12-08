@@ -29,7 +29,7 @@ RSpec.describe 'Poetry support' do
           remote:        LANG=en_US.UTF-8
           remote:        LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote:        LIBRARY_PATH=/app/.heroku/python/lib
-          remote:        PATH=/tmp/codon/tmp/cache/.heroku/python-poetry/bin:/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote:        PATH=/tmp/codon/tmp/cache/.heroku/python-poetry/bin:/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
           remote:        POETRY_VIRTUALENVS_CREATE=false
           remote:        POETRY_VIRTUALENVS_USE_POETRY_PYTHON=true
