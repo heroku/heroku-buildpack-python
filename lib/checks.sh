@@ -109,8 +109,8 @@ function checks::existing_venv_dir_present() {
 
 	for venv_name in ".venv" "venv"; do
 		if [[ -f "${build_dir}/${venv_name}/pyvenv.cfg" ]]; then
-			output::warning <<-EOF
-				Warning: Existing '${venv_name}/' directory found.
+			output::error <<-EOF
+				Error: Existing '${venv_name}/' directory found.
 
 				Your app's source code contains an existing directory named
 				'${venv_name}/', which looks like a Python virtual environment:
@@ -122,17 +122,31 @@ function checks::existing_venv_dir_present() {
 				single machine and so won't work when run somewhere else.
 
 				If you've committed a '${venv_name}/' directory to your Git repo, you
-				must delete it and add the directory to your .gitignore file:
+				must delete it and add the directory to your .gitignore file.
+
+				To do this:
+				1. Run 'git rm --cached -r ${venv_name}/' to remove the directory
+				   from the Git index.
+				2. Create a '.gitignore' file in the root of your repository
+				   if it doesn't already exist.
+				3. Add the '${venv_name}/' directory to the .gitignore file as a
+				   new entry on its own line (don't include the quotes).
+				4. Stage the change using 'git add .gitignore' and then
+				   'git commit' all changes.
+
+				For more information, see:
 				https://docs.github.com/en/get-started/git-basics/ignoring-files
 
-				If the directory was created by a 'bin/pre_compile' hook or an
-				earlier buildpack, you must update them to create the virtual
-				environment in a different location.
+				If the directory was created by a 'bin/pre_compile' hook or
+				an earlier buildpack, you must instead update them to create
+				the virtual environment in a different location.
 
-				In future versions of the buildpack, this warning will be turned
-				into an error.
+				Note: This error replaces the previous warning which had been
+				displayed in build logs since 2nd September 2025.
 			EOF
-			build_data::set_string "existing_venv_dir_present" "${venv_name}"
+			build_data::set_string "failure_reason" "checks::existing-venv-dir"
+			build_data::set_string "failure_detail" "${venv_name}"
+			exit 1
 		fi
 	done
 }

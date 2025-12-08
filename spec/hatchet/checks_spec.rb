@@ -72,14 +72,14 @@ RSpec.describe 'Buildpack validation checks' do
   end
 
   context 'when the app source contains a venv directory' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/venv_in_app_source') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/venv_in_app_source', allow_failure: true) }
 
-    it 'outputs a warning before continuing to build' do
+    it 'fails the build with an informative error message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: 
-          remote:  !     Warning: Existing '.venv/' directory found.
+          remote:  !     Error: Existing '.venv/' directory found.
           remote:  !     
           remote:  !     Your app's source code contains an existing directory named
           remote:  !     '.venv/', which looks like a Python virtual environment:
@@ -94,17 +94,29 @@ RSpec.describe 'Buildpack validation checks' do
           remote:  !     single machine and so won't work when run somewhere else.
           remote:  !     
           remote:  !     If you've committed a '.venv/' directory to your Git repo, you
-          remote:  !     must delete it and add the directory to your .gitignore file:
+          remote:  !     must delete it and add the directory to your .gitignore file.
+          remote:  !     
+          remote:  !     To do this:
+          remote:  !     1. Run 'git rm --cached -r .venv/' to remove the directory
+          remote:  !        from the Git index.
+          remote:  !     2. Create a '.gitignore' file in the root of your repository
+          remote:  !        if it doesn't already exist.
+          remote:  !     3. Add the '.venv/' directory to the .gitignore file as a
+          remote:  !        new entry on its own line (don't include the quotes).
+          remote:  !     4. Stage the change using 'git add .gitignore' and then
+          remote:  !        'git commit' all changes.
+          remote:  !     
+          remote:  !     For more information, see:
           remote:  !     https://docs.github.com/en/get-started/git-basics/ignoring-files
           remote:  !     
-          remote:  !     If the directory was created by a 'bin/pre_compile' hook or an
-          remote:  !     earlier buildpack, you must update them to create the virtual
-          remote:  !     environment in a different location.
+          remote:  !     If the directory was created by a 'bin/pre_compile' hook or
+          remote:  !     an earlier buildpack, you must instead update them to create
+          remote:  !     the virtual environment in a different location.
           remote:  !     
-          remote:  !     In future versions of the buildpack, this warning will be turned
-          remote:  !     into an error.
+          remote:  !     Note: This error replaces the previous warning which had been
+          remote:  !     displayed in build logs since 2nd September 2025.
           remote: 
-          remote: -----> Using Python 3.14 specified in .python-version
+          remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
       end
     end
