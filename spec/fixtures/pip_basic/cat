@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+echo "This custom script shouldn't take precedence over /usr/bin/cat!" >&2
+exit 1

@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Stopped adding the current working directory to `PATH`. ([#1987](https://github.com/heroku/heroku-buildpack-python/pull/1987))
 
 ## [v323] - 2025-12-05
 

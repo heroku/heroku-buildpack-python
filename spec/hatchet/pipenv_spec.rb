@@ -25,7 +25,7 @@ RSpec.describe 'Pipenv support' do
           remote:        LANG=en_US.UTF-8
           remote:        LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote:        LIBRARY_PATH=/app/.heroku/python/lib
-          remote:        PATH=/app/.heroku/python/pipenv/bin:/app/.heroku/python/bin::/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          remote:        PATH=/app/.heroku/python/pipenv/bin:/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote:        PIPENV_SYSTEM=1
           remote:        PIPENV_VERBOSITY=-1
           remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
