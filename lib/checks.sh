@@ -131,8 +131,8 @@ function checks::existing_venv_dir_present() {
 				   if it doesn't already exist.
 				3. Add the '${venv_name}/' directory to the .gitignore file as a
 				   new entry on its own line (don't include the quotes).
-				4. Commit these changes using 'git add --all' followed by
-				   'git commit'.
+				4. Stage the change using 'git add .gitignore' and then
+				   'git commit' all changes.
 
 				For more information, see:
 				https://docs.github.com/en/get-started/git-basics/ignoring-files
@@ -141,8 +141,8 @@ function checks::existing_venv_dir_present() {
 				an earlier buildpack, you must instead update them to create
 				the virtual environment in a different location.
 
-				Note: This error replaces the warning which was displayed in
-				build logs starting 2nd September 2025.
+				Note: This error replaces the previous warning which had been
+				displayed in build logs since 2nd September 2025.
 			EOF
 			build_data::set_string "failure_reason" "checks::existing-venv-dir"
 			build_data::set_string "failure_detail" "${venv_name}"

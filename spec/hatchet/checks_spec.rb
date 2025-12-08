@@ -103,8 +103,8 @@ RSpec.describe 'Buildpack validation checks' do
           remote:  !        if it doesn't already exist.
           remote:  !     3. Add the '.venv/' directory to the .gitignore file as a
           remote:  !        new entry on its own line (don't include the quotes).
-          remote:  !     4. Commit these changes using 'git add --all' followed by
-          remote:  !        'git commit'.
+          remote:  !     4. Stage the change using 'git add .gitignore' and then
+          remote:  !        'git commit' all changes.
           remote:  !     
           remote:  !     For more information, see:
           remote:  !     https://docs.github.com/en/get-started/git-basics/ignoring-files
@@ -113,8 +113,8 @@ RSpec.describe 'Buildpack validation checks' do
           remote:  !     an earlier buildpack, you must instead update them to create
           remote:  !     the virtual environment in a different location.
           remote:  !     
-          remote:  !     Note: This error replaces the warning which was displayed in
-          remote:  !     build logs starting 2nd September 2025.
+          remote:  !     Note: This error replaces the previous warning which had been
+          remote:  !     displayed in build logs since 2nd September 2025.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
         OUTPUT
