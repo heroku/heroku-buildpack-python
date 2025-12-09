@@ -291,7 +291,7 @@ RSpec.describe 'Pipenv support' do
   context 'without a Pipfile.lock' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_no_lockfile', allow_failure: true) }
 
-    it 'builds with the default Python version using just the Pipfile' do
+    it 'fails the build with an informative error message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected

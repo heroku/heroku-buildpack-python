@@ -59,34 +59,6 @@ function package_manager::determine_package_manager() {
 		package_managers_found_display_text+=("uv.lock (uv)")
 	fi
 
-	if ((${#package_managers_found[@]} == 0)) && [[ -f "${build_dir}/setup.py" ]]; then
-		package_managers_found+=(pip)
-		package_managers_found_display_text+=("setup.py (pip)")
-		output::warning <<-EOF
-			Warning: Implicit setup.py file support is deprecated.
-
-			Your app currently only has a setup.py file and no Python
-			package manager files. This means that the buildpack has
-			to guess which package manager you want to use and also
-			whether to install your project in editable mode or not.
-
-			For now, we will use pip to install your dependencies in
-			editable mode, however, this fallback is deprecated and
-			will be removed in the future.
-
-			Please add an explicit package manager file to your app.
-
-			To continue using pip in editable mode, create a new file
-			in the root directory of your app named 'requirements.txt'
-			containing the requirement '--editable .' (without quotes).
-
-			Alternatively, if you wish to switch to another package
-			manager, we highly recommend uv:
-			https://docs.astral.sh/uv/
-		EOF
-		build_data::set_raw "setup_py_only" "true"
-	fi
-
 	local num_package_managers_found=${#package_managers_found[@]}
 
 	case "${num_package_managers_found}" in
@@ -95,6 +67,36 @@ function package_manager::determine_package_manager() {
 			return 0
 			;;
 		0)
+			if [[ -f "${build_dir}/setup.py" ]]; then
+				output::error <<-EOF
+					Error: Implicit setup.py file support has been sunset.
+
+					Your app currently only has a setup.py file and no Python
+					package manager files. This means that the buildpack can't
+					tell which package manager you want to use, and whether to
+					install your project in editable mode or not.
+
+					Previously the buildpack guessed and used pip to install your
+					dependencies in editable mode. However, this fallback was
+					deprecated in September 2025 and has now been sunset.
+
+					You must now add an explicit package manager file to your app,
+					such as a requirements.txt, poetry.lock or uv.lock file.
+
+					To continue using your setup.py file with pip in editable
+					mode, create a new file in the root directory of your app
+					named 'requirements.txt' containing the requirement
+					'--editable .' (without quotes).
+
+					Alternatively, if you wish to switch to another package
+					manager, we recommend uv, since it supports lockfiles, is
+					faster, and is actively maintained by a full-time team:
+					https://docs.astral.sh/uv/
+				EOF
+				build_data::set_string "failure_reason" "package-manager::setup-py-only"
+				exit 1
+			fi
+
 			output::error <<-EOF
 				Error: Couldn't find any supported Python package manager files.
 

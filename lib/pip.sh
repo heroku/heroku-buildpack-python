@@ -107,14 +107,8 @@ function pip::install_dependencies() {
 	local pip_install_command=(
 		pip
 		install
+		-r requirements.txt
 	)
-
-	# Support for the setup.py fallback is deprecated and will be removed in the future.
-	if [[ -f setup.py && ! -f requirements.txt ]]; then
-		pip_install_command+=(--editable .)
-	else
-		pip_install_command+=(-r requirements.txt)
-	fi
 
 	# Install test dependencies too when the buildpack is invoked via `bin/test-compile` on Heroku CI.
 	# We install both requirements files at the same time to allow pip to resolve version conflicts.
