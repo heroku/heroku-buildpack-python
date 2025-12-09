@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- The build now errors if the files for multiple package managers are found. This replaces the warning displayed since November 2024. ([#1993](https://github.com/heroku/heroku-buildpack-python/pull/1993))
 - Sunset the previously deprecated support for falling back to installing dependencies from a `setup.py` file if no Python package manager files were found. ([#1992](https://github.com/heroku/heroku-buildpack-python/pull/1992))
 
 ## [v324] - 2025-12-09

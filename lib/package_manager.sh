@@ -44,11 +44,6 @@ function package_manager::determine_package_manager() {
 		package_managers_found_display_text+=("requirements.txt (pip)")
 	fi
 
-	# This must be after the requirements.txt check, so that the requirements.txt exported by
-	# `python-poetry-buildpack` takes precedence over poetry.lock, for consistency with the
-	# behaviour prior to this buildpack supporting Poetry natively. In the future the presence
-	# of multiple package manager files will be turned into an error, at which point the
-	# ordering here won't matter.
 	if [[ -f "${build_dir}/poetry.lock" ]]; then
 		package_managers_found+=(poetry)
 		package_managers_found_display_text+=("poetry.lock (Poetry)")
@@ -132,57 +127,38 @@ function package_manager::determine_package_manager() {
 			exit 1
 			;;
 		*)
-			# If multiple package managers are found, use the first found above.
-			# TODO: Turn this case into an error since it results in support tickets from users
-			# who don't realise they have multiple package manager files and think their changes
-			# aren't taking effect. (We'll need to wait until after Poetry support has landed,
-			# and people have had a chance to migrate from the Poetry buildpack mentioned above.)
-			echo "${package_managers_found[0]}"
-
-			output::warning <<-EOF
-				Warning: Multiple Python package manager files were found.
+			output::error <<-EOF
+				Error: Multiple Python package manager files were found.
 
 				Exactly one package manager file should be present in your app's
 				source code, however, several were found:
 
 				$(printf -- "%s\n" "${package_managers_found_display_text[@]}")
 
-				For now, we will build your app using the first package manager
-				listed above, however, in the future this warning will become
-				an error.
+				Previously, the buildpack guessed which package manager to use
+				and installed your dependencies with the first package manager
+				listed above. However, this implicit behaviour was deprecated
+				in November 2024 and is now no longer supported.
 
-				Decide which package manager you want to use with your app, and
-				then delete the file(s) and any config from the others.
+				You must decide which package manager you want to use with your
+				app, and then delete the file(s) and any config from the others.
 
 				If you aren't sure which package manager to use, we recommend
 				trying uv, since it supports lockfiles, is extremely fast, and
 				is actively maintained by a full-time team:
 				https://docs.astral.sh/uv/
+
+				Note: If you use a third-party uv or Poetry buildpack, you must
+				remove it from your app, since it's no longer required and the
+				requirements.txt file it generates will trigger this error. See:
+				https://devcenter.heroku.com/articles/managing-buildpacks#remove-classic-buildpacks
 			EOF
-
-			if [[ "${package_managers_found[*]}" == *"poetry"* ]]; then
-				output::notice <<-EOF
-					Note: We recently added support for the package manager Poetry.
-					If you are using a third-party Poetry buildpack you must remove
-					it, otherwise the requirements.txt file it generates will cause
-					the warning above.
-				EOF
-			fi
-
-			if [[ "${package_managers_found[*]}" == *"uv"* ]]; then
-				output::notice <<-EOF
-					Note: We recently added support for the package manager uv.
-					If you are using a third-party uv buildpack you must remove
-					it, otherwise the requirements.txt file it generates will cause
-					the warning above.
-				EOF
-			fi
-
-			build_data::set_string "package_manager_multiple_found" "$(
+			build_data::set_string "failure_reason" "package-manager::multiple-found"
+			build_data::set_string "failure_detail" "$(
 				IFS=,
 				echo "${package_managers_found[*]}"
 			)"
-			return 0
+			exit 1
 			;;
 	esac
 }
