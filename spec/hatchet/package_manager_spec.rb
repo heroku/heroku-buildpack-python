@@ -49,46 +49,40 @@ RSpec.describe 'Package manager support' do
     end
   end
 
-  # This case will be turned into an error in the future.
   context 'when there is only a setup.py' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/setup_py_only') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/setup_py_only', allow_failure: true) }
 
-    it 'installs packages from setup.py using pip' do
+    it 'fails the build with an informative error message' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: 
-          remote:  !     Warning: Implicit setup.py file support is deprecated.
+          remote:  !     Error: Implicit setup.py file support has been sunset.
           remote:  !     
           remote:  !     Your app currently only has a setup.py file and no Python
-          remote:  !     package manager files. This means that the buildpack has
-          remote:  !     to guess which package manager you want to use and also
-          remote:  !     whether to install your project in editable mode or not.
+          remote:  !     package manager files. This means that the buildpack can't
+          remote:  !     tell which package manager you want to use, and whether to
+          remote:  !     install your project in editable mode or not.
           remote:  !     
-          remote:  !     For now, we will use pip to install your dependencies in
-          remote:  !     editable mode, however, this fallback is deprecated and
-          remote:  !     will be removed in the future.
+          remote:  !     Previously the buildpack guessed and used pip to install your
+          remote:  !     dependencies in editable mode. However, this fallback was
+          remote:  !     deprecated in September 2025 and has now been sunset.
           remote:  !     
-          remote:  !     Please add an explicit package manager file to your app.
+          remote:  !     You must now add an explicit package manager file to your app,
+          remote:  !     such as a requirements.txt, poetry.lock or uv.lock file.
           remote:  !     
-          remote:  !     To continue using pip in editable mode, create a new file
-          remote:  !     in the root directory of your app named 'requirements.txt'
-          remote:  !     containing the requirement '--editable .' \\(without quotes\\).
+          remote:  !     To continue using your setup.py file with pip in editable
+          remote:  !     mode, create a new file in the root directory of your app
+          remote:  !     named 'requirements.txt' containing the requirement
+          remote:  !     '--editable .' (without quotes).
           remote:  !     
           remote:  !     Alternatively, if you wish to switch to another package
-          remote:  !     manager, we highly recommend uv:
+          remote:  !     manager, we recommend uv, since it supports lockfiles, is
+          remote:  !     faster, and is actively maintained by a full-time team:
           remote:  !     https://docs.astral.sh/uv/
           remote: 
-          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing pip #{PIP_VERSION}
-          remote: -----> Installing dependencies using 'pip install --editable .'
-          remote:        Obtaining file:///tmp/build_.*
-          remote:        .+
-          remote:        Installing collected packages: six, test
-          remote:        Successfully installed six-.+ test-0.0.0
-          remote: -----> Saving cache
-        REGEX
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
       end
     end
   end

@@ -1,2 +1,1 @@
-# This tests that the setup.py fallback is not used when other package manager files exist.
-raise RuntimeError("setup.py should not be run!")
+# This file tests that the setup.py sunset error is not shown when other package manager files exist.
