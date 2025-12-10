@@ -87,56 +87,44 @@ RSpec.describe 'Package manager support' do
     end
   end
 
-  # This case will be turned into an error in the future.
   context 'when there are multiple package manager files' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/multiple_package_managers') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/multiple_package_managers', allow_failure: true) }
 
-    it 'outputs a warning and builds with the first listed' do
+    it 'fails the build with an informative error message' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: 
-          remote:  !     Warning: Multiple Python package manager files were found.
+          remote:  !     Error: Multiple Python package manager files were found.
           remote:  !     
           remote:  !     Exactly one package manager file should be present in your app's
           remote:  !     source code, however, several were found:
           remote:  !     
-          remote:  !     Pipfile.lock \\(Pipenv\\)
-          remote:  !     requirements.txt \\(pip\\)
-          remote:  !     poetry.lock \\(Poetry\\)
-          remote:  !     uv.lock \\(uv\\)
+          remote:  !     Pipfile.lock (Pipenv)
+          remote:  !     requirements.txt (pip)
+          remote:  !     poetry.lock (Poetry)
+          remote:  !     uv.lock (uv)
           remote:  !     
-          remote:  !     For now, we will build your app using the first package manager
-          remote:  !     listed above, however, in the future this warning will become
-          remote:  !     an error.
+          remote:  !     Previously, the buildpack guessed which package manager to use
+          remote:  !     and installed your dependencies with the first package manager
+          remote:  !     listed above. However, this implicit behaviour was deprecated
+          remote:  !     in November 2024 and is now no longer supported.
           remote:  !     
-          remote:  !     Decide which package manager you want to use with your app, and
-          remote:  !     then delete the file\\(s\\) and any config from the others.
+          remote:  !     You must decide which package manager you want to use with your
+          remote:  !     app, and then delete the file(s) and any config from the others.
           remote:  !     
           remote:  !     If you aren't sure which package manager to use, we recommend
           remote:  !     trying uv, since it supports lockfiles, is extremely fast, and
           remote:  !     is actively maintained by a full-time team:
           remote:  !     https://docs.astral.sh/uv/
+          remote:  !     
+          remote:  !     Note: If you use a third-party uv or Poetry buildpack, you must
+          remote:  !     remove it from your app, since it's no longer required and the
+          remote:  !     requirements.txt file it generates will trigger this error. See:
+          remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#remove-classic-buildpacks
           remote: 
-          remote: 
-          remote:  !     Note: We recently added support for the package manager Poetry.
-          remote:  !     If you are using a third-party Poetry buildpack you must remove
-          remote:  !     it, otherwise the requirements.txt file it generates will cause
-          remote:  !     the warning above.
-          remote: 
-          remote: 
-          remote:  !     Note: We recently added support for the package manager uv.
-          remote:  !     If you are using a third-party uv buildpack you must remove
-          remote:  !     it, otherwise the requirements.txt file it generates will cause
-          remote:  !     the warning above.
-          remote: 
-          remote: -----> Using Python #{DEFAULT_PYTHON_MAJOR_VERSION} specified in .python-version
-          remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
-          remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
-          remote: -----> Saving cache
-        REGEX
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
       end
     end
   end
