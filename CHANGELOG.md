@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v325] - 2025-12-10
+
 - The build now errors if the files for multiple package managers are found. This replaces the warning displayed since November 2024. ([#1993](https://github.com/heroku/heroku-buildpack-python/pull/1993))
 - Sunset the previously deprecated support for falling back to installing dependencies from a `setup.py` file if no Python package manager files were found. ([#1992](https://github.com/heroku/heroku-buildpack-python/pull/1992))
 - Updated uv from 0.9.14 to 0.9.17. ([#1995](https://github.com/heroku/heroku-buildpack-python/pull/1995))
@@ -1430,7 +1433,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v324...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v325...main
+[v325]: https://github.com/heroku/heroku-buildpack-python/compare/v324...v325
 [v324]: https://github.com/heroku/heroku-buildpack-python/compare/v323...v324
 [v323]: https://github.com/heroku/heroku-buildpack-python/compare/v322...v323
 [v322]: https://github.com/heroku/heroku-buildpack-python/compare/v321...v322
