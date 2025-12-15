@@ -1,2 +1,1 @@
-# Pinned due to https://github.com/OSGeo/gdal/issues/13329
-GDAL==3.11.4
+GDAL
