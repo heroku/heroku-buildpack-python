@@ -5,7 +5,7 @@ require_relative '../spec_helper'
 RSpec.shared_examples 'builds with the requested Python version' do |requested_version, resolved_version|
   it "builds with Python #{requested_version}" do
     app.deploy do |app|
-      if ['3.9', '3.10', '3.11', '3.12'].include?(requested_version)
+      if ['3.10', '3.11', '3.12'].include?(requested_version)
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python #{requested_version} specified in .python-version
@@ -161,9 +161,7 @@ RSpec.describe 'Python version support' do
     end
 
     context 'with an app last built using an EOL Python version' do
-      # This fixture emulates the cache from a previous build that used a now-EOL Python version,
-      # since we can't actually perform a build using Python 3.8, since it was only supported
-      # until Heroku-20. TODO: Switch to doing a real EOL cached rebuild once Python 3.9 EOLs.
+      # This fixture emulates the cache from a previous build that used a now-EOL Python version.
       let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_eol_cached', allow_failure: true) }
 
       it 'aborts the build with an EOL message' do
@@ -171,21 +169,21 @@ RSpec.describe 'Python version support' do
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
             remote: -----> Running bin/pre_compile hook
-            remote: -----> No Python version was specified. Using the same major version as the last build: Python 3.8
+            remote: -----> No Python version was specified. Using the same major version as the last build: Python 3.9
             remote: 
             remote:  !     Error: The cached Python version has reached end-of-life.
             remote:  !     
             remote:  !     Your app doesn't specify a Python version, and so normally
-            remote:  !     would use the version cached from the last build (3.8).
+            remote:  !     would use the version cached from the last build (3.9).
             remote:  !     
-            remote:  !     However, Python 3.8 has reached its upstream end-of-life,
+            remote:  !     However, Python 3.9 has reached its upstream end-of-life,
             remote:  !     and is therefore no longer receiving security updates:
             remote:  !     https://devguide.python.org/versions/#supported-versions
             remote:  !     
             remote:  !     As such, it's no longer supported by this buildpack:
             remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
             remote:  !     
-            remote:  !     Please upgrade to at least Python 3.9 by configuring an
+            remote:  !     Please upgrade to at least Python 3.10 by configuring an
             remote:  !     explicit Python version for your app.
             remote:  !     
             remote:  !     Create a new file in the root directory of your app named:
@@ -197,9 +195,9 @@ RSpec.describe 'Python version support' do
             remote:  !     In the new file, specify your app's major Python version number
             remote:  !     only. Don't include quotes or a 'python-' prefix.
             remote:  !     
-            remote:  !     For example, to request the latest version of Python 3.9,
+            remote:  !     For example, to request the latest version of Python 3.10,
             remote:  !     update your .python-version file so it contains exactly:
-            remote:  !     3.9
+            remote:  !     3.10
             remote:  !     
             remote:  !     We strongly recommend that you don't specify the Python patch
             remote:  !     version number, since it will pin your app to an exact Python
@@ -247,41 +245,6 @@ RSpec.describe 'Python version support' do
             remote:  !     Push rejected, failed to compile Python app.
           OUTPUT
         end
-      end
-    end
-  end
-
-  context 'when .python-version contains Python 3.9' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9') }
-
-    it 'builds with Python 3.9 but shows a deprecation warning' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote: -----> Python app detected
-          remote: -----> Using Python 3.9 specified in .python-version
-          remote: 
-          remote:  !     Warning: Support for Python 3.9 is ending soon!
-          remote:  !     
-          remote:  !     Python 3.9 reached its upstream end-of-life on 31st October 2025,
-          remote:  !     and so no longer receives security updates:
-          remote:  !     https://devguide.python.org/versions/#supported-versions
-          remote:  !     
-          remote:  !     As such, support for Python 3.9 will be removed from this
-          remote:  !     buildpack on 7th January 2026.
-          remote:  !     
-          remote:  !     Upgrade to a newer Python version as soon as possible, by
-          remote:  !     changing the version in your .python-version file.
-          remote:  !     
-          remote:  !     For more information, see:
-          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
-          remote: 
-          remote: -----> Installing Python #{LATEST_PYTHON_3_9}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
-          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
-        OUTPUT
-        expect(app.run('python -V')).to eq("Python #{LATEST_PYTHON_3_9}\n")
-        expect($CHILD_STATUS.exitstatus).to eq(0)
       end
     end
   end
@@ -500,18 +463,18 @@ RSpec.describe 'Python version support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python 3.8 specified in .python-version
+          remote: -----> Using Python 3.9 specified in .python-version
           remote: 
           remote:  !     Error: The requested Python version has reached end-of-life.
           remote:  !     
-          remote:  !     Python 3.8 has reached its upstream end-of-life, and is
+          remote:  !     Python 3.9 has reached its upstream end-of-life, and is
           remote:  !     therefore no longer receiving security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
           remote:  !     As such, it's no longer supported by this buildpack:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote:  !     
-          remote:  !     Please upgrade to at least Python 3.9 by changing the
+          remote:  !     Please upgrade to at least Python 3.10 by changing the
           remote:  !     version in your .python-version file.
           remote:  !     
           remote:  !     If possible, we recommend upgrading all the way to Python #{DEFAULT_PYTHON_MAJOR_VERSION},
@@ -691,7 +654,7 @@ RSpec.describe 'Python version support' do
           remote:  !     As such, it's no longer supported by this buildpack:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote:  !     
-          remote:  !     Please upgrade to at least Python 3.9 by changing the
+          remote:  !     Please upgrade to at least Python 3.10 by changing the
           remote:  !     version in your runtime.txt file.
           remote:  !     
           remote:  !     If possible, we recommend upgrading all the way to Python #{DEFAULT_PYTHON_MAJOR_VERSION},
@@ -753,7 +716,7 @@ RSpec.describe 'Python version support' do
   end
 
   context 'when the requested Python version has changed since the last build' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.9') }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.10') }
 
     it 'builds with the new Python version after removing the old install' do
       app.deploy do |app|
@@ -764,7 +727,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Python app detected
           remote: -----> Using Python 3.13 specified in .python-version
           remote: -----> Discarding cache since:
-          remote:        - The Python version has changed from #{LATEST_PYTHON_3_9} to #{LATEST_PYTHON_3_13}
+          remote:        - The Python version has changed from #{LATEST_PYTHON_3_10} to #{LATEST_PYTHON_3_13}
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'

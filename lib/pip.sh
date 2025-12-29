@@ -28,7 +28,7 @@ function pip::install_pip() {
 	#   them installed.
 	# - Most of the Python ecosystem has stopped installing them for Python 3.12+ already.
 	# See the Python CNB's removal for more details: https://github.com/heroku/buildpacks-python/pull/243
-	if [[ "${python_major_version}" == +(3.9|3.10|3.11|3.12) ]]; then
+	if [[ "${python_major_version}" == +(3.10|3.11|3.12) ]]; then
 		build_data::set_string "setuptools_version" "${SETUPTOOLS_VERSION}"
 		build_data::set_string "wheel_version" "${WHEEL_VERSION}"
 		packages_to_install+=(

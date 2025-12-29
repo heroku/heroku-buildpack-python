@@ -160,23 +160,23 @@ RSpec.describe 'Pipenv support' do
   # 1. That `python_full_version` takes precedence over the `python_version` field.
   # 2. That Pipenv works on the oldest Python version supported by all stacks.
   # 3. That the security update available message works for Pipenv too.
-  context 'with a Pipfile.lock containing python_full_version 3.9.0' do
+  context 'with a Pipfile.lock containing python_full_version 3.10.0' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_full_version') }
 
     it 'builds with the outdated Python version specified and displays a deprecation warning' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
-          remote: -----> Using Python 3.9.0 specified in Pipfile.lock
+          remote: -----> Using Python 3.10.0 specified in Pipfile.lock
           remote: 
-          remote:  !     Warning: Support for Python 3.9 is ending soon!
+          remote:  !     Warning: Support for Python 3.10 is deprecated!
           remote:  !     
-          remote:  !     Python 3.9 reached its upstream end-of-life on 31st October 2025,
-          remote:  !     and so no longer receives security updates:
+          remote:  !     Python 3.10 will reach its upstream end-of-life in October 2026,
+          remote:  !     at which point it will no longer receive security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
-          remote:  !     As such, support for Python 3.9 will be removed from this
-          remote:  !     buildpack on 7th January 2026.
+          remote:  !     As such, support for Python 3.10 will be removed from this
+          remote:  !     buildpack on 6th January 2027.
           remote:  !     
           remote:  !     Upgrade to a newer Python version as soon as possible, by
           remote:  !     changing the version in your Pipfile.lock file.
@@ -187,8 +187,8 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote:  !     Warning: A Python patch update is available!
           remote:  !     
-          remote:  !     Your app is using Python 3.9.0, however, there is a newer
-          remote:  !     patch release of Python 3.9 available: #{LATEST_PYTHON_3_9}
+          remote:  !     Your app is using Python 3.10.0, however, there is a newer
+          remote:  !     patch release of Python 3.10 available: #{LATEST_PYTHON_3_10}
           remote:  !     
           remote:  !     It is important to always use the latest patch version of
           remote:  !     Python to keep your app secure.
@@ -196,12 +196,12 @@ RSpec.describe 'Pipenv support' do
           remote:  !     Update your Pipfile.lock file to use the new version.
           remote:  !     
           remote:  !     We strongly recommend that you don't pin your app to an
-          remote:  !     exact Python version such as 3.9.0, and instead only specify
-          remote:  !     the major Python version of 3.9 in your Pipfile.lock file.
+          remote:  !     exact Python version such as 3.10.0, and instead only specify
+          remote:  !     the major Python version of 3.10 in your Pipfile.lock file.
           remote:  !     This will allow your app to receive the latest available Python
           remote:  !     patch version automatically and prevent this warning.
           remote: 
-          remote: -----> Installing Python 3.9.0
+          remote: -----> Installing Python 3.10.0
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
@@ -443,7 +443,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     As such, it's no longer supported by this buildpack:
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote:  !     
-          remote:  !     Please upgrade to at least Python 3.9 by changing the
+          remote:  !     Please upgrade to at least Python 3.10 by changing the
           remote:  !     version in your Pipfile.lock file.
           remote:  !     
           remote:  !     If possible, we recommend upgrading all the way to Python #{DEFAULT_PYTHON_MAJOR_VERSION},

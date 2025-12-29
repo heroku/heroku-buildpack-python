@@ -51,11 +51,10 @@ The supported Python versions are:
 - Python 3.13
 - Python 3.12
 - Python 3.11
-- Python 3.10
 
 These Python versions are deprecated on Heroku:
 
-- Python 3.9
+- Python 3.10
 
 Python versions older than those listed above are no longer supported, since they have reached
 end-of-life [upstream](https://devguide.python.org/versions/#supported-versions).

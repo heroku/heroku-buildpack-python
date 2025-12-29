@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Removed support for Python 3.9. ([#2005](https://github.com/heroku/heroku-buildpack-python/pull/2005))
 - Adjusted the error message shown if SQLite headers aren't found during package installation. ([#2006](https://github.com/heroku/heroku-buildpack-python/pull/2006))
 
 ## [v326] - 2026-01-05

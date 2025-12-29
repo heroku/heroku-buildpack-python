@@ -267,16 +267,16 @@ RSpec.describe 'Poetry support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python 3.9.0 specified in .python-version
+          remote: -----> Using Python 3.10.0 specified in .python-version
           remote: 
-          remote:  !     Warning: Support for Python 3.9 is ending soon!
+          remote:  !     Warning: Support for Python 3.10 is deprecated!
           remote:  !     
-          remote:  !     Python 3.9 reached its upstream end-of-life on 31st October 2025,
-          remote:  !     and so no longer receives security updates:
+          remote:  !     Python 3.10 will reach its upstream end-of-life in October 2026,
+          remote:  !     at which point it will no longer receive security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
-          remote:  !     As such, support for Python 3.9 will be removed from this
-          remote:  !     buildpack on 7th January 2026.
+          remote:  !     As such, support for Python 3.10 will be removed from this
+          remote:  !     buildpack on 6th January 2027.
           remote:  !     
           remote:  !     Upgrade to a newer Python version as soon as possible, by
           remote:  !     changing the version in your .python-version file.
@@ -287,8 +287,8 @@ RSpec.describe 'Poetry support' do
           remote: 
           remote:  !     Warning: A Python patch update is available!
           remote:  !     
-          remote:  !     Your app is using Python 3.9.0, however, there is a newer
-          remote:  !     patch release of Python 3.9 available: #{LATEST_PYTHON_3_9}
+          remote:  !     Your app is using Python 3.10.0, however, there is a newer
+          remote:  !     patch release of Python 3.10 available: #{LATEST_PYTHON_3_10}
           remote:  !     
           remote:  !     It is important to always use the latest patch version of
           remote:  !     Python to keep your app secure.
@@ -296,12 +296,12 @@ RSpec.describe 'Poetry support' do
           remote:  !     Update your .python-version file to use the new version.
           remote:  !     
           remote:  !     We strongly recommend that you don't pin your app to an
-          remote:  !     exact Python version such as 3.9.0, and instead only specify
-          remote:  !     the major Python version of 3.9 in your .python-version file.
+          remote:  !     exact Python version such as 3.10.0, and instead only specify
+          remote:  !     the major Python version of 3.10 in your .python-version file.
           remote:  !     This will allow your app to receive the latest available Python
           remote:  !     patch version automatically and prevent this warning.
           remote: 
-          remote: -----> Installing Python 3.9.0
+          remote: -----> Installing Python 3.10.0
           remote: -----> Installing Poetry #{POETRY_VERSION}
           remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file

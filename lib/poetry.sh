@@ -51,13 +51,8 @@ function poetry::install_poetry() {
 		local bundled_pip_module_path
 		bundled_pip_module_path="$(utils::bundled_pip_module_path "${python_home}" "${python_major_version}")"
 
-		# We must call the venv Python directly here, rather than relying on pip's `--python`
-		# option, since `--python` was only added in pip v22.3, so isn't supported by the older
-		# pip versions bundled with Python 3.9/3.10.
 		# `--isolated`: Prevents any custom pip configuration added by third party buildpacks (via env
 		#               vars or global config files) from breaking package manager bootstrapping.
-		# We pin to an older dulwich version to work around https://github.com/jelmer/dulwich/issues/1948
-		# on Python 3.9.0/3.9.1. TODO: Remove this pin when we drop support for Python 3.9 in Jan 2026.
 		# shellcheck disable=SC2310 # This function is invoked in an 'if' condition so set -e will be disabled.
 		if ! {
 			"${poetry_venv_dir}/bin/python" "${bundled_pip_module_path}" \
