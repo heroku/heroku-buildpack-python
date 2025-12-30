@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Updated pip from 25.2 to 25.3. ([#2008](https://github.com/heroku/heroku-buildpack-python/pull/2008))
+- Stopped installing wheel when using pip with Python 3.12 and older. ([#2008](https://github.com/heroku/heroku-buildpack-python/pull/2008))
 
 ## [v327] - 2026-01-07
 

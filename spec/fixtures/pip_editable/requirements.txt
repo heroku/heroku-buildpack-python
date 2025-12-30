@@ -2,4 +2,4 @@
 # https://github.com/pypa/setuptools/issues/3535
 -e ./packages/local_package_pyproject_toml
 -e ./packages/local_package_setup_py
--e git+https://github.com/benoitc/gunicorn@20.1.0#egg=gunicorn
+-e git+https://github.com/benoitc/gunicorn@56b5ad87f8d72a674145c273ed8f547513c2b409#egg=gunicorn

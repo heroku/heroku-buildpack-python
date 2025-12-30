@@ -163,51 +163,42 @@ RSpec.describe 'pip support' do
     end
   end
 
-  # This test intentionally uses Python 3.12, so that we test rewriting using older globally installed
-  # setuptools (which causes .egg-link files to be created too). The Pipenv and Poetry equivalents of
-  # this test covers the PEP-517/518 setuptools case.
   context 'when requirements.txt contains editable requirements (both VCS and local package)' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pip_editable', buildpacks:) }
 
-    it 'rewrites .pth, .egg-link and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
+    it 'rewrites .pth and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running bin/post_compile hook
-          remote:        easy-install.pth:/app/.heroku/python/src/gunicorn
-          remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        gunicorn.egg-link:/app/.heroku/python/src/gunicorn
-          remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote:        
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Saving cache
           .+
           remote: -----> Inline app detected
-          remote: easy-install.pth:/app/.heroku/python/src/gunicorn
-          remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: gunicorn.egg-link:/app/.heroku/python/src/gunicorn
-          remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote: 
           remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
         REGEX
 
         # Test rewritten paths work at runtime.
         expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
-          easy-install.pth:/app/.heroku/python/src/gunicorn
-          easy-install.pth:/app/packages/local_package_setup_py
+          __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          gunicorn.egg-link:/app/.heroku/python/src/gunicorn
-          local-package-setup-py.egg-link:/app/packages/local_package_setup_py
+          __editable___local_package_setup_py_0_0_1_finder.py:/app/packages/local_package_setup_py/local_package_setup_py'}
 
           Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          Running entrypoint for the VCS package: gunicorn (version 20.1.0)
+          Running entrypoint for the VCS package: gunicorn (version 23.0.0)
         OUTPUT
 
         # Test that the cached .pth files work correctly.
@@ -215,30 +206,29 @@ RSpec.describe 'pip support' do
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running bin/post_compile hook
-          remote:        easy-install.pth:/app/.heroku/python/src/gunicorn
-          remote:        easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        gunicorn.egg-link:/app/.heroku/python/src/gunicorn
-          remote:        local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote:        
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
           remote: -----> Saving cache
           .+
           remote: -----> Inline app detected
-          remote: easy-install.pth:/app/.heroku/python/src/gunicorn
-          remote: easy-install.pth:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: gunicorn.egg-link:/app/.heroku/python/src/gunicorn
-          remote: local-package-setup-py.egg-link:/tmp/build_.+/packages/local_package_setup_py
+          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
           remote: 
           remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
           remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 20.1.0\\)
+          remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
         REGEX
         # Test that the VCS repo checkout was cached correctly.
-        expect(app.output).to include('Updating /app/.heroku/python/src/gunicorn clone (to revision 20.1.0)')
+        expect(app.output).to include(<<~OUTPUT)
+          remote:        Obtaining gunicorn from git+https://github.com/benoitc/gunicorn@56b5ad87f8d72a674145c273ed8f547513c2b409#egg=gunicorn (from -r requirements.txt (line 5))        
+          remote:          Skipping because already up-to-date.        
+        OUTPUT
       end
     end
   end
@@ -318,7 +308,7 @@ RSpec.describe 'pip support' do
           remote:  !     patch version automatically and prevent this warning.
           remote: 
           remote: -----> Installing Python 3.10.0
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION} and setuptools #{SETUPTOOLS_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
           remote:          Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
@@ -378,7 +368,7 @@ RSpec.describe 'pip support' do
     it 'outputs instructions for how to resolve the build failure' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
-          remote:        note: This error originates from a subprocess, and is likely not a problem with pip.
+          remote:        ERROR: Failed to build 'GDAL' when getting requirements to build wheel
           remote: 
           remote:  !     Error: Package installation failed since the GDAL library wasn't found.
           remote:  !     

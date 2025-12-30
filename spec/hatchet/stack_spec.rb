@@ -69,7 +69,7 @@ RSpec.describe 'Stack changes' do
           remote:        - The buildpack cache format has changed
           remote:        - The legacy SQLite3 headers and CLI binary need to be uninstalled
           remote: -----> Installing Python #{LATEST_PYTHON_3_12}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION} and setuptools #{SETUPTOOLS_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
