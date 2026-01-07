@@ -1,1 +1,3 @@
-pysqlite3
+# We have to use an older version to test the custom SQLite headers error message,
+# since pysqlite3 0.6.0+ ships with precompiled wheels and so doesn't error.
+pysqlite3==0.5.4
