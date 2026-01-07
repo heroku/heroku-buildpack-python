@@ -29,16 +29,9 @@ show-warnings() {
 			2. Replace any `pysqlite3` imports in your app with `sqlite3`.
 
 			Alternatively, if you can't use the `sqlite3` stdlib module,
-			switch from the `pysqlite3` package to `pysqlite3-binary`,
-			which is pre-compiled and doesn't need the SQLite headers to
-			be installed.
-
-			If instead you need the SQLite headers for another reason
-			(or wish to continue to compile the `pysqlite3` package from
-			source), then install the `libsqlite3-dev` and `libsqlite3-0`
-			packages using the APT buildpack (make sure the APT buildpack
-			runs before the Python buildpack, not after):
-			https://github.com/heroku/heroku-buildpack-apt
+			update your `pysqlite3` package to 0.6.0 or newer, since the
+			newer versions are published with pre-compiled wheels and so
+			don't need the SQLite headers to be installed.
 		EOF
 		build_data::set_string "failure_detail" "sqlite3.h: No such file or directory"
 	elif grep -qi 'Please use pip<24.1 if you need to use this version' "${install_log}"; then

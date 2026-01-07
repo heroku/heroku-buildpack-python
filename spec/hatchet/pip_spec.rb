@@ -449,16 +449,9 @@ RSpec.describe 'pip support' do
           remote:  !     2. Replace any `pysqlite3` imports in your app with `sqlite3`.
           remote:  !     
           remote:  !     Alternatively, if you can't use the `sqlite3` stdlib module,
-          remote:  !     switch from the `pysqlite3` package to `pysqlite3-binary`,
-          remote:  !     which is pre-compiled and doesn't need the SQLite headers to
-          remote:  !     be installed.
-          remote:  !     
-          remote:  !     If instead you need the SQLite headers for another reason
-          remote:  !     (or wish to continue to compile the `pysqlite3` package from
-          remote:  !     source), then install the `libsqlite3-dev` and `libsqlite3-0`
-          remote:  !     packages using the APT buildpack (make sure the APT buildpack
-          remote:  !     runs before the Python buildpack, not after):
-          remote:  !     https://github.com/heroku/heroku-buildpack-apt
+          remote:  !     update your `pysqlite3` package to 0.6.0 or newer, since the
+          remote:  !     newer versions are published with pre-compiled wheels and so
+          remote:  !     don't need the SQLite headers to be installed.
           remote: 
           remote: 
           remote:  !     Error: Unable to install dependencies using pip.
