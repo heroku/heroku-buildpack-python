@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v327] - 2026-01-07
+
 - Removed support for Python 3.9. ([#2005](https://github.com/heroku/heroku-buildpack-python/pull/2005))
 - Adjusted the error message shown if SQLite headers aren't found during package installation. ([#2006](https://github.com/heroku/heroku-buildpack-python/pull/2006))
 
@@ -1439,7 +1442,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v326...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v327...main
+[v327]: https://github.com/heroku/heroku-buildpack-python/compare/v326...v327
 [v326]: https://github.com/heroku/heroku-buildpack-python/compare/v325...v326
 [v325]: https://github.com/heroku/heroku-buildpack-python/compare/v324...v325
 [v324]: https://github.com/heroku/heroku-buildpack-python/compare/v323...v324
