@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v328] - 2026-01-07
+
 - Updated pip from 25.2 to 25.3. ([#2008](https://github.com/heroku/heroku-buildpack-python/pull/2008))
 - Stopped installing wheel when using pip with Python 3.12 and older. ([#2008](https://github.com/heroku/heroku-buildpack-python/pull/2008))
 
@@ -1444,7 +1447,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v327...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v328...main
+[v328]: https://github.com/heroku/heroku-buildpack-python/compare/v327...v328
 [v327]: https://github.com/heroku/heroku-buildpack-python/compare/v326...v327
 [v326]: https://github.com/heroku/heroku-buildpack-python/compare/v325...v326
 [v325]: https://github.com/heroku/heroku-buildpack-python/compare/v324...v325
