@@ -252,7 +252,7 @@ RSpec.describe 'pip support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python 3.9.0 specified in runtime.txt
+          remote: -----> Using Python 3.10.0 specified in runtime.txt
           remote: 
           remote:  !     Warning: The runtime.txt file is deprecated.
           remote:  !     
@@ -272,9 +272,9 @@ RSpec.describe 'pip support' do
           remote:  !     In the new file, specify your app's major Python version number
           remote:  !     only. Don't include quotes or a 'python-' prefix.
           remote:  !     
-          remote:  !     For example, to request the latest version of Python 3.9,
+          remote:  !     For example, to request the latest version of Python 3.10,
           remote:  !     update your .python-version file so it contains exactly:
-          remote:  !     3.9
+          remote:  !     3.10
           remote:  !     
           remote:  !     We strongly recommend that you don't specify the Python patch
           remote:  !     version number, since it will pin your app to an exact Python
@@ -285,14 +285,14 @@ RSpec.describe 'pip support' do
           remote:  !     this warning will be made an error.
           remote: 
           remote: 
-          remote:  !     Warning: Support for Python 3.9 is ending soon!
+          remote:  !     Warning: Support for Python 3.10 is deprecated!
           remote:  !     
-          remote:  !     Python 3.9 reached its upstream end-of-life on 31st October 2025,
-          remote:  !     and so no longer receives security updates:
+          remote:  !     Python 3.10 will reach its upstream end-of-life in October 2026,
+          remote:  !     at which point it will no longer receive security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
-          remote:  !     As such, support for Python 3.9 will be removed from this
-          remote:  !     buildpack on 7th January 2026.
+          remote:  !     As such, support for Python 3.10 will be removed from this
+          remote:  !     buildpack on 6th January 2027.
           remote:  !     
           remote:  !     Upgrade to a newer Python version as soon as possible, by
           remote:  !     changing the version in your runtime.txt file.
@@ -303,8 +303,8 @@ RSpec.describe 'pip support' do
           remote: 
           remote:  !     Warning: A Python patch update is available!
           remote:  !     
-          remote:  !     Your app is using Python 3.9.0, however, there is a newer
-          remote:  !     patch release of Python 3.9 available: #{LATEST_PYTHON_3_9}
+          remote:  !     Your app is using Python 3.10.0, however, there is a newer
+          remote:  !     patch release of Python 3.10 available: #{LATEST_PYTHON_3_10}
           remote:  !     
           remote:  !     It is important to always use the latest patch version of
           remote:  !     Python to keep your app secure.
@@ -312,12 +312,12 @@ RSpec.describe 'pip support' do
           remote:  !     Update your runtime.txt file to use the new version.
           remote:  !     
           remote:  !     We strongly recommend that you don't pin your app to an
-          remote:  !     exact Python version such as 3.9.0, and instead only specify
-          remote:  !     the major Python version of 3.9 in your runtime.txt file.
+          remote:  !     exact Python version such as 3.10.0, and instead only specify
+          remote:  !     the major Python version of 3.10 in your runtime.txt file.
           remote:  !     This will allow your app to receive the latest available Python
           remote:  !     patch version automatically and prevent this warning.
           remote: 
-          remote: -----> Installing Python 3.9.0
+          remote: -----> Installing Python 3.10.0
           remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))

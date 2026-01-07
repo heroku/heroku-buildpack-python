@@ -10,7 +10,6 @@ require 'hatchet'
 
 FIXTURE_DIR = Pathname.new(__FILE__).parent.join('fixtures')
 
-LATEST_PYTHON_3_9 = '3.9.25'
 LATEST_PYTHON_3_10 = '3.10.19'
 LATEST_PYTHON_3_11 = '3.11.14'
 LATEST_PYTHON_3_12 = '3.12.12'

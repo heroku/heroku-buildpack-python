@@ -4,14 +4,13 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-LATEST_PYTHON_3_9="3.9.25"
 LATEST_PYTHON_3_10="3.10.19"
 LATEST_PYTHON_3_11="3.11.14"
 LATEST_PYTHON_3_12="3.12.12"
 LATEST_PYTHON_3_13="3.13.11"
 LATEST_PYTHON_3_14="3.14.2"
 
-OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION=9
+OLDEST_SUPPORTED_PYTHON_3_MINOR_VERSION=10
 NEWEST_SUPPORTED_PYTHON_3_MINOR_VERSION=14
 
 DEFAULT_PYTHON_FULL_VERSION="${LATEST_PYTHON_3_14}"
@@ -525,7 +524,6 @@ function python_version::resolve_python_version() {
 	# Otherwise map major version specifiers to the latest patch release.
 	case "${requested_python_version}" in
 		*.*.*) echo "${requested_python_version}" ;;
-		3.9) echo "${LATEST_PYTHON_3_9}" ;;
 		3.10) echo "${LATEST_PYTHON_3_10}" ;;
 		3.11) echo "${LATEST_PYTHON_3_11}" ;;
 		3.12) echo "${LATEST_PYTHON_3_12}" ;;
@@ -688,24 +686,7 @@ function python_version::warn_if_deprecated_major_version() {
 	local requested_major_version="${1}"
 	local version_origin="${2}"
 
-	if [[ "${requested_major_version}" == "3.9" ]]; then
-		output::warning <<-EOF
-			Warning: Support for Python 3.9 is ending soon!
-
-			Python 3.9 reached its upstream end-of-life on 31st October 2025,
-			and so no longer receives security updates:
-			https://devguide.python.org/versions/#supported-versions
-
-			As such, support for Python 3.9 will be removed from this
-			buildpack on 7th January 2026.
-
-			Upgrade to a newer Python version as soon as possible, by
-			changing the version in your ${version_origin} file.
-
-			For more information, see:
-			https://devcenter.heroku.com/articles/python-support#supported-python-versions
-		EOF
-	elif [[ "${requested_major_version}" == "3.10" ]]; then
+	if [[ "${requested_major_version}" == "3.10" ]]; then
 		output::warning <<-EOF
 			Warning: Support for Python 3.10 is deprecated!
 

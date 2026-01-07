@@ -10,7 +10,7 @@ typing-extensions = "*"
 
 [requires]
 # Uses the oldest Python version supported by all stacks, to validate Pipenv works with it.
-python_full_version = "3.9.0"
+python_full_version = "3.10.0"
 
 # `python_full_version` should take precedence over this.
 python_version = "3.12"
