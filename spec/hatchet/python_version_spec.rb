@@ -10,7 +10,7 @@ RSpec.shared_examples 'builds with the requested Python version' do |requested_v
           remote: -----> Python app detected
           remote: -----> Using Python #{requested_version} specified in .python-version
           remote: -----> Installing Python #{resolved_version}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION} and setuptools #{SETUPTOOLS_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
@@ -152,7 +152,7 @@ RSpec.describe 'Python version support' do
             remote:        - The pip version has changed from 24.0 to #{PIP_VERSION}
             remote:        - The legacy SQLite3 headers and CLI binary need to be uninstalled
             remote: -----> Installing Python #{LATEST_PYTHON_3_12}
-            remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+            remote: -----> Installing pip #{PIP_VERSION} and setuptools #{SETUPTOOLS_VERSION}
           OUTPUT
           expect(app.run('python -V')).to eq("Python #{LATEST_PYTHON_3_12}\n")
           expect($CHILD_STATUS.exitstatus).to eq(0)
@@ -274,7 +274,7 @@ RSpec.describe 'Python version support' do
           remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
           remote: 
           remote: -----> Installing Python #{LATEST_PYTHON_3_10}
-          remote: -----> Installing pip #{PIP_VERSION}, setuptools #{SETUPTOOLS_VERSION} and wheel #{WHEEL_VERSION}
+          remote: -----> Installing pip #{PIP_VERSION} and setuptools #{SETUPTOOLS_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT

@@ -6,7 +6,6 @@ set -euo pipefail
 
 PIP_VERSION=$(utils::get_requirement_version 'pip')
 SETUPTOOLS_VERSION=$(utils::get_requirement_version 'setuptools')
-WHEEL_VERSION=$(utils::get_requirement_version 'wheel')
 
 function pip::install_pip() {
 	local python_home="${1}"
@@ -21,21 +20,17 @@ function pip::install_pip() {
 	)
 	local packages_display_text="pip ${PIP_VERSION}"
 
-	# We only install setuptools and wheel on Python 3.12 and older, since:
-	# - If either is not installed, pip will automatically install them into an isolated build
-	#   environment if needed when installing packages from an sdist. This means that for
-	#   all packages that correctly declare their metadata, it's no longer necessary to have
-	#   them installed.
+	# We only install setuptools on Python 3.12 and older, since:
+	# - pip now uses isolated build environments into which it installed setuptools and wheel
+	#   if needed when installing packages from an sdist.
 	# - Most of the Python ecosystem has stopped installing them for Python 3.12+ already.
 	# See the Python CNB's removal for more details: https://github.com/heroku/buildpacks-python/pull/243
 	if [[ "${python_major_version}" == +(3.10|3.11|3.12) ]]; then
 		build_data::set_string "setuptools_version" "${SETUPTOOLS_VERSION}"
-		build_data::set_string "wheel_version" "${WHEEL_VERSION}"
 		packages_to_install+=(
 			"setuptools==${SETUPTOOLS_VERSION}"
-			"wheel==${WHEEL_VERSION}"
 		)
-		packages_display_text+=", setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
+		packages_display_text+=" and setuptools ${SETUPTOOLS_VERSION}"
 	fi
 
 	# Note: We still perform this install step even if the cache was reused, since we have no guarantee
