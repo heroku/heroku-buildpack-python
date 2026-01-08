@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated Pipenv from 2025.0.4 to 2026.0.3. ([#2000](https://github.com/heroku/heroku-buildpack-python/pull/2000))
 
 ## [v328] - 2026-01-07
 
