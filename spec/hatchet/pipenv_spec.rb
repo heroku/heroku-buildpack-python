@@ -455,8 +455,7 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  # TODO: Rename this test description back this when the Pipenv version next changes.
-  context 'when the Python version has changed since the last build' do
+  context 'when the Pipenv and Python versions have changed since the last build' do
     let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v313'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
 
@@ -471,6 +470,7 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using Python 3.14 specified in Pipfile.lock
           remote: -----> Discarding cache since:
           remote:        - The Python version has changed from 3.14.0 to #{LATEST_PYTHON_3_14}
+          remote:        - The Pipenv version has changed from 2025.0.4 to #{PIPENV_VERSION}
           remote: -----> Installing Python #{LATEST_PYTHON_3_14}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
@@ -560,21 +560,28 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  # This is disabled since it's currently broken upstream: https://github.com/pypa/pipenv/issues/6403
   # This tests that Pipenv doesn't fall back to system Python if the Python version in
   # pyproject.toml doesn't match that in Pipfile / Pipfile.lock.
-  # context 'when requires-python in pyproject.toml is incompatible with .python-version' do
-  #   let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_mismatched_python_version', allow_failure: true) }
-  #
-  #   it 'fails the build' do
-  #     app.deploy do |app|
-  #       expect(clean_output(app.output)).to include(<<~OUTPUT)
-  #         remote: -----> Installing dependencies using 'pipenv install --deploy'
-  #         remote:        <TODO whatever error message Pipenv displays if they fix their bug>
-  #       OUTPUT
-  #     end
-  #   end
-  # end
+  context 'when requires-python in pyproject.toml is incompatible with .python-version' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_mismatched_python_version', allow_failure: true) }
+
+    it 'fails the build' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Installing dependencies using 'pipenv install --deploy'
+          remote:        Warning: Your Pipfile requires "python_version" 3.12, but you are using #{LATEST_PYTHON_3_13} 
+          remote:        from //app/./python/bin/python3.
+          remote:        Usage: pipenv install [OPTIONS] [PACKAGES]...
+          remote:        
+          remote:        ERROR:: Aborting deploy
+          remote: 
+          remote:  !     Error: Unable to install dependencies using Pipenv.
+          remote:  !     
+          remote:  !     See the log output above for more information.
+        OUTPUT
+      end
+    end
+  end
 
   # This tests not only our handling of failing dependency installation, but also that we're running
   # Pipenv in such a way that it errors if the lockfile is out of sync, rather than simply updating it.
