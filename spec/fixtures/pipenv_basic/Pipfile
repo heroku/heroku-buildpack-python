@@ -4,8 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-certifi = "*"
 typing-extensions = "*"
+# Test that dependencies that happen to also be vendored dependencies of Pipenv are correctly installed,
+# since Pipenv's --system mode is buggy and requires a workaround to ensure they aren't skipped.
+certifi = "*"
+packaging = "*"
 
 [dev-packages]
 

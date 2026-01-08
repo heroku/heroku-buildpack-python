@@ -15,7 +15,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Running bin/post_compile hook
           remote:        BUILD_DIR=/tmp/build_.+
           remote:        CACHE_DIR=/tmp/codon/tmp/cache
@@ -27,8 +26,10 @@ RSpec.describe 'Pipenv support' do
           remote:        LIBRARY_PATH=/app/.heroku/python/lib
           remote:        PATH=/app/.heroku/python/pipenv/bin:/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote:        PIPENV_SYSTEM=1
+          remote:        PIPENV_VERBOSITY=-1
           remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
           remote:        PYTHONUNBUFFERED=1
+          remote:        VIRTUAL_ENV=/app/.heroku/python
           remote: -----> Saving cache
           remote: 
           remote:  !     Note: We recently added support for the package manager uv:
@@ -47,9 +48,11 @@ RSpec.describe 'Pipenv support' do
           remote: LIBRARY_PATH=/app/.heroku/python/lib
           remote: PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote: PIPENV_SYSTEM=1
+          remote: PIPENV_VERBOSITY=-1
           remote: PYTHONHOME=/app/.heroku/python
           remote: PYTHONPATH=/app
           remote: PYTHONUNBUFFERED=true
+          remote: VIRTUAL_ENV=/app/.heroku/python
           remote: 
           remote: \\['',
           remote:  '/app',
@@ -61,10 +64,13 @@ RSpec.describe 'Pipenv support' do
           remote: pipenv, version #{PIPENV_VERSION}
           remote: Package           Version
           remote: ----------------- -+
-          remote: certifi           2025.11.12
+          remote: certifi           2026.1.4
+          remote: packaging         25.0
           remote: typing_extensions 4.15.0
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.14/site-packages/typing_extensions.py'>
+          remote: <module 'certifi' from '/app/.heroku/python/lib/python3.14/site-packages/certifi/__init__.py'>
+          remote: <module 'packaging' from '/app/.heroku/python/lib/python3.14/site-packages/packaging/__init__.py'>
           remote: 
           remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
@@ -99,7 +105,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Using cached install of Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Using cached Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Running bin/post_compile hook
           remote:        .+
           remote: -----> Saving cache
@@ -115,9 +120,11 @@ RSpec.describe 'Pipenv support' do
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/bin:/usr/bin:/bin
           PIPENV_SYSTEM=1
+          PIPENV_VERBOSITY=-1
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
+          VIRTUAL_ENV=/app/.heroku/python
           WEB_CONCURRENCY=2
           pipenv, version #{PIPENV_VERSION}
         OUTPUT
@@ -143,7 +150,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Saving cache
         REGEX
       end
@@ -198,7 +204,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Python 3.10.0
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Saving cache
         REGEX
       end
@@ -216,7 +221,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Saving cache
         REGEX
       end
@@ -275,7 +279,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Python #{DEFAULT_PYTHON_FULL_VERSION}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Saving cache
         REGEX
       end
@@ -468,7 +471,6 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing Python #{LATEST_PYTHON_3_14}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Saving cache
         REGEX
       end
@@ -483,7 +485,6 @@ RSpec.describe 'Pipenv support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Running bin/post_compile hook
           remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
@@ -526,7 +527,6 @@ RSpec.describe 'Pipenv support' do
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote:        Installing dependencies from Pipfile.lock \\(.+\\)...
           remote: -----> Running bin/post_compile hook
           remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}

@@ -81,17 +81,31 @@ function pipenv::install_pipenv() {
 	export PATH="${pipenv_bin_dir}:${PATH}"
 	# Force Pipenv to manage the system Python site-packages instead of using venvs.
 	export PIPENV_SYSTEM="1"
+	# Hide Pipenv's notice about finding/using an existing virtual environment.
+	export PIPENV_VERBOSITY="-1"
+	# Work around a Pipenv bug when using `--system`, whereby it doesn't correctly install dependencies
+	# that happen to also be a dependency of Pipenv (such as `certifi` and `packaging`). In general
+	# Pipenv's support for its `--system` mode is very buggy. Longer term we should explore moving
+	# to venvs, however, that will need to be coordinated across all package managers and will also
+	# change paths for Python which could break other use cases. Be careful removing this even if the
+	# `pip_basic` test that installs certifi/packaging still passes, since the repro seems to depend
+	# on specific package version combinations / other factors and so the testcase is very fragile.
+	export VIRTUAL_ENV="${python_home}"
 
 	# Set the same env vars in the environment used by later buildpacks.
 	cat >>"${export_file}" <<-EOF
 		export PATH="${pipenv_bin_dir}:\${PATH}"
 		export PIPENV_SYSTEM="1"
+		export PIPENV_VERBOSITY="-1"
+		export VIRTUAL_ENV="${python_home}"
 	EOF
 
 	# And the environment used at app run-time.
 	cat >>"${profile_d_file}" <<-EOF
 		export PATH="${pipenv_bin_dir}:\${PATH}"
 		export PIPENV_SYSTEM="1"
+		export PIPENV_VERBOSITY="-1"
+		export VIRTUAL_ENV="${python_home}"
 	EOF
 }
 
