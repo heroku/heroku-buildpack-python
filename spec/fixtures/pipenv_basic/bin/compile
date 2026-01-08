@@ -23,6 +23,10 @@ pip list --disable-pip-version-check --exclude pip
 echo
 
 python -c 'import typing_extensions; print(typing_extensions)'
+# Test that dependencies that happen to also be vendored dependencies of Pipenv are correctly installed,
+# since Pipenv's --system mode is buggy and requires a workaround to ensure they aren't skipped.
+python -c 'import certifi; print(certifi)'
+python -c 'import packaging; print(packaging)'
 echo
 
 jq --sort-keys '.' "${CACHE_DIR}/build-data/python.json"
