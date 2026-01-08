@@ -123,10 +123,8 @@ RSpec.describe 'Heroku CI' do
                  LIBRARY_PATH=/app/.heroku/python/lib
                  PATH=/app/.heroku/python/pipenv/bin:/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
                  PIPENV_SYSTEM=1
-                 PIPENV_VERBOSITY=-1
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
-                 VIRTUAL_ENV=/app/.heroku/python
           -----> Saving cache
 
            !     Note: We recently added support for the package manager uv:
@@ -145,11 +143,9 @@ RSpec.describe 'Heroku CI' do
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
           PIPENV_SYSTEM=1
-          PIPENV_VERBOSITY=-1
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
-          VIRTUAL_ENV=/app/.heroku/python
           -----> No test-setup command provided. Skipping.
           -----> Running test command `./bin/print-env-vars.sh && pytest --version`...
           CI=true
@@ -161,11 +157,9 @@ RSpec.describe 'Heroku CI' do
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/:/app/.sprettur/bin/
           PIPENV_SYSTEM=1
-          PIPENV_VERBOSITY=-1
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
-          VIRTUAL_ENV=/app/.heroku/python
           WEB_CONCURRENCY=5
           pytest .+
           -----> test command `./bin/print-env-vars.sh && pytest --version` completed successfully

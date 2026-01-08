@@ -27,10 +27,8 @@ RSpec.describe 'Pipenv support' do
           remote:        LIBRARY_PATH=/app/.heroku/python/lib
           remote:        PATH=/app/.heroku/python/pipenv/bin:/app/.heroku/python/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote:        PIPENV_SYSTEM=1
-          remote:        PIPENV_VERBOSITY=-1
           remote:        PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
           remote:        PYTHONUNBUFFERED=1
-          remote:        VIRTUAL_ENV=/app/.heroku/python
           remote: -----> Saving cache
           remote: 
           remote:  !     Note: We recently added support for the package manager uv:
@@ -49,11 +47,9 @@ RSpec.describe 'Pipenv support' do
           remote: LIBRARY_PATH=/app/.heroku/python/lib
           remote: PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
           remote: PIPENV_SYSTEM=1
-          remote: PIPENV_VERBOSITY=-1
           remote: PYTHONHOME=/app/.heroku/python
           remote: PYTHONPATH=/app
           remote: PYTHONUNBUFFERED=true
-          remote: VIRTUAL_ENV=/app/.heroku/python
           remote: 
           remote: \\['',
           remote:  '/app',
@@ -119,11 +115,9 @@ RSpec.describe 'Pipenv support' do
           LIBRARY_PATH=/app/.heroku/python/lib
           PATH=/app/.heroku/python/bin:/app/.heroku/python/pipenv/bin:/usr/local/bin:/usr/bin:/bin
           PIPENV_SYSTEM=1
-          PIPENV_VERBOSITY=-1
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
-          VIRTUAL_ENV=/app/.heroku/python
           WEB_CONCURRENCY=2
           pipenv, version #{PIPENV_VERSION}
         OUTPUT
