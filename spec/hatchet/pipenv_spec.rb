@@ -126,6 +126,7 @@ RSpec.describe 'Pipenv support' do
           PYTHONUNBUFFERED=true
           VIRTUAL_ENV=/app/.heroku/python
           WEB_CONCURRENCY=2
+          WEB_CONCURRENCY_SET_BY=heroku/python
           pipenv, version #{PIPENV_VERSION}
         OUTPUT
         expect($CHILD_STATUS.exitstatus).to eq(0)

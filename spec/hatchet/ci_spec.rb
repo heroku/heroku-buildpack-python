@@ -72,6 +72,7 @@ RSpec.describe 'Heroku CI' do
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
           WEB_CONCURRENCY=5
+          WEB_CONCURRENCY_SET_BY=heroku/python
           pytest .+
           -----> test command `./bin/print-env-vars.sh && pytest --version` completed successfully
         REGEX
@@ -165,6 +166,7 @@ RSpec.describe 'Heroku CI' do
           PYTHONUNBUFFERED=true
           VIRTUAL_ENV=/app/.heroku/python
           WEB_CONCURRENCY=5
+          WEB_CONCURRENCY_SET_BY=heroku/python
           pytest .+
           -----> test command `./bin/print-env-vars.sh && pytest --version` completed successfully
         REGEX
@@ -258,6 +260,7 @@ RSpec.describe 'Heroku CI' do
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
           WEB_CONCURRENCY=5
+          WEB_CONCURRENCY_SET_BY=heroku/python
           pytest .+
           -----> test command `./bin/print-env-vars.sh && pytest --version` completed successfully
         REGEX
@@ -345,6 +348,7 @@ RSpec.describe 'Heroku CI' do
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
           WEB_CONCURRENCY=5
+          WEB_CONCURRENCY_SET_BY=heroku/python
           pytest .+
           -----> test command `./bin/print-env-vars.sh && pytest --version` completed successfully
         REGEX

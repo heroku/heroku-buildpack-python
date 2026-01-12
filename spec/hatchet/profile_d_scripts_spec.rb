@@ -43,7 +43,7 @@ RSpec.describe '.profile.d/ scripts' do
         OUTPUT
       end
 
-      list_concurrency_envs_cmd = 'printenv | sort | grep -E "^(DYNO_RAM|WEB_CONCURRENCY)="'
+      list_concurrency_envs_cmd = 'printenv | sort | grep -E "^(DYNO_RAM|WEB_CONCURRENCY.*)="'
 
       # Check WEB_CONCURRENCY support when using a Standard-1X dyno.
       # We set the process type to `web` so that we can test the web-dyno-only log output.
@@ -53,6 +53,7 @@ RSpec.describe '.profile.d/ scripts' do
           Python buildpack: Defaulting WEB_CONCURRENCY to 2 based on the available memory.
           DYNO_RAM=512
           WEB_CONCURRENCY=2
+          WEB_CONCURRENCY_SET_BY=heroku/python
         OUTPUT
       end
 
@@ -63,6 +64,7 @@ RSpec.describe '.profile.d/ scripts' do
           Python buildpack: Defaulting WEB_CONCURRENCY to 4 based on the available memory.
           DYNO_RAM=1024
           WEB_CONCURRENCY=4
+          WEB_CONCURRENCY_SET_BY=heroku/python
         OUTPUT
       end
 
@@ -73,6 +75,7 @@ RSpec.describe '.profile.d/ scripts' do
           Python buildpack: Defaulting WEB_CONCURRENCY to 5 based on the number of CPU cores.
           DYNO_RAM=2560
           WEB_CONCURRENCY=5
+          WEB_CONCURRENCY_SET_BY=heroku/python
         OUTPUT
       end
 
@@ -83,6 +86,7 @@ RSpec.describe '.profile.d/ scripts' do
           Python buildpack: Defaulting WEB_CONCURRENCY to 17 based on the number of CPU cores.
           DYNO_RAM=14336
           WEB_CONCURRENCY=17
+          WEB_CONCURRENCY_SET_BY=heroku/python
         OUTPUT
       end
 
@@ -93,6 +97,7 @@ RSpec.describe '.profile.d/ scripts' do
           Python buildpack: Defaulting WEB_CONCURRENCY to 9 based on the number of CPU cores.
           DYNO_RAM=30720
           WEB_CONCURRENCY=9
+          WEB_CONCURRENCY_SET_BY=heroku/python
         OUTPUT
       end
 
@@ -103,6 +108,7 @@ RSpec.describe '.profile.d/ scripts' do
           Python buildpack: Defaulting WEB_CONCURRENCY to 17 based on the number of CPU cores.
           DYNO_RAM=63488
           WEB_CONCURRENCY=17
+          WEB_CONCURRENCY_SET_BY=heroku/python
         OUTPUT
       end
 
@@ -113,6 +119,7 @@ RSpec.describe '.profile.d/ scripts' do
           Python buildpack: Defaulting WEB_CONCURRENCY to 33 based on the number of CPU cores.
           DYNO_RAM=129024
           WEB_CONCURRENCY=33
+          WEB_CONCURRENCY_SET_BY=heroku/python
         OUTPUT
       end
 

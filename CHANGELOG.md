@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- The web server concurrency calculation profile script now sets the env var `WEB_CONCURRENCY_SET_BY="heroku/python"` if `WEB_CONCURRENCY` was set automatically by the buildpack. ([#2015](https://github.com/heroku/heroku-buildpack-python/pull/2015))
 
 ## [v331] - 2026-01-11
 
