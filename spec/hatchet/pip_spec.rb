@@ -123,6 +123,7 @@ RSpec.describe 'pip support' do
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
           WEB_CONCURRENCY=2
+          WEB_CONCURRENCY_SET_BY=heroku/python
           pip #{PIP_VERSION} from /app/.heroku/python/lib/python3.14/site-packages/pip (python 3.14)
         OUTPUT
         expect($CHILD_STATUS.exitstatus).to eq(0)

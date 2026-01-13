@@ -124,6 +124,7 @@ RSpec.describe 'Poetry support' do
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
           WEB_CONCURRENCY=2
+          WEB_CONCURRENCY_SET_BY=heroku/python
         OUTPUT
         expect($CHILD_STATUS.exitstatus).to eq(0)
       end

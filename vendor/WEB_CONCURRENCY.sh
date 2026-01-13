@@ -75,6 +75,9 @@ if [[ -v WEB_CONCURRENCY ]]; then
 	return 0
 fi
 
+# Make it possible to differentiate between user and buildpack set WEB_CONCURRENCY values.
+export WEB_CONCURRENCY_SET_BY="heroku/python"
+
 minimum_memory_per_process_in_mb=256
 
 # Prevents WEB_CONCURRENCY being set to zero if the environment is extremely memory constrained.
