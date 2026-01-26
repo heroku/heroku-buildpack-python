@@ -131,8 +131,7 @@ RSpec.describe 'Poetry support' do
     end
   end
 
-  # TODO: Rename this test description back this when the Poetry version next changes.
-  context 'when the Python version has changed since the last build' do
+  context 'when the Poetry and Python versions have changed since the last build' do
     let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v313'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_basic', buildpacks:) }
 
@@ -147,6 +146,7 @@ RSpec.describe 'Poetry support' do
           remote: -----> Using Python 3.14 specified in .python-version
           remote: -----> Discarding cache since:
           remote:        - The Python version has changed from 3.14.0 to #{LATEST_PYTHON_3_14}
+          remote:        - The Poetry version has changed from 2.2.1 to #{POETRY_VERSION}
           remote: -----> Installing Python #{LATEST_PYTHON_3_14}
           remote: -----> Installing Poetry #{POETRY_VERSION}
           remote: -----> Installing dependencies using 'poetry sync --only main'
