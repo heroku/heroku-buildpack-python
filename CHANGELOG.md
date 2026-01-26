@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v332] - 2026-01-26
+
 - Updated Poetry from 2.2.1 to 2.3.1. ([#2019](https://github.com/heroku/heroku-buildpack-python/pull/2019))
 - Updated uv from 0.9.24 to 0.9.26. ([#2016](https://github.com/heroku/heroku-buildpack-python/pull/2016))
 - The web server concurrency calculation profile script now sets the env var `WEB_CONCURRENCY_SET_BY="heroku/python"` if `WEB_CONCURRENCY` was set automatically by the buildpack. ([#2015](https://github.com/heroku/heroku-buildpack-python/pull/2015))
@@ -1462,7 +1465,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v331...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v332...main
+[v332]: https://github.com/heroku/heroku-buildpack-python/compare/v331...v332
 [v331]: https://github.com/heroku/heroku-buildpack-python/compare/v330...v331
 [v330]: https://github.com/heroku/heroku-buildpack-python/compare/v329...v330
 [v329]: https://github.com/heroku/heroku-buildpack-python/compare/v328...v329
