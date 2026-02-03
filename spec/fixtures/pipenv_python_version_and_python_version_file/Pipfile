@@ -10,4 +10,4 @@ typing-extensions = "*"
 
 [requires]
 # The version in .python-version should take precedence over this.
-python_version = "3.11"
+python_version = "3.13"

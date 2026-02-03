@@ -211,6 +211,8 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
+  # TODO: Delete this test once pipenv_mismatched_python_version is re-enabled,
+  # since they mostly duplicate each other.
   context 'when there is a both a Pipfile.lock python_version and a .python-version file' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_and_python_version_file') }
 
@@ -556,13 +558,18 @@ RSpec.describe 'Pipenv support' do
   end
 
   # This tests that Pipenv doesn't fall back to system Python if the Python version in
-  # pyproject.toml doesn't match that in Pipfile / Pipfile.lock.
-  context 'when requires-python in pyproject.toml is incompatible with .python-version' do
+  # pyproject.toml doesn't match that in Pipfile / Pipfile.lock. It also tests which of
+  # .python-version and Pipfile.lock take precedence for the installed Python version.
+  context 'when python_version in Pipfile.lock is incompatible with .python-version' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_mismatched_python_version', allow_failure: true) }
 
-    it 'fails the build' do
+    it 'fails the build', skip: 'https://github.com/pypa/pipenv/issues/6514' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python #{LATEST_PYTHON_3_13} specified in .python-version
+          remote: -----> Installing Python #{LATEST_PYTHON_3_13}
+          remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Warning: Your Pipfile requires "python_version" 3.12, but you are using #{LATEST_PYTHON_3_13} 
           remote:        from //app/./python/bin/python3.
