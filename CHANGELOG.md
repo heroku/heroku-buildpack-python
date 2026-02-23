@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Changed the S3 URL used to download Python to use AWS' dual-stack (IPv6 compatible) endpoint. ([#2035](https://github.com/heroku/heroku-buildpack-python/pull/2035))
 
 ## [v335] - 2026-02-10
 
