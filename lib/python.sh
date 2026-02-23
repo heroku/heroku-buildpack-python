@@ -4,7 +4,7 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-S3_BASE_URL="https://heroku-buildpack-python.s3.us-east-1.amazonaws.com"
+S3_BASE_URL="https://heroku-buildpack-python.s3.dualstack.us-east-1.amazonaws.com"
 
 function python::install() {
 	local build_dir="${1}"
@@ -28,7 +28,7 @@ function python::install() {
 		local ubuntu_version="${stack/heroku-/}.04"
 		local arch
 		arch=$(dpkg --print-architecture)
-		# e.g.: https://heroku-buildpack-python.s3.us-east-1.amazonaws.com/python-3.13.0-ubuntu-24.04-amd64.tar.zst
+		# e.g.: https://heroku-buildpack-python.s3.dualstack.us-east-1.amazonaws.com/python-3.14.0-ubuntu-24.04-amd64.tar.zst
 		local python_url="${S3_BASE_URL}/python-${python_full_version}-ubuntu-${ubuntu_version}-${arch}.tar.zst"
 
 		local error_log
@@ -117,7 +117,7 @@ function python::install() {
 					Then try building again to see if the error resolves itself.
 				EOF
 				build_data::set_string "failure_reason" "install-python"
-				# e.g.: 'curl: (6) Could not resolve host: heroku-buildpack-python.s3.us-east-1.amazonaws.com'
+				# e.g.: 'curl: (6) Could not resolve host: heroku-buildpack-python.s3.dualstack.us-east-1.amazonaws.com'
 				build_data::set_string "failure_detail" "$(head --lines=1 "${error_log}" || true)"
 			fi
 
