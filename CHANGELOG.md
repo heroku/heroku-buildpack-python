@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v336] - 2026-02-26
+
 - Changed the S3 URL used to download Python to use AWS' dual-stack (IPv6 compatible) endpoint. ([#2035](https://github.com/heroku/heroku-buildpack-python/pull/2035))
 
 ## [v335] - 2026-02-10
@@ -1480,7 +1483,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v335...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v336...main
+[v336]: https://github.com/heroku/heroku-buildpack-python/compare/v335...v336
 [v335]: https://github.com/heroku/heroku-buildpack-python/compare/v334...v335
 [v334]: https://github.com/heroku/heroku-buildpack-python/compare/v333...v334
 [v333]: https://github.com/heroku/heroku-buildpack-python/compare/v332...v333
