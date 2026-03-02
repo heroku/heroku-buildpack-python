@@ -349,7 +349,7 @@ RSpec.describe 'pip support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
-          remote:        ERROR: Invalid requirement: 'an-invalid-requirement!': Expected end or semicolon (after name and no valid version specifier)
+          remote:        ERROR: Invalid requirement: 'an-invalid-requirement!': Expected semicolon (after name with no version specifier) or end
           remote:            an-invalid-requirement!
           remote:                                  ^ (from line 1 of requirements.txt)
           remote: 
