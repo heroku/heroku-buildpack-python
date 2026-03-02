@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v336] - 2026-03-02
+
 - Added a workaround for `nltk.txt` package downloader errors caused by an upstream regression in NLTK v3.9.3. ([#2041](https://github.com/heroku/heroku-buildpack-python/pull/2041))
 - Changed the S3 URL used to download Python to use AWS' dual-stack (IPv6 compatible) endpoint. ([#2035](https://github.com/heroku/heroku-buildpack-python/pull/2035))
 
@@ -1481,7 +1484,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v335...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v336...main
+[v336]: https://github.com/heroku/heroku-buildpack-python/compare/v335...v336
 [v335]: https://github.com/heroku/heroku-buildpack-python/compare/v334...v335
 [v334]: https://github.com/heroku/heroku-buildpack-python/compare/v333...v334
 [v333]: https://github.com/heroku/heroku-buildpack-python/compare/v332...v333
