@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added a workaround for `nltk.txt` package downloader errors caused by an upstream regression in NLTK v3.9.3. ([#2041](https://github.com/heroku/heroku-buildpack-python/pull/2041))
 - Changed the S3 URL used to download Python to use AWS' dual-stack (IPv6 compatible) endpoint. ([#2035](https://github.com/heroku/heroku-buildpack-python/pull/2035))
 
 ## [v335] - 2026-02-10

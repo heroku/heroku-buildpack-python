@@ -25,10 +25,11 @@ if is_module_available 'nltk'; then
 		readarray -t nltk_packages <"${nltk_packages_definition}"
 		output::step "Downloading NLTK packages: ${nltk_packages[*]}"
 
-		nltk_data_dir="/app/.heroku/python/nltk_data"
-
+		# Note: We have to use the raw build directory path here and not the symlinked `/app` path,
+		# otherwise it will cause a false positive in NLTK v3.9.3's new Zip Slip security check,
+		# which doesn't handle symlinked paths correctly: https://github.com/nltk/nltk/issues/3509
 		# TODO: Does this even need user-provided env vars, or can we remove the sub_env usage here?
-		if ! sub_env python -m nltk.downloader -d "${nltk_data_dir}" "${nltk_packages[@]}" |& output::indent; then
+		if ! sub_env python -m nltk.downloader -d "${BUILD_DIR}/.heroku/python/nltk_data" "${nltk_packages[@]}" |& output::indent; then
 			output::error <<-EOF
 				Error: Unable to download NLTK data.
 
@@ -41,7 +42,9 @@ if is_module_available 'nltk'; then
 			exit 1
 		fi
 
-		set_env NLTK_DATA "${nltk_data_dir}"
+		# Since this will be used at runtime, we must use the symlinked `/app` path and not
+		# the raw build directory path.
+		set_env NLTK_DATA "/app/.heroku/python/nltk_data"
 	else
 		build_data::set_string "nltk_downloader" "skipped-no-nltk-file"
 		echo "       'nltk.txt' not found, not downloading any corpora"
