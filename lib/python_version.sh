@@ -4,9 +4,9 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-LATEST_PYTHON_3_10="3.10.19"
-LATEST_PYTHON_3_11="3.11.14"
-LATEST_PYTHON_3_12="3.12.12"
+LATEST_PYTHON_3_10="3.10.20"
+LATEST_PYTHON_3_11="3.11.15"
+LATEST_PYTHON_3_12="3.12.13"
 LATEST_PYTHON_3_13="3.13.12"
 LATEST_PYTHON_3_14="3.14.3"
 
