@@ -88,6 +88,9 @@ function uv::install_uv() {
 	# Prevent uv from downloading/using its own Python installation.
 	export UV_NO_MANAGED_PYTHON="1"
 	export UV_PYTHON_DOWNLOADS="never"
+	# Force uv to use hardlinks rather than the new default of reflinks, since the latter are
+	# significantly slower on Kodon: https://github.com/astral-sh/uv/issues/18259
+	export UV_LINK_MODE="hardlink"
 
 	# Set the same env vars in the environment used by later buildpacks.
 	cat >>"${export_file}" <<-EOF
@@ -95,6 +98,7 @@ function uv::install_uv() {
 		export UV_PROJECT_ENVIRONMENT="${python_home}"
 		export UV_NO_MANAGED_PYTHON="1"
 		export UV_PYTHON_DOWNLOADS="never"
+		export UV_LINK_MODE="hardlink"
 	EOF
 
 	# As a performance optimisation, uv attempts to use hardlinks instead of copying files from its

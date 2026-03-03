@@ -319,6 +319,7 @@ RSpec.describe 'Heroku CI' do
                  PATH=/tmp/cache\\w+/.heroku/python-uv:/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin:/app/.sprettur/bin/
                  PKG_CONFIG_PATH=/app/.heroku/python/lib/pkg-config
                  PYTHONUNBUFFERED=1
+                 UV_LINK_MODE=hardlink
                  UV_NO_MANAGED_PYTHON=1
                  UV_PROJECT_ENVIRONMENT=/app/.heroku/python
                  UV_PYTHON_DOWNLOADS=never
@@ -331,6 +332,7 @@ RSpec.describe 'Heroku CI' do
           PYTHONHOME=/app/.heroku/python
           PYTHONPATH=/app
           PYTHONUNBUFFERED=true
+          UV_LINK_MODE=hardlink
           UV_NO_MANAGED_PYTHON=1
           UV_PROJECT_ENVIRONMENT=/app/.heroku/python
           UV_PYTHON_DOWNLOADS=never
