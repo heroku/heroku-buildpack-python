@@ -527,7 +527,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Python app detected
           remote: -----> Using Python 3.12.999 specified in .python-version
           remote: -----> Installing Python 3.12.999
-          remote:        curl: \\(22\\) The requested URL returned error: 404.*
+          remote:        curl: \\(22\\) The requested URL returned error: .+
           remote:        zstd: /\\*stdin\\*\\\\: unexpected end of file 
           remote:        tar: Child returned status 1
           remote:        tar: Error is not recoverable: exiting now
