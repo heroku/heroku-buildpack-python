@@ -27,7 +27,7 @@ function uv::install_uv() {
 		local gnu_arch
 		# eg: `x86_64` or `aarch64`.
 		gnu_arch=$(arch)
-		local uv_url="https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/uv-${gnu_arch}-unknown-linux-gnu.tar.gz"
+		local uv_url="https://releases.astral.sh/github/uv/releases/download/${UV_VERSION}/uv-${gnu_arch}-unknown-linux-gnu.tar.gz"
 
 		local error_log
 		error_log=$(mktemp)
@@ -64,16 +64,16 @@ function uv::install_uv() {
 			output::error <<-EOF
 				Error: Unable to install uv.
 
-				Failed to download/install uv from GitHub:
+				Failed to download/install uv from:
 				${uv_url}
 
 				In some cases, this happens due to a temporary issue with
-				the network connection or GitHub's API/CDN.
+				the network connection or Astral's CDN, Cloudflare.
 
 				Try building again to see if the error resolves itself.
 
-				If that doesn't help, check the status of GitHub here:
-				https://www.githubstatus.com
+				If that doesn't help, check the status of Cloudflare here:
+				https://www.cloudflarestatus.com
 			EOF
 			build_data::set_string "failure_reason" "install-package-manager::uv"
 			# e.g.: 'curl: (56) Recv failure: Connection reset by peer'

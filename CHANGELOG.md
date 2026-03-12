@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Updated uv from 0.10.7 to 0.10.9. ([#2049](https://github.com/heroku/heroku-buildpack-python/pull/2049))
+- Switched to downloading uv from `releases.astral.sh` instead of GitHub releases. ([#2050](https://github.com/heroku/heroku-buildpack-python/pull/2050))
 
 ## [v338] - 2026-03-03
 
