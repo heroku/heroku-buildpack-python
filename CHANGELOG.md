@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v339] - 2026-03-13
+
 - Updated uv from 0.10.7 to 0.10.9. ([#2049](https://github.com/heroku/heroku-buildpack-python/pull/2049))
 - Switched to downloading uv from `releases.astral.sh` instead of GitHub releases. ([#2050](https://github.com/heroku/heroku-buildpack-python/pull/2050))
 - Updated the check for misspelled `.python-version` files with additional misspellings seen in the wild. ([#2051](https://github.com/heroku/heroku-buildpack-python/pull/2051))
@@ -1499,7 +1502,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v338...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v339...main
+[v339]: https://github.com/heroku/heroku-buildpack-python/compare/v338...v339
 [v338]: https://github.com/heroku/heroku-buildpack-python/compare/v337...v338
 [v337]: https://github.com/heroku/heroku-buildpack-python/compare/v336...v337
 [v336]: https://github.com/heroku/heroku-buildpack-python/compare/v335...v336
