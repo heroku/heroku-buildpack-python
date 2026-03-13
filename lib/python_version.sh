@@ -25,9 +25,12 @@ PYTHON_FULL_VERSION_REGEX="${INT_REGEX}\.${INT_REGEX}\.${INT_REGEX}"
 
 # Misspellings of the `.python-version` file seen in the wild.
 MISSPELLED_PYTHON_VERSION_FILE_NAMES=(
+	" .python-version"
+	". python-version"
 	".python_version.txt"
 	".python_version"
 	".python-version "
+	",python-version"
 	".python-version."
 	".python-version.py"
 	".python-version.rtf"
