@@ -15,6 +15,7 @@ on:
           - auto
           - heroku-22
           - heroku-24
+          - heroku-26
         default: auto
         required: false
       dry_run:
@@ -65,6 +66,31 @@ jobs:
     runs-on: ${{ matrix.arch == 'arm64' && 'pub-hk-ubuntu-24.04-arm-xlarge' || 'pub-hk-ubuntu-24.04-xlarge' }}
     env:
       STACK_VERSION: "24"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build Docker image
+        run: docker build --platform="linux/${{ matrix.arch }}" --pull --tag buildenv --build-arg=STACK_VERSION builds/
+      - name: Compile and package Python runtime
+        run: docker run --rm --volume="${PWD}/upload:/tmp/upload" buildenv ./build_python_runtime.sh "${{ inputs.python_version }}"
+      - name: Test Python runtime
+        run: |
+          RUN_IMAGE='heroku/heroku:${{ env.STACK_VERSION }}'
+          ARCHIVE_FILENAME='python-${{ inputs.python_version }}-ubuntu-${{ env.STACK_VERSION }}.04-${{ matrix.arch }}.tar.zst'
+          docker run --rm --volume="${PWD}/upload:/upload:ro" --volume="${PWD}/builds:/builds:ro" "${RUN_IMAGE}" /builds/test_python_runtime.sh "/upload/${ARCHIVE_FILENAME}"
+      - name: Upload Python runtime archive to S3
+        if: (!inputs.dry_run)
+        run: aws s3 sync ./upload "s3://${S3_BUCKET}"
+
+  heroku-26:
+    if: inputs.stack == 'heroku-26' || inputs.stack == 'auto'
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: ["amd64", "arm64"]
+    runs-on: ${{ matrix.arch == 'arm64' && 'pub-hk-ubuntu-24.04-arm-xlarge' || 'pub-hk-ubuntu-24.04-xlarge' }}
+    env:
+      STACK_VERSION: "26"
     steps:
       - name: Checkout
         uses: actions/checkout@v6

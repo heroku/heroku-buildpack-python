@@ -25,7 +25,7 @@ function abort() {
 }
 
 case "${STACK:?}" in
-	heroku-22 | heroku-24)
+	heroku-22 | heroku-24 | heroku-26)
 		SUPPORTED_PYTHON_VERSIONS=(
 			"3.10"
 			"3.11"
