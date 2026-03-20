@@ -68,10 +68,19 @@ optional_stdlib_modules=(
 	zlib
 )
 
+# zstd support was added in Python 3.14:
 # https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-zstandard
 if [[ "${major_python_version}" == "3.14" ]]; then
 	optional_stdlib_modules+=(
 		compression.zstd
+	)
+fi
+
+# crypt was removed in Python 3.13:
+# https://docs.python.org/3.13/whatsnew/3.13.html#whatsnew313-pep594
+if [[ "${major_python_version}" == +(3.10|3.11|3.12) ]]; then
+	optional_stdlib_modules+=(
+		crypt
 	)
 fi
 
