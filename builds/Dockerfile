@@ -8,8 +8,12 @@ ENV STACK="heroku-${STACK_VERSION}"
 # For Heroku-24 and newer, the build image sets a non-root default `USER`.
 USER root
 
+# `libcrypt-dev` can be removed once we drop support for Python 3.12,
+# since the `crypt` module was removed in Python 3.13:
+# https://docs.python.org/3.13/whatsnew/3.13.html#whatsnew313-pep594
 RUN apt-get update --error-on=any \
     && apt-get install -y --no-install-recommends \
+      libcrypt-dev \
       libdb-dev \
       libreadline-dev \
       libsqlite3-dev \
