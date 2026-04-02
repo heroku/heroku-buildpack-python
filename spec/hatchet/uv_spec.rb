@@ -59,7 +59,7 @@ RSpec.describe 'uv support' do
           remote:  '/app/.heroku/python/lib/python3.14/lib-dynload',
           remote:  '/app/.heroku/python/lib/python3.14/site-packages'\\]
           remote: 
-          remote: uv #{UV_VERSION}
+          remote: uv #{UV_VERSION} \\(x86_64-unknown-linux-gnu\\)
           remote: Using Python #{DEFAULT_PYTHON_FULL_VERSION} environment at: /app/.heroku/python
           remote: Package           Version
           remote: ----------------- -------
