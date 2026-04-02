@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated Pipenv from 2026.0.3 to 2026.5.1. ([#2065](https://github.com/heroku/heroku-buildpack-python/pull/2065))
 - Updated Poetry from 2.3.2 to 2.3.3. ([#2064](https://github.com/heroku/heroku-buildpack-python/pull/2064))
 - Updated uv from 0.10.9 to 0.11.3. ([#2067](https://github.com/heroku/heroku-buildpack-python/pull/2067))
 
