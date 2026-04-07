@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- The Python 3.14 version alias now resolves to Python 3.14.4. ([#2071](https://github.com/heroku/heroku-buildpack-python/pull/2071))
+- The Python 3.13 version alias now resolves to Python 3.13.13. ([#2071](https://github.com/heroku/heroku-buildpack-python/pull/2071))
 
 ## [v340] - 2026-04-02
 
