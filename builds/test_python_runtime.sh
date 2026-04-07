@@ -88,7 +88,7 @@ if "${INSTALL_DIR}/bin/python3" -c "import $(
 	IFS=,
 	echo "${optional_stdlib_modules[*]}"
 )"; then
-	echo "Successful imported: ${optional_stdlib_modules[*]}"
+	echo "Successfully imported: ${optional_stdlib_modules[*]}"
 else
 	abort "The above optional stdlib module failed to import! Check the compile logs to see if it was skipped due to missing libraries/headers."
 fi

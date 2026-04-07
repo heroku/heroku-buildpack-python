@@ -124,7 +124,7 @@
 ## [v318] - 2025-11-12
 
 - Improved the error message shown when a `.python-version` file uses an unsupported file encoding. ([#1958](https://github.com/heroku/heroku-buildpack-python/pull/1958))
-- Improved the error message shown when a `.python-version` or `runtime.txt` file contain an invalid Python version. ([#1958](https://github.com/heroku/heroku-buildpack-python/pull/1958))
+- Improved the error message shown when a `.python-version` or `runtime.txt` file contains an invalid Python version. ([#1958](https://github.com/heroku/heroku-buildpack-python/pull/1958))
 - Added support for commented lines in `runtime.txt`, for parity with `.python-version`. ([#1958](https://github.com/heroku/heroku-buildpack-python/pull/1958))
 
 ## [v317] - 2025-11-03
@@ -259,7 +259,7 @@
 ## [v292] - 2025-07-23
 
 - Updated Pipenv from 2024.0.1 to 2025.0.4. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
-- Fixed the way Pipenv is installed, so that it and its dependencies are installed into a separate virtual environment rather than same environment as the app. If your app inadvertently depended on Pipenv's internal dependencies, you will need to add those dependencies explicitly to your `Pipfile`. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
+- Fixed the way Pipenv is installed, so that it and its dependencies are installed into a separate virtual environment rather than the same environment as the app. If your app inadvertently depended on Pipenv's internal dependencies, you will need to add those dependencies explicitly to your `Pipfile`. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
 - Stopped installing pip when Pipenv is the chosen package manager. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
 - The build cache is now cleared when using Pipenv if the contents of `Pipfile.lock` has changed since the last build. This is required to work around Pipenv not uninstalling packages when they are removed from the lockfile. ([#1840](https://github.com/heroku/heroku-buildpack-python/pull/1840))
 - The build now errors when using Pipenv without its lockfile (`Pipfile.lock`). This replaces the warning displayed since November 2024. ([#1833](https://github.com/heroku/heroku-buildpack-python/pull/1833))
@@ -555,7 +555,7 @@
 
 ## [v243] - 2024-02-07
 
-- Added support for Python 3.11.8 and 3.12.2. ([#1538](https://github.com/heroku/heroku-buildpack-python/pull/1538)).
+- Added support for Python 3.11.8 and 3.12.2. ([#1538](https://github.com/heroku/heroku-buildpack-python/pull/1538))
 - Changed the default Python version for new apps from 3.12.1 to 3.12.2. ([#1538](https://github.com/heroku/heroku-buildpack-python/pull/1538))
 
 ## [v242] - 2024-01-11
@@ -566,8 +566,8 @@
 
 ## [v241] - 2023-12-08
 
-- Changed the default Python version for new apps from Python 3.11 to Python 3.12. ([#1516](https://github.com/heroku/heroku-buildpack-python/pull/1516)).
-- Added support for Python 3.11.7 and 3.12.1. ([#1517](https://github.com/heroku/heroku-buildpack-python/pull/1517) and [#1518](https://github.com/heroku/heroku-buildpack-python/pull/1518)).
+- Changed the default Python version for new apps from Python 3.11 to Python 3.12. ([#1516](https://github.com/heroku/heroku-buildpack-python/pull/1516))
+- Added support for Python 3.11.7 and 3.12.1. ([#1517](https://github.com/heroku/heroku-buildpack-python/pull/1517) and [#1518](https://github.com/heroku/heroku-buildpack-python/pull/1518))
 - Added a deprecation warning for Python 3.8. ([#1515](https://github.com/heroku/heroku-buildpack-python/pull/1515))
 
 ## [v240] - 2023-11-30
@@ -1443,7 +1443,7 @@ Updated pip and Setuptools.
 
 Added warnings for lack of Procfile.
 
-## v72 - 2015-12-07
+## v73 - 2015-12-07
 
 Updated default Python to 2.7.11.
 

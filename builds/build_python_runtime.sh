@@ -104,7 +104,7 @@ CONFIGURE_OPTS=(
 	#   and not the static library (such as `pycall.rb` or `PyO3`).
 	# - More consistent with the official Python Docker images and other distributions.
 	#
-	# Shared builds are slower unless `no-semantic-interposition`and LTO is used,
+	# Shared builds are slower unless `no-semantic-interposition` and LTO are used,
 	# however, as of Python 3.10 `no-semantic-interposition` is enabled by default:
 	# https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
 	# https://github.com/python/cpython/issues/83161

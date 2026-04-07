@@ -181,7 +181,7 @@ function cache::save() {
 	# but not Heroku CI or build-in-app-dir. Ideally we would be able to use `--reflink=auto` here
 	# (which would avoid the need for a conditional and also mean accidental edits by users in later
 	# buildpacks to one location doesn't affect the other), however, with the current filesystems
-	# used in production benchmarking showed `--reflinks=auto` was much slower than hardlinks.
+	# used in production benchmarking showed `--reflink=auto` was much slower than hardlinks.
 	if [[ "${build_dir_filesystem}" == "${cache_dir_filesystem}" ]]; then
 		local additional_copy_args=(--link)
 	else
