@@ -3,7 +3,7 @@
 # See: https://devcenter.heroku.com/articles/buildpack-api
 
 # We use `errtrace` and `inherit_errexit` to ensure the ERR trap and exit on error behaviour
-# propagates to buildpack functions run in subshells, such when using command substitutions.
+# propagates to buildpack functions run in subshells, such as when using command substitutions.
 set -eu -o pipefail -o errtrace
 shopt -s inherit_errexit
 
@@ -56,7 +56,6 @@ export BUILD_DIR CACHE_DIR ENV_DIR
 unset PYTHONHOME PYTHONPATH
 
 # Import the warnings script, which contains the `pip install` user warning mechanisms
-# (mentioned and explained above)
 source "${BUILDPACK_DIR}/bin/warnings"
 
 # Make the directory in which we will create symlinks from the temporary build directory
@@ -76,7 +75,7 @@ python_home='/app/.heroku/python'
 # using `/app` paths which will still work at run-time after relocation. Amongst other things, this
 # ensures that the shebang lines in the entrypoint scripts of installed packages are correct.
 export PATH="/app/.heroku/python/bin:${PATH}"
-# Tell Python to not buffer it's stdin/stdout.
+# Tell Python to not buffer its stdin/stdout.
 export PYTHONUNBUFFERED=1
 # Ensure Python uses a Unicode locale, to prevent the issues described in:
 # https://github.com/docker-library/python/pull/570
@@ -266,7 +265,7 @@ EOT
 #
 # In addition to ensuring dependencies work for subsequent buildpacks and at runtime, they must also
 # work for cached rebuilds. Most package managers will reinstall editable dependencies regardless on
-# next install, which means we can avoid having to rewrite paths on cache restore from the old build
+# the next install, which means we can avoid having to rewrite paths on cache restore from the old build
 # directory to the new location (`/tmp/build_<different-hash>`). However, Pipenv has a bug when using
 # PEP660 style editable VCS dependencies where it won't reinstall if it's missing (or in our case, the
 # path has changed), which means we must make sure that VCS src paths stored in the cache do use the

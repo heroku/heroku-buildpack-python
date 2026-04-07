@@ -49,7 +49,7 @@ RSpec.configure do |config|
   config.filter_run_when_matching :focus
   # Allows declaring on which stacks a test/group should run by tagging it with `stacks`.
   config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(ENV.fetch('HATCHET_DEFAULT_STACK')) }
-  # Make rspec-retry output a retry message when its had to retry a test.
+  # Make rspec-retry output a retry message when it's had to retry a test.
   config.verbose_retry = true
 end
 

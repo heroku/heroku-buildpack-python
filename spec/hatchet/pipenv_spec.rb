@@ -213,7 +213,7 @@ RSpec.describe 'Pipenv support' do
 
   # TODO: Delete this test once pipenv_mismatched_python_version is re-enabled,
   # since they mostly duplicate each other.
-  context 'when there is a both a Pipfile.lock python_version and a .python-version file' do
+  context 'when there is both a Pipfile.lock python_version and a .python-version file' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_and_python_version_file') }
 
     it 'builds with the Python version from the .python-version file' do
@@ -558,7 +558,7 @@ RSpec.describe 'Pipenv support' do
   end
 
   # This tests that Pipenv doesn't fall back to system Python if the Python version in
-  # pyproject.toml doesn't match that in Pipfile / Pipfile.lock. It also tests which of
+  # .python-version doesn't match that in Pipfile / Pipfile.lock. It also tests which of
   # .python-version and Pipfile.lock take precedence for the installed Python version.
   context 'when python_version in Pipfile.lock is incompatible with .python-version' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_mismatched_python_version', allow_failure: true) }

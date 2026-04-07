@@ -215,7 +215,7 @@ RSpec.describe 'Python version support' do
       # Python version than the version supported by this buildpack version.
       let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_non_existent_major_cached', allow_failure: true) }
 
-      it 'aborts the build with an EOL message' do
+      it 'aborts the build with an unrecognised Python version message' do
         app.deploy do |app|
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
@@ -311,7 +311,7 @@ RSpec.describe 'Python version support' do
   context 'when .python-version is misspelled' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_file_misspelled', allow_failure: true) }
 
-    it 'aborts the build with an invalid Python version message' do
+    it 'aborts the build with a misspelled .python-version file message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
@@ -486,10 +486,10 @@ RSpec.describe 'Python version support' do
     end
   end
 
-  context 'when .python-version contains an non-existent Python major version' do
+  context 'when .python-version contains a non-existent Python major version' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_version_non_existent_major', allow_failure: true) }
 
-    it 'aborts the build with an invalid .python-version message' do
+    it 'aborts the build with an unrecognised Python version message' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected

@@ -25,7 +25,7 @@ function uv::install_uv() {
 		mkdir -p "${uv_dir}"
 
 		local gnu_arch
-		# eg: `x86_64` or `aarch64`.
+		# e.g.: `x86_64` or `aarch64`.
 		gnu_arch=$(arch)
 		local uv_url="https://releases.astral.sh/github/uv/releases/download/${UV_VERSION}/uv-${gnu_arch}-unknown-linux-gnu.tar.gz"
 

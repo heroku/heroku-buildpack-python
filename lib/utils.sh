@@ -27,7 +27,7 @@ function utils::bundled_pip_module_path() {
 	# We have to use a glob since the bundled wheel filename contains the pip version, which differs
 	# between Python versions. We use compgen to avoid having to set nullglob, since there may be no
 	# matches in the case of a broken Python install. We also have to handle the case where there are
-	# multiple matching pip wheels, since in some versions of Python (eg 3.9.0) multiple versions of
+	# multiple matching pip wheels, since in some versions of Python (e.g. 3.9.0) multiple versions of
 	# pip were accidentally bundled upstream (we use tail since we want the newest pip version).
 	if bundled_pip_wheel="$(compgen -G "${bundled_wheels_dir}/pip-*.whl" | tail --lines=1)"; then
 		# The pip module exists inside the pip wheel (which is a zip file), however, Python can load

@@ -4,7 +4,7 @@
 # however, it helps Shellcheck realise the options under which these functions will run.
 set -euo pipefail
 
-# Used to run the `bin/pre_compile` and `bin/post_compile`s scripts if found in the app source,
+# Used to run the `bin/pre_compile` and `bin/post_compile` scripts if found in the app source,
 # allowing for build customisation.
 function hooks::run_hook() {
 	local hook_name="${1}"
