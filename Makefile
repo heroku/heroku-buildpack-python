@@ -1,7 +1,7 @@
 # These targets are not files
 .PHONY: lint lint-scripts lint-ruby check-format format run publish
 
-STACK ?= heroku-24
+STACK ?= heroku-26
 FIXTURE ?= spec/fixtures/python_version_unspecified
 # Allow overriding the exit code in CI, so we can test bin/report works for failing builds.
 COMPILE_FAILURE_EXIT_CODE ?= 1

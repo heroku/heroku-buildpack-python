@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Added support for Heroku-26. ([#2073](https://github.com/heroku/heroku-buildpack-python/pull/2073))
 
 ## [v341] - 2026-04-07
 

@@ -128,7 +128,10 @@ RSpec.describe 'uv support' do
     end
   end
 
-  context 'when the uv and Python versions have changed since the last build' do
+  # TODO: Enable on Heroku-26 after the uv and default Python versions next change,
+  # since for now there isn't a historic buildpack version we can use in this test
+  # whose stack check permits Heroku-26 and that also uses older uv/Python versions.
+  context 'when the uv and Python versions have changed since the last build', stacks: %w[heroku-22 heroku-24] do
     let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v313'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/uv_basic', buildpacks:) }
 
