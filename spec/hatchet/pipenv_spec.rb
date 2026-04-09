@@ -455,7 +455,10 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  context 'when the Pipenv and Python versions have changed since the last build' do
+  # TODO: Enable on Heroku-26 after the Pipenv and default Python versions next change,
+  # since for now there isn't a historic buildpack version we can use in this test whose
+  # stack check permits Heroku-26 and that also uses older Pipenv/Python versions.
+  context 'when the Pipenv and Python versions have changed since the last build', stacks: %w[heroku-22 heroku-24] do
     let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v313'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
 

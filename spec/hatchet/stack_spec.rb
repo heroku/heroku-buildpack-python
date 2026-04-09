@@ -3,7 +3,7 @@
 require_relative '../spec_helper'
 
 RSpec.describe 'Stack changes' do
-  context 'when the stack is upgraded from Heroku-22 to Heroku-24', stacks: %w[heroku-22] do
+  context 'when the stack is upgraded from Heroku-24 to Heroku-26', stacks: %w[heroku-24] do
     # This test performs an initial build using an older buildpack version, followed by a build
     # using the current version. This ensures that the current buildpack can successfully read
     # the stack metadata written to the build cache in the past. The buildpack version chosen is
@@ -14,8 +14,8 @@ RSpec.describe 'Stack changes' do
 
     it 'clears the cache before installing again whilst preserving the sticky Python version' do
       app.deploy do |app|
-        expect(app.output).to include('Building on the Heroku-22 stack')
-        app.update_stack('heroku-24')
+        expect(app.output).to include('Building on the Heroku-24 stack')
+        app.update_stack('heroku-26')
         update_buildpacks(app, [:default])
         app.commit!
         app.push!
@@ -64,7 +64,7 @@ RSpec.describe 'Stack changes' do
           remote:  !     file and this warning will be made an error.
           remote: 
           remote: -----> Discarding cache since:
-          remote:        - The stack has changed from heroku-22 to heroku-24
+          remote:        - The stack has changed from heroku-24 to heroku-26
           remote:        - The Python version has changed from 3.12.3 to #{LATEST_PYTHON_3_12}
           remote:        - The buildpack cache format has changed
           remote:        - The legacy SQLite3 headers and CLI binary need to be uninstalled
@@ -77,20 +77,20 @@ RSpec.describe 'Stack changes' do
     end
   end
 
-  context 'when the stack is downgraded from Heroku-24 to Heroku-22', stacks: %w[heroku-24] do
+  context 'when the stack is downgraded from Heroku-26 to Heroku-24', stacks: %w[heroku-26] do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.14') }
 
     it 'clears the cache before installing again' do
       app.deploy do |app|
-        expect(app.output).to include('Building on the Heroku-24 stack')
-        app.update_stack('heroku-22')
+        expect(app.output).to include('Building on the Heroku-26 stack')
+        app.update_stack('heroku-24')
         app.commit!
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
           remote: -----> Using Python 3.14 specified in .python-version
           remote: -----> Discarding cache since:
-          remote:        - The stack has changed from heroku-24 to heroku-22
+          remote:        - The stack has changed from heroku-26 to heroku-24
           remote: -----> Installing Python #{LATEST_PYTHON_3_14}
           remote: -----> Installing pip #{PIP_VERSION}
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'

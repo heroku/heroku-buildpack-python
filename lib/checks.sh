@@ -4,7 +4,7 @@ function checks::ensure_supported_stack() {
 	local stack="${1}"
 
 	case "${stack}" in
-		heroku-22 | heroku-24)
+		heroku-22 | heroku-24 | heroku-26)
 			return 0
 			;;
 		cedar* | heroku-16 | heroku-18 | heroku-20)

@@ -88,17 +88,21 @@ RSpec.describe 'Python version support' do
       end
     end
 
-    context 'with an app last built using an older default Python version' do
+    # TODO: Enable on Heroku-26 after the default Python version next changes (for the 3.14.5
+    # release), since for now there isn't a historic buildpack version we can use in this test
+    # whose stack check permits Heroku-26 and also has a different default Python version so
+    # that we can test the sticky versions feature.
+    context 'with an app last built using an older default Python version', stacks: %w[heroku-22 heroku-24] do
       # This test performs an initial build using an older buildpack version, followed
       # by a build using the current version. This ensures that:
       # - The current buildpack can successfully read the version metadata
       #   written to the build cache by older buildpack versions.
       # - If no Python version is specified, the same major version as the
-      #   last build is used (sticky versioning).
+      #   last build is used (sticky major versioning).
       # - Changes in the pip version are handled correctly.
       let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v267'] }
 
-      it 'builds with the same Python version as the last build' do
+      it 'builds with the same major Python version as the last build' do
         app.deploy do |app|
           update_buildpacks(app, [:default])
           app.commit!
@@ -566,12 +570,12 @@ RSpec.describe 'Python version support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python 3.13.2 specified in .python-version
+          remote: -----> Using Python 3.14.0 specified in .python-version
           remote: 
           remote:  !     Warning: A Python patch update is available!
           remote:  !     
-          remote:  !     Your app is using Python 3.13.2, however, there is a newer
-          remote:  !     patch release of Python 3.13 available: #{LATEST_PYTHON_3_13}
+          remote:  !     Your app is using Python 3.14.0, however, there is a newer
+          remote:  !     patch release of Python 3.14 available: #{LATEST_PYTHON_3_14}
           remote:  !     
           remote:  !     It is important to always use the latest patch version of
           remote:  !     Python to keep your app secure.
@@ -579,12 +583,12 @@ RSpec.describe 'Python version support' do
           remote:  !     Update your .python-version file to use the new version.
           remote:  !     
           remote:  !     We strongly recommend that you don't pin your app to an
-          remote:  !     exact Python version such as 3.13.2, and instead only specify
-          remote:  !     the major Python version of 3.13 in your .python-version file.
+          remote:  !     exact Python version such as 3.14.0, and instead only specify
+          remote:  !     the major Python version of 3.14 in your .python-version file.
           remote:  !     This will allow your app to receive the latest available Python
           remote:  !     patch version automatically and prevent this warning.
           remote: 
-          remote: -----> Installing Python 3.13.2
+          remote: -----> Installing Python 3.14.0
           remote: -----> Installing pip #{PIP_VERSION}
         OUTPUT
       end
