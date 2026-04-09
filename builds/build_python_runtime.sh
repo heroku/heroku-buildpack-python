@@ -72,13 +72,15 @@ set -o xtrace
 mkdir -p "${SRC_DIR}" "${INSTALL_DIR}" "${UPLOAD_DIR}"
 
 curl --fail --retry 5 --retry-connrefused --connect-timeout 3 --max-time 30 -o python.tgz "${SOURCE_URL}"
-curl --fail --retry 5 --retry-connrefused --connect-timeout 3 --max-time 30 -o python.tgz.sigstore "${SIGSTORE_BUNDLE_URL}"
+# Sigstore support was only added for Python 3.10.7 and newer, so we have to skip verification for now.
+# (Given we'll be dropping support for Python 3.10 in less than a year, it's not worth adding proper support for older versions)
+# curl --fail --retry 5 --retry-connrefused --connect-timeout 3 --max-time 30 -o python.tgz.sigstore "${SIGSTORE_BUNDLE_URL}"
 
-cosign verify-blob \
-	--bundle python.tgz.sigstore \
-	--certificate-identity "${SIGSTORE_IDENTITY}" \
-	--certificate-oidc-issuer "${SIGSTORE_ISSUER}" \
-	python.tgz
+# cosign verify-blob \
+# 	--bundle python.tgz.sigstore \
+# 	--certificate-identity "${SIGSTORE_IDENTITY}" \
+# 	--certificate-oidc-issuer "${SIGSTORE_ISSUER}" \
+# 	python.tgz
 
 tar --extract --file python.tgz --strip-components=1 --directory "${SRC_DIR}"
 cd "${SRC_DIR}"
