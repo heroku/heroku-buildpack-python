@@ -135,7 +135,7 @@ function build_data::_set() {
 function build_data::has() {
 	local key="${1}"
 
-	jq --exit-status "has(\"${key}\")" "${BUILD_DATA_FILE}" >/dev/null
+	jq --exit-status --arg key "${key}" 'has($key)' "${BUILD_DATA_FILE}" >/dev/null
 }
 
 # Retrieve the value of an entry in the build data store from the previous successful build.
@@ -158,9 +158,9 @@ function build_data::get_previous() {
 		# last matching entry in the file. The empty string is returned if the key wasn't found.
 		tac "${LEGACY_BUILD_DATA_FILE}" | { grep --perl-regexp --only-matching --max-count=1 "^${key}=\K.*$" || true; }
 	elif [[ -f "${PREVIOUS_BUILD_DATA_FILE}" ]]; then
-		# The `// empty` ensures we return the empty string rather than `null` if the key doesn't exist.
+		# By default jq will return `null` if the key isn't found, so we must handle this explicitly.
 		# We don't use `--exit-status` since `false` is a valid value for us to retrieve.
-		jq --raw-output ".${key} // empty" "${PREVIOUS_BUILD_DATA_FILE}"
+		jq --raw-output --arg key "${key}" 'if has($key) then .[$key] else empty end' "${PREVIOUS_BUILD_DATA_FILE}"
 	fi
 }
 
