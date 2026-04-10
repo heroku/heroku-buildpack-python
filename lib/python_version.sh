@@ -539,6 +539,7 @@ function python_version::resolve_python_version() {
 function python_version::warn_or_error_if_python_version_file_missing() {
 	local python_version_origin="${1}"
 	local python_major_version="${2}"
+	local package_manager="${3}"
 
 	if [[ "${python_version_origin}" == ".python-version" ]]; then
 		return 0
