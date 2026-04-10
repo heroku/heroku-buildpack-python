@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This script is run in a subshell via sub_env so doesn't inherit the options/vars/utils from `bin/compile`.
+# This script is run in a subshell so doesn't inherit the options/vars/utils from `bin/compile`.
 # TODO: Migrate this script to functions under `lib/` and stop running the entire script in a subshell.
 set -euo pipefail
 BUILDPACK_DIR=$(cd "$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")")" && pwd)
