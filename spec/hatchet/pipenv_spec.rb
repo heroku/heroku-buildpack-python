@@ -493,9 +493,9 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote: -----> Running bin/post_compile hook
           remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
+          remote:        _editable_impl_pipenv_editable.pth:/tmp/build_.+
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote:        _pipenv_editable.pth:/tmp/build_.+
           remote:        
           remote:        Running entrypoint for the current package: Hello from pipenv-editable!
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
@@ -505,9 +505,9 @@ RSpec.describe 'Pipenv support' do
           .+
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
+          remote: _editable_impl_pipenv_editable.pth:/tmp/build_.+
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote: _pipenv_editable.pth:/tmp/build_.+
           remote: 
           remote: Running entrypoint for the current package: Hello from pipenv-editable!
           remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
@@ -518,9 +518,9 @@ RSpec.describe 'Pipenv support' do
         # Test rewritten paths work at runtime.
         expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
           __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
+          _editable_impl_pipenv_editable.pth:/app
           __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           __editable___local_package_setup_py_0_0_1_finder.py:/app/packages/local_package_setup_py/local_package_setup_py'}
-          _pipenv_editable.pth:/app
 
           Running entrypoint for the current package: Hello from pipenv-editable!
           Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
@@ -535,9 +535,9 @@ RSpec.describe 'Pipenv support' do
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote: -----> Running bin/post_compile hook
           remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
+          remote:        _editable_impl_pipenv_editable.pth:/tmp/build_.+
           remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote:        _pipenv_editable.pth:/tmp/build_.+
           remote:        
           remote:        Running entrypoint for the current package: Hello from pipenv-editable!
           remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
@@ -547,9 +547,9 @@ RSpec.describe 'Pipenv support' do
           .+
           remote: -----> Inline app detected
           remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
+          remote: _editable_impl_pipenv_editable.pth:/tmp/build_.+
           remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
           remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote: _pipenv_editable.pth:/tmp/build_.+
           remote: 
           remote: Running entrypoint for the current package: Hello from pipenv-editable!
           remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
