@@ -21,7 +21,7 @@ function pip::install_pip() {
 	local packages_display_text="pip ${PIP_VERSION}"
 
 	# We only install setuptools on Python 3.12 and older, since:
-	# - pip now uses isolated build environments into which it installed setuptools and wheel
+	# - pip now uses isolated build environments into which it installs setuptools and wheel
 	#   if needed when installing packages from an sdist.
 	# - Most of the Python ecosystem has stopped installing them for Python 3.12+ already.
 	# See the Python CNB's removal for more details: https://github.com/heroku/buildpacks-python/pull/243
