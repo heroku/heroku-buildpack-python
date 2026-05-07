@@ -1,5 +1,5 @@
 ARG STACK_VERSION="24"
-FROM ghcr.io/sigstore/cosign/cosign:v3.0.5@sha256:be924970ba7438c22e18067dec5637946d6566eac711f5bedd1584e7137008fb AS cosign
+FROM ghcr.io/sigstore/cosign/cosign:v3.0.6@sha256:de9c65609e6bde17e6b48de485ee788407c9502fa08b8f4459f595b21f56cd00 AS cosign
 FROM heroku/heroku:${STACK_VERSION}-build
 
 ARG STACK_VERSION
