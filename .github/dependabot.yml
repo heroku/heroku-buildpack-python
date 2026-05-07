@@ -44,3 +44,5 @@ updates:
       # We don't limit grouping for Python to just minor/patch versions, since pip doesn't follow
       # semver, plus having to update CHANGELOG.md means it's easier to just have a single PR.
       python-dependencies:
+        patterns:
+          - "*"
