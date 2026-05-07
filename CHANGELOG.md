@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated pip from 26.0.1 to 26.1.1. ([#2089](https://github.com/heroku/heroku-buildpack-python/pull/2089))
 - Updated uv from 0.11.6 to 0.11.11. ([#2090](https://github.com/heroku/heroku-buildpack-python/pull/2090))
 
 ## [v343] - 2026-04-13
