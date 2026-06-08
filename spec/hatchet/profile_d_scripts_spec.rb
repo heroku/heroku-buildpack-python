@@ -27,7 +27,7 @@ RSpec.describe '.profile.d/ scripts' do
         'WEB_CONCURRENCY=this-should-be-preserved',
       ]
       app.run_multi(list_envs_cmd, heroku: { env: user_env_vars.join(';'), type: 'example-worker' }) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(output)).to eq(<<~OUTPUT)
           DYNO_RAM=512
           FORWARDED_ALLOW_IPS=*
           GUNICORN_CMD_ARGS=this-should-be-preserved
@@ -48,7 +48,7 @@ RSpec.describe '.profile.d/ scripts' do
       # Check WEB_CONCURRENCY support when using a Standard-1X dyno.
       # We set the process type to `web` so that we can test the web-dyno-only log output.
       app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'standard-1x', type: 'web' }) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(output)).to eq(<<~OUTPUT)
           Python buildpack: Detected 512 MB available memory and 8 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 2 based on the available memory.
           DYNO_RAM=512
@@ -59,7 +59,7 @@ RSpec.describe '.profile.d/ scripts' do
 
       # Standard-2X
       app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'standard-2x', type: 'web' }) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(output)).to eq(<<~OUTPUT)
           Python buildpack: Detected 1024 MB available memory and 8 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 4 based on the available memory.
           DYNO_RAM=1024
@@ -70,7 +70,7 @@ RSpec.describe '.profile.d/ scripts' do
 
       # Performance-M
       app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'performance-m', type: 'web' }) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(output)).to eq(<<~OUTPUT)
           Python buildpack: Detected 2560 MB available memory and 2 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 5 based on the number of CPU cores.
           DYNO_RAM=2560
@@ -81,7 +81,7 @@ RSpec.describe '.profile.d/ scripts' do
 
       # Performance-L
       app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'performance-l', type: 'web' }) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(output)).to eq(<<~OUTPUT)
           Python buildpack: Detected 14336 MB available memory and 8 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 17 based on the number of CPU cores.
           DYNO_RAM=14336
@@ -92,7 +92,7 @@ RSpec.describe '.profile.d/ scripts' do
 
       # Performance-L-RAM
       app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'performance-l-ram', type: 'web' }) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(output)).to eq(<<~OUTPUT)
           Python buildpack: Detected 30720 MB available memory and 4 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 9 based on the number of CPU cores.
           DYNO_RAM=30720
@@ -103,7 +103,7 @@ RSpec.describe '.profile.d/ scripts' do
 
       # Performance-XL
       app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'performance-xl', type: 'web' }) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(output)).to eq(<<~OUTPUT)
           Python buildpack: Detected 63488 MB available memory and 8 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 17 based on the number of CPU cores.
           DYNO_RAM=63488
@@ -114,7 +114,7 @@ RSpec.describe '.profile.d/ scripts' do
 
       # Performance-2XL
       app.run_multi(list_concurrency_envs_cmd, heroku: { size: 'performance-2xl', type: 'web' }) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(output)).to eq(<<~OUTPUT)
           Python buildpack: Detected 129024 MB available memory and 16 CPU cores.
           Python buildpack: Defaulting WEB_CONCURRENCY to 33 based on the number of CPU cores.
           DYNO_RAM=129024
@@ -125,7 +125,7 @@ RSpec.describe '.profile.d/ scripts' do
 
       # Check that WEB_CONCURRENCY is preserved if set, but that we still set DYNO_RAM.
       app.run_multi(list_concurrency_envs_cmd, heroku: { env: 'WEB_CONCURRENCY=999', type: 'web' }) do |output, _|
-        expect(output).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(output)).to eq(<<~OUTPUT)
           Python buildpack: Detected 512 MB available memory and 8 CPU cores.
           Python buildpack: Skipping automatic configuration of WEB_CONCURRENCY since it's already set.
           DYNO_RAM=512

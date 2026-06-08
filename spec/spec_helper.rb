@@ -62,6 +62,12 @@ def clean_output(output)
     .gsub(/\e\[[0-9;]+m/, '')
 end
 
+def normalize_trailing_newlines(output)
+  # The platform log stream that captures `run`/`run_multi` command output occasionally appends
+  # an extra trailing newline, which otherwise intermittently breaks exact output assertions.
+  output.sub(/\n+\z/, "\n")
+end
+
 def update_buildpacks(app, buildpacks)
   # Updates the list of buildpacks for an existing app, until Hatchet supports this natively:
   # https://github.com/heroku/hatchet/issues/166
