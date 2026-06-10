@@ -88,11 +88,7 @@ RSpec.describe 'Python version support' do
       end
     end
 
-    # TODO: Enable on Heroku-26 after the default Python version next changes (for the 3.14.5
-    # release), since for now there isn't a historic buildpack version we can use in this test
-    # whose stack check permits Heroku-26 and also has a different default Python version so
-    # that we can test the sticky versions feature.
-    context 'with an app last built using an older default Python version', stacks: %w[heroku-22 heroku-24] do
+    context 'with an app last built using an older default Python version' do
       # This test performs an initial build using an older buildpack version, followed
       # by a build using the current version. This ensures that:
       # - The current buildpack can successfully read the version metadata
@@ -100,7 +96,7 @@ RSpec.describe 'Python version support' do
       # - If no Python version is specified, the same major version as the
       #   last build is used (sticky major versioning).
       # - Changes in the pip version are handled correctly.
-      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v267'] }
+      let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v342'] }
 
       it 'builds with the same major Python version as the last build' do
         app.deploy do |app|
@@ -109,7 +105,7 @@ RSpec.describe 'Python version support' do
           app.push!
           expect(clean_output(app.output)).to include(<<~OUTPUT)
             remote: -----> Python app detected
-            remote: -----> No Python version was specified. Using the same major version as the last build: Python 3.12
+            remote: -----> No Python version was specified. Using the same major version as the last build: Python 3.14
             remote: 
             remote:  !     Warning: No Python version was specified.
             remote:  !     
@@ -131,9 +127,9 @@ RSpec.describe 'Python version support' do
             remote:  !     In the new file, specify your app's major Python version number
             remote:  !     only. Don't include quotes or a 'python-' prefix.
             remote:  !     
-            remote:  !     For example, to request the latest version of Python 3.12,
+            remote:  !     For example, to request the latest version of Python 3.14,
             remote:  !     update your .python-version file so it contains exactly:
-            remote:  !     3.12
+            remote:  !     3.14
             remote:  !     
             remote:  !     We strongly recommend that you don't specify the Python patch
             remote:  !     version number, since it will pin your app to an exact Python
@@ -152,13 +148,12 @@ RSpec.describe 'Python version support' do
             remote:  !     file and this warning will be made an error.
             remote: 
             remote: -----> Discarding cache since:
-            remote:        - The Python version has changed from 3.12.7 to #{LATEST_PYTHON_3_12}
-            remote:        - The pip version has changed from 24.0 to #{PIP_VERSION}
-            remote:        - The legacy SQLite3 headers and CLI binary need to be uninstalled
-            remote: -----> Installing Python #{LATEST_PYTHON_3_12}
-            remote: -----> Installing pip #{PIP_VERSION} and setuptools #{SETUPTOOLS_VERSION}
+            remote:        - The Python version has changed from 3.14.4 to #{LATEST_PYTHON_3_14}
+            remote:        - The pip version has changed from 26.0.1 to #{PIP_VERSION}
+            remote: -----> Installing Python #{LATEST_PYTHON_3_14}
+            remote: -----> Installing pip #{PIP_VERSION}
           OUTPUT
-          expect(app.run('python -V')).to eq("Python #{LATEST_PYTHON_3_12}\n")
+          expect(app.run('python -V')).to eq("Python #{LATEST_PYTHON_3_14}\n")
           expect($CHILD_STATUS.exitstatus).to eq(0)
         end
       end
