@@ -75,7 +75,7 @@ python_home='/app/.heroku/python'
 # using `/app` paths which will still work at run-time after relocation. Amongst other things, this
 # ensures that the shebang lines in the entrypoint scripts of installed packages are correct.
 export PATH="/app/.heroku/python/bin:${PATH}"
-# Tell Python to not buffer its stdin/stdout.
+# Disable Python's output buffering to ensure logs aren't dropped if an app crashes.
 export PYTHONUNBUFFERED=1
 # Ensure Python uses a Unicode locale, to prevent the issues described in:
 # https://github.com/docker-library/python/pull/570
