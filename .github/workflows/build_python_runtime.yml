@@ -43,7 +43,7 @@ jobs:
       STACK_VERSION: "22"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Build Docker image
         run: docker build --platform="linux/amd64" --pull --tag buildenv --build-arg=STACK_VERSION builds/
       - name: Compile and package Python runtime
@@ -68,7 +68,7 @@ jobs:
       STACK_VERSION: "24"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Build Docker image
         run: docker build --platform="linux/${{ matrix.arch }}" --pull --tag buildenv --build-arg=STACK_VERSION builds/
       - name: Compile and package Python runtime
@@ -93,7 +93,7 @@ jobs:
       STACK_VERSION: "26"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Build Docker image
         run: docker build --platform="linux/${{ matrix.arch }}" --pull --tag buildenv --build-arg=STACK_VERSION builds/
       - name: Compile and package Python runtime
