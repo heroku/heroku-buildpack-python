@@ -8,4 +8,5 @@
 CHANGELOG.md @edmorley
 Gemfile.lock @edmorley
 /.github/workflows/ @edmorley
+/builds/Dockerfile @edmorley
 /requirements/ @edmorley
