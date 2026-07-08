@@ -24,7 +24,7 @@ RSpec.shared_examples 'builds with the requested Python version' do |requested_v
           remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
       end
-      expect(app.run('python -V')).to eq("Python #{resolved_version}\n")
+      expect(normalize_trailing_newlines(app.run('python -V'))).to eq("Python #{resolved_version}\n")
       expect($CHILD_STATUS.exitstatus).to eq(0)
     end
   end
@@ -153,7 +153,7 @@ RSpec.describe 'Python version support' do
             remote: -----> Installing Python #{LATEST_PYTHON_3_14}
             remote: -----> Installing pip #{PIP_VERSION}
           OUTPUT
-          expect(app.run('python -V')).to eq("Python #{LATEST_PYTHON_3_14}\n")
+          expect(normalize_trailing_newlines(app.run('python -V'))).to eq("Python #{LATEST_PYTHON_3_14}\n")
           expect($CHILD_STATUS.exitstatus).to eq(0)
         end
       end
@@ -277,7 +277,7 @@ RSpec.describe 'Python version support' do
           remote: -----> Installing dependencies using 'pip install -r requirements.txt'
           remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
         OUTPUT
-        expect(app.run('python -V')).to eq("Python #{LATEST_PYTHON_3_10}\n")
+        expect(normalize_trailing_newlines(app.run('python -V'))).to eq("Python #{LATEST_PYTHON_3_10}\n")
         expect($CHILD_STATUS.exitstatus).to eq(0)
       end
     end

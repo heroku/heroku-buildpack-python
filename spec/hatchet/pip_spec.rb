@@ -110,7 +110,7 @@ RSpec.describe 'pip support' do
         REGEX
 
         # For historical reasons pip is made available at run-time too, unlike some of the other package managers.
-        expect(app.run('bin/print-env-vars.sh && pip --version')).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(app.run('bin/print-env-vars.sh && pip --version'))).to eq(<<~OUTPUT)
           DYNO_RAM=512
           FORWARDED_ALLOW_IPS=*
           GUNICORN_CMD_ARGS=--access-logfile -
