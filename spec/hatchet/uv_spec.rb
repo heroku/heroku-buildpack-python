@@ -109,7 +109,7 @@ RSpec.describe 'uv support' do
         REGEX
 
         command = 'bin/print-env-vars.sh && if command -v uv; then echo "uv unexpectedly found!" && exit 1; fi'
-        expect(app.run(command)).to eq(<<~OUTPUT)
+        expect(normalize_trailing_newlines(app.run(command))).to eq(<<~OUTPUT)
           DYNO_RAM=512
           FORWARDED_ALLOW_IPS=*
           GUNICORN_CMD_ARGS=--access-logfile -
