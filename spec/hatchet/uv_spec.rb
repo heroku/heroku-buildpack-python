@@ -463,7 +463,9 @@ RSpec.describe 'uv support' do
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
           remote:        Resolved 2 packages in .+s
-          remote:        The lockfile at `uv.lock` needs to be updated, but `--locked` was provided. To update the lockfile, run `uv lock`.
+          remote:        error: The lockfile at `uv.lock` needs to be updated, but `--locked` was provided.
+          remote:        
+          remote:        hint: To update the lockfile, run `uv lock`.
           remote: 
           remote:  !     Error: Unable to install dependencies using uv.
           remote:  !     
