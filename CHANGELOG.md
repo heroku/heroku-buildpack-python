@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v347] - 2026-07-10
+
 - Updated Pipenv from 2026.6.1 to 2026.6.2. ([#2111](https://github.com/heroku/heroku-buildpack-python/pull/2111))
 - Updated uv from 0.11.19 to 0.11.28. ([#2111](https://github.com/heroku/heroku-buildpack-python/pull/2111))
 
@@ -1544,7 +1547,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v346...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v347...main
+[v347]: https://github.com/heroku/heroku-buildpack-python/compare/v346...v347
 [v346]: https://github.com/heroku/heroku-buildpack-python/compare/v345...v346
 [v345]: https://github.com/heroku/heroku-buildpack-python/compare/v344...v345
 [v344]: https://github.com/heroku/heroku-buildpack-python/compare/v343...v344
