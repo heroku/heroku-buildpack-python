@@ -5,7 +5,10 @@
 set -euo pipefail
 
 PIP_VERSION=$(utils::get_requirement_version 'pip')
-SETUPTOOLS_VERSION=$(utils::get_requirement_version 'setuptools')
+# This is hardcoded rather than managed by Dependabot since we can't update to newer versions due to:
+# https://github.com/heroku/heroku-buildpack-python/pull/1630#issuecomment-2324236653
+# Also, once we drop support for older Pythons we'll stop installing setuptools entirely.
+SETUPTOOLS_VERSION='70.3.0'
 
 function pip::install_pip() {
 	local python_home="${1}"

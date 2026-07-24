@@ -28,10 +28,12 @@ def get_requirement_version(package_name)
 end
 
 PIP_VERSION = get_requirement_version('pip')
-SETUPTOOLS_VERSION = get_requirement_version('setuptools')
 PIPENV_VERSION = get_requirement_version('pipenv')
 POETRY_VERSION = get_requirement_version('poetry')
 UV_VERSION = get_requirement_version('uv')
+# This is hardcoded rather than managed by Dependabot since we can't update to newer versions due to:
+# https://github.com/heroku/heroku-buildpack-python/pull/1630#issuecomment-2324236653
+SETUPTOOLS_VERSION = '70.3.0'
 
 # Work around the return value for `default_buildpack` changing after deploy:
 # https://github.com/heroku/hatchet/issues/180
