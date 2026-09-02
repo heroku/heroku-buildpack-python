@@ -61,7 +61,9 @@ def clean_output(output)
     # https://github.com/heroku/hatchet/issues/162
     .gsub(/ {8}(?=\R)/, '')
     # Remove ANSI colour codes used in buildpack output (e.g. error messages).
-    .gsub(/\e\[[0-9;]+m/, '')
+    # GitHub Actions runners deliver the escape byte as the two literal characters
+    # "^[" instead of 0x1B, so strip both variants.
+    .gsub(/(?:\e|\^\[)\[[0-9;]+m/, '')
 end
 
 def normalize_trailing_newlines(output)
