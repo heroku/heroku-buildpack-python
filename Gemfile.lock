@@ -48,8 +48,8 @@ GEM
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.13.7)
-    rubocop (1.89.0)
-      json (~> 2.3)
+    rubocop (1.90.0)
+      json (>= 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
       parallel (>= 1.10)
@@ -91,7 +91,7 @@ DEPENDENCIES
 CHECKSUMS
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
-  bundler (4.0.18) sha256=02d9a17429de1847b4e0c9f27a9ee4b20c0a74c0a641b4e77195d6019e3618ac
+  bundler (4.0.20) sha256=7978a8ac648767f5e635bc522445b79e80a52b907a39a36c2d8085ed6bc762ae
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
   excon (1.7.0) sha256=b8deec2bf978123b7e4b13a103ffec61557c6feaba34706dbc1ce4a94dec33e0
   heroics (0.1.4) sha256=8d843fb0a2cb55f36d1754d1f684e2e2685573ab90ff23dad122d30c66b7021c
@@ -115,7 +115,7 @@ CHECKSUMS
   rspec-expectations (3.13.5) sha256=33a4d3a1d95060aea4c94e9f237030a8f9eae5615e9bd85718fe3a09e4b58836
   rspec-retry (0.6.2) sha256=6101ba23a38809811ae3484acde4ab481c54d846ac66d5037ccb40131a60d858
   rspec-support (3.13.7) sha256=0640e5570872aafefd79867901deeeeb40b0c9875a36b983d85f54fb7381c47c
-  rubocop (1.89.0) sha256=4dee8e3ee9c45e474834efd9e8d6fd031e8331c8dacdff0de4ad65ae0a6faae7
+  rubocop (1.90.0) sha256=9eb4c065b5c5154e4ef554c547972f3905a9eb6b53e657e580b6796b54bf8242
   rubocop-ast (1.50.0) sha256=b9ca88300da0803ee222ad20cdb30494c0a784eed06fdc35d254b06d662788db
   rubocop-rspec (3.10.2) sha256=0b3e2ecc592cd10ecbf0095bb58d1e357905276e069643523cc19eb7495f65e2
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
@@ -129,4 +129,4 @@ RUBY VERSION
   ruby 4.0.5
 
 BUNDLED WITH
-  4.0.18
+  4.0.20
