@@ -33,6 +33,11 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    # Override GitHub's default 3-day cooldown so manually-triggered runs pick up
+    # the latest versions immediately (the monthly schedule already reduces the
+    # chance of picking up a too-new release).
+    cooldown:
+      default-days: 0
     labels:
       - "dependencies"
       - "python"
