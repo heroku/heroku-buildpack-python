@@ -4,6 +4,9 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    allow:
+      # Update transitive dependencies too.
+      - dependency-type: "all"
     labels:
       - "dependencies"
       - "ruby"
@@ -38,6 +41,9 @@ updates:
     # chance of picking up a too-new release).
     cooldown:
       default-days: 0
+    allow:
+      # Update transitive dependencies too.
+      - dependency-type: "all"
     labels:
       - "dependencies"
       - "python"
