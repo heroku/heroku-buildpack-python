@@ -4,7 +4,7 @@ GEM
     ast (2.4.3)
     base64 (0.3.0)
     diff-lcs (1.6.2)
-    excon (1.7.0)
+    excon (1.7.1)
       logger
     heroics (0.1.4)
       base64
@@ -93,7 +93,7 @@ CHECKSUMS
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bundler (4.0.20) sha256=7978a8ac648767f5e635bc522445b79e80a52b907a39a36c2d8085ed6bc762ae
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
-  excon (1.7.0) sha256=b8deec2bf978123b7e4b13a103ffec61557c6feaba34706dbc1ce4a94dec33e0
+  excon (1.7.1) sha256=dd2d870eece1b5ce4e4f9efd938e67a69ccd8c003c3825b638b937e1082eaac2
   heroics (0.1.4) sha256=8d843fb0a2cb55f36d1754d1f684e2e2685573ab90ff23dad122d30c66b7021c
   heroku_hatchet (8.0.6) sha256=886a7d7d686859db9fac19df1194a35c5349285956ca4d134054c5c376accea3
   json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
