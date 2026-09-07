@@ -41,14 +41,11 @@ jobs:
       matrix:
         stack: ["heroku-22", "heroku-24", "heroku-26"]
     env:
-      HATCHET_APP_LIMIT: 300
       HATCHET_DEFAULT_STACK: ${{ matrix.stack }}
-      HATCHET_EXPENSIVE_MODE: 1
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_API_USER: ${{ secrets.HEROKU_API_USER }}
       HEROKU_DISABLE_AUTOUPDATE: 1
       PARALLEL_SPLIT_TEST_PROCESSES: 90
-      RSPEC_RETRY_RETRY_COUNT: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v7

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+ENV['HATCHET_APP_LIMIT'] ||= ENV['CI'] ? '300' : '50'
 ENV['HATCHET_BUILDPACK_BASE'] ||= 'https://github.com/heroku/heroku-buildpack-python.git'
 ENV['HATCHET_DEFAULT_STACK'] ||= 'heroku-26'
+ENV['HATCHET_EXPENSIVE_MODE'] ||= '1'
 
 require 'English' # for $CHILD_STATUS
 require 'rspec/core'
@@ -53,6 +55,10 @@ RSpec.configure do |config|
   config.filter_run_excluding stacks: ->(stacks) { !stacks.include?(ENV.fetch('HATCHET_DEFAULT_STACK')) }
   # Make rspec-retry output a retry message when it's had to retry a test.
   config.verbose_retry = true
+  # This is the number of total attempts, not retries.
+  config.default_retry_count = ENV['CI'] ? 2 : 1
+  # By default there is no sleep between retries.
+  config.default_sleep_interval = 5
 end
 
 def clean_output(output)
