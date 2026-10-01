@@ -65,7 +65,6 @@ RSpec.describe 'Poetry support' do
           remote:  '/app/.heroku/python/lib/python3.14/site-packages'\\]
           remote: 
           remote: Poetry \\(version #{POETRY_VERSION}\\)
-          remote: Skipping virtualenv creation, as specified in config file.
           remote: typing-extensions 4.15.0 Backported and Experimental Type Hints for Python ...
           remote: 
           remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.14/site-packages/typing_extensions.py'>
