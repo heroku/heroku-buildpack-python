@@ -379,21 +379,28 @@ RSpec.describe 'Poetry support' do
     end
   end
 
-  # This is disabled since it's currently broken upstream: https://github.com/python-poetry/poetry/issues/10226
   # This tests that Poetry doesn't download its own Python or fall back to system Python
   # if the Python version in pyproject.toml doesn't match that in .python-version.
-  # context 'when requires-python in pyproject.toml is incompatible with .python-version' do
-  #   let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_mismatched_python_version', allow_failure: true) }
-  #
-  #   it 'fails the build' do
-  #     app.deploy do |app|
-  #       expect(clean_output(app.output)).to include(<<~OUTPUT)
-  #         remote: -----> Installing dependencies using 'poetry sync --only main'
-  #         remote:        <TODO whatever error message Poetry displays if they fix their bug>
-  #       OUTPUT
-  #     end
-  #   end
-  # end
+  context 'when requires-python in pyproject.toml is incompatible with .python-version' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_mismatched_python_version', allow_failure: true) }
+
+    it 'fails the build' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Installing dependencies using 'poetry sync --only main'
+          remote:        
+          remote:        Current Python version (#{LATEST_PYTHON_3_13}) is not allowed by the project (3.12.*).
+          remote:        Poetry cannot switch to a compatible Python version because virtualenv creation is disabled.
+          remote: 
+          remote:  !     Error: Unable to install dependencies using Poetry.
+          remote:  !     
+          remote:  !     See the log output above for more information.
+          remote: 
+          remote:  !     Push rejected, failed to compile Python app.
+        OUTPUT
+      end
+    end
+  end
 
   # This tests not only our handling of failing dependency installation, but also that we're running
   # Poetry in such a way that it errors if the lockfile is out of sync, rather than simply updating it.
