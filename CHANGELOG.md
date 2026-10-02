@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Fixed builds failing when an app config var shadows a Bash read-only variable such as `UID`. ([#1751](https://github.com/heroku/heroku-buildpack-python/issues/1751))
 
 ## [v354] - 2026-10-02
 
