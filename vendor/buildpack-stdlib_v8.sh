@@ -32,12 +32,14 @@ un_set_env() {
 
 # Usage: $ _env-blacklist pattern
 # Outputs a regex of default blacklist env vars.
+# Includes Bash read-only variables (UID, EUID, and others from the Bash manual)
+# so an app config var with the same name cannot abort the build on export.
 _env_blacklist() {
 	local regex="${1:-}"
 	if [[ -n "${regex}" ]]; then
 		regex="|${regex}"
 	fi
-	echo "^(PATH|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|LD_LIBRARY_PATH|PYTHONHOME${regex})$"
+	echo "^(PATH|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|LD_LIBRARY_PATH|PYTHONHOME|BASHOPTS|BASHPID|BASH_VERSINFO|EUID|GROUPS|PPID|SHELLOPTS|UID${regex})$"
 }
 
 # Usage: $ export-env ENV_DIR WHITELIST BLACKLIST
