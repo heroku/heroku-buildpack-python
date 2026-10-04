@@ -53,7 +53,10 @@ export_env() {
 		# shellcheck disable=SC2045
 		for e in $(ls "${env_dir}"); do
 			echo "${e}" | grep -E "${whitelist}" | grep -qvE "${blacklist}" \
-				&& export "${e}=$(cat "${env_dir}/${e}")"
+		# Skip bash read-only variables (e.g. UID, BASH_VERSION) to avoid build failures
+		if ! declare -p "${e}" 2>/dev/null | grep -q "^declare -r "; then
+			export "${e}=$(cat "${env_dir}/${e}")"
+		fi
 			:
 		done
 	fi
@@ -73,3 +76,4 @@ sub_env() {
 		"${@}"
 	)
 }
+
