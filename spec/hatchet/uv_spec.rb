@@ -162,58 +162,50 @@ RSpec.describe 'uv support' do
     end
   end
 
-  # uv doesn't support editable mode with VCS dependencies, so unlike the editable tests for the other
-  # package managers the gunicorn dependency isn't editable. However, we still include it to ensure we
-  # have VCS coverage. See: https://github.com/astral-sh/uv/issues/5442
-  context 'when uv.lock contains editable requirements and a VCS dependency' do
+  # This tests that:
+  #  - The current project's editable install paths are rewritten correctly for hooks, later buildpacks,
+  #    runtime and cached builds.
+  #  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to uv).
+  #  - Building/compiling a source distribution package (as opposed to a pre-built wheel) works.
+  #  - The Python headers can be found when compiling.
+  #
+  # We can't install the VCS dependency in editable mode (like the Git tests for other package managers),
+  # since uv doesn't support editable mode with VCS dependencies:
+  # https://github.com/astral-sh/uv/issues/5442
+  context 'with an editable current project and a compiled (non-editable) VCS package' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/uv_editable', buildpacks:) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/uv_editable_git_compiled', buildpacks:) }
 
-    it 'rewrites .pth and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
+    it 'installs and rewrites editable paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
-          remote:        Resolved 5 packages in .+s
+          remote:        Resolved 2 packages in .+s
           remote:           .+
-          remote:        Prepared 5 packages in .+s
-          remote:        Installed 5 packages in .+s
+          remote:        Prepared 2 packages in .+s
+          remote:        Installed 2 packages in .+s
           remote:        Bytecode compiled .+ files in .+s
-          remote:         \\+ gunicorn==23.0.0 \\(from git\\+https://github.com/benoitc/gunicorn@56b5ad87f8d72a674145c273ed8f547513c2b409\\)
-          remote:         \\+ local-package-pyproject-toml==0.0.1 \\(from file:///tmp/build_.+/packages/local_package_pyproject_toml\\)
-          remote:         \\+ local-package-setup-py==0.0.1 \\(from file:///tmp/build_.+/packages/local_package_setup_py\\)
-          remote:         \\+ packaging==25.0
-          remote:         \\+ uv-editable==0.0.0 \\(from file:///tmp/build_.+\\)
+          remote:         \\+ extension-dist==0.1 \\(from git\\+https://github.com/pypa/wheel.git@7855525de4093257e7bfb434877265e227356566#subdirectory=tests/testdata/extension.dist\\)
+          remote:         \\+ uv-editable-git-compiled==0.0.0 \\(from file:///tmp/build_.+\\)
           remote: -----> Running bin/post_compile hook
-          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote:        uv_editable.pth:/tmp/build_.+/src
+          remote:        uv_editable_git_compiled.pth:/tmp/build_.+/src
           remote:        
-          remote:        Running entrypoint for the current package: Hello from uv-editable!
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote:        Running project entrypoint: OK
+          remote:        Running import of VCS package: OK
           remote: -----> Saving cache
           remote: -----> Inline app detected
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote: uv_editable.pth:/tmp/build_.+/src
+          remote: uv_editable_git_compiled.pth:/tmp/build_.+/src
           remote: 
-          remote: Running entrypoint for the current package: Hello from uv-editable!
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: Running project entrypoint: OK
+          remote: Running import of VCS package: OK
         REGEX
 
         # Test rewritten paths work at runtime.
-        expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
-          __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          __editable___local_package_setup_py_0_0_1_finder.py:/app/packages/local_package_setup_py/local_package_setup_py'}
-          uv_editable.pth:/app/src
+        expect(app.run('bin/test-editable-installs.sh')).to include(<<~OUTPUT)
+          uv_editable_git_compiled.pth:/app/src
 
-          Running entrypoint for the current package: Hello from uv-editable!
-          Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          Running entrypoint for the VCS package: gunicorn (version 23.0.0)
+          Running project entrypoint: OK
+          Running import of VCS package: OK
         OUTPUT
 
         # Test that the cached .pth files work correctly.
@@ -221,37 +213,25 @@ RSpec.describe 'uv support' do
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
-          remote:        Resolved 5 packages in .+
+          remote:        Resolved 2 packages in .+
           remote:           .+
-          remote:        Prepared 3 packages in .+s
-          remote:        Uninstalled 3 packages in .+s
-          remote:        Installed 3 packages in .+s
+          remote:        Prepared 1 package in .+s
+          remote:        Uninstalled 1 package in .+s
+          remote:        Installed 1 package in .+s
           remote:        Bytecode compiled .+ files in .+s
-          remote:         - local-package-pyproject-toml==0.0.1 \\(from file:///tmp/build_.+/packages/local_package_pyproject_toml\\)
-          remote:         \\+ local-package-pyproject-toml==0.0.1 \\(from file:///tmp/build_.+/packages/local_package_pyproject_toml\\)
-          remote:         - local-package-setup-py==0.0.1 \\(from file:///tmp/build_.+/packages/local_package_setup_py\\)
-          remote:         \\+ local-package-setup-py==0.0.1 \\(from file:///tmp/build_.+/packages/local_package_setup_py\\)
-          remote:         - uv-editable==0.0.0 \\(from file:///tmp/build_.+\\)
-          remote:         \\+ uv-editable==0.0.0 \\(from file:///tmp/build_.+\\)
+          remote:         - uv-editable-git-compiled==0.0.0 \\(from file:///tmp/build_.+\\)
+          remote:         \\+ uv-editable-git-compiled==0.0.0 \\(from file:///tmp/build_.+\\)
           remote: -----> Running bin/post_compile hook
-          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote:        uv_editable.pth:/tmp/build_.+/src
+          remote:        uv_editable_git_compiled.pth:/tmp/build_.+/src
           remote:        
-          remote:        Running entrypoint for the current package: Hello from uv-editable!
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote:        Running project entrypoint: OK
+          remote:        Running import of VCS package: OK
           remote: -----> Saving cache
           remote: -----> Inline app detected
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote: uv_editable.pth:/tmp/build_.+/src
+          remote: uv_editable_git_compiled.pth:/tmp/build_.+/src
           remote: 
-          remote: Running entrypoint for the current package: Hello from uv-editable!
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: Running project entrypoint: OK
+          remote: Running import of VCS package: OK
         REGEX
       end
     end

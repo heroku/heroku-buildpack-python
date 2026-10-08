@@ -164,70 +164,99 @@ RSpec.describe 'pip support' do
     end
   end
 
-  context 'when requirements.txt contains editable requirements (both VCS and local package)' do
+  # This tests that:
+  #  - Editable install paths are rewritten correctly for hooks, later buildpacks, runtime and cached builds.
+  #  - Local editable packages work for several build backends and layouts.
+  #  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to pip).
+  #  - The editable mode repository clone is saved into the correct location and reused by cached builds.
+  #  - Building/compiling a source distribution package (as opposed to a pre-built wheel) works.
+  #  - The Python headers can be found when compiling.
+  context 'with editable local packages and a compiled VCS package' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_editable', buildpacks:) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_editable_git_compiled', buildpacks:) }
 
-    it 'rewrites .pth and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
+    it 'installs and rewrites editable paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running bin/post_compile hook
-          remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
+          remote:        __editable__.pip_editable_git_compiled-0.0.0.pth:/tmp/build_.+/src
+          remote:        __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
+          remote:        __editable___setuptools_flat_0_0_0_finder.py:/tmp/build_.+/packages/setuptools_flat/setuptools_flat'}
+          remote:        _editable_impl_hatchling_default.pth:/tmp/build_.+/packages/hatchling_default/src
+          remote:        _editable_impl_hatchling_exact.py:/tmp/build_.+/packages/hatchling_exact/src/hatchling_exact/__init__.py'[)]
           remote:        
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote:        Running project entrypoint: OK
+          remote:        Running setuptools flat package entrypoint: OK
+          remote:        Running hatchling default package entrypoint: OK
+          remote:        Running hatchling exact package entrypoint: OK
+          remote:        Running import of VCS package: OK
           remote: -----> Saving cache
           .+
           remote: -----> Inline app detected
-          remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
+          remote: __editable__.pip_editable_git_compiled-0.0.0.pth:/tmp/build_.+/src
+          remote: __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
+          remote: __editable___setuptools_flat_0_0_0_finder.py:/tmp/build_.+/packages/setuptools_flat/setuptools_flat'}
+          remote: _editable_impl_hatchling_default.pth:/tmp/build_.+/packages/hatchling_default/src
+          remote: _editable_impl_hatchling_exact.py:/tmp/build_.+/packages/hatchling_exact/src/hatchling_exact/__init__.py'[)]
           remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: Running project entrypoint: OK
+          remote: Running setuptools flat package entrypoint: OK
+          remote: Running hatchling default package entrypoint: OK
+          remote: Running hatchling exact package entrypoint: OK
+          remote: Running import of VCS package: OK
         REGEX
 
         # Test rewritten paths work at runtime.
-        expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
-          __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          __editable___local_package_setup_py_0_0_1_finder.py:/app/packages/local_package_setup_py/local_package_setup_py'}
-
-          Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          Running entrypoint for the VCS package: gunicorn (version 23.0.0)
-        OUTPUT
+        # TODO: The hook module for hatchling's `dev-mode-exact` mode isn't rewritten yet, so still points at
+        # the build directory (which no longer exists at runtime), and so its entrypoint fails.
+        expect(app.run('bin/test-editable-installs.sh')).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
+          __editable__.pip_editable_git_compiled-0.0.0.pth:/app/src
+          __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
+          __editable___setuptools_flat_0_0_0_finder.py:/app/packages/setuptools_flat/setuptools_flat'}
+          _editable_impl_hatchling_default.pth:/app/packages/hatchling_default/src
+          _editable_impl_hatchling_exact.py:/tmp/build_.+/packages/hatchling_exact/src/hatchling_exact/__init__.py'[)]
+          
+          Running project entrypoint: OK
+          Running setuptools flat package entrypoint: OK
+          Running hatchling default package entrypoint: OK
+          Running hatchling exact package entrypoint: FAILED
+          Running import of VCS package: OK
+        REGEX
 
         # Test that the cached .pth files work correctly.
         app.commit!
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running bin/post_compile hook
-          remote:        __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
+          remote:        __editable__.pip_editable_git_compiled-0.0.0.pth:/tmp/build_.+/src
+          remote:        __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
+          remote:        __editable___setuptools_flat_0_0_0_finder.py:/tmp/build_.+/packages/setuptools_flat/setuptools_flat'}
+          remote:        _editable_impl_hatchling_default.pth:/tmp/build_.+/packages/hatchling_default/src
+          remote:        _editable_impl_hatchling_exact.py:/tmp/build_.+/packages/hatchling_exact/src/hatchling_exact/__init__.py'[)]
           remote:        
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote:        Running project entrypoint: OK
+          remote:        Running setuptools flat package entrypoint: OK
+          remote:        Running hatchling default package entrypoint: OK
+          remote:        Running hatchling exact package entrypoint: OK
+          remote:        Running import of VCS package: OK
           remote: -----> Saving cache
           .+
           remote: -----> Inline app detected
-          remote: __editable___gunicorn_23_0_0_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
+          remote: __editable__.pip_editable_git_compiled-0.0.0.pth:/tmp/build_.+/src
+          remote: __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
+          remote: __editable___setuptools_flat_0_0_0_finder.py:/tmp/build_.+/packages/setuptools_flat/setuptools_flat'}
+          remote: _editable_impl_hatchling_default.pth:/tmp/build_.+/packages/hatchling_default/src
+          remote: _editable_impl_hatchling_exact.py:/tmp/build_.+/packages/hatchling_exact/src/hatchling_exact/__init__.py'[)]
           remote: 
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 23.0.0\\)
+          remote: Running project entrypoint: OK
+          remote: Running setuptools flat package entrypoint: OK
+          remote: Running hatchling default package entrypoint: OK
+          remote: Running hatchling exact package entrypoint: OK
+          remote: Running import of VCS package: OK
         REGEX
         # Test that the VCS repo checkout was cached correctly.
         expect(app.output).to include(<<~OUTPUT)
-          remote:        Obtaining gunicorn from git+https://github.com/benoitc/gunicorn@56b5ad87f8d72a674145c273ed8f547513c2b409#egg=gunicorn (from -r requirements.txt (line 5))        
+          remote:        Obtaining extension.dist from git+https://github.com/pypa/wheel.git@7855525de4093257e7bfb434877265e227356566#egg=extension.dist&subdirectory=tests/testdata/extension.dist (from -r requirements.txt (line 32))        
           remote:          Skipping because already up-to-date.        
         OUTPUT
       end
@@ -328,16 +357,6 @@ RSpec.describe 'pip support' do
           remote:        Requirement already satisfied: typing-extensions==4.15.0 (from -r requirements.txt (line 2)) (4.15.0)
           remote: -----> Saving cache
         OUTPUT
-      end
-    end
-  end
-
-  context 'when requirements.txt contains a package that needs compiling against the Python headers' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pip_compiled') }
-
-    it 'installs successfully using pip' do
-      app.deploy do |app|
-        expect(app.output).to include('Building wheel for extension.dist')
       end
     end
   end

@@ -1,0 +1,13 @@
+[project]
+name = "pip-editable-git-compiled"
+version = "0.0.0"
+requires-python = ">=3.14"
+
+[project.scripts]
+project-entrypoint = "pip_editable_git_compiled:main"
+
+# The src layout results in a static `.pth` file (containing the path to `src/`), unlike the flat
+# layout of `packages/setuptools_flat` which results in an `__editable___*_finder.py` file.
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

@@ -1,0 +1,12 @@
+[project]
+name = "hatchling-default"
+version = "0.0.0"
+
+[project.scripts]
+hatchling-default = "hatchling_default:main"
+
+# Hatchling's default editable mode results in a static `_editable_impl_*.pth` file (containing
+# the path to `src/`), unlike its `dev-mode-exact` mode used by `packages/hatchling_exact`.
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

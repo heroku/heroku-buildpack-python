@@ -1,0 +1,27 @@
+[project]
+name = "uv-editable-git-compiled"
+version = "0.0.0"
+requires-python = ">=3.14"
+dependencies = [
+    "extension-dist",
+]
+
+[project.scripts]
+project-entrypoint = "uv_editable_git_compiled:main"
+
+# `uv_build` always results in a static `.pth` file.
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.uv.sources]
+# We use a VCS dependency in order to test that Git from the stack image can be found
+# (ie: the system PATH has been correctly propagated to uv).
+#
+# We can't install it in editable mode (like the Git tests for other package managers),
+# since uv doesn't support it with VCS dependencies:
+# https://github.com/astral-sh/uv/issues/5442
+#
+# A C-based package is used instead of a pure Python package, in order to test that the
+# Python headers can be found when compiling.
+extension-dist = { git = "https://github.com/pypa/wheel.git", tag = "0.45.1", subdirectory = "tests/testdata/extension.dist" }
