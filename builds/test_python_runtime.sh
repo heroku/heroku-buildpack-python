@@ -52,14 +52,19 @@ else
 fi
 
 # Check that optional and/or system library dependent stdlib modules were built.
+# Some modules (such as `decimal` and `hashlib`) fall back to pure Python or builtin implementations
+# if their C accelerator module wasn't built, so we import those underlying C modules directly.
+# `tkinter` is intentionally omitted, since it's not built (the Tcl/Tk libraries aren't installed).
 optional_stdlib_modules=(
+	_decimal
+	_hashlib
 	_uuid
 	bz2
 	ctypes
 	curses
+	curses.panel
 	dbm.gnu
 	dbm.ndbm
-	decimal
 	lzma
 	readline
 	sqlite3
@@ -70,7 +75,7 @@ optional_stdlib_modules=(
 
 # zstd support was added in Python 3.14:
 # https://docs.python.org/3.14/whatsnew/3.14.html#whatsnew314-zstandard
-if [[ "${major_python_version}" == "3.14" ]]; then
+if [[ "${major_python_version}" != +(3.10|3.11|3.12|3.13) ]]; then
 	optional_stdlib_modules+=(
 		compression.zstd
 	)
