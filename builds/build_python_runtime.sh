@@ -32,6 +32,7 @@ case "${STACK:?}" in
 			"3.12"
 			"3.13"
 			"3.14"
+			"3.15"
 		)
 		;;
 	*)
@@ -45,7 +46,7 @@ fi
 
 # Sigstore identities taken from: https://www.python.org/downloads/metadata/sigstore/
 case "${PYTHON_MAJOR_VERSION}" in
-	3.14)
+	3.14 | 3.15)
 		SIGSTORE_IDENTITY='hugo@python.org'
 		SIGSTORE_ISSUER='https://github.com/login/oauth'
 		;;
@@ -128,6 +129,18 @@ if [[ "${PYTHON_MAJOR_VERSION}" != +(3.10) ]]; then
 		# that compatibility issues between it and PGO were fixed:
 		# https://github.com/python/cpython/pull/29315
 		"--disable-test-modules"
+	)
+fi
+
+if [[ "${PYTHON_MAJOR_VERSION}" == "3.15" ]]; then
+	CONFIGURE_OPTS+=(
+		# Python 3.15 no longer implicitly falls back to the bundled `libmpdec` if the system library
+		# isn't found, so we have to opt in explicitly. (Earlier versions fall back automatically.)
+		# We can't use the system library yet, since Ubuntu 24.04 doesn't currently ship `libmpdec-dev`.
+		# TODO: Switch to the `libmpdec-dev` package once Ubuntu has re-added it for 24.04 (which we've
+		# requested) and it's available on our stacks:
+		# https://bugs.launchpad.net/ubuntu/+source/mpdecimal/+bug/2167730
+		"--without-system-libmpdec"
 	)
 fi
 
