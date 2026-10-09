@@ -211,25 +211,6 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  # TODO: Delete this test once pipenv_mismatched_python_version is re-enabled,
-  # since they mostly duplicate each other.
-  context 'when there is both a Pipfile.lock python_version and a .python-version file' do
-    let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_and_python_version_file') }
-
-    it 'builds with the Python version from the .python-version file' do
-      app.deploy do |app|
-        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
-          remote: -----> Python app detected
-          remote: -----> Using Python 3.13 specified in .python-version
-          remote: -----> Installing Python #{LATEST_PYTHON_3_13}
-          remote: -----> Installing Pipenv #{PIPENV_VERSION}
-          remote: -----> Installing dependencies using 'pipenv install --deploy'
-          remote: -----> Saving cache
-        REGEX
-      end
-    end
-  end
-
   context 'with a Pipfile.lock but no Python version specified' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_python_version_unspecified') }
 
@@ -553,24 +534,24 @@ RSpec.describe 'Pipenv support' do
   context 'when python_version in Pipfile.lock is incompatible with .python-version' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_mismatched_python_version', allow_failure: true) }
 
-    it 'fails the build', skip: 'https://github.com/pypa/pipenv/issues/6514' do
+    it 'fails the build' do
       app.deploy do |app|
-        expect(clean_output(app.output)).to include(<<~OUTPUT)
+        expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Python app detected
-          remote: -----> Using Python #{LATEST_PYTHON_3_13} specified in .python-version
+          remote: -----> Using Python 3.13 specified in .python-version
           remote: -----> Installing Python #{LATEST_PYTHON_3_13}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote:        Warning: Your Pipfile requires "python_version" 3.12, but you are using #{LATEST_PYTHON_3_13} 
-          remote:        from //app/./python/bin/python3.
-          remote:        Usage: pipenv install [OPTIONS] [PACKAGES]...
-          remote:        
+          remote:        from /app/./python/bin/python3.
+          .+
+          remote:        \\[DeployException\\]:       raise exceptions.DeployException
           remote:        ERROR:: Aborting deploy
           remote: 
           remote:  !     Error: Unable to install dependencies using Pipenv.
           remote:  !     
           remote:  !     See the log output above for more information.
-        OUTPUT
+        REGEX
       end
     end
   end
