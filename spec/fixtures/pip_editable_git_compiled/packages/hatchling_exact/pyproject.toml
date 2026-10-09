@@ -12,5 +12,4 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 # This mode uses the `editables` package, which (unlike hatchling's default mode) creates an
 # `_editable_impl_*.py` hook module containing absolute paths, rather than a static `.pth` file.
-# TODO: The buildpack doesn't rewrite the paths in this module yet, so it breaks at runtime.
 dev-mode-exact = true

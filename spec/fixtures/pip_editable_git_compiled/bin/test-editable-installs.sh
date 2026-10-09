@@ -20,10 +20,8 @@ setuptools-flat
 echo -n "Running hatchling default package entrypoint: "
 hatchling-default
 
-# TODO: Remove the fallback once bin/compile also rewrites the paths in hatchling's `dev-mode-exact`
-# hook module, which is currently left pointing at the build directory (so fails at runtime).
 echo -n "Running hatchling exact package entrypoint: "
-hatchling-exact 2>/dev/null || echo "FAILED"
+hatchling-exact
 
 echo -n "Running import of VCS package: "
 python -c 'import extension; print("OK")'

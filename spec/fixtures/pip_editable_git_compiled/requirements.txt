@@ -15,7 +15,6 @@
 
 # This uses hatchling in its `dev-mode-exact` editable mode, which uses the `editables` library and
 # results in an `_editable_impl_*.py` hook module containing absolute paths.
-# TODO: The buildpack doesn't rewrite the paths in that module yet, so it breaks at runtime.
 --editable ./packages/hatchling_exact
 
 # We use a VCS dependency installed in editable mode in order to test that:
