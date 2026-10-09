@@ -1,0 +1,32 @@
+# This uses setuptools with a src directory layout, which results in a static `.pth` file.
+--editable .
+
+# The local packages below have to be nested under `packages/`, since `PYTHONPATH` includes the app
+# root and so a same-named directory there would shadow the editable install:
+# https://github.com/pypa/setuptools/issues/3535
+
+# This uses setuptools with a flat layout, which results in an `__editable___*_finder.py` file.
+# It also only has a `setup.py` and no `pyproject.toml`, like legacy packages.
+--editable ./packages/setuptools_flat
+
+# This uses hatchling (the next most popular build backend after setuptools) in its default editable
+# mode, which results in a static `_editable_impl_*.pth` file.
+--editable ./packages/hatchling_default
+
+# This uses hatchling in its `dev-mode-exact` editable mode, which uses the `editables` library and
+# results in an `_editable_impl_*.py` hook module containing absolute paths.
+# TODO: The buildpack doesn't rewrite the paths in that module yet, so it breaks at runtime.
+--editable ./packages/hatchling_exact
+
+# We use a VCS dependency installed in editable mode in order to test that:
+#  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to pip).
+#  - The editable mode repository clone is saved into the correct location.
+#
+# A C-based package is used instead of a pure Python package, in order to test that the
+# Python headers can be found when compiling.
+#
+# It uses setuptools with a flat source layout, which results in an `__editable___*_finder.py` file.
+#
+# It's pinned to the commit SHA of the `0.45.1` tag (rather than the tag itself), so that on cached builds
+# pip can tell the existing clone is already up-to-date, instead of fetching from the remote again.
+--editable git+https://github.com/pypa/wheel.git@7855525de4093257e7bfb434877265e227356566#egg=extension.dist&subdirectory=tests/testdata/extension.dist

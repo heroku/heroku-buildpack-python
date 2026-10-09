@@ -1,0 +1,29 @@
+[project]
+name = "poetry-editable-git-compiled"
+version = "0.0.0"
+requires-python = ">=3.14"
+dependencies = [
+    "extension-dist",
+]
+
+[project.scripts]
+project-entrypoint = "poetry_editable_git_compiled:main"
+
+# `poetry-core` always results in a static `.pth` file.
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [{ include = "poetry_editable_git_compiled", from = "src" }]
+
+[tool.poetry.dependencies]
+# We use a VCS dependency installed in editable mode in order to test that:
+#  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to Poetry).
+#  - The editable mode repository clone is saved into the correct location.
+#
+# A C-based package is used instead of a pure Python package, in order to test that the
+# Python headers can be found when compiling.
+#
+# It uses setuptools with a flat source layout, which results in a `__editable___*_finder.py` file.
+extension-dist = { git = "https://github.com/pypa/wheel.git", tag = "0.45.1", subdirectory = "tests/testdata/extension.dist", develop = true }

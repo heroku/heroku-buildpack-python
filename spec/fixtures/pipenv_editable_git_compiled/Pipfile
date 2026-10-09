@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+# This uses setuptools with a src directory layout, which results in a static `.pth` file.
+pipenv-editable-git-compiled = { file = ".", editable = true }
+# We use a VCS dependency installed in editable mode in order to test that:
+#  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to Pipenv).
+#  - The editable mode repository clone is saved into the correct location.
+#
+# A C-based package is used instead of a pure Python package, in order to test that the
+# Python headers can be found when compiling.
+#
+# It uses setuptools with a flat source layout, which results in a `__editable___*_finder.py` file.
+extension-dist = { git = "git+https://github.com/pypa/wheel.git", ref = "0.45.1", subdirectory = "tests/testdata/extension.dist", editable = true }

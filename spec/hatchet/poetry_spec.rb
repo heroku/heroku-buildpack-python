@@ -163,11 +163,18 @@ RSpec.describe 'Poetry support' do
     end
   end
 
-  context 'when poetry.lock contains editable requirements (both VCS and local package)' do
+  # This tests that:
+  #  - The current project's editable install paths are rewritten correctly for hooks, later buildpacks,
+  #    runtime and cached builds.
+  #  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to Poetry).
+  #  - The editable mode repository clone is saved into the correct location.
+  #  - Building/compiling a source distribution package (as opposed to a pre-built wheel) works.
+  #  - The Python headers can be found when compiling.
+  context 'with an editable current project and a compiled editable VCS package' do
     let(:buildpacks) { [:default, 'heroku-community/inline'] }
-    let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_editable', buildpacks:) }
+    let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_editable_git_compiled', buildpacks:) }
 
-    it 'rewrites .pth and finder paths correctly for hooks, later buildpacks, runtime and cached builds' do
+    it 'installs and rewrites editable paths correctly for hooks, later buildpacks, runtime and cached builds' do
       app.deploy do |app|
         # As of pyproject-hooks 1.3, Poetry displays warnings emitted by build backends, and setuptools
         # emits an informational warning for every flat-layout package installed in editable mode.
@@ -175,31 +182,9 @@ RSpec.describe 'Poetry support' do
           remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
-          remote:        Package operations: 3 installs, 0 updates, 0 removals
+          remote:        Package operations: 1 install, 0 updates, 0 removals
           remote:        
-          remote:          - Installing gunicorn \\(26.2.2 afc7d2f\\)
-          remote:        /tmp/tmp.+/setuptools/command/editable_wheel.py:\\d+: BuildBackendWarning: Editable installation.
-          remote:        !!
-          remote:        
-          remote:                \\*+
-          remote:                Please be careful with folders in your working directory with the same
-          remote:                name as your package as they may take precedence during imports.
-          remote:                \\*+
-          remote:        
-          remote:        !!
-          remote:          with strategy, WheelFile\\(wheel_path, "w"\\) as wheel_obj:
-          remote:          - Installing local-package-pyproject-toml \\(0.0.1 /tmp/build_.+/packages/local_package_pyproject_toml\\)
-          remote:        /tmp/tmp.+/setuptools/command/editable_wheel.py:\\d+: BuildBackendWarning: Editable installation.
-          remote:        !!
-          remote:        
-          remote:                \\*+
-          remote:                Please be careful with folders in your working directory with the same
-          remote:                name as your package as they may take precedence during imports.
-          remote:                \\*+
-          remote:        
-          remote:        !!
-          remote:          with strategy, WheelFile\\(wheel_path, "w"\\) as wheel_obj:
-          remote:          - Installing local-package-setup-py \\(0.0.1 /tmp/build_.+/packages/local_package_setup_py\\)
+          remote:          - Installing extension-dist \\(0.1 7855525\\)
           remote:        /tmp/tmp.+/setuptools/command/editable_wheel.py:\\d+: BuildBackendWarning: Editable installation.
           remote:        !!
           remote:        
@@ -211,42 +196,30 @@ RSpec.describe 'Poetry support' do
           remote:        !!
           remote:          with strategy, WheelFile\\(wheel_path, "w"\\) as wheel_obj:
           remote:        
-          remote:        Installing the current project: poetry-editable \\(0.0.1\\)
+          remote:        Installing the current project: poetry-editable-git-compiled \\(0.0.0\\)
           remote: -----> Running bin/post_compile hook
-          remote:        __editable___gunicorn_26_2_2_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote:        poetry_editable.pth:/tmp/build_.+
+          remote:        __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/wheel/tests/testdata/extension.dist/extension'}
+          remote:        poetry_editable_git_compiled.pth:/tmp/build_.+/src
           remote:        
-          remote:        Running entrypoint for the current package: Hello from poetry-editable!
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 26.2.2\\)
+          remote:        Running project entrypoint: OK
+          remote:        Running import of VCS package: OK
           remote: -----> Saving cache
           .+
           remote: -----> Inline app detected
-          remote: __editable___gunicorn_26_2_2_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote: poetry_editable.pth:/tmp/build_.+
+          remote: __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/wheel/tests/testdata/extension.dist/extension'}
+          remote: poetry_editable_git_compiled.pth:/tmp/build_.+/src
           remote: 
-          remote: Running entrypoint for the current package: Hello from poetry-editable!
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 26.2.2\\)
+          remote: Running project entrypoint: OK
+          remote: Running import of VCS package: OK
         REGEX
 
         # Test rewritten paths work at runtime.
-        expect(app.run('bin/test-entrypoints.sh')).to include(<<~OUTPUT)
-          __editable___gunicorn_26_2_2_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          __editable___local_package_pyproject_toml_0_0_1_finder.py:/app/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          __editable___local_package_setup_py_0_0_1_finder.py:/app/packages/local_package_setup_py/local_package_setup_py'}
-          poetry_editable.pth:/app
+        expect(app.run('bin/test-editable-installs.sh')).to include(<<~OUTPUT)
+          __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/wheel/tests/testdata/extension.dist/extension'}
+          poetry_editable_git_compiled.pth:/app/src
 
-          Running entrypoint for the current package: Hello from poetry-editable!
-          Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          Running entrypoint for the VCS package: gunicorn (version 26.2.2)
+          Running project entrypoint: OK
+          Running import of VCS package: OK
         OUTPUT
 
         # Test that the cached .pth files work correctly.
@@ -256,31 +229,9 @@ RSpec.describe 'Poetry support' do
           remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
-          remote:        Package operations: 0 installs, 3 updates, 0 removals
+          remote:        Package operations: 0 installs, 1 update, 0 removals
           remote:        
-          remote:          - Updating gunicorn \\(26.2.2 /app/.heroku/python/src/gunicorn -> 26.2.2 afc7d2f\\)
-          remote:        /tmp/tmp.+/setuptools/command/editable_wheel.py:\\d+: BuildBackendWarning: Editable installation.
-          remote:        !!
-          remote:        
-          remote:                \\*+
-          remote:                Please be careful with folders in your working directory with the same
-          remote:                name as your package as they may take precedence during imports.
-          remote:                \\*+
-          remote:        
-          remote:        !!
-          remote:          with strategy, WheelFile\\(wheel_path, "w"\\) as wheel_obj:
-          remote:          - Updating local-package-pyproject-toml \\(0.0.1 /tmp/build_.+/packages/local_package_pyproject_toml -> 0.0.1 /tmp/build_.+/packages/local_package_pyproject_toml\\)
-          remote:        /tmp/tmp.+/setuptools/command/editable_wheel.py:\\d+: BuildBackendWarning: Editable installation.
-          remote:        !!
-          remote:        
-          remote:                \\*+
-          remote:                Please be careful with folders in your working directory with the same
-          remote:                name as your package as they may take precedence during imports.
-          remote:                \\*+
-          remote:        
-          remote:        !!
-          remote:          with strategy, WheelFile\\(wheel_path, "w"\\) as wheel_obj:
-          remote:          - Updating local-package-setup-py \\(0.0.1 /tmp/build_.+/packages/local_package_setup_py -> 0.0.1 /tmp/build_.+/packages/local_package_setup_py\\)
+          remote:          - Updating extension-dist \\(0.1 /app/.heroku/python/src/wheel -> 0.1 7855525\\)
           remote:        /tmp/tmp.+/setuptools/command/editable_wheel.py:\\d+: BuildBackendWarning: Editable installation.
           remote:        !!
           remote:        
@@ -292,29 +243,21 @@ RSpec.describe 'Poetry support' do
           remote:        !!
           remote:          with strategy, WheelFile\\(wheel_path, "w"\\) as wheel_obj:
           remote:        
-          remote:        Installing the current project: poetry-editable \\(0.0.1\\)
+          remote:        Installing the current project: poetry-editable-git-compiled \\(0.0.0\\)
           remote: -----> Running bin/post_compile hook
-          remote:        __editable___gunicorn_26_2_2_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          remote:        __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote:        __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote:        poetry_editable.pth:/tmp/build_.+
+          remote:        __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/wheel/tests/testdata/extension.dist/extension'}
+          remote:        poetry_editable_git_compiled.pth:/tmp/build_.+/src
           remote:        
-          remote:        Running entrypoint for the current package: Hello from poetry-editable!
-          remote:        Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote:        Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote:        Running entrypoint for the VCS package: gunicorn \\(version 26.2.2\\)
+          remote:        Running project entrypoint: OK
+          remote:        Running import of VCS package: OK
           remote: -----> Saving cache
           .+
           remote: -----> Inline app detected
-          remote: __editable___gunicorn_26_2_2_finder.py:/app/.heroku/python/src/gunicorn/gunicorn'}
-          remote: __editable___local_package_pyproject_toml_0_0_1_finder.py:/tmp/build_.+/packages/local_package_pyproject_toml/local_package_pyproject_toml'}
-          remote: __editable___local_package_setup_py_0_0_1_finder.py:/tmp/build_.+/packages/local_package_setup_py/local_package_setup_py'}
-          remote: poetry_editable.pth:/tmp/build_.+
+          remote: __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/wheel/tests/testdata/extension.dist/extension'}
+          remote: poetry_editable_git_compiled.pth:/tmp/build_.+/src
           remote: 
-          remote: Running entrypoint for the current package: Hello from poetry-editable!
-          remote: Running entrypoint for the pyproject.toml-based local package: Hello from pyproject.toml!
-          remote: Running entrypoint for the setup.py-based local package: Hello from setup.py!
-          remote: Running entrypoint for the VCS package: gunicorn \\(version 26.2.2\\)
+          remote: Running project entrypoint: OK
+          remote: Running import of VCS package: OK
         REGEX
       end
     end

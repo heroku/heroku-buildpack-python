@@ -1,0 +1,29 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "5ee4fa4f63d7ebd1f5483b5db356333e78b92fff84dcabb3408861d030e89ffd"
+        },
+        "pipfile-spec": 6,
+        "requires": {},
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "extension-dist": {
+            "editable": true,
+            "git": "git+https://github.com/pypa/wheel.git",
+            "ref": "7855525de4093257e7bfb434877265e227356566",
+            "subdirectory": "tests/testdata/extension.dist"
+        },
+        "pipenv-editable-git-compiled": {
+            "editable": true,
+            "file": "."
+        }
+    },
+    "develop": {}
+}
