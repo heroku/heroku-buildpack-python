@@ -207,19 +207,17 @@ RSpec.describe 'pip support' do
         REGEX
 
         # Test rewritten paths work at runtime.
-        # TODO: The hook module for hatchling's `dev-mode-exact` mode isn't rewritten yet, so still points at
-        # the build directory (which no longer exists at runtime), and so its entrypoint fails.
         expect(app.run('bin/test-editable-installs.sh')).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           __editable__.pip_editable_git_compiled-0.0.0.pth:/app/src
           __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
           __editable___setuptools_flat_0_0_0_finder.py:/app/packages/setuptools_flat/setuptools_flat'}
           _editable_impl_hatchling_default.pth:/app/packages/hatchling_default/src
-          _editable_impl_hatchling_exact.py:/tmp/build_.+/packages/hatchling_exact/src/hatchling_exact/__init__.py'[)]
+          _editable_impl_hatchling_exact.py:/app/packages/hatchling_exact/src/hatchling_exact/__init__.py'[)]
           
           Running project entrypoint: OK
           Running setuptools flat package entrypoint: OK
           Running hatchling default package entrypoint: OK
-          Running hatchling exact package entrypoint: FAILED
+          Running hatchling exact package entrypoint: OK
           Running import of VCS package: OK
         REGEX
 
@@ -256,7 +254,7 @@ RSpec.describe 'pip support' do
         REGEX
         # Test that the VCS repo checkout was cached correctly.
         expect(app.output).to include(<<~OUTPUT)
-          remote:        Obtaining extension.dist from git+https://github.com/pypa/wheel.git@7855525de4093257e7bfb434877265e227356566#egg=extension.dist&subdirectory=tests/testdata/extension.dist (from -r requirements.txt (line 32))        
+          remote:        Obtaining extension.dist from git+https://github.com/pypa/wheel.git@7855525de4093257e7bfb434877265e227356566#egg=extension.dist&subdirectory=tests/testdata/extension.dist (from -r requirements.txt (line 31))        
           remote:          Skipping because already up-to-date.        
         OUTPUT
       end

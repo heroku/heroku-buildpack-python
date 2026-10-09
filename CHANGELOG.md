@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fixed editable install path rewriting for some less common build backend configurations that use hook modules rather than static `.pth` files, such as hatchling's `dev-mode-exact` mode. ([#2158](https://github.com/heroku/heroku-buildpack-python/pull/2158))
+- Removed editable install path rewriting for `.egg-link` files, since no supported package manager creates them any more. ([#2158](https://github.com/heroku/heroku-buildpack-python/pull/2158))
 
 ## [v354] - 2026-10-02
 

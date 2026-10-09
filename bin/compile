@@ -275,18 +275,17 @@ EOT
 # 1. At build time, of just the VCS editable paths (which we can safely change to /app paths early).
 # 2. At runtime, to rewrite the remaining path-based editable dependency paths.
 #
-# TODO: Also rewrite the paths in the hook modules that some less common build backends create instead
-# (imported by an `import` line in a `.pth` file), since otherwise those editable installs break at runtime:
+# Some build backends also create hook modules (imported by an `import` line in a `.pth` file), so the
+# `*editable*.py` glob is used to match all of the following:
+#  - `__editable___<name>_<version>_finder.py` (setuptools)
 #  - `_editable_impl_<name>.py` (`editables`, used by hatchling's `dev-mode-exact` mode and pdm-backend's
 #    `editables` mode)
 #  - `_editable_skbc_<name>.py` (scikit-build-core)
-#  - `_<name>_editable_loader.py` (meson-python, which rebuilds from the build directory on import, so
-#    can't work regardless)
-# The hatchling case is covered (and currently expected to fail) by the pip editable test fixture.
+#  - `_<name>_editable_loader.py` (meson-python)
 if [[ "${BUILD_DIR}" != "/app" ]]; then
-	find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e "s#${BUILD_DIR}/.heroku/python#/app/.heroku/python#" {} \+
+	find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.pth' -or -name '*editable*.py' \) -exec sed -i -e "s#${BUILD_DIR}/.heroku/python#/app/.heroku/python#" {} \+
 	cat <<-EOT >>"${PROFILE_PATH}"
-		find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.egg-link' -or -name '*.pth' -or -name '__editable___*_finder.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
+		find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.pth' -or -name '*editable*.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
 	EOT
 fi
 
