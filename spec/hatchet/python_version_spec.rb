@@ -239,7 +239,7 @@ RSpec.describe 'Python version support' do
             remote:  !     Alternatively, request an older Python version by creating
             remote:  !     a .python-version file in the root directory of your app,
             remote:  !     that contains a Python version like:
-            remote:  !     3.14
+            remote:  !     3.15
             remote: 
             remote:  !     Push rejected, failed to compile Python app.
           OUTPUT
@@ -305,6 +305,12 @@ RSpec.describe 'Python version support' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.14') }
 
     it_behaves_like 'builds with the requested Python version', '3.14', LATEST_PYTHON_3_14
+  end
+
+  context 'when .python-version contains Python 3.15' do
+    let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.15') }
+
+    it_behaves_like 'builds with the requested Python version', '3.15', LATEST_PYTHON_3_15
   end
 
   context 'when .python-version is misspelled' do
@@ -508,7 +514,7 @@ RSpec.describe 'Python version support' do
           remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#view-your-buildpacks
           remote:  !     https://devcenter.heroku.com/articles/managing-buildpacks#classic-buildpacks-references
           remote:  !     
-          remote:  !     Otherwise, switch to a supported version (such as Python 3.14)
+          remote:  !     Otherwise, switch to a supported version (such as Python 3.15)
           remote:  !     by changing the version in your .python-version file.
           remote: 
           remote:  !     Push rejected, failed to compile Python app.
