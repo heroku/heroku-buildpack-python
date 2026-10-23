@@ -19,7 +19,7 @@ LEGACY_BUILD_DATA_FILE="${CACHE_DIR:?}/build-data/python"
 # ```
 function build_data::setup() {
 	if [[ -f "${BUILD_DATA_FILE}" ]]; then
-		# Rename the existing build data file rather than overwriting it, so we can lookup values
+		# Rename the existing build data file rather than overwriting it, so we can look up values
 		# from the previous build (such as when determining whether to invalidate the cache).
 		mv "${BUILD_DATA_FILE}" "${PREVIOUS_BUILD_DATA_FILE}"
 	else
@@ -47,7 +47,8 @@ function build_data::set_string() {
 #
 # Usage:
 # ```
-# local dependencies_install_start_time=$(build_data::current_unix_realtime)
+# local dependencies_install_start_time
+# dependencies_install_start_time=$(build_data::current_unix_realtime)
 # # ... some operation ...
 # build_data::set_duration "dependencies_install_duration" "${dependencies_install_start_time}"
 # ```
@@ -60,7 +61,7 @@ function build_data::set_duration() {
 	build_data::set_raw "${key}" "${duration}"
 }
 
-# Sets a build data value as raw JSON data. The value parameter must be valid JSON value, that's also
+# Sets a build data value as raw JSON data. The value parameter must be a valid JSON value that's also
 # a supported Honeycomb data type (string, integer, float, or boolean only; no arrays or objects).
 # For strings, use `build_data::set_string` instead since it will handle the escaping/quoting for you.
 # And for durations, use `build_data::set_duration`.
@@ -168,7 +169,8 @@ function build_data::get_previous() {
 #
 # Usage:
 # ```
-# local dependencies_install_start_time=$(build_data::current_unix_realtime)
+# local dependencies_install_start_time
+# dependencies_install_start_time=$(build_data::current_unix_realtime)
 # # ... some operation ...
 # build_data::set_duration "dependencies_install_duration" "${dependencies_install_start_time}"
 # ```
