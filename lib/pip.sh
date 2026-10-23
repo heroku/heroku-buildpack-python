@@ -95,7 +95,7 @@ function pip::install_dependencies() {
 	# TODO: Expose all config vars (after suitable checks are added for unsafe env vars)
 	# to allow for the env var interpolation feature of requirements files to work.
 	#
-	# PIP_EXTRA_INDEX_URL allows for an alternate pypi URL to be used.
+	# PIP_EXTRA_INDEX_URL allows for an alternate PyPI URL to be used.
 	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
 	if [[ -r "${ENV_DIR}/PIP_EXTRA_INDEX_URL" ]]; then
 		PIP_EXTRA_INDEX_URL="$(cat "${ENV_DIR}/PIP_EXTRA_INDEX_URL")"
