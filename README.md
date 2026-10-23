@@ -6,7 +6,7 @@
 
 This is the official [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) for Python apps.
 
-Recommended web frameworks include **Django** and **Flask**, among others. The recommended webserver is **Gunicorn**. There are no restrictions around what software can be used (as long as it's pip-installable). Web processes must bind to `$PORT`, and only the HTTP protocol is permitted for incoming connections.
+Recommended web frameworks include **Django** and **Flask**, among others. The recommended web server is **Gunicorn**. There are no restrictions around what software can be used (as long as it's pip-installable). Web processes must bind to `$PORT`, and only the HTTP protocol is permitted for incoming connections.
 
 > This is the Heroku Classic Buildpack for Python. If you are instead looking for the Heroku Cloud Native Buildpack for Python, you may find it [here](https://github.com/heroku/buildpacks-python).
 

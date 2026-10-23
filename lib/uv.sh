@@ -39,7 +39,7 @@ function uv::install_uv() {
 				# system timeout. We don't use `--speed-limit` since it gives worse error messages when used with
 				# retries and piping to tar. The uv archives are ~20 MB so only take ~1s to download on Heroku,
 				# so we set low timeouts to reduce delays before retries. However, we allow customising the timeouts
-				# to support non-Heroku environments that may be far from `us-east-1` or have a slower connection.
+				# to support non-Heroku environments that have a slower or higher-latency connection to Astral's CDN.
 				# We use `--no-progress-meter` rather than `--silent` so that retry status messages are printed.
 				# We have to use `--strip-components` since the uv binary is nested under a subdirectory.
 				curl \

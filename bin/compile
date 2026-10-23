@@ -155,7 +155,7 @@ mkdir -p "$(dirname "${PROFILE_PATH}")"
 # Realpath is used to support use-cases where one of the locations is a symlink to the other.
 # shellcheck disable=SC2312 # TODO: Invoke this command separately to avoid masking its return value.
 if [[ "$(realpath "${BUILD_DIR}")" != "$(realpath /app)" ]]; then
-	# python expects to reside in /app, so set up symlinks
+	# Python expects to reside in /app, so set up symlinks
 	# we will not remove these later so subsequent buildpacks can still invoke it
 	ln -nsf "${BUILD_DIR}/.heroku/python" /app/.heroku/python
 fi

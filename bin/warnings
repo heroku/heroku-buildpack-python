@@ -3,7 +3,6 @@
 show-warnings() {
 	local install_log="${1}"
 
-	# shellcheck disable=SC2154 # TODO: Env var is referenced but not assigned.
 	if grep -qi 'Could not find gdal-config' "${install_log}"; then
 		output::error <<-'EOF'
 			Error: Package installation failed since the GDAL library wasn't found.

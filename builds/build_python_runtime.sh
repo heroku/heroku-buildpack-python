@@ -162,6 +162,7 @@ CPU_COUNT="$(nproc)"
 make -j "${CPU_COUNT}" "EXTRA_CFLAGS=${EXTRA_CFLAGS}" "LDFLAGS=${LDFLAGS}"
 make install
 
+# `--without-static-libpython` should mean no static libraries are generated.
 if ! find "${INSTALL_DIR}" -type f -name '*.a' -print -exec false '{}' +; then
 	abort "Unexpected static libraries found!"
 fi
