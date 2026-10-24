@@ -18,16 +18,16 @@ GEM
       rrrretry (~> 1)
       thor (~> 1)
       threaded (~> 0)
-    json (3.0.2)
+    json (3.1.0)
     language_server-protocol (3.17.0.6)
     lint_roller (1.1.0)
     logger (1.7.0)
     moneta (1.0.0)
-    parallel (2.2.0)
+    parallel (2.3.0)
     parallel_split_test (0.10.0)
       parallel (>= 0.5.13)
       rspec-core (>= 3.9.0)
-    parser (3.3.12.0)
+    parser (3.3.13.0)
       ast (~> 2.4.1)
       racc
     platform-api (3.9.1)
@@ -48,14 +48,14 @@ GEM
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.13.7)
-    rubocop (1.91.0)
+    rubocop (1.92.0)
       json (>= 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
       parallel (>= 1.10)
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
-      regexp_parser (>= 2.9.3, < 3.0)
+      regexp_parser (>= 2.11.3, < 3.0)
       rubocop-ast (>= 1.49.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
@@ -96,14 +96,14 @@ CHECKSUMS
   excon (1.8.0) sha256=56d414519bff28bf95dd800ad4690a2fc0b8a49caf00367b70ecdbac71f91c93
   heroics (0.1.4) sha256=8d843fb0a2cb55f36d1754d1f684e2e2685573ab90ff23dad122d30c66b7021c
   heroku_hatchet (8.0.6) sha256=886a7d7d686859db9fac19df1194a35c5349285956ca4d134054c5c376accea3
-  json (3.0.2) sha256=8e6d7e7b11384c21230430cef90b71f14849a34a1f4452796670f7c981bd19df
+  json (3.1.0) sha256=3ce7ccf8fde58960177a3a756c31f292a4c1e1dedee884547096a5b0604e3bd8
   language_server-protocol (3.17.0.6) sha256=5ef2c0c138f8267e1bc631d3328347d354f96724b0af22f2c79516120443b7f0
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   moneta (1.0.0) sha256=2224e5a68156e8eceb525fb0582c8c4e0f29f67cae86507cdcfb406abbb1fc5d
-  parallel (2.2.0) sha256=e1059c5fd7b649558a0aec38a769f06a42942bdb40503d005a59c352fe011cd8
+  parallel (2.3.0) sha256=f75a3e904101ce6a1ccb6b8dc800cbafd42166d83330192438dcf29395167a6f
   parallel_split_test (0.10.0) sha256=4abd6bedc6a1b169ecb93a1bf982fa7fbd437b66c360594d56d107c25f53b05f
-  parser (3.3.12.0) sha256=21a6d7f755d5a24dfbdc6e6b772e4e879a52e7631a88bc5a3a134606052c9828
+  parser (3.3.13.0) sha256=e02f9b63c2fe05b0c68f692ba4df89b3cb113b663964f75d988fbebfd6c3deca
   platform-api (3.9.1) sha256=771f8a2dd19136e9f2715c5fad6b5b2c628398216091f3e8bd5fe86b5f094a75
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
@@ -115,7 +115,7 @@ CHECKSUMS
   rspec-expectations (3.13.5) sha256=33a4d3a1d95060aea4c94e9f237030a8f9eae5615e9bd85718fe3a09e4b58836
   rspec-retry (0.6.2) sha256=6101ba23a38809811ae3484acde4ab481c54d846ac66d5037ccb40131a60d858
   rspec-support (3.13.7) sha256=0640e5570872aafefd79867901deeeeb40b0c9875a36b983d85f54fb7381c47c
-  rubocop (1.91.0) sha256=9c82b7bf391c5d7e3798c5b9996e22a1fe3bd7468e351dfdeb96140c058296d0
+  rubocop (1.92.0) sha256=2af68041fb2e70bd9321d0479b49fad07f8008a3d0758c83347b4917128c56e0
   rubocop-ast (1.50.0) sha256=b9ca88300da0803ee222ad20cdb30494c0a784eed06fdc35d254b06d662788db
   rubocop-rspec (3.10.2) sha256=0b3e2ecc592cd10ecbf0095bb58d1e357905276e069643523cc19eb7495f65e2
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
@@ -126,7 +126,7 @@ CHECKSUMS
   webrick (1.9.2) sha256=beb4a15fc474defed24a3bda4ffd88a490d517c9e4e6118c3edce59e45864131
 
 RUBY VERSION
-  ruby 4.0.5
+  ruby 4.0.9
 
 BUNDLED WITH
   4.0.20
