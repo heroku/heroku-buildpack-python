@@ -286,7 +286,36 @@ RSpec.describe 'Python version support' do
   context 'when .python-version contains Python 3.11' do
     let(:app) { Hatchet::Runner.new('spec/fixtures/python_3.11') }
 
-    it_behaves_like 'builds with the requested Python version', '3.11', LATEST_PYTHON_3_11
+    it 'builds with Python 3.11 but shows a deprecation warning' do
+      app.deploy do |app|
+        expect(clean_output(app.output)).to include(<<~OUTPUT)
+          remote: -----> Python app detected
+          remote: -----> Using Python 3.11 specified in .python-version
+          remote: 
+          remote:  !     Warning: Support for Python 3.11 is deprecated!
+          remote:  !     
+          remote:  !     Python 3.11 will reach its upstream end-of-life in October 2027,
+          remote:  !     at which point it will no longer receive security updates:
+          remote:  !     https://devguide.python.org/versions/#supported-versions
+          remote:  !     
+          remote:  !     As such, support for Python 3.11 will be removed from this
+          remote:  !     buildpack on 5th January 2028.
+          remote:  !     
+          remote:  !     Upgrade to a newer Python version as soon as possible, by
+          remote:  !     changing the version in your .python-version file.
+          remote:  !     
+          remote:  !     For more information, see:
+          remote:  !     https://devcenter.heroku.com/articles/python-support#supported-python-versions
+          remote: 
+          remote: -----> Installing Python #{LATEST_PYTHON_3_11}
+          remote: -----> Installing pip #{PIP_VERSION} and setuptools #{SETUPTOOLS_VERSION}
+          remote: -----> Installing dependencies using 'pip install -r requirements.txt'
+          remote:        Collecting typing-extensions==4.15.0 (from -r requirements.txt (line 2))
+        OUTPUT
+        expect(normalize_trailing_newlines(app.run('python -V'))).to eq("Python #{LATEST_PYTHON_3_11}\n")
+        expect($CHILD_STATUS.exitstatus).to eq(0)
+      end
+    end
   end
 
   context 'when .python-version contains Python 3.12' do

@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Deprecated support for Python 3.11. ([#2176](https://github.com/heroku/heroku-buildpack-python/pull/2176))
 - Updated the Python 3.10 deprecation warning to reflect that it has now reached upstream end-of-life. ([#2175](https://github.com/heroku/heroku-buildpack-python/pull/2175))
 
 ## [v359] - 2026-10-26
