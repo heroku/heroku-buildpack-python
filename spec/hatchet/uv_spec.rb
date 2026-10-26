@@ -248,8 +248,8 @@ RSpec.describe 'uv support' do
           remote: 
           remote:  !     Warning: Support for Python 3.10 is deprecated!
           remote:  !     
-          remote:  !     Python 3.10 will reach its upstream end-of-life in October 2026,
-          remote:  !     at which point it will no longer receive security updates:
+          remote:  !     Python 3.10 reached its upstream end-of-life on 1st October 2026,
+          remote:  !     and so no longer receives security updates:
           remote:  !     https://devguide.python.org/versions/#supported-versions
           remote:  !     
           remote:  !     As such, support for Python 3.10 will be removed from this

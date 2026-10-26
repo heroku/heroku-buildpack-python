@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Updated the Python 3.10 deprecation warning to reflect that it has now reached upstream end-of-life. ([#2175](https://github.com/heroku/heroku-buildpack-python/pull/2175))
 
 ## [v359] - 2026-10-26
 
