@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v360] - 2026-10-26
+
 - Deprecated support for Python 3.11. ([#2176](https://github.com/heroku/heroku-buildpack-python/pull/2176))
 - Updated the Python 3.10 deprecation warning to reflect that it has now reached upstream end-of-life. ([#2175](https://github.com/heroku/heroku-buildpack-python/pull/2175))
 
@@ -1620,7 +1623,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v359...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v360...main
+[v360]: https://github.com/heroku/heroku-buildpack-python/compare/v359...v360
 [v359]: https://github.com/heroku/heroku-buildpack-python/compare/v358...v359
 [v358]: https://github.com/heroku/heroku-buildpack-python/compare/v357...v358
 [v357]: https://github.com/heroku/heroku-buildpack-python/compare/v356...v357
