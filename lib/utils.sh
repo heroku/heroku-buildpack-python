@@ -51,7 +51,7 @@ function utils::abort_internal_error() {
 	local message
 	message="${1} (line $(caller || true))"
 	output::error <<-EOF
-		Internal error: ${message}.
+		Internal Error: ${message}.
 	EOF
 	build_data::set_string "failure_reason" "internal-error::abort"
 	build_data::set_string "failure_detail" "${message}"
