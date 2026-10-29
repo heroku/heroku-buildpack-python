@@ -87,9 +87,11 @@ function cache::restore() {
 				if [[ "${cached_pipenv_version}" != "${PIPENV_VERSION:?}" ]]; then
 					cache_invalidation_reasons+=("The Pipenv version has changed from ${cached_pipenv_version:-"unknown"} to ${PIPENV_VERSION}")
 				fi
-				# `pipenv {install,sync}` by design don't actually uninstall packages on their own (!!):
-				# and we can't use `pipenv clean` since it isn't compatible with `--system`.
+				# `pipenv {install,sync}` by default don't uninstall packages removed from the lockfile:
 				# https://github.com/pypa/pipenv/issues/3365
+				# We can't use `pipenv clean` or `pipenv sync --clean` since neither works with `--system`.
+				# If we move to installing into a venv (for parity with the CNB), we can use `--clean`
+				# instead and remove this check.
 				# We have to explicitly check for the presence of the Pipfile.lock.sha256 file,
 				# since we only started writing it to the build cache as of buildpack v292 (released 2025-07-23).
 				local pipfile_lock_checksum_file="${cache_dir}/.heroku/python/Pipfile.lock.sha256"
