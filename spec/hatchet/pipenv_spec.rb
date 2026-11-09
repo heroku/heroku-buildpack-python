@@ -56,21 +56,21 @@ RSpec.describe 'Pipenv support' do
           remote: 
           remote: \\['',
           remote:  '/app',
-          remote:  '/app/.heroku/python/lib/python314.zip',
-          remote:  '/app/.heroku/python/lib/python3.14',
-          remote:  '/app/.heroku/python/lib/python3.14/lib-dynload',
-          remote:  '/app/.heroku/python/lib/python3.14/site-packages'\\]
+          remote:  '/app/.heroku/python/lib/python315.zip',
+          remote:  '/app/.heroku/python/lib/python3.15',
+          remote:  '/app/.heroku/python/lib/python3.15/lib-dynload',
+          remote:  '/app/.heroku/python/lib/python3.15/site-packages'\\]
           remote: 
           remote: pipenv, version #{PIPENV_VERSION}
           remote: Package           Version
           remote: ----------------- -+
-          remote: certifi           2026.1.4
-          remote: packaging         25.0
-          remote: typing_extensions 4.15.0
+          remote: certifi           2026.10.23
+          remote: packaging         26.3
+          remote: typing_extensions 4.16.0
           remote: 
-          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.14/site-packages/typing_extensions.py'>
-          remote: <module 'certifi' from '/app/.heroku/python/lib/python3.14/site-packages/certifi/__init__.py'>
-          remote: <module 'packaging' from '/app/.heroku/python/lib/python3.14/site-packages/packaging/__init__.py'>
+          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.15/site-packages/typing_extensions.py'>
+          remote: <module 'certifi' from '/app/.heroku/python/lib/python3.15/site-packages/certifi/__init__.py'>
+          remote: <module 'packaging' from '/app/.heroku/python/lib/python3.15/site-packages/packaging/__init__.py'>
           remote: 
           remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
@@ -87,11 +87,11 @@ RSpec.describe 'Pipenv support' do
           remote:   "pre_compile_hook": false,
           remote:   "python_install_duration": [0-9.]+,
           remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
-          remote:   "python_version_major": "3.14",
+          remote:   "python_version_major": "3.15",
           remote:   "python_version_origin": "Pipfile.lock",
           remote:   "python_version_outdated": false,
           remote:   "python_version_pinned": false,
-          remote:   "python_version_requested": "3.14",
+          remote:   "python_version_requested": "3.15",
           remote:   "total_duration": [0-9.]+
           remote: \\}
         REGEX
@@ -436,11 +436,8 @@ RSpec.describe 'Pipenv support' do
     end
   end
 
-  # TODO: Enable on Heroku-26 after the Pipenv and default Python versions next change,
-  # since for now there isn't a historic buildpack version we can use in this test whose
-  # stack check permits Heroku-26 and that also uses older Pipenv/Python versions.
-  context 'when the Pipenv and Python versions have changed since the last build', stacks: %w[heroku-22 heroku-24] do
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v313'] }
+  context 'when the Pipenv and Python versions have changed since the last build' do
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v355'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/pipenv_basic', buildpacks:) }
 
     it 'clears the cache before installing' do
@@ -451,11 +448,11 @@ RSpec.describe 'Pipenv support' do
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
-          remote: -----> Using Python 3.14 specified in Pipfile.lock
+          remote: -----> Using Python 3.15 specified in Pipfile.lock
           remote: -----> Discarding cache since:
-          remote:        - The Python version has changed from 3.14.0 to #{LATEST_PYTHON_3_14}
-          remote:        - The Pipenv version has changed from 2025.0.4 to #{PIPENV_VERSION}
-          remote: -----> Installing Python #{LATEST_PYTHON_3_14}
+          remote:        - The Python version has changed from 3.15.0 to #{LATEST_PYTHON_3_15}
+          remote:        - The Pipenv version has changed from 2026.8.0 to #{PIPENV_VERSION}
+          remote: -----> Installing Python #{LATEST_PYTHON_3_15}
           remote: -----> Installing Pipenv #{PIPENV_VERSION}
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote: -----> Saving cache

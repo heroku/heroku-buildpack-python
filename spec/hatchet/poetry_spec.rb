@@ -19,7 +19,7 @@ RSpec.describe 'Poetry support' do
           remote:        
           remote:        Package operations: 1 install, 0 updates, 0 removals
           remote:        
-          remote:          - Installing typing-extensions \\(4.15.0\\)
+          remote:          - Installing typing-extensions \\(4.16.0\\)
           remote: -----> Running bin/post_compile hook
           remote:        BUILD_DIR=/tmp/build_.+
           remote:        CACHE_DIR=/tmp/codon/tmp/cache
@@ -59,15 +59,15 @@ RSpec.describe 'Poetry support' do
           remote: 
           remote: \\['',
           remote:  '/app',
-          remote:  '/app/.heroku/python/lib/python314.zip',
-          remote:  '/app/.heroku/python/lib/python3.14',
-          remote:  '/app/.heroku/python/lib/python3.14/lib-dynload',
-          remote:  '/app/.heroku/python/lib/python3.14/site-packages'\\]
+          remote:  '/app/.heroku/python/lib/python315.zip',
+          remote:  '/app/.heroku/python/lib/python3.15',
+          remote:  '/app/.heroku/python/lib/python3.15/lib-dynload',
+          remote:  '/app/.heroku/python/lib/python3.15/site-packages'\\]
           remote: 
           remote: Poetry \\(version #{POETRY_VERSION}\\)
-          remote: typing-extensions 4.15.0 Backported and Experimental Type Hints for Python ...
+          remote: typing-extensions 4.16.0 Backported and Experimental Type Hints for Python ...
           remote: 
-          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.14/site-packages/typing_extensions.py'>
+          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.15/site-packages/typing_extensions.py'>
           remote: 
           remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
@@ -84,11 +84,11 @@ RSpec.describe 'Poetry support' do
           remote:   "pre_compile_hook": false,
           remote:   "python_install_duration": [0-9.]+,
           remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
-          remote:   "python_version_major": "3.14",
+          remote:   "python_version_major": "3.15",
           remote:   "python_version_origin": ".python-version",
           remote:   "python_version_outdated": false,
           remote:   "python_version_pinned": false,
-          remote:   "python_version_requested": "3.14",
+          remote:   "python_version_requested": "3.15",
           remote:   "total_duration": [0-9.]+
           remote: \\}
         REGEX
@@ -130,11 +130,10 @@ RSpec.describe 'Poetry support' do
     end
   end
 
-  # TODO: Enable on Heroku-26 after the Poetry and default Python versions next change,
-  # since for now there isn't a historic buildpack version we can use in this test whose
-  # stack check permits Heroku-26 and that also uses older Poetry/Python versions.
-  context 'when the Poetry and Python versions have changed since the last build', stacks: %w[heroku-22 heroku-24] do
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v313'] }
+  # TODO: Also assert on the Poetry version change after the next Poetry update, since
+  # every buildpack version that supports Python 3.15 uses the current Poetry version.
+  context 'when the Python version has changed since the last build' do
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v355'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/poetry_basic', buildpacks:) }
 
     it 'clears the cache before installing' do
@@ -145,18 +144,17 @@ RSpec.describe 'Poetry support' do
         app.push!
         expect(clean_output(app.output)).to include(<<~OUTPUT)
           remote: -----> Python app detected
-          remote: -----> Using Python 3.14 specified in .python-version
+          remote: -----> Using Python 3.15 specified in .python-version
           remote: -----> Discarding cache since:
-          remote:        - The Python version has changed from 3.14.0 to #{LATEST_PYTHON_3_14}
-          remote:        - The Poetry version has changed from 2.2.1 to #{POETRY_VERSION}
-          remote: -----> Installing Python #{LATEST_PYTHON_3_14}
+          remote:        - The Python version has changed from 3.15.0 to #{LATEST_PYTHON_3_15}
+          remote: -----> Installing Python #{LATEST_PYTHON_3_15}
           remote: -----> Installing Poetry #{POETRY_VERSION}
           remote: -----> Installing dependencies using 'poetry sync --only main'
           remote:        Installing dependencies from lock file
           remote:        
           remote:        Package operations: 1 install, 0 updates, 0 removals
           remote:        
-          remote:          - Installing typing-extensions (4.15.0)
+          remote:          - Installing typing-extensions (4.16.0)
           remote: -----> Saving cache
         OUTPUT
       end
@@ -315,7 +313,7 @@ RSpec.describe 'Poetry support' do
           remote:        
           remote:        Package operations: 1 install, 0 updates, 0 removals
           remote:        
-          remote:          - Installing typing-extensions (4.15.0)
+          remote:          - Installing typing-extensions (4.16.0)
           remote: -----> Saving cache
         OUTPUT
       end

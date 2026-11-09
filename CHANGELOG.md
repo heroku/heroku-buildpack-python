@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Changed the default Python version for new apps from 3.14 to 3.15. ([#2182](https://github.com/heroku/heroku-buildpack-python/pull/2182))
 
 ## [v361] - 2026-11-02
 
