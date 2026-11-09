@@ -10,23 +10,27 @@ CACHE_DIR="${2}"
 
 cd "${BUILD_DIR}"
 
+echo "Build-time env vars:"
 bin/print-env-vars.sh
 echo
 
+echo "Python sys.path:"
 python -c 'import pprint, sys; pprint.pp(sys.path)'
 echo
 
+echo "Package manager version and installed packages:"
 pipenv --version
 # We have to resort to using pip to list installed packages, since `pipenv graph` doesn't support `--system`.
 python -m ensurepip --default-pip >/dev/null
 pip list --disable-pip-version-check --exclude pip
 echo
 
-python -c 'import typing_extensions; print(typing_extensions)'
+python -c 'import typing_extensions; print(f"typing_extensions imported from: {typing_extensions.__file__}")'
 # Test that dependencies that happen to also be vendored dependencies of Pipenv are correctly installed,
 # since Pipenv's --system mode is buggy and requires a workaround to ensure they aren't skipped.
-python -c 'import certifi; print(certifi)'
-python -c 'import packaging; print(packaging)'
+python -c 'import certifi; print(f"certifi imported from: {certifi.__file__}")'
+python -c 'import packaging; print(f"packaging imported from: {packaging.__file__}")'
 echo
 
+echo "Contents of build-data/python.json:"
 jq --sort-keys '.' "${CACHE_DIR}/build-data/python.json"

@@ -18,7 +18,7 @@
 --editable ./packages/hatchling_exact
 
 # We use a VCS dependency installed in editable mode in order to test that:
-#  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to pip).
+#  - Git from the base image can be found (i.e. the system PATH has been correctly propagated to pip).
 #  - The editable mode repository clone is saved into the correct location.
 #
 # A C-based package is used instead of a pure Python package, in order to test that the

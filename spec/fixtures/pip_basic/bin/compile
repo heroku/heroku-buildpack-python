@@ -10,17 +10,21 @@ CACHE_DIR="${2}"
 
 cd "${BUILD_DIR}"
 
+echo "Build-time env vars:"
 bin/print-env-vars.sh
 echo
 
+echo "Python sys.path:"
 python -c 'import pprint, sys; pprint.pp(sys.path)'
 echo
 
+echo "Package manager version and installed packages:"
 pip --version
 pip list
 echo
 
-python -c 'import typing_extensions; print(typing_extensions)'
+python -c 'import typing_extensions; print(f"typing_extensions imported from: {typing_extensions.__file__}")'
 echo
 
+echo "Contents of build-data/python.json:"
 jq --sort-keys '.' "${CACHE_DIR}/build-data/python.json"

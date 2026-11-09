@@ -19,7 +19,7 @@ packages = [{ include = "poetry_editable_git_compiled", from = "src" }]
 
 [tool.poetry.dependencies]
 # We use a VCS dependency installed in editable mode in order to test that:
-#  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to Poetry).
+#  - Git from the base image can be found (i.e. the system PATH has been correctly propagated to Poetry).
 #  - The editable mode repository clone is saved into the correct location.
 #
 # A C-based package is used instead of a pure Python package, in order to test that the
