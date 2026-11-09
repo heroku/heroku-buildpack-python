@@ -51,10 +51,10 @@ RSpec.describe 'Django support' do
           remote:        
           remote:        \\['/tmp/build_\\w+/backend',
           remote:         '/tmp/build_\\w+',
-          remote:         '/app/.heroku/python/lib/python314.zip',
-          remote:         '/app/.heroku/python/lib/python3.14',
-          remote:         '/app/.heroku/python/lib/python3.14/lib-dynload',
-          remote:         '/app/.heroku/python/lib/python3.14/site-packages'\\]
+          remote:         '/app/.heroku/python/lib/python315.zip',
+          remote:         '/app/.heroku/python/lib/python3.15',
+          remote:         '/app/.heroku/python/lib/python3.15/lib-dynload',
+          remote:         '/app/.heroku/python/lib/python3.15/site-packages'\\]
           remote:        
           remote:        1 static file copied to '/tmp/build_\\w+/backend/staticfiles'.
           remote: 

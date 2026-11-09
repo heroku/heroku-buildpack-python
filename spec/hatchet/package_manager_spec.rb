@@ -152,7 +152,7 @@ RSpec.describe 'Package manager support' do
           remote:        Prepared 1 package in .+s
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
-          remote:         \\+ typing-extensions==4.15.0
+          remote:         \\+ typing-extensions==4.16.0
           remote: -----> Saving cache
           remote: -----> Discovering process types
         REGEX

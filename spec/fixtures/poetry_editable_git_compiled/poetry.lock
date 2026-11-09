@@ -19,5 +19,5 @@ subdirectory = "tests/testdata/extension.dist"
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.14"
-content-hash = "6383e3943aa34d09bcb9d50edf4f8382d0352ad5bcb5849d0cf450548b45f078"
+python-versions = ">=3.15"
+content-hash = "28b0cf32b6d088e3a2785ca54d6e6bad9378054ea3f12853c4436417443f7d3e"

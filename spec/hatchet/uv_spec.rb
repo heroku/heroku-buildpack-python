@@ -19,7 +19,7 @@ RSpec.describe 'uv support' do
           remote:        Prepared 1 package in .+s
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
-          remote:         \\+ typing-extensions==4.15.0
+          remote:         \\+ typing-extensions==4.16.0
           remote: -----> Running bin/post_compile hook
           remote:        BUILD_DIR=/tmp/build_.+
           remote:        CACHE_DIR=/tmp/codon/tmp/cache
@@ -54,18 +54,18 @@ RSpec.describe 'uv support' do
           remote: 
           remote: \\['',
           remote:  '/app',
-          remote:  '/app/.heroku/python/lib/python314.zip',
-          remote:  '/app/.heroku/python/lib/python3.14',
-          remote:  '/app/.heroku/python/lib/python3.14/lib-dynload',
-          remote:  '/app/.heroku/python/lib/python3.14/site-packages'\\]
+          remote:  '/app/.heroku/python/lib/python315.zip',
+          remote:  '/app/.heroku/python/lib/python3.15',
+          remote:  '/app/.heroku/python/lib/python3.15/lib-dynload',
+          remote:  '/app/.heroku/python/lib/python3.15/site-packages'\\]
           remote: 
           remote: uv #{UV_VERSION} \\(x86_64-unknown-linux-gnu\\)
           remote: Using Python #{DEFAULT_PYTHON_FULL_VERSION} environment at: /app/.heroku/python
           remote: Package           Version
           remote: ----------------- -------
-          remote: typing-extensions 4.15.0
+          remote: typing-extensions 4.16.0
           remote: 
-          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.14/site-packages/typing_extensions.py'>
+          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.15/site-packages/typing_extensions.py'>
           remote: 
           remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
@@ -81,11 +81,11 @@ RSpec.describe 'uv support' do
           remote:   "pre_compile_hook": false,
           remote:   "python_install_duration": [0-9.]+,
           remote:   "python_version": "#{DEFAULT_PYTHON_FULL_VERSION}",
-          remote:   "python_version_major": "3.14",
+          remote:   "python_version_major": "3.15",
           remote:   "python_version_origin": ".python-version",
           remote:   "python_version_outdated": false,
           remote:   "python_version_pinned": false,
-          remote:   "python_version_requested": "3.14",
+          remote:   "python_version_requested": "3.15",
           remote:   "total_duration": [0-9.]+,
           remote:   "uv_version": "#{UV_VERSION}"
           remote: \\}
@@ -128,11 +128,8 @@ RSpec.describe 'uv support' do
     end
   end
 
-  # TODO: Enable on Heroku-26 after the uv and default Python versions next change,
-  # since for now there isn't a historic buildpack version we can use in this test
-  # whose stack check permits Heroku-26 and that also uses older uv/Python versions.
-  context 'when the uv and Python versions have changed since the last build', stacks: %w[heroku-22 heroku-24] do
-    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v313'] }
+  context 'when the uv and Python versions have changed since the last build' do
+    let(:buildpacks) { ['https://github.com/heroku/heroku-buildpack-python#v355'] }
     let(:app) { Hatchet::Runner.new('spec/fixtures/uv_basic', buildpacks:) }
 
     it 'clears the cache before installing' do
@@ -143,18 +140,18 @@ RSpec.describe 'uv support' do
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX))
           remote: -----> Python app detected
-          remote: -----> Using Python 3.14 specified in .python-version
+          remote: -----> Using Python 3.15 specified in .python-version
           remote: -----> Discarding cache since:
-          remote:        - The Python version has changed from 3.14.0 to #{LATEST_PYTHON_3_14}
-          remote:        - The uv version has changed from 0.8.23 to #{UV_VERSION}
-          remote: -----> Installing Python #{LATEST_PYTHON_3_14}
+          remote:        - The Python version has changed from 3.15.0 to #{LATEST_PYTHON_3_15}
+          remote:        - The uv version has changed from 0.12.21 to #{UV_VERSION}
+          remote: -----> Installing Python #{LATEST_PYTHON_3_15}
           remote: -----> Installing uv #{UV_VERSION}
           remote: -----> Installing dependencies using 'uv sync --locked --no-default-groups'
           remote:        Resolved .+ packages in .+s
           remote:        Prepared 1 package in .+s
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
-          remote:         \\+ typing-extensions==4.15.0
+          remote:         \\+ typing-extensions==4.16.0
           remote: -----> Saving cache
           remote: -----> Discovering process types
         REGEX
@@ -285,7 +282,7 @@ RSpec.describe 'uv support' do
           remote:        Prepared 1 package in .+s
           remote:        Installed 1 package in .+s
           remote:        Bytecode compiled 1 file in .+s
-          remote:         \\+ typing-extensions==4.15.0
+          remote:         \\+ typing-extensions==4.16.0
           remote: -----> Saving cache
         REGEX
       end
