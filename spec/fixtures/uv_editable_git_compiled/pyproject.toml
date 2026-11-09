@@ -15,8 +15,8 @@ requires = ["uv_build"]
 build-backend = "uv_build"
 
 [tool.uv.sources]
-# We use a VCS dependency in order to test that Git from the stack image can be found
-# (ie: the system PATH has been correctly propagated to uv).
+# We use a VCS dependency in order to test that Git from the base image can be found
+# (i.e. the system PATH has been correctly propagated to uv).
 #
 # We can't install it in editable mode (like the Git tests for other package managers),
 # since uv doesn't support it with VCS dependencies:

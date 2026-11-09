@@ -10,19 +10,23 @@ CACHE_DIR="${2}"
 
 cd "${BUILD_DIR}"
 
+echo "Build-time env vars:"
 bin/print-env-vars.sh
 echo
 
+echo "Python sys.path:"
 python -c 'import pprint, sys; pprint.pp(sys.path)'
 echo
 
+echo "Package manager version and installed packages:"
 poetry --version
 # The show command also lists dependencies that are in optional groups in pyproject.toml
 # but that aren't actually installed, for which the only option is to filter out by hand.
 poetry show | grep -v ' (!) '
 echo
 
-python -c 'import typing_extensions; print(typing_extensions)'
+python -c 'import typing_extensions; print(f"typing_extensions imported from: {typing_extensions.__file__}")'
 echo
 
+echo "Contents of build-data/python.json:"
 jq --sort-keys '.' "${CACHE_DIR}/build-data/python.json"

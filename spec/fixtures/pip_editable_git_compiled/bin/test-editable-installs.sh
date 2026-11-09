@@ -4,6 +4,7 @@ set -euo pipefail
 
 # Print any path like strings in the files created by build backends for editable installs,
 # so we can check that the buildpack rewrote the paths correctly for build vs runtime.
+echo "Paths in editable install files:"
 (
 	cd .heroku/python/lib/python*/site-packages/
 	shopt -s nullglob

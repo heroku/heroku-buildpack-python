@@ -39,6 +39,7 @@ RSpec.describe 'uv support' do
           remote:        UV_PYTHON_DOWNLOADS=never
           remote: -----> Saving cache
           remote: -----> Inline app detected
+          remote: Build-time env vars:
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote: LIBRARY_PATH=/app/.heroku/python/lib
@@ -52,6 +53,7 @@ RSpec.describe 'uv support' do
           remote: UV_PROJECT_ENVIRONMENT=/app/.heroku/python
           remote: UV_PYTHON_DOWNLOADS=never
           remote: 
+          remote: Python sys.path:
           remote: \\['',
           remote:  '/app',
           remote:  '/app/.heroku/python/lib/python315.zip',
@@ -59,14 +61,16 @@ RSpec.describe 'uv support' do
           remote:  '/app/.heroku/python/lib/python3.15/lib-dynload',
           remote:  '/app/.heroku/python/lib/python3.15/site-packages'\\]
           remote: 
+          remote: Package manager version and installed packages:
           remote: uv #{UV_VERSION} \\(x86_64-unknown-linux-gnu\\)
           remote: Using Python #{DEFAULT_PYTHON_FULL_VERSION} environment at: /app/.heroku/python
           remote: Package           Version
           remote: ----------------- -------
           remote: typing-extensions 4.16.0
           remote: 
-          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.15/site-packages/typing_extensions.py'>
+          remote: typing_extensions imported from: /app/.heroku/python/lib/python3.15/site-packages/typing_extensions.py
           remote: 
+          remote: Contents of build-data/python.json:
           remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
           remote:   "cache_save_duration": [0-9.]+,
@@ -108,8 +112,10 @@ RSpec.describe 'uv support' do
           remote: -----> Inline app detected
         REGEX
 
-        command = 'bin/print-env-vars.sh && if command -v uv; then echo "uv unexpectedly found!" && exit 1; fi'
+        command = 'echo "Run-time env vars:" && bin/print-env-vars.sh && ' \
+                  'if command -v uv; then echo "uv unexpectedly found!" && exit 1; fi'
         expect(normalize_trailing_newlines(app.run(command))).to eq(<<~OUTPUT)
+          Run-time env vars:
           DYNO_RAM=512
           FORWARDED_ALLOW_IPS=*
           GUNICORN_CMD_ARGS=--access-logfile -
@@ -162,7 +168,7 @@ RSpec.describe 'uv support' do
   # This tests that:
   #  - The current project's editable install paths are rewritten correctly for hooks, later buildpacks,
   #    runtime and cached builds.
-  #  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to uv).
+  #  - Git from the base image can be found (i.e. the system PATH has been correctly propagated to uv).
   #  - Building/compiling a source distribution package (as opposed to a pre-built wheel) works.
   #  - The Python headers can be found when compiling.
   #
@@ -185,12 +191,14 @@ RSpec.describe 'uv support' do
           remote:         \\+ extension-dist==0.1 \\(from git\\+https://github.com/pypa/wheel.git@7855525de4093257e7bfb434877265e227356566#subdirectory=tests/testdata/extension.dist\\)
           remote:         \\+ uv-editable-git-compiled==0.0.0 \\(from file:///tmp/build_.+\\)
           remote: -----> Running bin/post_compile hook
+          remote:        Paths in editable install files:
           remote:        uv_editable_git_compiled.pth:/tmp/build_.+/src
           remote:        
           remote:        Running project entrypoint: OK
           remote:        Running import of VCS package: OK
           remote: -----> Saving cache
           remote: -----> Inline app detected
+          remote: Paths in editable install files:
           remote: uv_editable_git_compiled.pth:/tmp/build_.+/src
           remote: 
           remote: Running project entrypoint: OK
@@ -199,6 +207,7 @@ RSpec.describe 'uv support' do
 
         # Test rewritten paths work at runtime.
         expect(app.run('bin/test-editable-installs.sh')).to include(<<~OUTPUT)
+          Paths in editable install files:
           uv_editable_git_compiled.pth:/app/src
 
           Running project entrypoint: OK
@@ -219,12 +228,14 @@ RSpec.describe 'uv support' do
           remote:         - uv-editable-git-compiled==0.0.0 \\(from file:///tmp/build_.+\\)
           remote:         \\+ uv-editable-git-compiled==0.0.0 \\(from file:///tmp/build_.+\\)
           remote: -----> Running bin/post_compile hook
+          remote:        Paths in editable install files:
           remote:        uv_editable_git_compiled.pth:/tmp/build_.+/src
           remote:        
           remote:        Running project entrypoint: OK
           remote:        Running import of VCS package: OK
           remote: -----> Saving cache
           remote: -----> Inline app detected
+          remote: Paths in editable install files:
           remote: uv_editable_git_compiled.pth:/tmp/build_.+/src
           remote: 
           remote: Running project entrypoint: OK

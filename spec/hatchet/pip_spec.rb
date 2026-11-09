@@ -46,6 +46,7 @@ RSpec.describe 'pip support' do
           remote:  !     https://docs.astral.sh/uv/
           remote: 
           remote: -----> Inline app detected
+          remote: Build-time env vars:
           remote: LANG=en_US.UTF-8
           remote: LD_LIBRARY_PATH=/app/.heroku/python/lib
           remote: LIBRARY_PATH=/app/.heroku/python/lib
@@ -55,6 +56,7 @@ RSpec.describe 'pip support' do
           remote: PYTHONPATH=/app
           remote: PYTHONUNBUFFERED=true
           remote: 
+          remote: Python sys.path:
           remote: \\['',
           remote:  '/app',
           remote:  '/app/.heroku/python/lib/python315.zip',
@@ -62,14 +64,16 @@ RSpec.describe 'pip support' do
           remote:  '/app/.heroku/python/lib/python3.15/lib-dynload',
           remote:  '/app/.heroku/python/lib/python3.15/site-packages'\\]
           remote: 
+          remote: Package manager version and installed packages:
           remote: pip #{PIP_VERSION} from /app/.heroku/python/lib/python3.15/site-packages/pip \\(python 3.15\\)
           remote: Package           Version
           remote: ----------------- -------
           remote: pip               #{PIP_VERSION}
           remote: typing_extensions 4.16.0
           remote: 
-          remote: <module 'typing_extensions' from '/app/.heroku/python/lib/python3.15/site-packages/typing_extensions.py'>
+          remote: typing_extensions imported from: /app/.heroku/python/lib/python3.15/site-packages/typing_extensions.py
           remote: 
+          remote: Contents of build-data/python.json:
           remote: \\{
           remote:   "cache_restore_duration": [0-9.]+,
           remote:   "cache_save_duration": [0-9.]+,
@@ -110,7 +114,9 @@ RSpec.describe 'pip support' do
         REGEX
 
         # For historical reasons pip is made available at run-time too, unlike some of the other package managers.
-        expect(normalize_trailing_newlines(app.run('bin/print-env-vars.sh && pip --version'))).to eq(<<~OUTPUT)
+        command = 'echo "Run-time env vars:" && bin/print-env-vars.sh && pip --version'
+        expect(normalize_trailing_newlines(app.run(command))).to eq(<<~OUTPUT)
+          Run-time env vars:
           DYNO_RAM=512
           FORWARDED_ALLOW_IPS=*
           GUNICORN_CMD_ARGS=--access-logfile -
@@ -167,7 +173,7 @@ RSpec.describe 'pip support' do
   # This tests that:
   #  - Editable install paths are rewritten correctly for hooks, later buildpacks, runtime and cached builds.
   #  - Local editable packages work for several build backends and layouts.
-  #  - Git from the stack image can be found (ie: the system PATH has been correctly propagated to pip).
+  #  - Git from the base image can be found (i.e. the system PATH has been correctly propagated to pip).
   #  - The editable mode repository clone is saved into the correct location and reused by cached builds.
   #  - Building/compiling a source distribution package (as opposed to a pre-built wheel) works.
   #  - The Python headers can be found when compiling.
@@ -179,6 +185,7 @@ RSpec.describe 'pip support' do
       app.deploy do |app|
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running bin/post_compile hook
+          remote:        Paths in editable install files:
           remote:        __editable__.pip_editable_git_compiled-0.0.0.pth:/tmp/build_.+/src
           remote:        __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
           remote:        __editable___setuptools_flat_0_0_0_finder.py:/tmp/build_.+/packages/setuptools_flat/setuptools_flat'}
@@ -193,6 +200,7 @@ RSpec.describe 'pip support' do
           remote: -----> Saving cache
           .+
           remote: -----> Inline app detected
+          remote: Paths in editable install files:
           remote: __editable__.pip_editable_git_compiled-0.0.0.pth:/tmp/build_.+/src
           remote: __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
           remote: __editable___setuptools_flat_0_0_0_finder.py:/tmp/build_.+/packages/setuptools_flat/setuptools_flat'}
@@ -208,6 +216,7 @@ RSpec.describe 'pip support' do
 
         # Test rewritten paths work at runtime.
         expect(app.run('bin/test-editable-installs.sh')).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
+          Paths in editable install files:
           __editable__.pip_editable_git_compiled-0.0.0.pth:/app/src
           __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
           __editable___setuptools_flat_0_0_0_finder.py:/app/packages/setuptools_flat/setuptools_flat'}
@@ -226,6 +235,7 @@ RSpec.describe 'pip support' do
         app.push!
         expect(clean_output(app.output)).to match(Regexp.new(<<~REGEX, Regexp::MULTILINE))
           remote: -----> Running bin/post_compile hook
+          remote:        Paths in editable install files:
           remote:        __editable__.pip_editable_git_compiled-0.0.0.pth:/tmp/build_.+/src
           remote:        __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
           remote:        __editable___setuptools_flat_0_0_0_finder.py:/tmp/build_.+/packages/setuptools_flat/setuptools_flat'}
@@ -240,6 +250,7 @@ RSpec.describe 'pip support' do
           remote: -----> Saving cache
           .+
           remote: -----> Inline app detected
+          remote: Paths in editable install files:
           remote: __editable__.pip_editable_git_compiled-0.0.0.pth:/tmp/build_.+/src
           remote: __editable___extension_dist_0_1_finder.py:/app/.heroku/python/src/extension-dist/tests/testdata/extension.dist/extension'}
           remote: __editable___setuptools_flat_0_0_0_finder.py:/tmp/build_.+/packages/setuptools_flat/setuptools_flat'}
