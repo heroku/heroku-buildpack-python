@@ -283,9 +283,9 @@ EOT
 #  - `_editable_skbc_<name>.py` (scikit-build-core)
 #  - `_<name>_editable_loader.py` (meson-python)
 if [[ "${BUILD_DIR}" != "/app" ]]; then
-	find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.pth' -or -name '*editable*.py' \) -exec sed -i -e "s#${BUILD_DIR}/.heroku/python#/app/.heroku/python#" {} \+
+	find .heroku/python/lib/python*/site-packages/ -maxdepth 1 -type f -and \( -name '*.pth' -or -name '*editable*.py' \) -exec sed -i -e "s#${BUILD_DIR}/.heroku/python#/app/.heroku/python#" {} \+
 	cat <<-EOT >>"${PROFILE_PATH}"
-		find .heroku/python/lib/python*/site-packages/ -type f -and \( -name '*.pth' -or -name '*editable*.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
+		find .heroku/python/lib/python*/site-packages/ -maxdepth 1 -type f -and \( -name '*.pth' -or -name '*editable*.py' \) -exec sed -i -e 's#${BUILD_DIR}#/app#' {} \+
 	EOT
 fi
 

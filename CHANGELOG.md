@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Changed the editable install path rewrite to only search the top level of `site-packages/`. ([#2186](https://github.com/heroku/heroku-buildpack-python/pull/2186))
 
 ## [v362] - 2026-11-09
 
