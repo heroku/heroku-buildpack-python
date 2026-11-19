@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [v363] - 2026-11-19
+
 - Changed the editable install path rewrite to only search the top level of `site-packages/`. ([#2186](https://github.com/heroku/heroku-buildpack-python/pull/2186))
 - Updated pip from 26.2.2 to 26.3. ([#2190](https://github.com/heroku/heroku-buildpack-python/pull/2190))
 - Updated Pipenv from 2026.10.4 to 2026.11.0 (except for apps using Python 3.10, which remain on 2026.10.4). ([#2190](https://github.com/heroku/heroku-buildpack-python/pull/2190))
@@ -1636,7 +1639,8 @@ Default Python is now latest 2.7.10. Updated pip and Distribute.
 - Setuptools updated to v16.0
 - pip updated to v7.0.1
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v362...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-python/compare/v363...main
+[v363]: https://github.com/heroku/heroku-buildpack-python/compare/v362...v363
 [v362]: https://github.com/heroku/heroku-buildpack-python/compare/v361...v362
 [v361]: https://github.com/heroku/heroku-buildpack-python/compare/v360...v361
 [v360]: https://github.com/heroku/heroku-buildpack-python/compare/v359...v360
