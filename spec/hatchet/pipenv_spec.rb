@@ -209,7 +209,7 @@ RSpec.describe 'Pipenv support' do
           remote:  !     patch version automatically and prevent this warning.
           remote: 
           remote: -----> Installing Python 3.10.0
-          remote: -----> Installing Pipenv #{PIPENV_VERSION}
+          remote: -----> Installing Pipenv 2026.10.4
           remote: -----> Installing dependencies using 'pipenv install --deploy'
           remote: -----> Saving cache
         REGEX

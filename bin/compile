@@ -143,6 +143,13 @@ python_version::warn_or_error_if_python_version_file_missing "${python_version_o
 python_version::warn_if_deprecated_major_version "${python_major_version}" "${python_version_origin}"
 python_version::warn_if_patch_update_available "${python_full_version}" "${python_major_version}" "${python_version_origin}"
 
+# Pipenv 2026.11.0 and newer require Python 3.11+, so apps using Python 3.10 have to stay on the last
+# release that supports it. This must be set before `cache::restore` (which compares against it) and
+# can be removed once Python 3.10 support is removed (6th January 2027).
+if [[ "${package_manager}" == "pipenv" && "${python_major_version}" == "3.10" ]]; then
+	PIPENV_VERSION='2026.10.4'
+fi
+
 cache::restore "${BUILD_DIR}" "${CACHE_DIR}" "${STACK}" "${cached_python_full_version}" "${python_full_version}" "${package_manager}"
 
 # The directory for the .profile.d scripts.

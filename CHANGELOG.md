@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 - Changed the editable install path rewrite to only search the top level of `site-packages/`. ([#2186](https://github.com/heroku/heroku-buildpack-python/pull/2186))
+- Updated pip from 26.2.2 to 26.3. ([#2190](https://github.com/heroku/heroku-buildpack-python/pull/2190))
+- Updated Pipenv from 2026.10.4 to 2026.11.0 (except for apps using Python 3.10, which remain on 2026.10.4). ([#2190](https://github.com/heroku/heroku-buildpack-python/pull/2190))
+- Updated uv from 0.13.6 to 0.13.9. ([#2190](https://github.com/heroku/heroku-buildpack-python/pull/2190))
 
 ## [v362] - 2026-11-09
 
